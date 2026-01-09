@@ -2373,6 +2373,64 @@ tr:hover [data-category-tag] {
     color: #ef4444;
 }
 
+.direction-toggle-compact {
+    display: flex;
+    gap: 8px;
+}
+
+.direction-toggle-compact input[type="radio"] {
+    display: none;
+}
+
+.direction-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.direction-btn-in {
+    background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.06));
+    color: #059669;
+    border-color: rgba(16,185,129,0.15);
+}
+
+.direction-btn-in:hover {
+    background: linear-gradient(135deg, rgba(16,185,129,0.18), rgba(16,185,129,0.10));
+    border-color: rgba(16,185,129,0.25);
+}
+
+#modalDirectionIn:checked + .direction-btn-in {
+    background: linear-gradient(135deg, rgba(16,185,129,0.25), rgba(16,185,129,0.15));
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+}
+
+.direction-btn-out {
+    background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.06));
+    color: #f59e0b;
+    border-color: rgba(245,158,11,0.15);
+}
+
+.direction-btn-out:hover {
+    background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(245,158,11,0.10));
+    border-color: rgba(245,158,11,0.25);
+}
+
+#modalDirectionOut:checked + .direction-btn-out {
+    background: linear-gradient(135deg, rgba(245,158,11,0.25), rgba(245,158,11,0.15));
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245,158,11,0.1);
+}
+
 @media (max-width: 640px) {
     .direction-toggle {
         grid-template-columns: 1fr;
@@ -3067,11 +3125,11 @@ tr:hover [data-category-tag] {
                             <div class="direction-toggle-compact">
                                 <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
                                 <label for="modalDirectionIn" class="direction-btn direction-btn-in">
-                                    <i class="fas fa-arrow-down"></i> IN
+                                    <i class="fas fa-arrow-up"></i> IN
                                 </label>
                                 <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
                                 <label for="modalDirectionOut" class="direction-btn direction-btn-out">
-                                    <i class="fas fa-arrow-up"></i> OUT
+                                    <i class="fas fa-arrow-down"></i> OUT
                                 </label>
                             </div>
                         </div>
