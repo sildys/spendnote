@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SpendNote Dashboard - Manage your cash receipts, transactions, and registers in one place.">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
-    <title>Dashboard - SpendNote</title>
+    <title>SpendNote Dashboard 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -23,18 +20,12 @@
             --text-muted: #737373;
             --border: rgba(0,0,0,0.08);
             --shadow: rgba(0,0,0,0.04);
-            --error: #ef4444;
-            --success: #059669;
+
             --active: #059669;
             --active-rgb: 5, 150, 105;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        html {
-            overflow-x: clip;
-        }
-        
         body { 
             font-family: 'Inter', -apple-system, system-ui, sans-serif; 
             background: var(--bg);
@@ -45,7 +36,6 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: clip;
         }
 
         *:focus {
@@ -861,11 +851,185 @@
         }
         .table-wrapper::-webkit-scrollbar-thumb:hover { background: var(--active); }
 
+        /* FOOTER */
+        .app-footer {
+            background: var(--surface);
+            border-top: 2px solid var(--border);
+            margin-top: 48px;
+            padding: 32px 0;
+        }
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+        }
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .footer-logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.25);
+        }
+        .footer-logo-icon::before {
+            content: 'S';
+            font-size: 26px;
+            font-weight: 900;
+            color: white;
+        }
+        .footer-logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 2.5px;
+            background: white;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 1.25px;
+        }
+        .footer-logo-text {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.03em;
+        }
+        .footer-logo img {
+            height: 32px;
+            width: auto;
+        }
+        .footer-tagline {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .social-icon:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .footer-section h4 {
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .footer-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-link:hover {
+            color: var(--primary);
+            padding-left: 4px;
+        }
+        .footer-link i {
+            font-size: 12px;
+        }
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 32px auto 0;
+            padding: 24px 24px 0;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .footer-copyright {
+            font-weight: 500;
+        }
+        .footer-legal {
+            display: flex;
+            gap: 24px;
+        }
+        .footer-legal a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .footer-legal a:hover {
+            color: var(--primary);
+        }
+
         @media (max-width: 1024px) {
+            /* .registers-grid { grid-template-columns: 1fr; } - OLD, not used */
             .context-row { grid-template-columns: 1fr; }
             .context-pill { flex-direction: column; gap: 16px; }
             .context-badge { border: none; padding: 0; }
             .filter-grid { grid-template-columns: 1fr; }
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+            .footer-brand {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
         }
     
         /* ===== CAROUSEL STYLES ===== */
@@ -1092,7 +1256,6 @@
         .site-nav .logo {
             display: flex;
             align-items: center;
-            gap: 0;
             text-decoration: none;
             transition: transform 0.2s;
         }
@@ -1895,13 +2058,14 @@ tr:hover [data-category-tag] {
 @media (max-width: 820px){
   .filter-grid{ grid-template-columns: 1fr !important; }
 }
-    </style>
+
+</style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
 <nav class="site-nav">
   <div class="nav-container">
-            <a href="index.html" class="logo">
+            <a href="/" class="logo">
                 <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#nav-logo-gradient)"/>
                     <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
@@ -1921,12 +2085,12 @@ tr:hover [data-category-tag] {
                 <span style="font-weight: 900; font-size: 1.5rem; margin-left: 10px; color: #000000; letter-spacing: -0.02em;">SpendNote</span>
             </a>
             <ul class="nav-links">
-                <li><a href="spendnote-dashboard.html" class="active">Dashboard</a></li>
-                <li><a href="spendnote-register-list.html">Cash Registers</a></li>
-                <li><a href="spendnote-transaction-history.html">Transactions</a></li>
-                <li><a href="spendnote-receipt-list.html">Receipts</a></li>
-                <li><a href="spendnote-user-settings.html">Settings</a></li>
-                <li><a href="spendnote-login.html" class="btn btn-secondary">Log out</a></li>
+                <li><a href="/app/dashboard" class="active">Dashboard</a></li>
+                <li><a href="/app/registers">Cash Registers</a></li>
+                <li><a href="/app/transactions">Transactions</a></li>
+                <li><a href="/app/receipts">Receipts</a></li>
+                <li><a href="/app/settings">Settings</a></li>
+                <li><a href="/logout" class="btn btn-secondary">Log out</a></li>
             </ul>
         </div>
     </nav>
@@ -2535,23 +2699,24 @@ tr:hover [data-category-tag] {
             <div class="footer-links">
                 <h4>Product</h4>
                 <ul>
-                    <li><a href="index.html#features">Features</a></li>
-                    <li><a href="spendnote-pricing.html">Pricing</a></li>
-                    <li><a href="spendnote-faq.html">FAQ</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="/faq">FAQ</a></li>
                 </ul>
             </div>
             <div class="footer-links">
                 <h4>Company</h4>
                 <ul>
-                    <li><a href="spendnote-about.html">About</a></li>
-                    <li><a href="spendnote-contact.html">Contact</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                    <li><a href="/contact">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-links">
                 <h4>Legal</h4>
                 <ul>
-                    <li><a href="spendnote-terms.html">Terms</a></li>
-                    <li><a href="spendnote-privacy.html">Privacy</a></li>
+                    <li><a href="/terms">Terms</a></li>
+                    <li><a href="/privacy">Privacy</a></li>
                 </ul>
             </div>
         </div>

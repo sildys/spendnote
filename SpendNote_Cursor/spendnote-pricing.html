@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SpendNote pricing plans - Choose the right plan for your business. Free trial available.">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
     <title>Pricing - SpendNote</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,46 +12,28 @@
             --primary-light: #10b981;
             --primary-dark: #047857;
             --orange: #f59e0b;
-            --blue: #3b82f6;
             --bg: #fafafa;
             --surface: #ffffff;
-            --surface-elevated: #f5f5f5;
-            --text: #0a0a0a;
+            --text: #000000;
             --text-muted: #737373;
             --border: rgba(0,0,0,0.08);
-            --shadow: rgba(0,0,0,0.04);
-            --error: #ef4444;
-            --success: #059669;
-            --active: #059669;
             --active-rgb: 5, 150, 105;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        html { overflow-x: clip; }
-
-        *:focus {
-            outline: 3px solid var(--active);
-            outline-offset: 2px;
-        }
-
-        body {
+        body { 
             font-family: 'Inter', -apple-system, system-ui, sans-serif; 
             background: var(--bg);
             color: var(--text); 
             line-height: 1.6; 
-            font-size: 15px;
+            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: clip;
         }
 
-/* ===== Imported from landing (nav + footer) ===== */
-/* NAV */
-        .site-nav {
-            position: sticky;
+        /* NAV */
+        nav {
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
@@ -64,8 +43,8 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .site-nav .nav-container {
-            max-width: 1400px;
+        .nav-container {
+            max-width: 1200px;
             margin: 0 auto;
             padding: 1rem 2rem;
             display: flex;
@@ -73,233 +52,48 @@
             align-items: center;
         }
 
-        .site-nav .logo {
+        .logo {
             display: flex;
             align-items: center;
-            gap: 0;
-            text-decoration: none;
-            transition: transform 0.2s;
-        }
-
-        .site-nav .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .site-nav .logo img {
-            height: 36px;
-            width: auto;
-        }
-
-        .site-nav .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-            list-style: none;
-        }
-
-        .site-nav .nav-links a {
-            color: #000000;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-        }
-
-        .site-nav .nav-links a:hover {
-            color: var(--active);
-        }
-
-        .site-nav .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-block;
-            font-size: 0.95rem;
-            border: none;
-            cursor: pointer;
-        }
-
-        .site-nav .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
-        }
-
-        .site-nav .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
-        }
-
-        .site-nav .btn-secondary {
-            background: transparent;
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        .site-nav .btn-secondary:hover {
-            background: rgba(5, 150, 105, 0.05);
-            border-color: var(--primary);
-        }
-
-        .site-nav .btn-large {
-            padding: 1rem 2rem;
-            font-size: 1.05rem;
-        }
-
-        
-/* FOOTER */
-        footer {
-            background: var(--surface);
-            padding: 3rem 2rem 2rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 3rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-brand h3 {
-            font-size: 1.5rem;
+            gap: 12px;
+            font-size: 22px;
             font-weight: 900;
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-brand p {
-            color: #000000;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .newsletter-form {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .newsletter-form input {
-            flex: 1;
-            padding: 0.65rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-family: inherit;
-        }
-
-        .newsletter-form button {
-            padding: 0.65rem 1.25rem;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .newsletter-form button:hover {
-            transform: translateY(-2px);
-        }
-
-        .footer-links h4 {
-            margin-bottom: 1rem;
-            font-weight: 800;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links a {
-            color: #000000;
+            letter-spacing: -0.03em;
             text-decoration: none;
-            display: block;
-            padding: 0.4rem 0;
-            transition: color 0.2s;
-            font-size: 0.9rem;
+            color: var(--text);
         }
 
-        .footer-links a:hover {
-            color: var(--primary);
-        }
+        .logo svg { width: 40px; height: 40px; }
 
-        .footer-bottom {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
+        .nav-links {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #000000;
-            font-size: 0.85rem;
+            gap: 8px;
         }
 
-        .footer-social {
-            display: flex;
-            gap: 0.75rem;
-        }
-
-        .footer-social a {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(5, 150, 105, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
+        .nav-link {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-decoration: none;
             transition: all 0.2s;
+            font-size: 14px;
         }
 
-        .footer-social a:hover {
-            background: var(--primary);
+        .nav-link:hover {
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .nav-link.active {
             color: white;
-            transform: translateY(-2px);
+            background: var(--primary);
         }
-
-        
-
-        .site-nav .nav-links a.active {
-            color: var(--active);
-        }
-
-        .site-nav .nav-links a{
-            position: relative;
-        }
-        .site-nav .nav-links a.active::after{
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: -10px;
-            height: 3px;
-            border-radius: 999px;
-            background: var(--active);
-            opacity: 0.9;
-        }
-
-/* ===== End imported ===== */
 
         /* PRICING SECTION */
         .pricing-section {
-            padding: 3rem 2rem 4rem;
+            margin-top: 80px;
+            padding: 80px 2rem;
         }
 
         .pricing-container {
@@ -752,11 +546,12 @@
     </style>
 </head>
 <body>
-<nav class="site-nav">
-  <div class="nav-container">
-            <a href="index.html" class="logo">
-                <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#nav-logo-gradient)"/>
+    <!-- NAV -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#logo-gradient)"/>
                     <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
                     <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
                     <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
@@ -765,21 +560,20 @@
                     <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
                     <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                     <defs>
-                        <linearGradient id="nav-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                        <linearGradient id="logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
                             <stop offset="0%" stop-color="#059669"/>
                             <stop offset="100%" stop-color="#10b981"/>
                         </linearGradient>
                     </defs>
                 </svg>
-                <span style="font-weight: 900; font-size: 1.5rem; margin-left: 10px; color: #000000; letter-spacing: -0.02em;">SpendNote</span>
+                <span>SpendNote</span>
             </a>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="spendnote-pricing.html" class="active">Pricing</a></li>
-                <li><a href="spendnote-faq.html">FAQ</a></li>
-                <li><a href="spendnote-login.html" class="btn btn-secondary">Log in</a></li>
-                <li><a href="spendnote-signup.html" class="btn btn-primary">Sign up</a></li>
-            </ul>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/pricing" class="nav-link active">Pricing</a>
+                <a href="/login" class="nav-link">Log In</a>
+                <a href="/signup" class="nav-link">Sign Up</a>
+            </div>
         </div>
     </nav>
 
@@ -854,73 +648,6 @@
             </div>
         </div>
     </section>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-brand">
-                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
-                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#footer-logo-gradient)"/>
-                        <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
-                        <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
-                        <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-                        <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
-                        <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-                        <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
-                        <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        <defs>
-                            <linearGradient id="footer-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#059669"/>
-                                <stop offset="100%" stop-color="#10b981"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                    <h3 style="margin: 0; font-size: 1.5rem; font-weight: 900; background: linear-gradient(135deg, #047857, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SpendNote</h3>
-                </div>
-                <p>Professional cash receipt management for modern teams. Simple, secure, and transparent.</p>
-                
-                <form class="newsletter-form">
-                    <input type="email" placeholder="your@email.com" required>
-                    <button type="submit">Subscribe</button>
-                </form>
-            </div>
-            <div class="footer-links">
-                <h4>Product</h4>
-                <ul>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="/faq">FAQ</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/blog">Blog</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="/terms">Terms</a></li>
-                    <li><a href="/privacy">Privacy</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <div>
-                <p>&copy; 2026 SpendNote. All rights reserved.</p>
-                <p style="margin-top: 0.5rem;"><i class="fas fa-info-circle"></i> Proof of cash transfer only. Not a tax or accounting tool.</p>
-            </div>
-            <div class="footer-social">
-                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-            </div>
-        </div>
-    </footer>
 
     <script>
         // MOCK: Current user plan (replace with actual user data)
