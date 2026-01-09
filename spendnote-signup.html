@@ -390,7 +390,7 @@
         <div class="auth-card">
             <!-- Logo -->
             <div class="auth-logo">
-                <a href="/" class="logo-mark">
+                <a href="index.html" class="logo-mark">
                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#logo-gradient)"/>
                         <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
@@ -478,7 +478,7 @@
                         required
                     >
                     <label class="checkbox-label" for="terms">
-                        I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>
+                        I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>
                     </label>
                 </div>
 
@@ -513,7 +513,7 @@
 
             <!-- Footer -->
             <div class="auth-footer">
-                Already have an account? <a href="/login">Log in</a>
+                Already have an account? <a href="spendnote-login.html">Log in</a>
             </div>
         </div>
     </div>
@@ -615,7 +615,7 @@
                 successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Account created! Redirecting to dashboard...';
                 
                 setTimeout(() => {
-                    window.location.href = '/dashboard';
+                    window.location.href = 'spendnote-dashboard.html';
                 }, 1500);
 
                 // In real app, make API call:

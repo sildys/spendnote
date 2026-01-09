@@ -1261,7 +1261,7 @@
 <body>
 <nav class="site-nav">
   <div class="nav-container">
-            <a href="/" class="logo">
+            <a href="index.html" class="logo">
                 <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#nav-logo-gradient)"/>
                     <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
@@ -1281,12 +1281,11 @@
                 <span style="font-weight: 900; font-size: 1.5rem; margin-left: 10px; color: #000000; letter-spacing: -0.02em;">SpendNote</span>
             </a>
             <ul class="nav-links">
-                <li><a href="/app/dashboard" class="active">Dashboard</a></li>
-                <li><a href="/app/registers">Cash Registers</a></li>
-                <li><a href="/app/transactions">Transactions</a></li>
-                <li><a href="/app/receipts">Receipts</a></li>
-                <li><a href="/app/settings">Settings</a></li>
-                <li><a href="/logout" class="btn btn-secondary">Log out</a></li>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="spendnote-dashboard.html">Dashboard</a></li>
+                <li><a href="spendnote-pricing.html">Pricing</a></li>
+                <li><a href="spendnote-login.html" class="btn btn-secondary">Log in</a></li>
+                <li><a href="spendnote-signup.html" class="btn btn-primary">Sign up</a></li>
             </ul>
         </div>
     </nav>
@@ -1303,7 +1302,7 @@
             <p>Internal cash, clearly tracked with printable proof</p>
             <p class="hero-subnote">Fast, clean receipts for petty cash and team handoffs — not invoices, not accounting. Generate proof in ~30 seconds, print or email instantly. One shared view, always up to date.</p>
             <div class="hero-cta">
-                <a href="/signup" class="btn btn-primary btn-large">Start Free - No Card Required</a>
+                <a href="spendnote-signup.html" class="btn btn-primary btn-large">Start Free - No Card Required</a>
                 <a href="#features" class="btn btn-secondary btn-large">See how it works</a>
             </div>
             <div class="trust-badges">
@@ -1527,7 +1526,7 @@
         <div class="cta-container">
             <h2>Ready to Get Started?</h2>
             <p>Join teams tracking cash with SpendNote</p>
-            <a href="/signup" class="btn btn-primary btn-large">Start Free - No Card Required</a>
+            <a href="spendnote-signup.html" class="btn btn-primary btn-large">Start Free - No Card Required</a>
         </div>
     </section>
     </main>
@@ -1565,23 +1564,23 @@
                 <h4>Product</h4>
                 <ul>
                     <li><a href="#features">Features</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="spendnote-pricing.html">Pricing</a></li>
+                    <li><a href="#">FAQ</a></li>
                 </ul>
             </div>
             <div class="footer-links">
-                <h4>Company</h4>
+                <h4>App</h4>
                 <ul>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/blog">Blog</a></li>
-                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="spendnote-dashboard.html">Dashboard</a></li>
+                    <li><a href="spendnote-login.html">Log in</a></li>
+                    <li><a href="spendnote-signup.html">Sign up</a></li>
                 </ul>
             </div>
             <div class="footer-links">
                 <h4>Legal</h4>
                 <ul>
-                    <li><a href="/terms">Terms</a></li>
-                    <li><a href="/privacy">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Privacy</a></li>
                 </ul>
             </div>
         </div>
@@ -1711,7 +1710,7 @@
                     <ul>
                         ${data.trial.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
                     </ul>
-                    <a href="/signup" class="btn btn-secondary">Start Trial</a>
+                    <a href="spendnote-signup.html" class="btn btn-secondary">Start Trial</a>
                 </div>
                 
                 <div class="pricing-card featured">
@@ -1725,7 +1724,7 @@
                     <ul>
                         ${data.starter.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
                     </ul>
-                    <a href="/signup" class="btn btn-primary">Get Started</a>
+                    <a href="spendnote-signup.html" class="btn btn-primary">Get Started</a>
                     ${data.starter.yearlyLink ? '<a href="#" class="monthly-link" onclick="switchToYearly(event)">or save with yearly →</a>' : ''}
                 </div>
                 
@@ -1739,7 +1738,7 @@
                     <ul>
                         ${data.pro.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
                     </ul>
-                    <a href="/signup" class="btn btn-primary">Get Started</a>
+                    <a href="spendnote-signup.html" class="btn btn-primary">Get Started</a>
                     ${data.pro.yearlyLink ? '<a href="#" class="monthly-link" onclick="switchToYearly(event)">or save with yearly →</a>' : ''}
                 </div>
             `;
