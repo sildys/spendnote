@@ -433,16 +433,64 @@
             border-radius: 16px;
             overflow: hidden;
             transition: all 0.3s;
+            border-left-width: 4px;
         }
 
-        .faq-card:hover {
+        /* Category Colors */
+        #getting-started .faq-card {
+            border-left-color: var(--primary);
+        }
+
+        #getting-started .faq-card:hover {
             border-color: var(--primary);
-            box-shadow: 0 4px 20px rgba(5, 150, 105, 0.1);
+            box-shadow: 0 4px 20px rgba(5, 150, 105, 0.15);
         }
 
-        .faq-card.open {
+        #getting-started .faq-card.open {
             border-color: var(--primary);
             background: linear-gradient(to bottom, white, rgba(5, 150, 105, 0.02));
+        }
+
+        #features .faq-card {
+            border-left-color: var(--orange);
+        }
+
+        #features .faq-card:hover {
+            border-color: var(--orange);
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.15);
+        }
+
+        #features .faq-card.open {
+            border-color: var(--orange);
+            background: linear-gradient(to bottom, white, rgba(245, 158, 11, 0.02));
+        }
+
+        #billing .faq-card {
+            border-left-color: var(--blue);
+        }
+
+        #billing .faq-card:hover {
+            border-color: var(--blue);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+        }
+
+        #billing .faq-card.open {
+            border-color: var(--blue);
+            background: linear-gradient(to bottom, white, rgba(59, 130, 246, 0.02));
+        }
+
+        #security .faq-card {
+            border-left-color: var(--purple);
+        }
+
+        #security .faq-card:hover {
+            border-color: var(--purple);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+        }
+
+        #security .faq-card.open {
+            border-color: var(--purple);
+            background: linear-gradient(to bottom, white, rgba(139, 92, 246, 0.02));
         }
 
         .faq-header {
@@ -469,8 +517,27 @@
             transition: all 0.3s;
         }
 
-        .faq-card.open .faq-number {
+        #getting-started .faq-card.open .faq-number,
+        #getting-started .faq-card.open .faq-toggle {
             background: var(--primary);
+            color: white;
+        }
+
+        #features .faq-card.open .faq-number,
+        #features .faq-card.open .faq-toggle {
+            background: var(--orange);
+            color: white;
+        }
+
+        #billing .faq-card.open .faq-number,
+        #billing .faq-card.open .faq-toggle {
+            background: var(--blue);
+            color: white;
+        }
+
+        #security .faq-card.open .faq-number,
+        #security .faq-card.open .faq-toggle {
+            background: var(--purple);
             color: white;
         }
 
@@ -489,14 +556,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary);
+            color: var(--text-muted);
             transition: all 0.3s;
             flex-shrink: 0;
         }
 
         .faq-card.open .faq-toggle {
-            background: var(--primary);
-            color: white;
             transform: rotate(180deg);
         }
 
