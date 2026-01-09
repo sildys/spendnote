@@ -554,11 +554,11 @@
                 </div>
                 <div class="filter-group">
                     <label>Register</label>
-                    <select class="filter-select">
-                        <option value="">All Registers</option>
-                        <option value="main">Main Office</option>
-                        <option value="event">Event Fund</option>
-                        <option value="petty">Petty Cash</option>
+                    <select class="filter-select" id="registerFilter">
+                        <option value="" data-color="#059669" data-rgb="5, 150, 105">All Registers</option>
+                        <option value="main" data-color="#059669" data-rgb="5, 150, 105">Main Office</option>
+                        <option value="event" data-color="#f59e0b" data-rgb="245, 158, 11">Event Fund</option>
+                        <option value="petty" data-color="#3b82f6" data-rgb="59, 130, 246">Petty Cash</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -741,5 +741,27 @@
             <p><i class="fas fa-info-circle"></i> Proof of cash transfer only. Not a tax or accounting tool.</p>
         </div>
     </footer>
+
+    <script>
+        // Register filter - update active color
+        const registerFilter = document.getElementById('registerFilter');
+        
+        function updateRegisterColor() {
+            const selectedOption = registerFilter.options[registerFilter.selectedIndex];
+            const color = selectedOption.dataset.color;
+            const rgb = selectedOption.dataset.rgb;
+            
+            if (color && rgb) {
+                document.documentElement.style.setProperty('--active', color);
+                document.documentElement.style.setProperty('--active-rgb', rgb);
+            }
+        }
+        
+        // Set initial color
+        updateRegisterColor();
+        
+        // Update on change
+        registerFilter.addEventListener('change', updateRegisterColor);
+    </script>
 </body>
 </html>
