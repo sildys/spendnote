@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SpendNote Terms of Service - Read our terms and conditions.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Terms of Service - SpendNote</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-light: #10b981;
+            --primary-dark: #047857;
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --text: #0a0a0a;
+            --text-muted: #737373;
+            --border: rgba(0,0,0,0.08);
+            --active: #059669;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: clip; }
+
+        body { 
+            font-family: 'Inter', -apple-system, system-ui, sans-serif; 
+            background: var(--bg);
+            color: var(--text); 
+            line-height: 1.6; 
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NAV */
+        .site-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.95rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        /* HERO */
+        .legal-hero {
+            background: var(--surface);
+            padding: 4rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .legal-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .legal-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+        }
+
+        .legal-meta {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .legal-meta strong { color: var(--text); }
+
+        /* CONTENT */
+        .legal-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem 5rem;
+        }
+
+        .legal-content h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 2.5rem 0 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .legal-content h2:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .legal-content h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .legal-content p {
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .legal-content ul, .legal-content ol {
+            margin: 1rem 0 1.5rem 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .legal-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+        }
+
+        .legal-content a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .legal-content a:hover { text-decoration: underline; }
+
+        .legal-content strong { color: var(--text); }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.08), rgba(16, 185, 129, 0.04));
+            border-left: 4px solid var(--primary);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* TOC */
+        .toc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .toc a:hover { color: var(--primary); }
+
+        /* FOOTER */
+        footer {
+            background: var(--surface);
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-links-inline {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links-inline a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-links-inline a:hover { color: var(--primary); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .footer-links-inline { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#nav-logo-gradient)"/>
+                    <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                    <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                    <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                    <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                    <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="nav-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#059669"/>
+                            <stop offset="100%" stop-color="#10b981"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span style="font-weight: 900; font-size: 1.5rem; color: #000000;">SpendNote</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="spendnote-pricing.html">Pricing</a></li>
+                <li><a href="spendnote-faq.html">FAQ</a></li>
+                <li><a href="spendnote-login.html" class="btn btn-secondary">Log in</a></li>
+                <li><a href="spendnote-signup.html" class="btn btn-primary">Sign up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="legal-hero">
+        <div class="legal-hero-content">
+            <h1>Terms of Service</h1>
+            <p class="legal-meta">Last updated: <strong>January 9, 2026</strong></p>
+        </div>
+    </section>
+
+    <main class="legal-content">
+        <nav class="toc">
+            <h4>Table of Contents</h4>
+            <ul>
+                <li><a href="#acceptance">1. Acceptance of Terms</a></li>
+                <li><a href="#description">2. Description of Service</a></li>
+                <li><a href="#accounts">3. User Accounts</a></li>
+                <li><a href="#usage">4. Acceptable Use</a></li>
+                <li><a href="#payment">5. Payment Terms</a></li>
+                <li><a href="#cancellation">6. Cancellation & Refunds</a></li>
+                <li><a href="#intellectual">7. Intellectual Property</a></li>
+                <li><a href="#limitation">8. Limitation of Liability</a></li>
+                <li><a href="#changes">9. Changes to Terms</a></li>
+                <li><a href="#contact">10. Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="highlight-box">
+            <p><i class="fas fa-info-circle"></i> <strong>Important:</strong> SpendNote is designed for internal cash tracking only. Receipts generated are proof of handoff — not invoices or tax documents.</p>
+        </div>
+
+        <h2 id="acceptance">1. Acceptance of Terms</h2>
+        <p>By accessing or using SpendNote ("Service"), you agree to be bound by these Terms of Service ("Terms"). If you disagree with any part of these terms, you may not access the Service.</p>
+        <p>These Terms apply to all visitors, users, and others who access or use the Service.</p>
+
+        <h2 id="description">2. Description of Service</h2>
+        <p>SpendNote provides a cloud-based platform for:</p>
+        <ul>
+            <li>Creating and managing internal cash receipts</li>
+            <li>Tracking cash movements across multiple registers</li>
+            <li>Generating printable and emailable proof of cash handoff</li>
+            <li>Team collaboration and visibility features</li>
+        </ul>
+        <p><strong>SpendNote is not:</strong></p>
+        <ul>
+            <li>An accounting or bookkeeping software</li>
+            <li>A tax preparation or filing tool</li>
+            <li>An invoice generation system</li>
+            <li>A replacement for professional financial advice</li>
+        </ul>
+
+        <h2 id="accounts">3. User Accounts</h2>
+        <h3>3.1 Registration</h3>
+        <p>To use certain features of the Service, you must register for an account. You agree to provide accurate, current, and complete information during registration.</p>
+        
+        <h3>3.2 Account Security</h3>
+        <p>You are responsible for safeguarding your password and for all activities that occur under your account. You must notify us immediately of any unauthorized use.</p>
+        
+        <h3>3.3 Account Termination</h3>
+        <p>We reserve the right to suspend or terminate accounts that violate these Terms or for any other reason at our discretion.</p>
+
+        <h2 id="usage">4. Acceptable Use</h2>
+        <p>You agree not to use the Service to:</p>
+        <ul>
+            <li>Violate any applicable laws or regulations</li>
+            <li>Infringe on intellectual property rights of others</li>
+            <li>Transmit malware or harmful code</li>
+            <li>Attempt to gain unauthorized access to the Service</li>
+            <li>Use the Service for money laundering or other illegal financial activities</li>
+            <li>Create receipts for transactions that did not occur</li>
+        </ul>
+
+        <h2 id="payment">5. Payment Terms</h2>
+        <h3>5.1 Subscription Plans</h3>
+        <p>SpendNote offers various subscription plans as described on our <a href="spendnote-pricing.html">Pricing page</a>. Prices are subject to change with 30 days notice.</p>
+        
+        <h3>5.2 Billing</h3>
+        <p>Subscription fees are billed in advance on a monthly or annual basis depending on your selected plan. All fees are non-refundable except as described in Section 6.</p>
+        
+        <h3>5.3 Taxes</h3>
+        <p>You are responsible for paying all applicable taxes. If we are required to collect taxes, they will be added to your invoice.</p>
+
+        <h2 id="cancellation">6. Cancellation & Refunds</h2>
+        <h3>6.1 Cancellation</h3>
+        <p>You may cancel your subscription at any time through your account settings. Cancellation takes effect at the end of your current billing period.</p>
+        
+        <h3>6.2 Money-Back Guarantee</h3>
+        <p>We offer a <strong>30-day money-back guarantee</strong> for all paid plans. If you're not satisfied within 30 days of your first payment, contact us for a full refund.</p>
+        
+        <h3>6.3 Data Export</h3>
+        <p>Upon cancellation, you may export your data for 30 days. After this period, your data will be permanently deleted.</p>
+
+        <h2 id="intellectual">7. Intellectual Property</h2>
+        <p>The Service and its original content, features, and functionality are owned by SpendNote and are protected by international copyright, trademark, and other intellectual property laws.</p>
+        <p>You retain ownership of all content you create using the Service. By using the Service, you grant us a limited license to store and process your content as necessary to provide the Service.</p>
+
+        <h2 id="limitation">8. Limitation of Liability</h2>
+        <p>To the maximum extent permitted by law, SpendNote shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to:</p>
+        <ul>
+            <li>Loss of profits, data, or other intangible losses</li>
+            <li>Service interruptions or errors</li>
+            <li>Unauthorized access to your data</li>
+            <li>Any third-party conduct on the Service</li>
+        </ul>
+        <p>Our total liability shall not exceed the amount you paid for the Service in the twelve (12) months preceding the claim.</p>
+
+        <h2 id="changes">9. Changes to Terms</h2>
+        <p>We reserve the right to modify these Terms at any time. We will provide notice of significant changes via email or through the Service. Your continued use of the Service after changes become effective constitutes acceptance of the new Terms.</p>
+
+        <h2 id="contact">10. Contact Us</h2>
+        <p>If you have questions about these Terms, please contact us:</p>
+        <ul>
+            <li>Email: <a href="mailto:legal@spendnote.app">legal@spendnote.app</a></li>
+            <li>Contact form: <a href="spendnote-contact.html">spendnote-contact.html</a></li>
+        </ul>
+    </main>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SpendNote. All rights reserved.</p>
+            <div class="footer-links-inline">
+                <a href="spendnote-terms.html">Terms of Service</a>
+                <a href="spendnote-privacy.html">Privacy Policy</a>
+                <a href="spendnote-contact.html">Contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

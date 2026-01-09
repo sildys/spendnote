@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SpendNote Privacy Policy - How we collect, use, and protect your data.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Privacy Policy - SpendNote</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-light: #10b981;
+            --primary-dark: #047857;
+            --blue: #3b82f6;
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --text: #0a0a0a;
+            --text-muted: #737373;
+            --border: rgba(0,0,0,0.08);
+            --active: #059669;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: clip; }
+
+        body { 
+            font-family: 'Inter', -apple-system, system-ui, sans-serif; 
+            background: var(--bg);
+            color: var(--text); 
+            line-height: 1.6; 
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NAV */
+        .site-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.95rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        /* HERO */
+        .legal-hero {
+            background: var(--surface);
+            padding: 4rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .legal-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .legal-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+        }
+
+        .legal-meta {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .legal-meta strong { color: var(--text); }
+
+        /* CONTENT */
+        .legal-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem 5rem;
+        }
+
+        .legal-content h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 2.5rem 0 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .legal-content h2:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .legal-content h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .legal-content p {
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .legal-content ul, .legal-content ol {
+            margin: 1rem 0 1.5rem 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .legal-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+        }
+
+        .legal-content a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .legal-content a:hover { text-decoration: underline; }
+
+        .legal-content strong { color: var(--text); }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(96, 165, 250, 0.04));
+            border-left: 4px solid var(--blue);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .highlight-box.green {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.08), rgba(16, 185, 129, 0.04));
+            border-left-color: var(--primary);
+        }
+
+        /* TOC */
+        .toc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .toc a:hover { color: var(--primary); }
+
+        /* DATA TABLE */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            background: var(--surface);
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .data-table td {
+            color: var(--text-muted);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--surface);
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-links-inline {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links-inline a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-links-inline a:hover { color: var(--primary); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .footer-links-inline { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+            .data-table { font-size: 0.8rem; }
+            .data-table th, .data-table td { padding: 8px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#nav-logo-gradient)"/>
+                    <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                    <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                    <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                    <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                    <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="nav-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#059669"/>
+                            <stop offset="100%" stop-color="#10b981"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span style="font-weight: 900; font-size: 1.5rem; color: #000000;">SpendNote</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="spendnote-pricing.html">Pricing</a></li>
+                <li><a href="spendnote-faq.html">FAQ</a></li>
+                <li><a href="spendnote-login.html" class="btn btn-secondary">Log in</a></li>
+                <li><a href="spendnote-signup.html" class="btn btn-primary">Sign up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="legal-hero">
+        <div class="legal-hero-content">
+            <h1>Privacy Policy</h1>
+            <p class="legal-meta">Last updated: <strong>January 9, 2026</strong></p>
+        </div>
+    </section>
+
+    <main class="legal-content">
+        <nav class="toc">
+            <h4>Table of Contents</h4>
+            <ul>
+                <li><a href="#overview">1. Overview</a></li>
+                <li><a href="#collect">2. Information We Collect</a></li>
+                <li><a href="#use">3. How We Use Your Information</a></li>
+                <li><a href="#sharing">4. Information Sharing</a></li>
+                <li><a href="#security">5. Data Security</a></li>
+                <li><a href="#retention">6. Data Retention</a></li>
+                <li><a href="#rights">7. Your Rights</a></li>
+                <li><a href="#cookies">8. Cookies</a></li>
+                <li><a href="#children">9. Children's Privacy</a></li>
+                <li><a href="#changes">10. Changes to This Policy</a></li>
+                <li><a href="#contact">11. Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="highlight-box green">
+            <p><i class="fas fa-shield-alt"></i> <strong>Your privacy matters.</strong> We collect only what's necessary to provide SpendNote, and we never sell your data to third parties.</p>
+        </div>
+
+        <h2 id="overview">1. Overview</h2>
+        <p>SpendNote ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our service.</p>
+        <p>We are based in the European Union and comply with the General Data Protection Regulation (GDPR) and other applicable data protection laws.</p>
+
+        <h2 id="collect">2. Information We Collect</h2>
+        
+        <h3>2.1 Information You Provide</h3>
+        <table class="data-table">
+            <tr>
+                <th>Data Type</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td>Name & Email</td>
+                <td>Account creation & communication</td>
+            </tr>
+            <tr>
+                <td>Password (hashed)</td>
+                <td>Account security</td>
+            </tr>
+            <tr>
+                <td>Company name (optional)</td>
+                <td>Receipt customization</td>
+            </tr>
+            <tr>
+                <td>Receipt content</td>
+                <td>Service functionality</td>
+            </tr>
+            <tr>
+                <td>Payment information</td>
+                <td>Subscription billing (processed by Stripe)</td>
+            </tr>
+        </table>
+
+        <h3>2.2 Information Collected Automatically</h3>
+        <ul>
+            <li><strong>Usage data:</strong> Features used, pages visited, actions taken</li>
+            <li><strong>Device information:</strong> Browser type, operating system, device type</li>
+            <li><strong>IP address:</strong> For security and fraud prevention</li>
+            <li><strong>Cookies:</strong> Session and preference cookies (see Section 8)</li>
+        </ul>
+
+        <h2 id="use">3. How We Use Your Information</h2>
+        <p>We use collected information to:</p>
+        <ul>
+            <li>Provide, maintain, and improve the Service</li>
+            <li>Process transactions and send related information</li>
+            <li>Send administrative notifications and updates</li>
+            <li>Respond to your comments, questions, and support requests</li>
+            <li>Monitor and analyze usage patterns and trends</li>
+            <li>Detect, prevent, and address technical issues and fraud</li>
+        </ul>
+
+        <div class="highlight-box">
+            <p><i class="fas fa-ban"></i> <strong>We do NOT:</strong> Sell your data • Use it for advertising • Share with third parties for marketing</p>
+        </div>
+
+        <h2 id="sharing">4. Information Sharing</h2>
+        <p>We share your information only in the following circumstances:</p>
+        <ul>
+            <li><strong>Service providers:</strong> Third parties that help us operate the Service (hosting, payment processing, email delivery)</li>
+            <li><strong>Legal requirements:</strong> When required by law, legal process, or government request</li>
+            <li><strong>Business transfers:</strong> In connection with a merger, acquisition, or sale of assets</li>
+            <li><strong>With your consent:</strong> When you explicitly authorize sharing</li>
+        </ul>
+
+        <h3>Our Service Providers</h3>
+        <table class="data-table">
+            <tr>
+                <th>Provider</th>
+                <th>Purpose</th>
+                <th>Location</th>
+            </tr>
+            <tr>
+                <td>Hetzner</td>
+                <td>Cloud hosting</td>
+                <td>Germany (EU)</td>
+            </tr>
+            <tr>
+                <td>Stripe</td>
+                <td>Payment processing</td>
+                <td>USA (Privacy Shield)</td>
+            </tr>
+            <tr>
+                <td>Postmark</td>
+                <td>Transactional email</td>
+                <td>USA (Privacy Shield)</td>
+            </tr>
+        </table>
+
+        <h2 id="security">5. Data Security</h2>
+        <p>We implement industry-standard security measures:</p>
+        <ul>
+            <li><strong>Encryption:</strong> All data encrypted in transit (TLS 1.3) and at rest (AES-256)</li>
+            <li><strong>Access controls:</strong> Role-based access, principle of least privilege</li>
+            <li><strong>Monitoring:</strong> 24/7 security monitoring and intrusion detection</li>
+            <li><strong>Backups:</strong> Regular encrypted backups stored in EU data centers</li>
+            <li><strong>Password security:</strong> Passwords hashed using bcrypt with salt</li>
+        </ul>
+
+        <h2 id="retention">6. Data Retention</h2>
+        <p>We retain your data as follows:</p>
+        <ul>
+            <li><strong>Active accounts:</strong> Data retained while account is active</li>
+            <li><strong>Cancelled accounts:</strong> Data available for export for 30 days, then permanently deleted</li>
+            <li><strong>Backups:</strong> Removed from backups within 90 days of deletion</li>
+            <li><strong>Legal requirements:</strong> Some data may be retained longer if required by law</li>
+        </ul>
+
+        <h2 id="rights">7. Your Rights</h2>
+        <p>Under GDPR and other privacy laws, you have the right to:</p>
+        <ul>
+            <li><strong>Access:</strong> Request a copy of your personal data</li>
+            <li><strong>Rectification:</strong> Correct inaccurate or incomplete data</li>
+            <li><strong>Erasure:</strong> Request deletion of your data ("right to be forgotten")</li>
+            <li><strong>Portability:</strong> Export your data in a machine-readable format</li>
+            <li><strong>Restriction:</strong> Limit how we process your data</li>
+            <li><strong>Objection:</strong> Object to certain processing activities</li>
+            <li><strong>Withdraw consent:</strong> Withdraw consent for optional processing</li>
+        </ul>
+        <p>To exercise these rights, contact us at <a href="mailto:privacy@spendnote.app">privacy@spendnote.app</a>.</p>
+
+        <h2 id="cookies">8. Cookies</h2>
+        <p>We use the following types of cookies:</p>
+        <ul>
+            <li><strong>Essential cookies:</strong> Required for the Service to function (authentication, security)</li>
+            <li><strong>Preference cookies:</strong> Remember your settings and preferences</li>
+            <li><strong>Analytics cookies:</strong> Help us understand how you use the Service (anonymized)</li>
+        </ul>
+        <p>You can manage cookie preferences in your browser settings. Disabling essential cookies may affect Service functionality.</p>
+
+        <h2 id="children">9. Children's Privacy</h2>
+        <p>SpendNote is not intended for children under 16. We do not knowingly collect personal information from children. If you believe we have collected such information, please contact us immediately.</p>
+
+        <h2 id="changes">10. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. We will notify you of material changes by email and/or a prominent notice on the Service. Your continued use after changes become effective constitutes acceptance.</p>
+
+        <h2 id="contact">11. Contact Us</h2>
+        <p>For privacy-related questions or concerns:</p>
+        <ul>
+            <li><strong>Email:</strong> <a href="mailto:privacy@spendnote.app">privacy@spendnote.app</a></li>
+            <li><strong>Data Protection Officer:</strong> <a href="mailto:dpo@spendnote.app">dpo@spendnote.app</a></li>
+            <li><strong>Contact form:</strong> <a href="spendnote-contact.html">spendnote-contact.html</a></li>
+        </ul>
+        <p>If you're unsatisfied with our response, you have the right to lodge a complaint with your local data protection authority.</p>
+    </main>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SpendNote. All rights reserved.</p>
+            <div class="footer-links-inline">
+                <a href="spendnote-terms.html">Terms of Service</a>
+                <a href="spendnote-privacy.html">Privacy Policy</a>
+                <a href="spendnote-contact.html">Contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

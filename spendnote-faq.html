@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Frequently asked questions about SpendNote - your cash receipt management solution.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>FAQ - SpendNote</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-light: #10b981;
+            --primary-dark: #047857;
+            --orange: #f59e0b;
+            --blue: #3b82f6;
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --surface-elevated: #f5f5f5;
+            --text: #0a0a0a;
+            --text-muted: #737373;
+            --border: rgba(0,0,0,0.08);
+            --shadow: rgba(0,0,0,0.04);
+            --error: #ef4444;
+            --success: #059669;
+            --active: #059669;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: clip; }
+
+        *:focus {
+            outline: 3px solid var(--active);
+            outline-offset: 2px;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, system-ui, sans-serif; 
+            background: var(--bg);
+            color: var(--text); 
+            line-height: 1.6; 
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: clip;
+        }
+
+        /* NAV */
+        .site-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .logo:hover { transform: scale(1.05); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav-links a:hover { color: var(--active); }
+
+        .nav-links a.active { color: var(--active); }
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -10px;
+            height: 3px;
+            border-radius: 999px;
+            background: var(--active);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(5, 150, 105, 0.05);
+            border-color: var(--primary);
+        }
+
+        /* HERO */
+        .faq-hero {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            padding: 5rem 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .faq-hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+
+        .faq-hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* SEARCH */
+        .search-section {
+            max-width: 600px;
+            margin: -30px auto 0;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-box {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-family: inherit;
+            border-radius: 12px;
+            background: var(--surface-elevated);
+        }
+
+        .search-box input:focus { outline: none; }
+
+        .search-box button {
+            padding: 14px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .search-box button:hover { background: var(--primary-dark); }
+
+        /* FAQ CONTENT */
+        .faq-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .faq-categories {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .category-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .category-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .faq-section {
+            margin-bottom: 3rem;
+        }
+
+        .faq-section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .faq-section-title i {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .faq-section:nth-child(2) .faq-section-title i {
+            background: linear-gradient(135deg, var(--orange), #fbbf24);
+        }
+
+        .faq-section:nth-child(3) .faq-section-title i {
+            background: linear-gradient(135deg, var(--blue), #60a5fa);
+        }
+
+        .faq-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .faq-item:hover { border-color: var(--primary); }
+
+        .faq-question {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            color: var(--text);
+        }
+
+        .faq-question i {
+            color: var(--primary);
+            transition: transform 0.3s;
+            font-size: 14px;
+        }
+
+        .faq-item.open .faq-question i { transform: rotate(180deg); }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .faq-answer-content {
+            padding: 0 24px 20px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .faq-item.open .faq-answer { max-height: 500px; }
+
+        /* CTA */
+        .faq-cta {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .faq-cta h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .faq-cta p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .faq-cta .btn { display: inline-block; }
+
+        /* FOOTER */
+        footer {
+            background: var(--surface);
+            padding: 3rem 2rem 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 1rem;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-links ul { list-style: none; }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: block;
+            padding: 0.4rem 0;
+            transition: color 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover { color: var(--primary); }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#nav-logo-gradient)"/>
+                    <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                    <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                    <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                    <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                    <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="nav-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#059669"/>
+                            <stop offset="100%" stop-color="#10b981"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span style="font-weight: 900; font-size: 1.5rem; color: #000000; letter-spacing: -0.02em;">SpendNote</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="spendnote-dashboard.html">Dashboard</a></li>
+                <li><a href="spendnote-pricing.html">Pricing</a></li>
+                <li><a href="spendnote-faq.html" class="active">FAQ</a></li>
+                <li><a href="spendnote-login.html" class="btn btn-secondary">Log in</a></li>
+                <li><a href="spendnote-signup.html" class="btn btn-primary">Sign up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="faq-hero">
+        <h1>How can we help?</h1>
+        <p>Find answers to common questions about SpendNote</p>
+    </section>
+
+    <div class="search-section">
+        <div class="search-box">
+            <input type="text" placeholder="Search for answers..." id="searchInput">
+            <button type="button"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+
+    <main class="faq-content">
+        <div class="faq-categories">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="getting-started">Getting Started</button>
+            <button class="category-btn" data-category="features">Features</button>
+            <button class="category-btn" data-category="billing">Billing</button>
+            <button class="category-btn" data-category="security">Security</button>
+        </div>
+
+        <div class="faq-section" data-category="getting-started">
+            <h2 class="faq-section-title">
+                <i class="fas fa-rocket"></i>
+                Getting Started
+            </h2>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What is SpendNote?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        SpendNote is a simple cash receipt management tool for teams. It helps you track internal cash movements, create printable receipts, and maintain visibility across your team — all without the complexity of accounting software. Perfect for petty cash, employee advances, and team handoffs.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    How do I get started?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Getting started is easy! Sign up for a free trial (no credit card required), create your first cash register, and you can start creating receipts immediately. The whole process takes less than 2 minutes.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Is SpendNote an accounting tool?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        No, SpendNote is not an accounting or tax tool. It's designed specifically for internal cash tracking and creating proof of handoff. The receipts you create are for internal documentation purposes — they're not invoices and shouldn't be used for tax purposes.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section" data-category="features">
+            <h2 class="faq-section-title">
+                <i class="fas fa-star"></i>
+                Features
+            </h2>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Can I customize the receipt templates?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! With Starter and Pro plans, you can customize receipt templates including your company logo, custom wording, and even translate to different languages. The only element that can't be changed is the disclaimer that clarifies this is not a tax document.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    How do I share receipts with my team?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        You can share receipts in multiple ways: email them directly from SpendNote, download as PDF and share, or print them for physical handoff. All team members with access can also view receipts in real-time from the dashboard.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Can I track multiple cash registers?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Absolutely! The Free Trial includes 1 register, Starter includes 2 registers, and Pro gives you unlimited registers. This is perfect for tracking cash at different locations, events, or departments.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section" data-category="billing">
+            <h2 class="faq-section-title">
+                <i class="fas fa-credit-card"></i>
+                Billing & Plans
+            </h2>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What's included in the free trial?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        The free trial gives you 14 days or 20 receipts (whichever comes first) to try SpendNote. You get 1 cash register, 1 user, basic receipt templates, and PDF reports. No credit card required to start.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Can I cancel anytime?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! You can cancel your subscription at any time with no questions asked. We also offer a 30-day money-back guarantee on all paid plans. Your data remains accessible for export even after cancellation.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What payment methods do you accept?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We accept all major credit cards (Visa, Mastercard, American Express) through our secure payment processor. For annual plans, we can also arrange bank transfers for larger organizations.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section" data-category="security">
+            <h2 class="faq-section-title">
+                <i class="fas fa-shield-alt"></i>
+                Security & Privacy
+            </h2>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Is my data secure?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! All data is encrypted in transit (SSL/TLS) and at rest. We host on EU servers, are GDPR-ready, and follow industry best practices for data security. Your financial data is never shared with third parties.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Can I export my data?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Absolutely! You can export all your receipts and transaction history as CSV files at any time. PDFs of individual receipts can also be downloaded. Your data belongs to you.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Where are your servers located?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Our servers are located in the European Union, ensuring compliance with GDPR and other EU data protection regulations. This provides strong privacy protections for all users.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-cta">
+            <h2>Still have questions?</h2>
+            <p>Can't find what you're looking for? Our team is here to help.</p>
+            <a href="spendnote-contact.html" class="btn btn-primary">Contact Support</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>SpendNote</h3>
+                <p>Professional cash receipt management for modern teams. Simple, secure, and transparent.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="spendnote-pricing.html">Pricing</a></li>
+                    <li><a href="spendnote-faq.html">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="spendnote-about.html">About</a></li>
+                    <li><a href="spendnote-contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="spendnote-terms.html">Terms</a></li>
+                    <li><a href="spendnote-privacy.html">Privacy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SpendNote. All rights reserved.</p>
+            <p><i class="fas fa-info-circle"></i> Proof of cash transfer only. Not a tax or accounting tool.</p>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                const isOpen = item.classList.contains('open');
+                
+                // Close all items
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                
+                // Open clicked item if it wasn't open
+                if (!isOpen) {
+                    item.classList.add('open');
+                }
+            });
+        });
+
+        // Category filter
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const category = btn.dataset.category;
+                document.querySelectorAll('.faq-section').forEach(section => {
+                    if (category === 'all' || section.dataset.category === category) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Search (demo)
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll('.faq-item').forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

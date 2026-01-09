@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View and manage all your receipts in SpendNote.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Receipts - SpendNote</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-light: #10b981;
+            --primary-dark: #047857;
+            --orange: #f59e0b;
+            --blue: #3b82f6;
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --surface-elevated: #f5f5f5;
+            --text: #0a0a0a;
+            --text-muted: #737373;
+            --border: rgba(0,0,0,0.08);
+            --shadow: rgba(0,0,0,0.04);
+            --error: #ef4444;
+            --success: #059669;
+            --active: #059669;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: clip; }
+
+        body { 
+            font-family: 'Inter', -apple-system, system-ui, sans-serif; 
+            background: var(--bg);
+            color: var(--text); 
+            line-height: 1.6; 
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: clip;
+        }
+
+        *:focus {
+            outline: 3px solid var(--active);
+            outline-offset: 2px;
+        }
+
+        /* NAV */
+        .site-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .nav-links a:hover { color: var(--active); }
+        .nav-links a.active { color: var(--active); }
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -10px;
+            height: 3px;
+            border-radius: 999px;
+            background: var(--active);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        /* APP CONTAINER */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .stat-card.green .stat-value { color: var(--primary); }
+        .stat-card.orange .stat-value { color: var(--orange); }
+        .stat-card.blue .stat-value { color: var(--blue); }
+
+        /* FILTER SECTION */
+        .filter-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .filter-title {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .filter-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-input, .filter-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .filter-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .filter-btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .filter-btn.clear {
+            background: var(--surface-elevated);
+            color: var(--text);
+        }
+
+        .filter-btn:hover { opacity: 0.9; }
+
+        /* RECEIPTS GRID */
+        .receipts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .receipt-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .receipt-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(5, 150, 105, 0.15);
+        }
+
+        .receipt-preview {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            position: relative;
+        }
+
+        .receipt-preview i {
+            font-size: 48px;
+            color: var(--primary);
+            opacity: 0.3;
+        }
+
+        .receipt-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .receipt-badge.in {
+            background: rgba(5, 150, 105, 0.15);
+            color: var(--primary);
+        }
+
+        .receipt-badge.out {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--error);
+        }
+
+        .receipt-content {
+            padding: 1.25rem;
+        }
+
+        .receipt-id {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .receipt-amount {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .receipt-amount.in { color: var(--primary); }
+        .receipt-amount.out { color: var(--error); }
+
+        .receipt-partner {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .receipt-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .receipt-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .receipt-action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .receipt-action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .receipt-action-btn.primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* PAGINATION */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--surface);
+            border: 2px dashed var(--border);
+            border-radius: 20px;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: var(--primary);
+            opacity: 0.5;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--surface);
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 1024px) {
+            .receipts-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .filter-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .receipts-grid { grid-template-columns: 1fr; }
+            .stats-bar { grid-template-columns: 1fr; }
+            .filter-grid { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#nav-logo-gradient)"/>
+                    <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                    <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                    <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                    <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                    <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="nav-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#059669"/>
+                            <stop offset="100%" stop-color="#10b981"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span style="font-weight: 900; font-size: 1.5rem; color: #000000;">SpendNote</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="spendnote-dashboard.html">Dashboard</a></li>
+                <li><a href="spendnote-register-list.html">Cash Registers</a></li>
+                <li><a href="spendnote-transaction-history.html">Transactions</a></li>
+                <li><a href="spendnote-receipt-list.html" class="active">Receipts</a></li>
+                <li><a href="spendnote-user-settings.html">Settings</a></li>
+                <li><a href="spendnote-login.html" class="btn btn-secondary">Log out</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <div class="page-header">
+            <div>
+                <h1>Receipts</h1>
+                <p class="page-subtitle">View, download, and share your cash receipts</p>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-label"><i class="fas fa-receipt"></i> Total Receipts</div>
+                <div class="stat-value">156</div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-label"><i class="fas fa-arrow-down"></i> Cash IN Receipts</div>
+                <div class="stat-value">89</div>
+            </div>
+            <div class="stat-card orange">
+                <div class="stat-label"><i class="fas fa-arrow-up"></i> Cash OUT Receipts</div>
+                <div class="stat-value">67</div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-label"><i class="fas fa-calendar"></i> This Month</div>
+                <div class="stat-value">23</div>
+            </div>
+        </div>
+
+        <!-- FILTERS -->
+        <div class="filter-section">
+            <div class="filter-header">
+                <div class="filter-title"><i class="fas fa-filter"></i> Filter Receipts</div>
+            </div>
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label>Search</label>
+                    <input type="text" class="filter-input" placeholder="Receipt ID or partner...">
+                </div>
+                <div class="filter-group">
+                    <label>Register</label>
+                    <select class="filter-select">
+                        <option value="">All Registers</option>
+                        <option value="main">Main Office</option>
+                        <option value="event">Event Fund</option>
+                        <option value="petty">Petty Cash</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Direction</label>
+                    <select class="filter-select">
+                        <option value="">All</option>
+                        <option value="in">Cash IN</option>
+                        <option value="out">Cash OUT</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Date Range</label>
+                    <select class="filter-select">
+                        <option value="">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="filter-btn primary"><i class="fas fa-search"></i> Search</button>
+                <button class="filter-btn clear"><i class="fas fa-times"></i> Clear</button>
+                <div style="flex: 1;"></div>
+                <button class="filter-btn clear"><i class="fas fa-file-csv"></i> Export All</button>
+            </div>
+        </div>
+
+        <!-- RECEIPTS GRID -->
+        <div class="receipts-grid">
+            <!-- Receipt 1 -->
+            <div class="receipt-card" onclick="location.href='spendnote-receipt-detail.html'">
+                <div class="receipt-preview">
+                    <i class="fas fa-receipt"></i>
+                    <span class="receipt-badge in">IN</span>
+                </div>
+                <div class="receipt-content">
+                    <div class="receipt-id">RCP-156</div>
+                    <div class="receipt-amount in">+$1,250.00</div>
+                    <div class="receipt-partner">John Smith</div>
+                    <div class="receipt-meta">
+                        <span><i class="fas fa-calendar"></i> Jan 9, 2026</span>
+                        <span><i class="fas fa-building"></i> Main Office</span>
+                    </div>
+                    <div class="receipt-actions">
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-eye"></i> View</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-download"></i> PDF</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-envelope"></i> Email</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receipt 2 -->
+            <div class="receipt-card" onclick="location.href='spendnote-receipt-detail.html'">
+                <div class="receipt-preview">
+                    <i class="fas fa-receipt"></i>
+                    <span class="receipt-badge out">OUT</span>
+                </div>
+                <div class="receipt-content">
+                    <div class="receipt-id">RCP-155</div>
+                    <div class="receipt-amount out">-$340.00</div>
+                    <div class="receipt-partner">Sarah Johnson</div>
+                    <div class="receipt-meta">
+                        <span><i class="fas fa-calendar"></i> Jan 8, 2026</span>
+                        <span><i class="fas fa-building"></i> Petty Cash</span>
+                    </div>
+                    <div class="receipt-actions">
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-eye"></i> View</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-download"></i> PDF</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-envelope"></i> Email</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receipt 3 -->
+            <div class="receipt-card" onclick="location.href='spendnote-receipt-detail.html'">
+                <div class="receipt-preview">
+                    <i class="fas fa-receipt"></i>
+                    <span class="receipt-badge in">IN</span>
+                </div>
+                <div class="receipt-content">
+                    <div class="receipt-id">RCP-154</div>
+                    <div class="receipt-amount in">+$500.00</div>
+                    <div class="receipt-partner">Mike Williams</div>
+                    <div class="receipt-meta">
+                        <span><i class="fas fa-calendar"></i> Jan 7, 2026</span>
+                        <span><i class="fas fa-building"></i> Event Fund</span>
+                    </div>
+                    <div class="receipt-actions">
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-eye"></i> View</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-download"></i> PDF</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-envelope"></i> Email</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receipt 4 -->
+            <div class="receipt-card" onclick="location.href='spendnote-receipt-detail.html'">
+                <div class="receipt-preview">
+                    <i class="fas fa-receipt"></i>
+                    <span class="receipt-badge out">OUT</span>
+                </div>
+                <div class="receipt-content">
+                    <div class="receipt-id">RCP-153</div>
+                    <div class="receipt-amount out">-$125.50</div>
+                    <div class="receipt-partner">Emily Brown</div>
+                    <div class="receipt-meta">
+                        <span><i class="fas fa-calendar"></i> Jan 6, 2026</span>
+                        <span><i class="fas fa-building"></i> Main Office</span>
+                    </div>
+                    <div class="receipt-actions">
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-eye"></i> View</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-download"></i> PDF</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-envelope"></i> Email</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receipt 5 -->
+            <div class="receipt-card" onclick="location.href='spendnote-receipt-detail.html'">
+                <div class="receipt-preview">
+                    <i class="fas fa-receipt"></i>
+                    <span class="receipt-badge in">IN</span>
+                </div>
+                <div class="receipt-content">
+                    <div class="receipt-id">RCP-152</div>
+                    <div class="receipt-amount in">+$2,000.00</div>
+                    <div class="receipt-partner">David Lee</div>
+                    <div class="receipt-meta">
+                        <span><i class="fas fa-calendar"></i> Jan 5, 2026</span>
+                        <span><i class="fas fa-building"></i> Main Office</span>
+                    </div>
+                    <div class="receipt-actions">
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-eye"></i> View</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-download"></i> PDF</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-envelope"></i> Email</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receipt 6 -->
+            <div class="receipt-card" onclick="location.href='spendnote-receipt-detail.html'">
+                <div class="receipt-preview">
+                    <i class="fas fa-receipt"></i>
+                    <span class="receipt-badge out">OUT</span>
+                </div>
+                <div class="receipt-content">
+                    <div class="receipt-id">RCP-151</div>
+                    <div class="receipt-amount out">-$75.00</div>
+                    <div class="receipt-partner">Lisa Chen</div>
+                    <div class="receipt-meta">
+                        <span><i class="fas fa-calendar"></i> Jan 4, 2026</span>
+                        <span><i class="fas fa-building"></i> Petty Cash</span>
+                    </div>
+                    <div class="receipt-actions">
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-eye"></i> View</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-download"></i> PDF</button>
+                        <button class="receipt-action-btn" onclick="event.stopPropagation()"><i class="fas fa-envelope"></i> Email</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="pagination">
+            <button class="page-btn"><i class="fas fa-chevron-left"></i></button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">...</button>
+            <button class="page-btn">12</button>
+            <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SpendNote. All rights reserved.</p>
+            <p><i class="fas fa-info-circle"></i> Proof of cash transfer only. Not a tax or accounting tool.</p>
+        </div>
+    </footer>
+</body>
+</html>
