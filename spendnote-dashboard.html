@@ -1895,6 +1895,146 @@ tr:hover [data-category-tag] {
 @media (max-width: 820px){
   .filter-grid{ grid-template-columns: 1fr !important; }
 }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-container {
+    background: var(--surface);
+    border-radius: 24px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    margin: auto;
+}
+
+.modal-header {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(135deg, rgba(var(--active-rgb), 0.1), rgba(var(--active-rgb), 0.05));
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 24px 24px 0 0;
+    z-index: 10;
+}
+
+.modal-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--active);
+    margin: 0;
+}
+
+.modal-close {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: var(--text-muted);
+}
+
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 32px;
+}
+
+.modal-info-bar {
+    display: flex;
+    gap: 24px;
+    padding: 16px 20px;
+    background: var(--bg);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.modal-info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.modal-info-label {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.modal-info-value {
+    color: var(--text);
+    font-weight: 700;
+}
+
+.modal-info-select {
+    border: none;
+    background: transparent;
+    font-weight: 700;
+    color: var(--active);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.modal-info-select:focus {
+    outline: 2px solid var(--active);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+@media (max-width: 640px) {
+    .modal-container {
+        max-height: 95vh;
+        border-radius: 16px;
+    }
+    
+    .modal-header {
+        padding: 20px 24px;
+        border-radius: 16px 16px 0 0;
+    }
+    
+    .modal-title {
+        font-size: 20px;
+    }
+    
+    .modal-body {
+        padding: 24px;
+    }
+}
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
@@ -2503,6 +2643,190 @@ tr:hover [data-category-tag] {
         </main>
     </div>
 
+    <!-- CREATE TRANSACTION MODAL -->
+    <div class="modal-overlay" id="createTransactionModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="modal-title">Create Transaction</h2>
+                <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- INFO BAR -->
+                <div class="modal-info-bar">
+                    <div class="modal-info-item">
+                        <i class="fas fa-user" style="color: var(--active);"></i>
+                        <span class="modal-info-label">Logged by:</span>
+                        <span class="modal-info-value">John Doe</span>
+                    </div>
+                    <div class="modal-info-item">
+                        <i class="fas fa-building" style="color: var(--active);"></i>
+                        <span class="modal-info-label">Register:</span>
+                        <select class="modal-info-select" id="modalRegister">
+                            <option value="main" data-color="#059669" data-rgb="5, 150, 105">Main Office</option>
+                            <option value="event" data-color="#f59e0b" data-rgb="245, 158, 11">Event Fund</option>
+                            <option value="petty" data-color="#3b82f6" data-rgb="59, 130, 246">Petty Cash</option>
+                        </select>
+                    </div>
+                </div>
+
+                <form id="modalTransactionForm">
+                    <!-- PARTNER NAME -->
+                    <div class="form-group">
+                        <label class="form-label">Partner name <span class="required">*</span></label>
+                        <div class="input-with-button">
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                id="modalPartnerName"
+                                placeholder="Enter partner name"
+                                required
+                            >
+                            <button type="button" class="add-detail-btn" id="modalTogglePartnerDetails" title="Add partner details">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Expanded partner details -->
+                        <div class="expanded-fields" id="modalPartnerDetailsFields">
+                            <div class="expanded-field">
+                                <label>Address</label>
+                                <input 
+                                    type="text" 
+                                    class="form-input" 
+                                    id="modalPartnerAddress"
+                                    placeholder="Street, City, State, ZIP"
+                                >
+                            </div>
+                            <div class="expanded-field">
+                                <label>Partner ID</label>
+                                <input 
+                                    type="text" 
+                                    class="form-input" 
+                                    id="modalPartnerId"
+                                    placeholder="Tax ID, Client ID, etc."
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DIRECTION -->
+                    <div class="form-group">
+                        <label class="form-label">Transaction direction <span class="required">*</span></label>
+                        <div class="direction-toggle">
+                            <div class="direction-option">
+                                <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
+                                <label for="modalDirectionIn" class="direction-label">
+                                    <div class="direction-icon">⬇</div>
+                                    <div class="direction-text">IN (Received)</div>
+                                </label>
+                            </div>
+                            <div class="direction-option">
+                                <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
+                                <label for="modalDirectionOut" class="direction-label">
+                                    <div class="direction-icon">⬆</div>
+                                    <div class="direction-text">OUT (Paid)</div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AMOUNT -->
+                    <div class="form-group">
+                        <label class="form-label">Amount <span class="required">*</span></label>
+                        <div class="input-with-prefix">
+                            <span class="input-prefix">$</span>
+                            <input 
+                                type="number" 
+                                class="form-input" 
+                                id="modalAmount"
+                                placeholder="0.00"
+                                step="0.01"
+                                min="0"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <!-- LINE ITEMS -->
+                    <div class="form-group">
+                        <label class="form-label">Line items (optional)</label>
+                        <div class="line-items-container" id="modalLineItemsContainer">
+                            <!-- Line items will be added here -->
+                        </div>
+                        <button type="button" class="add-line-item-btn" id="modalAddLineItemBtn">
+                            <i class="fas fa-plus"></i>
+                            Add line item (max 5)
+                        </button>
+                    </div>
+
+                    <!-- DATE -->
+                    <div class="form-group">
+                        <label class="form-label">Date <span class="required">*</span></label>
+                        <input 
+                            type="date" 
+                            class="form-input" 
+                            id="modalDate"
+                            required
+                        >
+                    </div>
+
+                    <!-- TRANSACTION ID (Optional button) -->
+                    <button type="button" class="add-section-btn" id="modalToggleTransactionId">
+                        <i class="fas fa-plus"></i>
+                        <span>Add transaction ID (optional)</span>
+                    </button>
+                    <div class="form-group" id="modalTransactionIdGroup" style="display: none;">
+                        <label class="form-label">Transaction ID</label>
+                        <input 
+                            type="text" 
+                            class="form-input" 
+                            id="modalTransactionId"
+                            placeholder="PO#, Order#, Invoice#, etc."
+                        >
+                        <span class="form-hint">Purchase order, order number, invoice reference, etc.</span>
+                    </div>
+
+                    <!-- NOTE (Optional button) -->
+                    <button type="button" class="add-section-btn" id="modalToggleNote">
+                        <i class="fas fa-plus"></i>
+                        <span>Add note (optional)</span>
+                    </button>
+                    <div class="form-group" id="modalNoteGroup" style="display: none;">
+                        <label class="form-label">Note</label>
+                        <textarea 
+                            class="form-textarea" 
+                            id="modalNote"
+                            placeholder="Add any additional notes or comments"
+                        ></textarea>
+                    </div>
+
+                    <!-- ACTIONS -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-blue" name="action" value="done">
+                            <i class="fas fa-check"></i>
+                            Done
+                        </button>
+                        <button type="submit" class="btn btn-primary" name="action" value="done-receipt">
+                            <i class="fas fa-file-pdf"></i>
+                            Done & Receipt
+                        </button>
+                        <button type="button" class="btn btn-tertiary" id="modalCancelBtn">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                    </div>
+                    
+                    <!-- Receipt Note -->
+                    <div style="text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-muted); font-style: italic;">
+                        You can print a receipt now, or later from the transaction list.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
@@ -2739,8 +3063,205 @@ syncRowSelection();
             alert('Filters applied! (Demo mode)');
         });
 
-        document.getElementById('addTransactionBtn').addEventListener('click', () => {
-            window.location.href = 'spendnote-create-transaction.html';
+        // Modal functionality
+        const modal = document.getElementById('createTransactionModal');
+        const openModalBtn = document.getElementById('addTransactionBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelModalBtn = document.getElementById('modalCancelBtn');
+
+        // Open modal
+        openModalBtn.addEventListener('click', () => {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            // Set today's date
+            document.getElementById('modalDate').valueAsDate = new Date();
+        });
+
+        // Close modal
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset form
+            document.getElementById('modalTransactionForm').reset();
+            document.getElementById('modalPartnerDetailsFields').classList.remove('show');
+            document.getElementById('modalTransactionIdGroup').style.display = 'none';
+            document.getElementById('modalNoteGroup').style.display = 'none';
+            document.getElementById('modalLineItemsContainer').innerHTML = '';
+            modalLineItemCount = 0;
+            updateModalLineItemsButton();
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelModalBtn.addEventListener('click', closeModal);
+
+        // Close on overlay click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Modal register change - update active color
+        const modalRegisterSelect = document.getElementById('modalRegister');
+        
+        function updateModalRegisterColor() {
+            const selectedOption = modalRegisterSelect.options[modalRegisterSelect.selectedIndex];
+            const color = selectedOption.dataset.color;
+            const rgb = selectedOption.dataset.rgb;
+            
+            if (color && rgb) {
+                document.documentElement.style.setProperty('--active', color);
+                document.documentElement.style.setProperty('--active-rgb', rgb);
+            }
+        }
+        
+        modalRegisterSelect.addEventListener('change', updateModalRegisterColor);
+
+        // Toggle partner details
+        document.getElementById('modalTogglePartnerDetails').addEventListener('click', function() {
+            const fields = document.getElementById('modalPartnerDetailsFields');
+            const isVisible = fields.classList.contains('show');
+            
+            if (isVisible) {
+                fields.classList.remove('show');
+                this.classList.remove('active');
+                this.innerHTML = '<i class="fas fa-plus"></i>';
+            } else {
+                fields.classList.add('show');
+                this.classList.add('active');
+                this.innerHTML = '<i class="fas fa-minus"></i>';
+            }
+        });
+
+        // Toggle transaction ID
+        document.getElementById('modalToggleTransactionId').addEventListener('click', function() {
+            const group = document.getElementById('modalTransactionIdGroup');
+            const isVisible = group.style.display !== 'none';
+            
+            if (isVisible) {
+                group.style.display = 'none';
+                this.classList.remove('active');
+                this.querySelector('i').className = 'fas fa-plus';
+            } else {
+                group.style.display = 'block';
+                this.classList.add('active');
+                this.querySelector('i').className = 'fas fa-minus';
+            }
+        });
+
+        // Toggle note
+        document.getElementById('modalToggleNote').addEventListener('click', function() {
+            const group = document.getElementById('modalNoteGroup');
+            const isVisible = group.style.display !== 'none';
+            
+            if (isVisible) {
+                group.style.display = 'none';
+                this.classList.remove('active');
+                this.querySelector('i').className = 'fas fa-plus';
+            } else {
+                group.style.display = 'block';
+                this.classList.add('active');
+                this.querySelector('i').className = 'fas fa-minus';
+            }
+        });
+
+        // Line items management
+        let modalLineItemCount = 0;
+        const maxModalLineItems = 5;
+        const modalLineItemsContainer = document.getElementById('modalLineItemsContainer');
+        const modalAddLineItemBtn = document.getElementById('modalAddLineItemBtn');
+
+        modalAddLineItemBtn.addEventListener('click', () => {
+            if (modalLineItemCount >= maxModalLineItems) return;
+            
+            modalLineItemCount++;
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'line-item';
+            itemDiv.innerHTML = `
+                <input 
+                    type="text" 
+                    class="line-item-input" 
+                    placeholder="Item description"
+                    data-item-index="${modalLineItemCount}"
+                >
+                <input 
+                    type="number" 
+                    class="line-item-input line-item-amount" 
+                    placeholder="$0.00"
+                    step="0.01"
+                    min="0"
+                    data-amount-index="${modalLineItemCount}"
+                >
+                <button type="button" class="remove-item-btn" data-remove-index="${modalLineItemCount}">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            modalLineItemsContainer.appendChild(itemDiv);
+            
+            // Remove button
+            itemDiv.querySelector('.remove-item-btn').addEventListener('click', function() {
+                itemDiv.remove();
+                modalLineItemCount--;
+                updateModalLineItemsButton();
+            });
+            
+            updateModalLineItemsButton();
+        });
+
+        function updateModalLineItemsButton() {
+            modalAddLineItemBtn.disabled = modalLineItemCount >= maxModalLineItems;
+            modalAddLineItemBtn.innerHTML = `
+                <i class="fas fa-plus"></i>
+                Add line item (${modalLineItemCount}/${maxModalLineItems})
+            `;
+        }
+
+        // Form submission
+        document.getElementById('modalTransactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const actionBtn = e.submitter;
+            const action = actionBtn ? actionBtn.value : 'done';
+            
+            const formData = {
+                register: document.getElementById('modalRegister').value,
+                loggedBy: 'John Doe',
+                partnerName: document.getElementById('modalPartnerName').value,
+                partnerAddress: document.getElementById('modalPartnerAddress').value,
+                partnerId: document.getElementById('modalPartnerId').value,
+                direction: document.querySelector('input[name="modalDirection"]:checked').value,
+                amount: document.getElementById('modalAmount').value,
+                date: document.getElementById('modalDate').value,
+                transactionId: document.getElementById('modalTransactionId').value,
+                note: document.getElementById('modalNote').value,
+                lineItems: []
+            };
+
+            // Collect line items
+            document.querySelectorAll('#modalLineItemsContainer .line-item').forEach(item => {
+                const desc = item.querySelector('[data-item-index]').value;
+                const amt = item.querySelector('[data-amount-index]').value;
+                if (desc || amt) {
+                    formData.lineItems.push({ description: desc, amount: amt });
+                }
+            });
+
+            console.log('Transaction data:', formData);
+            console.log('Action:', action);
+            
+            if (action === 'done-receipt') {
+                alert('Transaction saved!\n\nGenerating receipt PDF...\n\nIn production:\n- Save to database\n- Generate & download PDF\n- Update register balance');
+            } else {
+                alert('Transaction saved!\n\nIn production:\n- Save to database\n- Update register balance\n- Refresh dashboard');
+            }
+            
+            closeModal();
         });
 
         const activeCard = document.querySelector('.register-card.active');
