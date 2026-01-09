@@ -35,6 +35,30 @@
             scroll-behavior: smooth;
         }
 
+        /* SCROLL PROGRESS BAR */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            z-index: 10000;
+            transition: width 0.1s ease-out, background 0.3s;
+        }
+
+        .scroll-progress.orange {
+            background: linear-gradient(90deg, var(--orange), #fbbf24);
+        }
+
+        .scroll-progress.blue {
+            background: linear-gradient(90deg, var(--blue), #60a5fa);
+        }
+
+        .scroll-progress.purple {
+            background: linear-gradient(90deg, var(--purple), #a78bfa);
+        }
+
         *:focus {
             outline: 3px solid var(--active);
             outline-offset: 2px;
@@ -146,9 +170,33 @@
         /* HERO */
         .faq-hero {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            padding: 4rem 2rem 3rem;
+            padding: 3rem 2rem 3rem;
             text-align: center;
             color: white;
+        }
+
+        .breadcrumb {
+            max-width: 1400px;
+            margin: 0 auto 1.5rem;
+            text-align: left;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .breadcrumb i {
+            font-size: 0.75rem;
+            margin: 0 0.5rem;
         }
 
         .faq-hero h1 {
@@ -480,16 +528,54 @@
             background: linear-gradient(135deg, var(--purple), #a78bfa);
         }
 
+        .section-info {
+            flex: 1;
+        }
+
         .section-info h2 {
             font-size: 1.5rem;
             font-weight: 800;
             letter-spacing: -0.02em;
             margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .section-info p {
             color: var(--text-muted);
             font-size: 0.9rem;
+        }
+
+        .question-count {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 100px;
+            background: var(--surface-elevated);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #getting-started .question-count {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--primary);
+        }
+
+        #features .question-count {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--orange);
+        }
+
+        #billing .question-count {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--blue);
+        }
+
+        #security .question-count {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--purple);
         }
 
         /* FAQ ITEMS - CARDS STYLE */
@@ -691,6 +777,15 @@
             color: var(--text);
         }
 
+        /* SEARCH HIGHLIGHT */
+        mark.search-highlight {
+            background: #fef08a;
+            color: var(--text);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
         /* NO RESULTS */
         .no-results {
             text-align: center;
@@ -700,6 +795,68 @@
 
         .no-results.show {
             display: block;
+        }
+
+        /* BACK TO TOP BUTTON */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(5, 150, 105, 0.4);
+        }
+
+        .back-to-top.orange {
+            background: var(--orange);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+        }
+
+        .back-to-top.orange:hover {
+            box-shadow: 0 12px 32px rgba(245, 158, 11, 0.4);
+        }
+
+        .back-to-top.blue {
+            background: var(--blue);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .back-to-top.blue:hover {
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
+        }
+
+        .back-to-top.purple {
+            background: var(--purple);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+        }
+
+        .back-to-top.purple:hover {
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.4);
         }
 
         .no-results i {
@@ -828,6 +985,9 @@
     </style>
 </head>
 <body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
     <nav class="site-nav">
         <div class="nav-container">
             <a href="index.html" class="logo">
@@ -861,6 +1021,11 @@
     </nav>
 
     <section class="faq-hero">
+        <div class="breadcrumb">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>FAQ</span>
+        </div>
         <h1>Frequently Asked Questions</h1>
         <p>Everything you need to know about SpendNote</p>
     </section>
@@ -945,7 +1110,7 @@
                         <i class="fas fa-rocket"></i>
                     </div>
                     <div class="section-info">
-                        <h2>Getting Started</h2>
+                        <h2>Getting Started <span class="question-count">3 Questions</span></h2>
                         <p>Learn the basics of SpendNote</p>
                     </div>
                 </div>
@@ -998,7 +1163,7 @@
                         <i class="fas fa-star"></i>
                     </div>
                     <div class="section-info">
-                        <h2>Features</h2>
+                        <h2>Features <span class="question-count">4 Questions</span></h2>
                         <p>Discover what SpendNote can do</p>
                     </div>
                 </div>
@@ -1064,7 +1229,7 @@
                         <i class="fas fa-credit-card"></i>
                     </div>
                     <div class="section-info">
-                        <h2>Billing & Plans</h2>
+                        <h2>Billing & Plans <span class="question-count">5 Questions</span></h2>
                         <p>Pricing and payment information</p>
                     </div>
                 </div>
@@ -1143,7 +1308,7 @@
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <div class="section-info">
-                        <h2>Security & Privacy</h2>
+                        <h2>Security & Privacy <span class="question-count">4 Questions</span></h2>
                         <p>How we protect your data</p>
                     </div>
                 </div>
@@ -1211,6 +1376,11 @@
         </main>
     </div>
 
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
@@ -1261,6 +1431,24 @@
                     card.classList.add('open');
                 }
             });
+
+            // Keyboard navigation for FAQ cards
+            header.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    header.click();
+                }
+            });
+
+            // Make header focusable
+            header.setAttribute('tabindex', '0');
+        });
+
+        // Global Escape key to close all FAQ cards
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.faq-card').forEach(c => c.classList.remove('open'));
+            }
         });
 
         // Navigation Menu - Active State
@@ -1301,29 +1489,54 @@
             });
         });
 
-        // Search functionality
+        // Search functionality with highlighting
         const searchInput = document.getElementById('searchInput');
         const faqCards = document.querySelectorAll('.faq-card');
         const faqSections = document.querySelectorAll('.faq-section');
         const noResults = document.getElementById('noResults');
+        
+        // Store original content
+        let originalContent = {};
+        faqCards.forEach((card, index) => {
+            originalContent[index] = {
+                question: card.querySelector('.faq-question-text').innerHTML,
+                answer: card.querySelector('.faq-answer').innerHTML
+            };
+        });
 
         searchInput.addEventListener('input', function() {
             const query = this.value.toLowerCase().trim();
             let hasResults = false;
 
             if (query === '') {
-                // Show all
-                faqCards.forEach(card => card.style.display = 'block');
+                // Restore original content
+                faqCards.forEach((card, index) => {
+                    card.style.display = 'block';
+                    card.querySelector('.faq-question-text').innerHTML = originalContent[index].question;
+                    card.querySelector('.faq-answer').innerHTML = originalContent[index].answer;
+                });
                 faqSections.forEach(section => section.style.display = 'block');
                 noResults.classList.remove('show');
                 return;
             }
 
-            faqCards.forEach(card => {
+            faqCards.forEach((card, index) => {
                 const text = card.textContent.toLowerCase();
                 if (text.includes(query)) {
                     card.style.display = 'block';
                     hasResults = true;
+
+                    // Highlight matches
+                    const highlightText = (text) => {
+                        const regex = new RegExp(`(${query})`, 'gi');
+                        return text.replace(regex, '<mark class="search-highlight">$1</mark>');
+                    };
+
+                    // Restore and highlight
+                    card.querySelector('.faq-question-text').innerHTML = 
+                        highlightText(originalContent[index].question);
+                    card.querySelector('.faq-answer').innerHTML = 
+                        highlightText(originalContent[index].answer);
                 } else {
                     card.style.display = 'none';
                 }
@@ -1345,6 +1558,60 @@
             } else {
                 noResults.classList.add('show');
             }
+        });
+
+        // Scroll Progress Bar & Back to Top
+        const scrollProgress = document.getElementById('scrollProgress');
+        const backToTop = document.getElementById('backToTop');
+
+        function getCurrentSection() {
+            const sections = document.querySelectorAll('.faq-section');
+            let current = 'getting-started';
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 200) {
+                    current = section.id;
+                }
+            });
+            
+            return current;
+        }
+
+        window.addEventListener('scroll', () => {
+            // Progress bar
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.scrollY / windowHeight) * 100;
+            scrollProgress.style.width = scrolled + '%';
+
+            // Show/hide back to top button
+            const showButton = window.scrollY > 500;
+            if (showButton) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+
+            // Update colors based on active section
+            const currentSection = getCurrentSection();
+            scrollProgress.className = 'scroll-progress';
+            backToTop.className = 'back-to-top' + (showButton ? ' show' : '');
+            
+            if (currentSection === 'features') {
+                scrollProgress.classList.add('orange');
+                backToTop.classList.add('orange');
+            } else if (currentSection === 'billing') {
+                scrollProgress.classList.add('blue');
+                backToTop.classList.add('blue');
+            } else if (currentSection === 'security') {
+                scrollProgress.classList.add('purple');
+                backToTop.classList.add('purple');
+            }
+        });
+
+        // Back to top click
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     </script>
 </body>
