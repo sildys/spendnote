@@ -1089,7 +1089,7 @@
                 <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <h2 class="section-title">Current Plan</h2>
-                        <p class="section-description">You are currently on the Starter plan</p>
+                        <p class="section-description">You are currently on the Standard plan</p>
                     </div>
                     <button class="btn btn-primary btn-small">
                         <i class="fas fa-arrow-up"></i>
@@ -1098,21 +1098,44 @@
                 </div>
 
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">
+                    <!-- Free Trial -->
+                    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px;">
+                        <div style="font-size: 13px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Free Trial</div>
+                        <div style="font-size: 32px; font-weight: 900;">$0</div>
+                        <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">14 days or 20 receipts</div>
+                        <ul style="margin-top: 16px; padding-left: 0; list-style: none; font-size: 13px; color: var(--text-muted);">
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>1 cash register</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>1 user</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>Basic receipt template</li>
+                        </ul>
+                    </div>
+                    <!-- Standard - CURRENT -->
                     <div style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.05)); border: 2px solid var(--primary); border-radius: 16px; padding: 24px; position: relative;">
-                        <div style="position: absolute; top: -10px; right: 16px; background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;">CURRENT</div>
-                        <div style="font-size: 13px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Starter</div>
-                        <div style="font-size: 32px; font-weight: 900;">€12<span style="font-size: 14px; font-weight: 500; color: var(--text-muted);">/month</span></div>
-                        <div style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">2 registers • 3 users • Unlimited receipts</div>
+                        <div style="position: absolute; top: -10px; right: 16px; background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;">CURRENT PLAN</div>
+                        <div style="font-size: 13px; color: var(--primary); font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Standard</div>
+                        <div style="font-size: 32px; font-weight: 900;">$19<span style="font-size: 14px; font-weight: 500; color: var(--text-muted);">/month</span></div>
+                        <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Solo users & small teams</div>
+                        <ul style="margin-top: 16px; padding-left: 0; list-style: none; font-size: 13px; color: var(--text-muted);">
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>2 cash registers</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>1 user</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>Unlimited receipts</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>Custom logo upload</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>CSV export</li>
+                        </ul>
                     </div>
-                    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; opacity: 0.7;">
+                    <!-- Pro -->
+                    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px;">
                         <div style="font-size: 13px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Pro</div>
-                        <div style="font-size: 32px; font-weight: 900;">€29<span style="font-size: 14px; font-weight: 500; color: var(--text-muted);">/month</span></div>
-                        <div style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">Unlimited registers • 10 users • API access</div>
-                    </div>
-                    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; opacity: 0.7;">
-                        <div style="font-size: 13px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Enterprise</div>
-                        <div style="font-size: 32px; font-weight: 900;">Custom</div>
-                        <div style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">Unlimited everything • Priority support</div>
+                        <div style="font-size: 32px; font-weight: 900;">$39<span style="font-size: 14px; font-weight: 500; color: var(--text-muted);">/month</span></div>
+                        <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Growing teams</div>
+                        <ul style="margin-top: 16px; padding-left: 0; list-style: none; font-size: 13px; color: var(--text-muted);">
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>Unlimited cash registers</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>5 users included</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>Custom receipt wording</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>Email receipts directly</li>
+                            <li style="margin-bottom: 6px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>Role-based permissions</li>
+                        </ul>
+                        <button class="btn btn-primary btn-small" style="width: 100%; margin-top: 16px;">Upgrade to Pro</button>
                     </div>
                 </div>
             </div>
