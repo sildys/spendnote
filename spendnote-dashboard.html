@@ -3017,109 +3017,15 @@ tr:hover [data-category-tag] {
                     <div class="swiper-pagination"></div>
                 </div>
                 <!-- End of registers-swiper -->
-
-            </div>
-            <!-- End of registers-carousel-section -->
-
             <div class="transactions-card">
                 <div class="transactions-header">
                     <div class="header-top">
                         <h2 class="transactions-title">Recent Transactions</h2>
-                        <div class="header-actions">
-                            <button class="filter-toggle-btn" id="filterToggle">
-                                <i class="fas fa-sliders-h"></i>
-                                Filters
-                            </button>
-                            <button class="export-btn">
-                                <i class="fas fa-download"></i>
-                                Export CSV
-                            </button>
-                            <div class="filter-tabs">
-                                <button class="filter-tab active">All</button>
-                                <button class="filter-tab">IN</button>
-                                <button class="filter-tab">OUT</button>
-                            </div>
-                        </div>
                     </div>
-                </div>
-
-                <div class="filter-panel-wrapper" id="filterPanel">
-                    <div class="filter-panel">
-                        <div class="filter-grid">
-                            <div class="filter-group">
-                                <label class="filter-label">
-                                    <i class="fas fa-user"></i>
-                                    Name / Person
-                                </label>
-                                <input type="text" class="filter-input" placeholder="Search by name..." id="filterName">
-                            </div>
-                            <div class="filter-group">
-                                <label class="filter-label">
-                                    <i class="fas fa-file-alt"></i>
-                                    Description
-                                </label>
-                                <input type="text" class="filter-input" placeholder="Search description..." id="filterDesc">
-                            </div>
-                            <div class="filter-group">
-                                <label class="filter-label">
-                                    <i class="fas fa-user"></i>
-                                    Created by
-                                </label>
-                                <input type="text" class="filter-input" placeholder="Search recorder..." id="filterCreatedBy">
-                            </div>
-                            <div class="filter-group">                             <label class="filter-label">
-                                    <i class="fas fa-calendar"></i>
-                                    Date From
-                                </label>
-                                <input type="date" class="filter-input" id="filterDateFrom">
-                            </div>
-                            <div class="filter-group">
-                                <label class="filter-label">
-                                    <i class="fas fa-calendar"></i>
-                                    Date To
-                                </label>
-                                <input type="date" class="filter-input" id="filterDateTo">
-                            </div>
-                            <div class="filter-group">
-                                <label class="filter-label">
-                                    <i class="fas fa-dollar-sign"></i>
-                                    Amount Range
-                                </label>
-                                <div class="amount-range">
-                                    <input type="number" class="filter-input" placeholder="Min" id="filterAmountMin">
-                                    <span>-</span>
-                                    <input type="number" class="filter-input" placeholder="Max" id="filterAmountMax">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="filter-actions">
-                            <button class="filter-btn clear" id="clearFilters">
-                                <i class="fas fa-times"></i>
-                                Clear
-                            </button>
-                            <button class="filter-btn primary" id="applyFilters">
-                                <i class="fas fa-check"></i>
-                                Apply Filters
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bulk-actions" id="bulkActions">
-                    <input type="checkbox" class="row-checkbox" id="selectAll">
-                    <span class="bulk-actions-text"><span id="selectedCount">0</span> selected</span>
-                    <button class="bulk-action-btn">
-                        <i class="fas fa-print"></i> Print Selected
-                    </button>
-                    <button class="bulk-action-btn delete">
-                        <i class="fas fa-trash"></i> Delete Selected
-                    </button>
                 </div>
 
                 <div class="table-wrapper" id="tableWrapper">
                     <div class="table-grid table-header">
-                        <div></div>
                         <div>#</div>
                         <div>Type</div>
                         <div>Receipt</div>
@@ -3133,7 +3039,6 @@ tr:hover [data-category-tag] {
                     </div>
 
                     <div class="table-grid" tabindex="0">
-                        <input type="checkbox" class="row-checkbox tx-checkbox">
                         <div class="tx-number">1</div>
                         <div class="tx-icon in"><i class="fas fa-arrow-up"></i></div>
                         <div class="tx-receipt">#1047</div>
@@ -3147,9 +3052,8 @@ tr:hover [data-category-tag] {
                         </div>
                         <div class="tx-createdby">by Alexa</div>
                         <button class="tx-action">Details</button>
-</div>
+                    </div>
                     <div class="table-grid" tabindex="0">
-                        <input type="checkbox" class="row-checkbox tx-checkbox">
                         <div class="tx-number">2</div>
                         <div class="tx-icon out"><i class="fas fa-arrow-down"></i></div>
                         <div class="tx-receipt">#1046</div>
@@ -3163,9 +3067,8 @@ tr:hover [data-category-tag] {
                         </div>
                         <div class="tx-createdby">by Mia</div>
                         <button class="tx-action">Details</button>
-</div>
+                    </div>
                     <div class="table-grid" tabindex="0">
-                        <input type="checkbox" class="row-checkbox tx-checkbox">
                         <div class="tx-number">3</div>
                         <div class="tx-icon in"><i class="fas fa-arrow-up"></i></div>
                         <div class="tx-receipt">#1045</div>
@@ -3179,9 +3082,8 @@ tr:hover [data-category-tag] {
                         </div>
                         <div class="tx-createdby">by Ethan</div>
                         <button class="tx-action">Details</button>
-</div>
+                    </div>
                     <div class="table-grid" tabindex="0">
-                        <input type="checkbox" class="row-checkbox tx-checkbox">
                         <div class="tx-number">4</div>
                         <div class="tx-icon out"><i class="fas fa-arrow-down"></i></div>
                         <div class="tx-receipt">#1044</div>
@@ -3195,9 +3097,8 @@ tr:hover [data-category-tag] {
                         </div>
                         <div class="tx-createdby">by Sofia</div>
                         <button class="tx-action">Details</button>
-</div>
+                    </div>
                     <div class="table-grid" tabindex="0">
-                        <input type="checkbox" class="row-checkbox tx-checkbox">
                         <div class="tx-number">5</div>
                         <div class="tx-icon in"><i class="fas fa-arrow-up"></i></div>
                         <div class="tx-receipt">#1043</div>
@@ -3211,9 +3112,8 @@ tr:hover [data-category-tag] {
                         </div>
                         <div class="tx-createdby">by Liam</div>
                         <button class="tx-action">Details</button>
-</div>
+                    </div>
                     <div class="table-grid" tabindex="0">
-                        <input type="checkbox" class="row-checkbox tx-checkbox">
                         <div class="tx-number">6</div>
                         <div class="tx-icon out"><i class="fas fa-arrow-down"></i></div>
                         <div class="tx-receipt">#1042</div>
@@ -3227,7 +3127,74 @@ tr:hover [data-category-tag] {
                         </div>
                         <div class="tx-createdby">by Noah</div>
                         <button class="tx-action">Details</button>
-</div>
+                    </div>
+                    <div class="table-grid" tabindex="0">
+                        <div class="tx-number">7</div>
+                        <div class="tx-icon in"><i class="fas fa-arrow-up"></i></div>
+                        <div class="tx-receipt">#1041</div>
+                        <div class="tx-desc">Event ticket sales</div>
+                        <div class="tx-person">Event Fund</div>
+                        <div class="tx-person">Main Office</div>
+                        <div class="tx-amount in">+$890</div>
+                        <div class="tx-datetime">
+                            <span class="date">Dec 28, 2025</span>
+                            <span class="time">6:30 PM</span>
+                        </div>
+                        <div class="tx-createdby">by Emma</div>
+                        <button class="tx-action">Details</button>
+                    </div>
+                    <div class="table-grid" tabindex="0">
+                        <div class="tx-number">8</div>
+                        <div class="tx-icon out"><i class="fas fa-arrow-down"></i></div>
+                        <div class="tx-receipt">#1040</div>
+                        <div class="tx-desc">Equipment rental</div>
+                        <div class="tx-person">Petty Cash</div>
+                        <div class="tx-person">TechRent Inc</div>
+                        <div class="tx-amount out">-$650</div>
+                        <div class="tx-datetime">
+                            <span class="date">Dec 27, 2025</span>
+                            <span class="time">1:45 PM</span>
+                        </div>
+                        <div class="tx-createdby">by Oliver</div>
+                        <button class="tx-action">Details</button>
+                    </div>
+                    <div class="table-grid" tabindex="0">
+                        <div class="tx-number">9</div>
+                        <div class="tx-icon in"><i class="fas fa-arrow-up"></i></div>
+                        <div class="tx-receipt">#1039</div>
+                        <div class="tx-desc">Refund received</div>
+                        <div class="tx-person">Vendor XYZ</div>
+                        <div class="tx-person">Main Office</div>
+                        <div class="tx-amount in">+$320</div>
+                        <div class="tx-datetime">
+                            <span class="date">Dec 26, 2025</span>
+                            <span class="time">10:20 AM</span>
+                        </div>
+                        <div class="tx-createdby">by Ava</div>
+                        <button class="tx-action">Details</button>
+                    </div>
+                    <div class="table-grid" tabindex="0">
+                        <div class="tx-number">10</div>
+                        <div class="tx-icon out"><i class="fas fa-arrow-down"></i></div>
+                        <div class="tx-receipt">#1038</div>
+                        <div class="tx-desc">Utility payment</div>
+                        <div class="tx-person">Main Office</div>
+                        <div class="tx-person">City Utilities</div>
+                        <div class="tx-amount out">-$275</div>
+                        <div class="tx-datetime">
+                            <span class="date">Dec 25, 2025</span>
+                            <span class="time">9:00 AM</span>
+                        </div>
+                        <div class="tx-createdby">by Isabella</div>
+                        <button class="tx-action">Details</button>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; padding: 24px; border-top: 1px solid var(--border);">
+                    <a href="spendnote-transaction-history.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px;">
+                        <span>View All Transactions</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </main>
