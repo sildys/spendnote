@@ -740,9 +740,9 @@
         <!-- TABS -->
         <div class="tabs">
             <button class="tab active" onclick="switchTab('profile')">Profile</button>
+            <button class="tab" onclick="switchTab('team')">Team Management</button>
             <button class="tab" onclick="switchTab('security')">Security</button>
             <button class="tab" onclick="switchTab('notifications')">Notifications</button>
-            <button class="tab" onclick="switchTab('team')">Team Management</button>
             <button class="tab" onclick="switchTab('danger')">Delete Account</button>
         </div>
 
@@ -1196,14 +1196,14 @@
             if (tab === 'profile') {
                 document.getElementById('profileTab').style.display = 'block';
                 document.querySelectorAll('.tab')[0].classList.add('active');
-            } else if (tab === 'security') {
-                document.getElementById('securityTab').style.display = 'block';
-                document.querySelectorAll('.tab')[1].classList.add('active');
-            } else if (tab === 'notifications') {
-                document.getElementById('notificationsTab').style.display = 'block';
-                document.querySelectorAll('.tab')[2].classList.add('active');
             } else if (tab === 'team') {
                 document.getElementById('teamTab').style.display = 'block';
+                document.querySelectorAll('.tab')[1].classList.add('active');
+            } else if (tab === 'security') {
+                document.getElementById('securityTab').style.display = 'block';
+                document.querySelectorAll('.tab')[2].classList.add('active');
+            } else if (tab === 'notifications') {
+                document.getElementById('notificationsTab').style.display = 'block';
                 document.querySelectorAll('.tab')[3].classList.add('active');
             } else if (tab === 'danger') {
                 document.getElementById('dangerTab').style.display = 'block';
