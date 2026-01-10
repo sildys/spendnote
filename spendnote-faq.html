@@ -625,6 +625,23 @@
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
         }
 
+        /* Category glow colors for open state */
+        #getting-started .faq-card.open {
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.15);
+        }
+
+        #features .faq-card.open {
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.15);
+        }
+
+        #billing .faq-card.open {
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+        }
+
+        #security .faq-card.open {
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+        }
+
         .faq-header {
             padding: 1.25rem 1.5rem;
             display: flex;
@@ -632,6 +649,11 @@
             gap: 12px;
             cursor: pointer;
             user-select: none;
+            border-bottom: none;
+        }
+        
+        .faq-card.open .faq-header {
+            border-bottom: none;
         }
 
         .faq-number {
