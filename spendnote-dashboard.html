@@ -3524,10 +3524,12 @@ tr:hover [data-category-tag] {
         const filterToggle = document.getElementById('filterToggle');
         const filterPanel = document.getElementById('filterPanel');
 
-        filterToggle.addEventListener('click', () => {
-            filterPanel.classList.toggle('expanded');
-            filterToggle.classList.toggle('active');
-        });
+        if (filterToggle) {
+            filterToggle.addEventListener('click', () => {
+                filterPanel.classList.toggle('expanded');
+                filterToggle.classList.toggle('active');
+            });
+        }
 
         // Filter tabs
         document.querySelectorAll('.filter-tab').forEach(tab => {
@@ -3614,6 +3616,8 @@ syncRowSelection();
 
         // Open modal
         openModalBtn.addEventListener('click', () => {
+            console.log('Button clicked!');
+            console.log('Modal element:', modal);
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
             
