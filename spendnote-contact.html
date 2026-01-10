@@ -172,7 +172,7 @@
 
         .contact-method {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 1rem;
             padding: 1.25rem;
             background: var(--surface);
@@ -370,7 +370,7 @@
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 3rem;
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
         }
 
         .footer-brand h3 {
@@ -412,8 +412,11 @@
         .footer-bottom {
             max-width: 1400px;
             margin: 0 auto;
-            padding-top: 1.5rem;
+            padding-top: 2rem;
             border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             color: var(--text-muted);
             font-size: 0.85rem;
         }
