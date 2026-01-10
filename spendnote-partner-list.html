@@ -59,6 +59,13 @@
             width: 100%;
         }
 
+        .main-content {
+            padding-top: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
         /* NAV */
         .site-nav {
             position: sticky;
@@ -497,12 +504,13 @@
     </nav>
 
 <div class="app-container">
-    <div class="page-header">
-        <h1 class="page-title">Partners</h1>
-        <p class="page-subtitle">Manage your transaction partners and their contact information</p>
-    </div>
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Partners</h1>
+            <p class="page-subtitle">Manage your transaction partners and their contact information</p>
+        </div>
 
-    <div class="partners-card">
+        <div class="partners-card">
         <div class="partners-header">
             <div class="header-top">
                 <h2 class="partners-title">All Partners</h2>
@@ -644,6 +652,7 @@
             </table>
         </div>
     </div>
+    </main>
 </div>
 
     <footer>
