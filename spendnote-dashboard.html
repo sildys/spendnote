@@ -3610,6 +3610,7 @@ syncRowSelection();
         const openModalBtn = document.getElementById('addTransactionBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const cancelModalBtn = document.getElementById('modalCancelBtn');
+        const modalRegisterSelect = document.getElementById('modalRegister');
 
         // Open modal
         openModalBtn.addEventListener('click', () => {
@@ -3664,7 +3665,6 @@ syncRowSelection();
         });
 
         // Modal register change - update active color
-        const modalRegisterSelect = document.getElementById('modalRegister');
         
         function updateModalRegisterColor() {
             const selectedOption = modalRegisterSelect.options[modalRegisterSelect.selectedIndex];
