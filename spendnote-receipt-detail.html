@@ -1068,9 +1068,9 @@
         </div>
 
         <!-- CONTENT -->
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <!-- RECEIPT FORMAT SELECTION -->
-            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px; box-shadow: 0 2px 12px var(--shadow);">
+        <div class="content-layout">
+            <!-- RECEIPT FORMAT SELECTION & PREVIEW -->
+            <div class="receipt-preview-wrapper">
                 <div class="preview-header">
                     <div class="preview-title">Select Receipt Format</div>
                 </div>
@@ -1096,6 +1096,94 @@
 
                 <!-- RECEIPT PREVIEW IFRAME -->
                 <iframe id="receiptFrame" class="receipt-iframe" src="spendnote-pdf-receipt.html"></iframe>
+            </div>
+
+            <!-- DISPLAY OPTIONS SIDEBAR -->
+            <div class="settings-sidebar">
+                <div class="settings-card">
+                    <h3 class="settings-card-title">Display Options</h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Choose which fields to show on the receipt</p>
+                    
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Show Logo</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked onchange="toggleReceiptField('logo', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Show Company Info</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked onchange="toggleReceiptField('company', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Show Address</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked onchange="toggleReceiptField('address', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Show Partner Details</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked onchange="toggleReceiptField('partner', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Show Transaction ID</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked onchange="toggleReceiptField('transaction-id', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Show Note</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked onchange="toggleReceiptField('note', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Show Signatures</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked onchange="toggleReceiptField('signatures', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Show Date/Time</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked onchange="toggleReceiptField('datetime', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
         </div>
@@ -1125,6 +1213,43 @@
                 case 'a4':
                     iframe.src = 'spendnote-receipt-a4-two-copies.html';
                     break;
+            }
+        }
+
+        // Toggle receipt fields visibility
+        function toggleReceiptField(field, show) {
+            const iframe = document.getElementById('receiptFrame');
+            
+            // Wait for iframe to load
+            if (!iframe.contentWindow) {
+                console.log('Iframe not loaded yet');
+                return;
+            }
+
+            try {
+                const iframeDoc = iframe.contentWindow.document;
+                
+                // Map field names to CSS classes/selectors in the receipt
+                const fieldSelectors = {
+                    'logo': '.company-logo, .logo',
+                    'company': '.company-info, .company-name',
+                    'address': '.receipt-address, .address',
+                    'partner': '.partner-details, .partner-info',
+                    'transaction-id': '.transaction-id, .tx-id',
+                    'note': '.note, .receipt-note',
+                    'signatures': '.signature, .signatures',
+                    'datetime': '.date, .time, .datetime'
+                };
+
+                const selector = fieldSelectors[field];
+                if (selector) {
+                    const elements = iframeDoc.querySelectorAll(selector);
+                    elements.forEach(el => {
+                        el.style.display = show ? '' : 'none';
+                    });
+                }
+            } catch (e) {
+                console.log('Cannot access iframe content (cross-origin):', e.message);
             }
         }
     </script>
