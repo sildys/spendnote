@@ -1084,55 +1084,99 @@
 
         <!-- BILLING TAB -->
         <div id="billingTab" class="tab-content" style="display: none;">
-            <!-- Current Plan Summary -->
+            <!-- Subscription & Plans -->
             <div class="section">
-                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h2 class="section-title">Current Plan</h2>
-                        <p class="section-description">You are currently on the Standard plan (yearly billing)</p>
-                    </div>
+                <div class="section-header">
+                    <h2 class="section-title">Subscription & Plans</h2>
+                    <p class="section-description">Manage your subscription and compare plans</p>
                 </div>
 
-                <div style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.05)); border: 2px solid var(--primary); border-radius: 16px; padding: 24px; margin-top: 16px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px;">
+                <!-- Next billing info -->
+                <div style="margin-bottom: 24px; padding: 16px; background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.05)); border: 1px solid var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <i class="fas fa-calendar-check" style="color: var(--primary); font-size: 24px;"></i>
                         <div>
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                                <span style="background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;">CURRENT PLAN</span>
-                                <span style="background: var(--orange); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">YEARLY</span>
-                            </div>
-                            <div style="font-size: 28px; font-weight: 900; margin-bottom: 4px;">Standard</div>
-                            <div style="font-size: 14px; color: var(--text-muted);">Solo users & small teams</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="font-size: 36px; font-weight: 900;">$190<span style="font-size: 16px; font-weight: 500; color: var(--text-muted);">/year</span></div>
-                            <div style="font-size: 13px; color: var(--text-muted);">Just $15.83/month</div>
-                            <div style="font-size: 13px; color: var(--orange); font-weight: 600; margin-top: 4px;">💰 Saving $38 vs monthly</div>
+                            <div style="font-weight: 700; font-size: 15px;">You're on <span style="color: var(--primary);">Standard (Yearly)</span></div>
+                            <div style="font-size: 13px; color: var(--text-muted);">Next billing: February 1, 2026 • $190.00</div>
                         </div>
                     </div>
-                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
-                        <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px;">What's included:</div>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px;">
-                            <div style="font-size: 14px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>2 cash registers</div>
-                            <div style="font-size: 14px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>1 user</div>
-                            <div style="font-size: 14px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>Unlimited receipts</div>
-                            <div style="font-size: 14px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>Custom logo upload</div>
-                            <div style="font-size: 14px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>2 receipt templates</div>
-                            <div style="font-size: 14px;"><i class="fas fa-check" style="color: var(--primary); margin-right: 8px;"></i>CSV export</div>
-                        </div>
+                    <button class="btn btn-secondary btn-small" style="color: var(--text-muted);"><i class="fas fa-times" style="margin-right: 6px;"></i>Cancel</button>
+                </div>
+
+                <!-- Billing Toggle -->
+                <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px;">
+                    <span id="billingMonthlyLabel" style="font-size: 15px; font-weight: 600; color: var(--text-muted); cursor: pointer;">Monthly</span>
+                    <div id="billingToggle" style="width: 56px; height: 28px; background: var(--primary); border-radius: 28px; position: relative; cursor: pointer;">
+                        <div id="billingToggleSlider" style="width: 22px; height: 22px; background: white; border-radius: 50%; position: absolute; top: 3px; left: 31px; transition: left 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
                     </div>
-                    <div style="margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
-                        <a href="spendnote-pricing.html" class="btn btn-primary btn-small"><i class="fas fa-arrow-up" style="margin-right: 8px;"></i>Upgrade to Pro</a>
-                        <button class="btn btn-secondary btn-small"><i class="fas fa-exchange-alt" style="margin-right: 8px;"></i>Switch to Monthly</button>
-                        <button class="btn btn-secondary btn-small" style="color: var(--text-muted);"><i class="fas fa-times" style="margin-right: 8px;"></i>Cancel Subscription</button>
+                    <span id="billingYearlyLabel" style="font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer;">Yearly <span style="background: var(--orange); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: 4px;">SAVE 20%</span></span>
+                </div>
+
+                <!-- Plan Cards -->
+                <div id="billingPlanCards" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <!-- Free Trial -->
+                    <div style="background: var(--surface); border: 2px solid rgba(96, 165, 250, 0.3); border-radius: 20px; padding: 24px; position: relative;">
+                        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">Free Trial</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">14 days or 20 receipts</p>
+                        <div style="font-size: 40px; font-weight: 900; margin-bottom: 4px;">$0</div>
+                        <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Try it out</div>
+                        <ul style="list-style: none; padding: 0; margin-bottom: 20px;">
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>1 cash register</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>1 user</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>20 receipts (or 14 days)</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>Basic receipt template</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>Basic PDF report</li>
+                        </ul>
+                        <button class="btn btn-secondary btn-small" style="width: 100%; background: #e5e7eb; color: #9ca3af; cursor: default; pointer-events: none;">Trial Expired</button>
+                    </div>
+
+                    <!-- Standard - CURRENT -->
+                    <div style="background: var(--surface); border: 2px solid var(--primary); border-radius: 20px; padding: 24px; position: relative; box-shadow: 0 8px 24px rgba(5, 150, 105, 0.15); transform: scale(1.02);">
+                        <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">Current Plan</div>
+                        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 4px; margin-top: 8px;">Standard</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Solo users & small teams</p>
+                        <div id="standardPrice" style="font-size: 40px; font-weight: 900; margin-bottom: 4px;">$190</div>
+                        <div id="standardPeriod" style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">per year</div>
+                        <div id="standardBreakdown" style="font-size: 13px; color: var(--text-muted);">Just $15.83/month</div>
+                        <div id="standardSavings" style="font-size: 13px; color: var(--orange); font-weight: 600; margin-bottom: 16px;">💰 Save $38 vs monthly</div>
+                        <ul style="list-style: none; padding: 0; margin-bottom: 20px;">
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>2 cash registers</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>1 user</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>Unlimited receipts</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>Custom logo upload</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>2 receipt templates</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>Printable + downloadable PDF</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>CSV export</li>
+                        </ul>
+                        <button class="btn btn-secondary btn-small" style="width: 100%; background: #e5e7eb; color: #9ca3af; cursor: default; pointer-events: none;">Current Plan</button>
+                    </div>
+
+                    <!-- Pro -->
+                    <div style="background: var(--surface); border: 2px solid rgba(245, 158, 11, 0.3); border-radius: 20px; padding: 24px; position: relative;">
+                        <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--orange); color: white; padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">Most Popular</div>
+                        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 4px; margin-top: 8px;">Pro</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Growing teams</p>
+                        <div id="proPrice" style="font-size: 40px; font-weight: 900; margin-bottom: 4px;">$390</div>
+                        <div id="proPeriod" style="font-size: 14px; color: var(--text-muted); margin-bottom: 4px;">per year</div>
+                        <div id="proBreakdown" style="font-size: 13px; color: var(--text-muted);">Just $32.50/month</div>
+                        <div id="proSavings" style="font-size: 13px; color: var(--orange); font-weight: 600; margin-bottom: 16px;">💰 Save $78 vs monthly</div>
+                        <ul style="list-style: none; padding: 0; margin-bottom: 20px;">
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>Unlimited cash registers</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>5 users included</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>+$5/mo per additional user</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>Unlimited receipts</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>Custom receipt wording</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>Email receipts directly</li>
+                            <li style="padding: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px;"><i class="fas fa-check" style="color: var(--primary);"></i>Role-based permissions</li>
+                        </ul>
+                        <button class="btn btn-primary btn-small" style="width: 100%; background: var(--orange);" onclick="alert('Upgrade to Pro\n\nIn production:\n- Show payment confirmation\n- Process upgrade\n- Update subscription')">Upgrade to Pro</button>
                     </div>
                 </div>
 
-                <div style="margin-top: 24px; padding: 16px; background: var(--surface-elevated); border-radius: 12px; display: flex; align-items: center; gap: 12px;">
-                    <i class="fas fa-calendar-alt" style="color: var(--primary); font-size: 20px;"></i>
-                    <div>
-                        <div style="font-weight: 600;">Next billing date: February 1, 2026</div>
-                        <div style="font-size: 13px; color: var(--text-muted);">Your card ending in 4242 will be charged $190.00</div>
-                    </div>
+                <!-- Guarantee -->
+                <div style="margin-top: 24px; text-align: center; padding: 20px; background: rgba(5, 150, 105, 0.05); border-radius: 12px;">
+                    <i class="fas fa-shield-check" style="font-size: 28px; color: var(--primary); margin-bottom: 8px;"></i>
+                    <p style="font-size: 14px; margin: 0;"><strong>30-Day Money-Back Guarantee</strong> • Cancel anytime • No questions asked</p>
                 </div>
             </div>
 
@@ -1369,6 +1413,76 @@
             } else {
                 alert('Please type "DELETE" exactly to confirm account deletion.');
             }
+        }
+
+        // Billing Toggle
+        let isYearly = true;
+        const billingToggle = document.getElementById('billingToggle');
+        const billingToggleSlider = document.getElementById('billingToggleSlider');
+        const billingMonthlyLabel = document.getElementById('billingMonthlyLabel');
+        const billingYearlyLabel = document.getElementById('billingYearlyLabel');
+
+        function updateBillingPrices() {
+            const standardPrice = document.getElementById('standardPrice');
+            const standardPeriod = document.getElementById('standardPeriod');
+            const standardBreakdown = document.getElementById('standardBreakdown');
+            const standardSavings = document.getElementById('standardSavings');
+            const proPrice = document.getElementById('proPrice');
+            const proPeriod = document.getElementById('proPeriod');
+            const proBreakdown = document.getElementById('proBreakdown');
+            const proSavings = document.getElementById('proSavings');
+
+            if (isYearly) {
+                standardPrice.textContent = '$190';
+                standardPeriod.textContent = 'per year';
+                standardBreakdown.textContent = 'Just $15.83/month';
+                standardSavings.textContent = '💰 Save $38 vs monthly';
+                standardSavings.style.display = 'block';
+                proPrice.textContent = '$390';
+                proPeriod.textContent = 'per year';
+                proBreakdown.textContent = 'Just $32.50/month';
+                proSavings.textContent = '💰 Save $78 vs monthly';
+                proSavings.style.display = 'block';
+            } else {
+                standardPrice.textContent = '$19';
+                standardPeriod.textContent = 'per month';
+                standardBreakdown.textContent = '$228/year if billed monthly';
+                standardSavings.style.display = 'none';
+                proPrice.textContent = '$39';
+                proPeriod.textContent = 'per month';
+                proBreakdown.textContent = '$468/year if billed monthly';
+                proSavings.style.display = 'none';
+            }
+        }
+
+        if (billingToggle) {
+            billingToggle.addEventListener('click', () => {
+                isYearly = !isYearly;
+                if (isYearly) {
+                    billingToggle.style.background = 'var(--primary)';
+                    billingToggleSlider.style.left = '31px';
+                    billingYearlyLabel.style.color = 'var(--text)';
+                    billingMonthlyLabel.style.color = 'var(--text-muted)';
+                } else {
+                    billingToggle.style.background = '#e5e7eb';
+                    billingToggleSlider.style.left = '3px';
+                    billingYearlyLabel.style.color = 'var(--text-muted)';
+                    billingMonthlyLabel.style.color = 'var(--text)';
+                }
+                updateBillingPrices();
+            });
+        }
+
+        if (billingMonthlyLabel) {
+            billingMonthlyLabel.addEventListener('click', () => {
+                if (isYearly) billingToggle.click();
+            });
+        }
+
+        if (billingYearlyLabel) {
+            billingYearlyLabel.addEventListener('click', () => {
+                if (!isYearly) billingToggle.click();
+            });
         }
     </script>
 </body>
