@@ -1068,9 +1068,9 @@
         </div>
 
         <!-- CONTENT -->
-        <div class="content-layout">
+        <div style="max-width: 1200px; margin: 0 auto;">
             <!-- RECEIPT FORMAT SELECTION -->
-            <div class="receipt-preview-wrapper">
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px; box-shadow: 0 2px 12px var(--shadow);">
                 <div class="preview-header">
                     <div class="preview-title">Select Receipt Format</div>
                 </div>
@@ -1097,268 +1097,36 @@
                 <!-- RECEIPT PREVIEW IFRAME -->
                 <iframe id="receiptFrame" class="receipt-iframe" src="spendnote-pdf-receipt.html"></iframe>
             </div>
-
-            <!-- INFO SIDEBAR -->
-            <div class="settings-sidebar">
-                <!-- Template Selection -->
-                <div class="settings-card">
-                    <h3 class="settings-card-title">Template</h3>
-                    <select class="template-select" id="templateSelect" onchange="changeTemplate(this.value)">
-                        <option value="standard">Standard (Default)</option>
-                        <option value="compact">Compact</option>
-                        <option value="minimal">Minimal</option>
-                    </select>
-                </div>
-
-                <!-- Display Settings -->
-                <div class="settings-card">
-                    <h3 class="settings-card-title">Display Options</h3>
-                    
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Logo</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleVisibility('logo', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Company Block</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleVisibility('company', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Address</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" onchange="toggleVisibility('address', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Partner Details</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleVisibility('partner', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Transaction ID</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" onchange="toggleVisibility('transaction-id', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Note</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleVisibility('note', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Created By</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleVisibility('created-by', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Signatures</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleVisibility('signatures', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Date/Time</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleVisibility('datetime', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Actions -->
-                <div class="settings-card actions-card">
-                    <h3 class="settings-card-title">Actions</h3>
-                    <button class="btn btn-secondary action-btn-full" onclick="window.print()">
-                        <i class="fas fa-print"></i>
-                        Print Receipt
-                    </button>
-                    <button class="btn btn-primary action-btn-full" onclick="alert('Download PDF\n\nIn production:\n- Generate PDF\n- Download file')">
-                        <i class="fas fa-download"></i>
-                        Download PDF
-                    </button>
-                </div>
-            </div>
         </div>
         </div>
         </main>
     </div>
 
     <script>
-        let currentZoom = 1;
-        const minZoom = 0.5;
-        const maxZoom = 1.5;
-        const zoomStep = 0.1;
-
-        function updateZoom() {
-            const container = document.getElementById('previewContainer');
-            container.style.transform = `scale(${currentZoom})`;
+        // Format selection
+        function selectFormat(format) {
+            // Remove active class from all cards
+            document.querySelectorAll('.format-card').forEach(card => {
+                card.classList.remove('active');
+            });
             
-            // Update button states
-            document.getElementById('zoomOut').disabled = currentZoom <= minZoom;
-            document.getElementById('zoomIn').disabled = currentZoom >= maxZoom;
-        }
-
-        function zoomIn() {
-            if (currentZoom < maxZoom) {
-                currentZoom = Math.min(currentZoom + zoomStep, maxZoom);
-                updateZoom();
-            }
-        }
-
-        function zoomOut() {
-            if (currentZoom > minZoom) {
-                currentZoom = Math.max(currentZoom - zoomStep, minZoom);
-                updateZoom();
-            }
-        }
-
-        function zoomReset() {
-            currentZoom = 1;
-            updateZoom();
-        }
-
-        function changeTemplate(template) {
-            const container = document.getElementById('previewContainer');
-            container.setAttribute('data-template', template);
-        }
-
-        function toggleVisibility(field, show) {
-            const container = document.getElementById('previewContainer');
-            container.setAttribute(`data-show-${field}`, show ? '1' : '0');
-        }
-
-        // Dual-copy print logic
-        let printClone = null;
-        let cutDivider = null;
-
-        function limitLineItems(receiptElement) {
-            const maxItems = 5;
-            const tbody = receiptElement.querySelector('.receipt-table tbody');
-            if (!tbody) return;
-
-            const rows = tbody.querySelectorAll('tr');
-            const totalItems = rows.length;
-
-            if (totalItems > maxItems) {
-                // Hide rows beyond index 4
-                rows.forEach((row, index) => {
-                    if (index >= maxItems) {
-                        row.style.display = 'none';
-                    }
-                });
-
-                // Add overflow message
-                const overflowCount = totalItems - maxItems;
-                const overflowDiv = document.createElement('div');
-                overflowDiv.className = 'items-overflow';
-                overflowDiv.textContent = `+${overflowCount} more item${overflowCount > 1 ? 's' : ''}`;
-                
-                const table = receiptElement.querySelector('.receipt-table');
-                if (table && !table.nextElementSibling?.classList.contains('items-overflow')) {
-                    table.parentNode.insertBefore(overflowDiv, table.nextSibling);
-                }
-            }
-        }
-
-        window.addEventListener('beforeprint', function() {
-            const container = document.getElementById('previewContainer');
-            const originalReceipt = document.getElementById('receipt');
+            // Add active class to clicked card
+            event.currentTarget.classList.add('active');
             
-            if (!originalReceipt) return;
-
-            // Limit line items in original
-            limitLineItems(originalReceipt);
-
-            // Clone the receipt
-            printClone = originalReceipt.cloneNode(true);
-            printClone.id = 'receipt-copy';
-            
-            // Limit line items in clone
-            limitLineItems(printClone);
-
-            // Create cut divider
-            cutDivider = document.createElement('div');
-            cutDivider.className = 'cut-divider';
-            cutDivider.innerHTML = '✂ - - - - - - - - - - - - CUT HERE - - - - - - - - - - - - ✂';
-
-            // Insert divider and clone
-            container.appendChild(cutDivider);
-            container.appendChild(printClone);
-        });
-
-        window.addEventListener('afterprint', function() {
-            const container = document.getElementById('previewContainer');
-            const originalReceipt = document.getElementById('receipt');
-
-            // Remove clone and divider
-            if (printClone && printClone.parentNode) {
-                printClone.parentNode.removeChild(printClone);
-                printClone = null;
+            // Change iframe source based on format
+            const iframe = document.getElementById('receiptFrame');
+            switch(format) {
+                case 'pdf':
+                    iframe.src = 'spendnote-pdf-receipt.html';
+                    break;
+                case 'email':
+                    iframe.src = 'spendnote-email-receipt.html';
+                    break;
+                case 'a4':
+                    iframe.src = 'spendnote-receipt-a4-two-copies.html';
+                    break;
             }
-            if (cutDivider && cutDivider.parentNode) {
-                cutDivider.parentNode.removeChild(cutDivider);
-                cutDivider = null;
-            }
-
-            // Restore original receipt (remove overflow messages and unhide rows)
-            if (originalReceipt) {
-                const tbody = originalReceipt.querySelector('.receipt-table tbody');
-                if (tbody) {
-                    const rows = tbody.querySelectorAll('tr');
-                    rows.forEach(row => {
-                        row.style.display = '';
-                    });
-                }
-
-                const overflowMsg = originalReceipt.parentNode.querySelector('.items-overflow');
-                if (overflowMsg) {
-                    overflowMsg.parentNode.removeChild(overflowMsg);
-                }
-            }
-        });
-
-        // Initialize zoom buttons
-        updateZoom();
+        }
     </script>
 
     <footer>
@@ -1427,32 +1195,5 @@
             </div>
         </div>
     </footer>
-
-    <script>
-        // Format selection
-        function selectFormat(format) {
-            // Remove active class from all cards
-            document.querySelectorAll('.format-card').forEach(card => {
-                card.classList.remove('active');
-            });
-            
-            // Add active class to clicked card
-            event.target.closest('.format-card').classList.add('active');
-            
-            // Change iframe source based on format
-            const iframe = document.getElementById('receiptFrame');
-            switch(format) {
-                case 'pdf':
-                    iframe.src = 'spendnote-pdf-receipt.html';
-                    break;
-                case 'email':
-                    iframe.src = 'spendnote-email-receipt.html';
-                    break;
-                case 'a4':
-                    iframe.src = 'spendnote-receipt-a4-two-copies.html';
-                    break;
-            }
-        }
-    </script>
 </body>
 </html>
