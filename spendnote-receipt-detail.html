@@ -1191,6 +1191,43 @@
     </div>
 
     <script>
+        // Track current display options
+        let displayOptions = {
+            logo: '1',
+            company: '1',
+            address: '1',
+            partner: '1',
+            'transaction-id': '1',
+            note: '1',
+            signatures: '1',
+            datetime: '1'
+        };
+
+        // Track current format
+        let currentFormat = 'pdf';
+
+        // Build URL with parameters
+        function buildReceiptUrl(format) {
+            const baseUrls = {
+                'pdf': 'spendnote-pdf-receipt.html',
+                'email': 'spendnote-email-receipt.html',
+                'a4': 'spendnote-receipt-a4-two-copies.html'
+            };
+            
+            const params = new URLSearchParams();
+            for (const [key, value] of Object.entries(displayOptions)) {
+                params.append(key, value);
+            }
+            
+            return `${baseUrls[format]}?${params.toString()}`;
+        }
+
+        // Reload iframe with current settings
+        function reloadIframe() {
+            const iframe = document.getElementById('receiptFrame');
+            iframe.src = buildReceiptUrl(currentFormat);
+        }
+
         // Format selection
         function selectFormat(format) {
             // Remove active class from all cards
@@ -1201,57 +1238,26 @@
             // Add active class to clicked card
             event.currentTarget.classList.add('active');
             
-            // Change iframe source based on format
-            const iframe = document.getElementById('receiptFrame');
-            switch(format) {
-                case 'pdf':
-                    iframe.src = 'spendnote-pdf-receipt.html';
-                    break;
-                case 'email':
-                    iframe.src = 'spendnote-email-receipt.html';
-                    break;
-                case 'a4':
-                    iframe.src = 'spendnote-receipt-a4-two-copies.html';
-                    break;
-            }
+            // Update current format
+            currentFormat = format;
+            
+            // Reload iframe with new format
+            reloadIframe();
         }
 
         // Toggle receipt fields visibility
         function toggleReceiptField(field, show) {
-            const iframe = document.getElementById('receiptFrame');
+            // Update display options
+            displayOptions[field] = show ? '1' : '0';
             
-            // Wait for iframe to load
-            if (!iframe.contentWindow) {
-                console.log('Iframe not loaded yet');
-                return;
-            }
-
-            try {
-                const iframeDoc = iframe.contentWindow.document;
-                
-                // Map field names to CSS classes/selectors in the actual receipt templates
-                const fieldSelectors = {
-                    'logo': '.logo',
-                    'company': '.title, .meta, .footer-brand',
-                    'address': '.party-info',
-                    'partner': '.parties',
-                    'transaction-id': '.identifiers',
-                    'note': '.notes',
-                    'signatures': '.signature-section, .signatures',
-                    'datetime': '.meta'
-                };
-
-                const selector = fieldSelectors[field];
-                if (selector) {
-                    const elements = iframeDoc.querySelectorAll(selector);
-                    elements.forEach(el => {
-                        el.style.display = show ? '' : 'none';
-                    });
-                }
-            } catch (e) {
-                console.log('Cannot access iframe content (cross-origin):', e.message);
-            }
+            // Reload iframe with new settings
+            reloadIframe();
         }
+
+        // Initialize iframe on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            reloadIframe();
+        });
     </script>
 
     <footer>
