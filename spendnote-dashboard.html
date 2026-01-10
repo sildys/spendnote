@@ -1499,12 +1499,6 @@
             background: var(--border);
         }
 
-        /* ===== Recent Transactions grid tidy ===== */
-        .table-grid{
-            grid-template-columns: 36px 44px 44px 88px minmax(240px, 1fr) 140px 140px 120px 160px 140px 96px;
-            gap: 12px;
-            padding: 16px 28px;
-        }
         .tx-desc, .tx-person, .tx-receipt{
             white-space: nowrap;
             overflow: hidden;
@@ -1792,41 +1786,10 @@ tr:hover [data-category-tag] {
 }
 
 
-/* === v24 FIXES: no horizontal scroll + proper row selection + remove hover category labels === */
+/* === v24 FIXES: no horizontal scroll + proper row selection === */
 
 /* Hide any remaining tooltip UI */
 .row-tooltip { display: none !important; }
-
-/* Make transaction rows fit the card without horizontal scroll */
-.table-grid {
-  /* tighter row */
-  gap: 12px !important;
-  padding: 16px 20px !important;
-
-  /* NEW: 11 columns incl. Created by + Action, tuned to fit typical desktop widths */
-  grid-template-columns:
-    32px   /* checkbox */
-    34px   /* # */
-    44px   /* type icon */
-    72px   /* receipt */
-    minmax(160px, 1.35fr)  /* description */
-    minmax(110px, 0.95fr)  /* from */
-    minmax(110px, 0.95fr)  /* to */
-    90px   /* amount */
-    120px  /* date & time */
-    110px  /* created by */
-    86px;  /* action */
-}
-
-/* If viewport is narrower, squeeze a bit more */
-@media (max-width: 1200px) {
-  .table-grid {
-    gap: 10px !important;
-    padding: 14px 16px !important;
-    grid-template-columns:
-      30px 32px 42px 64px minmax(140px, 1.4fr) minmax(95px, 0.9fr) minmax(95px, 0.9fr) 84px 112px 96px 78px;
-  }
-}
 
 /* Ensure the container never shows a horizontal scrollbar */
 .recent-transactions,
