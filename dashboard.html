@@ -3951,15 +3951,17 @@ tr:hover [data-category-tag] {
 
         // Update menu item colors based on active cash box
         function updateMenuColors(color) {
-            const navCashBoxes = document.getElementById('navCashBoxes');
-            const navTransactions = document.getElementById('navTransactions');
+            // Update all nav-cash-item links (Dashboard, Cash Boxes, Transactions)
+            const navCashItems = document.querySelectorAll('.nav-cash-item');
+            navCashItems.forEach(item => {
+                item.style.color = color;
+            });
             
-            if (navCashBoxes) {
-                navCashBoxes.style.color = color;
-            }
-            if (navTransactions) {
-                navTransactions.style.color = color;
-            }
+            // Update other menu items (Contacts, Settings) - not Log out button
+            const otherNavItems = document.querySelectorAll('.nav-links a:not(.nav-cash-item):not(.btn)');
+            otherNavItems.forEach(item => {
+                item.style.color = color;
+            });
         }
 
         // ========================================
