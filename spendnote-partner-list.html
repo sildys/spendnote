@@ -460,13 +460,43 @@
             align-items: center;
             justify-content: center;
             color: var(--text-muted);
-            transition: all 0.2s;
             text-decoration: none;
+            transition: all 0.2s;
         }
 
         .footer-social a:hover {
             background: var(--primary);
             color: white;
+        }
+
+        /* STICKY ADD TRANSACTION BUTTON */
+        .sticky-add-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+        }
+
+        .sticky-add-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(5, 150, 105, 0.5);
+        }
+
+        .sticky-add-btn:active {
+            transform: translateY(-2px) scale(1.02);
         }
     </style>
 </head>
@@ -494,7 +524,7 @@
             </a>
             <ul class="nav-links">
                 <li><a href="spendnote-dashboard.html">Dashboard</a></li>
-                <li><a href="spendnote-register-list.html">Cash Registers</a></li>
+                <li><a href="spendnote-cash-box-list.html">Cash Boxes</a></li>
                 <li><a href="spendnote-transaction-history.html">Transactions</a></li>
                 <li><a href="spendnote-partner-list.html" class="active">Partners</a></li>
                 <li><a href="spendnote-user-settings.html">Settings</a></li>
@@ -689,13 +719,6 @@
                 </ul>
             </div>
             <div class="footer-links">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="spendnote-about.html">About</a></li>
-                    <li><a href="spendnote-contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
                 <h4>Legal</h4>
                 <ul>
                     <li><a href="spendnote-terms.html">Terms</a></li>
@@ -748,6 +771,11 @@
             });
         });
     </script>
+
+    <!-- Sticky Add Transaction Button -->
+    <button class="sticky-add-btn" onclick="window.location.href='spendnote-create-transaction.html'" aria-label="Add Transaction">
+        <i class="fas fa-plus"></i>
+    </button>
 
 </body>
 </html>

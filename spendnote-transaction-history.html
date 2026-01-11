@@ -646,15 +646,15 @@
             background: var(--bg);
         }
 
-        tbody tr.register-main:hover {
+        tbody tr.Cash Box-main:hover {
             background: rgba(5, 150, 105, 0.03);
         }
 
-        tbody tr.register-event:hover {
+        tbody tr.Cash Box-event:hover {
             background: rgba(245, 158, 11, 0.03);
         }
 
-        tbody tr.register-petty:hover {
+        tbody tr.Cash Box-petty:hover {
             background: rgba(59, 130, 246, 0.03);
         }
 
@@ -683,7 +683,7 @@
             color: var(--text);
         }
 
-        .tx-register {
+        .tx-Cash Box {
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -695,12 +695,12 @@
             color: var(--primary);
         }
 
-        .tx-register.orange {
+        .tx-Cash Box.orange {
             background: rgba(245, 158, 11, 0.1);
             color: var(--orange);
         }
 
-        .tx-register.blue {
+        .tx-Cash Box.blue {
             background: rgba(59, 130, 246, 0.1);
             color: var(--blue);
         }
@@ -833,6 +833,36 @@
             cursor: not-allowed;
         }
 
+        /* STICKY ADD TRANSACTION BUTTON */
+        .sticky-add-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+        }
+
+        .sticky-add-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(5, 150, 105, 0.5);
+        }
+
+        .sticky-add-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
         /* RESPONSIVE */
         @media (max-width: 1024px) {
             .filter-grid {
@@ -890,7 +920,7 @@
             </a>
             <ul class="nav-links">
                 <li><a href="spendnote-dashboard.html">Dashboard</a></li>
-                <li><a href="spendnote-register-list.html">Cash Registers</a></li>
+                <li><a href="spendnote-cash-box-list.html">Cash Boxes</a></li>
                 <li><a href="spendnote-transaction-history.html" class="active">Transactions</a></li>
                 <li><a href="spendnote-partner-list.html">Partners</a></li>
                 <li><a href="spendnote-user-settings.html">Settings</a></li>
@@ -905,7 +935,7 @@
         <div class="page-header">
             <div class="page-title-group">
                 <h1>Transaction History</h1>
-                <p class="page-subtitle">Search and filter all transactions across all registers</p>
+                <p class="page-subtitle">Search and filter all transactions across all Cash Boxes</p>
             </div>
         </div>
 
@@ -942,7 +972,7 @@
             <div class="stat-card">
                 <div class="stat-label">
                     <i class="fas fa-building"></i>
-                    Registers
+                    Cash Boxes
                 </div>
                 <div class="stat-value">3</div>
             </div>
@@ -988,14 +1018,14 @@
                         <input type="text" class="filter-input" placeholder="Search recorder..." id="filterRecorder">
                     </div>
 
-                    <!-- Register -->
+                    <!-- Cash Box -->
                     <div class="filter-group">
                         <label class="filter-label">
                             <i class="fas fa-building"></i>
-                            Register
+                            Cash Box
                         </label>
                         <select class="filter-select" id="filterRegister">
-                            <option value="">All Registers</option>
+                            <option value="">All Cash Boxes</option>
                             <option value="main">Main Office</option>
                             <option value="event">Event Fund</option>
                             <option value="petty">Petty Cash</option>
@@ -1084,7 +1114,7 @@
                             <th>ID</th>
                             <th>Date</th>
                             <th>Partner</th>
-                            <th>Register</th>
+                            <th>Cash Box</th>
                             <th>Direction</th>
                             <th>Amount</th>
                             <th>Logged By</th>
@@ -1093,12 +1123,12 @@
                     </thead>
                     <tbody>
                         <!-- Sample Data -->
-                        <tr class="register-main">
+                        <tr class="Cash Box-main">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-342</span></td>
                             <td><span class="tx-date">Jan 6, 2026</span></td>
                             <td><span class="tx-partner">John Smith</span></td>
-                            <td><span class="tx-register">Main Office</span></td>
+                            <td><span class="tx-Cash Box">Main Office</span></td>
                             <td><span class="tx-direction in">⬇ IN</span></td>
                             <td><span class="tx-amount in">$1,200.00</span></td>
                             <td><span class="tx-recorder">Jane Doe</span></td>
@@ -1111,12 +1141,12 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr class="register-event">
+                        <tr class="Cash Box-event">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-341</span></td>
                             <td><span class="tx-date">Jan 5, 2026</span></td>
                             <td><span class="tx-partner">Sarah Williams</span></td>
-                            <td><span class="tx-register orange">Event Fund</span></td>
+                            <td><span class="tx-Cash Box orange">Event Fund</span></td>
                             <td><span class="tx-direction out">⬆ OUT</span></td>
                             <td><span class="tx-amount out">$450.00</span></td>
                             <td><span class="tx-recorder">John Doe</span></td>
@@ -1129,12 +1159,12 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr class="register-petty">
+                        <tr class="Cash Box-petty">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-340</span></td>
                             <td><span class="tx-date">Jan 5, 2026</span></td>
                             <td><span class="tx-partner">Mike Johnson</span></td>
-                            <td><span class="tx-register blue">Petty Cash</span></td>
+                            <td><span class="tx-Cash Box blue">Petty Cash</span></td>
                             <td><span class="tx-direction in">⬇ IN</span></td>
                             <td><span class="tx-amount in">$85.50</span></td>
                             <td><span class="tx-recorder">Jane Doe</span></td>
@@ -1147,12 +1177,12 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr class="register-main">
+                        <tr class="Cash Box-main">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-339</span></td>
                             <td><span class="tx-date">Jan 4, 2026</span></td>
                             <td><span class="tx-partner">Emily Davis</span></td>
-                            <td><span class="tx-register">Main Office</span></td>
+                            <td><span class="tx-Cash Box">Main Office</span></td>
                             <td><span class="tx-direction out">⬆ OUT</span></td>
                             <td><span class="tx-amount out">$2,350.00</span></td>
                             <td><span class="tx-recorder">John Doe</span></td>
@@ -1165,12 +1195,12 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr class="register-event">
+                        <tr class="Cash Box-event">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-338</span></td>
                             <td><span class="tx-date">Jan 4, 2026</span></td>
                             <td><span class="tx-partner">Robert Brown</span></td>
-                            <td><span class="tx-register orange">Event Fund</span></td>
+                            <td><span class="tx-Cash Box orange">Event Fund</span></td>
                             <td><span class="tx-direction in">⬇ IN</span></td>
                             <td><span class="tx-amount in">$750.00</span></td>
                             <td><span class="tx-recorder">Jane Doe</span></td>
@@ -1183,12 +1213,12 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr class="register-petty">
+                        <tr class="Cash Box-petty">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-337</span></td>
                             <td><span class="tx-date">Jan 3, 2026</span></td>
                             <td><span class="tx-partner">Lisa Anderson</span></td>
-                            <td><span class="tx-register blue">Petty Cash</span></td>
+                            <td><span class="tx-Cash Box blue">Petty Cash</span></td>
                             <td><span class="tx-direction out">⬆ OUT</span></td>
                             <td><span class="tx-amount out">$125.00</span></td>
                             <td><span class="tx-recorder">John Doe</span></td>
@@ -1291,6 +1321,11 @@
             </div>
     </footer>
 
+    <!-- Sticky Add Transaction Button -->
+    <button class="sticky-add-btn" onclick="window.location.href='spendnote-create-transaction.html'" aria-label="Add Transaction">
+        <i class="fas fa-plus"></i>
+    </button>
+
     <script>
         // Stats note
         console.log('Stats show filtered results only');
@@ -1313,7 +1348,7 @@
                 partner: document.getElementById('filterPartner').value,
                 description: document.getElementById('filterDescription').value,
                 recorder: document.getElementById('filterRecorder').value,
-                register: document.getElementById('filterRegister').value,
+                cashBox: document.getElementById('filterRegister').value,
                 dateFrom: document.getElementById('filterDateFrom').value,
                 dateTo: document.getElementById('filterDateTo').value,
                 amountMin: document.getElementById('filterAmountMin').value,

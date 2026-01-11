@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Cash register settings in SpendNote.">
+    <meta name="description" content="Cash Box settings in SpendNote.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
-    <title>Cash Register Settings - SpendNote</title>
+    <title>Cash Box Settings - SpendNote</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -821,7 +821,7 @@
             </a>
             <ul class="nav-links">
                 <li><a href="spendnote-dashboard.html">Dashboard</a></li>
-                <li><a href="spendnote-register-list.html" class="active">Cash Registers</a></li>
+                <li><a href="spendnote-cash-box-list.html" class="active">Cash Boxes</a></li>
                 <li><a href="spendnote-transaction-history.html">Transactions</a></li>
                 <li><a href="spendnote-partner-list.html">Partners</a></li>
                 <li><a href="spendnote-user-settings.html">Settings</a></li>
@@ -835,14 +835,14 @@
         <div class="breadcrumb">
             <a href="/dashboard">Dashboard</a>
             <i class="fas fa-chevron-right"></i>
-            <a href="/registers">Registers</a>
+            <a href="/Cash Boxes">Cash Boxes</a>
             <i class="fas fa-chevron-right"></i>
             <span class="current">Main Office Settings</span>
         </div>
 
         <!-- PAGE HEADER -->
         <div class="page-header">
-            <h1 class="page-title">Cash Register Settings</h1>
+            <h1 class="page-title">Cash Box Settings</h1>
             <p class="page-subtitle">Configure Main Office (CR-001)</p>
         </div>
 
@@ -852,18 +852,18 @@
             <section class="settings-section">
                 <div class="section-header">
                     <h2 class="section-title">General</h2>
-                    <p class="section-description">Basic information about this cash register</p>
+                    <p class="section-description">Basic information about this Cash Box</p>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Cash register name</label>
+                    <label class="form-label">Cash Box name</label>
                     <input type="text" class="form-input" value="Main Office" placeholder="e.g., Main Office">
                     <p class="form-hint">This name appears on receipts and in your dashboard</p>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Description (optional)</label>
-                    <textarea class="form-input" placeholder="Internal note for this cash register (not shown on receipts)"></textarea>
+                    <textarea class="form-input" placeholder="Internal note for this Cash Box (not shown on receipts)"></textarea>
                     <p class="form-hint">For your reference only — customers won't see this</p>
                 </div>
             </section>
@@ -872,7 +872,7 @@
             <section class="settings-section">
                 <div class="section-header">
                     <h2 class="section-title">Currency</h2>
-                    <p class="section-description">Choose the currency for this cash register</p>
+                    <p class="section-description">Choose the currency for this Cash Box</p>
                 </div>
 
                 <div class="form-group">
@@ -893,7 +893,7 @@
                     <i class="fas fa-exclamation-triangle"></i>
                     <div class="warning-text">
                         <strong>Changing currency affects existing data.</strong><br>
-                        This register has 47 transactions. Changing currency won't convert amounts — balances will display in the new currency symbol.
+                        This Cash Box has 47 transactions. Changing currency won't convert amounts — balances will display in the new currency symbol.
                     </div>
                 </div>
             </section>
@@ -902,7 +902,7 @@
             <section class="settings-section">
                 <div class="section-header">
                     <h2 class="section-title">Appearance</h2>
-                    <p class="section-description">Customize the accent color for this register</p>
+                    <p class="section-description">Customize the accent color for this Cash Box</p>
                 </div>
 
                 <div class="form-group">
@@ -922,8 +922,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Register icon (appearance only)</label>
-                    <p class="form-hint" style="margin-bottom: 12px;">Choose an icon to represent this cash register</p>
+                    <label class="form-label">Cash Box icon (appearance only)</label>
+                    <p class="form-hint" style="margin-bottom: 12px;">Choose an icon to represent this Cash Box</p>
                     
                     <div class="icon-palette">
                         <div class="icon-option selected" data-icon="building">
@@ -1079,9 +1079,9 @@
                 <div class="form-group">
                     <button class="danger-button" id="deleteButton">
                         <i class="fas fa-trash"></i>
-                        Request cash register deletion
+                        Request Cash Box deletion
                     </button>
-                    <p class="form-hint">This will permanently delete this register and all 47 transactions. This action cannot be undone.</p>
+                    <p class="form-hint">This will permanently delete this Cash Box and all 47 transactions. This action cannot be undone.</p>
                 </div>
             </section>
 
@@ -1197,8 +1197,8 @@
 
         // Delete confirmation
         document.getElementById('deleteButton').addEventListener('click', function() {
-            if (confirm('Are you sure you want to delete "Main Office"?\n\nThis will permanently delete:\n• This cash register\n• All 47 transactions\n• All associated data\n\nThis action cannot be undone.')) {
-                alert('Cash register deleted (demo only)');
+            if (confirm('Are you sure you want to delete "Main Office"?\n\nThis will permanently delete:\n• This Cash Box\n• All 47 transactions\n• All associated data\n\nThis action cannot be undone.')) {
+                alert('Cash Box deleted (demo only)');
             }
         });
     </script>

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Manage your cash registers in SpendNote.">
+    <meta name="description" content="Manage your Cash Boxes in SpendNote.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
-    <title>Cash Registers - SpendNote</title>
+    <title>Cash Boxes - SpendNote</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -355,14 +355,14 @@
             box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
         }
 
-        /* REGISTERS GRID */
-        .registers-grid {
+        /* Cash Boxes GRID */
+        .Cash Boxes-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
 
-        .register-card {
+        .Cash Box-card {
             background: var(--surface);
             border: 2px solid var(--border);
             border-radius: 18px;
@@ -376,31 +376,31 @@
             min-height: auto;
         }
 
-        .register-card:hover {
+        .Cash Box-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 24px rgba(0,0,0,0.08);
         }
 
-        .register-card.green { border-color: rgba(5, 150, 105, 0.3); }
-        .register-card.orange { border-color: rgba(245, 158, 11, 0.3); }
-        .register-card.blue { border-color: rgba(59, 130, 246, 0.3); }
-        .register-card.purple { border-color: rgba(139, 92, 246, 0.3); }
-        .register-card.red { border-color: rgba(239, 68, 68, 0.3); }
+        .Cash Box-card.green { border-color: rgba(5, 150, 105, 0.3); }
+        .Cash Box-card.orange { border-color: rgba(245, 158, 11, 0.3); }
+        .Cash Box-card.blue { border-color: rgba(59, 130, 246, 0.3); }
+        .Cash Box-card.purple { border-color: rgba(139, 92, 246, 0.3); }
+        .Cash Box-card.red { border-color: rgba(239, 68, 68, 0.3); }
 
-        .register-card.green:hover { border-color: rgba(5, 150, 105, 0.5); }
-        .register-card.orange:hover { border-color: rgba(245, 158, 11, 0.5); }
-        .register-card.blue:hover { border-color: rgba(59, 130, 246, 0.5); }
-        .register-card.purple:hover { border-color: rgba(139, 92, 246, 0.5); }
-        .register-card.red:hover { border-color: rgba(239, 68, 68, 0.5); }
+        .Cash Box-card.green:hover { border-color: rgba(5, 150, 105, 0.5); }
+        .Cash Box-card.orange:hover { border-color: rgba(245, 158, 11, 0.5); }
+        .Cash Box-card.blue:hover { border-color: rgba(59, 130, 246, 0.5); }
+        .Cash Box-card.purple:hover { border-color: rgba(139, 92, 246, 0.5); }
+        .Cash Box-card.red:hover { border-color: rgba(239, 68, 68, 0.5); }
 
-        .register-header {
+        .Cash Box-header {
             display: flex;
             align-items: flex-start;
             gap: 12px;
             margin-bottom: 16px;
         }
 
-        .register-icon {
+        .Cash Box-icon {
             width: 44px;
             height: 44px;
             border-radius: 12px;
@@ -411,55 +411,55 @@
             flex-shrink: 0;
         }
 
-        .register-icon.green {
+        .Cash Box-icon.green {
             background: linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(5, 150, 105, 0.08));
             color: var(--primary);
             border: 2px solid rgba(5, 150, 105, 0.2);
         }
 
-        .register-icon.orange {
+        .Cash Box-icon.orange {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.08));
             color: var(--orange);
             border: 2px solid rgba(245, 158, 11, 0.2);
         }
 
-        .register-icon.blue {
+        .Cash Box-icon.blue {
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.08));
             color: var(--blue);
             border: 2px solid rgba(59, 130, 246, 0.2);
         }
 
-        .register-icon.purple {
+        .Cash Box-icon.purple {
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.08));
             color: #8b5cf6;
             border: 2px solid rgba(139, 92, 246, 0.2);
         }
 
-        .register-icon.red {
+        .Cash Box-icon.red {
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08));
             color: var(--error);
             border: 2px solid rgba(239, 68, 68, 0.2);
         }
 
-        .register-info {
+        .Cash Box-info {
             flex: 1;
         }
 
-        .register-name {
+        .Cash Box-name {
             font-size: 20px;
             font-weight: 800;
             letter-spacing: -0.01em;
             margin-bottom: 4px;
         }
 
-        .register-id {
+        .Cash Box-id {
             font-size: 12px;
             color: var(--text-muted);
             font-family: 'Courier New', monospace;
             font-weight: 600;
         }
 
-        .register-balance {
+        .Cash Box-balance {
             background: var(--bg);
             border-radius: 10px;
             padding: 12px;
@@ -482,7 +482,7 @@
             color: var(--text);
         }
 
-        .register-stats {
+        .Cash Box-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
@@ -514,7 +514,7 @@
         .stat-value.in { color: var(--primary); }
         .stat-value.out { color: var(--orange); }
 
-        .register-actions {
+        .Cash Box-actions {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 8px;
@@ -709,14 +709,44 @@
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
         }
 
+        /* STICKY ADD TRANSACTION BUTTON */
+        .sticky-add-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+        }
+
+        .sticky-add-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(5, 150, 105, 0.5);
+        }
+
+        .sticky-add-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
         /* RESPONSIVE */
         @media (max-width: 1200px) {
-            .registers-grid {
+            .Cash Boxes-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
         @media (max-width: 768px) {
-            .registers-grid {
+            .Cash Boxes-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -757,7 +787,7 @@
             </a>
             <ul class="nav-links">
                 <li><a href="spendnote-dashboard.html">Dashboard</a></li>
-                <li><a href="spendnote-register-list.html" class="active">Cash Registers</a></li>
+                <li><a href="spendnote-cash-box-list.html" class="active">Cash Boxes</a></li>
                 <li><a href="spendnote-transaction-history.html">Transactions</a></li>
                 <li><a href="spendnote-partner-list.html">Partners</a></li>
                 <li><a href="spendnote-user-settings.html">Settings</a></li>
@@ -772,35 +802,35 @@
             <!-- PAGE HEADER -->
             <div class="page-header">
                 <div class="page-title-group">
-                    <h1>Cash Registers</h1>
-                    <p class="page-subtitle">Manage and monitor all your cash registers</p>
+                    <h1>Cash Boxes</h1>
+                    <p class="page-subtitle">Manage and monitor all your Cash Boxes</p>
             </div>
-            <button class="btn btn-primary" onclick="alert('Create New Register\n\nIn production:\n- Open create register modal\n- Set name, icon, color\n- Initialize balance')">
+            <button class="btn btn-primary" onclick="alert('Create New Cash Box\n\nIn production:\n- Open create Cash Box modal\n- Set name, icon, color\n- Initialize balance')">
                 <i class="fas fa-plus"></i>
-                Create Register
+                Create Cash Box
             </button>
         </div>
 
-        <!-- REGISTERS GRID -->
-        <div class="registers-grid">
-            <!-- Register 1 - Main Office (Green) -->
-            <div class="register-card green">
-                <div class="register-header">
-                    <div class="register-icon green">
+        <!-- Cash Boxes GRID -->
+        <div class="Cash Boxes-grid">
+            <!-- Cash Box 1 - Main Office (Green) -->
+            <div class="Cash Box-card green">
+                <div class="Cash Box-header">
+                    <div class="Cash Box-icon green">
                         <i class="fas fa-building"></i>
                     </div>
-                    <div class="register-info">
-                        <div class="register-name">Main Office</div>
-                        <div class="register-id">CR-001</div>
+                    <div class="Cash Box-info">
+                        <div class="Cash Box-name">Main Office</div>
+                        <div class="Cash Box-id">CR-001</div>
                     </div>
                 </div>
 
-                <div class="register-balance">
+                <div class="Cash Box-balance">
                     <div class="balance-label">Current Balance</div>
                     <div class="balance-value">$18,500</div>
                 </div>
 
-                <div class="register-stats">
+                <div class="Cash Box-stats">
                     <div class="stat-item">
                         <div class="stat-label">IN (142)</div>
                         <div class="stat-value in">$78,200</div>
@@ -811,12 +841,12 @@
                     </div>
                 </div>
 
-                <div class="register-actions">
-                    <button class="action-btn" onclick="window.location.href='/register-detail?id=main'">
+                <div class="Cash Box-actions">
+                    <button class="action-btn" onclick="window.location.href='/Cash Box-detail?id=main'">
                         <i class="fas fa-eye"></i>
                         View
                     </button>
-                    <button class="action-btn" onclick="window.location.href='/register-settings?id=main'">
+                    <button class="action-btn" onclick="window.location.href='/Cash Box-settings?id=main'">
                         <i class="fas fa-cog"></i>
                         Settings
                     </button>
@@ -827,24 +857,24 @@
                 </div>
             </div>
 
-            <!-- Register 2 - Event Fund (Orange) -->
-            <div class="register-card orange">
-                <div class="register-header">
-                    <div class="register-icon orange">
+            <!-- Cash Box 2 - Event Fund (Orange) -->
+            <div class="Cash Box-card orange">
+                <div class="Cash Box-header">
+                    <div class="Cash Box-icon orange">
                         <i class="fas fa-calendar-alt"></i>
                     </div>
-                    <div class="register-info">
-                        <div class="register-name">Event Fund</div>
-                        <div class="register-id">CR-002</div>
+                    <div class="Cash Box-info">
+                        <div class="Cash Box-name">Event Fund</div>
+                        <div class="Cash Box-id">CR-002</div>
                     </div>
                 </div>
 
-                <div class="register-balance">
+                <div class="Cash Box-balance">
                     <div class="balance-label">Current Balance</div>
                     <div class="balance-value">$4,750</div>
                 </div>
 
-                <div class="register-stats">
+                <div class="Cash Box-stats">
                     <div class="stat-item">
                         <div class="stat-label">IN (65)</div>
                         <div class="stat-value in">$28,400</div>
@@ -855,12 +885,12 @@
                     </div>
                 </div>
 
-                <div class="register-actions">
-                    <button class="action-btn" onclick="window.location.href='/register-detail?id=event'">
+                <div class="Cash Box-actions">
+                    <button class="action-btn" onclick="window.location.href='/Cash Box-detail?id=event'">
                         <i class="fas fa-eye"></i>
                         View
                     </button>
-                    <button class="action-btn" onclick="window.location.href='/register-settings?id=event'">
+                    <button class="action-btn" onclick="window.location.href='/Cash Box-settings?id=event'">
                         <i class="fas fa-cog"></i>
                         Settings
                     </button>
@@ -871,24 +901,24 @@
                 </div>
             </div>
 
-            <!-- Register 3 - Petty Cash (Blue) -->
-            <div class="register-card blue">
-                <div class="register-header">
-                    <div class="register-icon blue">
+            <!-- Cash Box 3 - Petty Cash (Blue) -->
+            <div class="Cash Box-card blue">
+                <div class="Cash Box-header">
+                    <div class="Cash Box-icon blue">
                         <i class="fas fa-wallet"></i>
                     </div>
-                    <div class="register-info">
-                        <div class="register-name">Petty Cash</div>
-                        <div class="register-id">CR-003</div>
+                    <div class="Cash Box-info">
+                        <div class="Cash Box-name">Petty Cash</div>
+                        <div class="Cash Box-id">CR-003</div>
                     </div>
                 </div>
 
-                <div class="register-balance">
+                <div class="Cash Box-balance">
                     <div class="balance-label">Current Balance</div>
                     <div class="balance-value">$2,000</div>
                 </div>
 
-                <div class="register-stats">
+                <div class="Cash Box-stats">
                     <div class="stat-item">
                         <div class="stat-label">IN (42)</div>
                         <div class="stat-value in">$12,800</div>
@@ -899,12 +929,12 @@
                     </div>
                 </div>
 
-                <div class="register-actions">
-                    <button class="action-btn" onclick="window.location.href='/register-detail?id=petty'">
+                <div class="Cash Box-actions">
+                    <button class="action-btn" onclick="window.location.href='/Cash Box-detail?id=petty'">
                         <i class="fas fa-eye"></i>
                         View
                     </button>
-                    <button class="action-btn" onclick="window.location.href='/register-settings?id=petty'">
+                    <button class="action-btn" onclick="window.location.href='/Cash Box-settings?id=petty'">
                         <i class="fas fa-cog"></i>
                         Settings
                     </button>
@@ -915,24 +945,24 @@
                 </div>
             </div>
 
-            <!-- Register 4 - Marketing Budget (Purple) -->
-            <div class="register-card purple">
-                <div class="register-header">
-                    <div class="register-icon purple">
+            <!-- Cash Box 4 - Marketing Budget (Purple) -->
+            <div class="Cash Box-card purple">
+                <div class="Cash Box-header">
+                    <div class="Cash Box-icon purple">
                         <i class="fas fa-bullhorn"></i>
                     </div>
-                    <div class="register-info">
-                        <div class="register-name">Marketing Budget</div>
-                        <div class="register-id">CR-004</div>
+                    <div class="Cash Box-info">
+                        <div class="Cash Box-name">Marketing Budget</div>
+                        <div class="Cash Box-id">CR-004</div>
                     </div>
                 </div>
 
-                <div class="register-balance">
+                <div class="Cash Box-balance">
                     <div class="balance-label">Current Balance</div>
                     <div class="balance-value">$12,300</div>
                 </div>
 
-                <div class="register-stats">
+                <div class="Cash Box-stats">
                     <div class="stat-item">
                         <div class="stat-label">IN (38)</div>
                         <div class="stat-value in">$42,000</div>
@@ -943,12 +973,12 @@
                     </div>
                 </div>
 
-                <div class="register-actions">
-                    <button class="action-btn" onclick="window.location.href='/register-detail?id=marketing'">
+                <div class="Cash Box-actions">
+                    <button class="action-btn" onclick="window.location.href='/Cash Box-detail?id=marketing'">
                         <i class="fas fa-eye"></i>
                         View
                     </button>
-                    <button class="action-btn" onclick="window.location.href='/register-settings?id=marketing'">
+                    <button class="action-btn" onclick="window.location.href='/Cash Box-settings?id=marketing'">
                         <i class="fas fa-cog"></i>
                         Settings
                     </button>
@@ -959,24 +989,24 @@
                 </div>
             </div>
 
-            <!-- Register 5 - Emergency Fund (Red) -->
-            <div class="register-card red">
-                <div class="register-header">
-                    <div class="register-icon red">
+            <!-- Cash Box 5 - Emergency Fund (Red) -->
+            <div class="Cash Box-card red">
+                <div class="Cash Box-header">
+                    <div class="Cash Box-icon red">
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
-                    <div class="register-info">
-                        <div class="register-name">Emergency Fund</div>
-                        <div class="register-id">CR-005</div>
+                    <div class="Cash Box-info">
+                        <div class="Cash Box-name">Emergency Fund</div>
+                        <div class="Cash Box-id">CR-005</div>
                     </div>
                 </div>
 
-                <div class="register-balance">
+                <div class="Cash Box-balance">
                     <div class="balance-label">Current Balance</div>
                     <div class="balance-value">$8,900</div>
                 </div>
 
-                <div class="register-stats">
+                <div class="Cash Box-stats">
                     <div class="stat-item">
                         <div class="stat-label">IN (12)</div>
                         <div class="stat-value in">$9,200</div>
@@ -987,12 +1017,12 @@
                     </div>
                 </div>
 
-                <div class="register-actions">
-                    <button class="action-btn" onclick="window.location.href='/register-detail?id=emergency'">
+                <div class="Cash Box-actions">
+                    <button class="action-btn" onclick="window.location.href='/Cash Box-detail?id=emergency'">
                         <i class="fas fa-eye"></i>
                         View
                     </button>
-                    <button class="action-btn" onclick="window.location.href='/register-settings?id=emergency'">
+                    <button class="action-btn" onclick="window.location.href='/Cash Box-settings?id=emergency'">
                         <i class="fas fa-cog"></i>
                         Settings
                     </button>
@@ -1072,7 +1102,7 @@
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
                 <div class="modal-header-text">
-                    <div class="modal-title">Delete Cash Register?</div>
+                    <div class="modal-title">Delete Cash Box?</div>
                     <div class="modal-subtitle" id="modalRegisterName">Main Office (CR-001)</div>
                 </div>
             </div>
@@ -1092,7 +1122,7 @@
                 </div>
 
                 <p class="confirm-text">
-                    Are you absolutely sure you want to delete this register? 
+                    Are you absolutely sure you want to delete this Cash Box? 
                     Consider archiving instead of deleting to preserve historical data.
                 </p>
             </div>
@@ -1108,6 +1138,11 @@
             </div>
         </div>
     </div>
+
+    <!-- Sticky Add Transaction Button -->
+    <button class="sticky-add-btn" onclick="window.location.href='spendnote-create-transaction.html'" aria-label="Add Transaction">
+        <i class="fas fa-plus"></i>
+    </button>
 
     <script>
         let currentRegisterToDelete = null;
@@ -1126,7 +1161,7 @@
 
         function confirmDelete() {
             if (currentRegisterToDelete) {
-                alert(`Register "${currentRegisterToDelete.name}" deleted!\n\n${currentRegisterToDelete.txCount} transactions permanently removed.\n\nIn production:\n- Delete from database\n- Remove all transactions\n- Update stats\n- Redirect to registers list`);
+                alert(`Cash Box "${currentRegisterToDelete.name}" deleted!\n\n${currentRegisterToDelete.txCount} transactions permanently removed.\n\nIn production:\n- Delete from database\n- Remove all transactions\n- Update stats\n- Redirect to Cash Boxes list`);
                 hideDeleteModal();
                 // In production: actually delete and refresh page
             }

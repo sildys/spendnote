@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SpendNote Dashboard - Manage your cash receipts, transactions, and registers in one place.">
+    <meta name="description" content="SpendNote Dashboard - Manage your cash receipts, transactions, and Cash Boxes in one place.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
     <title>Dashboard - SpendNote</title>
@@ -127,7 +127,97 @@
             width: auto;
         }
 
-        .nav-links { display: flex; gap: 8px; list-style: none; }
+        .nav-links { display: flex; gap: 8px; list-style: none; align-items: center; }
+        .nav-links a {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            background: transparent;
+            border: none;
+            text-decoration: none;
+        }
+        .nav-links a:hover { color: var(--text); background: var(--surface-elevated); }
+        
+        /* Cash-related nav items */
+        .nav-links a.nav-cash-item {
+            color: var(--active);
+            font-weight: 700;
+        }
+        .nav-links a.nav-cash-item:hover {
+            background: rgba(var(--active-rgb), 0.1);
+        }
+        
+        /* New Transaction button in nav */
+        .nav-new-transaction-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--active);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(var(--active-rgb), 0.25);
+        }
+        .nav-new-transaction-btn:hover {
+            filter: brightness(0.9);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(var(--active-rgb), 0.35);
+        }
+        .nav-new-transaction-btn i { font-size: 12px; }
+        
+        /* Compact invite banner */
+        .invite-banner-compact {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: rgba(99,102,241,0.06);
+            border: 1px solid rgba(99,102,241,0.15);
+            border-radius: 10px;
+            margin: 0 0 20px 0;
+            font-size: 14px;
+            color: var(--text);
+        }
+        .invite-banner-compact > i { color: #6366f1; font-size: 14px; }
+        .invite-banner-compact span { flex: 1; }
+        .invite-btn-compact {
+            padding: 6px 14px;
+            background: rgba(99,102,241,0.12);
+            border: 1px solid rgba(99,102,241,0.25);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #4f46e5;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .invite-btn-compact:hover { background: rgba(99,102,241,0.2); }
+        .dismiss-btn-compact {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .dismiss-btn-compact:hover { background: rgba(0,0,0,0.05); color: var(--text); }
+        
         .nav-link {
             padding: 10px 20px;
             cursor: pointer;
@@ -160,16 +250,16 @@
             gap: 20px; 
         }
 
-        /* REGISTER CARDS */
+        /* Cash Box CARDS */
         /* OLD - not used anymore
-        .registers-grid {
+        .Cash Boxes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
             gap: 16px;
             margin-bottom: 20px;
         }
         */
-        .register-card {
+        .Cash Box-card {
             background: var(--surface);
             border: 2px solid var(--border);
             border-radius: 24px;
@@ -180,29 +270,29 @@
             overflow: hidden;
             box-shadow: 0 4px 20px var(--shadow);
         }
-        .register-card::before{
+        .Cash Box-card::before{
             /* Removed gradient wash to keep cards calm */
             content: none;
         }
-        .register-card:hover {
+        .Cash Box-card:hover {
             border-color: rgba(var(--active-rgb), 0.4);
             transform: translateY(-4px);
             box-shadow: 0 12px 40px rgba(var(--active-rgb), 0.12);
         }
-        .register-card.active {
+        .Cash Box-card.active {
             border-color: var(--active);
             background: linear-gradient(135deg, #ffffff 0%, rgba(var(--active-rgb), 0.04) 100%);
             box-shadow: 0 8px 32px rgba(var(--active-rgb), 0.15);
         }
-        .register-card.active::before { opacity: 0.06; }
+        .Cash Box-card.active::before { opacity: 0.06; }
 
-        .register-top {
+        .Cash Box-top {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 24px;
         }
-        .register-info h3 {
+        .Cash Box-info h3 {
             font-size: 18px;
             font-weight: 800;
             margin-bottom: 6px;
@@ -210,7 +300,7 @@
             position: relative;
             padding-left: 18px;
         }
-        .register-info h3::before{
+        .Cash Box-info h3::before{
             content: '';
             width: 10px;
             height: 10px;
@@ -222,7 +312,7 @@
             transform: translateY(-50%);
             box-shadow: 0 0 0 3px rgba(var(--card-rgb, var(--active-rgb)), 0.14);
         }
-        .register-id {
+        .Cash Box-id {
             font-size: 12px;
             color: var(--text-muted);
             font-weight: 600;
@@ -232,7 +322,7 @@
             border-radius: 6px;
             display: inline-block;
         }
-        .register-icon {
+        .Cash Box-icon {
             width: 56px;
             height: 56px;
             border-radius: 16px;
@@ -244,7 +334,7 @@
             font-size: 24px;
             border: 1px solid rgba(var(--active-rgb), 0.15);
         }
-        .register-balance {
+        .Cash Box-balance {
             font-size: 40px;
             font-weight: 900;
             color: var(--text);
@@ -268,10 +358,8 @@
         .trend-indicator.down { background: rgba(239,68,68,0.12); color: #dc2626; }
         .trend-indicator i { font-size: 12px; }
 
-        .register-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+        .Cash Box-stats {
+            display: none; /* Hidden - only balance shown */
         }
         .stat-item {
             background: var(--surface-elevated);
@@ -702,9 +790,9 @@
 
         .table-grid {
             display: grid;
-            grid-template-columns: 0.6fr 0.8fr 2fr 1.4fr 1.4fr 1fr 1.4fr 1fr 0.9fr;
-            gap: 8px;
-            padding: 14px 16px;
+            grid-template-columns: 55px 100px 120px 140px 1fr 95px 90px 65px;
+            gap: 12px;
+            padding: 14px 20px;
             align-items: center;
             border-bottom: 1px solid var(--border);
             transition: all 0.2s;
@@ -712,8 +800,15 @@
             width: 100%;
             box-sizing: border-box;
         }
-        .table-grid:hover {
-            background: rgba(var(--active-rgb), 0.03);
+        /* Row hover/focus uses cashbox color */
+        .table-grid:not(.table-header):hover {
+            background: rgba(var(--cashbox-rgb, 5, 150, 105), 0.06);
+        }
+        .table-grid:not(.table-header):focus {
+            background: rgba(var(--cashbox-rgb, 5, 150, 105), 0.1);
+            outline: 2px solid var(--cashbox-color, #059669);
+            outline-offset: -2px;
+            border-radius: 8px;
         }
         .table-grid:hover .row-tooltip { opacity: 1; }
         .table-header {
@@ -754,6 +849,44 @@
             z-index: 50;
         }
         .row-tooltip strong { color: #10b981; }
+
+        /* Type badge - IN/OUT */
+        .tx-type {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            text-align: center;
+        }
+        .tx-type.in {
+            background: rgba(16,185,129,0.15);
+            color: #059669;
+        }
+        .tx-type.out {
+            background: rgba(245,158,11,0.15);
+            color: #d97706;
+        }
+        
+        /* Cash Box badge */
+        .tx-cashbox {
+            font-size: 13px;
+        }
+        .cashbox-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text);
+        }
+        .cashbox-badge::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--cb-color, var(--text-muted));
+            flex-shrink: 0;
+        }
 
         .tx-icon {
             width: 38px;
@@ -817,9 +950,9 @@
         }
         .tx-action {
             padding: 8px 16px;
-            background: rgba(var(--active-rgb), 0.1);
-            color: var(--active);
-            border: 1px solid rgba(var(--active-rgb), 0.2);
+            background: rgba(var(--row-rgb, var(--active-rgb)), 0.1);
+            color: var(--row-color, var(--active));
+            border: 1px solid rgba(var(--row-rgb, var(--active-rgb)), 0.2);
             border-radius: 10px;
             font-weight: 800;
             font-size: 12px;
@@ -827,7 +960,7 @@
             transition: all 0.2s;
         }
         .tx-action:hover {
-            background: var(--active);
+            background: var(--row-color, var(--active));
             color: white;
             transform: translateY(-1px);
         }
@@ -889,7 +1022,7 @@
         }
     
         /* ===== CAROUSEL STYLES ===== */
-        .registers-carousel-section {
+        .Cash Boxes-carousel-section {
             margin-bottom: 30px;
             width: 100%;
             max-width: 100%;
@@ -944,7 +1077,7 @@
         }
 
         /* Swiper overrides */
-        .registers-swiper {
+        .Cash Boxes-swiper {
             padding: 10px 0 50px 0;
             overflow: hidden;
             width: 100%;
@@ -958,7 +1091,7 @@
             height: auto;
         }
 
-        .registers-swiper .register-card {
+        .Cash Boxes-swiper .Cash Box-card {
             margin: 0;
             height: 100%;
             max-width: 100%;
@@ -984,13 +1117,13 @@
             border-radius: 4px;
         }
 
-        /* Add Register Button */
-        .add-register-container {
+        /* Add Cash Box Button */
+        .add-Cash Box-container {
             text-align: center;
             margin-top: 20px;
         }
 
-        .add-register-btn {
+        .add-Cash Box-btn {
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -1006,12 +1139,12 @@
             box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
         }
 
-        .add-register-btn:hover {
+        .add-Cash Box-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
         }
 
-        .add-register-btn i {
+        .add-Cash Box-btn i {
             font-size: 18px;
         }
 
@@ -1024,36 +1157,36 @@
         }
 
         /* Prevent icon color change on hover */
-        .register-card:hover .register-icon i,
-        .register-card.active .register-icon i {
+        .Cash Box-card:hover .Cash Box-icon i,
+        .Cash Box-card.active .Cash Box-icon i {
             color: inherit;
         }
 
         
-                /* Add New Register Card */
-        .add-new-register-card {
+                /* Add New Cash Box Card */
+        .add-new-Cash Box-card {
             border: 3px dashed #10b981 !important;
             background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
             display: flex;
             flex-direction: column;
         }
 
-        .add-new-register-card:hover {
+        .add-new-Cash Box-card:hover {
             background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
             border-color: #059669 !important;
         }
 
-        .add-new-register-card .register-icon.add-icon {
+        .add-new-Cash Box-card .Cash Box-icon.add-icon {
             background: linear-gradient(135deg, #10b981, #059669) !important;
             color: white !important;
             border: none !important;
         }
 
-        .add-new-register-card .register-top h3 {
+        .add-new-Cash Box-card .Cash Box-top h3 {
             color: #10b981;
         }
 
-        .add-register-message {
+        .add-Cash Box-message {
             flex: 1;
             display: flex;
             align-items: center;
@@ -1061,7 +1194,7 @@
             padding: 40px 20px;
         }
 
-        .add-register-message p {
+        .add-Cash Box-message p {
             color: #6b7280;
             font-size: 16px;
             line-height: 1.6;
@@ -1355,7 +1488,7 @@
             font-weight: 900;
             letter-spacing: -0.02em;
         }
-        .registers-carousel-section{
+        .Cash Boxes-carousel-section{
             margin-top: 14px;
         }
         .carousel-title{
@@ -1371,22 +1504,22 @@
         }
 
 
-        /* ===== Register card kebab menu (settings/delete) ===== */
-.register-top{
+        /* ===== Cash Box card kebab menu (settings/delete) ===== */
+.Cash Box-top{
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
   gap:14px;
 }
 
-.register-header-left{
+.Cash Box-header-left{
   display:flex;
   align-items:flex-start;
   gap:12px;
   min-width:0;
 }
 
-.register-icon.small{
+.Cash Box-icon.small{
   width:34px;
   height:34px;
   border-radius:10px;
@@ -1397,16 +1530,16 @@
   font-size:14px;
 }
 
-.register-info{
+.Cash Box-info{
   min-width:0;
 }
 
-.register-actions{
+.Cash Box-actions{
   position:relative;
   flex:0 0 auto;
 }
 
-.register-kebab{
+.Cash Box-kebab{
   width:32px;
   height:32px;
   border-radius:10px;
@@ -1420,12 +1553,12 @@
   transition: all .15s ease;
 }
 
-.register-kebab:hover{
+.Cash Box-kebab:hover{
   background: rgba(148, 163, 184, 0.16);
   color: var(--text);
 }
 
-.register-menu{
+.Cash Box-menu{
   position:absolute;
   top: calc(100% + 8px);
   right: 0;
@@ -1439,9 +1572,9 @@
   z-index: 50;
 }
 
-.register-menu.open{ display:block; }
+.Cash Box-menu.open{ display:block; }
 
-.register-menu button{
+.Cash Box-menu button{
   width:100%;
   display:flex;
   align-items:center;
@@ -1457,21 +1590,21 @@
   font-size:14px;
 }
 
-.register-menu button:hover{
+.Cash Box-menu button:hover{
   background: rgba(148, 163, 184, 0.10);
 }
 
-.register-menu .divider{
+.Cash Box-menu .divider{
   height:1px;
   background: var(--border);
   margin: 6px 4px;
 }
 
-.register-menu .danger{
+.Cash Box-menu .danger{
   color: var(--danger);
 }
-.register-menu.open{ display: block; }
-        .register-menu button{
+.Cash Box-menu.open{ display: block; }
+        .Cash Box-menu button{
             width: 100%;
             display: flex;
             align-items: center;
@@ -1485,14 +1618,14 @@
             font-size: 13px;
             color: var(--text);
         }
-        .register-menu button:hover{ background: rgba(var(--active-rgb), 0.06); }
-        .register-menu .danger{
+        .Cash Box-menu button:hover{ background: rgba(var(--active-rgb), 0.06); }
+        .Cash Box-menu .danger{
             color: #dc2626;
         }
-        .register-menu .danger:hover{
+        .Cash Box-menu .danger:hover{
             background: rgba(239, 68, 68, 0.08);
         }
-        .register-menu .divider{
+        .Cash Box-menu .divider{
             height: 1px;
             background: var(--border);
         }
@@ -1631,7 +1764,7 @@ table.transactions-table th, table.transactions-table td,
 .transactions-table .col-date, .table-transactions .col-date { width: 12% !important; }
 .transactions-table .col-amount, .table-transactions .col-amount { width: 12% !important; text-align: right !important; }
 .transactions-table .col-category, .table-transactions .col-category { width: 14% !important; }
-.transactions-table .col-register, .table-transactions .col-register { width: 16% !important; }
+.transactions-table .col-Cash Box, .table-transactions .col-Cash Box { width: 16% !important; }
 .transactions-table .col-createdby, .table-transactions .col-createdby { width: 14% !important; }
 
 
@@ -1960,13 +2093,13 @@ tr:hover [data-category-tag] {
     color: var(--border);
 }
 
-.register-selector-wrapper {
+.Cash Box-selector-wrapper {
     position: relative;
     display: inline-flex;
     align-items: center;
 }
 
-.register-selector-icon {
+.Cash Box-selector-icon {
     position: absolute;
     left: 14px;
     font-size: 18px;
@@ -2630,11 +2763,12 @@ tr:hover [data-category-tag] {
                 <span style="font-weight: 900; font-size: 1.5rem; margin-left: 10px; color: #000000; letter-spacing: -0.02em;">SpendNote</span>
             </a>
             <ul class="nav-links">
-                <li><a href="index.html" class="active">Dashboard</a></li>
-                <li><a href="spendnote-register-list.html">Cash Registers</a></li>
-                <li><a href="spendnote-transaction-history.html">Transactions</a></li>
-                <li><a href="spendnote-partner-list.html">Partners</a></li>
+                <li><a href="index.html" class="nav-cash-item active">Dashboard</a></li>
+                <li><a href="spendnote-cash-box-list.html" class="nav-cash-item">Cash Boxes</a></li>
+                <li><a href="spendnote-transaction-history.html" class="nav-cash-item">Transactions</a></li>
+                <li><a href="spendnote-partner-list.html">Contacts</a></li>
                 <li><a href="spendnote-user-settings.html">Settings</a></li>
+                <li><button class="nav-new-transaction-btn" id="addTransactionBtn"><i class="fas fa-plus"></i> New Transaction</button></li>
                 <li><a href="spendnote-login.html" class="btn btn-secondary">Log out</a></li>
             </ul>
         </div>
@@ -2642,84 +2776,19 @@ tr:hover [data-category-tag] {
 
 <div class="app-container">
     <main class="main-content">
-            <!-- App topbar -->
-            <section class="app-topbar">
-<div class="context-row">
-                <button class="add-transaction-btn" id="addTransactionBtn">
-                    <div class="add-btn-icon">
-                        <i class="fas fa-plus"></i>
-                    </div>
-                    <div class="add-btn-text">New Transaction</div>
-                </button>
-
-                <div class="context-pill">
-                    <div class="context-badge">
-                        <div class="context-dot"></div>
-                        <div class="context-text" id="activeRegister">Main Office</div>
-                    </div>
-                    <div class="context-stats">
-                        <div class="context-stat context-stat-balance">
-                            <div class="tooltip">Current available balance</div>
-                            <div class="context-stat-value" id="availableBalance">$12,480</div>
-                            <div class="context-stat-label">Available</div>
-                        </div>
-
-                        <div class="context-stat">
-                            <div class="tooltip">↑ $420 vs last week</div>
-                            <div class="context-stat-value">
-                                +$4.4k
-                                <span class="context-stat-trend up">↑ 10%</span>
-                            </div>
-                            <div class="context-stat-label">Net Today</div>
-                        </div>
-                        <div class="context-stat">
-                            <div class="tooltip">142 transactions</div>
-                            <div class="context-stat-value">
-                                $25.7k
-                                <span class="context-stat-trend up">↑ 5%</span>
-                            </div>
-                            <div class="context-stat-label">Week In</div>
-                        </div>
-                        <div class="context-stat">
-                            <div class="tooltip">78 transactions</div>
-                            <div class="context-stat-value">
-                                $11.2k
-                                <span class="context-stat-trend down">↓ 3%</span>
-                            </div>
-                            <div class="context-stat-label">Week Out</div>
-                        </div>
-                        <div class="context-stat">
-                            <div class="tooltip">Average: 20/day</div>
-                            <div class="context-stat-value">142</div>
-                            <div class="context-stat-label">Txns</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </section>
-            <!-- Tip: invite your team -->
-            <div class="invite-banner" id="inviteBanner">
-                <div class="invite-banner-left">
-                    <div class="invite-banner-icon" aria-hidden="true">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="invite-banner-copy">
-                        <p class="invite-banner-title">Tip: invite your team</p>
-                        <p class="invite-banner-text">They can add receipts from their phones — you’ll see everything here instantly.</p>
-                    </div>
-                </div>
-                <div class="invite-banner-actions">
-                    <button class="invite-btn" type="button">Invite team</button>
-                    <button class="dismiss-btn" type="button" onclick="document.getElementById('inviteBanner').style.display='none'">Dismiss</button>
-                </div>
+            <!-- Tip: invite your team (compact) -->
+            <div class="invite-banner-compact" id="inviteBanner">
+                <i class="fas fa-lightbulb"></i>
+                <span><strong>Tip:</strong> Invite your team – they can add receipts from their phones.</span>
+                <button class="invite-btn-compact" type="button">Invite</button>
+                <button class="dismiss-btn-compact" type="button" onclick="document.getElementById('inviteBanner').style.display='none'" title="Dismiss">×</button>
             </div>
 
-
-            <!-- Cash Registers Carousel -->
-            <div class="registers-carousel-section">
+            <!-- Cash Boxes Carousel -->
+            <div class="Cash Boxes-carousel-section">
                 <div class="carousel-header">
-                    <h2 class="carousel-title">Cash Registers</h2>
-                    <div class="carousel-subtitle">Switch registers fast, keep the balance in sight.</div>
+                    <h2 class="carousel-title">Cash Boxes</h2>
+                    <div class="carousel-subtitle">Switch Cash Boxes fast, keep the balance in sight.</div>
                     <div class="carousel-nav">
                         <button class="carousel-arrow swiper-button-prev-custom" aria-label="Previous">
                             <i class="fas fa-chevron-left"></i>
@@ -2730,42 +2799,42 @@ tr:hover [data-category-tag] {
                     </div>
                 </div>
 
-                <div class="swiper registers-swiper">
+                <div class="swiper Cash Boxes-swiper">
                     <div class="swiper-wrapper">
                         <!-- Slide 1 - Main Office (Green) -->
                         <div class="swiper-slide">
-                            <div class="register-card active" data-name="Main Office" data-color="#059669" data-rgb="5, 150, 105" 
+                            <div class="Cash Box-card active" data-name="Main Office" data-color="#059669" data-rgb="5, 150, 105" 
                                  role="button" tabindex="0">
-                                <div class="register-top">
-  <div class="register-header-left">
-    <div class="register-icon small" style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(5, 150, 105, 0.05)); color: #059669; border-color: rgba(5, 150, 105, 0.15);"><i class="fas fa-building"></i></div>
-    <div class="register-info"><h3>Main Office</h3>
-                                        <div class="register-id">CR-001</div></div>
+                                <div class="Cash Box-top">
+  <div class="Cash Box-header-left">
+    <div class="Cash Box-icon small" style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(5, 150, 105, 0.05)); color: #059669; border-color: rgba(5, 150, 105, 0.15);"><i class="fas fa-building"></i></div>
+    <div class="Cash Box-info"><h3>Main Office</h3>
+                                        <div class="Cash Box-id">CR-001</div></div>
   </div>
-  <div class="register-actions">
-    <button class="register-kebab" aria-label="Cash register menu" type="button">
+  <div class="Cash Box-actions">
+    <button class="Cash Box-kebab" aria-label="Cash Box menu" type="button">
       <i class="fas fa-ellipsis-h"></i>
     </button>
-    <div class="register-menu" role="menu" aria-label="Cash register actions">
+    <div class="Cash Box-menu" role="menu" aria-label="Cash Box actions">
       <button class="menu-settings" type="button">
         <span>Settings</span>
         <i class="fas fa-cog"></i>
       </button>
       <div class="divider"></div>
       <button class="menu-delete danger" type="button">
-        <span>Delete cash register</span>
+        <span>Delete Cash Box</span>
         <i class="fas fa-trash"></i>
       </button>
     </div>
   </div>
 </div>
-                                <div class="register-balance">
+                                <div class="Cash Box-balance">
                                     $18,500
                                     <span class="trend-indicator up">
                                         <i class="fas fa-arrow-up"></i>+12%
                                     </span>
                                 </div>
-                                <div class="register-stats">
+                                <div class="Cash Box-stats">
                                     <div class="stat-item">
                                         <div class="tooltip">Average: $2,400/day this week</div>
                                         <div class="stat-label">Today In</div>
@@ -2782,38 +2851,38 @@ tr:hover [data-category-tag] {
 
                         <!-- Slide 2 - Event Fund (Orange) -->
                         <div class="swiper-slide">
-                            <div class="register-card" data-name="Event Fund" data-color="#f59e0b" data-rgb="245, 158, 11"
+                            <div class="Cash Box-card" data-name="Event Fund" data-color="#f59e0b" data-rgb="245, 158, 11"
                                  role="button" tabindex="0">
-                                <div class="register-top">
-  <div class="register-header-left">
-    <div class="register-icon small" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05)); color: #f59e0b; border-color: rgba(245, 158, 11, 0.15);"><i class="fas fa-calendar-alt"></i></div>
-    <div class="register-info"><h3>Event Fund</h3>
-                                        <div class="register-id">CR-002</div></div>
+                                <div class="Cash Box-top">
+  <div class="Cash Box-header-left">
+    <div class="Cash Box-icon small" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05)); color: #f59e0b; border-color: rgba(245, 158, 11, 0.15);"><i class="fas fa-calendar-alt"></i></div>
+    <div class="Cash Box-info"><h3>Event Fund</h3>
+                                        <div class="Cash Box-id">CR-002</div></div>
   </div>
-  <div class="register-actions">
-    <button class="register-kebab" aria-label="Cash register menu" type="button">
+  <div class="Cash Box-actions">
+    <button class="Cash Box-kebab" aria-label="Cash Box menu" type="button">
       <i class="fas fa-ellipsis-h"></i>
     </button>
-    <div class="register-menu" role="menu" aria-label="Cash register actions">
+    <div class="Cash Box-menu" role="menu" aria-label="Cash Box actions">
       <button class="menu-settings" type="button">
         <span>Settings</span>
         <i class="fas fa-cog"></i>
       </button>
       <div class="divider"></div>
       <button class="menu-delete danger" type="button">
-        <span>Delete cash register</span>
+        <span>Delete Cash Box</span>
         <i class="fas fa-trash"></i>
       </button>
     </div>
   </div>
 </div>
-                                <div class="register-balance">
+                                <div class="Cash Box-balance">
                                     $4,750
                                     <span class="trend-indicator up">
                                         <i class="fas fa-arrow-up"></i>+8%
                                     </span>
                                 </div>
-                                <div class="register-stats">
+                                <div class="Cash Box-stats">
                                     <div class="stat-item">
                                         <div class="tooltip">2 events pending</div>
                                         <div class="stat-label">Today In</div>
@@ -2830,38 +2899,38 @@ tr:hover [data-category-tag] {
 
                         <!-- Slide 3 - Petty Cash (Blue) -->
                         <div class="swiper-slide">
-                            <div class="register-card" data-name="Petty Cash" data-color="#3b82f6" data-rgb="59, 130, 246"
+                            <div class="Cash Box-card" data-name="Petty Cash" data-color="#3b82f6" data-rgb="59, 130, 246"
                                  role="button" tabindex="0">
-                                <div class="register-top">
-  <div class="register-header-left">
-    <div class="register-icon small" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05)); color: #3b82f6; border-color: rgba(59, 130, 246, 0.15);"><i class="fas fa-wallet"></i></div>
-    <div class="register-info"><h3>Petty Cash</h3>
-                                        <div class="register-id">CR-003</div></div>
+                                <div class="Cash Box-top">
+  <div class="Cash Box-header-left">
+    <div class="Cash Box-icon small" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05)); color: #3b82f6; border-color: rgba(59, 130, 246, 0.15);"><i class="fas fa-wallet"></i></div>
+    <div class="Cash Box-info"><h3>Petty Cash</h3>
+                                        <div class="Cash Box-id">CR-003</div></div>
   </div>
-  <div class="register-actions">
-    <button class="register-kebab" aria-label="Cash register menu" type="button">
+  <div class="Cash Box-actions">
+    <button class="Cash Box-kebab" aria-label="Cash Box menu" type="button">
       <i class="fas fa-ellipsis-h"></i>
     </button>
-    <div class="register-menu" role="menu" aria-label="Cash register actions">
+    <div class="Cash Box-menu" role="menu" aria-label="Cash Box actions">
       <button class="menu-settings" type="button">
         <span>Settings</span>
         <i class="fas fa-cog"></i>
       </button>
       <div class="divider"></div>
       <button class="menu-delete danger" type="button">
-        <span>Delete cash register</span>
+        <span>Delete Cash Box</span>
         <i class="fas fa-trash"></i>
       </button>
     </div>
   </div>
 </div>
-                                <div class="register-balance">
+                                <div class="Cash Box-balance">
                                     $2,000
                                     <span class="trend-indicator down">
                                         <i class="fas fa-arrow-down"></i>-5%
                                     </span>
                                 </div>
-                                <div class="register-stats">
+                                <div class="Cash Box-stats">
                                     <div class="stat-item">
                                         <div class="tooltip">No deposits today</div>
                                         <div class="stat-label">Today In</div>
@@ -2878,38 +2947,38 @@ tr:hover [data-category-tag] {
 
                         <!-- Slide 4 - Marketing Budget (Purple) -->
                         <div class="swiper-slide">
-                            <div class="register-card" data-name="Marketing Budget" data-color="#8b5cf6" data-rgb="139, 92, 246"
+                            <div class="Cash Box-card" data-name="Marketing Budget" data-color="#8b5cf6" data-rgb="139, 92, 246"
                                  role="button" tabindex="0">
-                                <div class="register-top">
-  <div class="register-header-left">
-    <div class="register-icon small" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05)); color: #8b5cf6; border-color: rgba(139, 92, 246, 0.15);"><i class="fas fa-bullhorn"></i></div>
-    <div class="register-info"><h3>Marketing Budget</h3>
-                                        <div class="register-id">CR-004</div></div>
+                                <div class="Cash Box-top">
+  <div class="Cash Box-header-left">
+    <div class="Cash Box-icon small" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05)); color: #8b5cf6; border-color: rgba(139, 92, 246, 0.15);"><i class="fas fa-bullhorn"></i></div>
+    <div class="Cash Box-info"><h3>Marketing Budget</h3>
+                                        <div class="Cash Box-id">CR-004</div></div>
   </div>
-  <div class="register-actions">
-    <button class="register-kebab" aria-label="Cash register menu" type="button">
+  <div class="Cash Box-actions">
+    <button class="Cash Box-kebab" aria-label="Cash Box menu" type="button">
       <i class="fas fa-ellipsis-h"></i>
     </button>
-    <div class="register-menu" role="menu" aria-label="Cash register actions">
+    <div class="Cash Box-menu" role="menu" aria-label="Cash Box actions">
       <button class="menu-settings" type="button">
         <span>Settings</span>
         <i class="fas fa-cog"></i>
       </button>
       <div class="divider"></div>
       <button class="menu-delete danger" type="button">
-        <span>Delete cash register</span>
+        <span>Delete Cash Box</span>
         <i class="fas fa-trash"></i>
       </button>
     </div>
   </div>
 </div>
-                                <div class="register-balance">
+                                <div class="Cash Box-balance">
                                     $12,300
                                     <span class="trend-indicator up">
                                         <i class="fas fa-arrow-up"></i>+25%
                                     </span>
                                 </div>
-                                <div class="register-stats">
+                                <div class="Cash Box-stats">
                                     <div class="stat-item">
                                         <div class="tooltip">Campaign budget increase</div>
                                         <div class="stat-label">Today In</div>
@@ -2926,38 +2995,38 @@ tr:hover [data-category-tag] {
 
                         <!-- Slide 5 - Emergency Fund (Red) -->
                         <div class="swiper-slide">
-                            <div class="register-card" data-name="Emergency Fund" data-color="#ef4444" data-rgb="239, 68, 68"
+                            <div class="Cash Box-card" data-name="Emergency Fund" data-color="#ef4444" data-rgb="239, 68, 68"
                                  role="button" tabindex="0">
-                                <div class="register-top">
-  <div class="register-header-left">
-    <div class="register-icon small" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05)); color: #ef4444; border-color: rgba(239, 68, 68, 0.15);"><i class="fas fa-exclamation-triangle"></i></div>
-    <div class="register-info"><h3>Emergency Fund</h3>
-                                        <div class="register-id">CR-005</div></div>
+                                <div class="Cash Box-top">
+  <div class="Cash Box-header-left">
+    <div class="Cash Box-icon small" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05)); color: #ef4444; border-color: rgba(239, 68, 68, 0.15);"><i class="fas fa-exclamation-triangle"></i></div>
+    <div class="Cash Box-info"><h3>Emergency Fund</h3>
+                                        <div class="Cash Box-id">CR-005</div></div>
   </div>
-  <div class="register-actions">
-    <button class="register-kebab" aria-label="Cash register menu" type="button">
+  <div class="Cash Box-actions">
+    <button class="Cash Box-kebab" aria-label="Cash Box menu" type="button">
       <i class="fas fa-ellipsis-h"></i>
     </button>
-    <div class="register-menu" role="menu" aria-label="Cash register actions">
+    <div class="Cash Box-menu" role="menu" aria-label="Cash Box actions">
       <button class="menu-settings" type="button">
         <span>Settings</span>
         <i class="fas fa-cog"></i>
       </button>
       <div class="divider"></div>
       <button class="menu-delete danger" type="button">
-        <span>Delete cash register</span>
+        <span>Delete Cash Box</span>
         <i class="fas fa-trash"></i>
       </button>
     </div>
   </div>
 </div>
-                                <div class="register-balance">
+                                <div class="Cash Box-balance">
                                     $8,900
                                     <span class="trend-indicator neutral">
                                         <i class="fas fa-minus"></i>0%
                                     </span>
                                 </div>
-                                <div class="register-stats">
+                                <div class="Cash Box-stats">
                                     <div class="stat-item">
                                         <div class="tooltip">No activity</div>
                                         <div class="stat-label">Today In</div>
@@ -2972,20 +3041,20 @@ tr:hover [data-category-tag] {
                             </div>
                         </div>
 
-                        <!-- Slide 6 - Add New Cash Register -->
+                        <!-- Slide 6 - Add New Cash Box -->
                         <div class="swiper-slide">
-                            <div class="register-card add-new-register-card" role="button" tabindex="0">
-                                <div class="register-top">
-                                    <div class="register-info">
+                            <div class="Cash Box-card add-new-Cash Box-card" role="button" tabindex="0">
+                                <div class="Cash Box-top">
+                                    <div class="Cash Box-info">
                                         <h3>Add New</h3>
-                                        <div class="register-id">Create</div>
+                                        <div class="Cash Box-id">Create</div>
                                     </div>
-                                    <div class="register-icon add-icon">
+                                    <div class="Cash Box-icon add-icon">
                                         <i class="fas fa-plus"></i>
                                     </div>
                                 </div>
-                                <div class="add-register-message">
-                                    <p>Create a new cash register to track your transactions</p>
+                                <div class="add-Cash Box-message">
+                                    <p>Create a new Cash Box to track your transactions</p>
                                 </div>
                             </div>
                         </div>
@@ -2995,13 +3064,13 @@ tr:hover [data-category-tag] {
                     <!-- Pagination -->
                     <div class="swiper-pagination"></div>
                 </div>
-                <!-- End of registers-swiper -->
+                <!-- End of Cash Boxes-swiper -->
             <div class="transactions-card">
                 <div class="transactions-header">
                     <div class="header-top">
                         <h2 class="transactions-title">Latest Transactions</h2>
                         <a href="spendnote-transaction-history.html" class="view-all-btn">
-                            <span>View All Transactions</span>
+                            <span>View All</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -3010,162 +3079,79 @@ tr:hover [data-category-tag] {
                 <div class="table-wrapper" id="tableWrapper">
                     <div class="table-grid table-header">
                         <div>Type</div>
-                        <div>Receipt</div>
-                        <div>Description</div>
-                        <div>From</div>
-                        <div>To</div>
-                        <div>Amount</div>
                         <div>Date & Time</div>
+                        <div>Cash Box</div>
+                        <div>Partner</div>
+                        <div>Description</div>
+                        <div>Amount</div>
                         <div>Created by</div>
                         <div>Action</div>
                     </div>
 
-                    <div class="table-grid" tabindex="0">
-                        <div class="tx-icon in"><i class="fas fa-arrow-up"></i></div>
-                        <div class="tx-receipt">#1047</div>
-                        <div class="tx-desc">Retail cash deposit</div>
-                        <div class="tx-person">John Smith</div>
-                        <div class="tx-person">Main Office</div>
-                        <div class="tx-amount in">+$5,000</div>
+                    <div class="table-grid" tabindex="0" style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
+                        <div class="tx-type in">IN</div>
                         <div class="tx-datetime">
                             <span class="date">Jan 3, 2026</span>
                             <span class="time">2:34 PM</span>
                         </div>
+                        <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: #059669;">Main Office</span></div>
+                        <div class="tx-person">John Smith</div>
+                        <div class="tx-desc">Retail cash deposit</div>
+                        <div class="tx-amount in">+$5,000</div>
                         <div class="tx-createdby">by Alexa</div>
-                        <button class="tx-action">Details</button>
+                        <button class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105;">View</button>
                     </div>
-                    <div class="table-grid" tabindex="0">
-                        <div class="tx-icon out"><i class="fas fa-arrow-down"></i></div>
-                        <div class="tx-receipt">#1046</div>
-                        <div class="tx-desc">Office supplies</div>
-                        <div class="tx-person">Main Office</div>
-                        <div class="tx-person">ABC Supplies</div>
-                        <div class="tx-amount out">-$450</div>
+                    <div class="table-grid" tabindex="0" style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
+                        <div class="tx-type out">OUT</div>
                         <div class="tx-datetime">
                             <span class="date">Jan 2, 2026</span>
                             <span class="time">9:15 AM</span>
                         </div>
+                        <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: #059669;">Main Office</span></div>
+                        <div class="tx-person">ABC Supplies</div>
+                        <div class="tx-desc">Office supplies</div>
+                        <div class="tx-amount out">-$450</div>
                         <div class="tx-createdby">by Mia</div>
-                        <button class="tx-action">Details</button>
+                        <button class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105;">View</button>
                     </div>
-                    <div class="table-grid" tabindex="0">
-                        <div class="tx-icon in"><i class="fas fa-arrow-up"></i></div>
-                        <div class="tx-receipt">#1045</div>
-                        <div class="tx-desc">Customer payment</div>
-                        <div class="tx-person">Mary Johnson</div>
-                        <div class="tx-person">Main Office</div>
-                        <div class="tx-amount in">+$2,200</div>
+                    <div class="table-grid" tabindex="0" style="--cashbox-rgb: 245, 158, 11; --cashbox-color: #f59e0b;">
+                        <div class="tx-type in">IN</div>
                         <div class="tx-datetime">
                             <span class="date">Jan 1, 2026</span>
                             <span class="time">4:20 PM</span>
                         </div>
+                        <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: #f59e0b;">Event Fund</span></div>
+                        <div class="tx-person">Mary Johnson</div>
+                        <div class="tx-desc">Customer payment</div>
+                        <div class="tx-amount in">+$2,200</div>
                         <div class="tx-createdby">by Ethan</div>
-                        <button class="tx-action">Details</button>
+                        <button class="tx-action" style="--row-color: #f59e0b; --row-rgb: 245, 158, 11;">View</button>
                     </div>
-                    <div class="table-grid" tabindex="0">
-                        
-                        <div class="tx-icon out"><i class="fas fa-arrow-down"></i></div>
-                        <div class="tx-receipt">#1044</div>
-                        <div class="tx-desc">Marketing campaign</div>
-                        <div class="tx-person">Main Office</div>
-                        <div class="tx-person">AdCorp Media</div>
-                        <div class="tx-amount out">-$1,800</div>
+                    <div class="table-grid" tabindex="0" style="--cashbox-rgb: 59, 130, 246; --cashbox-color: #3b82f6;">
+                        <div class="tx-type out">OUT</div>
                         <div class="tx-datetime">
                             <span class="date">Dec 31, 2025</span>
                             <span class="time">11:45 AM</span>
                         </div>
+                        <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: #3b82f6;">Petty Cash</span></div>
+                        <div class="tx-person">AdCorp Media</div>
+                        <div class="tx-desc">Marketing campaign</div>
+                        <div class="tx-amount out">-$1,800</div>
                         <div class="tx-createdby">by Sofia</div>
-                        <button class="tx-action">Details</button>
+                        <button class="tx-action" style="--row-color: #3b82f6; --row-rgb: 59, 130, 246;">View</button>
                     </div>
-                    <div class="table-grid" tabindex="0">
-                        
-                        <div class="tx-icon in"><i class="fas fa-arrow-up"></i></div>
-                        <div class="tx-receipt">#1043</div>
-                        <div class="tx-desc">Product sales</div>
-                        <div class="tx-person">Sarah Williams</div>
-                        <div class="tx-person">Main Office</div>
-                        <div class="tx-amount in">+$3,450</div>
+                    <div class="table-grid" tabindex="0" style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
+                        <div class="tx-type in">IN</div>
                         <div class="tx-datetime">
                             <span class="date">Dec 30, 2025</span>
                             <span class="time">3:10 PM</span>
                         </div>
+                        <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: #059669;">Main Office</span></div>
+                        <div class="tx-person">Sarah Williams</div>
+                        <div class="tx-desc">Product sales</div>
+                        <div class="tx-amount in">+$3,450</div>
                         <div class="tx-createdby">by Liam</div>
-                        <button class="tx-action">Details</button>
-                    </div>
-                    <div class="table-grid" tabindex="0">
-                        
-                        <div class="tx-icon out"><i class="fas fa-arrow-down"></i></div>
-                        <div class="tx-receipt">#1042</div>
-                        <div class="tx-desc">Employee salary</div>
-                        <div class="tx-person">Main Office</div>
-                        <div class="tx-person">David Chen</div>
-                        <div class="tx-amount out">-$4,200</div>
-                        <div class="tx-datetime">
-                            <span class="date">Dec 29, 2025</span>
-                            <span class="time">8:00 AM</span>
-                        </div>
-                        <div class="tx-createdby">by Noah</div>
-                        <button class="tx-action">Details</button>
-                    </div>
-                    <div class="table-grid" tabindex="0">
-                        
-                        <div class="tx-icon in"><i class="fas fa-arrow-up"></i></div>
-                        <div class="tx-receipt">#1041</div>
-                        <div class="tx-desc">Event ticket sales</div>
-                        <div class="tx-person">Event Fund</div>
-                        <div class="tx-person">Main Office</div>
-                        <div class="tx-amount in">+$890</div>
-                        <div class="tx-datetime">
-                            <span class="date">Dec 28, 2025</span>
-                            <span class="time">6:30 PM</span>
-                        </div>
-                        <div class="tx-createdby">by Emma</div>
-                        <button class="tx-action">Details</button>
-                    </div>
-                    <div class="table-grid" tabindex="0">
-                        
-                        <div class="tx-icon out"><i class="fas fa-arrow-down"></i></div>
-                        <div class="tx-receipt">#1040</div>
-                        <div class="tx-desc">Equipment rental</div>
-                        <div class="tx-person">Petty Cash</div>
-                        <div class="tx-person">TechRent Inc</div>
-                        <div class="tx-amount out">-$650</div>
-                        <div class="tx-datetime">
-                            <span class="date">Dec 27, 2025</span>
-                            <span class="time">1:45 PM</span>
-                        </div>
-                        <div class="tx-createdby">by Oliver</div>
-                        <button class="tx-action">Details</button>
-                    </div>
-                    <div class="table-grid" tabindex="0">
-                        
-                        <div class="tx-icon in"><i class="fas fa-arrow-up"></i></div>
-                        <div class="tx-receipt">#1039</div>
-                        <div class="tx-desc">Refund received</div>
-                        <div class="tx-person">Vendor XYZ</div>
-                        <div class="tx-person">Main Office</div>
-                        <div class="tx-amount in">+$320</div>
-                        <div class="tx-datetime">
-                            <span class="date">Dec 26, 2025</span>
-                            <span class="time">10:20 AM</span>
-                        </div>
-                        <div class="tx-createdby">by Ava</div>
-                        <button class="tx-action">Details</button>
-                    </div>
-                    <div class="table-grid" tabindex="0">
-                        
-                        <div class="tx-icon out"><i class="fas fa-arrow-down"></i></div>
-                        <div class="tx-receipt">#1038</div>
-                        <div class="tx-desc">Utility payment</div>
-                        <div class="tx-person">Main Office</div>
-                        <div class="tx-person">City Utilities</div>
-                        <div class="tx-amount out">-$275</div>
-                        <div class="tx-datetime">
-                            <span class="date">Dec 25, 2025</span>
-                            <span class="time">9:00 AM</span>
-                        </div>
-                        <div class="tx-createdby">by Isabella</div>
-                        <button class="tx-action">Details</button>
+                        <button class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105;">View</button>
                     </div>
                 </div>
                 
@@ -3181,9 +3167,9 @@ tr:hover [data-category-tag] {
                     <h2 class="modal-title">Create Transaction</h2>
                     <div class="modal-header-info">
                         <span class="header-info-item"><i class="fas fa-user"></i> John Doe</span>
-                        <span class="header-info-divider">•</span>
-                        <div class="register-selector-wrapper">
-                            <i class="register-selector-icon fas fa-building" id="registerIcon"></i>
+                        <span class="header-info-divider">â€¢</span>
+                        <div class="Cash Box-selector-wrapper">
+                            <i class="Cash Box-selector-icon fas fa-building" id="registerIcon"></i>
                             <select class="header-info-select" id="modalRegister">
                                 <option value="main" data-color="#059669" data-rgb="5, 150, 105" data-icon="fa-building">Main Office</option>
                                 <option value="event" data-color="#f59e0b" data-rgb="245, 158, 11" data-icon="fa-calendar-alt">Event Fund</option>
@@ -3248,11 +3234,11 @@ tr:hover [data-category-tag] {
                             <div class="direction-toggle-compact">
                                 <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
                                 <label for="modalDirectionIn" class="direction-btn direction-btn-in">
-                                    <i class="fas fa-arrow-up"></i> IN
+                                    IN
                                 </label>
                                 <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
                                 <label for="modalDirectionOut" class="direction-btn direction-btn-out">
-                                    <i class="fas fa-arrow-down"></i> OUT
+                                    OUT
                                 </label>
                             </div>
                         </div>
@@ -3400,13 +3386,6 @@ tr:hover [data-category-tag] {
                 </ul>
             </div>
             <div class="footer-links">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="spendnote-about.html">About</a></li>
-                    <li><a href="spendnote-contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
                 <h4>Legal</h4>
                 <ul>
                     <li><a href="spendnote-terms.html">Terms</a></li>
@@ -3424,7 +3403,7 @@ tr:hover [data-category-tag] {
     </footer>
 
     <script>
-        // Register cards
+        // Cash Box cards
         function updateActiveRegister(card) {
             const color = card.dataset.color;
             const rgb = card.dataset.rgb;
@@ -3432,16 +3411,16 @@ tr:hover [data-category-tag] {
 
             document.documentElement.style.setProperty('--active', color);
             document.documentElement.style.setProperty('--active-rgb', rgb);
-            document.getElementById('activeRegister').textContent = name;
+            // activeRegister removed
         }
 
-        document.querySelectorAll('.register-card').forEach(card => {
+        document.querySelectorAll('.Cash Box-card').forEach(card => {
             // Per-card color for calm visual coding
             card.style.setProperty('--card-color', card.dataset.color);
             card.style.setProperty('--card-rgb', card.dataset.rgb);
 
             card.addEventListener('click', () => {
-                document.querySelectorAll('.register-card').forEach(c => c.classList.remove('active'));
+                document.querySelectorAll('.Cash Box-card').forEach(c => c.classList.remove('active'));
                 card.classList.add('active');
                 updateActiveRegister(card);
             });
@@ -3454,16 +3433,16 @@ tr:hover [data-category-tag] {
             });
         });
 
-        // Register kebab menus (prevent card click)
+        // Cash Box kebab menus (prevent card click)
         function closeAllRegisterMenus() {
-            document.querySelectorAll('.register-menu.open').forEach(m => m.classList.remove('open'));
+            document.querySelectorAll('.Cash Box-menu.open').forEach(m => m.classList.remove('open'));
         }
 
-        document.querySelectorAll('.register-kebab').forEach(btn => {
+        document.querySelectorAll('.Cash Box-kebab').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const card = btn.closest('.register-card');
-                const menu = card ? card.querySelector('.register-menu') : null;
+                const card = btn.closest('.Cash Box-card');
+                const menu = card ? card.querySelector('.Cash Box-menu') : null;
                 if (!menu) return;
                 const isOpen = menu.classList.contains('open');
                 closeAllRegisterMenus();
@@ -3478,15 +3457,15 @@ tr:hover [data-category-tag] {
             });
         });
 
-        document.querySelectorAll('.register-menu').forEach(menu => {
+        document.querySelectorAll('.Cash Box-menu').forEach(menu => {
             menu.addEventListener('click', (e) => e.stopPropagation());
         });
 
         document.querySelectorAll('.menu-settings').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const card = btn.closest('.register-card');
-                const name = card?.dataset?.name || 'this register';
+                const card = btn.closest('.Cash Box-card');
+                const name = card?.dataset?.name || 'this Cash Box';
                 alert(`Open settings for ${name} (demo).`);
                 closeAllRegisterMenus();
             });
@@ -3495,8 +3474,8 @@ tr:hover [data-category-tag] {
         document.querySelectorAll('.menu-delete').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const card = btn.closest('.register-card');
-                const name = card?.dataset?.name || 'this register';
+                const card = btn.closest('.Cash Box-card');
+                const name = card?.dataset?.name || 'this Cash Box';
                 alert(`Delete ${name} (demo).`);
                 closeAllRegisterMenus();
             });
@@ -3623,8 +3602,8 @@ tr:hover [data-category-tag] {
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             
-            // Set modal register to active register
-            const activeCard = document.querySelector('.register-card.active');
+            // Set modal Cash Box to active Cash Box
+            const activeCard = document.querySelector('.Cash Box-card.active');
             if (activeCard) {
                 const registerName = activeCard.dataset.name;
                 
@@ -3671,7 +3650,7 @@ tr:hover [data-category-tag] {
             }
         });
 
-        // Modal register change - update active color
+        // Modal Cash Box change - update active color
         
         function updateModalRegisterColor() {
             const selectedOption = modalRegisterSelect.options[modalRegisterSelect.selectedIndex];
@@ -3687,7 +3666,7 @@ tr:hover [data-category-tag] {
             // Update icon
             const registerIcon = document.getElementById('registerIcon');
             if (registerIcon && icon) {
-                registerIcon.className = 'register-selector-icon fas ' + icon;
+                registerIcon.className = 'Cash Box-selector-icon fas ' + icon;
             }
         }
         
@@ -4078,7 +4057,7 @@ tr:hover [data-category-tag] {
             const action = actionBtn ? actionBtn.value : 'done';
             
             const formData = {
-                register: document.getElementById('modalRegister').value,
+                Cash Box: document.getElementById('modalRegister').value,
                 loggedBy: 'John Doe',
                 partnerName: document.getElementById('modalPartnerName').value,
                 partnerAddress: document.getElementById('modalPartnerAddress').value,
@@ -4104,15 +4083,15 @@ tr:hover [data-category-tag] {
             console.log('Action:', action);
             
             if (action === 'done-receipt') {
-                alert('Transaction saved!\n\nGenerating receipt PDF...\n\nIn production:\n- Save to database\n- Generate & download PDF\n- Update register balance');
+                alert('Transaction saved!\n\nGenerating receipt PDF...\n\nIn production:\n- Save to database\n- Generate & download PDF\n- Update Cash Box balance');
             } else {
-                alert('Transaction saved!\n\nIn production:\n- Save to database\n- Update register balance\n- Refresh dashboard');
+                alert('Transaction saved!\n\nIn production:\n- Save to database\n- Update Cash Box balance\n- Refresh dashboard');
             }
             
             closeModal();
         });
 
-        const activeCard = document.querySelector('.register-card.active');
+        const activeCard = document.querySelector('.Cash Box-card.active');
         if (activeCard) updateActiveRegister(activeCard);
     </script>
 
@@ -4120,7 +4099,7 @@ tr:hover [data-category-tag] {
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         // Initialize Swiper
-        const registersSwiper = new Swiper('.registers-swiper', {
+        const registersSwiper = new Swiper('.Cash Boxes-swiper', {
             slidesPerView: 1,
             spaceBetween: 20,
             loop: false,
