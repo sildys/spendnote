@@ -276,14 +276,18 @@
             content: none;
         }
         .register-card:hover {
-            border-color: rgba(var(--active-rgb), 0.4);
+            border-right-color: rgba(var(--card-rgb, var(--active-rgb)), 0.4);
+            border-top-color: rgba(var(--card-rgb, var(--active-rgb)), 0.4);
+            border-bottom-color: rgba(var(--card-rgb, var(--active-rgb)), 0.4);
             transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(var(--active-rgb), 0.12);
+            box-shadow: 0 12px 40px rgba(var(--card-rgb, var(--active-rgb)), 0.12);
         }
         .register-card.active {
-            border-color: var(--active);
-            background: linear-gradient(135deg, #ffffff 0%, rgba(var(--active-rgb), 0.04) 100%);
-            box-shadow: 0 8px 32px rgba(var(--active-rgb), 0.15);
+            border-right-color: var(--card-color, var(--active));
+            border-top-color: var(--card-color, var(--active));
+            border-bottom-color: var(--card-color, var(--active));
+            background: linear-gradient(135deg, #ffffff 0%, rgba(var(--card-rgb, var(--active-rgb)), 0.04) 100%);
+            box-shadow: 0 8px 32px rgba(var(--card-rgb, var(--active-rgb)), 0.15);
         }
         .register-card.active::before { opacity: 0.06; }
 
