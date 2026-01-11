@@ -3422,15 +3422,14 @@ tr:hover [data-category-tag] {
         }
 
         // Open modal if hash is #new-transaction
-        setTimeout(() => {
-            if (window.location.hash === '#new-transaction') {
+        console.log('Current hash:', window.location.hash);
+        if (window.location.hash === '#new-transaction') {
+            console.log('Opening modal from hash');
+            setTimeout(() => {
                 openModal();
-                // Remove hash from URL
-                setTimeout(() => {
-                    history.replaceState(null, null, 'dashboard.html');
-                }, 100);
-            }
-        }, 300);
+                history.replaceState(null, null, 'dashboard.html');
+            }, 500);
+        }
 
         // Close modal
         function closeModal() {
