@@ -3471,8 +3471,10 @@ tr:hover [data-category-tag] {
         });
 
         // Modal Cash Box change - update active color
+        const modalRegisterSelect = document.getElementById('modalRegister');
         
         function updateModalRegisterColor() {
+            if (!modalRegisterSelect) return;
             const selectedOption = modalRegisterSelect.options[modalRegisterSelect.selectedIndex];
             const color = selectedOption.dataset.color;
             const rgb = selectedOption.dataset.rgb;
@@ -3507,7 +3509,9 @@ tr:hover [data-category-tag] {
             }
         }
         
-        modalRegisterSelect.addEventListener('change', updateModalRegisterColor);
+        if (modalRegisterSelect) {
+            modalRegisterSelect.addEventListener('change', updateModalRegisterColor);
+        }
 
         // Partner Autocomplete
         const partnerInput = document.getElementById('modalPartnerName');
