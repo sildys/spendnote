@@ -696,20 +696,23 @@
 
         /* SAVE BUTTON */
         .save-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            margin-top: 32px;
-            padding: 20px 28px;
+            width: 100%;
+            padding: 20px 0;
             background: var(--surface);
             border-top: 1px solid var(--border);
             position: sticky;
             bottom: 0;
             z-index: 50;
             box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
-            margin-left: -28px;
-            margin-right: -28px;
-            margin-bottom: -28px;
+        }
+
+        .save-actions-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
         }
 
         .btn-small {
@@ -1094,12 +1097,14 @@
                     <p class="form-hint">This will permanently delete this Cash Box and all 47 transactions. This action cannot be undone.</p>
                 </div>
             </section>
+        </div>
+    </div>
 
-            <!-- SAVE ACTIONS -->
-            <div class="save-actions">
-                <button class="btn btn-secondary">Cancel</button>
-                <button class="btn btn-primary">Save Changes</button>
-            </div>
+    <!-- SAVE ACTIONS -->
+    <div class="save-actions">
+        <div class="save-actions-inner">
+            <button class="btn btn-secondary">Cancel</button>
+            <button class="btn btn-primary">Save Changes</button>
         </div>
     </div>
 
