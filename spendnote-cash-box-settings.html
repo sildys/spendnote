@@ -413,26 +413,14 @@
         /* ICON PICKER */
         .icon-palette {
             display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 12px;
             margin-top: 12px;
-        }
-
-        @media (max-width: 1200px) {
-            .icon-palette {
-                grid-template-columns: repeat(8, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .icon-palette {
-                grid-template-columns: repeat(6, 1fr);
-            }
         }
 
         .icon-option {
             aspect-ratio: 1;
-            border-radius: 10px;
+            border-radius: 12px;
             border: 2px solid var(--border);
             cursor: pointer;
             transition: all 0.2s;
@@ -441,9 +429,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 24px;
             color: var(--text-muted);
-            min-height: 50px;
         }
 
         .icon-option:hover {
