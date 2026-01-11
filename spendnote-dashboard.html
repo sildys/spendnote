@@ -4100,14 +4100,12 @@ tr:hover [data-category-tag] {
             closeModal();
         });
 
-        const activeCard = document.querySelector('.register-card.active');
-        if (activeCard) updateActiveRegister(activeCard);
     </script>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        // Initialize Swiper
+        // Initialize Swiper FIRST
         const registersSwiper = new Swiper('.registers-swiper', {
             slidesPerView: 1,
             spaceBetween: 20,
@@ -4131,6 +4129,10 @@ tr:hover [data-category-tag] {
                 },
             },
         });
+
+        // Initialize cash box cards AFTER Swiper
+        const activeCard = document.querySelector('.register-card.active');
+        if (activeCard) updateActiveRegister(activeCard);
     </script>
 
 </body>
