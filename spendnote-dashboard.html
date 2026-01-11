@@ -3412,35 +3412,35 @@ tr:hover [data-category-tag] {
     </footer>
 
     <script>
-        // Cash Box cards
-        function updateActiveRegister(card) {
-            const color = card.dataset.color;
-            const rgb = card.dataset.rgb;
-            const name = card.dataset.name;
+        // ========================================
+        // CASH BOX CARDS - Simple and Clean
+        // ========================================
+        function initCashBoxCards() {
+            const cards = document.querySelectorAll('.register-card');
+            
+            cards.forEach(card => {
+                // Set card color CSS variables
+                const color = card.dataset.color;
+                const rgb = card.dataset.rgb;
+                card.style.setProperty('--card-color', color);
+                card.style.setProperty('--card-rgb', rgb);
 
-            document.documentElement.style.setProperty('--active', color);
-            document.documentElement.style.setProperty('--active-rgb', rgb);
-            // activeRegister removed
+                // Click to activate
+                card.addEventListener('click', (e) => {
+                    // Don't activate if clicking menu button
+                    if (e.target.closest('.register-kebab') || e.target.closest('.register-menu')) {
+                        return;
+                    }
+                    
+                    cards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    
+                    // Update global active color
+                    document.documentElement.style.setProperty('--active', color);
+                    document.documentElement.style.setProperty('--active-rgb', rgb);
+                });
+            });
         }
-
-        document.querySelectorAll('.register-card').forEach(card => {
-            // Per-card color for calm visual coding
-            card.style.setProperty('--card-color', card.dataset.color);
-            card.style.setProperty('--card-rgb', card.dataset.rgb);
-
-            card.addEventListener('click', () => {
-                document.querySelectorAll('.register-card').forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-                updateActiveRegister(card);
-            });
-
-            card.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    card.click();
-                }
-            });
-        });
 
         // Cash Box kebab menus (prevent card click)
         function closeAllRegisterMenus() {
@@ -3596,42 +3596,22 @@ tr:hover [data-category-tag] {
             });
         }
 
-        // Modal functionality
+        // ========================================
+        // MODAL - Simple and Clean
+        // ========================================
         const modal = document.getElementById('createTransactionModal');
         const openModalBtn = document.getElementById('addTransactionBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const cancelModalBtn = document.getElementById('modalCancelBtn');
-        const modalRegisterSelect = document.getElementById('modalRegister');
 
-        // Open modal
-        console.log('Modal element:', modal);
-        console.log('Open button:', openModalBtn);
-        
-        if (openModalBtn && modal) {
-            openModalBtn.addEventListener('click', (e) => {
-                console.log('Button clicked!');
-                e.preventDefault();
-                e.stopPropagation();
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            
-                // Set modal register to active register
-                const activeCard = document.querySelector('.register-card.active');
-            if (activeCard) {
-                const registerName = activeCard.dataset.name;
-                
-                // Find matching option and select it
-                const options = modalRegisterSelect.options;
-                for (let i = 0; i < options.length; i++) {
-                    const optionText = options[i].textContent.trim();
-                    if (optionText === registerName) {
-                        modalRegisterSelect.selectedIndex = i;
-                        updateModalRegisterColor();
-                        break;
-                    }
-                }
-            }
-            });
+        function openModal() {
+            if (!modal) return;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        if (openModalBtn) {
+            openModalBtn.addEventListener('click', openModal);
         }
 
         // Close modal
@@ -4134,9 +4114,17 @@ tr:hover [data-category-tag] {
             },
         });
 
-        // Initialize cash box cards AFTER Swiper
+        // ========================================
+        // INITIALIZE EVERYTHING
+        // ========================================
+        initCashBoxCards();
+        
+        // Set initial active card color
         const activeCard = document.querySelector('.register-card.active');
-        if (activeCard) updateActiveRegister(activeCard);
+        if (activeCard) {
+            document.documentElement.style.setProperty('--active', activeCard.dataset.color);
+            document.documentElement.style.setProperty('--active-rgb', activeCard.dataset.rgb);
+        }
     </script>
 
 </body>
