@@ -11,6 +11,27 @@ document.addEventListener('DOMContentLoaded', function() {
             navLinks.classList.toggle('active');
         });
     }
+    
+    // Load and apply saved active cash box color
+    const savedColor = localStorage.getItem('activeCashBoxColor');
+    const savedRgb = localStorage.getItem('activeCashBoxRgb');
+    
+    if (savedColor && savedRgb) {
+        // Apply saved colors to CSS variables
+        document.documentElement.style.setProperty('--active', savedColor);
+        document.documentElement.style.setProperty('--active-rgb', savedRgb);
+        
+        // Update menu item colors
+        const navCashItems = document.querySelectorAll('.nav-cash-item');
+        navCashItems.forEach(item => {
+            item.style.color = savedColor;
+        });
+        
+        const otherNavItems = document.querySelectorAll('.nav-links a:not(.nav-cash-item):not(.btn)');
+        otherNavItems.forEach(item => {
+            item.style.color = savedColor;
+        });
+    }
 });
 
 // Utility functions

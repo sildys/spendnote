@@ -3943,10 +3943,33 @@ tr:hover [data-category-tag] {
                     document.documentElement.style.setProperty('--active', color);
                     document.documentElement.style.setProperty('--active-rgb', rgb);
                     
+                    // Save to localStorage
+                    localStorage.setItem('activeCashBoxColor', color);
+                    localStorage.setItem('activeCashBoxRgb', rgb);
+                    
                     // Update menu item colors
                     updateMenuColors(color);
                 });
             });
+            
+            // Load saved active cash box from localStorage
+            const savedColor = localStorage.getItem('activeCashBoxColor');
+            const savedRgb = localStorage.getItem('activeCashBoxRgb');
+            
+            if (savedColor && savedRgb) {
+                // Find and activate the saved cash box
+                cards.forEach(card => {
+                    if (card.dataset.color === savedColor) {
+                        cards.forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+                    }
+                });
+                
+                // Apply saved colors
+                document.documentElement.style.setProperty('--active', savedColor);
+                document.documentElement.style.setProperty('--active-rgb', savedRgb);
+                updateMenuColors(savedColor);
+            }
         }
 
         // Update menu item colors based on active cash box
