@@ -518,7 +518,7 @@ body {
     padding: 0 1rem;
 }
 
-.app-footer-links-simple a:not(:first-child)::before {
+.app-footer-links-simple a::before {
     content: '•';
     margin-right: 1rem;
     color: rgba(255, 255, 255, 0.5);
