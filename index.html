@@ -1,37 +1,77 @@
+﻿<!-- MARKER: landing-edited-2026-01-08 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SpendNote Dashboard - Manage your cash receipts, transactions, and Cash Boxes in one place.">
+    <meta name="description" content="SpendNote - Record, track, and search every cash movement. Complete transparency and traceability for your team's petty cash.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
-    <title>Dashboard - SpendNote</title>
+    <title>SpendNote - Track Every Cash Movement. Full Transparency. Always Searchable.</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/main.css">
-    <style>.app-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            flex: 1;
-            padding: 28px 24px;
-            width: 100%;
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-light: #10b981;
+            --primary-dark: #047857;
+            --orange: #f59e0b;
+            --blue: #3b82f6;
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --surface-elevated: #f5f5f5;
+            --text: #0a0a0a;
+            --text-muted: #737373;
+            --border: rgba(0,0,0,0.08);
+            --shadow: rgba(0,0,0,0.04);
+            --error: #ef4444;
+            --success: #059669;
+            --active: #059669;
+            --active-rgb: 5, 150, 105;
         }
 
-        /* TOP NAV */
-        .top-nav {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 16px 28px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: clip;
+            scroll-behavior: smooth;
+        }
+
+        /* SCROLL PROGRESS BAR */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            z-index: 10000;
+            transition: width 0.1s ease-out;
+        }
+
+        *:focus {
+            outline: 3px solid var(--active);
+            outline-offset: 2px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-            box-shadow: 0 2px 16px var(--shadow);
+            flex-direction: column;
+            overflow-x: clip;
         }
 
-        /* MODERN LOGO */
+        /* MODERN LOGO (from dashboard) */
         .logo {
             display: flex;
             align-items: center;
@@ -84,1100 +124,947 @@
             width: auto;
         }
 
-        .nav-links { display: flex; gap: 8px; list-style: none; align-items: center; }
-        .nav-links a {
-            padding: 10px 20px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-muted);
-            border-radius: 12px;
-            transition: all 0.2s ease;
-            font-size: 14px;
-            background: transparent;
-            border: none;
-            text-decoration: none;
-        }
-        .nav-links a:hover { color: var(--text); background: var(--surface-elevated); }
-        
-        /* Cash-related nav items */
-        .nav-links a.nav-cash-item {
-            color: var(--active);
-            font-weight: 700;
-        }
-        .nav-links a.nav-cash-item:hover {
-            background: rgba(var(--active-rgb), 0.1);
-        }
-        
-        /* New Transaction button in nav */
-        .nav-new-transaction-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: var(--active);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 14px;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(var(--active-rgb), 0.25);
-        }
-        .nav-new-transaction-btn:hover {
-            filter: brightness(0.9);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(var(--active-rgb), 0.35);
-        }
-        .nav-new-transaction-btn i { font-size: 12px; }
-        
-        /* Compact invite banner */
-        .invite-banner-compact {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 16px;
-            background: rgba(99,102,241,0.06);
-            border: 1px solid rgba(99,102,241,0.15);
-            border-radius: 10px;
-            margin: 0 0 20px 0;
-            font-size: 14px;
-            color: var(--text);
-        }
-        .invite-banner-compact > i { color: #6366f1; font-size: 14px; }
-        .invite-banner-compact span { flex: 1; }
-        .invite-btn-compact {
-            padding: 6px 14px;
-            background: rgba(99,102,241,0.12);
-            border: 1px solid rgba(99,102,241,0.25);
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #4f46e5;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .invite-btn-compact:hover { background: rgba(99,102,241,0.2); }
-        .dismiss-btn-compact {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-        .dismiss-btn-compact:hover { background: rgba(0,0,0,0.05); color: var(--text); }
-        
+        .nav-links { display: flex; gap: 8px; list-style: none; }
         .nav-link {
             padding: 10px 20px;
             cursor: pointer;
             font-weight: 600;
             color: var(--text-muted);
             border-radius: 12px;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             font-size: 14px;
-            background: transparent;
-            border: none;
         }
         .nav-link:hover { color: var(--text); background: var(--surface-elevated); }
         .nav-link.active { color: white; background: var(--active); }
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 16px;
-            background: var(--surface-elevated);
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 14px;
-            border: 1px solid var(--border);
-        }
 
-        .main-content { 
-            padding-top: 28px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px; 
-        }
-
-        /* Cash Box CARDS */
-        /* OLD - not used anymore
-        .registers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        */
-        .register-card {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-left: 4px solid transparent;
-            border-radius: 24px;
-            padding: 28px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 20px var(--shadow);
-        }
-        .register-card::before{
-            /* Removed gradient wash to keep cards calm */
-            content: none;
-        }
-        .register-card:hover {
-            border-right-color: rgba(var(--card-rgb, var(--active-rgb)), 0.4);
-            border-top-color: rgba(var(--card-rgb, var(--active-rgb)), 0.4);
-            border-bottom-color: rgba(var(--card-rgb, var(--active-rgb)), 0.4);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(var(--card-rgb, var(--active-rgb)), 0.12);
-        }
-        .register-card.active {
-            border-left-color: var(--card-color, var(--active));
-            border-right-color: var(--card-color, var(--active));
-            border-top-color: var(--card-color, var(--active));
-            border-bottom-color: var(--card-color, var(--active));
-            background: linear-gradient(135deg, #ffffff 0%, rgba(var(--card-rgb, var(--active-rgb)), 0.04) 100%);
-            box-shadow: 0 8px 32px rgba(var(--card-rgb, var(--active-rgb)), 0.15);
-        }
-        .register-card.active::before { opacity: 0.06; }
-
-        .register-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 24px;
-        }
-        .register-info h3 {
-            font-size: 18px;
-            font-weight: 800;
-            margin-bottom: 6px;
-            color: var(--text);
-            position: relative;
-            padding-left: 18px;
-        }
-        .register-info h3::before{
-            content: '';
-            width: 10px;
-            height: 10px;
-            border-radius: 999px;
-            background: var(--card-color, var(--active));
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            box-shadow: 0 0 0 3px rgba(var(--card-rgb, var(--active-rgb)), 0.14);
-        }
-        .register-id {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 600;
-            font-family: monospace;
-            background: var(--surface-elevated);
-            padding: 4px 8px;
-            border-radius: 6px;
-            display: inline-block;
-        }
-        .register-icon {
-            width: 72px;
-            height: 72px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, rgba(var(--active-rgb), 0.1), rgba(var(--active-rgb), 0.05));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--active);
-            font-size: 32px;
-            border: 2px solid rgba(var(--active-rgb), 0.2);
-        }
-        .register-balance {
-            font-size: 40px;
-            font-weight: 900;
-            color: var(--text);
-            margin-bottom: 8px;
-            letter-spacing: -0.04em;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .trend-indicator {
-            font-size: 14px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .trend-indicator.up { background: rgba(16,185,129,0.12); color: #059669; }
-        .trend-indicator.down { background: rgba(239,68,68,0.12); color: #dc2626; }
-        .trend-indicator i { font-size: 12px; }
-
-        .register-stats {
-            display: none; /* Hidden - only balance shown */
-        }
-        .stat-item {
-            background: var(--surface-elevated);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 12px 14px;
-            position: relative;
-        }
-
-        .tooltip {
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.9);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            z-index: 100;
-        }
-        .tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: rgba(0,0,0,0.9);
-        }
-        .stat-item:hover .tooltip { opacity: 1; }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-            letter-spacing: 0.05em;
-        }
-        .stat-value {
-            font-size: 18px;
-            font-weight: 800;
-        }
-        .stat-value.in { color: #10b981; }
-        .stat-value.out { color: #f59e0b; }
-
-        /* CONTEXT ROW */
-        .context-row {
+        /* HERO */
+        .hero {
+            padding: 7rem 2rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .add-transaction-btn {
-            background-color: var(--active);
-            background-image: none;
-            border: none;
-            border-radius: 20px;
-            padding: 24px 48px;
-            display: flex;
+            gap: 4rem;
             align-items: center;
-            justify-content: center;
-            gap: 20px;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-            box-shadow: 0 8px 24px rgba(var(--active-rgb), 0.28);
             position: relative;
-        }
-        .add-transaction-btn::before { display: none; }
-        .add-transaction-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 14px 34px rgba(var(--active-rgb), 0.38);
-            filter: brightness(0.96);
-        }
-        .add-transaction-btn:hover::before { display: none; }
-        
-            50% { opacity: 0.3; }
-        }
-        .add-transaction-btn:active {
-            transform: translateY(-2px);
-            filter: brightness(0.94);
-        }
-        .add-btn-icon {
-            width: 56px;
-            height: 56px;
-            background: rgba(255,255,255,0.25);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            color: white;
-            font-weight: 900;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .add-btn-text {
-            font-size: 20px;
-            font-weight: 900;
-            color: white;
-            line-height: 1.3;
-            letter-spacing: -0.02em;
+            overflow: hidden;
         }
 
-        .context-pill {
-            background: linear-gradient(135deg, var(--surface) 0%, rgba(var(--active-rgb), 0.08) 100%);
-            border: 2px solid var(--active);
-            border-radius: 18px;
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 0 6px 28px rgba(var(--active-rgb), 0.2);
-        }
-        .context-badge {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding-right: 20px;
-            border-right: 2px solid var(--border);
-            flex-shrink: 0;
-        }
-        .context-dot {
-            width: 12px;
-            height: 12px;
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(5, 150, 105, 0.15), rgba(16, 185, 129, 0.08) 50%, transparent 70%);
             border-radius: 50%;
-            background: var(--active);
-            box-shadow: 0 0 20px rgba(var(--active-rgb), 0.6);
-            animation: pulse 2s infinite;
+            top: -100px;
+            right: -50px;
+            animation: floatSlow 15s ease-in-out infinite;
+            z-index: -1;
+            filter: blur(40px);
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.95); }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.12), rgba(251, 191, 36, 0.06) 50%, transparent 70%);
+            border-radius: 50%;
+            bottom: -80px;
+            left: -60px;
+            animation: floatSlow 20s ease-in-out infinite reverse;
+            z-index: -1;
+            filter: blur(40px);
         }
-        .context-text {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--active);
-            white-space: nowrap;
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, 40px) scale(1.1); }
         }
-        .context-stats {
-            display: flex;
-            gap: 20px;
-            flex: 1;
-            justify-content: space-around;
-        }
-        .context-stat {
-            text-align: center;
-            position: relative;
-        }
-        .context-stat-value {
-            font-size: 20px;
+
+        .hero-content h1 {
             font-weight: 900;
-            color: var(--text);
-            margin-bottom: 2px;
-            letter-spacing: -0.02em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-        .context-stat-trend {
-            font-size: 12px;
-            font-weight: 700;
-        }
-        .context-stat-trend.up { color: #059669; }
-        .context-stat-trend.down { color: #dc2626; }
-        .context-stat-label {
-            font-size: 10px;
-            color: var(--text-muted);
-            font-weight: 700;
-            text-transform: uppercase;
+            line-height: 1.1;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.03em;
         }
 
-        /* TRANSACTIONS */
-        .transactions-card {
-            background: var(--surface);
-            border: 2px solid rgba(var(--active-rgb), 0.2);
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 6px 28px rgba(var(--active-rgb), 0.12);
-            width: 100%;
+        .hero-label {
+            display: block;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 0.25rem;
         }
-        .transactions-header {
-            padding: 24px 32px;
-            border-bottom: 2px solid rgba(var(--active-rgb), 0.15);
-            background: linear-gradient(135deg, var(--surface-elevated) 0%, rgba(var(--active-rgb), 0.04) 100%);
+
+        .hero-big {
+            display: block;
+            font-size: clamp(4rem, 10vw, 7rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 0.95;
+            margin-bottom: 0.15rem;
+            letter-spacing: -0.04em;
         }
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .transactions-title {
-            font-size: 20px;
+
+        .hero-accent {
+            display: block;
+            font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 800;
+            color: var(--orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
             color: var(--text);
-        }
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .view-all-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 24px;
-            background: var(--primary);
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 15px;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
-        }
-        .view-all-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
-        }
-        .view-all-btn i {
-            font-size: 13px;
-        }
-
-        .filter-toggle-btn {
-            padding: 10px 20px;
-            background: white;
-            color: var(--text);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .filter-toggle-btn:hover {
-            background: var(--surface-elevated);
-            border-color: var(--active);
-        }
-        .filter-toggle-btn.active {
-            background: rgba(var(--active-rgb), 0.1);
-            color: var(--active);
-            border-color: var(--active);
-        }
-        .filter-toggle-btn i {
-            transition: transform 0.3s;
-        }
-        .filter-toggle-btn.active i {
-            transform: rotate(180deg);
-        }
-
-        .export-btn {
-            padding: 10px 20px;
-            background: var(--active);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .export-btn:hover {
-            background: var(--primary-light);
-            transform: translateY(-2px);
-        }
-
-        .filter-panel-wrapper {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .filter-panel-wrapper.expanded {
-            max-height: 400px;
-        }
-
-        .filter-panel {
-            padding: 20px 32px;
-            background: linear-gradient(135deg, rgba(var(--active-rgb), 0.02), transparent);
-            border-bottom: 2px solid var(--border);
-        }
-
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .filter-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .filter-label i {
-            font-size: 10px;
-            color: var(--active);
-        }
-        .filter-input {
-            padding: 10px 14px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-            background: white;
-            transition: all 0.2s;
-        }
-        .filter-input:focus {
-            border-color: var(--active);
-            box-shadow: 0 0 0 3px rgba(var(--active-rgb), 0.1);
-        }
-        .filter-input::placeholder {
-            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.5;
             font-weight: 500;
         }
 
-        .amount-range {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .amount-range input {
-            flex: 1;
-        }
-        .amount-range span {
+        
+        .hero-subnote{
+            font-size: 1.05rem;
             color: var(--text-muted);
-            font-weight: 700;
+            margin-top: -1.25rem;
+            margin-bottom: 2rem;
+            line-height: 1.45;
+            font-weight: 600;
         }
-
-        .filter-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-        }
-        .filter-btn {
-            padding: 10px 20px;
-            border: 1px solid var(--border);
-            background: white;
+        .hero-subnote strong{
             color: var(--text);
-            border-radius: 10px;
             font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .filter-btn:hover {
-            background: var(--surface-elevated);
-        }
-        .filter-btn.primary {
-            background: var(--active);
-            color: white;
-            border-color: var(--active);
-        }
-        .filter-btn.primary:hover {
-            background: var(--primary-light);
-        }
-        .filter-btn.clear {
-            color: #ef4444;
-            border-color: rgba(239,68,68,0.3);
-        }
-        .filter-btn.clear:hover {
-            background: rgba(239,68,68,0.1);
-            border-color: #ef4444;
         }
 
-        .filter-tabs {
+.hero-cta {
             display: flex;
-            gap: 6px;
-            background: white;
-            padding: 4px;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
             border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-        .filter-tab {
-            padding: 8px 18px;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
             font-weight: 700;
-            font-size: 13px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            font-size: 0.95rem;
+            border: none;
             cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.2s;
         }
-        .filter-tab:hover { 
-            color: var(--text);
-            background: var(--surface-elevated);
-        }
-        .filter-tab.active {
-            background: var(--active);
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
         }
 
-        .table-wrapper {
-            max-height: 600px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            position: relative;
-            width: 100%;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
         }
 
-        .table-grid {
-            display: grid;
-            grid-template-columns: 55px 100px 120px 140px 1fr 95px 90px 65px;
-            gap: 12px;
-            padding: 14px 20px;
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(5, 150, 105, 0.05);
+            border-color: var(--primary);
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.05rem;
+        }
+
+        .trust-badges {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: #000000;
+        }
+
+        .trust-badges span {
+            display: flex;
             align-items: center;
-            border-bottom: 1px solid var(--border);
-            transition: all 0.2s;
+            gap: 0.4rem;
+        }
+
+        .trust-badges span:nth-child(1) i {
+            color: var(--primary);
+        }
+
+        .trust-badges span:nth-child(2) i {
+            color: var(--orange);
+        }
+
+        .trust-badges span:nth-child(3) i {
+            color: var(--blue);
+        }
+
+        .reassurance-note{
+            margin-top: 0.9rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: rgba(5,150,105,0.04);
+            color: #000000;
+            font-size: 0.95rem;
+            font-weight: 600;
+            max-width: 42rem;
+        }
+        .reassurance-note i{ color: var(--primary); margin-top: 2px; }
+        .reassurance-note strong{ font-weight: 800; }
+
+        /* CAROUSEL */
+        .hero-carousel {
             position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            background: var(--surface);
+        }
+
+        .carousel-slide {
+            display: none;
+            position: relative;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .carousel-slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .carousel-slide img {
             width: 100%;
-            box-sizing: border-box;
+            height: auto;
+            display: block;
         }
-        /* Row hover/focus uses cashbox color */
-        .table-grid:not(.table-header):hover {
-            background: rgba(var(--cashbox-rgb, 5, 150, 105), 0.06);
+
+        .slide-caption {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-        .table-grid:not(.table-header):focus {
-            background: rgba(var(--cashbox-rgb, 5, 150, 105), 0.1);
-            outline: 2px solid var(--cashbox-color, #059669);
-            outline-offset: -2px;
-            border-radius: 8px;
+
+        /* Slide 1 caption - Z├Âld */
+        .carousel-slide:nth-child(1) .slide-caption {
+            background: rgba(5, 150, 105, 0.95);
         }
-        .table-grid:hover .row-tooltip { opacity: 1; }
-        .table-header {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            background: var(--surface-elevated);
-            border-bottom: 2px solid var(--border);
-            position: sticky;
-            top: 0;
+
+        /* Slide 2 caption - Narancs */
+        .carousel-slide:nth-child(2) .slide-caption {
+            background: rgba(245, 158, 11, 0.95);
+        }
+
+        /* Slide 3 caption - K├ęk */
+        .carousel-slide:nth-child(3) .slide-caption {
+            background: rgba(59, 130, 246, 0.95);
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
             z-index: 10;
         }
-        .table-header:hover { background: var(--surface-elevated); }
 
-        .row-checkbox {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: var(--active);
-        }
-
-        .row-tooltip {
-            position: absolute;
-            right: 100px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.9);
-            color: white;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 12px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            white-space: nowrap;
-            z-index: 50;
-        }
-        .row-tooltip strong { color: #10b981; }
-
-        /* Type badge - IN/OUT */
-        .tx-type {
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 800;
-            text-align: center;
-        }
-        .tx-type.in {
-            background: rgba(16,185,129,0.15);
-            color: #059669;
-        }
-        .tx-type.out {
-            background: rgba(245,158,11,0.15);
-            color: #d97706;
-        }
-        
-        /* Cash Box badge */
-        .tx-cashbox {
-            font-size: 13px;
-        }
-        .cashbox-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--text);
-        }
-        .cashbox-badge::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--cb-color, var(--text-muted));
-            flex-shrink: 0;
-        }
-
-        .tx-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-            font-weight: 800;
-        }
-        .tx-icon.in {
-            background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.08));
-            color: #059669;
-            border: 1px solid rgba(16,185,129,0.2);
-        }
-        .tx-icon.out {
-            background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.08));
-            color: #f59e0b;
-            border: 1px solid rgba(245,158,11,0.2);
-        }
-        .tx-receipt {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--active);
-            font-family: monospace;
-        }
-        .tx-desc {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text);
-        }
-        .tx-person {
-            font-size: 13px;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-        .tx-amount {
-            font-size: 17px;
-            font-weight: 900;
-            text-align: right;
-        }
-        .tx-amount.in { color: #10b981; }
-        .tx-amount.out { color: #f59e0b; }
-        .tx-datetime {
-            font-size: 12px;
-            color: var(--text);
-            font-weight: 600;
-            text-align: left;
-            padding-left: 20px;
-        }
-        .tx-datetime .date {
-            display: block;
-            font-weight: 700;
-        }
-        .tx-datetime .time {
-            display: block;
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .tx-action {
-            padding: 8px 16px;
-            background: rgba(var(--row-rgb, var(--active-rgb)), 0.1);
-            color: var(--row-color, var(--active));
-            border: 1px solid rgba(var(--row-rgb, var(--active-rgb)), 0.2);
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .tx-action:hover {
-            background: var(--row-color, var(--active));
-            color: white;
-            transform: translateY(-1px);
-        }
-
-        .bulk-actions {
-            padding: 12px 32px;
-            background: rgba(var(--active-rgb), 0.05);
-            border-bottom: 2px solid var(--border);
-            display: none;
-            align-items: center;
-            gap: 16px;
-        }
-        .bulk-actions.active { display: flex; }
-        .bulk-actions-text {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text);
-        }
-        .bulk-action-btn {
-            padding: 8px 16px;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .bulk-action-btn:hover {
-            background: var(--active);
-            color: white;
-            border-color: var(--active);
-        }
-        .bulk-action-btn.delete {
-            color: #ef4444;
-            border-color: #ef4444;
-        }
-        .bulk-action-btn.delete:hover {
-            background: #ef4444;
-            color: white;
-        }
-
-        .table-wrapper::-webkit-scrollbar { width: 10px; }
-        .table-wrapper::-webkit-scrollbar-track { background: var(--surface-elevated); }
-        .table-wrapper::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 5px;
-        }
-        .table-wrapper::-webkit-scrollbar-thumb:hover { background: var(--active); }
-
-        @media (max-width: 1024px) {
-            .context-row { grid-template-columns: 1fr; }
-            .context-pill { flex-direction: column; gap: 16px; }
-            .context-badge { border: none; padding: 0; }
-            .filter-grid { grid-template-columns: 1fr; }
-        }
-    
-        /* ===== CAROUSEL STYLES ===== */
-        .registers-carousel-section {
-            margin-bottom: 30px;
-            width: 100%;
-            max-width: 100%;
-            overflow: hidden;
-        }
-
-        .carousel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .carousel-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1f2937;
-            margin: 0;
-        }
-
-        .carousel-nav {
-            display: flex;
-            gap: 10px;
-        }
-
-        .carousel-arrow {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: white;
-            border: 2px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .carousel-arrow:hover:not(.swiper-button-disabled) {
-            border-color: #10b981;
-            background: #f0fdf4;
-        }
-
-        .carousel-arrow.swiper-button-disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .carousel-arrow i {
-            color: #6b7280;
-            font-size: 16px;
-        }
-
-        /* Swiper overrides */
-        .registers-swiper {
-            padding: 10px 0 50px 0;
-            overflow: hidden;
-            width: 100%;
-        }
-        
-        .swiper-wrapper {
-            display: flex;
-        }
-
-        .swiper-slide {
-            height: auto;
-        }
-
-        .registers-swiper .register-card {
-            margin: 0;
-            height: 100%;
-            max-width: 100%;
-            width: 100%;
-        }
-
-        /* Pagination */
-        .swiper-pagination {
-            bottom: 10px !important;
-        }
-
-        .swiper-pagination-bullet {
+        .dot {
             width: 8px;
             height: 8px;
-            background: #d1d5db;
-            opacity: 1;
-            transition: all 0.3s ease;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .swiper-pagination-bullet-active {
-            background: #10b981;
+        .dot:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .dot.active {
+            background: white;
             width: 24px;
             border-radius: 4px;
         }
 
-        /* Add Cash Box Button */
-        .add-register-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .add-register-btn {
-            display: inline-flex;
+        /* Placeholder slide styles */
+        .placeholder-slide {
+            width: 100%;
+            aspect-ratio: 16/10;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 10px;
-            padding: 14px 28px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            justify-content: center;
+            padding: 3rem;
+            position: relative;
+        }
+
+        /* Slide 1 - Z├Âld */
+        .carousel-slide:nth-child(1) .placeholder-slide {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+
+        .carousel-slide:nth-child(1) .placeholder-icon {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+
+        /* Slide 2 - Narancs */
+        .carousel-slide:nth-child(2) .placeholder-slide {
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+        }
+
+        .carousel-slide:nth-child(2) .placeholder-icon {
+            background: linear-gradient(135deg, var(--orange), #fbbf24);
+        }
+
+        /* Slide 3 - K├ęk */
+        .carousel-slide:nth-child(3) .placeholder-slide {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        }
+
+        .carousel-slide:nth-child(3) .placeholder-icon {
+            background: linear-gradient(135deg, var(--blue), #60a5fa);
+        }
+
+        .placeholder-content {
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .placeholder-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
             color: white;
-            border: none;
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
+        }
+
+        .placeholder-content h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .placeholder-content p {
+            font-size: 1.05rem;
+            color: #000000;
+            line-height: 1.6;
+        }
+
+        /* FEATURES */
+        .features-section {
+            padding: 3rem 2rem;
+            background: var(--surface);
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: #000000;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1.25rem;
+            padding: 1.5rem;
+            background: var(--surface);
+            border: 2px solid;
+            border-radius: 16px;
+            transition: all 0.3s;
+            min-height: 140px;
+            align-items: flex-start;
+        }
+
+        .feature-item:nth-child(1) {
+            border-color: rgba(5, 150, 105, 0.3);
+        }
+
+        .feature-item:nth-child(2) {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .feature-item:nth-child(3) {
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .feature-item:nth-child(4) {
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .feature-item:nth-child(5) {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .feature-item:nth-child(6) {
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .feature-item:nth-child(7) {
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .feature-item:nth-child(8) {
+            border-color: rgba(5, 150, 105, 0.3);
+        }
+
+        .feature-item:nth-child(1):hover {
+            border-color: var(--primary);
+            box-shadow: 0 12px 32px rgba(5, 150, 105, 0.2);
+        }
+
+        .feature-item:nth-child(2):hover {
+            border-color: var(--orange);
+            box-shadow: 0 12px 32px rgba(245, 158, 11, 0.2);
+        }
+
+        .feature-item:nth-child(3):hover {
+            border-color: var(--blue);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2);
+        }
+
+        .feature-item:nth-child(4):hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 12px 32px rgba(16, 185, 129, 0.2);
+        }
+
+        .feature-item:nth-child(5):hover {
+            border-color: #fbbf24;
+            box-shadow: 0 12px 32px rgba(251, 191, 36, 0.2);
+        }
+
+        .feature-item:nth-child(6):hover {
+            border-color: #60a5fa;
+            box-shadow: 0 12px 32px rgba(96, 165, 250, 0.2);
+        }
+
+        .feature-item:nth-child(7):hover {
+            border-color: #60a5fa;
+            box-shadow: 0 12px 32px rgba(96, 165, 250, 0.2);
+        }
+
+        .feature-item:nth-child(8):hover {
+            border-color: var(--primary);
+            box-shadow: 0 12px 32px rgba(5, 150, 105, 0.2);
+        }
+
+        .feature-item:hover {
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        .feature-item:nth-child(2) .feature-icon {
+            background: linear-gradient(135deg, var(--orange), #fbbf24);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .feature-item:nth-child(3) .feature-icon {
+            background: linear-gradient(135deg, var(--blue), #60a5fa);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .feature-item:nth-child(4) .feature-icon {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .feature-item:nth-child(5) .feature-icon {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .feature-item:nth-child(6) .feature-icon {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .feature-item:nth-child(7) .feature-icon {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .feature-item:nth-child(8) .feature-icon {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        .feature-content h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .feature-content p {
+            font-size: 0.95rem;
+            color: #000000;
+            line-height: 1.5;
+        }
+
+        /* USE CASES */
+        .use-cases {
+            padding: 2rem;
+            background: var(--bg);
+            text-align: center;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .use-cases p {
+            font-size: 1rem;
+            color: #000000;
+        }
+
+        .usecases-inner{ max-width: 1200px; margin: 0 auto; }
+        .usecases-title{ margin-bottom: 1rem; }
+        .usecases-grid{
+            display:flex;
+            flex-wrap:wrap;
+            gap:0.75rem;
+            justify-content:center;
+        }
+        .usecase-pill{
+            display:flex;
+            align-items:center;
+            gap:0.6rem;
+            padding:0.6rem 0.9rem;
+            border:1px solid var(--border);
+            border-radius:999px;
+            background: var(--surface);
+            font-weight:700;
+            font-size:0.95rem;
+            color:#000000;
+        }
+        .usecase-pill .dot{
+            width:10px; height:10px; border-radius:50%;
+            display:inline-block;
+        }
+        .dot-green{ background: var(--primary); }
+        .dot-orange{ background: var(--orange); }
+        .dot-blue{ background: var(--blue); }
+
+        .use-cases strong {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        /* PRICING */
+        .pricing-section {
+            padding: 4rem 2rem;
+            background: var(--surface);
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+
+        .pricing-reassurance{
+            max-width: 900px;
+            margin: 0 auto 1.75rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.9rem;
+        }
+        .pricing-reassurance-item{
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 0.9rem 1rem;
+            background: rgba(0,0,0,0.02);
+            display:flex;
+            gap:0.7rem;
+            align-items:flex-start;
+            font-weight:600;
+            color:#000000;
+            font-size:0.95rem;
+        }
+        .pricing-reassurance-item i{ color: var(--primary); margin-top:2px; }
+        @media (max-width: 1024px){
+            .pricing-reassurance{ grid-template-columns: 1fr; }
+        }
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .toggle-label {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #000000;
+            transition: color 0.3s;
+        }
+
+        .toggle-label.active {
+            color: var(--text);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 64px;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+            transition: all 0.3s;
+            border: 1px solid var(--border);
         }
 
-        .add-register-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+        .toggle-switch.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-color: transparent;
         }
 
-        .add-register-btn i {
-            font-size: 18px;
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 12px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
 
-
-        /* Fix pagination overlap */
-        .swiper-pagination {
-            bottom: 20px !important;
-            position: relative !important;
-            margin-top: 20px;
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(32px);
         }
 
-        /* Prevent icon color change on hover */
-        .register-card:hover .register-icon i,
-        .register-card.active .register-icon i {
-            color: inherit;
+        .save-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 0.35rem 0.9rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
         }
 
-        
-                /* Add New Cash Box Card */
-        .add-new-register-card {
-            border: 3px dashed #10b981 !important;
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
         }
 
-        .add-new-register-card:hover {
-            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
-            border-color: #059669 !important;
+        .pricing-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem 1.75rem;
+            transition: all 0.3s;
+            position: relative;
         }
 
-        .add-new-register-card .register-icon.add-icon {
-            background: linear-gradient(135deg, #10b981, #059669) !important;
-            color: white !important;
-            border: none !important;
+        .pricing-card:nth-child(1) {
+            border-color: rgba(5, 150, 105, 0.2);
         }
 
-        .add-new-register-card .register-top h3 {
-            color: #10b981;
+        .pricing-card:nth-child(2) {
+            border-color: rgba(245, 158, 11, 0.3);
         }
 
-        .add-register-message {
-            margin-top: 16px;
+        .pricing-card:nth-child(3) {
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--orange);
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(245, 158, 11, 0.2);
+        }
+
+        .pricing-card:nth-child(1):hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(5, 150, 105, 0.15);
+            border-color: var(--primary);
+        }
+
+        .pricing-card:nth-child(2):hover {
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 16px 48px rgba(245, 158, 11, 0.25);
+            border-color: var(--orange);
+        }
+
+        .pricing-card:nth-child(3):hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(59, 130, 246, 0.15);
+            border-color: var(--blue);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--orange), #fbbf24);
+            padding: 0.4rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
+        }
+
+        .pricing-card h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-best-for {
+            color: #000000;
+            font-size: 0.85rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .pricing-card .price {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .price-breakdown {
+            color: #000000;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .savings {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .period {
+            color: #000000;
+            margin-bottom: 1.5rem;
+            display: block;
+            font-size: 0.95rem;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-card li {
+            padding: 0.65rem 0;
+            color: #000000;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-size: 0.9rem;
+        }
+
+        .pricing-card li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-card li i {
+            color: var(--primary);
+            font-size: 0.85rem;
+        }
+
+        .monthly-link {
+            display: block;
+            margin-top: 1rem;
+            color: #000000;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .monthly-link:hover {
+            color: var(--primary);
+        }
+
+        .pricing-guarantee {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.25rem;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(5, 150, 105, 0.1);
+        }
+
+        .pricing-guarantee i {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-guarantee p {
+            color: #000000;
+            font-size: 0.9rem;
+        }
+
+        /* CTA */
+        .cta-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             text-align: center;
         }
 
-        .add-register-message p {
-            color: #6b7280;
-            font-size: 14px;
-            line-height: 1.5;
-            margin: 0;
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        
-                /* Responsive */
+        .cta-section h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: white;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .cta-section .btn-primary {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 6rem 2rem 3rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+        }
+
         @media (max-width: 768px) {
-            .logo img {
-                height: 18px;
+            .hero-cta {
+                flex-direction: column;
             }
-            
-            .carousel-title {
-                font-size: 20px;
-            }
-            
-            .carousel-nav {
-                display: none;
+
+            .trust-badges {
+                flex-direction: column;
+                gap: 0.75rem;
             }
         }
 
     
+/* Spendnote landing tweak: trust badges */
+.trust-badges { letter-spacing: .1px; }
 
-.site-nav .nav-container {
+
+
+/* ===== Imported from landing (nav + footer) ===== */
+/* NAV */
+        .site-nav {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .site-nav .nav-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 1rem 2rem;
@@ -1203,17 +1090,125 @@
             width: auto;
         }
 
+        .site-nav .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .site-nav .nav-links a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .site-nav .nav-links a:hover {
+            color: var(--active);
+        }
+
+        .site-nav .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .site-nav .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+        }
+
+        .site-nav .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
+        }
+
+        .site-nav .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .site-nav .btn-secondary:hover {
+            background: rgba(5, 150, 105, 0.05);
+            border-color: var(--primary);
+        }
+
         .site-nav .btn-large {
             padding: 1rem 2rem;
             font-size: 1.05rem;
         }
 
         
+/* BACK TO TOP BUTTON */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(5, 150, 105, 0.4);
+        }
+
 /* FOOTER */
         footer {
             background: var(--surface);
             padding: 3rem 2rem 2rem;
             border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.75rem;
         }
 
         .footer-brand p {
@@ -1282,8 +1277,11 @@
         .footer-bottom {
             max-width: 1400px;
             margin: 0 auto;
-            padding-top: 1.5rem;
+            padding-top: 2rem;
             border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             color: #000000;
             font-size: 0.85rem;
         }
@@ -1334,1257 +1332,18 @@
 
 /* ===== End imported ===== */
 
-        /* ===== App topbar enhancements ===== */
-        .app-topbar{
-            margin: 0 auto;
-            max-width: 1400px;
-            padding: 18px 20px;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            background: linear-gradient(180deg, rgba(5, 150, 105, 0.06), rgba(255,255,255,0.9));
-            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+        /* MAIN WRAPPER - for footer positioning */
+        main {
+            flex: 1;
+            overflow-x: hidden;
         }
-        .app-topbar .context-row{
-            margin: 0;
-        }
-        .app-topbar .add-transaction-btn{
-            border-radius: 14px;
-        }
-        .app-topbar .context-pill{
-            border-radius: 16px;
-            background: rgba(255,255,255,0.85);
-        }
-        .app-topbar .context-stat-balance .context-stat-value{
-            font-size: 1.35rem;
-            font-weight: 900;
-            letter-spacing: -0.02em;
-        }
-        .registers-carousel-section{
-            margin-top: 14px;
-        }
-        .carousel-title{
-            letter-spacing: -0.02em;
-        }
-        .carousel-header{
-            padding-top: 6px;
-        }
-        .carousel-subtitle{
-            margin-top: 2px;
-            font-size: 0.95rem;
-            color: var(--text-muted);
-        }
-
-
-        /* ===== Cash Box card kebab menu (settings/delete) ===== */
-.register-top{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:14px;
-}
-
-.register-header-left{
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-  min-width:0;
-}
-
-.register-icon.small{
-  width:34px;
-  height:34px;
-  border-radius:10px;
-  flex:0 0 auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:14px;
-}
-
-.register-info{
-  min-width:0;
-}
-
-.register-actions{
-  position:relative;
-  flex:0 0 auto;
-}
-
-.register-kebab{
-  width:32px;
-  height:32px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background: rgba(148, 163, 184, 0.10);
-  color: var(--text-secondary);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  transition: all .15s ease;
-}
-
-.register-kebab:hover{
-  background: rgba(148, 163, 184, 0.16);
-  color: var(--text);
-}
-
-.register-menu{
-  position:absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  width: 220px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  padding: 8px;
-  display:none;
-  z-index: 50;
-}
-
-.register-menu.open{ display:block; }
-
-.register-menu button{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:10px 12px;
-  border-radius:10px;
-  background:transparent;
-  border:0;
-  color: var(--text);
-  cursor:pointer;
-  font-weight:600;
-  font-size:14px;
-}
-
-.register-menu button:hover{
-  background: rgba(148, 163, 184, 0.10);
-}
-
-.register-menu .divider{
-  height:1px;
-  background: var(--border);
-  margin: 6px 4px;
-}
-
-.register-menu .danger{
-  color: var(--danger);
-}
-.register-menu.open{ display: block; }
-        .register-menu button{
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 12px 14px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 13px;
-            color: var(--text);
-        }
-        .register-menu button:hover{ background: rgba(var(--active-rgb), 0.06); }
-        .register-menu .danger{
-            color: #dc2626;
-        }
-        .register-menu .danger:hover{
-            background: rgba(239, 68, 68, 0.08);
-        }
-        .register-menu .divider{
-            height: 1px;
-            background: var(--border);
-        }
-
-        .tx-desc, .tx-person, .tx-receipt{
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .tx-receipt{ text-align: left; }
-        /* Add breathing room between Amount and Date columns */
-        .tx-amount{ padding-right: 10px; }
-        .tx-datetime{ padding-left: 16px; }
-        .tx-action{ width: 100%; text-align: center; }
-        .table-header > div{
-            white-space: nowrap;
-        }
-        .table-header > div:nth-child(9){ padding-left: 16px; }
-
-
-.tx-by{font-size:11px;color:#6b7280;margin-top:2px;}
-
-        /* ===== Invite banner (team tip) ===== */
-        .invite-banner{
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:16px;
-            padding:16px 18px;
-            border:2px dashed rgba(99,102,241,0.25);
-            background: rgba(99,102,241,0.06);
-            border-radius: 16px;
-            margin: 14px 0 18px 0;
-        }
-        .invite-banner-left{
-            display:flex;
-            align-items:flex-start;
-            gap:12px;
-            min-width: 0;
-        }
-        .invite-banner-icon{
-            width:28px;
-            height:28px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            color: rgba(5,150,105,0.95);
-            flex: 0 0 auto;
-            margin-top:2px;
-        }
-        .invite-banner-title{
-            font-weight: 800;
-            font-size: 16px;
-            color: var(--text);
-            margin: 0;
-            line-height: 1.2;
-        }
-        .invite-banner-text{
-            margin: 2px 0 0 0;
-            color: rgba(15,23,42,0.75);
-            font-size: 14px;
-            line-height: 1.35;
-        }
-        .invite-banner-actions{
-            display:flex;
-            align-items:center;
-            gap:10px;
-            flex: 0 0 auto;
-        }
-        .invite-btn{
-            border: 1px solid rgba(99,102,241,0.25);
-            background: rgba(99,102,241,0.12);
-            color: var(--text);
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .dismiss-btn{
-            border: 1px solid rgba(15,23,42,0.12);
-            background: rgba(255,255,255,0.9);
-            color: var(--text);
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .invite-btn:hover{ filter: brightness(0.98); }
-        .dismiss-btn:hover{ filter: brightness(0.98); }
-
-        .tx-createdby{ font-weight:700; color: rgba(15,23,42,0.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-/* --- FIX: Filters wrap into two rows (no overflow) --- */
-.filters-row, .filters-grid, .filters-container {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 10px !important;
-}
-.filters-row > *, .filters-grid > *, .filters-container > * {
-  flex: 1 1 220px !important;
-  min-width: 220px !important;
-}
-@media (min-width: 1100px) {
-  .filters-row > *, .filters-grid > *, .filters-container > * {
-    flex: 1 1 calc(50% - 10px) !important;
-    min-width: 260px !important;
-  }
-}
-/* Ensure filter dropdown panel fits viewport */
-.filters-dropdown, .filters-menu, .filter-dropdown-panel {
-  max-width: min(920px, 95vw) !important;
-  width: auto !important;
-}
-
-
-/* --- FIX: Transactions table fits screen (no horizontal scroll) --- */
-.transactions-table, table.transactions-table, .table-transactions {
-  width: 100% !important;
-  table-layout: fixed !important;
-}
-.transactions-table th, .transactions-table td,
-table.transactions-table th, table.transactions-table td,
-.table-transactions th, .table-transactions td {
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
-}
-/* Narrower "Name/Description" style columns */
-.transactions-table .col-name, .transactions-table .col-vendor, .transactions-table .col-desc,
-.table-transactions .col-name, .table-transactions .col-vendor, .table-transactions .col-desc {
-  width: 22% !important;
-}
-/* Standard widths for other columns */
-.transactions-table .col-date, .table-transactions .col-date { width: 12% !important; }
-.transactions-table .col-amount, .table-transactions .col-amount { width: 12% !important; text-align: right !important; }
-.transactions-table .col-category, .table-transactions .col-category { width: 14% !important; }
-.transactions-table .col-Cash Box, .table-transactions .col-Cash Box { width: 16% !important; }
-.transactions-table .col-createdby, .table-transactions .col-createdby { width: 14% !important; }
-
-
-/* Remove forced horizontal scroll on table wrappers */
-.table-responsive, .transactions-table-wrap, .table-wrap {
-  overflow-x: visible !important;
-}
-
-
-/* === v23 FIXES === */
-
-/* 1) Kill horizontal scrolling for the transactions table area */
-.table-responsive,
-.transactions-table-wrap,
-.table-wrap,
-.table-container,
-.recent-transactions .table-responsive,
-.recent-transactions .transactions-table-wrap,
-.recent-transactions .table-wrap {
-  overflow-x: hidden !important;
-}
-
-/* Make sure the table can actually fit */
-.transactions-table,
-table.transactions-table,
-.table-transactions,
-.recent-transactions table {
-  width: 100% !important;
-  table-layout: fixed !important;
-}
-
-/* Tighter table density */
-.transactions-table th,
-.transactions-table td,
-table.transactions-table th,
-table.transactions-table td,
-.table-transactions th,
-.table-transactions td,
-.recent-transactions table th,
-.recent-transactions table td {
-  padding: 10px 8px !important;
-  font-size: 14px !important;
-}
-
-/* Default: no-nowrap only where needed; allow wrap on text-heavy columns */
-.transactions-table th,
-.transactions-table td,
-table.transactions-table th,
-table.transactions-table td,
-.table-transactions th,
-.table-transactions td,
-.recent-transactions table th,
-.recent-transactions table td {
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
-}
-
-/* Allow wrapping on description + date/time so we don't force width */
-.transactions-table .col-desc,
-.table-transactions .col-desc,
-.recent-transactions .col-desc,
-.transactions-table .col-date,
-.table-transactions .col-date,
-.recent-transactions .col-date {
-  white-space: normal !important;
-  line-height: 1.2 !important;
-}
-
-/* Column width map (tuned to avoid horizontal scroll) */
-.transactions-table .col-check,
-.table-transactions .col-check,
-.recent-transactions .col-check { width: 4% !important; }
-
-.transactions-table .col-idx,
-.table-transactions .col-idx,
-.recent-transactions .col-idx { width: 4% !important; }
-
-.transactions-table .col-type,
-.table-transactions .col-type,
-.recent-transactions .col-type { width: 6% !important; }
-
-.transactions-table .col-receipt,
-.table-transactions .col-receipt,
-.recent-transactions .col-receipt { width: 8% !important; }
-
-.transactions-table .col-desc,
-.table-transactions .col-desc,
-.recent-transactions .col-desc { width: 22% !important; }
-
-.transactions-table .col-from,
-.table-transactions .col-from,
-.recent-transactions .col-from { width: 12% !important; }
-
-.transactions-table .col-to,
-.table-transactions .col-to,
-.recent-transactions .col-to { width: 12% !important; }
-
-.transactions-table .col-amount,
-.table-transactions .col-amount,
-.recent-transactions .col-amount { width: 10% !important; text-align: right !important; }
-
-.transactions-table .col-date,
-.table-transactions .col-date,
-.recent-transactions .col-date { width: 14% !important; }
-
-.transactions-table .col-createdby,
-.table-transactions .col-createdby,
-.recent-transactions .col-createdby { width: 10% !important; }
-
-.transactions-table .col-action,
-.table-transactions .col-action,
-.recent-transactions .col-action { width: 8% !important; }
-
-/* If there is any leftover forced scrollbar, hide it (last resort) */
-.recent-transactions,
-.recent-transactions .card,
-.recent-transactions .card-body {
-  overflow-x: hidden !important;
-}
-
-/* 2) Remove hover-only "category" labels/tags/badges on rows (not used in Spendnote) */
-.category,
-.category-tag,
-.category-badge,
-.row-category,
-.badge-category,
-.tag-category,
-.hover-category,
-[class*="categoryTag"],
-[class*="category-tag"],
-[class*="category_badge"],
-[data-category],
-[data-category-tag] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-}
-
-/* If they are shown only on hover, ensure hover doesn't reveal anything */
-tr:hover .category,
-tr:hover .category-tag,
-tr:hover .category-badge,
-tr:hover .row-category,
-tr:hover [data-category],
-tr:hover [data-category-tag] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-}
-
-
-/* === v24 FIXES: no horizontal scroll + proper row selection === */
-
-/* Hide any remaining tooltip UI */
-.row-tooltip { display: none !important; }
-
-/* Ensure the container never shows a horizontal scrollbar */
-.recent-transactions,
-.table-container,
-.table-wrap,
-.transactions-table-wrap {
-  overflow-x: hidden !important;
-}
-
-/* Proper selected-row styling that spans full width */
-.table-grid.is-selected {
-  background: rgba(var(--active-rgb), 0.06) !important;
-  box-shadow: inset 0 0 0 2px rgba(var(--active-rgb), 0.55) !important;
-  border-radius: 12px;
-}
-
-/* Hook selection via focus too (keyboard) */
-.table-grid:focus-within {
-  outline: none;
-  box-shadow: inset 0 0 0 2px rgba(var(--active-rgb), 0.35);
-}
-
-/* Created by typography: same visual weight as From/To, and short username */
-.tx-createdby{
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  color: var(--text-muted) !important;
-  text-transform: none !important;
-}
-
-/* Keep date/time readable but compact */
-.tx-datetime .date { font-size: 13px !important; }
-.tx-datetime .time { font-size: 12px !important; }
-
-/* Action button must not overflow */
-.tx-action{
-  width: 100% !important;
-  min-width: 0 !important;
-  padding: 10px 12px !important;
-  font-size: 13px !important;
-  white-space: nowrap !important;
-}
-
-
-/* === v25 FIX: Filters panel layout (2-column grid, no overflow) === */
-.filter-panel-wrapper { 
-  max-width: min(960px, 95vw) !important;
-  width: auto !important;
-}
-.filter-panel {
-  max-width: min(960px, 95vw) !important;
-  width: auto !important;
-  overflow-x: hidden !important;
-}
-/* Force filters into two columns on desktop, one on mobile */
-.filter-grid {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 14px !important;
-  align-items: start !important;
-}
-@media (max-width: 820px) {
-  .filter-grid { grid-template-columns: 1fr !important; }
-}
-/* Amount range: keep inputs inside the card, allow shrink */
-.amount-range {
-  display: grid !important;
-  grid-template-columns: 1fr auto 1fr !important;
-  gap: 8px !important;
-  align-items: center !important;
-}
-.amount-range .filter-input { min-width: 0 !important; width: 100% !important; }
-/* Ensure filter groups don't force min widths */
-.filter-group { min-width: 0 !important; }
-.filter-input { min-width: 0 !important; }
-
-
-/* === v26 TWEAK: Filters in TWO ROWS (3 columns) === */
-.filter-grid{
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-}
-@media (max-width: 1100px){
-  .filter-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-}
-@media (max-width: 820px){
-  .filter-grid{ grid-template-columns: 1fr !important; }
-}
-
-/* ===== MODAL ===== */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    z-index: 9999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    overflow-y: auto;
-}
-
-.modal-overlay.active {
-    display: flex;
-}
-
-.modal-container {
-    background: var(--surface);
-    border-radius: 24px;
-    max-width: 1100px;
-    width: 100%;
-    max-height: 92vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    position: relative;
-    margin: auto;
-}
-
-.modal-header {
-    position: sticky;
-    top: 0;
-    background: linear-gradient(135deg, rgba(var(--active-rgb), 0.1), rgba(var(--active-rgb), 0.05));
-    padding: 16px 32px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 24px 24px 0 0;
-    z-index: 10;
-}
-
-.modal-header-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.modal-title {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--active);
-    margin: 0;
-}
-
-.modal-header-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-    color: var(--text-muted);
-    padding-left: 16px;
-    border-left: 2px solid var(--border);
-}
-
-.header-info-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.header-info-item i {
-    font-size: 12px;
-    color: var(--active);
-}
-
-.header-info-divider {
-    color: var(--border);
-}
-
-.register-selector-wrapper {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-}
-
-.register-selector-icon {
-    position: absolute;
-    left: 14px;
-    font-size: 18px;
-    color: var(--active);
-    pointer-events: none;
-    z-index: 1;
-    transition: color 0.3s;
-}
-
-.header-info-select {
-    border: none;
-    background: linear-gradient(135deg, rgba(var(--active-rgb), 0.15), rgba(var(--active-rgb), 0.08));
-    font-weight: 800;
-    color: var(--active);
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 16px;
-    padding: 10px 20px 10px 44px;
-    border-radius: 12px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 8px rgba(var(--active-rgb), 0.15);
-    position: relative;
-    min-width: 180px;
-}
-
-.header-info-select:hover {
-    background: linear-gradient(135deg, rgba(var(--active-rgb), 0.25), rgba(var(--active-rgb), 0.15));
-    box-shadow: 0 4px 16px rgba(var(--active-rgb), 0.25);
-    transform: translateY(-1px);
-}
-
-.header-info-select:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(var(--active-rgb), 0.2), 0 4px 16px rgba(var(--active-rgb), 0.3);
-    transform: translateY(-1px);
-}
-
-.header-info-select option {
-    padding: 10px;
-    font-size: 16px;
-}
-
-.modal-close {
-    width: 40px;
-    height: 40px;
-    border: none;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    color: var(--text-muted);
-    font-size: 18px;
-}
-
-.modal-close:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: var(--text);
-    transform: rotate(90deg);
-}
-
-.modal-body {
-    padding: 20px 32px 24px 32px;
-}
-
-.expanded-fields {
-    display: none;
-    margin-top: 12px;
-    padding: 16px;
-    background: var(--bg);
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-
-.expanded-fields.show {
-    display: block;
-    max-height: 500px;
-    opacity: 1;
-}
-
-.modal-info-bar {
-    display: flex;
-    gap: 24px;
-    padding: 16px 20px;
-    background: var(--bg);
-    border-radius: 12px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-}
-
-.modal-info-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-}
-
-.modal-info-label {
-    color: var(--text-muted);
-    font-weight: 500;
-}
-
-.modal-info-value {
-    color: var(--text);
-    font-weight: 700;
-}
-
-.modal-info-select {
-    border: none;
-    background: transparent;
-    font-weight: 700;
-    color: var(--active);
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 14px;
-}
-
-.modal-info-select:focus {
-    outline: 2px solid var(--active);
-    outline-offset: 2px;
-    border-radius: 4px;
-}
-
-@media (max-width: 640px) {
-    .modal-container {
-        max-height: 95vh;
-        border-radius: 16px;
-    }
-    
-    .modal-header {
-        padding: 20px 24px;
-        border-radius: 16px 16px 0 0;
-    }
-    
-    .modal-title {
-        font-size: 20px;
-    }
-    
-    .modal-body {
-        padding: 16px;
-    }
-}
-
-/* ===== FORM STYLES FOR MODAL ===== */
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 260px;
-    gap: 16px;
-    margin-bottom: 12px;
-}
-
-.form-group {
-    margin-bottom: 12px;
-}
-
-.form-row-line-item {
-    display: grid;
-    grid-template-columns: 1fr 200px;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.form-row-line-item .form-group {
-    margin-bottom: 0;
-}
-
-.optional-buttons-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-}
-
-.optional-buttons-row .add-section-btn {
-    flex: 1;
-    min-width: 200px;
-}
-
-.form-group-flex {
-    flex: 1;
-}
-
-.form-label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 8px;
-}
-
-.form-label .required {
-    color: var(--error);
-}
-
-.form-input,
-.form-select,
-.form-textarea {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    font-size: 15px;
-    font-family: inherit;
-    transition: all 0.2s;
-    background: var(--surface);
-}
-
-.form-input:focus,
-.form-select:focus,
-.form-textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
-}
-
-.form-textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-.form-hint {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 6px;
-}
-
-.input-with-button {
-    display: flex;
-    gap: 8px;
-    align-items: flex-start;
-}
-
-.input-with-button .form-input {
-    flex: 1;
-}
-
-.input-with-prefix {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.input-prefix {
-    position: absolute;
-    left: 16px;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-muted);
-    pointer-events: none;
-    z-index: 1;
-}
-
-.input-with-prefix .form-input {
-    padding-left: 32px;
-}
-
-.add-detail-btn {
-    width: 40px;
-    height: 40px;
-    border: 2px solid var(--border);
-    background: var(--surface);
-    border-radius: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    color: var(--text-muted);
-    flex-shrink: 0;
-}
-
-.add-detail-btn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    background: rgba(5, 150, 105, 0.05);
-}
-
-.add-detail-btn.active {
-    border-color: var(--primary);
-    color: var(--primary);
-    background: rgba(5, 150, 105, 0.1);
-}
-
-.remove-item-btn {
-    width: 36px;
-    height: 36px;
-    border: none;
-    background: transparent;
-    color: var(--text-muted);
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.remove-item-btn:hover {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--error);
-}
-
-.add-line-item-btn {
-    padding: 9px 14px;
-    border: 2px dashed var(--border);
-    background: transparent;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    justify-content: center;
-    width: 100%;
-    font-family: inherit;
-}
-
-.add-line-item-btn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    background: rgba(5, 150, 105, 0.05);
-}
-
-.add-line-item-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.add-section-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    border: 2px dashed var(--border);
-    background: transparent;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    width: 100%;
-    font-family: inherit;
-    margin-bottom: 0;
-}
-
-.add-section-btn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    background: rgba(5, 150, 105, 0.05);
-}
-
-.add-section-btn.active {
-    border-style: solid;
-    border-color: var(--primary);
-    color: var(--primary);
-    background: rgba(5, 150, 105, 0.08);
-}
-
-.form-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
-}
-
-.btn-blue {
-    background: #64748b;
-    color: white;
-}
-
-.btn-blue:hover {
-    background: #475569;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
-}
-
-.btn-tertiary {
-    background: white;
-    color: var(--text);
-    border: 2px solid var(--border);
-}
-
-.btn-tertiary:hover {
-    border-color: var(--text);
-    background: var(--bg);
-    transform: translateY(-1px);
-}
-
-.btn-tertiary i {
-    color: #ef4444;
-}
-
-.direction-toggle-compact {
-    display: flex;
-    gap: 8px;
-}
-
-.direction-toggle-compact input[type="radio"] {
-    display: none;
-}
-
-.direction-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 1px solid transparent;
-}
-
-.direction-btn-in {
-    background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.06));
-    color: #059669;
-    border-color: rgba(16,185,129,0.15);
-}
-
-.direction-btn-in:hover {
-    background: linear-gradient(135deg, rgba(16,185,129,0.18), rgba(16,185,129,0.10));
-    border-color: rgba(16,185,129,0.25);
-}
-
-#modalDirectionIn:checked + .direction-btn-in {
-    background: linear-gradient(135deg, rgba(16,185,129,0.25), rgba(16,185,129,0.15));
-    border-color: #059669;
-    box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
-}
-
-.direction-btn-out {
-    background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.06));
-    color: #f59e0b;
-    border-color: rgba(245,158,11,0.15);
-}
-
-.direction-btn-out:hover {
-    background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(245,158,11,0.10));
-    border-color: rgba(245,158,11,0.25);
-}
-
-#modalDirectionOut:checked + .direction-btn-out {
-    background: linear-gradient(135deg, rgba(245,158,11,0.25), rgba(245,158,11,0.15));
-    border-color: #f59e0b;
-    box-shadow: 0 0 0 3px rgba(245,158,11,0.1);
-}
-
-@media (max-width: 640px) {
-    .direction-toggle {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
-    
-    .line-item {
-        grid-template-columns: 1fr;
-    }
-    
-    .line-item-amount {
-        width: 100%;
-    }
-}
-
-.line-items-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 12px;
-}
-
-.line-item {
-    display: grid;
-    grid-template-columns: 1fr 200px 40px;
-    gap: 10px;
-    align-items: center;
-}
-
-.line-item-input {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    font-size: 15px;
-    font-family: inherit;
-    transition: all 0.2s;
-    background: var(--surface);
-}
-
-.line-item-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
-}
-
-.line-item-amount {
-    text-align: right;
-}
-
-.autocomplete-wrapper {
-    position: relative;
-    flex: 1;
-}
-
-.autocomplete-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: var(--surface);
-    border: 2px solid var(--primary);
-    border-top: none;
-    border-radius: 0 0 10px 10px;
-    max-height: 280px;
-    overflow-y: auto;
-    z-index: 1000;
-    display: none;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-.autocomplete-dropdown.show {
-    display: block;
-}
-
-.autocomplete-item {
-    padding: 12px 16px;
-    cursor: pointer;
-    transition: background 0.2s;
-    border-bottom: 1px solid var(--border);
-}
-
-.autocomplete-item:last-child {
-    border-bottom: none;
-}
-
-.autocomplete-item:hover {
-    background: var(--bg);
-}
-
-.autocomplete-item.active {
-    background: rgba(var(--active-rgb), 0.1);
-}
-
-.autocomplete-item-name {
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 4px;
-}
-
-.autocomplete-item-details {
-    font-size: 13px;
-    color: var(--text-muted);
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.autocomplete-item-detail {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.autocomplete-item-detail i {
-    font-size: 11px;
-}
-
-.autocomplete-add-new {
-    padding: 12px 16px;
-    cursor: pointer;
-    background: linear-gradient(135deg, rgba(var(--active-rgb), 0.08), rgba(var(--active-rgb), 0.04));
-    color: var(--primary);
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-top: 2px solid var(--border);
-    transition: all 0.2s;
-}
-
-.autocomplete-add-new:hover {
-    background: linear-gradient(135deg, rgba(var(--active-rgb), 0.15), rgba(var(--active-rgb), 0.08));
-}
-
-.autocomplete-add-new i {
-    font-size: 14px;
-}
-
-.autocomplete-empty {
-    padding: 20px 16px;
-    text-align: center;
-    color: var(--text-muted);
-    font-style: italic;
-}
-
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
+<!-- Scroll Progress Bar -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
 <nav class="site-nav">
   <div class="nav-container">
             <a href="index.html" class="logo">
@@ -2607,594 +1366,255 @@ tr:hover [data-category-tag] {
                 <span style="font-weight: 900; font-size: 1.5rem; margin-left: 10px; color: #000000; letter-spacing: -0.02em;">SpendNote</span>
             </a>
             <ul class="nav-links">
-                <li><a href="index.html" class="nav-cash-item active">Dashboard</a></li>
-                <li><a href="spendnote-cash-box-list.html" class="nav-cash-item" id="navCashBoxes">Cash Boxes</a></li>
-                <li><a href="spendnote-transaction-history.html" class="nav-cash-item" id="navTransactions">Transactions</a></li>
-                <li><a href="spendnote-partner-list.html">Contacts</a></li>
-                <li><a href="spendnote-user-settings.html">Settings</a></li>
-                <li><button class="nav-new-transaction-btn" id="addTransactionBtn"><i class="fas fa-plus"></i> New Transaction</button></li>
-                <li><a href="spendnote-login.html" class="btn btn-secondary">Log out</a></li>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="spendnote-pricing.html">Pricing</a></li>
+                <li><a href="spendnote-faq.html">FAQ</a></li>
+                <li><a href="spendnote-login.html" class="btn btn-secondary">Log in</a></li>
+                <li><a href="spendnote-signup.html" class="btn btn-primary">Sign up</a></li>
             </ul>
         </div>
     </nav>
 
-<div class="app-container">
-    <main class="main-content">
-            <!-- Tip: invite your team (compact) -->
-            <div class="invite-banner-compact" id="inviteBanner">
-                <i class="fas fa-lightbulb"></i>
-                <span><strong>Tip:</strong> Invite your team – they can add receipts from their phones.</span>
-                <button class="invite-btn-compact" type="button">Invite</button>
-                <button class="dismiss-btn-compact" type="button" onclick="document.getElementById('inviteBanner').style.display='none'" title="Dismiss">×</button>
+    <main>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>
+                <span class="hero-label">Petty cash tracking,</span>
+                <span class="hero-big">transparent</span>
+                <span class="hero-accent">& always searchable</span>
+            </h1>
+            <p>Record every cash movement with complete visibility and traceability</p>
+            <p class="hero-subnote">Track petty cash across your team ÔÇö record every transaction, search your history instantly, and maintain full transparency. <strong>Quick receipts when you need them</strong> ÔÇö ready in ~30 seconds.</p>
+            <div class="hero-cta">
+                <a href="spendnote-signup.html" class="btn btn-primary btn-large">Start Free - No Card Required</a>
+                <a href="#features" class="btn btn-secondary btn-large">See how it works</a>
+            </div>
+            <div class="trust-badges">
+                <span><i class="fas fa-check-circle"></i> SSL Encrypted</span>
+                <span><i class="fas fa-shield-check"></i> 30-Day Money Back</span>
+                <span><i class="fas fa-times-circle"></i> Cancel Anytime</span>
+            </div>
+            <div class="reassurance-note">
+                <i class="fas fa-info-circle"></i>
+                <span>For petty cash tracking only (not a tax tool)</span>
+            </div>
+</div>
+
+        <!-- ANIMATED CAROUSEL -->
+        <div class="hero-carousel">
+            <!-- Slide 1 -->
+            <div class="carousel-slide active">
+                <div class="placeholder-slide">
+                    <div class="placeholder-content">
+                        <div class="placeholder-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h3>Add cash movement</h3>
+                        <p>Your team records it from anywhere.</p>
+                    </div>
+                </div>
+                <div class="slide-caption">
+                    <i class="fas fa-edit"></i> Add cash movement
+                </div>
             </div>
 
-            <!-- Cash Boxes Carousel -->
-            <div class="registers-carousel-section">
-                <div class="carousel-header">
-                    <h2 class="carousel-title">Cash Boxes</h2>
-                    <div class="carousel-subtitle">Switch Cash Boxes fast, keep the balance in sight.</div>
-                    <div class="carousel-nav">
-                        <button class="carousel-arrow swiper-button-prev-custom" aria-label="Previous">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="carousel-arrow swiper-button-next-custom" aria-label="Next">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="swiper registers-swiper">
-                    <div class="swiper-wrapper">
-                        <!-- Slide 1 - Main Office (Green) -->
-                        <div class="swiper-slide">
-                            <div class="register-card active" data-name="Main Office" data-color="#059669" data-rgb="5, 150, 105" 
-                                 role="button" tabindex="0">
-                                <div class="register-top">
-  <div class="register-header-left">
-    <div class="register-icon small" style="width: 72px; height: 72px; font-size: 32px; border-radius: 18px; border-width: 2px; background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(5, 150, 105, 0.05)); color: #059669; border-color: rgba(5, 150, 105, 0.15);"><i class="fas fa-building"></i></div>
-    <div class="register-info"><h3>Main Office</h3>
-                                        <div class="register-id">CR-001</div></div>
-  </div>
-  <div class="register-actions">
-    <button class="register-kebab" aria-label="Cash Box menu" type="button">
-      <i class="fas fa-ellipsis-h"></i>
-    </button>
-    <div class="register-menu" role="menu" aria-label="Cash Box actions">
-      <button class="menu-settings" type="button">
-        <span>Settings</span>
-        <i class="fas fa-cog"></i>
-      </button>
-      <div class="divider"></div>
-      <button class="menu-delete danger" type="button">
-        <span>Delete Cash Box</span>
-        <i class="fas fa-trash"></i>
-      </button>
-    </div>
-  </div>
-</div>
-                                <div class="register-balance">
-                                    $18,500
-                                    <span class="trend-indicator up">
-                                        <i class="fas fa-arrow-up"></i>+12%
-                                    </span>
-                                </div>
-                                <div class="register-stats">
-                                    <div class="stat-item">
-                                        <div class="tooltip">Average: $2,400/day this week</div>
-                                        <div class="stat-label">Today In</div>
-                                        <div class="stat-value in">+$7,200</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="tooltip">-15% vs yesterday</div>
-                                        <div class="stat-label">Today Out</div>
-                                        <div class="stat-value out">-$2,800</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 2 - Event Fund (Orange) -->
-                        <div class="swiper-slide">
-                            <div class="register-card" data-name="Event Fund" data-color="#f59e0b" data-rgb="245, 158, 11"
-                                 role="button" tabindex="0">
-                                <div class="register-top">
-  <div class="register-header-left">
-    <div class="register-icon small" style="width: 72px; height: 72px; font-size: 32px; border-radius: 18px; border-width: 2px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05)); color: #f59e0b; border-color: rgba(245, 158, 11, 0.15);"><i class="fas fa-calendar-alt"></i></div>
-    <div class="register-info"><h3>Event Fund</h3>
-                                        <div class="register-id">CR-002</div></div>
-  </div>
-  <div class="register-actions">
-    <button class="register-kebab" aria-label="Cash Box menu" type="button">
-      <i class="fas fa-ellipsis-h"></i>
-    </button>
-    <div class="register-menu" role="menu" aria-label="Cash Box actions">
-      <button class="menu-settings" type="button">
-        <span>Settings</span>
-        <i class="fas fa-cog"></i>
-      </button>
-      <div class="divider"></div>
-      <button class="menu-delete danger" type="button">
-        <span>Delete Cash Box</span>
-        <i class="fas fa-trash"></i>
-      </button>
-    </div>
-  </div>
-</div>
-                                <div class="register-balance">
-                                    $4,750
-                                    <span class="trend-indicator up">
-                                        <i class="fas fa-arrow-up"></i>+8%
-                                    </span>
-                                </div>
-                                <div class="register-stats">
-                                    <div class="stat-item">
-                                        <div class="tooltip">2 events pending</div>
-                                        <div class="stat-label">Today In</div>
-                                        <div class="stat-value in">+$1,200</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="tooltip">Catering & supplies</div>
-                                        <div class="stat-label">Today Out</div>
-                                        <div class="stat-value out">-$650</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 3 - Petty Cash (Blue) -->
-                        <div class="swiper-slide">
-                            <div class="register-card" data-name="Petty Cash" data-color="#3b82f6" data-rgb="59, 130, 246"
-                                 role="button" tabindex="0">
-                                <div class="register-top">
-  <div class="register-header-left">
-    <div class="register-icon small" style="width: 72px; height: 72px; font-size: 32px; border-radius: 18px; border-width: 2px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05)); color: #3b82f6; border-color: rgba(59, 130, 246, 0.15);"><i class="fas fa-wallet"></i></div>
-    <div class="register-info"><h3>Petty Cash</h3>
-                                        <div class="register-id">CR-003</div></div>
-  </div>
-  <div class="register-actions">
-    <button class="register-kebab" aria-label="Cash Box menu" type="button">
-      <i class="fas fa-ellipsis-h"></i>
-    </button>
-    <div class="register-menu" role="menu" aria-label="Cash Box actions">
-      <button class="menu-settings" type="button">
-        <span>Settings</span>
-        <i class="fas fa-cog"></i>
-      </button>
-      <div class="divider"></div>
-      <button class="menu-delete danger" type="button">
-        <span>Delete Cash Box</span>
-        <i class="fas fa-trash"></i>
-      </button>
-    </div>
-  </div>
-</div>
-                                <div class="register-balance">
-                                    $2,000
-                                    <span class="trend-indicator down">
-                                        <i class="fas fa-arrow-down"></i>-5%
-                                    </span>
-                                </div>
-                                <div class="register-stats">
-                                    <div class="stat-item">
-                                        <div class="tooltip">No deposits today</div>
-                                        <div class="stat-label">Today In</div>
-                                        <div class="stat-value in">+$0</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="tooltip">Office snacks & misc</div>
-                                        <div class="stat-label">Today Out</div>
-                                        <div class="stat-value out">-$300</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 4 - Marketing Budget (Purple) -->
-                        <div class="swiper-slide">
-                            <div class="register-card" data-name="Marketing Budget" data-color="#8b5cf6" data-rgb="139, 92, 246"
-                                 role="button" tabindex="0">
-                                <div class="register-top">
-  <div class="register-header-left">
-    <div class="register-icon small" style="width: 72px; height: 72px; font-size: 32px; border-radius: 18px; border-width: 2px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05)); color: #8b5cf6; border-color: rgba(139, 92, 246, 0.15);"><i class="fas fa-bullhorn"></i></div>
-    <div class="register-info"><h3>Marketing Budget</h3>
-                                        <div class="register-id">CR-004</div></div>
-  </div>
-  <div class="register-actions">
-    <button class="register-kebab" aria-label="Cash Box menu" type="button">
-      <i class="fas fa-ellipsis-h"></i>
-    </button>
-    <div class="register-menu" role="menu" aria-label="Cash Box actions">
-      <button class="menu-settings" type="button">
-        <span>Settings</span>
-        <i class="fas fa-cog"></i>
-      </button>
-      <div class="divider"></div>
-      <button class="menu-delete danger" type="button">
-        <span>Delete Cash Box</span>
-        <i class="fas fa-trash"></i>
-      </button>
-    </div>
-  </div>
-</div>
-                                <div class="register-balance">
-                                    $12,300
-                                    <span class="trend-indicator up">
-                                        <i class="fas fa-arrow-up"></i>+25%
-                                    </span>
-                                </div>
-                                <div class="register-stats">
-                                    <div class="stat-item">
-                                        <div class="tooltip">Campaign budget increase</div>
-                                        <div class="stat-label">Today In</div>
-                                        <div class="stat-value in">+$5,000</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="tooltip">Ad spend & promotions</div>
-                                        <div class="stat-label">Today Out</div>
-                                        <div class="stat-value out">-$1,800</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 5 - Emergency Fund (Red) -->
-                        <div class="swiper-slide">
-                            <div class="register-card" data-name="Emergency Fund" data-color="#ef4444" data-rgb="239, 68, 68"
-                                 role="button" tabindex="0">
-                                <div class="register-top">
-  <div class="register-header-left">
-    <div class="register-icon small" style="width: 72px; height: 72px; font-size: 32px; border-radius: 18px; border-width: 2px; background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05)); color: #ef4444; border-color: rgba(239, 68, 68, 0.15);"><i class="fas fa-exclamation-triangle"></i></div>
-    <div class="register-info"><h3>Emergency Fund</h3>
-                                        <div class="register-id">CR-005</div></div>
-  </div>
-  <div class="register-actions">
-    <button class="register-kebab" aria-label="Cash Box menu" type="button">
-      <i class="fas fa-ellipsis-h"></i>
-    </button>
-    <div class="register-menu" role="menu" aria-label="Cash Box actions">
-      <button class="menu-settings" type="button">
-        <span>Settings</span>
-        <i class="fas fa-cog"></i>
-      </button>
-      <div class="divider"></div>
-      <button class="menu-delete danger" type="button">
-        <span>Delete Cash Box</span>
-        <i class="fas fa-trash"></i>
-      </button>
-    </div>
-  </div>
-</div>
-                                <div class="register-balance">
-                                    $8,900
-                                    <span class="trend-indicator neutral">
-                                        <i class="fas fa-minus"></i>0%
-                                    </span>
-                                </div>
-                                <div class="register-stats">
-                                    <div class="stat-item">
-                                        <div class="tooltip">No activity</div>
-                                        <div class="stat-label">Today In</div>
-                                        <div class="stat-value in">+$0</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="tooltip">No activity</div>
-                                        <div class="stat-label">Today Out</div>
-                                        <div class="stat-value out">-$0</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 6 - Add New Cash Box -->
-                        <div class="swiper-slide">
-                            <div class="register-card add-new-register-card" role="button" tabindex="0">
-                                <div class="register-top">
-                                    <div class="register-info">
-                                        <h3>Add New</h3>
-                                        <div class="register-id">Create</div>
-                                    </div>
-                                    <div class="register-icon add-icon">
-                                        <i class="fas fa-plus"></i>
-                                    </div>
-                                </div>
-                                <div class="register-balance" style="font-size: 16px; font-weight: 600; color: #6b7280; line-height: 1.6; padding: 20px 0;">
-                                    Create a new Cash Box to track your transactions
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End of swiper-wrapper -->
-                    
-                    <!-- Pagination -->
-                    <div class="swiper-pagination"></div>
-                </div>
-                <!-- End of registers-swiper -->
-            <div class="transactions-card">
-                <div class="transactions-header">
-                    <div class="header-top">
-                        <h2 class="transactions-title">Latest Transactions</h2>
-                        <a href="spendnote-transaction-history.html" class="view-all-btn">
-                            <span>View All</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="table-wrapper" id="tableWrapper">
-                    <div class="table-grid table-header">
-                        <div>Type</div>
-                        <div>Date & Time</div>
-                        <div>Cash Box</div>
-                        <div>Partner</div>
-                        <div>Description</div>
-                        <div>Amount</div>
-                        <div>Created by</div>
-                        <div>Action</div>
-                    </div>
-
-                    <div class="table-grid" tabindex="0" style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
-                        <div class="tx-type in">IN</div>
-                        <div class="tx-datetime">
-                            <span class="date">Jan 3, 2026</span>
-                            <span class="time">2:34 PM</span>
-                        </div>
-                        <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: #059669;">Main Office</span></div>
-                        <div class="tx-person">John Smith</div>
-                        <div class="tx-desc">Retail cash deposit</div>
-                        <div class="tx-amount in">+$5,000</div>
-                        <div class="tx-createdby">by Alexa</div>
-                        <button class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105;">View</button>
-                    </div>
-                    <div class="table-grid" tabindex="0" style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
-                        <div class="tx-type out">OUT</div>
-                        <div class="tx-datetime">
-                            <span class="date">Jan 2, 2026</span>
-                            <span class="time">9:15 AM</span>
-                        </div>
-                        <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: #059669;">Main Office</span></div>
-                        <div class="tx-person">ABC Supplies</div>
-                        <div class="tx-desc">Office supplies</div>
-                        <div class="tx-amount out">-$450</div>
-                        <div class="tx-createdby">by Mia</div>
-                        <button class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105;">View</button>
-                    </div>
-                    <div class="table-grid" tabindex="0" style="--cashbox-rgb: 245, 158, 11; --cashbox-color: #f59e0b;">
-                        <div class="tx-type in">IN</div>
-                        <div class="tx-datetime">
-                            <span class="date">Jan 1, 2026</span>
-                            <span class="time">4:20 PM</span>
-                        </div>
-                        <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: #f59e0b;">Event Fund</span></div>
-                        <div class="tx-person">Mary Johnson</div>
-                        <div class="tx-desc">Customer payment</div>
-                        <div class="tx-amount in">+$2,200</div>
-                        <div class="tx-createdby">by Ethan</div>
-                        <button class="tx-action" style="--row-color: #f59e0b; --row-rgb: 245, 158, 11;">View</button>
-                    </div>
-                    <div class="table-grid" tabindex="0" style="--cashbox-rgb: 59, 130, 246; --cashbox-color: #3b82f6;">
-                        <div class="tx-type out">OUT</div>
-                        <div class="tx-datetime">
-                            <span class="date">Dec 31, 2025</span>
-                            <span class="time">11:45 AM</span>
-                        </div>
-                        <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: #3b82f6;">Petty Cash</span></div>
-                        <div class="tx-person">AdCorp Media</div>
-                        <div class="tx-desc">Marketing campaign</div>
-                        <div class="tx-amount out">-$1,800</div>
-                        <div class="tx-createdby">by Sofia</div>
-                        <button class="tx-action" style="--row-color: #3b82f6; --row-rgb: 59, 130, 246;">View</button>
-                    </div>
-                    <div class="table-grid" tabindex="0" style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
-                        <div class="tx-type in">IN</div>
-                        <div class="tx-datetime">
-                            <span class="date">Dec 30, 2025</span>
-                            <span class="time">3:10 PM</span>
-                        </div>
-                        <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: #059669;">Main Office</span></div>
-                        <div class="tx-person">Sarah Williams</div>
-                        <div class="tx-desc">Product sales</div>
-                        <div class="tx-amount in">+$3,450</div>
-                        <div class="tx-createdby">by Liam</div>
-                        <button class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105;">View</button>
-                    </div>
-                </div>
-                
-            </div>
-        </main>
-    </div>
-
-    <!-- CREATE TRANSACTION MODAL -->
-    <div class="modal-overlay" id="createTransactionModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <div class="modal-header-left">
-                    <h2 class="modal-title">Create Transaction</h2>
-                    <div class="modal-header-info">
-                        <span class="header-info-item"><i class="fas fa-user"></i> John Doe</span>
-                        <span class="header-info-divider">â€¢</span>
-                        <div class="register-selector-wrapper">
-                            <i class="register-selector-icon fas fa-building" id="registerIcon"></i>
-                            <select class="header-info-select" id="modalRegister">
-                                <option value="main" data-color="#059669" data-rgb="5, 150, 105" data-icon="fa-building">Main Office</option>
-                                <option value="event" data-color="#f59e0b" data-rgb="245, 158, 11" data-icon="fa-calendar-alt">Event Fund</option>
-                                <option value="petty" data-color="#3b82f6" data-rgb="59, 130, 246" data-icon="fa-wallet">Petty Cash</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="modalTransactionForm">
-                    <!-- PARTNER NAME + DIRECTION INLINE -->
-                    <div class="form-row">
-                        <div class="form-group form-group-flex">
-                            <label class="form-label">Partner <span class="required">*</span></label>
-                            <div class="input-with-button">
-                                <div class="autocomplete-wrapper">
-                                    <input 
-                                        type="text" 
-                                        class="form-input" 
-                                        id="modalPartnerName"
-                                        placeholder="Search or add partner..."
-                                        autocomplete="off"
-                                        required
-                                    >
-                                    <div class="autocomplete-dropdown" id="partnerAutocomplete"></div>
-                                </div>
-                                <button type="button" class="add-detail-btn" id="modalTogglePartnerDetails" title="Add partner details">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                            
-                            <!-- Expanded partner details -->
-                            <div class="expanded-fields" id="modalPartnerDetailsFields">
-                                <div class="expanded-field">
-                                    <label>Address</label>
-                                    <input 
-                                        type="text" 
-                                        class="form-input" 
-                                        id="modalPartnerAddress"
-                                        placeholder="Street, City, State, ZIP"
-                                    >
-                                </div>
-                                <div class="expanded-field">
-                                    <label>Partner ID</label>
-                                    <input 
-                                        type="text" 
-                                        class="form-input" 
-                                        id="modalPartnerId"
-                                        placeholder="Client ID, Reference number, etc."
-                                    >
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- DIRECTION COMPACT -->
-                        <div class="form-group form-group-compact">
-                            <label class="form-label">Type <span class="required">*</span></label>
-                            <div class="direction-toggle-compact">
-                                <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
-                                <label for="modalDirectionIn" class="direction-btn direction-btn-in">
-                                    IN
-                                </label>
-                                <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
-                                <label for="modalDirectionOut" class="direction-btn direction-btn-out">
-                                    OUT
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- DESCRIPTION + AMOUNT IN ONE ROW -->
-                    <div class="form-row-line-item">
-                        <div class="form-group">
-                            <label class="form-label">Description <span class="required">*</span></label>
-                            <div class="autocomplete-wrapper">
-                                <input 
-                                    type="text" 
-                                    class="form-input" 
-                                    id="modalDescription"
-                                    placeholder="Brief description"
-                                    autocomplete="off"
-                                    required
-                                >
-                                <div class="autocomplete-dropdown" id="descriptionAutocomplete"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" style="white-space: nowrap;">Amount <span class="required">*</span></label>
-                            <div class="input-with-prefix">
-                                <span class="input-prefix">$</span>
-                                <input 
-                                    type="number" 
-                                    class="form-input" 
-                                    id="modalAmount"
-                                    placeholder="0.00"
-                                    step="0.01"
-                                    min="0"
-                                    required
-                                >
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- LINE ITEMS -->
-                    <div class="form-group">
-                        <label class="form-label">Line items (optional)</label>
-                        <div class="line-items-container" id="modalLineItemsContainer">
-                            <!-- Line items will be added here -->
-                        </div>
-                        <button type="button" class="add-line-item-btn" id="modalAddLineItemBtn">
-                            <i class="fas fa-plus"></i>
-                            Add line item (max 4)
-                        </button>
-                    </div>
-
-                    <!-- OPTIONAL BUTTONS IN ONE ROW -->
-                    <div class="optional-buttons-row">
-                        <button type="button" class="add-section-btn" id="modalToggleTransactionId">
-                            <i class="fas fa-plus"></i>
-                            <span>Transaction ID</span>
-                        </button>
-                        <button type="button" class="add-section-btn" id="modalToggleNote">
-                            <i class="fas fa-plus"></i>
-                            <span>Note</span>
-                        </button>
-                    </div>
-
-                    <!-- TRANSACTION ID FIELD -->
-                    <div class="form-group" id="modalTransactionIdGroup" style="display: none;">
-                        <label class="form-label">Transaction ID</label>
-                        <div class="autocomplete-wrapper">
-                            <input 
-                                type="text" 
-                                class="form-input" 
-                                id="modalTransactionId"
-                                placeholder="PO#, Order#, Invoice#, etc."
-                                autocomplete="off"
-                            >
-                            <div class="autocomplete-dropdown" id="transactionIdAutocomplete"></div>
-                        </div>
-                    </div>
-
-                    <!-- NOTE FIELD (FULL WIDTH) -->
-                    <div class="form-group" id="modalNoteGroup" style="display: none;">
-                        <label class="form-label">Note</label>
-                        <textarea 
-                            class="form-textarea" 
-                            id="modalNote"
-                            placeholder="Add any additional notes or comments"
-                            rows="3"
-                        ></textarea>
-                    </div>
-
-                    <!-- ACTIONS -->
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-blue" name="action" value="done">
-                            <i class="fas fa-check"></i>
-                            Done
-                        </button>
-                        <button type="submit" class="btn btn-primary" name="action" value="done-receipt">
+            <!-- Slide 2 -->
+            <div class="carousel-slide">
+                <div class="placeholder-slide">
+                    <div class="placeholder-content">
+                        <div class="placeholder-icon">
                             <i class="fas fa-file-pdf"></i>
-                            Done & Receipt
-                        </button>
-                        <button type="button" class="btn btn-tertiary" id="modalCancelBtn">
-                            <i class="fas fa-times"></i>
-                            Cancel
-                        </button>
+                        </div>
+                        <h3>Receipt created</h3>
+                        <p>Record saved automatically.</p>
                     </div>
-                    
-                    <!-- Receipt Note -->
-                    <div style="text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-muted); font-style: italic;">
-                        You can print a receipt now, or later from the transaction list.
+                </div>
+                <div class="slide-caption">
+                    <i class="fas fa-file-pdf"></i> Receipt created
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="carousel-slide">
+                <div class="placeholder-slide">
+                    <div class="placeholder-content">
+                        <div class="placeholder-icon">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <h3>Everyone sees it</h3>
+                        <p>You stay in control ÔÇö without asking.</p>
                     </div>
-                </form>
+                </div>
+                <div class="slide-caption">
+                    <i class="fas fa-paper-plane"></i> Everyone sees it
+                </div>
+            </div>
+
+            <!-- Dots -->
+            <div class="carousel-dots">
+                <span class="dot active" data-slide="0"></span>
+                <span class="dot" data-slide="1"></span>
+                <span class="dot" data-slide="2"></span>
             </div>
         </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features-section" id="features">
+        <div class="features-container">
+            <div class="section-header">
+                <h2>Everything you need. Nothing you don't.</h2>
+                <p>Built for teams that handle petty cash and internal cash movements. Track who took the cash, who received it ÔÇö simple documentation of handoff.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Real-time team visibility</h3>
+                        <p>Your team records internal cash movements. You see who took the cash and who received it ÔÇö instantly, without chasing anyone.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Access anywhere</h3>
+                        <p>Phone, tablet, or desktop. One shared view ÔÇö always in sync.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>30 Second Receipts</h3>
+                        <p>Fill form, generate PDF, print or email instantly. No complexity.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-cash-Cash Box"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Multi-Cash Box Tracking</h3>
+                        <p>Organize cash by location, event, or purpose. See everything at a glance.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Custom Templates</h3>
+                        <p>Translate to any language. Customize every field (except disclaimer).</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Receipt History</h3>
+                        <p>Search and track all receipts. Never lose a record again.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Secure & Private</h3>
+                        <p>SSL encrypted. Cloud storage. Your data is safe.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Email & Print</h3>
+                        <p>Send copies instantly or print for handoff. Both parties covered.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- USE CASES -->
+    <section class="use-cases" aria-label="Use cases">
+        <div class="usecases-inner">
+            <p class="usecases-title"><strong>Perfect for</strong> petty cash and internal handoffs:</p>
+            <div class="usecases-grid">
+                <div class="usecase-pill"><span class="dot dot-green"></span> Office petty cash</div>
+                <div class="usecase-pill"><span class="dot dot-orange"></span> Event cash at multiple points</div>
+                <div class="usecase-pill"><span class="dot dot-blue"></span> Employee advances & deposits</div>
+                <div class="usecase-pill"><span class="dot dot-green"></span> Community treasurers</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing-section" id="pricing">
+        <div class="pricing-container">
+            <div class="section-header">
+                <h2>Simple Pricing</h2>
+                <p>Start free, upgrade when you're ready</p>
+            </div>
+
+            <div class="pricing-reassurance">
+                <div class="pricing-reassurance-item"><i class="fas fa-receipt"></i><span>Receipts document the <strong>cash handoff</strong> ÔÇö not invoices.</span></div>
+                <div class="pricing-reassurance-item"><i class="fas fa-user-lock"></i><span>Your data stays private. Export/print when you need.</span></div>
+                <div class="pricing-reassurance-item"><i class="fas fa-bolt"></i><span>Designed for speed: one form Ôćĺ PDF Ôćĺ done.</span></div>
+            </div>
+
+            
+            <div class="pricing-toggle">
+                <span class="toggle-label" id="monthlyLabel">Monthly</span>
+                <div class="toggle-switch active" id="pricingToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+                <span class="toggle-label active" id="yearlyLabel">
+                    Yearly <span class="save-badge">2 months free</span>
+                </span>
+            </div>
+
+            <div class="pricing-grid" id="pricingCards">
+                <!-- Populated by JS -->
+            </div>
+
+            <div class="pricing-guarantee">
+                <i class="fas fa-shield-check"></i>
+                <p><strong>30-Day Money-Back Guarantee</strong> ÔÇó Cancel anytime ÔÇó No questions asked</p>
+            </div>
+        </div>
+    
+    <div class="trust-badges" style="margin-top:18px; display:flex; justify-content:center; text-align:center; font-size:14px; opacity:.85; gap:10px; flex-wrap:wrap;">
+      <span>Hosted on EU servers ÔÇó Encrypted in transit &amp; at rest ÔÇó GDPR-ready</span>
     </div>
+
+</section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-container">
+            <h2>Ready to Get Started?</h2>
+            <p>Join teams tracking cash with SpendNote</p>
+            <a href="spendnote-signup.html" class="btn btn-primary btn-large">Start Free - No Card Required</a>
+        </div>
+    </section>
+    </main>
 
     <footer>
         <div class="footer-content">
@@ -3219,12 +1639,11 @@ tr:hover [data-category-tag] {
                     <h3 style="margin: 0; font-size: 1.5rem; font-weight: 900; background: linear-gradient(135deg, #047857, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SpendNote</h3>
                 </div>
                 <p>Professional cash receipt management for modern teams. Simple, secure, and transparent.</p>
-                
-                </div>
+            </div>
             <div class="footer-links">
                 <h4>Product</h4>
                 <ul>
-                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="#features">Features</a></li>
                     <li><a href="spendnote-pricing.html">Pricing</a></li>
                     <li><a href="spendnote-faq.html">FAQ</a></li>
                 </ul>
@@ -3241,749 +1660,227 @@ tr:hover [data-category-tag] {
         <div class="footer-bottom">
             <div>
                 <p>&copy; 2026 SpendNote. All rights reserved.</p>
-                <p style="margin-top: 0.5rem;"><i class="fas fa-info-circle"></i> Proof of cash transfer only. Not a tax or accounting tool.</p>
+                <p style="margin-top: 0.5rem;"><i class="fas fa-info-circle"></i> Cash handoff documentation only. Not a tax or accounting tool.</p>
             </div>
-            </div>
+        </div>
     </footer>
 
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
     <script>
-        // ========================================
-        // CASH BOX KEBAB MENUS
-        // ========================================
-        function closeAllRegisterMenus() {
-            document.querySelectorAll('.register-menu.open').forEach(m => m.classList.remove('open'));
+        // CAROUSEL
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.dot');
+        let autoplayInterval;
+
+        function showSlide(n) {
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            
+            currentSlide = (n + slides.length) % slides.length;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
         }
 
-        document.querySelectorAll('.register-kebab').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const card = btn.closest('.register-card');
-                const menu = card ? card.querySelector('.register-menu') : null;
-                if (!menu) return;
-                const isOpen = menu.classList.contains('open');
-                closeAllRegisterMenus();
-                if (!isOpen) menu.classList.add('open');
-            });
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
 
-            btn.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    btn.click();
+        function startAutoplay() {
+            autoplayInterval = setInterval(nextSlide, 4000);
+        }
+
+        function stopAutoplay() {
+            clearInterval(autoplayInterval);
+        }
+
+        // Dot navigation
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                stopAutoplay();
+                showSlide(i);
+                startAutoplay();
+            });
+        });
+
+        // Start autoplay
+        startAutoplay();
+
+        // Pause on hover
+        document.querySelector('.hero-carousel').addEventListener('mouseenter', stopAutoplay);
+        document.querySelector('.hero-carousel').addEventListener('mouseleave', startAutoplay);
+
+        // PRICING
+        const pricingData = {
+            yearly: {
+                trial: { 
+                    price: '$0', 
+                    period: '14 days or 20 receipts',
+                    bestFor: 'Try it out',
+                    features: ['1 Cash Box', '1 user', '20 receipts (or 14 days)', 'Basic receipt template', 'Basic PDF report'] 
+                },
+                starter: { 
+                    price: '$190', 
+                    breakdown: 'Just $15.83/month',
+                    savings: '­čĺ░ Save $38 vs monthly',
+                    period: 'per year',
+                    bestFor: 'Solo users & small teams',
+                    features: ['2 Cash Boxes', '1 user', 'Unlimited receipts', 'Custom logo upload', '2 receipt templates', 'Printable + downloadable PDF', 'CSV export'],
+                    popular: true
+                },
+                pro: { 
+                    price: '$390', 
+                    breakdown: 'Just $32.50/month',
+                    savings: '­čĺ░ Save $78 vs monthly',
+                    period: 'per year',
+                    bestFor: 'Growing teams',
+                    features: ['Unlimited Cash Boxes', '5 users included', '+$5/mo per additional user', 'Unlimited receipts', 'Custom receipt wording', 'Email receipts directly', 'Role-based permissions', 'All Standard features'] 
                 }
-            });
-        });
-
-        document.querySelectorAll('.register-menu').forEach(menu => {
-            menu.addEventListener('click', (e) => e.stopPropagation());
-        });
-
-        document.querySelectorAll('.menu-settings').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const card = btn.closest('.register-card');
-                const name = card?.dataset?.name || 'this Cash Box';
-                alert(`Open settings for ${name} (demo).`);
-                closeAllRegisterMenus();
-            });
-        });
-
-        document.querySelectorAll('.menu-delete').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const card = btn.closest('.register-card');
-                const name = card?.dataset?.name || 'this Cash Box';
-                alert(`Delete ${name} (demo).`);
-                closeAllRegisterMenus();
-            });
-        });
-
-        document.addEventListener('click', closeAllRegisterMenus);
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeAllRegisterMenus();
-        });
-
-
-        // Filter toggle
-        const filterToggle = document.getElementById('filterToggle');
-        const filterPanel = document.getElementById('filterPanel');
-
-        if (filterToggle) {
-            filterToggle.addEventListener('click', () => {
-                filterPanel.classList.toggle('expanded');
-                filterToggle.classList.toggle('active');
-            });
-        }
-
-        // Filter tabs
-        document.querySelectorAll('.filter-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-            });
-        });
-
-        // Nav links
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-            });
-        });
-
-        // Bulk selection
-        const selectAllCheckbox = document.getElementById('selectAll');
-        const txCheckboxes = document.querySelectorAll('.tx-checkbox');
-        const bulkActions = document.getElementById('bulkActions');
-        const selectedCount = document.getElementById('selectedCount');
-        
-        // v24: toggle selected row styling
-        function syncRowSelection() {
-            txCheckboxes.forEach(cb => {
-                const row = cb.closest('.table-grid');
-                if (row) row.classList.toggle('is-selected', cb.checked);
-            });
-        }
-
-        function updateBulkActions() {
-            const checkedCount = document.querySelectorAll('.tx-checkbox:checked').length;
-            if (selectedCount) selectedCount.textContent = checkedCount;
-            if (bulkActions) bulkActions.classList.toggle('active', checkedCount > 0);
-            if (selectAllCheckbox) selectAllCheckbox.checked = checkedCount === txCheckboxes.length;
-            syncRowSelection();
-        }
-
-        if (selectAllCheckbox) {
-            selectAllCheckbox.addEventListener('change', () => {
-                txCheckboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
-                updateBulkActions();
-            });
-        }
-        
-        txCheckboxes.forEach(cb => {
-            cb.addEventListener('change', () => {
-                updateBulkActions();
-                syncRowSelection();
-            });
-        });
-        
-        syncRowSelection();
-
-        // Export button
-        const exportBtn = document.querySelector('.export-btn');
-        if (exportBtn) {
-            exportBtn.addEventListener('click', () => {
-                alert('Exporting transactions to CSV...');
-            });
-        }
-
-        // Clear filters
-        const clearFiltersBtn = document.getElementById('clearFilters');
-        if (clearFiltersBtn) {
-            clearFiltersBtn.addEventListener('click', () => {
-                const filterName = document.getElementById('filterName');
-                const filterDesc = document.getElementById('filterDesc');
-                const filterDateFrom = document.getElementById('filterDateFrom');
-                const filterDateTo = document.getElementById('filterDateTo');
-                const filterAmountMin = document.getElementById('filterAmountMin');
-                const filterAmountMax = document.getElementById('filterAmountMax');
-                if (filterName) filterName.value = '';
-                if (filterDesc) filterDesc.value = '';
-                if (filterDateFrom) filterDateFrom.value = '';
-                if (filterDateTo) filterDateTo.value = '';
-                if (filterAmountMin) filterAmountMin.value = '';
-                if (filterAmountMax) filterAmountMax.value = '';
-            });
-        }
-
-        // Apply filters
-        const applyFiltersBtn = document.getElementById('applyFilters');
-        if (applyFiltersBtn) {
-            applyFiltersBtn.addEventListener('click', () => {
-                alert('Filters applied! (Demo mode)');
-            });
-        }
-
-        // ========================================
-        // MODAL - Simple and Clean
-        // ========================================
-        const modal = document.getElementById('createTransactionModal');
-        const openModalBtn = document.getElementById('addTransactionBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const cancelModalBtn = document.getElementById('modalCancelBtn');
-
-        function openModal() {
-            if (!modal) return;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        if (openModalBtn) {
-            openModalBtn.addEventListener('click', openModal);
-        }
-
-        // Close modal
-        function closeModal() {
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-            // Reset form
-            document.getElementById('modalTransactionForm').reset();
-            document.getElementById('modalPartnerDetailsFields').classList.remove('show');
-            document.getElementById('modalTransactionIdGroup').style.display = 'none';
-            document.getElementById('modalNoteGroup').style.display = 'none';
-            document.getElementById('modalLineItemsContainer').innerHTML = '';
-            modalLineItemCount = 0;
-            updateModalLineItemsButton();
-        }
-
-        closeModalBtn.addEventListener('click', closeModal);
-        cancelModalBtn.addEventListener('click', closeModal);
-
-        // Close on overlay click
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
-
-        // Close on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('active')) {
-                closeModal();
+            },
+            monthly: {
+                trial: { 
+                    price: '$0', 
+                    period: '14 days or 20 receipts',
+                    bestFor: 'Try it out',
+                    features: ['1 Cash Box', '1 user', '20 receipts (or 14 days)', 'Basic receipt template', 'Basic PDF report'] 
+                },
+                starter: { 
+                    price: '$19', 
+                    period: 'per month',
+                    bestFor: 'Solo users & small teams',
+                    features: ['2 Cash Boxes', '1 user', 'Unlimited receipts', 'Custom logo upload', '2 receipt templates', 'Printable + downloadable PDF', 'CSV export'],
+                    popular: true,
+                    yearlyLink: true
+                },
+                pro: { 
+                    price: '$39', 
+                    period: 'per month',
+                    bestFor: 'Growing teams',
+                    features: ['Unlimited Cash Boxes', '5 users included', '+$5/mo per additional user', 'Unlimited receipts', 'Custom receipt wording', 'Email receipts directly', 'Role-based permissions', 'All Standard features'],
+                    yearlyLink: true
+                }
             }
-        });
+        };
 
-        // Modal Cash Box change - update active color
-        
-        function updateModalRegisterColor() {
-            const selectedOption = modalRegisterSelect.options[modalRegisterSelect.selectedIndex];
-            const color = selectedOption.dataset.color;
-            const rgb = selectedOption.dataset.rgb;
-            const icon = selectedOption.dataset.icon;
+        let isYearly = true;
+
+        function renderPricing(type) {
+            const data = pricingData[type];
+            const container = document.getElementById('pricingCards');
             
-            if (color && rgb) {
-                document.documentElement.style.setProperty('--active', color);
-                document.documentElement.style.setProperty('--active-rgb', rgb);
-            }
-            
-            // Update icon
-            const registerIcon = document.getElementById('registerIcon');
-            if (registerIcon && icon) {
-                registerIcon.className = 'register-selector-icon fas ' + icon;
-            }
-        }
-        
-        modalRegisterSelect.addEventListener('change', updateModalRegisterColor);
-
-        // Partner Autocomplete
-        const partnerInput = document.getElementById('modalPartnerName');
-        const partnerDropdown = document.getElementById('partnerAutocomplete');
-        const partnerAddressInput = document.getElementById('modalPartnerAddress');
-        const partnerIdInput = document.getElementById('modalPartnerId');
-        
-        // Partner database (in production, this would come from API)
-        const partners = [
-            { name: 'ABC Supplies', address: '123 Main St, New York, NY 10001', id: 'SUPP-001', contact: 'contact@abcsupplies.com' },
-            { name: 'John Smith', address: '456 Oak Ave, Los Angeles, CA 90001', id: '', contact: 'john.smith@email.com' },
-            { name: 'Mary Johnson', address: '789 Pine Rd, Chicago, IL 60601', id: 'CLI-MJ-2025', contact: 'mary.j@company.com' },
-            { name: 'AdCorp Media', address: '321 Market St, San Francisco, CA 94102', id: 'VEND-AC-789', contact: 'billing@adcorpmedia.com' },
-            { name: 'Sarah Williams', address: '555 Elm St, Boston, MA 02101', id: '', contact: 'sarah.w@email.com' },
-            { name: 'David Chen', address: '777 Maple Dr, Seattle, WA 98101', id: 'EMP-DC-456', contact: 'david.chen@company.com' }
-        ];
-        
-        let selectedPartnerIndex = -1;
-        
-        function filterPartners(query) {
-            if (!query) return [];
-            const lowerQuery = query.toLowerCase();
-            return partners.filter(p => 
-                p.name.toLowerCase().includes(lowerQuery) ||
-                (p.id && p.id.toLowerCase().includes(lowerQuery)) ||
-                (p.address && p.address.toLowerCase().includes(lowerQuery))
-            );
-        }
-        
-        function showAutocomplete(results) {
-            if (results.length === 0 && partnerInput.value.length > 0) {
-                partnerDropdown.innerHTML = `
-                    <div class="autocomplete-add-new" data-action="add-new">
-                        <i class="fas fa-plus"></i>
-                        Add "${partnerInput.value}" as new partner
-                    </div>
-                `;
-                partnerDropdown.classList.add('show');
-                return;
-            }
-            
-            if (results.length === 0) {
-                partnerDropdown.classList.remove('show');
-                return;
-            }
-            
-            let html = results.map((partner, index) => `
-                <div class="autocomplete-item ${index === selectedPartnerIndex ? 'active' : ''}" data-index="${index}">
-                    <div class="autocomplete-item-name">${partner.name}</div>
-                    <div class="autocomplete-item-details">
-                        ${partner.id ? `<div class="autocomplete-item-detail"><i class="fas fa-tag"></i>${partner.id}</div>` : ''}
-                        ${partner.address ? `<div class="autocomplete-item-detail"><i class="fas fa-map-marker-alt"></i>${partner.address.split(',')[0]}</div>` : ''}
-                    </div>
+            container.innerHTML = `
+                <div class="pricing-card">
+                    <h3>Free Trial</h3>
+                    <p class="pricing-best-for">${data.trial.bestFor}</p>
+                    <div class="price">${data.trial.price}</div>
+                    <span class="period">${data.trial.period}</span>
+                    <ul>
+                        ${data.trial.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
+                    </ul>
+                    <a href="spendnote-signup.html" class="btn btn-secondary">Start Trial</a>
                 </div>
-            `).join('');
-            
-            html += `
-                <div class="autocomplete-add-new" data-action="add-new">
-                    <i class="fas fa-plus"></i>
-                    Add new partner
+                
+                <div class="pricing-card featured">
+                    ${data.starter.popular ? '<div class="popular-badge">Most Popular</div>' : ''}
+                    <h3>Starter</h3>
+                    <p class="pricing-best-for">${data.starter.bestFor}</p>
+                    <div class="price">${data.starter.price}</div>
+                    ${data.starter.breakdown ? `<div class="price-breakdown">${data.starter.breakdown}</div>` : ''}
+                    ${data.starter.savings ? `<div class="savings">${data.starter.savings}</div>` : ''}
+                    <span class="period">${data.starter.period}</span>
+                    <ul>
+                        ${data.starter.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
+                    </ul>
+                    <a href="spendnote-signup.html" class="btn btn-primary">Get Started</a>
+                    ${data.starter.yearlyLink ? '<a href="#" class="monthly-link" onclick="switchToYearly(event)">or save with yearly Ôćĺ</a>' : ''}
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>Pro</h3>
+                    <p class="pricing-best-for">${data.pro.bestFor}</p>
+                    <div class="price">${data.pro.price}</div>
+                    ${data.pro.breakdown ? `<div class="price-breakdown">${data.pro.breakdown}</div>` : ''}
+                    ${data.pro.savings ? `<div class="savings">${data.pro.savings}</div>` : ''}
+                    <span class="period">${data.pro.period}</span>
+                    <ul>
+                        ${data.pro.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
+                    </ul>
+                    <a href="spendnote-signup.html" class="btn btn-primary">Get Started</a>
+                    ${data.pro.yearlyLink ? '<a href="#" class="monthly-link" onclick="switchToYearly(event)">or save with yearly Ôćĺ</a>' : ''}
                 </div>
             `;
-            
-            partnerDropdown.innerHTML = html;
-            partnerDropdown.classList.add('show');
-            
-            // Add click handlers
-            partnerDropdown.querySelectorAll('.autocomplete-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    const index = parseInt(item.dataset.index);
-                    selectPartner(partners.filter(p => 
-                        p.name.toLowerCase().includes(partnerInput.value.toLowerCase()) ||
-                        (p.id && p.id.toLowerCase().includes(partnerInput.value.toLowerCase())) ||
-                        (p.address && p.address.toLowerCase().includes(partnerInput.value.toLowerCase()))
-                    )[index]);
-                });
-            });
-            
-            partnerDropdown.querySelector('.autocomplete-add-new').addEventListener('click', () => {
-                partnerDropdown.classList.remove('show');
-                partnerInput.focus();
-            });
-        }
-        
-        function selectPartner(partner) {
-            partnerInput.value = partner.name;
-            partnerAddressInput.value = partner.address || '';
-            partnerIdInput.value = partner.id || '';
-            partnerDropdown.classList.remove('show');
-            selectedPartnerIndex = -1;
-            
-            // Auto-expand partner details if they have data
-            if (partner.address || partner.id) {
-                const detailsFields = document.getElementById('modalPartnerDetailsFields');
-                const toggleBtn = document.getElementById('modalTogglePartnerDetails');
-                if (!detailsFields.classList.contains('show')) {
-                    detailsFields.classList.add('show');
-                    toggleBtn.classList.add('active');
-                    toggleBtn.innerHTML = '<i class="fas fa-minus"></i>';
-                }
-            }
-        }
-        
-        // Input event
-        partnerInput.addEventListener('input', (e) => {
-            const results = filterPartners(e.target.value);
-            showAutocomplete(results);
-            selectedPartnerIndex = -1;
-        });
-        
-        // Focus event
-        partnerInput.addEventListener('focus', (e) => {
-            if (e.target.value) {
-                const results = filterPartners(e.target.value);
-                showAutocomplete(results);
-            }
-        });
-        
-        // Keyboard navigation
-        partnerInput.addEventListener('keydown', (e) => {
-            const items = partnerDropdown.querySelectorAll('.autocomplete-item');
-            
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                selectedPartnerIndex = Math.min(selectedPartnerIndex + 1, items.length - 1);
-                updateActiveItem();
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                selectedPartnerIndex = Math.max(selectedPartnerIndex - 1, -1);
-                updateActiveItem();
-            } else if (e.key === 'Enter' && selectedPartnerIndex >= 0) {
-                e.preventDefault();
-                const results = filterPartners(partnerInput.value);
-                if (results[selectedPartnerIndex]) {
-                    selectPartner(results[selectedPartnerIndex]);
-                }
-            } else if (e.key === 'Escape') {
-                partnerDropdown.classList.remove('show');
-                selectedPartnerIndex = -1;
-            }
-        });
-        
-        function updateActiveItem() {
-            const items = partnerDropdown.querySelectorAll('.autocomplete-item');
-            items.forEach((item, index) => {
-                item.classList.toggle('active', index === selectedPartnerIndex);
-            });
-            
-            // Scroll into view
-            if (selectedPartnerIndex >= 0 && items[selectedPartnerIndex]) {
-                items[selectedPartnerIndex].scrollIntoView({ block: 'nearest' });
-            }
-        }
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!partnerInput.contains(e.target) && !partnerDropdown.contains(e.target)) {
-                partnerDropdown.classList.remove('show');
-                selectedPartnerIndex = -1;
-            }
-        });
-
-        // Description Autocomplete
-        const descriptionInput = document.getElementById('modalDescription');
-        const descriptionDropdown = document.getElementById('descriptionAutocomplete');
-        
-        const recentDescriptions = [
-            'Office supplies',
-            'Retail cash deposit',
-            'Customer payment',
-            'Marketing campaign',
-            'Product sales',
-            'Employee salary',
-            'Rent payment',
-            'Utility bills',
-            'Equipment purchase',
-            'Consulting services'
-        ];
-        
-        function setupSimpleAutocomplete(input, dropdown, dataArray) {
-            let selectedIndex = -1;
-            
-            input.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                if (!query) {
-                    dropdown.classList.remove('show');
-                    return;
-                }
-                
-                const results = dataArray.filter(item => item.toLowerCase().includes(query));
-                
-                if (results.length === 0) {
-                    dropdown.classList.remove('show');
-                    return;
-                }
-                
-                const html = results.map((item, index) => `
-                    <div class="autocomplete-item ${index === selectedIndex ? 'active' : ''}" data-value="${item}">
-                        <div class="autocomplete-item-name">${item}</div>
-                    </div>
-                `).join('');
-                
-                dropdown.innerHTML = html;
-                dropdown.classList.add('show');
-                
-                dropdown.querySelectorAll('.autocomplete-item').forEach(item => {
-                    item.addEventListener('click', () => {
-                        input.value = item.dataset.value;
-                        dropdown.classList.remove('show');
-                        selectedIndex = -1;
-                    });
-                });
-            });
-            
-            input.addEventListener('focus', (e) => {
-                if (e.target.value) {
-                    const event = new Event('input', { bubbles: true });
-                    e.target.dispatchEvent(event);
-                }
-            });
-            
-            input.addEventListener('keydown', (e) => {
-                const items = dropdown.querySelectorAll('.autocomplete-item');
-                
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
-                    updateItems();
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    selectedIndex = Math.max(selectedIndex - 1, -1);
-                    updateItems();
-                } else if (e.key === 'Enter' && selectedIndex >= 0 && items[selectedIndex]) {
-                    e.preventDefault();
-                    input.value = items[selectedIndex].dataset.value;
-                    dropdown.classList.remove('show');
-                    selectedIndex = -1;
-                } else if (e.key === 'Escape') {
-                    dropdown.classList.remove('show');
-                    selectedIndex = -1;
-                }
-            });
-            
-            function updateItems() {
-                const items = dropdown.querySelectorAll('.autocomplete-item');
-                items.forEach((item, index) => {
-                    item.classList.toggle('active', index === selectedIndex);
-                });
-                if (selectedIndex >= 0 && items[selectedIndex]) {
-                    items[selectedIndex].scrollIntoView({ block: 'nearest' });
-                }
-            }
-            
-            document.addEventListener('click', (e) => {
-                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.classList.remove('show');
-                    selectedIndex = -1;
-                }
-            });
-        }
-        
-        setupSimpleAutocomplete(descriptionInput, descriptionDropdown, recentDescriptions);
-        
-        // Transaction ID Autocomplete
-        const transactionIdInput = document.getElementById('modalTransactionId');
-        const transactionIdDropdown = document.getElementById('transactionIdAutocomplete');
-        
-        const recentTransactionIds = [
-            'PO-2026-001',
-            'INV-2026-045',
-            'ORD-2025-789',
-            'REF-2026-012',
-            'PO-2025-998',
-            'INV-2025-999'
-        ];
-        
-        setupSimpleAutocomplete(transactionIdInput, transactionIdDropdown, recentTransactionIds);
-
-        // Toggle partner details
-        document.getElementById('modalTogglePartnerDetails').addEventListener('click', function() {
-            const fields = document.getElementById('modalPartnerDetailsFields');
-            const isVisible = fields.classList.contains('show');
-            
-            if (isVisible) {
-                fields.classList.remove('show');
-                this.classList.remove('active');
-                this.innerHTML = '<i class="fas fa-plus"></i>';
-            } else {
-                fields.classList.add('show');
-                this.classList.add('active');
-                this.innerHTML = '<i class="fas fa-minus"></i>';
-            }
-        });
-
-        // Toggle transaction ID
-        document.getElementById('modalToggleTransactionId').addEventListener('click', function() {
-            const group = document.getElementById('modalTransactionIdGroup');
-            const isVisible = group.style.display !== 'none';
-            
-            if (isVisible) {
-                group.style.display = 'none';
-                this.classList.remove('active');
-                this.querySelector('i').className = 'fas fa-plus';
-            } else {
-                group.style.display = 'block';
-                this.classList.add('active');
-                this.querySelector('i').className = 'fas fa-minus';
-            }
-        });
-
-        // Toggle note
-        document.getElementById('modalToggleNote').addEventListener('click', function() {
-            const group = document.getElementById('modalNoteGroup');
-            const isVisible = group.style.display !== 'none';
-            
-            if (isVisible) {
-                group.style.display = 'none';
-                this.classList.remove('active');
-                this.querySelector('i').className = 'fas fa-plus';
-            } else {
-                group.style.display = 'block';
-                this.classList.add('active');
-                this.querySelector('i').className = 'fas fa-minus';
-            }
-        });
-
-        // Line items management
-        let modalLineItemCount = 0;
-        const maxModalLineItems = 4;
-        const modalLineItemsContainer = document.getElementById('modalLineItemsContainer');
-        const modalAddLineItemBtn = document.getElementById('modalAddLineItemBtn');
-
-        modalAddLineItemBtn.addEventListener('click', () => {
-            if (modalLineItemCount >= maxModalLineItems) return;
-            
-            modalLineItemCount++;
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'line-item';
-            itemDiv.innerHTML = `
-                <input 
-                    type="text" 
-                    class="line-item-input" 
-                    placeholder="Item description"
-                    data-item-index="${modalLineItemCount}"
-                >
-                <input 
-                    type="number" 
-                    class="line-item-input line-item-amount" 
-                    placeholder="$0.00"
-                    step="0.01"
-                    min="0"
-                    data-amount-index="${modalLineItemCount}"
-                >
-                <button type="button" class="remove-item-btn" data-remove-index="${modalLineItemCount}">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            
-            modalLineItemsContainer.appendChild(itemDiv);
-            
-            // Remove button
-            itemDiv.querySelector('.remove-item-btn').addEventListener('click', function() {
-                itemDiv.remove();
-                modalLineItemCount--;
-                updateModalLineItemsButton();
-            });
-            
-            updateModalLineItemsButton();
-        });
-
-        function updateModalLineItemsButton() {
-            modalAddLineItemBtn.disabled = modalLineItemCount >= maxModalLineItems;
-            modalAddLineItemBtn.innerHTML = `
-                <i class="fas fa-plus"></i>
-                Add line item (${modalLineItemCount}/${maxModalLineItems})
-            `;
         }
 
-        // Form submission
-        document.getElementById('modalTransactionForm').addEventListener('submit', function(e) {
+        function switchToYearly(e) {
             e.preventDefault();
-            
-            const actionBtn = e.submitter;
-            const action = actionBtn ? actionBtn.value : 'done';
-            
-            const formData = {
-                Cash Box: document.getElementById('modalRegister').value,
-                loggedBy: 'John Doe',
-                partnerName: document.getElementById('modalPartnerName').value,
-                partnerAddress: document.getElementById('modalPartnerAddress').value,
-                partnerId: document.getElementById('modalPartnerId').value,
-                direction: document.querySelector('input[name="modalDirection"]:checked').value,
-                amount: document.getElementById('modalAmount').value,
-                date: document.getElementById('modalDate').value,
-                transactionId: document.getElementById('modalTransactionId').value,
-                note: document.getElementById('modalNote').value,
-                lineItems: []
-            };
+            document.getElementById('pricingToggle').click();
+        }
 
-            // Collect line items
-            document.querySelectorAll('#modalLineItemsContainer .line-item').forEach(item => {
-                const desc = item.querySelector('[data-item-index]').value;
-                const amt = item.querySelector('[data-amount-index]').value;
-                if (desc || amt) {
-                    formData.lineItems.push({ description: desc, amount: amt });
+        document.getElementById('pricingToggle').addEventListener('click', function() {
+            isYearly = !isYearly;
+            this.classList.toggle('active');
+            
+            const monthlyLabel = document.getElementById('monthlyLabel');
+            const yearlyLabel = document.getElementById('yearlyLabel');
+            
+            if (isYearly) {
+                monthlyLabel.classList.remove('active');
+                yearlyLabel.classList.add('active');
+                renderPricing('yearly');
+            } else {
+                monthlyLabel.classList.add('active');
+                yearlyLabel.classList.remove('active');
+                renderPricing('monthly');
+            }
+        });
+
+        renderPricing('yearly');
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
+        });
 
-            console.log('Transaction data:', formData);
-            console.log('Action:', action);
-            
-            if (action === 'done-receipt') {
-                alert('Transaction saved!\n\nGenerating receipt PDF...\n\nIn production:\n- Save to database\n- Generate & download PDF\n- Update Cash Box balance');
+        // Newsletter
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thanks for subscribing! We\'ll keep you updated.');
+            this.reset();
+        });
+
+        // Scroll Progress Bar & Back to Top
+        const scrollProgress = document.getElementById('scrollProgress');
+        const backToTop = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            // Progress bar
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.scrollY / windowHeight) * 100;
+            scrollProgress.style.width = scrolled + '%';
+
+            // Show/hide back to top button
+            if (window.scrollY > 500) {
+                backToTop.classList.add('show');
             } else {
-                alert('Transaction saved!\n\nIn production:\n- Save to database\n- Update Cash Box balance\n- Refresh dashboard');
+                backToTop.classList.remove('show');
             }
-            
-            closeModal();
         });
 
-    </script>
-
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        // ========================================
-        // CASH BOX CARDS INITIALIZATION
-        // ========================================
-        function initCashBoxCards() {
-            const cards = document.querySelectorAll('.register-card');
-            
-            cards.forEach(card => {
-                // Set card color CSS variables
-                const color = card.dataset.color;
-                const rgb = card.dataset.rgb;
-                card.style.setProperty('--card-color', color);
-                card.style.setProperty('--card-rgb', rgb);
-
-                // Click to activate
-                card.addEventListener('click', (e) => {
-                    // Don't activate if clicking menu button
-                    if (e.target.closest('.register-kebab') || e.target.closest('.register-menu')) {
-                        return;
-                    }
-                    
-                    cards.forEach(c => c.classList.remove('active'));
-                    card.classList.add('active');
-                    
-                    // Update global active color
-                    document.documentElement.style.setProperty('--active', color);
-                    document.documentElement.style.setProperty('--active-rgb', rgb);
-                    
-                    // Update menu item colors
-                    updateMenuColors(color);
-                });
-            });
-        }
-
-        // Update menu item colors based on active cash box
-        function updateMenuColors(color) {
-            const navCashBoxes = document.getElementById('navCashBoxes');
-            const navTransactions = document.getElementById('navTransactions');
-            
-            if (navCashBoxes) {
-                navCashBoxes.style.color = color;
-            }
-            if (navTransactions) {
-                navTransactions.style.color = color;
-            }
-        }
-
-        // ========================================
-        // SWIPER INITIALIZATION
-        // ========================================
-        const registersSwiper = new Swiper('.registers-swiper', {
-            slidesPerView: 1,
-            spaceBetween: 20,
-            loop: false,
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next-custom',
-                prevEl: '.swiper-button-prev-custom',
-            },
-            breakpoints: {
-                640: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                },
-                1024: {
-                    slidesPerView: 3,
-                    spaceBetween: 24,
-                },
-            },
+        // Back to top click
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-
-        // ========================================
-        // INITIALIZE EVERYTHING AFTER SWIPER
-        // ========================================
-        initCashBoxCards();
-        
-        // Set initial active card color
-        const activeCard = document.querySelector('.register-card.active');
-        if (activeCard) {
-            document.documentElement.style.setProperty('--active', activeCard.dataset.color);
-            document.documentElement.style.setProperty('--active-rgb', activeCard.dataset.rgb);
-            // Set initial menu colors
-            updateMenuColors(activeCard.dataset.color);
-        }
     </script>
-
-    <script src="assets/js/main.js"></script>
 </body>
 </html>
