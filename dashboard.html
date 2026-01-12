@@ -2976,8 +2976,6 @@ tr:hover [data-category-tag] {
                 <div class="modal-header-left">
                     <h2 class="modal-title">Create Transaction</h2>
                     <div class="modal-header-info">
-                        <span class="header-info-item" id="modalCreatedBy"><i class="fas fa-user"></i> Created by <span id="modalUserName">John</span></span>
-                        <span class="header-info-divider">•</span>
                         <div class="register-selector-wrapper">
                             <i class="register-selector-icon fas fa-building" id="registerIcon"></i>
                             <select class="header-info-select" id="modalRegister">
@@ -3392,13 +3390,6 @@ tr:hover [data-category-tag] {
             if (!modal) {
                 console.error('Modal element not found!');
                 return;
-            }
-            
-            // Set logged-in user name in modal header
-            const navUserName = document.querySelector('.user-name');
-            const modalUserName = document.getElementById('modalUserName');
-            if (navUserName && modalUserName) {
-                modalUserName.textContent = navUserName.textContent;
             }
             
             console.log('Adding active class to modal');
