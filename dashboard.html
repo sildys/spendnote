@@ -2972,7 +2972,7 @@ tr:hover [data-category-tag] {
                 <div class="modal-header-left">
                     <h2 class="modal-title">Create Transaction</h2>
                     <div class="modal-header-info">
-                        <span class="header-info-item"><i class="fas fa-user"></i> Created by John</span>
+                        <span class="header-info-item" id="modalCreatedBy"><i class="fas fa-user"></i> Created by <span id="modalUserName">John</span></span>
                         <span class="header-info-divider">•</span>
                         <div class="register-selector-wrapper">
                             <i class="register-selector-icon fas fa-building" id="registerIcon"></i>
@@ -3389,6 +3389,14 @@ tr:hover [data-category-tag] {
                 console.error('Modal element not found!');
                 return;
             }
+            
+            // Set logged-in user name in modal header
+            const navUserName = document.querySelector('.user-name');
+            const modalUserName = document.getElementById('modalUserName');
+            if (navUserName && modalUserName) {
+                modalUserName.textContent = navUserName.textContent;
+            }
+            
             console.log('Adding active class to modal');
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -3873,7 +3881,7 @@ tr:hover [data-category-tag] {
             
             const formData = {
                 cashBox: document.getElementById('modalRegister').value,
-                loggedBy: 'John',
+                loggedBy: document.querySelector('.user-name')?.textContent || 'John',
                 ContactName: document.getElementById('modalContactName').value,
                 ContactAddress: document.getElementById('modalContactAddress').value,
                 ContactId: document.getElementById('modalContactId').value,
