@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Partner management in SpendNote - manage your transaction partners.">
+    <meta name="description" content="Contact management in SpendNote - manage your transaction Contacts.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
-    <title>Partners - SpendNote</title>
+    <title>Contacts - SpendNote</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
@@ -63,15 +63,15 @@
             color: var(--text-muted);
         }
 
-        /* PARTNERS CARD */
-        .partners-card {
+        /* ContactS CARD */
+        .Contacts-card {
             background: var(--surface);
             border-radius: 24px;
             box-shadow: 0 1px 3px var(--shadow);
             overflow: hidden;
         }
 
-        .partners-header {
+        .Contacts-header {
             padding: 24px 32px;
             border-bottom: 1px solid var(--border);
         }
@@ -84,7 +84,7 @@
             flex-wrap: wrap;
         }
 
-        .partners-title {
+        .Contacts-title {
             font-size: 24px;
             font-weight: 800;
             color: var(--text);
@@ -96,7 +96,7 @@
             align-items: center;
         }
 
-        .add-partner-btn {
+        .add-Contact-btn {
             padding: 12px 24px;
             background: var(--primary);
             color: white;
@@ -111,7 +111,7 @@
             gap: 8px;
         }
 
-        .add-partner-btn:hover {
+        .add-Contact-btn:hover {
             background: var(--primary-dark);
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
@@ -151,16 +151,16 @@
             overflow-x: auto;
         }
 
-        .partners-table {
+        .Contacts-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .partners-table thead {
+        .Contacts-table thead {
             background: var(--bg);
         }
 
-        .partners-table th {
+        .Contacts-table th {
             padding: 16px 24px;
             text-align: left;
             font-size: 13px;
@@ -170,36 +170,36 @@
             letter-spacing: 0.5px;
         }
 
-        .partners-table tbody tr {
+        .Contacts-table tbody tr {
             border-bottom: 1px solid var(--border);
             transition: background 0.2s;
         }
 
-        .partners-table tbody tr:hover {
+        .Contacts-table tbody tr:hover {
             background: var(--bg);
         }
 
-        .partners-table td {
+        .Contacts-table td {
             padding: 20px 24px;
             font-size: 15px;
         }
 
-        .partner-name {
+        .Contact-name {
             font-weight: 700;
             color: var(--text);
         }
 
-        .partner-address {
+        .Contact-address {
             color: var(--text-muted);
             font-size: 14px;
         }
 
-        .partner-contact {
+        .Contact-contact {
             color: var(--text-muted);
             font-size: 14px;
         }
 
-        .partner-actions {
+        .Contact-actions {
             display: flex;
             gap: 8px;
         }
@@ -414,7 +414,7 @@
                 <li><a href="dashboard.html" class="nav-cash-item">Dashboard</a></li>
                 <li><a href="spendnote-cash-box-list.html" class="nav-cash-item" id="navCashBoxes">Cash Boxes</a></li>
                 <li><a href="spendnote-transaction-history.html" class="nav-cash-item" id="navTransactions">Transactions</a></li>
-                <li><a href="spendnote-partner-list.html">Contacts</a></li>
+                <li><a href="spendnote-contact-list.html">Contacts</a></li>
                 <li><a href="spendnote-user-settings.html">Settings</a></li>
                 <li><a href="dashboard.html#new-transaction" class="nav-new-transaction-btn"><i class="fas fa-plus"></i> New Transaction</a></li>
                 <li><a href="index.html" class="btn btn-secondary">Log out</a></li>
@@ -425,62 +425,62 @@
 <div class="app-container">
     <main class="main-content">
         <div class="page-header">
-            <h1 class="page-title">Partners</h1>
-            <p class="page-subtitle">Manage your transaction partners and their contact information</p>
+            <h1 class="page-title">Contacts</h1>
+            <p class="page-subtitle">Manage your transaction Contacts and their contact information</p>
         </div>
 
-        <div class="partners-card">
-        <div class="partners-header">
+        <div class="Contacts-card">
+        <div class="Contacts-header">
             <div class="header-top">
-                <h2 class="partners-title">All Partners</h2>
+                <h2 class="Contacts-title">All Contacts</h2>
                 <div class="header-actions">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" id="searchInput" placeholder="Search partners...">
+                        <input type="text" id="searchInput" placeholder="Search Contacts...">
                     </div>
-                    <button class="add-partner-btn" id="addPartnerBtn">
+                    <button class="add-Contact-btn" id="addContactBtn">
                         <i class="fas fa-plus"></i>
-                        Add Partner
+                        Add Contact
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="table-wrapper">
-            <table class="partners-table">
+            <table class="Contacts-table">
                 <thead>
                     <tr>
-                        <th>Partner Name</th>
-                        <th>Partner ID</th>
+                        <th>Contact Name</th>
+                        <th>Contact ID</th>
                         <th>Address</th>
                         <th>Contact</th>
                         <th>Last Transaction</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="partnersTableBody">
+                <tbody id="ContactsTableBody">
                     <tr>
                         <td>
-                            <div class="partner-name">ABC Supplies</div>
+                            <div class="Contact-name">ABC Supplies</div>
                         </td>
                         <td>
-                            <div class="partner-contact">SUPP-001</div>
+                            <div class="Contact-contact">SUPP-001</div>
                         </td>
                         <td>
-                            <div class="partner-address">123 Main St, New York, NY 10001</div>
+                            <div class="Contact-address">123 Main St, New York, NY 10001</div>
                         </td>
                         <td>
-                            <div class="partner-contact">contact@abcsupplies.com</div>
+                            <div class="Contact-contact">contact@abcsupplies.com</div>
                         </td>
                         <td>
-                            <div class="partner-contact">Jan 3, 2026</div>
+                            <div class="Contact-contact">Jan 3, 2026</div>
                         </td>
                         <td>
-                            <div class="partner-actions">
-                                <button class="action-btn" title="Edit partner">
+                            <div class="Contact-actions">
+                                <button class="action-btn" title="Edit Contact">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <button class="action-btn delete" title="Delete partner">
+                                <button class="action-btn delete" title="Delete Contact">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </div>
@@ -488,26 +488,26 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="partner-name">John Smith</div>
+                            <div class="Contact-name">John Smith</div>
                         </td>
                         <td>
-                            <div class="partner-contact" style="color: var(--text-muted); font-style: italic;">—</div>
+                            <div class="Contact-contact" style="color: var(--text-muted); font-style: italic;">—</div>
                         </td>
                         <td>
-                            <div class="partner-address">456 Oak Ave, Los Angeles, CA 90001</div>
+                            <div class="Contact-address">456 Oak Ave, Los Angeles, CA 90001</div>
                         </td>
                         <td>
-                            <div class="partner-contact">john.smith@email.com</div>
+                            <div class="Contact-contact">john.smith@email.com</div>
                         </td>
                         <td>
-                            <div class="partner-contact">Jan 2, 2026</div>
+                            <div class="Contact-contact">Jan 2, 2026</div>
                         </td>
                         <td>
-                            <div class="partner-actions">
-                                <button class="action-btn" title="Edit partner">
+                            <div class="Contact-actions">
+                                <button class="action-btn" title="Edit Contact">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <button class="action-btn delete" title="Delete partner">
+                                <button class="action-btn delete" title="Delete Contact">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </div>
@@ -515,26 +515,26 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="partner-name">Mary Johnson</div>
+                            <div class="Contact-name">Mary Johnson</div>
                         </td>
                         <td>
-                            <div class="partner-contact">CLI-MJ-2025</div>
+                            <div class="Contact-contact">CLI-MJ-2025</div>
                         </td>
                         <td>
-                            <div class="partner-address">789 Pine Rd, Chicago, IL 60601</div>
+                            <div class="Contact-address">789 Pine Rd, Chicago, IL 60601</div>
                         </td>
                         <td>
-                            <div class="partner-contact">mary.j@company.com</div>
+                            <div class="Contact-contact">mary.j@company.com</div>
                         </td>
                         <td>
-                            <div class="partner-contact">Jan 1, 2026</div>
+                            <div class="Contact-contact">Jan 1, 2026</div>
                         </td>
                         <td>
-                            <div class="partner-actions">
-                                <button class="action-btn" title="Edit partner">
+                            <div class="Contact-actions">
+                                <button class="action-btn" title="Edit Contact">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <button class="action-btn delete" title="Delete partner">
+                                <button class="action-btn delete" title="Delete Contact">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </div>
@@ -542,26 +542,26 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="partner-name">AdCorp Media</div>
+                            <div class="Contact-name">AdCorp Media</div>
                         </td>
                         <td>
-                            <div class="partner-contact">VEND-AC-789</div>
+                            <div class="Contact-contact">VEND-AC-789</div>
                         </td>
                         <td>
-                            <div class="partner-address">321 Market St, San Francisco, CA 94102</div>
+                            <div class="Contact-address">321 Market St, San Francisco, CA 94102</div>
                         </td>
                         <td>
-                            <div class="partner-contact">billing@adcorpmedia.com</div>
+                            <div class="Contact-contact">billing@adcorpmedia.com</div>
                         </td>
                         <td>
-                            <div class="partner-contact">Dec 31, 2025</div>
+                            <div class="Contact-contact">Dec 31, 2025</div>
                         </td>
                         <td>
-                            <div class="partner-actions">
-                                <button class="action-btn" title="Edit partner">
+                            <div class="Contact-actions">
+                                <button class="action-btn" title="Edit Contact">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <button class="action-btn delete" title="Delete partner">
+                                <button class="action-btn delete" title="Delete Contact">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </div>
@@ -638,7 +638,7 @@
     <script>
         // Search functionality
         const searchInput = document.getElementById('searchInput');
-        const tableBody = document.getElementById('partnersTableBody');
+        const tableBody = document.getElementById('ContactsTableBody');
         
         searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
@@ -650,22 +650,22 @@
             });
         });
 
-        // Add partner button
-        document.getElementById('addPartnerBtn').addEventListener('click', () => {
-            alert('Add Partner modal will open here (to be implemented)');
+        // Add Contact button
+        document.getElementById('addContactBtn').addEventListener('click', () => {
+            alert('Add Contact modal will open here (to be implemented)');
         });
 
         // Edit buttons
         document.querySelectorAll('.action-btn:not(.delete)').forEach(btn => {
             btn.addEventListener('click', () => {
-                alert('Edit Partner modal will open here (to be implemented)');
+                alert('Edit Contact modal will open here (to be implemented)');
             });
         });
 
         // Delete buttons
         document.querySelectorAll('.action-btn.delete').forEach(btn => {
             btn.addEventListener('click', () => {
-                if (confirm('Are you sure you want to delete this partner?')) {
+                if (confirm('Are you sure you want to delete this Contact?')) {
                     btn.closest('tr').remove();
                 }
             });

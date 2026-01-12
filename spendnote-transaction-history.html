@@ -530,7 +530,7 @@
             font-size: 13px;
         }
 
-        .tx-partner {
+        .tx-Contact {
             font-weight: 600;
             color: var(--text);
         }
@@ -774,7 +774,7 @@
                 <li><a href="dashboard.html" class="nav-cash-item">Dashboard</a></li>
                 <li><a href="spendnote-cash-box-list.html" class="nav-cash-item" id="navCashBoxes">Cash Boxes</a></li>
                 <li><a href="spendnote-transaction-history.html" class="nav-cash-item active" id="navTransactions">Transactions</a></li>
-                <li><a href="spendnote-partner-list.html">Contacts</a></li>
+                <li><a href="spendnote-contact-list.html">Contacts</a></li>
                 <li><a href="spendnote-user-settings.html">Settings</a></li>
                 <li><a href="dashboard.html#new-transaction" class="nav-new-transaction-btn"><i class="fas fa-plus"></i> New Transaction</a></li>
                 <li><a href="index.html" class="btn btn-secondary">Log out</a></li>
@@ -844,13 +844,13 @@
 
             <div class="filter-panel" id="filterPanel">
                 <div class="filter-grid">
-                    <!-- Partner Name -->
+                    <!-- Contact Name -->
                     <div class="filter-group">
                         <label class="filter-label">
                             <i class="fas fa-user"></i>
-                            Partner Name
+                            Contact Name
                         </label>
-                        <input type="text" class="filter-input" placeholder="Search by name..." id="filterPartner">
+                        <input type="text" class="filter-input" placeholder="Search by name..." id="filterContact">
                     </div>
 
                     <!-- Description/Note -->
@@ -966,7 +966,7 @@
                             <th><input type="checkbox" id="selectAllHeader"></th>
                             <th>ID</th>
                             <th>Date</th>
-                            <th>Partner</th>
+                            <th>Contact</th>
                             <th>Cash Box</th>
                             <th>Direction</th>
                             <th>Amount</th>
@@ -980,7 +980,7 @@
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-342</span></td>
                             <td><span class="tx-date">Jan 6, 2026</span></td>
-                            <td><span class="tx-partner">John Smith</span></td>
+                            <td><span class="tx-Contact">John Smith</span></td>
                             <td><span class="tx-Cash Box">Main Office</span></td>
                             <td><span class="tx-direction in">⬇ IN</span></td>
                             <td><span class="tx-amount in">$1,200.00</span></td>
@@ -998,7 +998,7 @@
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-341</span></td>
                             <td><span class="tx-date">Jan 5, 2026</span></td>
-                            <td><span class="tx-partner">Sarah Williams</span></td>
+                            <td><span class="tx-Contact">Sarah Williams</span></td>
                             <td><span class="tx-Cash Box orange">Event Fund</span></td>
                             <td><span class="tx-direction out">⬆ OUT</span></td>
                             <td><span class="tx-amount out">$450.00</span></td>
@@ -1016,7 +1016,7 @@
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-340</span></td>
                             <td><span class="tx-date">Jan 5, 2026</span></td>
-                            <td><span class="tx-partner">Mike Johnson</span></td>
+                            <td><span class="tx-Contact">Mike Johnson</span></td>
                             <td><span class="tx-Cash Box blue">Petty Cash</span></td>
                             <td><span class="tx-direction in">⬇ IN</span></td>
                             <td><span class="tx-amount in">$85.50</span></td>
@@ -1034,7 +1034,7 @@
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-339</span></td>
                             <td><span class="tx-date">Jan 4, 2026</span></td>
-                            <td><span class="tx-partner">Emily Davis</span></td>
+                            <td><span class="tx-Contact">Emily Davis</span></td>
                             <td><span class="tx-Cash Box">Main Office</span></td>
                             <td><span class="tx-direction out">⬆ OUT</span></td>
                             <td><span class="tx-amount out">$2,350.00</span></td>
@@ -1052,7 +1052,7 @@
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-338</span></td>
                             <td><span class="tx-date">Jan 4, 2026</span></td>
-                            <td><span class="tx-partner">Robert Brown</span></td>
+                            <td><span class="tx-Contact">Robert Brown</span></td>
                             <td><span class="tx-Cash Box orange">Event Fund</span></td>
                             <td><span class="tx-direction in">⬇ IN</span></td>
                             <td><span class="tx-amount in">$750.00</span></td>
@@ -1070,7 +1070,7 @@
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-id">TRX-337</span></td>
                             <td><span class="tx-date">Jan 3, 2026</span></td>
-                            <td><span class="tx-partner">Lisa Anderson</span></td>
+                            <td><span class="tx-Contact">Lisa Anderson</span></td>
                             <td><span class="tx-Cash Box blue">Petty Cash</span></td>
                             <td><span class="tx-direction out">⬆ OUT</span></td>
                             <td><span class="tx-amount out">$125.00</span></td>
@@ -1238,7 +1238,7 @@
         // Apply filters
         document.getElementById('applyFilters').addEventListener('click', function() {
             const filters = {
-                partner: document.getElementById('filterPartner').value,
+                Contact: document.getElementById('filterContact').value,
                 description: document.getElementById('filterDescription').value,
                 recorder: document.getElementById('filterRecorder').value,
                 cashBox: document.getElementById('filterRegister').value,
