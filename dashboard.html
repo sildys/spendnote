@@ -2611,7 +2611,28 @@ tr:hover [data-category-tag] {
                 <li><a href="spendnote-contact-list.html">Contacts</a></li>
                 <li><a href="spendnote-user-settings.html">Settings</a></li>
                 <li><button class="nav-new-transaction-btn" id="addTransactionBtn"><i class="fas fa-plus"></i> New Transaction</button></li>
-                <li><a href="index.html" class="btn btn-secondary">Log out</a></li>
+                <li class="user-avatar-wrapper">
+                    <div class="user-avatar" id="userAvatarBtn" style="background: linear-gradient(135deg, #059669, #10b981);">
+                        JD
+                    </div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="user-dropdown-header">
+                            <div class="user-dropdown-name">John Doe</div>
+                            <div class="user-dropdown-email">john.doe@example.com</div>
+                        </div>
+                        <div class="user-dropdown-menu">
+                            <a href="spendnote-user-settings.html" class="user-dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <div class="user-dropdown-divider"></div>
+                            <a href="index.html" class="user-dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Log out
+                            </a>
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>
@@ -2887,7 +2908,7 @@ tr:hover [data-category-tag] {
                         <div class="tx-person">John Smith</div>
                         <div class="tx-desc">Retail cash deposit</div>
                         <div class="tx-amount in">+$5,000</div>
-                        <div class="tx-createdby">by Alexa</div>
+                        <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">A</div><span>Alexa</span></div></div>
                         <a href="spendnote-transaction-detail.html" class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105; text-decoration: none; display: flex; align-items: center; justify-content: center;">View</a>
                     </div>
                     <div class="table-grid" tabindex="0" style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
@@ -2900,7 +2921,7 @@ tr:hover [data-category-tag] {
                         <div class="tx-person">ABC Supplies</div>
                         <div class="tx-desc">Office supplies</div>
                         <div class="tx-amount out">-$450</div>
-                        <div class="tx-createdby">by Mia</div>
+                        <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small" style="background: linear-gradient(135deg, #ec4899, #f472b6);">M</div><span>Mia</span></div></div>
                         <a href="spendnote-transaction-detail.html" class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105; text-decoration: none; display: flex; align-items: center; justify-content: center;">View</a>
                     </div>
                     <div class="table-grid" tabindex="0" style="--cashbox-rgb: 245, 158, 11; --cashbox-color: #f59e0b;">
@@ -2913,7 +2934,7 @@ tr:hover [data-category-tag] {
                         <div class="tx-person">Mary Johnson</div>
                         <div class="tx-desc">Customer payment</div>
                         <div class="tx-amount in">+$2,200</div>
-                        <div class="tx-createdby">by Ethan</div>
+                        <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">E</div><span>Ethan</span></div></div>
                         <a href="spendnote-transaction-detail.html" class="tx-action" style="--row-color: #f59e0b; --row-rgb: 245, 158, 11; text-decoration: none; display: flex; align-items: center; justify-content: center;">View</a>
                     </div>
                     <div class="table-grid" tabindex="0" style="--cashbox-rgb: 59, 130, 246; --cashbox-color: #3b82f6;">
@@ -2926,7 +2947,7 @@ tr:hover [data-category-tag] {
                         <div class="tx-person">AdCorp Media</div>
                         <div class="tx-desc">Marketing campaign</div>
                         <div class="tx-amount out">-$1,800</div>
-                        <div class="tx-createdby">by Sofia</div>
+                        <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">S</div><span>Sofia</span></div></div>
                         <a href="spendnote-transaction-detail.html" class="tx-action" style="--row-color: #3b82f6; --row-rgb: 59, 130, 246; text-decoration: none; display: flex; align-items: center; justify-content: center;">View</a>
                     </div>
                     <div class="table-grid" tabindex="0" style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
@@ -2939,7 +2960,7 @@ tr:hover [data-category-tag] {
                         <div class="tx-person">Sarah Williams</div>
                         <div class="tx-desc">Product sales</div>
                         <div class="tx-amount in">+$3,450</div>
-                        <div class="tx-createdby">by Liam</div>
+                        <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small" style="background: linear-gradient(135deg, #059669, #10b981);">L</div><span>Liam</span></div></div>
                         <a href="spendnote-transaction-detail.html" class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105; text-decoration: none; display: flex; align-items: center; justify-content: center;">View</a>
                     </div>
                 </div>
@@ -4032,6 +4053,26 @@ tr:hover [data-category-tag] {
                 } else {
                     // No active cash box, navigate without filter
                     window.location.href = 'spendnote-transaction-history.html';
+                }
+            });
+        }
+
+        // ========================================
+        // USER AVATAR DROPDOWN
+        // ========================================
+        const userAvatarBtn = document.getElementById('userAvatarBtn');
+        const userDropdown = document.getElementById('userDropdown');
+        
+        if (userAvatarBtn && userDropdown) {
+            userAvatarBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                userDropdown.classList.toggle('show');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!userAvatarBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                    userDropdown.classList.remove('show');
                 }
             });
         }

@@ -39,6 +39,24 @@ document.addEventListener('DOMContentLoaded', function() {
             newTransactionBtn.style.color = 'white';
         }
     }
+    
+    // User avatar dropdown
+    const userAvatarBtn = document.getElementById('userAvatarBtn');
+    const userDropdown = document.getElementById('userDropdown');
+    
+    if (userAvatarBtn && userDropdown) {
+        userAvatarBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!userAvatarBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                userDropdown.classList.remove('show');
+            }
+        });
+    }
 });
 
 // Utility functions

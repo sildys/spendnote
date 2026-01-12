@@ -503,7 +503,28 @@
                 <li><a href="spendnote-transaction-history.html" class="active">Transactions</a></li>
                 <li><a href="spendnote-contact-list.html">Contacts</a></li>
                 <li><a href="spendnote-user-settings.html">Settings</a></li>
-                <li><a href="index.html" class="btn btn-secondary">Log out</a></li>
+                <li class="user-avatar-wrapper">
+                    <div class="user-avatar" id="userAvatarBtn" style="background: linear-gradient(135deg, #059669, #10b981);">
+                        JD
+                    </div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="user-dropdown-header">
+                            <div class="user-dropdown-name">John Doe</div>
+                            <div class="user-dropdown-email">john.doe@example.com</div>
+                        </div>
+                        <div class="user-dropdown-menu">
+                            <a href="spendnote-user-settings.html" class="user-dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <div class="user-dropdown-divider"></div>
+                            <a href="index.html" class="user-dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Log out
+                            </a>
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>
