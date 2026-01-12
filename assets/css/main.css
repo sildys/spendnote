@@ -532,6 +532,10 @@ body {
 /* User Avatar */
 .user-avatar-wrapper {
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
 }
 
 .user-avatar {
@@ -544,9 +548,16 @@ body {
     font-weight: 700;
     font-size: 13px;
     color: white;
-    cursor: pointer;
     transition: all 0.2s;
     border: 2px solid transparent;
+    flex-shrink: 0;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+    white-space: nowrap;
 }
 
 .user-avatar:hover {
