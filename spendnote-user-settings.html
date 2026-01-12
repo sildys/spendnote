@@ -589,7 +589,6 @@
             <button class="tab" onclick="switchTab('team')">Team Management</a>
             <button class="tab" onclick="switchTab('billing')">Billing</a>
             <button class="tab" onclick="switchTab('security')">Security</a>
-            <button class="tab" onclick="switchTab('notifications')">Notifications</a>
             <button class="tab" onclick="switchTab('danger')">Delete Account</a>
         </div>
 
@@ -722,6 +721,27 @@
                     <button class="btn btn-primary">Save Receipt Info</a>
                 </div>
             </div>
+
+            <!-- Weekly Summary -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Email Preferences</h2>
+                    <p class="section-description">Manage your email notifications</p>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <div class="toggle-label">Weekly Summary</div>
+                        <div class="toggle-description">Receive a weekly summary of your Cash Box activity</div>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="section-actions">
+                    <button class="btn btn-primary">Save Preferences</a>
+                </div>
+            </div>
         </div>
 
         <!-- SECURITY TAB -->
@@ -750,85 +770,6 @@
                 <div class="section-actions">
                     <button class="btn btn-secondary">Cancel</a>
                     <button class="btn btn-primary">Update Password</a>
-                </div>
-            </div>
-
-            <!-- Sessions -->
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">Active Sessions</h2>
-                    <p class="section-description">Manage your active sessions across devices</p>
-                </div>
-                <div class="toggle-group">
-                    <div class="toggle-info">
-                        <div class="toggle-label">Chrome on MacBook Pro</div>
-                        <div class="toggle-description">Last active: 2 minutes ago • New York, US</div>
-                    </div>
-                    <button class="btn btn-secondary btn-small">Current</a>
-                </div>
-                <div class="toggle-group">
-                    <div class="toggle-info">
-                        <div class="toggle-label">Safari on iPhone</div>
-                        <div class="toggle-description">Last active: 3 hours ago • New York, US</div>
-                    </div>
-                    <button class="btn btn-secondary btn-small">Revoke</a>
-                </div>
-                <div class="section-actions">
-                    <button class="btn btn-secondary">Sign Out All Devices</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- NOTIFICATIONS TAB -->
-        <div id="notificationsTab" class="tab-content" style="display: none;">
-            <!-- Email Notifications -->
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">Email Notifications</h2>
-                    <p class="section-description">Choose what updates you want to receive</p>
-                </div>
-                <div class="toggle-group">
-                    <div class="toggle-info">
-                        <div class="toggle-label">Transaction Alerts</div>
-                        <div class="toggle-description">Get notified when a new transaction is created</div>
-                    </div>
-                    <label class="toggle">
-                        <input type="checkbox" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="toggle-group">
-                    <div class="toggle-info">
-                        <div class="toggle-label">Weekly Summary</div>
-                        <div class="toggle-description">Receive a weekly summary of your Cash Box activity</div>
-                    </div>
-                    <label class="toggle">
-                        <input type="checkbox" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="toggle-group">
-                    <div class="toggle-info">
-                        <div class="toggle-label">Product Updates</div>
-                        <div class="toggle-description">News about new features and improvements</div>
-                    </div>
-                    <label class="toggle">
-                        <input type="checkbox">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="toggle-group">
-                    <div class="toggle-info">
-                        <div class="toggle-label">Marketing Emails</div>
-                        <div class="toggle-description">Tips, guides, and promotional content</div>
-                    </div>
-                    <label class="toggle">
-                        <input type="checkbox">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="section-actions">
-                    <button class="btn btn-primary">Save Preferences</a>
                 </div>
             </div>
         </div>
@@ -1026,96 +967,21 @@
                 </div>
             </div>
 
-            <!-- Billing Details -->
+            <!-- Manage Subscription -->
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">Billing Details</h2>
-                    <p class="section-description">Your billing information for invoices</p>
+                    <h2 class="section-title">Manage Subscription</h2>
+                    <p class="section-description">Update billing details, payment methods, and view invoices</p>
                 </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                    <div class="form-group">
-                        <label class="form-label">Company Name</label>
-                        <input type="text" class="form-input" value="Acme Corporation" placeholder="Company name">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Tax ID / VAT Number</label>
-                        <input type="text" class="form-input" value="HU12345678" placeholder="Tax ID">
-                    </div>
-                    <div class="form-group" style="grid-column: span 2;">
-                        <label class="form-label">Billing Address</label>
-                        <input type="text" class="form-input" value="123 Business Street, Budapest, 1051, Hungary" placeholder="Full address">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Billing Email</label>
-                        <input type="email" class="form-input" value="billing@acme.com" placeholder="billing@company.com">
-                    </div>
+                <div style="padding: 20px; background: var(--bg); border-radius: 12px; border: 1px solid var(--border); text-align: center;">
+                    <i class="fas fa-credit-card" style="font-size: 48px; color: var(--primary); margin-bottom: 16px; opacity: 0.8;"></i>
+                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Stripe Customer Portal</h3>
+                    <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Manage your billing information, payment methods, and download invoices securely through Stripe.</p>
+                    <button class="btn btn-primary" onclick="alert('Stripe Customer Portal\n\nIn production:\n- Redirect to Stripe Customer Portal\n- User can update billing details\n- User can change payment method\n- User can view/download invoices\n- User can cancel subscription')">
+                        <i class="fas fa-external-link-alt" style="margin-right: 8px;"></i>
+                        Open Stripe Portal
+                    </button>
                 </div>
-                <div class="section-actions" style="margin-top: 16px;">
-                    <button class="btn btn-primary">Save Billing Details</a>
-                </div>
-            </div>
-
-            <!-- Payment Method -->
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">Payment Method</h2>
-                    <p class="section-description">Manage your payment method</p>
-                </div>
-
-                <div style="display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--surface-elevated); border-radius: 12px;">
-                    <div style="width: 48px; height: 32px; background: linear-gradient(135deg, #1a1f71, #00579f); border-radius: 6px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fab fa-cc-visa" style="color: white; font-size: 20px;"></i>
-                    </div>
-                    <div style="flex: 1;">
-                        <div style="font-weight: 600;">Visa ending in 4242</div>
-                        <div style="font-size: 13px; color: var(--text-muted);">Expires 12/2027</div>
-                    </div>
-                    <button class="btn btn-secondary btn-small">Change</a>
-                </div>
-            </div>
-
-            <!-- Invoice History -->
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">Invoice History</h2>
-                    <p class="section-description">Download your past invoices</p>
-                </div>
-
-                <table style="width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr style="border-bottom: 2px solid var(--border);">
-                            <th style="text-align: left; padding: 12px 0; font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Invoice</th>
-                            <th style="text-align: left; padding: 12px 0; font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Date</th>
-                            <th style="text-align: left; padding: 12px 0; font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Amount</th>
-                            <th style="text-align: left; padding: 12px 0; font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Status</th>
-                            <th style="text-align: right; padding: 12px 0; font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Download</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="border-bottom: 1px solid var(--border);">
-                            <td style="padding: 16px 0; font-weight: 600;">INV-2026-001</td>
-                            <td style="padding: 16px 0; color: var(--text-muted);">Jan 1, 2026</td>
-                            <td style="padding: 16px 0; font-weight: 600;">€12.00</td>
-                            <td style="padding: 16px 0;"><span style="background: rgba(16, 185, 129, 0.1); color: #059669; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">Paid</span></td>
-                            <td style="padding: 16px 0; text-align: right;"><button class="btn btn-secondary btn-small"><i class="fas fa-download"></i> PDF</a></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid var(--border);">
-                            <td style="padding: 16px 0; font-weight: 600;">INV-2025-012</td>
-                            <td style="padding: 16px 0; color: var(--text-muted);">Dec 1, 2025</td>
-                            <td style="padding: 16px 0; font-weight: 600;">€12.00</td>
-                            <td style="padding: 16px 0;"><span style="background: rgba(16, 185, 129, 0.1); color: #059669; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">Paid</span></td>
-                            <td style="padding: 16px 0; text-align: right;"><button class="btn btn-secondary btn-small"><i class="fas fa-download"></i> PDF</a></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid var(--border);">
-                            <td style="padding: 16px 0; font-weight: 600;">INV-2025-011</td>
-                            <td style="padding: 16px 0; color: var(--text-muted);">Nov 1, 2025</td>
-                            <td style="padding: 16px 0; font-weight: 600;">€12.00</td>
-                            <td style="padding: 16px 0;"><span style="background: rgba(16, 185, 129, 0.1); color: #059669; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">Paid</span></td>
-                            <td style="padding: 16px 0; text-align: right;"><button class="btn btn-secondary btn-small"><i class="fas fa-download"></i> PDF</a></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
 
@@ -1237,12 +1103,9 @@
             } else if (tab === 'security') {
                 document.getElementById('securityTab').style.display = 'block';
                 document.querySelectorAll('.tab')[3].classList.add('active');
-            } else if (tab === 'notifications') {
-                document.getElementById('notificationsTab').style.display = 'block';
-                document.querySelectorAll('.tab')[4].classList.add('active');
             } else if (tab === 'danger') {
                 document.getElementById('dangerTab').style.display = 'block';
-                document.querySelectorAll('.tab')[5].classList.add('active');
+                document.querySelectorAll('.tab')[4].classList.add('active');
             }
         }
 
