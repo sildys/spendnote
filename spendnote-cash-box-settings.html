@@ -149,13 +149,19 @@
             position: relative;
         }
         
+        .receipt-preview-wrapper {
+            min-width: 100%;
+            display: flex;
+            justify-content: center;
+            transform-origin: top center;
+            transition: transform 0.2s ease;
+        }
+        
         .receipt-preview-frame {
             width: 100%;
             height: 700px;
             border: none;
             background: white;
-            transform-origin: top center;
-            transition: transform 0.2s ease;
         }
         
         /* Mock Receipt Preview */
@@ -1128,7 +1134,9 @@
                         </div>
                         <!-- RECEIPT PREVIEW IFRAME -->
                         <div class="receipt-preview-container">
-                            <iframe id="receiptFrame" class="receipt-preview-frame" src="spendnote-pdf-receipt.html"></iframe>
+                            <div class="receipt-preview-wrapper" id="receiptWrapper">
+                                <iframe id="receiptFrame" class="receipt-preview-frame" src="spendnote-pdf-receipt.html"></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1353,10 +1361,10 @@
         const maxZoom = 2.0;
 
         function updateZoom() {
-            const iframe = document.getElementById('receiptFrame');
+            const wrapper = document.getElementById('receiptWrapper');
             const zoomLevel = document.getElementById('zoomLevel');
-            if (iframe && zoomLevel) {
-                iframe.style.transform = `scale(${currentZoom})`;
+            if (wrapper && zoomLevel) {
+                wrapper.style.transform = `scale(${currentZoom})`;
                 zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
             }
         }
