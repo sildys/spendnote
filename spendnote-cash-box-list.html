@@ -408,9 +408,9 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            min-height: 280px;
             cursor: pointer;
             transition: all 0.3s;
+            box-shadow: 0 2px 12px var(--shadow);
         }
 
         .add-cash-box-card:hover {
@@ -448,11 +448,18 @@
             font-size: 18px;
             font-weight: 800;
             color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .add-cash-box-subtitle {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
             margin-bottom: 16px;
         }
 
         .add-cash-box-upgrade {
-            margin-top: 8px;
+            margin-top: 12px;
             padding: 10px 18px;
             background: rgba(245, 158, 11, 0.1);
             border: 1px solid rgba(245, 158, 11, 0.3);
@@ -465,6 +472,10 @@
 
         .add-cash-box-card.disabled .add-cash-box-upgrade {
             display: block;
+        }
+
+        .add-cash-box-card.disabled .add-cash-box-subtitle {
+            display: none;
         }
 
         /* DELETE MODAL */
@@ -877,7 +888,8 @@
                     <i class="fas fa-plus"></i>
                 </div>
                 <div class="add-cash-box-title">Add Cash Box</div>
-                <!-- Conditional upgrade message based on plan and box count -->
+                <div class="add-cash-box-subtitle">Keep your cash organized</div>
+                <!-- Conditional upgrade message - only shown when limit reached -->
                 <div class="add-cash-box-upgrade" data-upgrade-text="standard">Upgrade to Standard for more Cash Boxes</div>
                 <div class="add-cash-box-upgrade" data-upgrade-text="pro">Upgrade to Pro for unlimited Cash Boxes</div>
             </div>
