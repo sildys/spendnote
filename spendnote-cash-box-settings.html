@@ -151,9 +151,7 @@
         
         .receipt-preview-wrapper {
             width: 100%;
-            display: inline-block;
-            transform-origin: top left;
-            transition: transform 0.2s ease;
+            display: block;
         }
         
         .receipt-preview-frame {
@@ -162,6 +160,8 @@
             border: none;
             background: white;
             display: block;
+            zoom: 1;
+            transition: zoom 0.2s ease;
         }
         
         /* Mock Receipt Preview */
@@ -1361,10 +1361,10 @@
         const maxZoom = 2.0;
 
         function updateZoom() {
-            const wrapper = document.getElementById('receiptWrapper');
+            const iframe = document.getElementById('receiptFrame');
             const zoomLevel = document.getElementById('zoomLevel');
-            if (wrapper && zoomLevel) {
-                wrapper.style.transform = `scale(${currentZoom})`;
+            if (iframe && zoomLevel) {
+                iframe.style.zoom = currentZoom;
                 zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
             }
         }
