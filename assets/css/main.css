@@ -27,7 +27,7 @@
 
 html {
     overflow-x: clip;
-    font-size: 85%; /* Scale down all rem-based sizes by 15% */
+    font-size: 75%; /* Scale down all rem-based sizes by 25% */
 }
 
 body {
