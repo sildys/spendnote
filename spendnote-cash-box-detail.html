@@ -11,12 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
     <style>
-        /* Force white navigation background */
-        .site-nav {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-        }
-
         .site-nav .nav-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -173,19 +167,6 @@
             opacity: 0.9;
         }
 
-        /* All navigation links use active color */
-        .site-nav .nav-links a {
-            color: var(--active) !important;
-        }
-
-        .site-nav .nav-links a:hover {
-            opacity: 0.7;
-        }
-
-        /* Active menu item gets underline */
-        .site-nav .nav-links a.active::after {
-            background: var(--active) !important;
-        }
 
         /* New Transaction Button */
         .btn-new-transaction {
@@ -909,7 +890,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
-<nav class="site-nav">
+<nav class="site-nav" style="background:#fff">
   <div class="nav-container">
             <a href="dashboard.html" class="logo">
                 <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
