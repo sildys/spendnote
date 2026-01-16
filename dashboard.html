@@ -3144,7 +3144,7 @@ tr:hover [data-category-tag] {
                     <div class="optional-buttons-row">
                         <button type="button" class="add-section-btn" id="modalToggleTransactionId">
                             <i class="fas fa-plus"></i>
-                            <span>Transaction ID</span>
+                            <span>Reference ID</span>
                         </button>
                         <button type="button" class="add-section-btn" id="modalToggleNote">
                             <i class="fas fa-plus"></i>
@@ -3152,16 +3152,15 @@ tr:hover [data-category-tag] {
                         </button>
                     </div>
 
-                    <!-- TRANSACTION ID FIELD -->
+                    <!-- REFERENCE ID FIELD -->
                     <div class="form-group" id="modalTransactionIdGroup" style="display: none;">
-                        <label class="form-label">Transaction ID</label>
+                        <label class="form-label">Reference ID</label>
                         <div class="autocomplete-wrapper">
                             <input 
                                 type="text" 
                                 class="form-input" 
                                 id="modalTransactionId"
-                                placeholder="PO#, Order#, Invoice#, etc."
-                                autocomplete="off"
+                                placeholder="e.g., INV-2024-001, PO-12345"
                             >
                             <div class="autocomplete-dropdown" id="transactionIdAutocomplete"></div>
                         </div>
