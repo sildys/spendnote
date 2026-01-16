@@ -207,6 +207,28 @@
       line-height: 1.6;
     }
     
+    /* SIGNATURES */
+    .signatures {
+      display: flex;
+      justify-content: space-between;
+      gap: 48px;
+      margin-bottom: 32px;
+    }
+    
+    .signature {
+      flex: 1;
+    }
+    
+    .signature-label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 24px;
+    }
+    
+    .signature-line {
+      border-top: 1px solid #000;
+    }
+    
     /* FOOTER */
     .footer {
       border-top: 2px solid #e0e0e0;
@@ -319,7 +341,20 @@
 
     <!-- NOTES -->
     <div class="notes">
-      <!-- ... -->
+      <div class="notes-label">Notes</div>
+      <div class="notes-text">Advance payment for client presentations and office maintenance.</div>
+    </div>
+
+    <!-- SIGNATURES -->
+    <div class="signatures">
+      <div class="signature">
+        <div class="signature-label">Issued by</div>
+        <div class="signature-line"></div>
+      </div>
+      <div class="signature">
+        <div class="signature-label">Received by</div>
+        <div class="signature-line"></div>
+      </div>
     </div>
 
     <!-- FOOTER -->
