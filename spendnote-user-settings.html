@@ -1124,6 +1124,16 @@
             }
         }
 
+        // Check URL parameter on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tab = urlParams.get('tab');
+            
+            if (tab) {
+                switchTab(tab);
+            }
+        });
+
         function deleteAccount() {
             const confirm = document.getElementById('deleteConfirm').value;
             if (confirm === 'DELETE') {
