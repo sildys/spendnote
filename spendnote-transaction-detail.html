@@ -291,6 +291,18 @@
         }
 
         .transaction-summary {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 1200px) {
+            .transaction-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .transaction-main-info {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 16px;
@@ -298,17 +310,18 @@
             box-shadow: 0 2px 8px var(--shadow);
         }
 
-        .transaction-summary-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px 32px;
-            margin-top: 20px;
+        .transaction-details-info {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 8px var(--shadow);
         }
 
-        @media (max-width: 768px) {
-            .transaction-summary-grid {
-                grid-template-columns: 1fr;
-            }
+        .transaction-info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
         .receipts-layout {
@@ -908,49 +921,56 @@
         <div class="content-grid">
             <!-- TRANSACTION SUMMARY -->
             <div class="transaction-summary">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2 class="card-title" style="margin: 0;">Transaction Details</h2>
-                    <div class="amount-value in" style="margin: 0;">$7,200.00</div>
-                </div>
-                
-                <div class="transaction-summary-grid">
-                    <div class="info-row">
-                        <span class="info-label">Transaction ID</span>
-                        <span class="info-value"><code>TRX-342</code></span>
+                <!-- LEFT: Main Info -->
+                <div class="transaction-main-info">
+                    <h2 class="card-title" style="margin-bottom: 20px;">Transaction Info</h2>
+                    
+                    <div class="transaction-info-grid">
+                        <div class="info-row">
+                            <span class="info-label">Transaction ID</span>
+                            <span class="info-value"><code>TRX-342</code></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Date</span>
+                            <span class="info-value">January 6, 2026</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Cash Box</span>
+                            <span class="info-value highlight">Main Office (CR-001)</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Contact Name</span>
+                            <span class="info-value">John Smith</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Contact ID</span>
+                            <span class="info-value">CLIENT-4523</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Reference</span>
+                            <span class="info-value">PO-2026-0142</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Logged By</span>
+                            <span class="info-value">Jane Doe</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Created At</span>
+                            <span class="info-value">Jan 6, 2026 - 2:45 PM</span>
+                        </div>
                     </div>
-                    <div class="info-row">
-                        <span class="info-label">Date</span>
-                        <span class="info-value">January 6, 2026</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Cash Box</span>
-                        <span class="info-value highlight">Main Office (CR-001)</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Contact Name</span>
-                        <span class="info-value">John Smith</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Contact ID</span>
-                        <span class="info-value">CLIENT-4523</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Reference</span>
-                        <span class="info-value">PO-2026-0142</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Logged By</span>
-                        <span class="info-value">Jane Doe</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Created At</span>
-                        <span class="info-value">Jan 6, 2026 - 2:45 PM</span>
+
+                    <!-- AMOUNT -->
+                    <div style="margin-top: 24px; padding-top: 24px; border-top: 2px solid var(--border);">
+                        <div class="info-label" style="margin-bottom: 8px;">Amount</div>
+                        <div class="amount-value in" style="font-size: 36px;">$7,200.00</div>
+                        <div class="status-badge in" style="margin-top: 8px;">⬇ Cash IN (Received)</div>
                     </div>
                 </div>
 
-                <!-- LINE ITEMS -->
-                <div style="margin-top: 24px;">
-                    <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">Line Items</h3>
+                <!-- RIGHT: Details -->
+                <div class="transaction-details-info">
+                    <h2 class="card-title" style="margin-bottom: 20px;">Line Items</h2>
                     <div class="line-items-table">
                         <table>
                             <thead>
@@ -979,13 +999,13 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
 
-                <!-- NOTE -->
-                <div style="margin-top: 24px;">
-                    <span class="info-label">Note</span>
-                    <div class="note-box" style="margin-top: 8px;">
-                        Payment received for Q4 consulting services. Client was very satisfied with the project outcomes and has indicated interest in continuing work in Q1 2026.
+                    <!-- NOTE -->
+                    <div style="margin-top: 24px;">
+                        <span class="info-label">Note</span>
+                        <div class="note-box" style="margin-top: 8px;">
+                            Payment received for Q4 consulting services. Client was very satisfied with the project outcomes and has indicated interest in continuing work in Q1 2026.
+                        </div>
                     </div>
                 </div>
             </div>
