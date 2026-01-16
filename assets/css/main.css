@@ -27,6 +27,7 @@
 
 html {
     overflow-x: clip;
+    font-size: 85%; /* Scale down all rem-based sizes by 15% */
 }
 
 body {
@@ -34,7 +35,7 @@ body {
     background: var(--bg);
     color: var(--text);
     line-height: 1.6;
-    font-size: 15px;
+    font-size: 13px;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     display: flex;
@@ -61,9 +62,9 @@ body {
 }
 
 .nav-container {
-    max-width: 1400px;
+    max-width: 1190px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1.7rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -88,7 +89,7 @@ body {
     color: #000000;
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.81rem;
     transition: color 0.2s;
 }
 
@@ -121,10 +122,10 @@ body {
 }
 
 .nav-links a {
-    padding: 10px 20px;
+    padding: 8px 17px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 13px;
     color: var(--text-muted);
     border-radius: 12px;
     transition: all 0.2s;
@@ -150,12 +151,12 @@ body {
 .nav-new-transaction-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 12px;
+    padding: 8px 17px;
+    border-radius: 10px;
     font-weight: 700;
     font-family: inherit;
     cursor: pointer;
@@ -175,18 +176,18 @@ body {
 
 /* App Container */
 .app-container {
-    max-width: 1400px;
+    max-width: 1190px;
     margin: 0 auto;
     flex: 1;
-    padding: 28px 24px;
+    padding: 24px 20px;
     width: 100%;
 }
 
 /* Buttons */
 .btn {
     display: inline-block;
-    padding: 10px 20px;
-    border-radius: 12px;
+    padding: 8px 17px;
+    border-radius: 10px;
     font-weight: 600;
     text-decoration: none;
     transition: all 0.2s;
@@ -227,9 +228,9 @@ body {
 }
 
 .app-footer-container {
-    max-width: 1400px;
+    max-width: 1190px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1.7rem;
 }
 
 .app-footer-top {
