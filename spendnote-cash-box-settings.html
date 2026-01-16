@@ -1235,6 +1235,91 @@
                 </div>
             </section>
 
+            <!-- TEAM ACCESS -->
+            <section class="settings-section" id="team">
+                <div class="section-header">
+                    <h2 class="section-title">Team Access</h2>
+                    <p class="section-description">Manage who can access this Cash Box</p>
+                </div>
+
+                <!-- Add User Form -->
+                <div class="add-user-form">
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 1;">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" placeholder="user@example.com" id="newUserEmail">
+                        </div>
+                        <div class="form-group" style="width: 200px;">
+                            <label class="form-label">Role</label>
+                            <select class="form-select" id="newUserRole">
+                                <option value="admin">Admin</option>
+                                <option value="viewer">Viewer</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="align-self: flex-end;">
+                            <button class="btn btn-primary" onclick="addUser()">
+                                <i class="fas fa-plus"></i>
+                                Add User
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Members List -->
+                <div class="team-members-list">
+                    <div class="team-member-item">
+                        <img src="https://i.pravatar.cc/150?img=12" alt="John Doe" class="team-member-avatar">
+                        <div class="team-member-info">
+                            <div class="team-member-name">John Doe</div>
+                            <div class="team-member-email">john.doe@example.com</div>
+                        </div>
+                        <div class="team-member-role owner-badge">Owner</div>
+                        <div class="team-member-actions">
+                            <span class="team-member-note">Cannot be removed</span>
+                        </div>
+                    </div>
+
+                    <div class="team-member-item">
+                        <img src="https://i.pravatar.cc/150?img=5" alt="Jane Smith" class="team-member-avatar">
+                        <div class="team-member-info">
+                            <div class="team-member-name">Jane Smith</div>
+                            <div class="team-member-email">jane.smith@example.com</div>
+                        </div>
+                        <select class="team-role-select">
+                            <option value="admin" selected>Admin</option>
+                            <option value="viewer">Viewer</option>
+                        </select>
+                        <div class="team-member-actions">
+                            <button class="btn-icon-danger" onclick="removeUser(this)" title="Remove user">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="team-member-item">
+                        <img src="https://i.pravatar.cc/150?img=8" alt="Mike Johnson" class="team-member-avatar">
+                        <div class="team-member-info">
+                            <div class="team-member-name">Mike Johnson</div>
+                            <div class="team-member-email">mike.johnson@example.com</div>
+                        </div>
+                        <select class="team-role-select">
+                            <option value="admin">Admin</option>
+                            <option value="viewer" selected>Viewer</option>
+                        </select>
+                        <div class="team-member-actions">
+                            <button class="btn-icon-danger" onclick="removeUser(this)" title="Remove user">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-hint" style="margin-top: 16px;">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Admin:</strong> Can view and create transactions. <strong>Viewer:</strong> Can only view transactions.
+                </div>
+            </section>
+
             <!-- DANGER ZONE -->
             <section class="settings-section danger-zone">
                 <div class="section-header">
@@ -1577,6 +1662,43 @@
         function resetZoom() {
             currentZoom = 0.7;
             updateZoom();
+        }
+
+        // Team Management Functions
+        function addUser() {
+            const email = document.getElementById('newUserEmail').value;
+            const role = document.getElementById('newUserRole').value;
+            
+            if (!email) {
+                alert('Please enter an email address');
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            alert(`User ${email} added as ${role} (demo only)`);
+            
+            // Clear inputs
+            document.getElementById('newUserEmail').value = '';
+            document.getElementById('newUserRole').value = 'admin';
+        }
+        
+        function removeUser(button) {
+            const memberItem = button.closest('.team-member-item');
+            const userName = memberItem.querySelector('.team-member-name').textContent;
+            
+            if (confirm(`Remove ${userName} from this Cash Box?\n\nThey will no longer be able to access this Cash Box.`)) {
+                memberItem.style.opacity = '0.5';
+                setTimeout(() => {
+                    memberItem.remove();
+                    alert(`${userName} removed (demo only)`);
+                }, 300);
+            }
         }
 
         // Delete confirmation
