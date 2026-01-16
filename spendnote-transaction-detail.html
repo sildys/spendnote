@@ -1094,7 +1094,12 @@
                     <!-- FIELDS TO SHOW -->
                     <div class="form-group">
                         <label class="form-label">Fields to show</label>
-                        <p class="form-hint" style="margin-bottom: 12px;">Amount, Date, and Payer/Receiver names are always shown</p>
+                        <p class="form-hint" style="margin-bottom: 8px;">Amount, Date, and Payer/Receiver names are always shown</p>
+                        <p class="form-hint" style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                            Default settings loaded from <strong>Main Office (CR-001)</strong>
+                            <a href="#" onclick="alert('Reset to defaults\n\nIn production:\n- Load default settings from Cash Box\n- Apply to current receipt'); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600; margin-left: 4px;">Reset to defaults</a>
+                        </p>
                         
                         <div class="receipt-toggles">
                             <div class="receipt-toggle-item">
