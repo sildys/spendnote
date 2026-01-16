@@ -23,13 +23,20 @@
     
     /* Remove padding when in iframe to prevent double scrollbar */
     body.in-iframe {
-      background: white;
+      background: white !important;
+      overflow: hidden !important;
     }
     
     body.in-iframe .email-wrapper {
-      padding: 0;
-      max-width: 100%;
-      background: white;
+      padding: 0 !important;
+      margin: 0 !important;
+      max-width: 100% !important;
+      background: white !important;
+    }
+    
+    body.in-iframe .email-container {
+      border-radius: 0 !important;
+      box-shadow: none !important;
     }
     
     .email-container {
