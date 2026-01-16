@@ -197,57 +197,46 @@
             gap: 20px; 
         }
 
-        /* HEADER WITH COLOR */
-        .register-header {
-            background: linear-gradient(135deg, rgba(var(--active-rgb), 0.1), rgba(var(--active-rgb), 0.05));
-            border: 2px solid rgba(var(--active-rgb), 0.2);
-            border-radius: 24px;
-            padding: 32px;
-            margin-bottom: 32px;
+        /* COMPACT HEADER */
+        .compact-header {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 24px;
+            gap: 32px;
+            box-shadow: 0 2px 8px var(--shadow);
         }
 
-        .header-left {
+        .header-info {
             flex: 1;
         }
 
-        .breadcrumb {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-
-        .breadcrumb a {
-            color: var(--active);
-            text-decoration: none;
-        }
-
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        .register-title-row {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 8px;
-        }
-
-        .register-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, rgba(var(--active-rgb), 0.15), rgba(var(--active-rgb), 0.08));
-            border: 2px solid rgba(var(--active-rgb), 0.25);
+        .cash-box-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(5, 150, 105, 0.08));
+            border: 2px solid rgba(5, 150, 105, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 20px;
             color: var(--active);
+        }
+
+        .header-balance {
+            text-align: right;
+            padding: 0 24px;
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+        }
+
+        .header-actions-compact {
+            display: flex;
+            gap: 12px;
         }
 
         .register-title {
@@ -544,22 +533,32 @@
         }
 
         @media (max-width: 768px) {
-            .register-header {
+            .compact-header {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 20px;
             }
 
-            .header-actions {
+            .header-balance {
+                border-left: none;
+                border-right: none;
+                border-top: 1px solid var(--border);
+                border-bottom: 1px solid var(--border);
+                padding: 16px 0;
+                text-align: left;
                 width: 100%;
-                flex-direction: column;
+            }
+
+            .header-actions-compact {
+                width: 100%;
+            }
+
+            .header-actions-compact .btn {
+                flex: 1;
             }
 
             .stats-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .balance-amount {
-                font-size: 48px;
             }
 
             table {
@@ -878,38 +877,39 @@
     <!-- MAIN -->
     <div class="app-container">
         <main class="main-content">
-        <!-- Cash Box HEADER -->
-        <div class="register-header">
-            <div class="header-left">
-                <div class="breadcrumb">
-                    <a href="/Cash Boxes">← Back to Cash Boxes</a>
-                </div>
-                <div class="register-title-row">
-                    <div class="register-icon">
+        <!-- COMPACT HEADER -->
+        <div class="breadcrumb" style="margin-bottom: 16px;">
+            <a href="/Cash Boxes" style="color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500;">
+                <i class="fas fa-arrow-left" style="margin-right: 6px;"></i>
+                Back to Cash Boxes
+            </a>
+        </div>
+
+        <div class="compact-header">
+            <div class="header-info">
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+                    <div class="cash-box-icon">
                         <i class="fas fa-building"></i>
                     </div>
                     <div>
-                        <h1 class="register-title">Main Office</h1>
-                        <div class="register-id">CR-001</div>
+                        <h1 style="font-size: 28px; font-weight: 900; margin: 0; letter-spacing: -0.02em;">Main Office</h1>
+                        <div style="font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 2px;">CR-001</div>
                     </div>
                 </div>
             </div>
-            <div class="header-actions">
+            <div class="header-balance">
+                <div style="font-size: 13px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px;">Current Balance</div>
+                <div style="font-size: 36px; font-weight: 900; color: var(--primary); letter-spacing: -0.02em;">$18,500</div>
+            </div>
+            <div class="header-actions-compact">
                 <button class="btn btn-primary" onclick="window.location.href='/create-transaction?Cash Box=main'">
                     <i class="fas fa-plus"></i>
                     New Transaction
                 </button>
                 <button class="btn btn-secondary" onclick="window.location.href='spendnote-cash-box-settings.html?id=main'">
                     <i class="fas fa-cog"></i>
-                    Settings
                 </button>
             </div>
-        </div>
-
-        <!-- BALANCE CARD -->
-        <div class="balance-card">
-            <div class="balance-label">Current Balance</div>
-            <div class="balance-amount">$18,500</div>
         </div>
 
         <!-- STATS GRID -->
