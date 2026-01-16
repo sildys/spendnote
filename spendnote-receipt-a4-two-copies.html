@@ -83,6 +83,10 @@ body {
   border-top: 0.5mm solid #000;
   width: calc(100% - var(--logo-w) - var(--logo-gap));
 }
+/* Full width header-rule when logo is hidden */
+.header-rule.full-width{
+  width: 100%;
+}
 /* PARTIES */
 .parties {
   height: 26mm;
@@ -318,7 +322,7 @@ body {
     <div class="topbar">
   <div>
     <div class="title">Cash Receipt</div>
-    <div class="meta"><span class="recorded-by">Recorded by: John Smith</span> &nbsp; Date: Jan 7, 2026</div>
+    <div class="meta"><span class="recorded-by">Recorded by: John Smith</span><span class="date-separator"> &nbsp; </span>Date: Jan 7, 2026</div>
   </div>
   <div class="right-block">
     <div class="identifiers">
@@ -403,7 +407,7 @@ body {
     <div class="topbar">
   <div>
     <div class="title">Cash Receipt</div>
-    <div class="meta"><span class="recorded-by">Recorded by: John Smith</span> &nbsp; Date: Jan 7, 2026</div>
+    <div class="meta"><span class="recorded-by">Recorded by: John Smith</span><span class="date-separator"> &nbsp; </span>Date: Jan 7, 2026</div>
   </div>
   <div class="right-block">
     <div class="identifiers">
@@ -488,6 +492,8 @@ body {
   // Hide elements based on URL parameters
   if (urlParams.get('logo') === '0') {
     document.querySelectorAll('.logo, .logo-box, .sn-logo').forEach(el => el.style.display = 'none');
+    // Make header-rule full width when logo is hidden
+    document.querySelectorAll('.header-rule').forEach(el => el.classList.add('full-width'));
   }
   
   if (urlParams.get('company-name') === '0') {
@@ -508,6 +514,8 @@ body {
   
   if (urlParams.get('recorded-by') === '0') {
     document.querySelectorAll('.recorded-by').forEach(el => el.style.display = 'none');
+    // Also hide the separator space before Date
+    document.querySelectorAll('.date-separator').forEach(el => el.style.display = 'none');
   }
   
   if (urlParams.get('receipt-id') === '0') {
