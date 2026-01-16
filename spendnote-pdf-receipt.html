@@ -445,6 +445,16 @@ if (urlParams.get('contact') === '0') {
     document.querySelectorAll('.contact-address, .to-address').forEach(el => el.style.display = 'none');
 }
 
+// Partner IDs (both company and contact IDs)
+if (urlParams.get('partner-id') === '0') {
+    document.querySelectorAll('.party-id, .company-id, .contact-id').forEach(el => el.style.display = 'none');
+}
+
+// Recorded By
+if (urlParams.get('recorded-by') === '0') {
+    document.querySelectorAll('.recorded-by').forEach(el => el.style.display = 'none');
+}
+
 // Receipt ID
 if (urlParams.get('receipt-id') === '0') {
     document.querySelectorAll('.receipt-id, .receipt-id-line').forEach(el => el.style.display = 'none');

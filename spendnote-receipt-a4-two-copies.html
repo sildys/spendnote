@@ -318,7 +318,7 @@ body {
     <div class="topbar">
   <div>
     <div class="title">Cash Receipt</div>
-    <div class="meta">Recorded by: John Smith &nbsp; Date: Jan 7, 2026</div>
+    <div class="meta"><span class="recorded-by">Recorded by: John Smith</span> &nbsp; Date: Jan 7, 2026</div>
   </div>
   <div class="right-block">
     <div class="identifiers">
@@ -403,7 +403,7 @@ body {
     <div class="topbar">
   <div>
     <div class="title">Cash Receipt</div>
-    <div class="meta">Recorded by: John Smith &nbsp; Date: Jan 7, 2026</div>
+    <div class="meta"><span class="recorded-by">Recorded by: John Smith</span> &nbsp; Date: Jan 7, 2026</div>
   </div>
   <div class="right-block">
     <div class="identifiers">
@@ -500,6 +500,14 @@ body {
   
   if (urlParams.get('contact') === '0') {
     document.querySelectorAll('.contact-address, .to-address').forEach(el => el.style.display = 'none');
+  }
+  
+  if (urlParams.get('partner-id') === '0') {
+    document.querySelectorAll('.party-id, .company-id, .contact-id').forEach(el => el.style.display = 'none');
+  }
+  
+  if (urlParams.get('recorded-by') === '0') {
+    document.querySelectorAll('.recorded-by').forEach(el => el.style.display = 'none');
   }
   
   if (urlParams.get('receipt-id') === '0') {
