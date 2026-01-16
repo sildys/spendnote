@@ -756,6 +756,24 @@
                         <input type="text" class="filter-input" placeholder="e.g., PO-2026-0142" id="filterReferenceId">
                     </div>
 
+                    <!-- Description/Note -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-file-alt"></i>
+                            Description / Note
+                        </label>
+                        <input type="text" class="filter-input" placeholder="Search description..." id="filterDescription">
+                    </div>
+
+                    <!-- Created By -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-user-check"></i>
+                            Created by
+                        </label>
+                        <input type="text" class="filter-input" placeholder="Search creator..." id="filterCreator">
+                    </div>
+
                     <!-- Date From -->
                     <div class="filter-group">
                         <label class="filter-label">
@@ -775,7 +793,7 @@
                     </div>
 
                     <!-- Amount Range -->
-                    <div class="filter-group">
+                    <div class="filter-group" style="grid-column: span 2;">
                         <label class="filter-label">
                             <i class="fas fa-dollar-sign"></i>
                             Amount Range
@@ -797,108 +815,173 @@
                         <i class="fas fa-check"></i>
                         Apply Filters
                     </button>
+                    <div style="flex: 1;"></div>
+                    <button class="filter-btn clear" id="exportCSV">
+                        <i class="fas fa-file-csv"></i>
+                        Export CSV
+                    </button>
+                    <button class="filter-btn clear" id="exportPDF">
+                        <i class="fas fa-file-pdf"></i>
+                        Export PDF
+                    </button>
                 </div>
             </div>
         </div>
 
+        <!-- BULK ACTIONS -->
+        <div class="bulk-actions" id="bulkActions" style="display: none;">
+            <input type="checkbox" id="selectAll">
+            <span class="bulk-actions-text"><strong><span id="selectedCount">0</span> selected</strong></span>
+            <button class="bulk-action-btn">
+                <i class="fas fa-file-pdf"></i>
+                Print Selected
+            </button>
+            <button class="bulk-action-btn">
+                <i class="fas fa-envelope"></i>
+                Email Selected
+            </button>
+            <button class="bulk-action-btn delete">
+                <i class="fas fa-trash"></i>
+                Delete Selected
+            </button>
+        </div>
+
         <div class="transactions-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Contact</th>
-                        <th>Contact ID</th>
-                        <th>Reference ID</th>
-                        <th>Amount</th>
-                        <th>Created by</th>
-                        <th style="text-align: right;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><span class="tx-direction in">⬇ IN</span></td>
-                        <td><span class="tx-id">TRX-342</span></td>
-                        <td><span class="tx-date">Jan 6, 2026</span></td>
-                        <td><span class="tx-Contact">John Smith</span></td>
-                        <td><span class="tx-contact-id">CLIENT-4523</span></td>
-                        <td><span class="tx-reference-id">PO-2026-0142</span></td>
-                        <td><span class="tx-amount in">$7,200</span></td>
-                        <td><span class="tx-date">Jane Doe</span></td>
-                        <td>
-                            <div class="tx-actions">
-                                <button class="action-btn" title="View transaction details" onclick="window.location.href='/transaction-detail?id=TRX-342'"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn" title="View receipt" onclick="window.location.href='/receipt-detail?id=TRX-342'"><i class="fas fa-file-alt"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tx-direction out">⬆ OUT</span></td>
-                        <td><span class="tx-id">TRX-339</span></td>
-                        <td><span class="tx-date">Jan 4, 2026</span></td>
-                        <td><span class="tx-Contact">Emily Davis</span></td>
-                        <td><span class="tx-contact-id">EMP-ED-789</span></td>
-                        <td><span class="tx-reference-id">EXP-2026-045</span></td>
-                        <td><span class="tx-amount out">$2,350</span></td>
-                        <td><span class="tx-date">John Doe</span></td>
-                        <td>
-                            <div class="tx-actions">
-                                <button class="action-btn" title="View transaction details" onclick="window.location.href='/transaction-detail?id=TRX-339'"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn" title="View receipt" onclick="window.location.href='/receipt-detail?id=TRX-339'"><i class="fas fa-file-alt"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tx-direction in">⬇ IN</span></td>
-                        <td><span class="tx-id">TRX-335</span></td>
-                        <td><span class="tx-date">Jan 3, 2026</span></td>
-                        <td><span class="tx-Contact">Michael Brown</span></td>
-                        <td><span class="tx-contact-id"></span></td>
-                        <td><span class="tx-reference-id">REF-2026-078</span></td>
-                        <td><span class="tx-amount in">$4,580</span></td>
-                        <td><span class="tx-date">Jane Doe</span></td>
-                        <td>
-                            <div class="tx-actions">
-                                <button class="action-btn" title="View transaction details" onclick="window.location.href='/transaction-detail?id=TRX-335'"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn" title="View receipt" onclick="window.location.href='/receipt-detail?id=TRX-335'"><i class="fas fa-file-alt"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tx-direction out">⬆ OUT</span></td>
-                        <td><span class="tx-id">TRX-332</span></td>
-                        <td><span class="tx-date">Jan 2, 2026</span></td>
-                        <td><span class="tx-Contact">Lisa Wilson</span></td>
-                        <td><span class="tx-contact-id">CLI-LW-2025</span></td>
-                        <td><span class="tx-reference-id"></span></td>
-                        <td><span class="tx-amount out">$1,890</span></td>
-                        <td><span class="tx-date">John Doe</span></td>
-                        <td>
-                            <div class="tx-actions">
-                                <button class="action-btn" title="View transaction details" onclick="window.location.href='/transaction-detail?id=TRX-332'"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn" title="View receipt" onclick="window.location.href='/receipt-detail?id=TRX-332'"><i class="fas fa-file-alt"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="tx-direction in">⬇ IN</span></td>
-                        <td><span class="tx-id">TRX-328</span></td>
-                        <td><span class="tx-date">Jan 1, 2026</span></td>
-                        <td><span class="tx-Contact">David Lee</span></td>
-                        <td><span class="tx-contact-id"></span></td>
-                        <td><span class="tx-reference-id">INV-2026-001</span></td>
-                        <td><span class="tx-amount in">$3,250</span></td>
-                        <td><span class="tx-date">Jane Doe</span></td>
-                        <td>
-                            <div class="tx-actions">
-                                <button class="action-btn" title="View transaction details" onclick="window.location.href='/transaction-detail?id=TRX-328'"><i class="fas fa-eye"></i></button>
-                                <button class="action-btn" title="View receipt" onclick="window.location.href='/receipt-detail?id=TRX-328'"><i class="fas fa-file-alt"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAllHeader"></th>
+                            <th>Type</th>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Contact</th>
+                            <th>Contact ID</th>
+                            <th>Reference ID</th>
+                            <th>Amount</th>
+                            <th>Created by</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox"></td>
+                            <td><span class="tx-direction in">⬇ IN</span></td>
+                            <td><span class="tx-id">TRX-342</span></td>
+                            <td><span class="tx-date">Jan 6, 2026</span></td>
+                            <td><span class="tx-Contact">John Smith</span></td>
+                            <td><span class="tx-contact-id">CLIENT-4523</span></td>
+                            <td><span class="tx-reference-id">PO-2026-0142</span></td>
+                            <td><span class="tx-amount in">$7,200</span></td>
+                            <td><span class="tx-date">Jane Doe</span></td>
+                            <td>
+                                <div class="tx-actions">
+                                    <button class="action-btn" title="View transaction details" onclick="window.location.href='/transaction-detail?id=TRX-342'"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="View receipt" onclick="window.location.href='/receipt-detail?id=TRX-342'"><i class="fas fa-file-alt"></i></button>
+                                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox"></td>
+                            <td><span class="tx-direction out">⬆ OUT</span></td>
+                            <td><span class="tx-id">TRX-339</span></td>
+                            <td><span class="tx-date">Jan 4, 2026</span></td>
+                            <td><span class="tx-Contact">Emily Davis</span></td>
+                            <td><span class="tx-contact-id">EMP-ED-789</span></td>
+                            <td><span class="tx-reference-id">EXP-2026-045</span></td>
+                            <td><span class="tx-amount out">$2,350</span></td>
+                            <td><span class="tx-date">John Doe</span></td>
+                            <td>
+                                <div class="tx-actions">
+                                    <button class="action-btn" title="View transaction details" onclick="window.location.href='/transaction-detail?id=TRX-339'"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="View receipt" onclick="window.location.href='/receipt-detail?id=TRX-339'"><i class="fas fa-file-alt"></i></button>
+                                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox"></td>
+                            <td><span class="tx-direction in">⬇ IN</span></td>
+                            <td><span class="tx-id">TRX-335</span></td>
+                            <td><span class="tx-date">Jan 3, 2026</span></td>
+                            <td><span class="tx-Contact">Michael Brown</span></td>
+                            <td><span class="tx-contact-id"></span></td>
+                            <td><span class="tx-reference-id">REF-2026-078</span></td>
+                            <td><span class="tx-amount in">$4,580</span></td>
+                            <td><span class="tx-date">Jane Doe</span></td>
+                            <td>
+                                <div class="tx-actions">
+                                    <button class="action-btn" title="View transaction details" onclick="window.location.href='/transaction-detail?id=TRX-335'"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="View receipt" onclick="window.location.href='/receipt-detail?id=TRX-335'"><i class="fas fa-file-alt"></i></button>
+                                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox"></td>
+                            <td><span class="tx-direction out">⬆ OUT</span></td>
+                            <td><span class="tx-id">TRX-332</span></td>
+                            <td><span class="tx-date">Jan 2, 2026</span></td>
+                            <td><span class="tx-Contact">Lisa Wilson</span></td>
+                            <td><span class="tx-contact-id">CLI-LW-2025</span></td>
+                            <td><span class="tx-reference-id"></span></td>
+                            <td><span class="tx-amount out">$1,890</span></td>
+                            <td><span class="tx-date">John Doe</span></td>
+                            <td>
+                                <div class="tx-actions">
+                                    <button class="action-btn" title="View transaction details" onclick="window.location.href='/transaction-detail?id=TRX-332'"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="View receipt" onclick="window.location.href='/receipt-detail?id=TRX-332'"><i class="fas fa-file-alt"></i></button>
+                                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox"></td>
+                            <td><span class="tx-direction in">⬇ IN</span></td>
+                            <td><span class="tx-id">TRX-328</span></td>
+                            <td><span class="tx-date">Jan 1, 2026</span></td>
+                            <td><span class="tx-Contact">David Lee</span></td>
+                            <td><span class="tx-contact-id"></span></td>
+                            <td><span class="tx-reference-id">INV-2026-001</span></td>
+                            <td><span class="tx-amount in">$3,250</span></td>
+                            <td><span class="tx-date">Jane Doe</span></td>
+                            <td>
+                                <div class="tx-actions">
+                                    <button class="action-btn" title="View transaction details" onclick="window.location.href='/transaction-detail?id=TRX-328'"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="View receipt" onclick="window.location.href='/receipt-detail?id=TRX-328'"><i class="fas fa-file-alt"></i></button>
+                                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="pagination">
+                <div class="pagination-info">
+                    Showing 1-5 of 87
+                    <select id="perPageSelect" style="margin-left: 8px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border);">
+                        <option value="10">10 per page</option>
+                        <option value="25">25 per page</option>
+                        <option value="50">50 per page</option>
+                    </select>
+                </div>
+                <div class="pagination-controls">
+                    <button class="pagination-btn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">...</button>
+                    <button class="pagination-btn">9</button>
+                    <button class="pagination-btn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
         </div>
         </main>
     </div>
