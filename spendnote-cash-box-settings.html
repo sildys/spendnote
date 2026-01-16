@@ -747,6 +747,70 @@
             margin-left: 8px;
         }
 
+        /* TEAM ACCESS - Compact */
+        .team-access-compact {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .team-avatars {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .team-avatar-small {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--surface);
+            box-shadow: 0 0 0 1px var(--border);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .team-avatar-small:hover {
+            transform: scale(1.1);
+            z-index: 1;
+        }
+
+        .team-count {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        .team-manage-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .team-manage-link:hover {
+            border-color: var(--active);
+            color: var(--active);
+        }
+
+        .team-manage-link i {
+            font-size: 12px;
+        }
+
         /* DANGER ZONE */
         .danger-zone {
             background: rgba(239, 68, 68, 0.08);
@@ -873,6 +937,20 @@
         <div class="page-header">
             <h1 class="page-title">Cash Box Settings</h1>
             <p class="page-subtitle">Configure Main Office (CR-001)</p>
+        </div>
+
+        <!-- TEAM ACCESS - Compact -->
+        <div class="team-access-compact" style="margin-bottom: 24px;">
+            <div class="team-avatars">
+                <img src="https://i.pravatar.cc/150?img=12" alt="John Doe" class="team-avatar-small" title="John Doe (Owner)">
+                <img src="https://i.pravatar.cc/150?img=5" alt="Jane Smith" class="team-avatar-small" title="Jane Smith (Admin)">
+                <img src="https://i.pravatar.cc/150?img=8" alt="Mike Johnson" class="team-avatar-small" title="Mike Johnson (Viewer)">
+                <div class="team-count">3 members</div>
+            </div>
+            <a href="spendnote-team-management.html" class="team-manage-link">
+                <i class="fas fa-users"></i>
+                Manage Team
+            </a>
         </div>
 
         <!-- SETTINGS SECTIONS -->
