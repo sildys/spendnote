@@ -736,31 +736,34 @@
             font-size: 16px;
             font-weight: 800;
             letter-spacing: -0.01em;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
         }
 
-        .setting-item {
+        /* RECEIPT TOGGLES */
+        .receipt-toggles {
+            display: flex;
+            flex-direction: column;
+            background: var(--surface-elevated);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .receipt-toggle-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
+            padding: 14px 18px;
             border-bottom: 1px solid var(--border);
         }
 
-        .setting-item:last-child {
+        .receipt-toggle-item:last-child {
             border-bottom: none;
         }
 
-        .setting-label {
+        .receipt-toggle-item .toggle-label {
             font-size: 14px;
             font-weight: 600;
             color: var(--text);
-        }
-
-        .setting-description {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
         }
 
         /* TEMPLATE DROPDOWN */
@@ -1073,87 +1076,57 @@
             <!-- DISPLAY OPTIONS SIDEBAR -->
             <div class="settings-sidebar">
                 <div class="settings-card">
-                    <h3 class="settings-card-title">Display Options</h3>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Choose which fields to show on the receipt</p>
+                    <h3 class="settings-card-title">Fields to show</h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Amount, Date, and Payer/Receiver names are always shown</p>
                     
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Logo</div>
+                    <div class="receipt-toggles">
+                        <div class="receipt-toggle-item">
+                            <span class="toggle-label">Show Logo</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked data-field="logo">
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleReceiptField('logo', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
 
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Company Info</div>
+                        <div class="receipt-toggle-item">
+                            <span class="toggle-label">Show Addresses</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked data-field="addresses">
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleReceiptField('company', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
 
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Address</div>
+                        <div class="receipt-toggle-item">
+                            <span class="toggle-label">Show Tracking Details</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked data-field="tracking">
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleReceiptField('address', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
 
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Contact Details</div>
+                        <div class="receipt-toggle-item">
+                            <span class="toggle-label">Show Additional Info</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked data-field="additional">
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleReceiptField('Contact', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
 
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Transaction ID</div>
+                        <div class="receipt-toggle-item">
+                            <span class="toggle-label">Show Note</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked data-field="note">
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleReceiptField('transaction-id', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
 
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Note</div>
+                        <div class="receipt-toggle-item">
+                            <span class="toggle-label">Show Signatures</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked data-field="signatures">
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleReceiptField('note', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Signatures</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleReceiptField('signatures', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Show Date/Time</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked onchange="toggleReceiptField('datetime', this.checked)">
-                            <span class="toggle-slider"></span>
-                        </label>
                     </div>
                 </div>
             </div>
@@ -1166,13 +1139,11 @@
         // Track current display options
         let displayOptions = {
             logo: '1',
-            company: '1',
-            address: '1',
-            Contact: '1',
-            'transaction-id': '1',
+            addresses: '1',
+            tracking: '1',
+            additional: '1',
             note: '1',
-            signatures: '1',
-            datetime: '1'
+            signatures: '1'
         };
 
         // Track current format
@@ -1217,14 +1188,18 @@
             reloadIframe();
         }
 
-        // Toggle receipt fields visibility
-        function toggleReceiptField(field, show) {
-            // Update display options
-            displayOptions[field] = show ? '1' : '0';
-            
-            // Reload iframe with new settings
-            reloadIframe();
-        }
+        // Toggle switches for receipt fields - update iframe in real-time
+        document.querySelectorAll('.receipt-toggles input[type="checkbox"]').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const field = this.dataset.field;
+                if (field) {
+                    // Update display options
+                    displayOptions[field] = this.checked ? '1' : '0';
+                    // Reload iframe with new settings
+                    reloadIframe();
+                }
+            });
+        });
 
         // Initialize iframe on page load
         window.addEventListener('DOMContentLoaded', function() {
