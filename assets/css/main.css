@@ -368,7 +368,7 @@ label {
    9. FOOTER (UNIFIED)
    ======================================== */
 .app-footer {
-    background: #3a3a3a;
+    background: #4a4a4a;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding: var(--space-xl) 0;
     margin-top: auto;
@@ -427,11 +427,11 @@ label {
     align-items: flex-start;
     gap: var(--space-sm);
     padding: var(--space-sm) var(--space-md);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-md);
     font-size: var(--font-xs);
     color: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     max-width: 350px;
 }
 
