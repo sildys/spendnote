@@ -9,8 +9,11 @@
     <title>FAQ - SpendNote</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/main.css?v=2">
-    <style>/* SCROLL PROGRESS BAR */
+    <link rel="stylesheet" href="assets/css/main.css?v=20260117">
+    <style>
+        /* ===== FAQ PAGE SPECIFIC STYLES ===== */
+        
+        /* SCROLL PROGRESS BAR */
         .scroll-progress {
             position: fixed;
             top: 0;
@@ -37,61 +40,6 @@
         *:focus {
             outline: 3px solid var(--active);
             outline-offset: 2px;
-        }
-        
-        body { 
-            font-family: 'Inter', -apple-system, system-ui, sans-serif; 
-            background: var(--bg);
-            color: var(--text); 
-            line-height: 1.6; 
-            font-size: 15px;
-            -webkit-font-smoothing: antialiased;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: clip;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            transition: transform 0.2s;
-        }
-
-        .logo:hover { transform: scale(1.05); }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: #000000;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-            position: relative;
-        }
-
-        .nav-links a:hover { color: var(--active); }
-
-        .nav-links a.active { color: var(--active); }
-        .nav-links a.active::after {
-            content: '';
-            position: absolute;
-            left: 0; right: 0; bottom: -10px;
-            height: 3px;
-            border-radius: 999px;
-            background: var(--active);
-        }
-
-        .nav-links .btn-primary {
-            color: white !important;
         }
 
         /* HERO */
@@ -742,53 +690,6 @@
             color: var(--text-muted);
         }
 
-        /* FOOTER */
-        footer {
-            background: var(--surface);
-            padding: 3rem 2rem 2rem;
-            border-top: 1px solid var(--border);
-            margin-top: auto;
-        }
-
-        .footer-brand p {
-            color: var(--text-muted);
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        .footer-links h4 {
-            margin-bottom: 1rem;
-            font-weight: 800;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .footer-links ul { list-style: none; }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            display: block;
-            padding: 0.4rem 0;
-            transition: color 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .footer-links a:hover { color: var(--primary); }
-
-        .footer-bottom {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
         /* RESPONSIVE */
         @media (max-width: 1024px) {
             .faq-container {
@@ -845,7 +746,7 @@
                         </linearGradient>
                     </defs>
                 </svg>
-                <span style="font-weight: 900; font-size: 1.5rem; color: #000000; letter-spacing: -0.02em;">SpendNote</span>
+                <span>SpendNote</span>
             </a>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
