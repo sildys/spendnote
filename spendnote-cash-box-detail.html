@@ -1000,6 +1000,14 @@
             
             // Update nav menu colors
             updateMenuColors(colorData.hex);
+            
+            // Update all View links to pass the color parameter
+            document.querySelectorAll('.action-btn').forEach(link => {
+                const currentHref = link.getAttribute('href');
+                if (currentHref && !currentHref.includes('color=')) {
+                    link.setAttribute('href', currentHref + '?color=' + color);
+                }
+            });
         });
     </script>
 </body>
