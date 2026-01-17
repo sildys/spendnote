@@ -195,11 +195,57 @@
         }
         .register-card.active::before { opacity: 0.06; }
 
+        /* UNIFIED CARD STRUCTURE - SAME AS CASH BOX LIST */
+        .register-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .register-name {
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            margin-bottom: 4px;
+            position: relative;
+            padding-left: 16px;
+            color: var(--text);
+        }
+
+        .register-name::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--card-color, var(--active));
+            box-shadow: 0 0 0 2px rgba(var(--card-rgb, var(--active-rgb)), 0.14);
+        }
+
+        /* Support for icon color classes */
+        .register-card .register-name::before {
+            background: var(--card-color, var(--active));
+        }
+        .register-card .register-icon.green { color: #059669; }
+        .register-card .register-icon.orange { color: #f59e0b; }
+        .register-card .register-icon.blue { color: #3b82f6; }
+        .register-card .register-icon.purple { color: #8b5cf6; }
+        .register-card .register-icon.red { color: #ef4444; }
+
+        /* OLD STRUCTURE SUPPORT (deprecated) */
         .register-top {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 16px;
+        }
+        .register-info {
+            flex: 1;
+            min-width: 0;
         }
         .register-info h3 {
             font-size: 16px;
@@ -2646,21 +2692,20 @@ tr:hover [data-category-tag] {
                         <div class="swiper-slide">
                             <div class="register-card active" data-name="Main Office" data-color="#059669" data-rgb="5, 150, 105" 
                                  role="button" tabindex="0">
-                                <div class="register-top">
-  <div class="register-header-left">
-    <div class="register-icon small" style="width: 72px; height: 72px; font-size: 32px; border-radius: 18px; border-width: 2px; background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(5, 150, 105, 0.05)); color: #059669; border-color: rgba(5, 150, 105, 0.15);"><i class="fas fa-building"></i></div>
-    <div class="register-info"><h3>Main Office</h3>
-                                        <div class="register-id">CR-001</div></div>
-  </div>
-  <div class="register-actions">
-    <a href="spendnote-cash-box-settings.html" class="register-kebab" aria-label="Cash Box settings" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: center;">
-      <i class="fas fa-ellipsis-h"></i>
-    </a>
-  </div>
-</div>
+                                <div class="register-header">
+                                    <div class="register-icon green">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                    <div class="register-info">
+                                        <div class="register-name">Main Office</div>
+                                        <div class="register-id">CR-001</div>
+                                    </div>
+                                </div>
+                                
                                 <div class="register-balance">
                                     $18,500
                                 </div>
+                                
                                 <div class="register-stats">
                                     <div class="stat-item">
                                         <div class="tooltip">Average: $2,400/day this week</div>
