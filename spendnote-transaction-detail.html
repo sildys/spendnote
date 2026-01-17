@@ -1253,15 +1253,24 @@
             }
         }
 
-        // Apply color from URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const color = urlParams.get('color') || 'green';
-        const colorData = colorMap[color] || colorMap['green'];
-        document.documentElement.style.setProperty('--active', colorData.hex);
-        document.documentElement.style.setProperty('--active-rgb', colorData.rgb);
+        // This transaction belongs to "Main Office" Cash Box (green)
+        // In production, this would come from the transaction data
+        const transactionCashBox = {
+            name: 'Main Office',
+            color: 'green',
+            colorData: colorMap['green']
+        };
+        
+        // Apply the Cash Box color that this transaction belongs to
+        document.documentElement.style.setProperty('--active', transactionCashBox.colorData.hex);
+        document.documentElement.style.setProperty('--active-rgb', transactionCashBox.colorData.rgb);
         
         // Update nav menu colors
-        updateMenuColors(colorData.hex);
+        updateMenuColors(transactionCashBox.colorData.hex);
+        
+        // Restore the Cash Box selection in localStorage to match this transaction's Cash Box
+        localStorage.setItem('activeCashBoxColor', transactionCashBox.colorData.hex);
+        localStorage.setItem('activeCashBoxRgb', transactionCashBox.colorData.rgb);
     </script>
     <script src="assets/js/main.js"></script>
 </body>
