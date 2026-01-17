@@ -3,6 +3,11 @@
    Shared styles for app pages (dashboard, etc.)
    ============================================ */
 
+/* SCROLLBAR FIX - Prevent layout shift when scrollbar appears */
+html {
+    scrollbar-gutter: stable;
+}
+
 /* APP-SPECIFIC OVERRIDES */
 body {
     font-size: 12px; /* App uses smaller base font */
