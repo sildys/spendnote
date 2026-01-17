@@ -74,7 +74,6 @@ input, select, textarea, .form-control {
 /* FIX: all-pages — navigation overflow */
 .nav-links, .nav-container, .site-nav {
   max-width: 100%;
-  overflow-x: visible;
 }
 
 /* === FIX SUMMARY ===
