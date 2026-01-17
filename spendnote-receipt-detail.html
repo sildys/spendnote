@@ -1276,13 +1276,30 @@
                 <span>SpendNote</span>
             </a>
             <ul class="nav-links">
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="spendnote-cash-box-list.html">Cash Boxes</a></li>
-                <li><a href="spendnote-transaction-history.html">Transactions</a></li>
-                <li><a href="spendnote-partner-list.html">Partners</a></li>
-                <li><a href="spendnote-receipt-list.html" class="active">Receipts</a></li>
-                <li><a href="spendnote-user-settings.html">Settings</a></li>
-                <li><a href="spendnote-login.html" class="btn btn-secondary">Log out</a></li>
+                <li><a href="dashboard.html" class="nav-cash-item">Dashboard</a></li>
+                <li><a href="spendnote-cash-box-list.html" class="nav-cash-item" id="navCashBoxes">Cash Boxes</a></li>
+                <li><a href="spendnote-transaction-history.html" class="nav-cash-item" id="navTransactions">Transactions</a></li>
+                <li><a href="spendnote-contact-list.html">Contacts</a></li>
+                <li><button class="nav-new-transaction-btn" id="addTransactionBtn"><i class="fas fa-plus"></i> New Transaction</button></li>
+                <li class="user-avatar-wrapper" id="userAvatarBtn">
+                    <div class="user-avatar">
+                        <img src="https://i.pravatar.cc/150?img=12" alt="User">
+                    </div>
+                    <span class="user-name">John</span>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="user-dropdown-menu">
+                            <a href="spendnote-user-settings.html" class="user-dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <div class="user-dropdown-divider"></div>
+                            <a href="index.html" class="user-dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Log out
+                            </a>
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>
