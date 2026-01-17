@@ -382,15 +382,15 @@ label {
 
 .app-footer-top {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-bottom: var(--space-xl);
-    gap: var(--space-lg);
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-lg);
+    gap: var(--space-xl);
 }
 
 .app-footer-brand {
-    max-width: 400px;
+    max-width: 450px;
+    flex: 1;
 }
 
 .app-footer-brand-logo {
@@ -419,12 +419,12 @@ label {
     color: var(--text-muted);
     line-height: 1.6;
     margin-bottom: var(--space-md);
+    max-width: 100%;
 }
 
 .app-footer-brand-disclaimer {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
     gap: var(--space-sm);
     padding: var(--space-sm) var(--space-md);
     background: rgba(var(--active-rgb), 0.05);
@@ -432,8 +432,6 @@ label {
     font-size: var(--font-xs);
     color: var(--text-muted);
     border: 1px solid rgba(var(--active-rgb), 0.1);
-    max-width: 400px;
-    margin: 0 auto;
 }
 
 .app-footer-brand-disclaimer i {
@@ -443,9 +441,8 @@ label {
 
 .app-footer-links-simple {
     display: flex;
-    gap: var(--space-xl);
-    align-items: center;
-    justify-content: center;
+    gap: var(--space-lg);
+    align-items: flex-start;
 }
 
 .app-footer-links-simple a {
