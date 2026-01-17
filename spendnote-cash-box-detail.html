@@ -90,43 +90,37 @@
             gap: 8px;
         }
 
-        /* STATS GRID - Dashboard Style */
+        /* STATS GRID - Simple Style */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .stat-card {
             background: var(--surface);
             border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 16px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
 
         .stat-header {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .stat-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 14px;
             flex-shrink: 0;
         }
 
@@ -140,33 +134,15 @@
             color: var(--orange);
         }
 
-        .stat-trend-mini {
-            font-size: 12px;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 6px;
-            margin-left: auto;
-        }
-
-        .stat-trend-mini.up {
-            color: var(--primary);
-            background: rgba(5, 150, 105, 0.1);
-        }
-
-        .stat-trend-mini.down {
-            color: var(--orange);
-            background: rgba(245, 158, 11, 0.1);
-        }
-
         .stat-label {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .stat-value {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 900;
             letter-spacing: -0.02em;
             color: var(--text);
@@ -693,7 +669,6 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon in"><i class="fas fa-arrow-down"></i></div>
-                    <span class="stat-trend-mini up">+15%</span>
                 </div>
                 <div class="stat-label">Today IN</div>
                 <div class="stat-value in">$7,200</div>
@@ -701,7 +676,6 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon out"><i class="fas fa-arrow-up"></i></div>
-                    <span class="stat-trend-mini down">-5%</span>
                 </div>
                 <div class="stat-label">Today OUT</div>
                 <div class="stat-value out">$2,800</div>
@@ -709,7 +683,6 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon in"><i class="fas fa-calendar-week"></i></div>
-                    <span class="stat-trend-mini up">+8%</span>
                 </div>
                 <div class="stat-label">Week IN</div>
                 <div class="stat-value in">$45,200</div>
@@ -717,7 +690,6 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon out"><i class="fas fa-calendar-week"></i></div>
-                    <span class="stat-trend-mini down">-3%</span>
                 </div>
                 <div class="stat-label">Week OUT</div>
                 <div class="stat-value out">$28,500</div>
