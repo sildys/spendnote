@@ -219,33 +219,27 @@
         .register-card {
             background: var(--surface);
             border: 2px solid var(--border);
-            border-left: 4px solid transparent;
             border-radius: 20px;
             padding: 20px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: box-shadow 0.2s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 20px var(--shadow);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
         .register-card::before{
-            /* Removed gradient wash to keep cards calm */
             content: none;
         }
         .register-card:hover {
-            border-right-color: rgba(var(--card-rgb, var(--active-rgb)), 0.4);
-            border-top-color: rgba(var(--card-rgb, var(--active-rgb)), 0.4);
-            border-bottom-color: rgba(var(--card-rgb, var(--active-rgb)), 0.4);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(var(--card-rgb, var(--active-rgb)), 0.12);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         }
         .register-card.active {
-            border-left-color: var(--card-color, var(--active));
-            border-right-color: var(--card-color, var(--active));
-            border-top-color: var(--card-color, var(--active));
-            border-bottom-color: var(--card-color, var(--active));
+            border: 2px solid var(--card-color, var(--active));
             background: linear-gradient(135deg, #ffffff 0%, rgba(var(--card-rgb, var(--active-rgb)), 0.04) 100%);
-            box-shadow: 0 8px 32px rgba(var(--card-rgb, var(--active-rgb)), 0.15);
+            box-shadow: 0 4px 16px rgba(var(--card-rgb, var(--active-rgb)), 0.2);
+        }
+        .register-card.active:hover {
+            box-shadow: 0 8px 24px rgba(var(--card-rgb, var(--active-rgb)), 0.25);
         }
         .register-card.active::before { opacity: 0.06; }
 
