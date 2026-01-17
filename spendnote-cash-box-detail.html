@@ -937,11 +937,17 @@
                 item.style.color = color;
             });
             
-            // Update New Transaction button background color
+            // Update Contacts link color too
+            document.querySelectorAll('.nav-links a:not(.nav-cash-item):not(.nav-new-transaction-btn)').forEach(item => {
+                item.style.color = color;
+            });
+            
+            // Update New Transaction button background color and white text
             const newTransactionBtn = document.querySelector('.nav-new-transaction-btn');
             if (newTransactionBtn) {
                 newTransactionBtn.style.background = color;
                 newTransactionBtn.style.borderColor = color;
+                newTransactionBtn.style.color = 'white';
             }
         }
 
