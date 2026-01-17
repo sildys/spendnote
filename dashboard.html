@@ -794,20 +794,20 @@
         }
         .table-grid:hover .row-tooltip { opacity: 1; }
         .table-header {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            background: rgba(var(--cashbox-rgb, var(--active-rgb)), 0.08); /* ✅ Dinamikus szín */
-            border-bottom: 2px solid rgba(var(--cashbox-rgb, var(--active-rgb)), 0.15);
+            font-size: 11px !important;
+            color: var(--text-muted) !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.06em !important;
+            background: rgba(var(--cashbox-rgb, var(--active-rgb)), 0.08) !important; /* ✅ Dinamikus szín */
+            border-bottom: 2px solid rgba(var(--cashbox-rgb, var(--active-rgb)), 0.15) !important;
             position: sticky;
             top: 0;
             z-index: 10;
-            padding: 10px 12px; /* ✅ Alacsonyabb fejléc */
+            padding: 8px 16px !important; /* ✅✅ Alacsonyabb fejléc - KÉNYSZERÍTETT */
         }
         .table-header:hover { 
-            background: rgba(var(--cashbox-rgb, var(--active-rgb)), 0.12);
+            background: rgba(var(--cashbox-rgb, var(--active-rgb)), 0.12) !important;
         }
 
         .row-checkbox {
@@ -2944,7 +2944,7 @@ tr:hover [data-category-tag] {
                 </div>
 
                 <div class="table-wrapper" id="tableWrapper">
-                    <div class="table-grid table-header">
+                    <div class="table-grid table-header" id="transactionTableHeader" style="--cashbox-rgb: 5, 150, 105;">
                         <div>Type</div>
                         <div>Date & Time</div>
                         <div>Cash Box</div>
@@ -4005,6 +4005,8 @@ tr:hover [data-category-tag] {
                     
                     // Update menu item colors
                     updateMenuColors(color);
+                    // Update table header color
+                    updateTableHeaderColor(rgb);
                 });
             });
             
@@ -4050,6 +4052,14 @@ tr:hover [data-category-tag] {
             }
         }
 
+        // Update table header color dynamically
+        function updateTableHeaderColor(rgb) {
+            const tableHeader = document.getElementById('transactionTableHeader');
+            if (tableHeader) {
+                tableHeader.style.setProperty('--cashbox-rgb', rgb);
+            }
+        }
+
         // ========================================
         // SWIPER INITIALIZATION
         // ========================================
@@ -4089,6 +4099,8 @@ tr:hover [data-category-tag] {
             document.documentElement.style.setProperty('--active-rgb', activeCard.dataset.rgb);
             // Set initial menu colors
             updateMenuColors(activeCard.dataset.color);
+            // Update table header color
+            updateTableHeaderColor(activeCard.dataset.rgb);
         }
 
         // ========================================
