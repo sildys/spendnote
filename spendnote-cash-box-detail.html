@@ -373,6 +373,35 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        th:hover {
+            color: var(--text);
+            background: rgba(var(--active-rgb), 0.05);
+        }
+
+        th.sortable::after {
+            content: '\f0dc';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-left: 6px;
+            opacity: 0.3;
+            font-size: 10px;
+        }
+
+        th.sortable.asc::after {
+            content: '\f0de';
+            opacity: 1;
+            color: var(--active);
+        }
+
+        th.sortable.desc::after {
+            content: '\f0dd';
+            opacity: 1;
+            color: var(--active);
         }
 
         tbody tr {
@@ -437,9 +466,10 @@
         .action-btn {
             width: 32px;
             height: 32px;
-            border-radius: 6px;
+            border-radius: 8px;
             border: none;
-            background: transparent;
+            background: var(--surface);
+            border: 1px solid var(--border);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -450,8 +480,11 @@
         }
 
         .action-btn:hover {
-            background: var(--bg);
-            color: var(--text);
+            background: var(--active);
+            color: white;
+            border-color: var(--active);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(var(--active-rgb), 0.3);
         }
 
         /* PAGINATION */
@@ -727,13 +760,13 @@
                         <label class="filter-label"><i class="fas fa-hashtag"></i> Reference ID</label>
                         <input type="text" class="filter-input" placeholder="e.g., PO-2026-0142">
                     </div>
-                    <div class="filter-group">
-                        <label class="filter-label"><i class="fas fa-calendar"></i> Date From</label>
-                        <input type="date" class="filter-input">
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label"><i class="fas fa-calendar"></i> Date To</label>
-                        <input type="date" class="filter-input">
+                    <div class="filter-group" style="grid-column: span 2;">
+                        <label class="filter-label"><i class="fas fa-calendar"></i> Date Range</label>
+                        <div class="amount-range">
+                            <input type="date" class="filter-input" placeholder="From">
+                            <span>–</span>
+                            <input type="date" class="filter-input" placeholder="To">
+                        </div>
                     </div>
                     <div class="filter-group">
                         <label class="filter-label"><i class="fas fa-dollar-sign"></i> Amount Range</label>
@@ -761,12 +794,12 @@
                     <thead>
                         <tr>
                             <th style="width: 40px;"></th>
-                            <th>Type</th>
-                            <th>ID</th>
-                            <th>Date</th>
-                            <th>Contact</th>
-                            <th>Amount</th>
-                            <th>Created by</th>
+                            <th class="sortable">Type</th>
+                            <th class="sortable">ID</th>
+                            <th class="sortable">Date</th>
+                            <th class="sortable">Contact</th>
+                            <th class="sortable">Amount</th>
+                            <th class="sortable">Created by</th>
                             <th style="width: 40px;"></th>
                         </tr>
                     </thead>
