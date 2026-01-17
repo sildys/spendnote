@@ -1059,103 +1059,6 @@
 
 /* ===== Imported from landing (nav + footer) ===== */
 /* NAV */
-        .site-nav {
-            position: sticky;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .site-nav .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 18px 32px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .site-nav .logo {
-            display: flex;
-            align-items: center;
-            gap: 0;
-            text-decoration: none;
-            transition: transform 0.2s;
-        }
-
-        .site-nav .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .site-nav .logo img {
-            height: 44px;
-            width: auto;
-        }
-
-        .site-nav .nav-links {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-            list-style: none;
-        }
-
-        .site-nav .nav-links a {
-            color: #000000;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-            transition: color 0.2s;
-        }
-
-        .site-nav .nav-links a:hover {
-            color: var(--active);
-        }
-
-        .site-nav .btn {
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-block;
-            font-size: 15px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .site-nav .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white !important;
-            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
-        }
-
-        .site-nav .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
-            color: white !important;
-        }
-
-        .site-nav .btn-secondary {
-            background: transparent;
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        .site-nav .btn-secondary:hover {
-            background: rgba(5, 150, 105, 0.05);
-            border-color: var(--primary);
-        }
-
-        .site-nav .btn-large {
-            padding: 16px 32px;
-            font-size: 17px;
-        }
-
-        
 /* BACK TO TOP BUTTON */
         .back-to-top {
             position: fixed;
@@ -1193,26 +1096,6 @@
 
 /* FOOTER - now using main.css styles */
         
-
-        .site-nav .nav-links a.active {
-            color: var(--active);
-        }
-
-        .site-nav .nav-links a{
-            position: relative;
-        }
-        .site-nav .nav-links a.active::after{
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: -10px;
-            height: 3px;
-            border-radius: 999px;
-            background: var(--active);
-            opacity: 0.9;
-        }
-
 /* ===== End imported ===== */
 
         /* MAIN WRAPPER - for footer positioning */
