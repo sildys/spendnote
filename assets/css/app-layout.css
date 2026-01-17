@@ -145,7 +145,7 @@ body {
 
 /* APP CONTAINER OVERRIDE (if needed) */
 .app-container {
-    padding: 28px 3rem; /* 3rem = 48px horizontal - SAME as nav-container */
+    padding: 20px 3rem; /* Reduced from 28px - more compact */
     max-width: 1400px;
     margin: 0 auto;
     flex: 1;
@@ -153,17 +153,17 @@ body {
 }
 
 .main-content {
-    padding-top: 28px;
+    padding-top: 20px; /* Reduced from 28px */
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px; /* Reduced from 20px */
 }
 
 /* ============================================
    PAGE HEADER - Modern "Quiet Header" Style
    ============================================ */
 .page-header {
-    margin-bottom: 24px; /* Reduced from 32px - more compact */
+    margin-bottom: 16px; /* Reduced from 24px - more compact */
 }
 
 .page-title-group {
