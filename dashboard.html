@@ -524,7 +524,7 @@
             width: 100%;
         }
         .transactions-header {
-            padding: 24px 32px;
+            padding: 16px 32px;
             border-bottom: 1px solid rgba(var(--cashbox-rgb, var(--active-rgb)), 0.12);
             background: transparent;
         }
@@ -2929,7 +2929,7 @@ tr:hover [data-category-tag] {
             </div>
 
             <div class="transactions-card">
-                <div class="transactions-header">
+                <div class="transactions-header" id="transactionsHeader" style="--cashbox-rgb: 5, 150, 105;">
                     <div class="header-top">
                         <h2 class="transactions-title">Latest Transactions</h2>
                         <a href="spendnote-transaction-history.html" class="view-all-btn">
@@ -4053,6 +4053,10 @@ tr:hover [data-category-tag] {
             const tableHeader = document.getElementById('transactionTableHeader');
             if (tableHeader) {
                 tableHeader.style.setProperty('--cashbox-rgb', rgb);
+            }
+            const transactionsHeader = document.getElementById('transactionsHeader');
+            if (transactionsHeader) {
+                transactionsHeader.style.setProperty('--cashbox-rgb', rgb);
             }
         }
 
