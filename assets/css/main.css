@@ -166,8 +166,8 @@ body {
     list-style: none;
 }
 
-.site-nav .nav-links a,
-.site-nav .nav-links button {
+.site-nav .nav-links a:not(.btn),
+.site-nav .nav-links button:not(.btn) {
     color: var(--text);
     text-decoration: none;
     font-weight: 600;
