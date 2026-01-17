@@ -1218,6 +1218,50 @@
             currentZoom = 0.7;
             updateZoom();
         }
+
+        // ========================================
+        // DYNAMIC COLOR SYSTEM
+        // ========================================
+        
+        // Color mapping
+        const colorMap = {
+            'green': { hex: '#059669', rgb: '5, 150, 105' },
+            'orange': { hex: '#f59e0b', rgb: '245, 158, 11' },
+            'blue': { hex: '#3b82f6', rgb: '59, 130, 246' },
+            'purple': { hex: '#8b5cf6', rgb: '139, 92, 246' },
+            'red': { hex: '#ef4444', rgb: '239, 68, 68' }
+        };
+
+        // Update menu item colors based on Cash Box color
+        function updateMenuColors(color) {
+            // Update all nav-cash-item links (Dashboard, Cash Boxes, Transactions)
+            document.querySelectorAll('.nav-cash-item').forEach(item => {
+                item.style.color = color;
+            });
+            
+            // Update Contacts link color too
+            document.querySelectorAll('.nav-links a:not(.nav-cash-item):not(.nav-new-transaction-btn)').forEach(item => {
+                item.style.color = color;
+            });
+            
+            // Update New Transaction button background color and white text
+            const newTransactionBtn = document.querySelector('.nav-new-transaction-btn');
+            if (newTransactionBtn) {
+                newTransactionBtn.style.background = color;
+                newTransactionBtn.style.borderColor = color;
+                newTransactionBtn.style.color = 'white';
+            }
+        }
+
+        // Apply color from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const color = urlParams.get('color') || 'green';
+        const colorData = colorMap[color] || colorMap['green'];
+        document.documentElement.style.setProperty('--active', colorData.hex);
+        document.documentElement.style.setProperty('--active-rgb', colorData.rgb);
+        
+        // Update nav menu colors
+        updateMenuColors(colorData.hex);
     </script>
     <script src="assets/js/main.js"></script>
 </body>
