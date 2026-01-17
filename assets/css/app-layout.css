@@ -112,6 +112,7 @@ body {
     color: var(--active);
     font-weight: 700;
     border-bottom-color: var(--active);
+    border-radius: 12px 12px 0 0;
 }
 
 /* Cash-related nav items (Dashboard, Cash Boxes, Transactions) - only color, not active state */
