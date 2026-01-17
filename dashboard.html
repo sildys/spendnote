@@ -1009,6 +1009,7 @@
             width: 100%;
             max-width: 100%;
             overflow: hidden;
+            position: relative;
         }
 
         .carousel-header {
@@ -1027,8 +1028,12 @@
         }
 
         .carousel-nav {
+            position: absolute;
+            top: 0;
+            right: 0;
             display: flex;
             gap: 10px;
+            z-index: 10;
         }
 
         .carousel-arrow {
@@ -1415,13 +1420,7 @@
         .registers-carousel-section {
             margin-top: 0; /* No extra margin, page-header handles spacing */
         }
-        .carousel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 0;
-            margin-bottom: 16px; /* Tighter spacing */
-        }
+        /* Carousel navigation moved to top-right of carousel section */
 
 
         /* ===== Cash Box card kebab menu (settings/delete) ===== */
@@ -2700,16 +2699,13 @@ tr:hover [data-category-tag] {
 
             <!-- Cash Boxes Carousel -->
             <div class="registers-carousel-section">
-                <div class="carousel-header">
-                    <h2 class="carousel-title">Cash Boxes</h2>
-                    <div class="carousel-nav">
-                        <button class="carousel-arrow swiper-button-prev-custom" aria-label="Previous">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="carousel-arrow swiper-button-next-custom" aria-label="Next">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
+                <div class="carousel-nav">
+                    <button class="carousel-arrow swiper-button-prev-custom" aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-arrow swiper-button-next-custom" aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
 
                 <div class="swiper registers-swiper">
