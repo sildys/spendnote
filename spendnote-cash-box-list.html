@@ -923,6 +923,12 @@
                     item.style.color = color;
                 });
                 
+                // Update other menu items (Contacts) - not buttons
+                const otherNavItems = document.querySelectorAll('.nav-links a:not(.nav-cash-item):not(.btn):not(.nav-new-transaction-btn)');
+                otherNavItems.forEach(item => {
+                    item.style.color = color;
+                });
+                
                 // Update New Transaction button background color
                 const newTransactionBtn = document.querySelector('.nav-new-transaction-btn');
                 if (newTransactionBtn) {
