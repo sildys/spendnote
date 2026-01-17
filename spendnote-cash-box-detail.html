@@ -503,6 +503,12 @@
             cursor: not-allowed;
         }
 
+        /* CHECKBOX DYNAMIC COLOR */
+        input[type="checkbox"] {
+            accent-color: var(--active);
+            cursor: pointer;
+        }
+
         /* RESPONSIVE */
         @media (max-width: 1024px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -739,8 +745,11 @@
                     </div>
                 </div>
                 <div class="filter-actions">
-                    <button class="filter-btn clear"><i class="fas fa-times"></i> Clear</button>
-                    <button class="filter-btn primary"><i class="fas fa-check"></i> Apply</button>
+                    <button class="filter-btn clear"><i class="fas fa-times"></i> Clear All</button>
+                    <button class="filter-btn primary"><i class="fas fa-check"></i> Apply Filters</button>
+                    <div style="flex: 1;"></div>
+                    <button class="filter-btn clear"><i class="fas fa-file-csv"></i> Export CSV</button>
+                    <button class="filter-btn clear"><i class="fas fa-file-pdf"></i> Export PDF</button>
                 </div>
             </div>
         </div>
