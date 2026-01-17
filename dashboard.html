@@ -1132,24 +1132,24 @@
         .add-cash-box-card {
             background: var(--surface);
             border: 2px dashed var(--border);
-            border-radius: 24px;
-            padding: 28px;
+            border-radius: 20px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 20px var(--shadow);
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             height: 100%;
         }
 
         .add-cash-box-card:hover {
             border-color: var(--primary);
             background: rgba(5, 150, 105, 0.02);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(5, 150, 105, 0.12);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.12);
         }
 
         .add-cash-box-card.disabled {
@@ -1165,31 +1165,31 @@
         }
 
         .add-cash-box-icon {
-            width: 72px;
-            height: 72px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             background: rgba(5, 150, 105, 0.1);
             border: 2px solid rgba(5, 150, 105, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 24px;
             color: var(--primary);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .add-cash-box-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
             color: var(--text);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .add-cash-box-subtitle {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--text-muted);
-            margin-bottom: 16px;
+            margin-bottom: 0;
         }
 
         .add-cash-box-upgrade {
