@@ -942,24 +942,9 @@
             const cashBoxCards = document.querySelectorAll('.register-card:not(.add-cash-box-card)');
             
             cashBoxCards.forEach(card => {
-                // Get color from card class (green, orange, blue, purple, red)
-                let color, rgb;
-                if (card.classList.contains('green')) {
-                    color = '#059669';
-                    rgb = '5, 150, 105';
-                } else if (card.classList.contains('orange')) {
-                    color = '#f59e0b';
-                    rgb = '245, 158, 11';
-                } else if (card.classList.contains('blue')) {
-                    color = '#3b82f6';
-                    rgb = '59, 130, 246';
-                } else if (card.classList.contains('purple')) {
-                    color = '#8b5cf6';
-                    rgb = '139, 92, 246';
-                } else if (card.classList.contains('red')) {
-                    color = '#ef4444';
-                    rgb = '239, 68, 68';
-                }
+                // Get color from data attributes
+                const color = card.dataset.color;
+                const rgb = card.dataset.rgb;
                 
                 // Click to select cash box
                 card.addEventListener('click', (e) => {
