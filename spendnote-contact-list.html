@@ -100,11 +100,19 @@
         /* TABLE */
         .table-wrapper {
             overflow-x: auto;
+            max-width: 100%;
         }
 
         .Contacts-table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .Contacts-table td, .Contacts-table th {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .Contacts-table thead {
