@@ -910,6 +910,84 @@
                 card.classList.remove('disabled');
                 upgradeMessages.forEach(msg => msg.style.display = 'none');
             }
+
+            // ========================================
+            // CASH BOX COLOR SELECTION & MENU SYNC
+            // ========================================
+            
+            // Update menu item colors based on selected cash box
+            function updateMenuColors(color) {
+                // Update all nav-cash-item links (Dashboard, Cash Boxes, Transactions)
+                const navCashItems = document.querySelectorAll('.nav-cash-item');
+                navCashItems.forEach(item => {
+                    item.style.color = color;
+                });
+                
+                // Update New Transaction button background color
+                const newTransactionBtn = document.querySelector('.nav-new-transaction-btn');
+                if (newTransactionBtn) {
+                    newTransactionBtn.style.background = color;
+                    newTransactionBtn.style.borderColor = color;
+                }
+            }
+
+            // Initialize cash box cards with click handlers
+            const cashBoxCards = document.querySelectorAll('.register-card:not(.add-cash-box-card)');
+            
+            cashBoxCards.forEach(card => {
+                // Get color from card class (green, orange, blue, purple, red)
+                let color, rgb;
+                if (card.classList.contains('green')) {
+                    color = '#059669';
+                    rgb = '5, 150, 105';
+                } else if (card.classList.contains('orange')) {
+                    color = '#f59e0b';
+                    rgb = '245, 158, 11';
+                } else if (card.classList.contains('blue')) {
+                    color = '#3b82f6';
+                    rgb = '59, 130, 246';
+                } else if (card.classList.contains('purple')) {
+                    color = '#8b5cf6';
+                    rgb = '139, 92, 246';
+                } else if (card.classList.contains('red')) {
+                    color = '#ef4444';
+                    rgb = '239, 68, 68';
+                }
+                
+                // Click to select cash box
+                card.addEventListener('click', (e) => {
+                    // Don't trigger if clicking action buttons
+                    if (e.target.closest('.action-btn')) {
+                        return;
+                    }
+                    
+                    // Update active state
+                    cashBoxCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    
+                    // Update global CSS variables
+                    document.documentElement.style.setProperty('--active', color);
+                    document.documentElement.style.setProperty('--active-rgb', rgb);
+                    
+                    // Save to localStorage
+                    localStorage.setItem('activeCashBoxColor', color);
+                    localStorage.setItem('activeCashBoxRgb', rgb);
+                    
+                    // Update menu colors
+                    updateMenuColors(color);
+                });
+            });
+
+            // Load saved active cash box from localStorage on page load
+            const savedColor = localStorage.getItem('activeCashBoxColor');
+            const savedRgb = localStorage.getItem('activeCashBoxRgb');
+            
+            if (savedColor && savedRgb) {
+                // Apply saved colors
+                document.documentElement.style.setProperty('--active', savedColor);
+                document.documentElement.style.setProperty('--active-rgb', savedRgb);
+                updateMenuColors(savedColor);
+            }
         });
     </script>
     <script src="assets/js/main.js"></script>
