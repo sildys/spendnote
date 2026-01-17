@@ -107,12 +107,11 @@ body {
 }
 
 /* Active menu item indicator */
-.nav-links a.active {
+.site-nav .nav-links a.active {
     color: var(--active);
-    font-weight: 700;
 }
 
-.nav-links a.active::after {
+.site-nav .nav-links a.active::after {
     content: '';
     position: absolute;
     left: 0;
