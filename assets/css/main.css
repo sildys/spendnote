@@ -179,8 +179,25 @@ body {
     font-family: inherit;
 }
 
-.site-nav .nav-links a:hover {
+.site-nav .nav-links a:not(.btn):hover {
     color: var(--active);
+}
+
+/* Nav buttons keep their button styling */
+.site-nav .nav-links .btn-primary {
+    color: white !important;
+}
+
+.site-nav .nav-links .btn-primary:hover {
+    color: white !important;
+}
+
+.site-nav .nav-links .btn-secondary {
+    color: var(--text) !important;
+}
+
+.site-nav .nav-links .btn-secondary:hover {
+    color: var(--active) !important;
 }
 
 .site-nav .nav-links a.active {
@@ -351,7 +368,7 @@ label {
    9. FOOTER (UNIFIED)
    ======================================== */
 .app-footer {
-    background: var(--surface);
+    background: var(--surface-elevated);
     border-top: 1px solid var(--border);
     padding: var(--space-xl) 0;
     margin-top: auto;
