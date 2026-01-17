@@ -13,6 +13,18 @@
     <style>
         /* ===== PRICING PAGE SPECIFIC STYLES ===== */
 
+        /* SCROLL PROGRESS BAR */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            z-index: 10000;
+            transition: width 0.1s ease-out;
+        }
+
         /* PRICING SECTION */
         .pricing-section {
             padding: 3rem 2rem 4rem;
@@ -432,6 +444,9 @@
     </style>
 </head>
 <body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
 <nav class="site-nav">
   <div class="nav-container">
             <a href="index.html" class="logo">
@@ -790,6 +805,14 @@
         });
 
         renderPricing('yearly');
+
+        // Scroll Progress Bar
+        const scrollProgress = document.getElementById('scrollProgress');
+        window.addEventListener('scroll', () => {
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.scrollY / windowHeight) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
     </script>
     <script src="assets/js/main.js"></script>
 </body>
