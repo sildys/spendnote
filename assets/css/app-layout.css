@@ -115,7 +115,7 @@ body {
 .nav-links a.active::after {
     content: '';
     position: absolute;
-    bottom: 8px;
+    bottom: 6px;
     left: 20px;
     right: 20px;
     height: 3px;
