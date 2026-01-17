@@ -8,6 +8,87 @@ body {
     font-size: 12px; /* App uses smaller base font */
 }
 
+/* ============================================
+   NAVIGATION OVERRIDES FOR APP PAGES
+   ============================================ */
+
+/* Top Nav Container (dashboard specific) */
+.top-nav {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 16px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 16px var(--shadow);
+}
+
+/* Navigation Links - App Style */
+.nav-links {
+    display: flex;
+    gap: 8px; /* Smaller gap for app pages */
+    list-style: none;
+    align-items: center;
+}
+
+.nav-links a {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    background: transparent;
+    border: none;
+    text-decoration: none;
+}
+
+.nav-links a:hover {
+    color: var(--text);
+    background: var(--surface-elevated);
+}
+
+/* Cash-related nav items (Dashboard, Cash Boxes, Transactions) */
+.nav-links a.nav-cash-item {
+    color: var(--active); /* Green color */
+    font-weight: 700;
+}
+
+.nav-links a.nav-cash-item:hover {
+    background: rgba(var(--active-rgb), 0.1);
+}
+
+/* New Transaction button in nav */
+.nav-new-transaction-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--active);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(var(--active-rgb), 0.25);
+}
+
+.nav-new-transaction-btn:hover {
+    filter: brightness(0.9);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(var(--active-rgb), 0.35);
+}
+
+.nav-new-transaction-btn i {
+    font-size: 12px;
+}
+
 /* APP CONTAINER OVERRIDE (if needed) */
 .app-container {
     padding: 28px 24px;
@@ -194,12 +275,12 @@ body {
     border-radius: 8px;
     transition: all 0.2s;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
 }
 
 .user-dropdown-item:hover {
-    background: var(--surface-elevated);
+    background: rgba(var(--active-rgb), 0.1);
     color: var(--active);
 }
 
@@ -207,6 +288,7 @@ body {
     width: 16px;
     text-align: center;
     font-size: 14px;
+    color: inherit;
 }
 
 .user-dropdown-divider {
