@@ -47,6 +47,37 @@
             align-items: center;
         }
 
+        .contacts-header-top {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .contacts-controls {
+            display: grid;
+            grid-template-columns: max-content 200px 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .contacts-controls .search-box {
+            width: 100%;
+            max-width: none;
+        }
+
+        .contacts-cashbox-select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--surface);
+            cursor: pointer;
+            color: var(--text);
+        }
+
         .btn-export {
             padding: 10px 18px;
             background: var(--surface);
@@ -523,23 +554,23 @@
 
         <div class="Contacts-card">
         <div class="Contacts-header">
-            <div class="header-top" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <div class="contacts-header-top">
                 <h2 class="Contacts-title" style="margin: 0;">All Contacts</h2>
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <select id="cashBoxFilter" style="padding: 10px 16px; border: 2px solid var(--border); border-radius: 10px; font-size: 13px; font-weight: 600; background: var(--surface); cursor: pointer; color: var(--text); min-width: 180px;">
+                <div class="contacts-controls">
+                    <button class="add-Contact-btn-large" id="addContactBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Contact
+                    </button>
+                    <select id="cashBoxFilter" class="contacts-cashbox-select">
                         <option value="">All Cash Boxes</option>
                         <option value="main">Main Office</option>
                         <option value="event">Event Fund</option>
                         <option value="petty">Petty Cash</option>
                     </select>
-                    <div class="search-box" style="width: 320px;">
+                    <div class="search-box">
                         <i class="fas fa-search"></i>
                         <input type="text" id="searchInput" placeholder="Search Contacts...">
                     </div>
-                    <button class="add-Contact-btn-large" id="addContactBtn">
-                        <i class="fas fa-plus"></i>
-                        Add Contact
-                    </button>
                 </div>
             </div>
             
