@@ -514,6 +514,12 @@
             <div class="header-top">
                 <h2 class="Contacts-title">All Contacts</h2>
                 <div class="header-actions">
+                    <select id="cashBoxFilter" style="padding: 10px 16px; border: 2px solid var(--border); border-radius: 10px; font-size: 13px; font-weight: 600; background: var(--surface); cursor: pointer; color: var(--text);">
+                        <option value="">All Cash Boxes</option>
+                        <option value="main">Main Office</option>
+                        <option value="event">Event Fund</option>
+                        <option value="petty">Petty Cash</option>
+                    </select>
                     <div class="search-box">
                         <i class="fas fa-search"></i>
                         <input type="text" id="searchInput" placeholder="Search Contacts...">
@@ -835,16 +841,41 @@
         // Search functionality
         const searchInput = document.getElementById('searchInput');
         const tableBody = document.getElementById('ContactsTableBody');
+        const cashBoxFilter = document.getElementById('cashBoxFilter');
         
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
+        searchInput.addEventListener('input', applyFilters);
+        cashBoxFilter.addEventListener('change', applyFilters);
+        
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const cashBox = cashBoxFilter.value;
             const rows = tableBody.getElementsByTagName('tr');
             
             Array.from(rows).forEach(row => {
                 const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchTerm) ? '' : 'none';
+                let show = true;
+                
+                // Search filter
+                if (searchTerm && !text.includes(searchTerm)) {
+                    show = false;
+                }
+                
+                // Cash Box filter (demo: filter based on contact ID for demonstration)
+                if (cashBox && show) {
+                    const contactId = row.cells[1]?.textContent.trim();
+                    // Demo logic: Main Office = CONT-001, CONT-003; Event Fund = CONT-002, CONT-004; Petty Cash = CONT-005, CONT-006
+                    if (cashBox === 'main' && !['CONT-001', 'CONT-003'].includes(contactId)) {
+                        show = false;
+                    } else if (cashBox === 'event' && !['CONT-002', 'CONT-004'].includes(contactId)) {
+                        show = false;
+                    } else if (cashBox === 'petty' && !['CONT-005', 'CONT-006'].includes(contactId)) {
+                        show = false;
+                    }
+                }
+                
+                row.style.display = show ? '' : 'none';
             });
-        });
+        }
 
         // Add Contact button
         document.getElementById('addContactBtn').addEventListener('click', () => {
