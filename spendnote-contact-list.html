@@ -267,6 +267,29 @@
             color: var(--text-muted);
         }
 
+        /* BULK ACTIONS */
+        .bulk-action-btn {
+            padding: 8px 16px;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bulk-action-btn:hover {
+            background: var(--bg);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+
         /* EMPTY STATE */
         .empty-state {
             padding: 80px 32px;
@@ -491,14 +514,6 @@
             <div class="header-top">
                 <h2 class="Contacts-title">All Contacts</h2>
                 <div class="header-actions">
-                    <button class="btn-export" id="exportCSV">
-                        <i class="fas fa-file-csv"></i>
-                        Export CSV
-                    </button>
-                    <button class="btn-export" id="exportPDF">
-                        <i class="fas fa-file-pdf"></i>
-                        Export PDF
-                    </button>
                     <div class="search-box">
                         <i class="fas fa-search"></i>
                         <input type="text" id="searchInput" placeholder="Search Contacts...">
@@ -506,6 +521,21 @@
                     <button class="add-Contact-btn" id="addContactBtn">
                         <i class="fas fa-plus"></i>
                         Add Contact
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Bulk Actions -->
+            <div class="bulk-actions" id="bulkActions" style="display: none; margin-top: 20px; padding: 16px 32px; background: rgba(5, 150, 105, 0.05); border-radius: 12px; align-items: center; gap: 20px;">
+                <span style="font-size: 14px; font-weight: 700; color: var(--text);"><span id="selectedCount">0</span> selected</span>
+                <div style="display: flex; gap: 8px;">
+                    <button class="bulk-action-btn" id="bulkExportCSV">
+                        <i class="fas fa-file-csv"></i>
+                        Export CSV
+                    </button>
+                    <button class="bulk-action-btn" id="bulkExportPDF">
+                        <i class="fas fa-file-pdf"></i>
+                        Export PDF
                     </button>
                 </div>
             </div>
@@ -548,6 +578,7 @@
             <table class="Contacts-table">
                 <thead>
                     <tr>
+                        <th style="width: 40px;"><input type="checkbox" id="selectAllHeader"></th>
                         <th class="sortable" data-column="id">Contact ID <i class="fas fa-sort"></i></th>
                         <th class="sortable" data-column="name">Name <i class="fas fa-sort"></i></th>
                         <th class="sortable" data-column="contact">Contact Info <i class="fas fa-sort"></i></th>
@@ -559,6 +590,7 @@
                 </thead>
                 <tbody id="ContactsTableBody">
                     <tr>
+                        <td><input type="checkbox" class="row-checkbox"></td>
                         <td>
                             <div class="Contact-contact" style="font-weight: 600; color: var(--text-muted);">CONT-001</div>
                         </td>
@@ -584,6 +616,7 @@
                         </td>
                     </tr>
                     <tr>
+                        <td><input type="checkbox" class="row-checkbox"></td>
                         <td>
                             <div class="Contact-contact" style="font-weight: 600; color: var(--text-muted);">CONT-002</div>
                         </td>
@@ -814,16 +847,43 @@
             window.location.href = 'spendnote-contact-detail.html?mode=new';
         });
 
-        // Export CSV
-        document.getElementById('exportCSV').addEventListener('click', () => {
-            alert('Export CSV - ALL CONTACTS\n\nIn production:\n- Generate CSV file with all contact data\n- Download file: contacts.csv');
-            console.log('Exporting contacts to CSV...');
+        // Select all checkbox
+        document.getElementById('selectAllHeader').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+            updateBulkActions();
         });
 
-        // Export PDF
-        document.getElementById('exportPDF').addEventListener('click', () => {
-            alert('Export PDF - ALL CONTACTS\n\nIn production:\n- Generate PDF report with all contact data\n- Download file: contacts.pdf');
-            console.log('Exporting contacts to PDF...');
+        // Row checkboxes
+        document.querySelectorAll('.row-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', updateBulkActions);
+        });
+
+        function updateBulkActions() {
+            const checked = document.querySelectorAll('.row-checkbox:checked').length;
+            const bulkActions = document.getElementById('bulkActions');
+            const selectedCount = document.getElementById('selectedCount');
+            
+            if (checked > 0) {
+                bulkActions.style.display = 'flex';
+                selectedCount.textContent = checked;
+            } else {
+                bulkActions.style.display = 'none';
+            }
+        }
+
+        // Bulk Export CSV
+        document.getElementById('bulkExportCSV').addEventListener('click', () => {
+            const checked = document.querySelectorAll('.row-checkbox:checked').length;
+            alert(`Export CSV - ${checked} SELECTED CONTACTS\n\nIn production:\n- Generate CSV file with selected contact data\n- Download file: contacts_selected.csv`);
+            console.log('Exporting selected contacts to CSV...');
+        });
+
+        // Bulk Export PDF
+        document.getElementById('bulkExportPDF').addEventListener('click', () => {
+            const checked = document.querySelectorAll('.row-checkbox:checked').length;
+            alert(`Export PDF - ${checked} SELECTED CONTACTS\n\nIn production:\n- Generate PDF report with selected contact data\n- Download file: contacts_selected.pdf`);
+            console.log('Exporting selected contacts to PDF...');
         });
 
         // Pagination variables
