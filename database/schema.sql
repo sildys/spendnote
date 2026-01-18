@@ -13,11 +13,14 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS public.profiles (
     id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
     email TEXT UNIQUE NOT NULL,
-    full_name TEXT,
+    full_name TEXT NOT NULL,
     company_name TEXT,
     phone TEXT,
     address TEXT,
-    avatar_url TEXT,
+    account_logo_url TEXT,
+    subscription_tier TEXT DEFAULT 'free' CHECK (subscription_tier IN ('free', 'standard', 'pro')),
+    stripe_customer_id TEXT,
+    stripe_subscription_id TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -45,10 +48,35 @@ CREATE TABLE IF NOT EXISTS public.cash_boxes (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
     name TEXT NOT NULL,
-    description TEXT,
-    initial_balance DECIMAL(12, 2) DEFAULT 0.00,
-    current_balance DECIMAL(12, 2) DEFAULT 0.00,
-    color TEXT DEFAULT '#10b981', -- green by default
+    currency TEXT DEFAULT 'USD' NOT NULL,
+    color TEXT DEFAULT '#10b981' NOT NULL,
+    icon TEXT DEFAULT 'building' NOT NULL,
+    id_prefix TEXT DEFAULT 'REC-',
+    current_balance DECIMAL(12, 2) DEFAULT 0.00 NOT NULL,
+    
+    -- Receipt settings (Standard+)
+    receipt_show_logo BOOLEAN DEFAULT true,
+    receipt_show_addresses BOOLEAN DEFAULT true,
+    receipt_show_tracking BOOLEAN DEFAULT true,
+    receipt_show_additional BOOLEAN DEFAULT true,
+    receipt_show_note BOOLEAN DEFAULT true,
+    receipt_show_signatures BOOLEAN DEFAULT true,
+    
+    -- Receipt custom text (Pro only)
+    receipt_title TEXT,
+    receipt_total_label TEXT,
+    receipt_from_label TEXT,
+    receipt_to_label TEXT,
+    receipt_description_label TEXT,
+    receipt_amount_label TEXT,
+    receipt_notes_label TEXT,
+    receipt_issued_by_label TEXT,
+    receipt_received_by_label TEXT,
+    receipt_footer_note TEXT,
+    
+    -- Cash box logo (Pro only)
+    cash_box_logo_url TEXT,
+    
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -124,12 +152,26 @@ CREATE TABLE IF NOT EXISTS public.transactions (
     user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
     cash_box_id UUID REFERENCES public.cash_boxes(id) ON DELETE CASCADE NOT NULL,
     contact_id UUID REFERENCES public.contacts(id) ON DELETE SET NULL,
+    
     type TEXT NOT NULL CHECK (type IN ('income', 'expense')),
     amount DECIMAL(12, 2) NOT NULL CHECK (amount > 0),
-    description TEXT NOT NULL,
+    description TEXT,
+    notes TEXT,
     transaction_date DATE NOT NULL DEFAULT CURRENT_DATE,
     receipt_number TEXT,
-    notes TEXT,
+    
+    -- Contact snapshot (for receipt regeneration)
+    contact_name TEXT NOT NULL,
+    contact_email TEXT,
+    contact_phone TEXT,
+    contact_address TEXT,
+    contact_custom_field_1 TEXT,
+    contact_custom_field_2 TEXT,
+    
+    -- Created by (for team tracking)
+    created_by_user_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+    created_by_user_name TEXT,
+    
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -162,30 +204,65 @@ CREATE INDEX IF NOT EXISTS idx_transactions_date ON public.transactions(transact
 CREATE INDEX IF NOT EXISTS idx_transactions_type ON public.transactions(type);
 
 -- =====================================================
--- CASH BOX CONTACTS (Many-to-Many Junction Table)
+-- TEAM MEMBERS TABLE (Pro only)
 -- =====================================================
-CREATE TABLE IF NOT EXISTS public.cash_box_contacts (
-    cash_box_id UUID REFERENCES public.cash_boxes(id) ON DELETE CASCADE NOT NULL,
-    contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE NOT NULL,
+CREATE TABLE IF NOT EXISTS public.team_members (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    owner_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+    member_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+    role TEXT NOT NULL CHECK (role IN ('admin', 'member')),
+    status TEXT DEFAULT 'active' CHECK (status IN ('active', 'pending', 'inactive')),
+    invited_email TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    PRIMARY KEY (cash_box_id, contact_id)
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(owner_id, member_id)
+);
+
+-- =====================================================
+-- CASH BOX ACCESS (Pro team feature)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS public.cash_box_access (
+    cash_box_id UUID REFERENCES public.cash_boxes(id) ON DELETE CASCADE NOT NULL,
+    user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+    granted_by UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    PRIMARY KEY (cash_box_id, user_id)
 );
 
 -- Enable Row Level Security
-ALTER TABLE public.cash_box_contacts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.team_members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.cash_box_access ENABLE ROW LEVEL SECURITY;
 
--- Cash box contacts policies
-CREATE POLICY "Users can view their own cash box contacts" 
-    ON public.cash_box_contacts FOR SELECT 
+-- Team members policies
+CREATE POLICY "Owners can view their team members" 
+    ON public.team_members FOR SELECT 
+    USING (auth.uid() = owner_id OR auth.uid() = member_id);
+
+CREATE POLICY "Owners can insert team members" 
+    ON public.team_members FOR INSERT 
+    WITH CHECK (auth.uid() = owner_id);
+
+CREATE POLICY "Owners can update team members" 
+    ON public.team_members FOR UPDATE 
+    USING (auth.uid() = owner_id);
+
+CREATE POLICY "Owners can delete team members" 
+    ON public.team_members FOR DELETE 
+    USING (auth.uid() = owner_id);
+
+-- Cash box access policies
+CREATE POLICY "Users can view their cash box access" 
+    ON public.cash_box_access FOR SELECT 
     USING (
+        auth.uid() = user_id OR 
         EXISTS (
             SELECT 1 FROM public.cash_boxes 
             WHERE id = cash_box_id AND user_id = auth.uid()
         )
     );
 
-CREATE POLICY "Users can insert their own cash box contacts" 
-    ON public.cash_box_contacts FOR INSERT 
+CREATE POLICY "Owners can grant cash box access" 
+    ON public.cash_box_access FOR INSERT 
     WITH CHECK (
         EXISTS (
             SELECT 1 FROM public.cash_boxes 
@@ -193,8 +270,8 @@ CREATE POLICY "Users can insert their own cash box contacts"
         )
     );
 
-CREATE POLICY "Users can delete their own cash box contacts" 
-    ON public.cash_box_contacts FOR DELETE 
+CREATE POLICY "Owners can revoke cash box access" 
+    ON public.cash_box_access FOR DELETE 
     USING (
         EXISTS (
             SELECT 1 FROM public.cash_boxes 
