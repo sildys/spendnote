@@ -700,9 +700,9 @@
                     <i class="fas fa-chevron-down" id="filterToggleIcon" style="transition: transform 0.3s; color: var(--text-muted);"></i>
                 </div>
                 <div class="filter-tabs">
-                    <button class="filter-tab active" onclick="event.stopPropagation()">All</button>
-                    <button class="filter-tab" onclick="event.stopPropagation()">IN</button>
-                    <button class="filter-tab" onclick="event.stopPropagation()">OUT</button>
+                    <button class="filter-tab active" data-filter="all" onclick="event.stopPropagation()">All</button>
+                    <button class="filter-tab" data-filter="in" onclick="event.stopPropagation()">IN</button>
+                    <button class="filter-tab" data-filter="out" onclick="event.stopPropagation()">OUT</button>
                 </div>
             </div>
             <div class="filter-panel" id="filterPanel" style="display: none;">
