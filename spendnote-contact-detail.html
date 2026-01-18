@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact details in SpendNote.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
+    <title>Contact Details - SpendNote</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=8">
+    <link rel="stylesheet" href="assets/css/app-layout.css?v=8">
+    <style>
+        /* ===== CONTACT DETAIL PAGE SPECIFIC STYLES ===== */
+
+        .main-content { 
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px; 
+        }
+
+        /* BREADCRUMB */
+        .breadcrumb {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .breadcrumb a {
+            color: var(--active);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* HEADER */
+        .page-header {
+            margin-bottom: 20px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .header-left h1 {
+            font-size: 28px !important;
+            font-weight: 800 !important;
+            letter-spacing: -0.02em !important;
+            margin-bottom: 6px !important;
+        }
+
+        .contact-meta {
+            font-size: 14px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .contact-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface);
+            border-color: var(--primary);
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        /* CONTENT GRID */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* CARD */
+        .card {
+            background: var(--surface);
+            border-radius: 24px;
+            box-shadow: 0 1px 3px var(--shadow);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .card-body {
+            padding: 32px;
+        }
+
+        /* FORM */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .form-group label .required {
+            color: var(--error);
+            margin-left: 4px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: var(--bg);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
+            background: var(--surface);
+        }
+
+        .form-group input:disabled,
+        .form-group textarea:disabled {
+            background: var(--bg);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* INFO ITEM */
+        .info-item {
+            margin-bottom: 24px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .info-value.empty {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* STATS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-box {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--text);
+        }
+
+        /* TRANSACTIONS LIST */
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-radius: 12px;
+            background: var(--bg);
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+
+        .transaction-item:hover {
+            background: var(--surface);
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .transaction-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .transaction-icon.in {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--primary);
+        }
+
+        .transaction-icon.out {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+
+        .transaction-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .transaction-id {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .transaction-amount {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .transaction-amount.in {
+            color: var(--primary);
+        }
+
+        .transaction-amount.out {
+            color: var(--error);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            color: var(--text-muted);
+            opacity: 0.5;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-container">
+            <a href="dashboard.html" class="logo">
+                <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#nav-logo-gradient)"/>
+                    <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                    <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                    <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                    <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                    <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="nav-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#059669"/>
+                            <stop offset="100%" stop-color="#10b981"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>SpendNote</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-cash-item">Dashboard</a></li>
+                <li><a href="spendnote-cash-box-list.html" class="nav-cash-item" id="navCashBoxes">Cash Boxes</a></li>
+                <li><a href="spendnote-transaction-history.html" class="nav-cash-item" id="navTransactions">Transactions</a></li>
+                <li><a href="spendnote-contact-list.html" class="active">Contacts</a></li>
+                <li><button class="nav-new-transaction-btn" id="addTransactionBtn"><i class="fas fa-plus"></i> New Transaction</button></li>
+                <li class="user-avatar-wrapper" id="userAvatarBtn">
+                    <div class="user-avatar">
+                        <img src="https://i.pravatar.cc/150?img=12" alt="User">
+                    </div>
+                    <span class="user-name">John</span>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="user-dropdown-menu">
+                            <a href="spendnote-user-settings.html" class="user-dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <div class="user-dropdown-divider"></div>
+                            <a href="index.html" class="user-dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Log out
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+<div class="app-container">
+    <main class="main-content">
+        <div class="breadcrumb">
+            <a href="spendnote-contact-list.html">Contacts</a> / <span id="breadcrumbTitle">Contact Details</span>
+        </div>
+
+        <div class="page-header">
+            <div class="header-top">
+                <div class="header-left">
+                    <h1 id="pageTitle">Contact Details</h1>
+                    <div class="contact-meta" id="contactMeta">
+                        <span><i class="fas fa-calendar"></i> Created: Jan 1, 2026</span>
+                    </div>
+                </div>
+                <div class="header-actions" id="headerActions">
+                    <!-- Actions will be dynamically added -->
+                </div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <!-- Left Column: Contact Information -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Contact Information</h2>
+                </div>
+                <div class="card-body">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="contactName">Name <span class="required">*</span></label>
+                            <input type="text" id="contactName" name="contactName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactEmail">Email</label>
+                            <input type="email" id="contactEmail" name="contactEmail">
+                            <p class="form-help">Optional - contact's email address</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactPhone">Phone</label>
+                            <input type="tel" id="contactPhone" name="contactPhone">
+                            <p class="form-help">Optional - contact's phone number</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactAddress">Address</label>
+                            <textarea id="contactAddress" name="contactAddress"></textarea>
+                            <p class="form-help">Optional - contact's full address</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactNotes">Notes</label>
+                            <textarea id="contactNotes" name="contactNotes"></textarea>
+                            <p class="form-help">Optional - any additional notes about this contact</p>
+                        </div>
+
+                        <div id="formActions" style="display: none;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Contact
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='spendnote-contact-list.html'">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Column: Stats & Transactions -->
+            <div>
+                <!-- Stats Card -->
+                <div class="card" style="margin-bottom: 24px;" id="statsCard">
+                    <div class="card-header">
+                        <h2 class="card-title">Statistics</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-label">Transactions</div>
+                                <div class="stat-value" id="statTransactions">8</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Last Activity</div>
+                                <div class="stat-value" style="font-size: 16px;" id="statLastActivity">Jan 3, 2026</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions Card -->
+                <div class="card" id="transactionsCard">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Transactions</h2>
+                    </div>
+                    <div class="card-body" id="transactionsList">
+                        <!-- Transactions will be dynamically added -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+    <!-- Modern 2-Row Footer -->
+<footer class="app-footer">
+    <div class="app-footer-container">
+        <!-- Top Row -->
+        <div class="app-footer-top">
+            <!-- Brand Section with Disclaimer -->
+            <div class="app-footer-brand">
+                <a href="dashboard.html" class="app-footer-brand-logo">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="white"/>
+                        <path d="M32 4 L38 10 L32 10 Z" fill="rgba(0,0,0,0.15)"/>
+                        <path d="M32 4 L32 10 L38 10" stroke="rgba(0,0,0,0.2)" stroke-width="1.5" stroke-linejoin="round"/>
+                        <line x1="14" y1="14" x2="30" y2="14" stroke="rgba(0,0,0,0.15)" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="14" y1="19" x2="26" y2="19" stroke="rgba(0,0,0,0.12)" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="14" y1="24" x2="30" y2="24" stroke="rgba(0,0,0,0.15)" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="14" y1="29" x2="22" y2="29" stroke="rgba(0,0,0,0.1)" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="rgba(0,0,0,0.2)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>SpendNote</span>
+                </a>
+                <p class="app-footer-brand-desc">
+                    Cash receipt management for modern teams. Simple, secure, transparent.
+                </p>
+            </div>
+            
+            <!-- Right: Links + Disclaimer -->
+            <div class="app-footer-right">
+                <div class="app-footer-links-simple">
+                    <a href="index.html#features">Features</a>
+                    <a href="spendnote-pricing.html">Pricing</a>
+                    <a href="spendnote-faq.html">FAQ</a>
+                    <a href="spendnote-terms.html">Legal</a>
+                </div>
+                
+                <!-- Disclaimer on right side -->
+                <div class="app-footer-brand-disclaimer">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Cash handoff documentation only. Not a tax or accounting tool.</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Row -->
+        <div class="app-footer-bottom">
+            <div class="app-footer-copyright">
+                2026 SpendNote. All rights reserved.
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const contactId = urlParams.get('id');
+        const mode = urlParams.get('mode');
+
+        // Demo data
+        const contactData = {
+            'CONT-001': {
+                name: 'ABC Supplies',
+                email: 'contact@abcsupplies.com',
+                phone: '+1 (555) 123-4567',
+                address: '123 Main St, New York, NY 10001',
+                notes: 'Primary supplier for office materials',
+                created: 'Jan 1, 2026',
+                transactions: 8,
+                lastActivity: 'Jan 3, 2026',
+                recentTransactions: [
+                    { id: 'TRX-342', type: 'IN', amount: '$1,200.00', date: 'Jan 3, 2026' },
+                    { id: 'TRX-338', type: 'OUT', amount: '$450.00', date: 'Dec 28, 2025' },
+                    { id: 'TRX-320', type: 'IN', amount: '$850.00', date: 'Dec 15, 2025' }
+                ]
+            }
+        };
+
+        // Initialize page
+        if (mode === 'new') {
+            // New contact mode
+            document.getElementById('pageTitle').textContent = 'Add New Contact';
+            document.getElementById('breadcrumbTitle').textContent = 'Add New Contact';
+            document.getElementById('contactMeta').style.display = 'none';
+            document.getElementById('formActions').style.display = 'flex';
+            document.getElementById('formActions').style.gap = '12px';
+            document.getElementById('statsCard').style.display = 'none';
+            document.getElementById('transactionsCard').style.display = 'none';
+            
+            // Enable all form fields
+            document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(field => {
+                field.disabled = false;
+            });
+        } else {
+            // View mode
+            const contact = contactData[contactId] || contactData['CONT-001'];
+            
+            document.getElementById('pageTitle').textContent = contact.name;
+            document.getElementById('breadcrumbTitle').textContent = contact.name;
+            document.getElementById('contactMeta').innerHTML = `
+                <span><i class="fas fa-id-card"></i> ${contactId}</span>
+                <span><i class="fas fa-calendar"></i> Created: ${contact.created}</span>
+            `;
+            
+            // Fill form with data
+            document.getElementById('contactName').value = contact.name;
+            document.getElementById('contactEmail').value = contact.email || '';
+            document.getElementById('contactPhone').value = contact.phone || '';
+            document.getElementById('contactAddress').value = contact.address || '';
+            document.getElementById('contactNotes').value = contact.notes || '';
+            
+            // Disable all form fields (view only)
+            document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(field => {
+                field.disabled = true;
+            });
+            
+            // Add header actions
+            document.getElementById('headerActions').innerHTML = `
+                <button class="btn btn-primary" onclick="enableEdit()">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn btn-secondary" onclick="window.location.href='spendnote-contact-list.html'">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </button>
+            `;
+            
+            // Fill stats
+            document.getElementById('statTransactions').textContent = contact.transactions;
+            document.getElementById('statLastActivity').textContent = contact.lastActivity;
+            
+            // Fill recent transactions
+            const transactionsList = document.getElementById('transactionsList');
+            if (contact.recentTransactions && contact.recentTransactions.length > 0) {
+                transactionsList.innerHTML = contact.recentTransactions.map(tx => `
+                    <div class="transaction-item">
+                        <div class="transaction-left">
+                            <div class="transaction-icon ${tx.type.toLowerCase()}">
+                                <i class="fas fa-arrow-${tx.type === 'IN' ? 'down' : 'up'}"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-id">${tx.id}</div>
+                                <div class="transaction-date">${tx.date}</div>
+                            </div>
+                        </div>
+                        <div class="transaction-amount ${tx.type.toLowerCase()}">${tx.amount}</div>
+                    </div>
+                `).join('');
+            } else {
+                transactionsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon"><i class="fas fa-receipt"></i></div>
+                        <div class="empty-state-text">No transactions yet</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Enable edit mode
+        function enableEdit() {
+            document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(field => {
+                field.disabled = false;
+            });
+            
+            document.getElementById('formActions').style.display = 'flex';
+            document.getElementById('formActions').style.gap = '12px';
+            
+            document.getElementById('headerActions').innerHTML = `
+                <button class="btn btn-danger" onclick="deleteContact()">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            `;
+        }
+
+        // Delete contact
+        function deleteContact() {
+            if (confirm('Are you sure you want to delete this contact?')) {
+                alert('Contact deleted! (Demo only)');
+                window.location.href = 'spendnote-contact-list.html';
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('contactName').value,
+                email: document.getElementById('contactEmail').value,
+                phone: document.getElementById('contactPhone').value,
+                address: document.getElementById('contactAddress').value,
+                notes: document.getElementById('contactNotes').value
+            };
+            
+            console.log('Contact saved:', formData);
+            alert('Contact saved successfully! (Demo only)');
+            window.location.href = 'spendnote-contact-list.html';
+        });
+    </script>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
