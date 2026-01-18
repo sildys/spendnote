@@ -204,15 +204,12 @@
             font-size: 14px;
         }
 
-        .cashbox-badge {
+        .cashbox-dot {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
-            background: rgba(var(--cb-color-rgb, 5, 150, 105), 0.1);
-            color: var(--cb-color);
-            border: 1px solid rgba(var(--cb-color-rgb, 5, 150, 105), 0.2);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            cursor: help;
         }
 
         .Contact-actions {
@@ -599,7 +596,7 @@
                         <th class="sortable" data-column="id" style="width: 110px;">Contact ID <i class="fas fa-sort"></i></th>
                         <th class="sortable" data-column="name" style="width: 180px;">Name <i class="fas fa-sort"></i></th>
                         <th class="sortable" data-column="contact" style="width: 200px;">Contact Info <i class="fas fa-sort"></i></th>
-                        <th class="sortable" data-column="cashbox" style="width: 140px;">Cash Box <i class="fas fa-sort"></i></th>
+                        <th style="width: 80px; text-align: center;">Cash Boxes</th>
                         <th class="sortable" data-column="address">Address <i class="fas fa-sort"></i></th>
                         <th class="sortable" data-column="transactions" style="width: 80px; text-align: center;">Transactions <i class="fas fa-sort"></i></th>
                         <th class="sortable" data-column="date" style="width: 140px;">Last Transaction <i class="fas fa-sort"></i></th>
@@ -618,8 +615,11 @@
                         <td>
                             <div class="Contact-contact">contact@abcsupplies.com</div>
                         </td>
-                        <td>
-                            <span class="cashbox-badge" style="--cb-color: #059669;">Main Office</span>
+                        <td style="text-align: center;">
+                            <div style="display: flex; gap: 4px; justify-content: center;">
+                                <span class="cashbox-dot" style="background: #059669;" title="Main Office"></span>
+                                <span class="cashbox-dot" style="background: #f59e0b;" title="Event Fund"></span>
+                            </div>
                         </td>
                         <td>
                             <div class="Contact-address">123 Main St, New York, NY 10001</div>
@@ -647,8 +647,10 @@
                         <td>
                             <div class="Contact-contact">john.smith@email.com</div>
                         </td>
-                        <td>
-                            <span class="cashbox-badge" style="--cb-color: #f59e0b;">Event Fund</span>
+                        <td style="text-align: center;">
+                            <div style="display: flex; gap: 4px; justify-content: center;">
+                                <span class="cashbox-dot" style="background: #f59e0b;" title="Event Fund"></span>
+                            </div>
                         </td>
                         <td>
                             <div class="Contact-address">456 Oak Ave, Los Angeles, CA 90001</div>
@@ -676,8 +678,11 @@
                         <td>
                             <div class="Contact-contact">mary.j@company.com</div>
                         </td>
-                        <td>
-                            <span class="cashbox-badge" style="--cb-color: #059669;">Main Office</span>
+                        <td style="text-align: center;">
+                            <div style="display: flex; gap: 4px; justify-content: center;">
+                                <span class="cashbox-dot" style="background: #059669;" title="Main Office"></span>
+                                <span class="cashbox-dot" style="background: #3b82f6;" title="Petty Cash"></span>
+                            </div>
                         </td>
                         <td>
                             <div class="Contact-address">789 Pine Rd, Chicago, IL 60601</div>
@@ -705,8 +710,12 @@
                         <td>
                             <div class="Contact-contact">billing@adcorpmedia.com</div>
                         </td>
-                        <td>
-                            <span class="cashbox-badge" style="--cb-color: #f59e0b;">Event Fund</span>
+                        <td style="text-align: center;">
+                            <div style="display: flex; gap: 4px; justify-content: center;">
+                                <span class="cashbox-dot" style="background: #059669;" title="Main Office"></span>
+                                <span class="cashbox-dot" style="background: #f59e0b;" title="Event Fund"></span>
+                                <span class="cashbox-dot" style="background: #3b82f6;" title="Petty Cash"></span>
+                            </div>
                         </td>
                         <td>
                             <div class="Contact-address">321 Market St, San Francisco, CA 94102</div>
@@ -734,8 +743,10 @@
                         <td>
                             <div class="Contact-contact">+1 (555) 123-4567</div>
                         </td>
-                        <td>
-                            <span class="cashbox-badge" style="--cb-color: #3b82f6;">Petty Cash</span>
+                        <td style="text-align: center;">
+                            <div style="display: flex; gap: 4px; justify-content: center;">
+                                <span class="cashbox-dot" style="background: #3b82f6;" title="Petty Cash"></span>
+                            </div>
                         </td>
                         <td>
                             <div class="Contact-address" style="color: var(--text-muted); font-style: italic;">—</div>
@@ -763,8 +774,11 @@
                         <td>
                             <div class="Contact-contact" style="color: var(--text-muted); font-style: italic;">—</div>
                         </td>
-                        <td>
-                            <span class="cashbox-badge" style="--cb-color: #3b82f6;">Petty Cash</span>
+                        <td style="text-align: center;">
+                            <div style="display: flex; gap: 4px; justify-content: center;">
+                                <span class="cashbox-dot" style="background: #f59e0b;" title="Event Fund"></span>
+                                <span class="cashbox-dot" style="background: #3b82f6;" title="Petty Cash"></span>
+                            </div>
                         </td>
                         <td>
                             <div class="Contact-address" style="color: var(--text-muted); font-style: italic;">—</div>
