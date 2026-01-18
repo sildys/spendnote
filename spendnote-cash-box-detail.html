@@ -1168,6 +1168,42 @@
                     link.setAttribute('href', currentHref + '?cashBoxColor=' + color);
                 }
             });
+
+            // Bulk actions functionality
+            const bulkActionsPanel = document.getElementById('bulkActions');
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const rowCheckboxes = document.querySelectorAll('.row-checkbox, tbody input[type="checkbox"]');
+            const selectedCountSpan = document.getElementById('selectedCount');
+
+            function updateBulkActions() {
+                const checkedBoxes = Array.from(rowCheckboxes).filter(cb => cb.checked);
+                const count = checkedBoxes.length;
+                
+                if (count > 0) {
+                    bulkActionsPanel.classList.add('show');
+                    selectedCountSpan.textContent = count;
+                } else {
+                    bulkActionsPanel.classList.remove('show');
+                }
+                
+                // Update select all checkbox state
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.checked = count === rowCheckboxes.length && count > 0;
+                }
+            }
+
+            // Select all functionality
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('change', function() {
+                    rowCheckboxes.forEach(cb => cb.checked = this.checked);
+                    updateBulkActions();
+                });
+            }
+
+            // Individual checkbox functionality
+            rowCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateBulkActions);
+            });
         });
     </script>
 </body>
