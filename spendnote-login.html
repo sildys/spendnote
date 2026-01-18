@@ -455,7 +455,7 @@
         // Google login
         document.getElementById('googleBtn').addEventListener('click', async function() {
             try {
-                const { data, error } = await supabase.auth.signInWithOAuth({
+                const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
                         redirectTo: `${window.location.origin}/dashboard.html`

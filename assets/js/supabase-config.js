@@ -3,13 +3,13 @@ const SUPABASE_URL = 'https://zrnnharudlgxuvewqryj.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_Vg44Z7eJacwji3iLii0Dxg_mQlSfwi-';
 
 // Initialize Supabase client
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Auth helper functions
 const auth = {
     // Get current user
     async getCurrentUser() {
-        const { data: { user }, error } = await supabase.auth.getUser();
+        const { data: { user }, error } = await supabaseClient.auth.getUser();
         if (error) {
             console.error('Error getting user:', error);
             return null;
@@ -19,7 +19,7 @@ const auth = {
 
     // Sign up new user
     async signUp(email, password, fullName) {
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error } = await supabaseClient.auth.signUp({
             email,
             password,
             options: {
@@ -37,7 +37,7 @@ const auth = {
 
     // Sign in user
     async signIn(email, password) {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
             email,
             password
         });
@@ -50,7 +50,7 @@ const auth = {
 
     // Sign out user
     async signOut() {
-        const { error } = await supabase.auth.signOut();
+        const { error } = await supabaseClient.auth.signOut();
         if (error) {
             console.error('Error signing out:', error);
             return { success: false, error: error.message };
@@ -60,7 +60,7 @@ const auth = {
 
     // Reset password
     async resetPassword(email) {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
             redirectTo: `${window.location.origin}/spendnote-login.html`
         });
         if (error) {
@@ -92,7 +92,7 @@ const db = {
     // Cash Boxes
     cashBoxes: {
         async getAll() {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('cash_boxes')
                 .select('*')
                 .order('created_at', { ascending: false });
@@ -104,7 +104,7 @@ const db = {
         },
 
         async getById(id) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('cash_boxes')
                 .select('*')
                 .eq('id', id)
@@ -117,7 +117,7 @@ const db = {
         },
 
         async create(cashBox) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('cash_boxes')
                 .insert([cashBox])
                 .select()
@@ -130,7 +130,7 @@ const db = {
         },
 
         async update(id, updates) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('cash_boxes')
                 .update(updates)
                 .eq('id', id)
@@ -144,7 +144,7 @@ const db = {
         },
 
         async delete(id) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('cash_boxes')
                 .delete()
                 .eq('id', id);
@@ -159,7 +159,7 @@ const db = {
     // Contacts
     contacts: {
         async getAll() {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('contacts')
                 .select('*')
                 .order('name', { ascending: true });
@@ -171,7 +171,7 @@ const db = {
         },
 
         async getById(id) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('contacts')
                 .select('*')
                 .eq('id', id)
@@ -184,7 +184,7 @@ const db = {
         },
 
         async create(contact) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('contacts')
                 .insert([contact])
                 .select()
@@ -197,7 +197,7 @@ const db = {
         },
 
         async update(id, updates) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('contacts')
                 .update(updates)
                 .eq('id', id)
@@ -211,7 +211,7 @@ const db = {
         },
 
         async delete(id) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('contacts')
                 .delete()
                 .eq('id', id);
@@ -226,7 +226,7 @@ const db = {
     // Transactions
     transactions: {
         async getAll(filters = {}) {
-            let query = supabase
+            let query = supabaseClient
                 .from('transactions')
                 .select(`
                     *,
@@ -257,7 +257,7 @@ const db = {
         },
 
         async getById(id) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('transactions')
                 .select(`
                     *,
@@ -274,7 +274,7 @@ const db = {
         },
 
         async create(transaction) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('transactions')
                 .insert([transaction])
                 .select()
@@ -287,7 +287,7 @@ const db = {
         },
 
         async update(id, updates) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('transactions')
                 .update(updates)
                 .eq('id', id)
@@ -301,7 +301,7 @@ const db = {
         },
 
         async delete(id) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('transactions')
                 .delete()
                 .eq('id', id);
@@ -319,7 +319,7 @@ const db = {
             const user = await auth.getCurrentUser();
             if (!user) return null;
 
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('profiles')
                 .select('*')
                 .eq('id', user.id)
@@ -335,7 +335,7 @@ const db = {
             const user = await auth.getCurrentUser();
             if (!user) return { success: false, error: 'Not authenticated' };
 
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('profiles')
                 .update(updates)
                 .eq('id', user.id)
@@ -352,7 +352,7 @@ const db = {
     // Team Members (Pro feature)
     teamMembers: {
         async getAll() {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('team_members')
                 .select(`
                     *,
@@ -370,7 +370,7 @@ const db = {
             const user = await auth.getCurrentUser();
             if (!user) return { success: false, error: 'Not authenticated' };
 
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('team_members')
                 .insert([{
                     owner_id: user.id,
@@ -388,7 +388,7 @@ const db = {
         },
 
         async updateRole(memberId, role) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('team_members')
                 .update({ role })
                 .eq('id', memberId)
@@ -402,7 +402,7 @@ const db = {
         },
 
         async remove(memberId) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('team_members')
                 .delete()
                 .eq('id', memberId);
@@ -420,7 +420,7 @@ const db = {
             const user = await auth.getCurrentUser();
             if (!user) return { success: false, error: 'Not authenticated' };
 
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('cash_box_access')
                 .insert([{
                     cash_box_id: cashBoxId,
@@ -437,7 +437,7 @@ const db = {
         },
 
         async revoke(cashBoxId, userId) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('cash_box_access')
                 .delete()
                 .eq('cash_box_id', cashBoxId)
@@ -450,7 +450,7 @@ const db = {
         },
 
         async getForCashBox(cashBoxId) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('cash_box_access')
                 .select(`
                     *,
@@ -467,6 +467,6 @@ const db = {
 };
 
 // Export for use in other files
-window.supabaseClient = supabase;
+window.supabaseClient = supabaseClient;
 window.auth = auth;
 window.db = db;
