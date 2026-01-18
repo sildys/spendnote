@@ -3984,7 +3984,7 @@ tr:hover [data-category-tag] {
                 card.style.setProperty('--card-color', color);
                 card.style.setProperty('--card-rgb', rgb);
 
-                // Click to activate and navigate to Cash Box Detail
+                // Click to activate
                 card.addEventListener('click', (e) => {
                     // Don't activate if clicking menu button
                     if (e.target.closest('.register-kebab') || e.target.closest('.register-menu')) {
@@ -4007,8 +4007,13 @@ tr:hover [data-category-tag] {
                     updateMenuColors(color);
                     // Update table header color
                     updateTableHeaderColor(rgb);
-                    
-                    // Navigate to Cash Box Detail with cashbox ID
+                });
+                
+                // Double-click to navigate to Cash Box Detail
+                card.addEventListener('dblclick', (e) => {
+                    if (e.target.closest('.register-kebab') || e.target.closest('.register-menu')) {
+                        return;
+                    }
                     const cashboxId = card.dataset.id;
                     window.location.href = `spendnote-cash-box-detail.html?id=${cashboxId}`;
                 });
