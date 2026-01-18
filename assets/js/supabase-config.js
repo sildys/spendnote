@@ -230,7 +230,7 @@ const db = {
                 .from('transactions')
                 .select(`
                     *,
-                    cash_box:cash_boxes(id, name, color),
+                    cash_box:cash_boxes(id, name, color, currency),
                     contact:contacts(id, name)
                 `)
                 .order('transaction_date', { ascending: false });
@@ -261,8 +261,8 @@ const db = {
                 .from('transactions')
                 .select(`
                     *,
-                    cash_box:cash_boxes(id, name, color),
-                    contact:contacts(id, name, email, phone)
+                    cash_box:cash_boxes(id, name, color, currency),
+                    contact:contacts(id, name, email, phone, address)
                 `)
                 .eq('id', id)
                 .single();
@@ -346,6 +346,122 @@ const db = {
                 return { success: false, error: error.message };
             }
             return { success: true, data };
+        }
+    },
+
+    // Team Members (Pro feature)
+    teamMembers: {
+        async getAll() {
+            const { data, error } = await supabase
+                .from('team_members')
+                .select(`
+                    *,
+                    member:profiles!member_id(id, full_name, email)
+                `)
+                .order('created_at', { ascending: false });
+            if (error) {
+                console.error('Error fetching team members:', error);
+                return [];
+            }
+            return data;
+        },
+
+        async invite(email, role) {
+            const user = await auth.getCurrentUser();
+            if (!user) return { success: false, error: 'Not authenticated' };
+
+            const { data, error } = await supabase
+                .from('team_members')
+                .insert([{
+                    owner_id: user.id,
+                    invited_email: email,
+                    role: role,
+                    status: 'pending'
+                }])
+                .select()
+                .single();
+            if (error) {
+                console.error('Error inviting team member:', error);
+                return { success: false, error: error.message };
+            }
+            return { success: true, data };
+        },
+
+        async updateRole(memberId, role) {
+            const { data, error } = await supabase
+                .from('team_members')
+                .update({ role })
+                .eq('id', memberId)
+                .select()
+                .single();
+            if (error) {
+                console.error('Error updating team member role:', error);
+                return { success: false, error: error.message };
+            }
+            return { success: true, data };
+        },
+
+        async remove(memberId) {
+            const { error } = await supabase
+                .from('team_members')
+                .delete()
+                .eq('id', memberId);
+            if (error) {
+                console.error('Error removing team member:', error);
+                return { success: false, error: error.message };
+            }
+            return { success: true };
+        }
+    },
+
+    // Cash Box Access (Pro team feature)
+    cashBoxAccess: {
+        async grant(cashBoxId, userId) {
+            const user = await auth.getCurrentUser();
+            if (!user) return { success: false, error: 'Not authenticated' };
+
+            const { data, error } = await supabase
+                .from('cash_box_access')
+                .insert([{
+                    cash_box_id: cashBoxId,
+                    user_id: userId,
+                    granted_by: user.id
+                }])
+                .select()
+                .single();
+            if (error) {
+                console.error('Error granting cash box access:', error);
+                return { success: false, error: error.message };
+            }
+            return { success: true, data };
+        },
+
+        async revoke(cashBoxId, userId) {
+            const { error } = await supabase
+                .from('cash_box_access')
+                .delete()
+                .eq('cash_box_id', cashBoxId)
+                .eq('user_id', userId);
+            if (error) {
+                console.error('Error revoking cash box access:', error);
+                return { success: false, error: error.message };
+            }
+            return { success: true };
+        },
+
+        async getForCashBox(cashBoxId) {
+            const { data, error } = await supabase
+                .from('cash_box_access')
+                .select(`
+                    *,
+                    user:profiles!user_id(id, full_name, email)
+                `)
+                .eq('cash_box_id', cashBoxId);
+            if (error) {
+                console.error('Error fetching cash box access:', error);
+                return [];
+            }
+            return data;
         }
     }
 };
