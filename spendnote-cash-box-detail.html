@@ -382,6 +382,54 @@
 
         .filter-btn.clear:hover { border-color: var(--text); }
 
+        /* BULK ACTIONS */
+        .bulk-actions {
+            display: none;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 24px;
+            background: rgba(5, 150, 105, 0.05);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            border-radius: 16px;
+            margin-bottom: 16px;
+        }
+
+        .bulk-actions.show {
+            display: flex;
+        }
+
+        .bulk-actions-text {
+            font-weight: 600;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .bulk-action-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            background: var(--surface);
+            color: var(--text);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bulk-action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .bulk-action-btn.delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+
         /* TRANSACTIONS TABLE */
         .transactions-table {
             background: var(--surface);
@@ -819,6 +867,24 @@
                     <button class="filter-btn clear"><i class="fas fa-file-pdf"></i> Export PDF</button>
                 </div>
             </div>
+        </div>
+
+        <!-- BULK ACTIONS -->
+        <div class="bulk-actions" id="bulkActions">
+            <input type="checkbox" id="selectAll">
+            <span class="bulk-actions-text"><strong><span id="selectedCount">0</span> selected</strong></span>
+            <button class="bulk-action-btn">
+                <i class="fas fa-file-pdf"></i>
+                Print Selected
+            </button>
+            <button class="bulk-action-btn">
+                <i class="fas fa-envelope"></i>
+                Email Selected
+            </button>
+            <button class="bulk-action-btn delete">
+                <i class="fas fa-trash"></i>
+                Delete Selected
+            </button>
         </div>
 
         <!-- TRANSACTIONS TABLE -->
