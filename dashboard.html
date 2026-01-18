@@ -4110,12 +4110,15 @@ tr:hover [data-category-tag] {
         const returnFromCashBoxId = urlParams.get('cashbox');
         if (returnFromCashBoxId) {
             // Find the slide index for the cashbox ID
-            const slides = document.querySelectorAll('.swiper-slide .register-card');
+            const allSlides = document.querySelectorAll('.swiper-slide');
             let targetIndex = -1;
-            slides.forEach((card, index) => {
-                const cashBoxId = card.dataset.id;
-                if (cashBoxId && cashBoxId === returnFromCashBoxId) {
-                    targetIndex = index;
+            allSlides.forEach((slide, index) => {
+                const card = slide.querySelector('.register-card');
+                if (card) {
+                    const cashBoxId = card.dataset.id;
+                    if (cashBoxId && cashBoxId === returnFromCashBoxId) {
+                        targetIndex = index;
+                    }
                 }
             });
             // Navigate to the slide (including index 0)
