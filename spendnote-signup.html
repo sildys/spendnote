@@ -551,7 +551,7 @@
                     successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Account created! Redirecting to dashboard...';
                     
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        window.location.href = 'spendnote-user-settings.html';
                     }, 1000);
                 } else {
                     // Error
@@ -577,7 +577,7 @@
                 const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: `${window.location.origin}/dashboard.html`
+                        redirectTo: `${window.location.origin}/spendnote-user-settings.html`
                     }
                 });
                 
