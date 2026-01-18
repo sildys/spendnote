@@ -375,26 +375,22 @@
             color: var(--text);
         }
 
-        .tx-Cash Box {
+        /* Cash Box badge */
+        .cashbox-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            background: rgba(5, 150, 105, 0.1);
-            border-radius: 6px;
-            font-size: 12px;
+            gap: 8px;
             font-weight: 600;
-            color: var(--primary);
+            font-size: 13px;
+            color: var(--text);
         }
-
-        .tx-Cash Box.orange {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--orange);
-        }
-
-        .tx-Cash Box.blue {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--blue);
+        .cashbox-badge::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--cb-color, var(--text-muted));
+            flex-shrink: 0;
         }
 
         .tx-direction {
@@ -808,7 +804,7 @@
                             <td><span class="tx-direction in">IN</span></td>
                             <td><span class="tx-id">TRX-342</span></td>
                             <td><span class="tx-date">Jan 6, 2026</span></td>
-                            <td><span class="tx-Cash Box">Main Office</span></td>
+                            <td><span class="cashbox-badge" style="--cb-color: #059669;">Main Office</span></td>
                             <td><span class="tx-Contact">John Smith</span></td>
                             <td><span class="tx-contact-id">CLIENT-4523</span></td>
                             <td><span class="tx-amount in">$1,200.00</span></td>
@@ -827,7 +823,7 @@
                             <td><span class="tx-direction out">OUT</span></td>
                             <td><span class="tx-id">TRX-341</span></td>
                             <td><span class="tx-date">Jan 5, 2026</span></td>
-                            <td><span class="tx-Cash Box orange">Event Fund</span></td>
+                            <td><span class="cashbox-badge" style="--cb-color: #f59e0b;">Event Fund</span></td>
                             <td><span class="tx-Contact">Sarah Williams</span></td>
                             <td><span class="tx-contact-id"></span></td>
                             <td><span class="tx-amount out">$450.00</span></td>
@@ -846,7 +842,7 @@
                             <td><span class="tx-direction in">IN</span></td>
                             <td><span class="tx-id">TRX-340</span></td>
                             <td><span class="tx-date">Jan 5, 2026</span></td>
-                            <td><span class="tx-Cash Box blue">Petty Cash</span></td>
+                            <td><span class="cashbox-badge" style="--cb-color: #3b82f6;">Petty Cash</span></td>
                             <td><span class="tx-Contact">Mike Johnson</span></td>
                             <td><span class="tx-contact-id">CLI-MJ-2025</span></td>
                             <td><span class="tx-amount in">$85.50</span></td>
@@ -865,7 +861,7 @@
                             <td><span class="tx-direction out">OUT</span></td>
                             <td><span class="tx-id">TRX-339</span></td>
                             <td><span class="tx-date">Jan 4, 2026</span></td>
-                            <td><span class="tx-Cash Box">Main Office</span></td>
+                            <td><span class="cashbox-badge" style="--cb-color: #059669;">Main Office</span></td>
                             <td><span class="tx-Contact">Emily Davis</span></td>
                             <td><span class="tx-contact-id">EMP-ED-789</span></td>
                             <td><span class="tx-amount out">$2,350.00</span></td>
@@ -884,7 +880,7 @@
                             <td><span class="tx-direction in">IN</span></td>
                             <td><span class="tx-id">TRX-338</span></td>
                             <td><span class="tx-date">Jan 4, 2026</span></td>
-                            <td><span class="tx-Cash Box orange">Event Fund</span></td>
+                            <td><span class="cashbox-badge" style="--cb-color: #f59e0b;">Event Fund</span></td>
                             <td><span class="tx-Contact">Robert Brown</span></td>
                             <td><span class="tx-contact-id"></span></td>
                             <td><span class="tx-amount in">$750.00</span></td>
@@ -903,7 +899,7 @@
                             <td><span class="tx-direction out">OUT</span></td>
                             <td><span class="tx-id">TRX-337</span></td>
                             <td><span class="tx-date">Jan 3, 2026</span></td>
-                            <td><span class="tx-Cash Box blue">Petty Cash</span></td>
+                            <td><span class="cashbox-badge" style="--cb-color: #3b82f6;">Petty Cash</span></td>
                             <td><span class="tx-Contact">Lisa Anderson</span></td>
                             <td><span class="tx-contact-id">VEND-LA-456</span></td>
                             <td><span class="tx-amount out">$125.00</span></td>
