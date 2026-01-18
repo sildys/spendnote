@@ -929,27 +929,47 @@
         .tx-datetime .time {
             display: block;
             color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .tx-action {
-            padding: 8px 16px;
-            background: rgba(var(--row-rgb, var(--active-rgb)), 0.1);
-            color: var(--row-color, var(--active));
-            border: 1px solid rgba(var(--row-rgb, var(--active-rgb)), 0.2);
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .tx-action:hover {
-            background: var(--row-color, var(--active));
-            color: white;
-            transform: translateY(-1px);
-        }
 
-        .bulk-actions {
+            .bulk-actions {
+                padding: 12px 32px;
+                background: rgba(var(--active-rgb), 0.05);
+                border-bottom: 2px solid var(--border);
+                display: none;
+                align-items: center;
+                gap: 16px;
+            }
+            .bulk-actions.active { display: flex; }
+            .bulk-actions-text {
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--text);
+            }
+            .bulk-action-btn {
+                padding: 8px 16px;
+                background: white;
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                font-weight: 700;
+                font-size: 13px;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .bulk-action-btn:hover {
+                background: var(--active);
+                color: white;
+                border-color: var(--active);
+            }
+            .bulk-action-btn.delete {
+                color: #ef4444;
+                border-color: #ef4444;
+            }
+            .bulk-action-btn.delete:hover {
+                background: #ef4444;
+                color: white;
+            }
             padding: 12px 32px;
             background: rgba(var(--active-rgb), 0.05);
             border-bottom: 2px solid var(--border);
@@ -2965,7 +2985,7 @@ tr:hover [data-category-tag] {
                         <div class="tx-desc">Retail cash deposit</div>
                         <div class="tx-amount in">+$5,000</div>
                         <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small"><img src="https://i.pravatar.cc/150?img=5" alt="Alexa"></div><span>Alexa</span></div></div>
-                        <a href="spendnote-transaction-detail.html" class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105; text-decoration: none; display: flex; align-items: center; justify-content: center;">View</a>
+                        <a href="spendnote-transaction-detail.html" class="tx-action">View</a>
                     </div>
                     <div class="table-grid" tabindex="0" style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
                         <div class="tx-type out">OUT</div>
@@ -2978,7 +2998,7 @@ tr:hover [data-category-tag] {
                         <div class="tx-desc">Office supplies</div>
                         <div class="tx-amount out">-$450</div>
                         <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small"><img src="https://i.pravatar.cc/150?img=9" alt="Mia"></div><span>Mia</span></div></div>
-                        <a href="spendnote-transaction-detail.html" class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105; text-decoration: none; display: flex; align-items: center; justify-content: center;">View</a>
+                        <a href="spendnote-transaction-detail.html" class="tx-action">View</a>
                     </div>
                     <div class="table-grid" tabindex="0" style="--cashbox-rgb: 245, 158, 11; --cashbox-color: #f59e0b;">
                         <div class="tx-type in">IN</div>
@@ -2991,7 +3011,7 @@ tr:hover [data-category-tag] {
                         <div class="tx-desc">Customer payment</div>
                         <div class="tx-amount in">+$2,200</div>
                         <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small"><img src="https://i.pravatar.cc/150?img=13" alt="Ethan"></div><span>Ethan</span></div></div>
-                        <a href="spendnote-transaction-detail.html" class="tx-action" style="--row-color: #f59e0b; --row-rgb: 245, 158, 11; text-decoration: none; display: flex; align-items: center; justify-content: center;">View</a>
+                        <a href="spendnote-transaction-detail.html" class="tx-action">View</a>
                     </div>
                     <div class="table-grid" tabindex="0" style="--cashbox-rgb: 59, 130, 246; --cashbox-color: #3b82f6;">
                         <div class="tx-type out">OUT</div>
@@ -3004,7 +3024,7 @@ tr:hover [data-category-tag] {
                         <div class="tx-desc">Marketing campaign</div>
                         <div class="tx-amount out">-$1,800</div>
                         <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small"><img src="https://i.pravatar.cc/150?img=10" alt="Sofia"></div><span>Sofia</span></div></div>
-                        <a href="spendnote-transaction-detail.html" class="tx-action" style="--row-color: #3b82f6; --row-rgb: 59, 130, 246; text-decoration: none; display: flex; align-items: center; justify-content: center;">View</a>
+                        <a href="spendnote-transaction-detail.html" class="tx-action">View</a>
                     </div>
                     <div class="table-grid" tabindex="0" style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
                         <div class="tx-type in">IN</div>
@@ -3017,7 +3037,7 @@ tr:hover [data-category-tag] {
                         <div class="tx-desc">Product sales</div>
                         <div class="tx-amount in">+$3,450</div>
                         <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small"><img src="https://i.pravatar.cc/150?img=15" alt="Liam"></div><span>Liam</span></div></div>
-                        <a href="spendnote-transaction-detail.html" class="tx-action" style="--row-color: #059669; --row-rgb: 5, 150, 105; text-decoration: none; display: flex; align-items: center; justify-content: center;">View</a>
+                        <a href="spendnote-transaction-detail.html" class="tx-action">View</a>
                     </div>
                 </div>
                 
