@@ -660,35 +660,35 @@
                     <i class="fas fa-list"></i>
                     Total Transactions
                 </div>
-                <div class="stat-value">342</div>
+                <div class="stat-value" id="statTotalTransactions">342</div>
             </div>
             <div class="stat-card in">
                 <div class="stat-label">
                     <i class="fas fa-arrow-down"></i>
                     Total IN
                 </div>
-                <div class="stat-value">$124,580</div>
+                <div class="stat-value" id="statTotalIn">$124,580</div>
             </div>
             <div class="stat-card out">
                 <div class="stat-label">
                     <i class="fas fa-arrow-up"></i>
                     Total OUT
                 </div>
-                <div class="stat-value">$87,320</div>
+                <div class="stat-value" id="statTotalOut">$87,320</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">
                     <i class="fas fa-balance-scale"></i>
                     Net Balance
                 </div>
-                <div class="stat-value">$37,260</div>
+                <div class="stat-value" id="statNetBalance">$37,260</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">
                     <i class="fas fa-building"></i>
                     Cash Boxes
                 </div>
-                <div class="stat-value">3</div>
+                <div class="stat-value" id="statCashBoxes">3</div>
             </div>
         </div>
 
@@ -1113,8 +1113,64 @@
             }
         });
 
-        // Stats note
-        console.log('Stats show filtered results only');
+        // Dynamic stats calculation
+        function updateStats() {
+            // Get all visible rows (not hidden by filters)
+            const visibleRows = Array.from(document.querySelectorAll('tbody tr')).filter(row => {
+                return row.style.display !== 'none';
+            });
+            
+            let totalIn = 0;
+            let totalOut = 0;
+            const cashBoxes = new Set();
+            
+            visibleRows.forEach(row => {
+                // Get direction
+                const directionEl = row.querySelector('.tx-direction');
+                if (!directionEl) return;
+                
+                const direction = directionEl.textContent.trim();
+                
+                // Get amount
+                const amountEl = row.querySelector('.tx-amount');
+                if (!amountEl) return;
+                
+                const amountText = amountEl.textContent.replace(/[$,]/g, '');
+                const amount = parseFloat(amountText);
+                
+                if (direction === 'IN') {
+                    totalIn += amount;
+                } else if (direction === 'OUT') {
+                    totalOut += amount;
+                }
+                
+                // Get cash box
+                const cashBoxEl = row.querySelector('.cashbox-badge');
+                if (cashBoxEl) {
+                    cashBoxes.add(cashBoxEl.textContent.trim());
+                }
+            });
+            
+            const netBalance = totalIn - totalOut;
+            
+            // Update DOM
+            document.getElementById('statTotalTransactions').textContent = visibleRows.length;
+            document.getElementById('statTotalIn').textContent = '$' + totalIn.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+            document.getElementById('statTotalOut').textContent = '$' + totalOut.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+            document.getElementById('statNetBalance').textContent = '$' + netBalance.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+            document.getElementById('statCashBoxes').textContent = cashBoxes.size;
+        }
+        
+        // Call updateStats on page load
+        updateStats();
+        
+        // Add event listeners to all filter inputs
+        document.querySelectorAll('.filter-select, .filter-input').forEach(input => {
+            input.addEventListener('change', function() {
+                // Wait a bit for filters to apply
+                setTimeout(updateStats, 100);
+            });
+        });
 
         // Filter tabs
         document.querySelectorAll('.filter-tab').forEach(tab => {
