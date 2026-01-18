@@ -16,11 +16,12 @@
 6. Click **Run** to execute the schema
 
 This will create:
-- `profiles` table (extends Supabase Auth users)
-- `cash_boxes` table
+- `profiles` table (extends Supabase Auth users with subscription info)
+- `cash_boxes` table (with receipt customization settings)
 - `contacts` table
-- `transactions` table
-- `cash_box_contacts` junction table
+- `transactions` table (with contact snapshots and team tracking)
+- `team_members` table (Pro feature)
+- `cash_box_access` table (Pro team feature)
 - All necessary indexes, triggers, and Row Level Security policies
 
 ### 2. Optional: Add Sample Data

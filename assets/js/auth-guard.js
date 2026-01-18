@@ -1,0 +1,12 @@
+// Auth Guard - Redirect to login if not authenticated
+// This script should be included on all app pages (not on public pages like index, login, signup)
+
+(async function() {
+    // Check if user is authenticated
+    const { data: { session }, error } = await supabase.auth.getSession();
+    
+    if (!session || error) {
+        // Not authenticated - redirect to login
+        window.location.href = '/spendnote-login.html';
+    }
+})();
