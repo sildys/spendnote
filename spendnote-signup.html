@@ -446,15 +446,15 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js"></script>
     <script>
-        // Check if already logged in
-        (async () => {
+        // Wait for DOM and scripts to load
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check if already logged in
             const user = await auth.getCurrentUser();
             if (user) {
                 window.location.href = 'dashboard.html';
             }
-        })();
 
-        // Password strength indicator
+            // Password strength indicator
         const passwordInput = document.getElementById('password');
         const strengthBars = document.querySelectorAll('.strength-bar');
         const strengthText = document.getElementById('strengthText');
@@ -588,6 +588,7 @@
                 showError('Google sign up failed. Please try again.');
             }
         });
+        }); // Close DOMContentLoaded
     </script>
     <script src="assets/js/main.js"></script>
 </body>
