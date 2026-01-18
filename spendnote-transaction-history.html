@@ -354,6 +354,11 @@
             white-space: nowrap;
         }
 
+        /* Row hover uses cashbox color */
+        tbody tr:hover {
+            background: rgba(var(--cashbox-rgb, 5, 150, 105), 0.06);
+        }
+
         .tx-id {
             font-family: 'Courier New', monospace;
             font-weight: 600;
@@ -798,7 +803,7 @@
                     </thead>
                     <tbody>
                         <!-- Sample Data -->
-                        <tr class="register-main">
+                        <tr class="register-main" style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-direction in">IN</span></td>
                             <td><span class="tx-id">TRX-342</span></td>
@@ -817,7 +822,7 @@
                             </td>
                             <td><a href="spendnote-transaction-detail.html" class="action-btn">View</a></td>
                         </tr>
-                        <tr>
+                        <tr style="--cashbox-rgb: 245, 158, 11; --cashbox-color: #f59e0b;">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-direction out">OUT</span></td>
                             <td><span class="tx-id">TRX-341</span></td>
@@ -836,7 +841,7 @@
                             </td>
                             <td><a href="spendnote-transaction-detail.html" class="action-btn">View</a></td>
                         </tr>
-                        <tr>
+                        <tr style="--cashbox-rgb: 59, 130, 246; --cashbox-color: #3b82f6;">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-direction in">IN</span></td>
                             <td><span class="tx-id">TRX-340</span></td>
@@ -855,7 +860,7 @@
                             </td>
                             <td><a href="spendnote-transaction-detail.html" class="action-btn">View</a></td>
                         </tr>
-                        <tr>
+                        <tr style="--cashbox-rgb: 5, 150, 105; --cashbox-color: #059669;">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-direction out">OUT</span></td>
                             <td><span class="tx-id">TRX-339</span></td>
@@ -874,7 +879,7 @@
                             </td>
                             <td><a href="spendnote-transaction-detail.html" class="action-btn">View</a></td>
                         </tr>
-                        <tr>
+                        <tr style="--cashbox-rgb: 245, 158, 11; --cashbox-color: #f59e0b;">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-direction in">IN</span></td>
                             <td><span class="tx-id">TRX-338</span></td>
@@ -893,7 +898,7 @@
                             </td>
                             <td><a href="spendnote-transaction-detail.html" class="action-btn">View</a></td>
                         </tr>
-                        <tr>
+                        <tr style="--cashbox-rgb: 59, 130, 246; --cashbox-color: #3b82f6;">
                             <td><input type="checkbox" class="row-checkbox"></td>
                             <td><span class="tx-direction out">OUT</span></td>
                             <td><span class="tx-id">TRX-337</span></td>
