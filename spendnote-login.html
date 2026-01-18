@@ -390,7 +390,17 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabase-config.js"></script>
     <script>
+        // Check if already logged in
+        (async () => {
+            const user = await auth.getCurrentUser();
+            if (user) {
+                window.location.href = 'dashboard.html';
+            }
+        })();
+
         // Form submission
         const loginForm = document.getElementById('loginForm');
         const errorMessage = document.getElementById('errorMessage');
@@ -404,48 +414,33 @@
             successMessage.classList.remove('show');
 
             // Get form data
-            const formData = {
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value,
-                remember: document.getElementById('remember').checked
-            };
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
             // Disable button
             const submitBtn = this.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Logging in...';
 
-            // Simulate API call
-            setTimeout(() => {
-                // Success
-                successMessage.classList.add('show');
-                successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Logged in! Redirecting to dashboard...';
+            try {
+                // Sign in with Supabase
+                const result = await auth.signIn(email, password);
                 
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
-
-                // In real app, make API call:
-                // try {
-                //     const response = await fetch('/api/login', {
-                //         method: 'POST',
-                //         headers: { 'Content-Type': 'application/json' },
-                //         body: JSON.stringify(formData)
-                //     });
-                //     
-                //     if (response.ok) {
-                //         const data = await response.json();
-                //         localStorage.setItem('token', data.token);
-                //         successMessage.classList.add('show');
-                //         setTimeout(() => window.location.href = '/dashboard', 1500);
-                //     } else {
-                //         const error = await response.json();
-                //         showError(error.message || 'Invalid email or password');
-                //     }
-                // } catch (error) {
-                //     showError('Network error. Please try again.');
-                // }
-            }, 1000);
+                if (result.success) {
+                    // Success
+                    successMessage.classList.add('show');
+                    successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Logged in! Redirecting to dashboard...';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    // Error
+                    showError(result.error || 'Invalid email or password');
+                }
+            } catch (error) {
+                showError('Network error. Please try again.');
+            }
         });
 
         function showError(message) {
@@ -458,10 +453,21 @@
         }
 
         // Google login
-        document.getElementById('googleBtn').addEventListener('click', function() {
-            alert('Google OAuth integration (demo only)');
-            // In real app:
-            // window.location.href = '/auth/google';
+        document.getElementById('googleBtn').addEventListener('click', async function() {
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: `${window.location.origin}/dashboard.html`
+                    }
+                });
+                
+                if (error) {
+                    showError('Google login failed. Please try again.');
+                }
+            } catch (error) {
+                showError('Google login failed. Please try again.');
+            }
         });
     </script>
     <script src="assets/js/main.js"></script>

@@ -443,7 +443,17 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabase-config.js"></script>
     <script>
+        // Check if already logged in
+        (async () => {
+            const user = await auth.getCurrentUser();
+            if (user) {
+                window.location.href = 'dashboard.html';
+            }
+        })();
+
         // Password strength indicator
         const passwordInput = document.getElementById('password');
         const strengthBars = document.querySelectorAll('.strength-bar');
@@ -510,20 +520,18 @@
             successMessage.classList.remove('show');
 
             // Get form data
-            const formData = {
-                name: document.getElementById('fullName').value,
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value,
-                terms: document.getElementById('terms').checked
-            };
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const terms = document.getElementById('terms').checked;
 
             // Validate
-            if (!formData.terms) {
+            if (!terms) {
                 showError('Please agree to the Terms of Service');
                 return;
             }
 
-            if (formData.password.length < 8) {
+            if (password.length < 8) {
                 showError('Password must be at least 8 characters');
                 return;
             }
@@ -533,39 +541,29 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Creating account...';
 
-            // Simulate API call
-            setTimeout(() => {
-                // Success
-                successMessage.classList.add('show');
-                successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Account created! Redirecting to dashboard...';
+            try {
+                // Sign up with Supabase
+                const result = await auth.signUp(email, password, fullName);
                 
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
-
-                // In real app, make API call:
-                // try {
-                //     const response = await fetch('/api/signup', {
-                //         method: 'POST',
-                //         headers: { 'Content-Type': 'application/json' },
-                //         body: JSON.stringify(formData)
-                //     });
-                //     
-                //     if (response.ok) {
-                //         successMessage.classList.add('show');
-                //         setTimeout(() => window.location.href = '/dashboard', 1500);
-                //     } else {
-                //         const error = await response.json();
-                //         showError(error.message);
-                //     }
-                // } catch (error) {
-                //     showError('Network error. Please try again.');
-                // }
-            }, 1000);
+                if (result.success) {
+                    // Success
+                    successMessage.classList.add('show');
+                    successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Account created! Redirecting to dashboard...';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    // Error
+                    showError(result.error || 'Failed to create account. Please try again.');
+                }
+            } catch (error) {
+                showError('Network error. Please try again.');
+            }
         });
 
         function showError(message) {
-            errorMessage.textContent = message;
+            errorMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + message;
             errorMessage.classList.add('show');
             
             const submitBtn = signupForm.querySelector('button[type="submit"]');
@@ -574,10 +572,21 @@
         }
 
         // Google sign up
-        document.getElementById('googleBtn').addEventListener('click', function() {
-            alert('Google OAuth integration (demo only)');
-            // In real app:
-            // window.location.href = '/auth/google';
+        document.getElementById('googleBtn').addEventListener('click', async function() {
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: `${window.location.origin}/dashboard.html`
+                    }
+                });
+                
+                if (error) {
+                    showError('Google sign up failed. Please try again.');
+                }
+            } catch (error) {
+                showError('Google sign up failed. Please try again.');
+            }
         });
     </script>
     <script src="assets/js/main.js"></script>
