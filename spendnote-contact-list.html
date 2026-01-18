@@ -595,9 +595,8 @@
                         <th style="width: 40px;"><input type="checkbox" id="selectAllHeader"></th>
                         <th class="sortable" data-column="id" style="width: 100px;">ID <i class="fas fa-sort"></i></th>
                         <th class="sortable" data-column="name" style="width: 200px;">Name <i class="fas fa-sort"></i></th>
-                        <th class="sortable" data-column="contact" style="width: 220px;">Contact <i class="fas fa-sort"></i></th>
+                        <th class="sortable" data-column="contact" style="width: 280px;">Contact <i class="fas fa-sort"></i></th>
                         <th style="width: 90px; text-align: center;" title="Cash Boxes">Boxes <i class="fas fa-sort"></i></th>
-                        <th class="sortable" data-column="address">Address <i class="fas fa-sort"></i></th>
                         <th class="sortable" data-column="transactions" style="width: 50px; text-align: center;" title="Number of Transactions"># <i class="fas fa-sort"></i></th>
                         <th class="sortable" data-column="date" style="width: 110px;">Last Tx <i class="fas fa-sort"></i></th>
                         <th style="width: 90px;">Actions</th>
@@ -620,9 +619,6 @@
                                 <span class="cashbox-dot" style="background: #059669;" title="Main Office"></span>
                                 <span class="cashbox-dot" style="background: #f59e0b;" title="Event Fund"></span>
                             </div>
-                        </td>
-                        <td>
-                            <div class="Contact-address">123 Main St, New York, NY 10001</div>
                         </td>
                         <td>
                             <div class="Contact-contact" style="font-weight: 700; color: var(--text);">8</div>
@@ -653,9 +649,6 @@
                             </div>
                         </td>
                         <td>
-                            <div class="Contact-address">456 Oak Ave, Los Angeles, CA 90001</div>
-                        </td>
-                        <td>
                             <div class="Contact-contact" style="font-weight: 700; color: var(--text);">3</div>
                         </td>
                         <td>
@@ -683,9 +676,6 @@
                                 <span class="cashbox-dot" style="background: #059669;" title="Main Office"></span>
                                 <span class="cashbox-dot" style="background: #3b82f6;" title="Petty Cash"></span>
                             </div>
-                        </td>
-                        <td>
-                            <div class="Contact-address">789 Pine Rd, Chicago, IL 60601</div>
                         </td>
                         <td>
                             <div class="Contact-contact" style="font-weight: 700; color: var(--text);">12</div>
@@ -718,9 +708,6 @@
                             </div>
                         </td>
                         <td>
-                            <div class="Contact-address">321 Market St, San Francisco, CA 94102</div>
-                        </td>
-                        <td>
                             <div class="Contact-contact" style="font-weight: 700; color: var(--text);">5</div>
                         </td>
                         <td>
@@ -747,9 +734,6 @@
                             <div style="display: flex; gap: 4px; justify-content: center;">
                                 <span class="cashbox-dot" style="background: #3b82f6;" title="Petty Cash"></span>
                             </div>
-                        </td>
-                        <td>
-                            <div class="Contact-address" style="color: var(--text-muted); font-style: italic;">—</div>
                         </td>
                         <td>
                             <div class="Contact-contact" style="font-weight: 700; color: var(--text);">2</div>
@@ -779,9 +763,6 @@
                                 <span class="cashbox-dot" style="background: #f59e0b;" title="Event Fund"></span>
                                 <span class="cashbox-dot" style="background: #3b82f6;" title="Petty Cash"></span>
                             </div>
-                        </td>
-                        <td>
-                            <div class="Contact-address" style="color: var(--text-muted); font-style: italic;">—</div>
                         </td>
                         <td>
                             <div class="Contact-contact" style="font-weight: 700; color: var(--text);">1</div>
@@ -988,18 +969,12 @@
                 } else if (column === 'contact') {
                     aValue = a.cells[3].textContent.trim().toLowerCase();
                     bValue = b.cells[3].textContent.trim().toLowerCase();
-                } else if (column === 'cashbox') {
-                    aValue = a.cells[4].textContent.trim().toLowerCase();
-                    bValue = b.cells[4].textContent.trim().toLowerCase();
-                } else if (column === 'address') {
-                    aValue = a.cells[5].textContent.trim().toLowerCase();
-                    bValue = b.cells[5].textContent.trim().toLowerCase();
                 } else if (column === 'transactions') {
-                    aValue = parseInt(a.cells[6].textContent.trim()) || 0;
-                    bValue = parseInt(b.cells[6].textContent.trim()) || 0;
+                    aValue = parseInt(a.cells[5].textContent.trim()) || 0;
+                    bValue = parseInt(b.cells[5].textContent.trim()) || 0;
                 } else if (column === 'date') {
-                    aValue = new Date(a.cells[7].textContent.trim());
-                    bValue = new Date(b.cells[7].textContent.trim());
+                    aValue = new Date(a.cells[6].textContent.trim());
+                    bValue = new Date(b.cells[6].textContent.trim());
                 }
                 
                 if (direction === 'asc') {
