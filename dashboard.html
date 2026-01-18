@@ -929,47 +929,27 @@
         .tx-datetime .time {
             display: block;
             color: var(--text-muted);
+        }
 
-            .bulk-actions {
-                padding: 12px 32px;
-                background: rgba(var(--active-rgb), 0.05);
-                border-bottom: 2px solid var(--border);
-                display: none;
-                align-items: center;
-                gap: 16px;
-            }
-            .bulk-actions.active { display: flex; }
-            .bulk-actions-text {
-                font-size: 14px;
-                font-weight: 700;
-                color: var(--text);
-            }
-            .bulk-action-btn {
-                padding: 8px 16px;
-                background: white;
-                border: 1px solid var(--border);
-                border-radius: 8px;
-                font-weight: 700;
-                font-size: 13px;
-                cursor: pointer;
-                transition: all 0.2s;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-            }
-            .bulk-action-btn:hover {
-                background: var(--active);
-                color: white;
-                border-color: var(--active);
-            }
-            .bulk-action-btn.delete {
-                color: #ef4444;
-                border-color: #ef4444;
-            }
-            .bulk-action-btn.delete:hover {
-                background: #ef4444;
-                color: white;
-            }
+        .tx-action {
+            padding: 8px 16px;
+            background: rgba(var(--active-rgb), 0.1);
+            color: var(--active);
+            border: 1px solid rgba(var(--active-rgb), 0.2);
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .tx-action:hover {
+            background: var(--active);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .bulk-actions {
             padding: 12px 32px;
             background: rgba(var(--active-rgb), 0.05);
             border-bottom: 2px solid var(--border);
