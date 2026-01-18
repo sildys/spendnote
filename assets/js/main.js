@@ -134,7 +134,7 @@ function bindLogoutLinks() {
             } catch (error) {
                 console.error('Logout failed:', error);
             }
-            window.location.href = 'spendnote-login.html';
+            window.location.href = 'index.html';
         });
     });
 }
