@@ -1061,6 +1061,20 @@
     </a>
 
     <script>
+        // Toggle filters panel
+        function toggleFilters() {
+            const panel = document.getElementById('filterPanel');
+            const icon = document.getElementById('filterToggleIcon');
+            
+            if (panel.style.display === 'none' || panel.style.display === '') {
+                panel.style.display = 'block';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                panel.style.display = 'none';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
         // ========================================
         // AUTO-APPLY CASHBOX FILTER FROM URL
         // ========================================
