@@ -706,57 +706,20 @@
             </div>
             <div class="filter-panel" id="filterPanel" style="display: none;">
                 <div class="filter-grid">
-                    <!-- Contact Name -->
                     <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-user"></i>
-                            Contact Name
-                        </label>
+                        <label class="filter-label"><i class="fas fa-hashtag"></i> ID</label>
+                        <input type="text" class="filter-input" placeholder="e.g., TRX-342">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label"><i class="fas fa-user"></i> Contact Name</label>
                         <input type="text" class="filter-input" placeholder="Search by name..." id="filterContact">
                     </div>
-
-                    <!-- Contact ID -->
                     <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-tag"></i>
-                            Contact ID
-                        </label>
+                        <label class="filter-label"><i class="fas fa-tag"></i> Contact ID</label>
                         <input type="text" class="filter-input" placeholder="e.g., CLIENT-4523" id="filterContactId">
                     </div>
-
-                    <!-- Reference ID -->
                     <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-hashtag"></i>
-                            Reference ID
-                        </label>
-                        <input type="text" class="filter-input" placeholder="e.g., PO-2026-0142" id="filterReferenceId">
-                    </div>
-
-                    <!-- Description/Note -->
-                    <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-file-alt"></i>
-                            Description / Note
-                        </label>
-                        <input type="text" class="filter-input" placeholder="Search description..." id="filterDescription">
-                    </div>
-
-                    <!-- Created By (Recorder) -->
-                    <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-user-check"></i>
-                            Logged By
-                        </label>
-                        <input type="text" class="filter-input" placeholder="Search recorder..." id="filterRecorder">
-                    </div>
-
-                    <!-- Cash Box -->
-                    <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-building"></i>
-                            Cash Box
-                        </label>
+                        <label class="filter-label"><i class="fas fa-building"></i> Cash Box</label>
                         <select class="filter-select" id="filterRegister">
                             <option value="">All Cash Boxes</option>
                             <option value="main">Main Office</option>
@@ -764,36 +727,25 @@
                             <option value="petty">Petty Cash</option>
                         </select>
                     </div>
-
-                    <!-- Date From -->
                     <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-calendar"></i>
-                            Date From
-                        </label>
-                        <input type="date" class="filter-input" id="filterDateFrom">
+                        <label class="filter-label"><i class="fas fa-calendar"></i> Date Range</label>
+                        <div class="amount-range">
+                            <input type="date" class="filter-input" id="filterDateFrom">
+                            <span>–</span>
+                            <input type="date" class="filter-input" id="filterDateTo">
+                        </div>
                     </div>
-
-                    <!-- Date To -->
                     <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-calendar"></i>
-                            Date To
-                        </label>
-                        <input type="date" class="filter-input" id="filterDateTo">
-                    </div>
-
-                    <!-- Amount Range -->
-                    <div class="filter-group" style="grid-column: span 3;">
-                        <label class="filter-label">
-                            <i class="fas fa-dollar-sign"></i>
-                            Amount Range
-                        </label>
+                        <label class="filter-label"><i class="fas fa-dollar-sign"></i> Amount Range</label>
                         <div class="amount-range">
                             <input type="number" class="filter-input" placeholder="Min" id="filterAmountMin" step="0.01">
                             <span>–</span>
                             <input type="number" class="filter-input" placeholder="Max" id="filterAmountMax" step="0.01">
                         </div>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label"><i class="fas fa-user-check"></i> Created by</label>
+                        <input type="text" class="filter-input" placeholder="Search recorder..." id="filterRecorder">
                     </div>
                 </div>
 
