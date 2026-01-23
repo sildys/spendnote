@@ -114,15 +114,15 @@ async function handleSave(e) {
             alert('Cash box created successfully!');
         }
         
-        // Redirect back to where we came from
+        // Redirect back to where we came from with hard refresh
         const referrer = document.referrer;
         if (referrer && referrer.includes('dashboard.html')) {
-            window.location.href = 'dashboard.html';
+            window.location.replace('dashboard.html');
         } else if (referrer && referrer.includes('spendnote-cash-box-list.html')) {
-            window.location.href = 'spendnote-cash-box-list.html';
+            window.location.replace('spendnote-cash-box-list.html');
         } else {
             // Default to cash box list if no referrer
-            window.location.href = 'spendnote-cash-box-list.html';
+            window.location.replace('spendnote-cash-box-list.html');
         }
         
     } catch (error) {
