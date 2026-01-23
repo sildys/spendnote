@@ -146,6 +146,9 @@ async function loadDashboardData() {
             }
             
             console.log('✅ Dashboard loaded with real cash boxes:', cashBoxes.length);
+            
+            // Update modal cash box dropdown
+            updateModalCashBoxDropdown(cashBoxes);
         } else {
             console.log('ℹ️ No cash boxes found in database');
         }
@@ -156,6 +159,57 @@ async function loadDashboardData() {
     } catch (error) {
         console.error('❌ Error loading dashboard data:', error);
     }
+}
+
+// Update modal cash box dropdown with real data
+function updateModalCashBoxDropdown(cashBoxes) {
+    const modalRegisterSelect = document.getElementById('modalRegister');
+    if (!modalRegisterSelect || !cashBoxes || cashBoxes.length === 0) return;
+    
+    // Clear existing options
+    modalRegisterSelect.innerHTML = '';
+    
+    // Helper function to get icon class from icon name
+    function getIconClass(iconName) {
+        const iconMap = {
+            'building': 'fa-building',
+            'calendar': 'fa-calendar-alt',
+            'wallet': 'fa-wallet',
+            'bullhorn': 'fa-bullhorn',
+            'store': 'fa-store',
+            'piggy-bank': 'fa-piggy-bank',
+            'chart-line': 'fa-chart-line',
+            'coins': 'fa-coins'
+        };
+        return iconMap[iconName] || 'fa-building';
+    }
+    
+    // Helper function to convert hex color to RGB
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? 
+            `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : 
+            '5, 150, 105';
+    }
+    
+    // Add options for each cash box
+    cashBoxes.forEach((box, index) => {
+        const option = document.createElement('option');
+        option.value = box.id;
+        option.textContent = box.name;
+        option.setAttribute('data-color', box.color);
+        option.setAttribute('data-rgb', hexToRgb(box.color));
+        option.setAttribute('data-icon', getIconClass(box.icon));
+        
+        // Set first option as selected
+        if (index === 0) {
+            option.selected = true;
+        }
+        
+        modalRegisterSelect.appendChild(option);
+    });
+    
+    console.log('✅ Modal cash box dropdown updated with', cashBoxes.length, 'cash boxes');
 }
 
 // Load recent transactions
