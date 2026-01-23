@@ -82,7 +82,7 @@ async function loadCashBoxList() {
                 
                 // Create card HTML
                 allCardsHTML += `
-                    <div class="register-card" 
+                    <div class="register-card ${colorClass}" 
                          data-id="${box.id}" 
                          data-name="${box.name}" 
                          data-color="${color}" 
@@ -121,6 +121,56 @@ async function loadCashBoxList() {
                 grid.insertAdjacentHTML('beforeend', allCardsHTML);
             }
             
+            // Bind selection + menu color sync for dynamic cards
+            const cashBoxCards = Array.from(grid.querySelectorAll('.register-card'))
+                .filter(card => !card.classList.contains('add-cash-box-card'));
+
+            const applyMenuColors = (color) => {
+                if (typeof window.updateMenuColors === 'function') {
+                    window.updateMenuColors(color);
+                    return;
+                }
+                document.querySelectorAll('.nav-cash-item').forEach(item => {
+                    item.style.color = color;
+                });
+                document.querySelectorAll('.nav-links a:not(.nav-cash-item):not(.btn):not(.nav-new-transaction-btn)')
+                    .forEach(item => {
+                        item.style.color = color;
+                    });
+                const newTransactionBtn = document.querySelector('.nav-new-transaction-btn');
+                if (newTransactionBtn) {
+                    newTransactionBtn.style.background = color;
+                    newTransactionBtn.style.borderColor = color;
+                }
+            };
+
+            const setActiveCard = (card) => {
+                if (!card) return;
+                cashBoxCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                const color = card.dataset.color || '#059669';
+                const rgb = card.dataset.rgb || '5, 150, 105';
+                document.documentElement.style.setProperty('--active', color);
+                document.documentElement.style.setProperty('--active-rgb', rgb);
+                localStorage.setItem('activeCashBoxColor', color);
+                localStorage.setItem('activeCashBoxRgb', rgb);
+                localStorage.setItem('activeCashBoxId', card.dataset.id || '');
+                applyMenuColors(color);
+            };
+
+            cashBoxCards.forEach(card => {
+                card.addEventListener('click', (event) => {
+                    if (event.target.closest('.action-btn')) {
+                        return;
+                    }
+                    setActiveCard(card);
+                });
+            });
+
+            const savedId = localStorage.getItem('activeCashBoxId');
+            const savedCard = savedId ? cashBoxCards.find(card => card.dataset.id === savedId) : null;
+            setActiveCard(savedCard || cashBoxCards[0]);
+
             console.log('✅ Cash Box List loaded with real data:', cashBoxes.length, 'cash boxes');
         } else {
             console.log('ℹ️ No cash boxes found in database');

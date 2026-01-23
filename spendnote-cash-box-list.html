@@ -138,6 +138,11 @@
         .register-card.purple .register-name::before { background: #8b5cf6; box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.14); }
         .register-card.red .register-name::before { background: #ef4444; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.14); }
 
+        .register-card .register-name::before {
+            background: var(--card-color, var(--active));
+            box-shadow: 0 0 0 2px rgba(var(--card-rgb, var(--active-rgb)), 0.14);
+        }
+
         .register-id {
             font-size: 11px;
             color: var(--text-muted);
