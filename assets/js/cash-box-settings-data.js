@@ -148,22 +148,47 @@ async function handleSave(e) {
             console.log('✅ Profile created:', profile);
         }
         
-        // Prepare data (match actual table columns)
-        const currencySelect = document.getElementById('currencySelect');
-        const normalizeCurrency = (value) => (value || '')
-            .toString()
-            .trim()
-            .toUpperCase()
-            .replace(/[^A-Z]/g, '')
-            .slice(0, 3);
+        // Prepare data
+        const currencyInput = document.getElementById('currencySelect');
+        const selectedColor = document.querySelector('.color-option.selected')?.dataset.color;
+        const selectedIcon = document.querySelector('.icon-option.selected')?.dataset.icon;
 
-        const currency = normalizeCurrency(currencySelect ? currencySelect.value : 'USD');
-        if (!currency || currency.length !== 3) {
-            alert('Currency must be a 3-letter ISO code (e.g., USD, EUR, HUF).');
+        const currencyAliases = {
+            'FT': 'HUF',
+            'FORINT': 'HUF',
+            'HUF': 'HUF',
+            '€': 'EUR',
+            'EUR': 'EUR',
+            '$': 'USD',
+            'USD': 'USD',
+            '£': 'GBP',
+            'GBP': 'GBP',
+            '¥': 'JPY',
+            'JPY': 'JPY'
+        };
+
+        const canonicalizeCurrency = (value) => {
+            const raw = (value || '').toString().trim().toUpperCase();
+            const compact = raw.replace(/\s+/g, '');
+
+            if (currencyAliases[compact]) {
+                return currencyAliases[compact];
+            }
+
+            const iso = compact.replace(/[^A-Z]/g, '');
+            if (/^[A-Z]{3}$/.test(iso)) {
+                return iso;
+            }
+
+            return null;
+        };
+
+        const currency = canonicalizeCurrency(currencyInput ? currencyInput.value : 'USD');
+        if (!currency) {
+            alert('Currency must be a valid ISO 4217 code (e.g., USD, EUR, HUF).\nTip: you can type "Ft" and it will be saved as HUF.');
             return;
         }
 
-        // Validate currency with Intl (rejects non-ISO like "FAK")
         try {
             new Intl.NumberFormat('en', { style: 'currency', currency }).format(0);
         } catch (err) {
@@ -171,21 +196,28 @@ async function handleSave(e) {
             return;
         }
 
-        if (currencySelect) {
-            currencySelect.value = currency;
+        if (currencyInput) {
+            currencyInput.value = currency;
+            currencyInput.dataset.originalCurrency = currencyInput.dataset.originalCurrency || currency;
         }
-        const selectedColor = document.querySelector('.color-option.selected')?.dataset.color;
-        const selectedIcon = document.querySelector('.icon-option.selected')?.dataset.icon;
-        const formData = {
-            name: name,
-            currency: currency,
-            color: selectedColor || '#059669',
-            icon: selectedIcon || 'building',
+
+        const color = selectedColor || '#059669';
+        const icon = selectedIcon || 'building';
+
+        const updatePayload = {
+            name,
+            currency,
+            color,
+            icon
+        };
+
+        const createPayload = {
+            ...updatePayload,
             current_balance: 0,
             user_id: user.id
         };
         
-        console.log('📝 Form data:', formData);
+        console.log('📝 Form data:', isEditMode ? updatePayload : createPayload);
         
         // Show loading state
         const saveBtn = e.target;
@@ -195,19 +227,34 @@ async function handleSave(e) {
         
         if (isEditMode) {
             // Update existing cash box
-            await db.cashBoxes.update(currentCashBoxId, formData);
-            console.log('✅ Cash box updated:', formData.name);
+            const updateResult = await db.cashBoxes.update(currentCashBoxId, updatePayload);
+            console.log('📦 Update result:', updateResult);
+            if (updateResult && updateResult.success === false) {
+                throw new Error(updateResult.error || 'Failed to update cash box');
+            }
+
+            // If the edited cash box is currently selected, update saved theme
+            if (localStorage.getItem('activeCashBoxId') === currentCashBoxId) {
+                const rgb = (() => {
+                    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+                    return m ? `${parseInt(m[1], 16)}, ${parseInt(m[2], 16)}, ${parseInt(m[3], 16)}` : '5, 150, 105';
+                })();
+                localStorage.setItem('activeCashBoxColor', color);
+                localStorage.setItem('activeCashBoxRgb', rgb);
+            }
+
+            console.log('✅ Cash box updated:', updatePayload.name);
             alert('Cash box updated successfully!');
         } else {
             // Create new cash box
-            const result = await db.cashBoxes.create(formData);
+            const result = await db.cashBoxes.create(createPayload);
             console.log('📦 Create result:', result);
             
             if (result.success === false) {
                 throw new Error(result.error || 'Failed to create cash box');
             }
             
-            console.log('✅ Cash box created:', formData.name);
+            console.log('✅ Cash box created:', createPayload.name);
             alert('Cash box created successfully!');
         }
         

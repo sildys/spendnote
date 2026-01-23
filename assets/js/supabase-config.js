@@ -148,17 +148,15 @@ var db = {
         },
 
         async update(id, updates) {
-            const { data, error } = await supabaseClient
+            const { error } = await supabaseClient
                 .from('cash_boxes')
                 .update(updates)
-                .eq('id', id)
-                .select()
-                .single();
+                .eq('id', id);
             if (error) {
                 console.error('Error updating cash box:', error);
                 return { success: false, error: error.message };
             }
-            return { success: true, data };
+            return { success: true };
         },
 
         async delete(id) {
