@@ -261,7 +261,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=14"></script>
     <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/main.js?v=14"></script>
+    <script src="assets/js/main.js?v=15"></script>
 
     <script>
         function showError(message) {
@@ -297,9 +297,11 @@
                 select.appendChild(opt);
             });
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlCashBoxId = urlParams.get('cashBoxId');
             const savedActiveId = localStorage.getItem('activeCashBoxId');
             const fallbackId = cashBoxes[cashBoxes.length - 1]?.id;
-            const desired = savedActiveId || fallbackId;
+            const desired = urlCashBoxId || savedActiveId || fallbackId;
             if (desired) {
                 select.value = desired;
             }
@@ -325,6 +327,10 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const rawReturnTo = urlParams.get('returnTo');
+            const safeReturnTo = rawReturnTo && !/^[a-zA-Z]+:\/\//.test(rawReturnTo) ? rawReturnTo : null;
+
             const dateInput = document.getElementById('dateInput');
             if (dateInput && !dateInput.value) {
                 const now = new Date();
@@ -344,7 +350,7 @@
             const cancelBtn = document.getElementById('cancelBtn');
             if (cancelBtn) {
                 cancelBtn.addEventListener('click', () => {
-                    window.location.href = 'spendnote-transaction-history.html';
+                    window.location.href = safeReturnTo || 'spendnote-transaction-history.html';
                 });
             }
 
@@ -427,7 +433,7 @@
                         return;
                     }
 
-                    window.location.href = 'spendnote-transaction-history.html';
+                    window.location.href = safeReturnTo || 'spendnote-transaction-history.html';
                 } catch (error) {
                     showError(error?.message || 'Unexpected error.');
                 } finally {
