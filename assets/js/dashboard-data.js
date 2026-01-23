@@ -132,6 +132,14 @@ async function loadDashboardData() {
                 if (activeCard) {
                     document.documentElement.style.setProperty('--active', activeCard.dataset.color);
                     document.documentElement.style.setProperty('--active-rgb', activeCard.dataset.rgb);
+                    
+                    // Update menu colors and table header
+                    if (typeof updateMenuColors === 'function') {
+                        updateMenuColors(activeCard.dataset.color);
+                    }
+                    if (typeof updateTableHeaderColor === 'function') {
+                        updateTableHeaderColor(activeCard.dataset.rgb);
+                    }
                 }
             } else {
                 console.log('⚠️ Swiper not initialized yet');
