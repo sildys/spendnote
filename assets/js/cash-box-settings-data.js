@@ -96,7 +96,7 @@ async function handleSave(e) {
         }
         
         // Check if profile exists (cash_boxes.user_id references profiles.id)
-        const { data: profile, error: profileError } = await window.supabaseClient
+        let { data: profile, error: profileError } = await window.supabaseClient
             .from('profiles')
             .select('id')
             .eq('id', user.id)
@@ -105,8 +105,27 @@ async function handleSave(e) {
         console.log('👤 Profile:', profile);
         console.log('❌ Profile error:', profileError);
         
+        // If profile doesn't exist, create it automatically
         if (profileError || !profile) {
-            throw new Error('Profile not found. Please complete your profile first.');
+            console.log('📝 Creating profile automatically...');
+            const { data: newProfile, error: createError } = await window.supabaseClient
+                .from('profiles')
+                .insert([{
+                    id: user.id,
+                    email: user.email,
+                    full_name: user.email.split('@')[0],
+                    subscription_tier: 'free'
+                }])
+                .select()
+                .single();
+            
+            if (createError) {
+                console.error('❌ Error creating profile:', createError);
+                throw new Error('Failed to create profile: ' + createError.message);
+            }
+            
+            profile = newProfile;
+            console.log('✅ Profile created:', profile);
         }
         
         // Prepare data
