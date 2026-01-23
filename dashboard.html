@@ -4139,6 +4139,14 @@ tr:hover [data-category-tag] {
         }
 
         // ========================================
+        // LOAD REAL DATA FROM SUPABASE
+        // ========================================
+        // Load dashboard data after Swiper is initialized
+        if (typeof loadDashboardData === 'function') {
+            loadDashboardData();
+        }
+
+        // ========================================
         // TRANSACTIONS MENU - ADD CASHBOX FILTER
         // ========================================
         const transactionsLink = document.getElementById('navTransactions');

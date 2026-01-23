@@ -1,5 +1,5 @@
 // Dashboard Data Loader - Load real data from Supabase
-(async function loadDashboardData() {
+async function loadDashboardData() {
     try {
         // Load cash boxes from database
         const cashBoxes = await db.cashBoxes.getAll();
@@ -143,7 +143,7 @@
     } catch (error) {
         console.error('❌ Error loading dashboard data:', error);
     }
-})();
+}
 
 // Load recent transactions
 async function loadRecentTransactions() {
