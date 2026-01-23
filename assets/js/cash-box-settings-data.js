@@ -27,10 +27,16 @@ async function initCashBoxSettings() {
         }
         
         // Setup Save Changes button handler
-        const saveBtn = document.querySelector('.btn-primary');
-        if (saveBtn && saveBtn.textContent.includes('Save')) {
-            saveBtn.addEventListener('click', handleSave);
-        }
+        const saveBtns = document.querySelectorAll('.btn-primary');
+        console.log('🔍 Found', saveBtns.length, 'primary buttons');
+        
+        saveBtns.forEach(btn => {
+            console.log('🔍 Button text:', btn.textContent);
+            if (btn.textContent.includes('Save')) {
+                btn.addEventListener('click', handleSave);
+                console.log('✅ Save button handler attached');
+            }
+        });
         
         console.log('✅ Cash Box Settings initialized', isEditMode ? '(Edit mode)' : '(Create mode)');
         
@@ -50,8 +56,8 @@ async function loadCashBoxData(id) {
             return;
         }
         
-        // Populate the name field (first input with placeholder "e.g., Main Office")
-        const nameInput = document.querySelector('input[placeholder*="Main Office"]');
+        // Populate the name field
+        const nameInput = document.getElementById('cashBoxNameInput');
         if (nameInput) nameInput.value = cashBox.name || '';
         
         console.log('✅ Cash box data loaded:', cashBox.name);
@@ -67,8 +73,8 @@ async function handleSave(e) {
     e.preventDefault();
     
     try {
-        // Get the name from the first input
-        const nameInput = document.querySelector('input[placeholder*="Main Office"]');
+        // Get the name from the input
+        const nameInput = document.getElementById('cashBoxNameInput');
         const name = nameInput ? nameInput.value.trim() : '';
         
         // Validate
