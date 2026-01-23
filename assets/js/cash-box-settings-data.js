@@ -95,6 +95,20 @@ async function handleSave(e) {
             throw new Error('You must be logged in to create a cash box');
         }
         
+        // Check if profile exists (cash_boxes.user_id references profiles.id)
+        const { data: profile, error: profileError } = await window.supabaseClient
+            .from('profiles')
+            .select('id')
+            .eq('id', user.id)
+            .single();
+        
+        console.log('👤 Profile:', profile);
+        console.log('❌ Profile error:', profileError);
+        
+        if (profileError || !profile) {
+            throw new Error('Profile not found. Please complete your profile first.');
+        }
+        
         // Prepare data
         const formData = {
             name: name,
