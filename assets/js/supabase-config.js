@@ -92,9 +92,16 @@ var db = {
     // Cash Boxes
     cashBoxes: {
         async getAll() {
+            const user = await auth.getCurrentUser();
+            if (!user) {
+                console.error('No authenticated user');
+                return [];
+            }
+            
             const { data, error } = await supabaseClient
                 .from('cash_boxes')
                 .select('*')
+                .eq('user_id', user.id)
                 .order('created_at', { ascending: false });
             if (error) {
                 console.error('Error fetching cash boxes:', error);
@@ -226,6 +233,12 @@ var db = {
     // Transactions
     transactions: {
         async getAll(filters = {}) {
+            const user = await auth.getCurrentUser();
+            if (!user) {
+                console.error('No authenticated user');
+                return [];
+            }
+            
             let query = supabaseClient
                 .from('transactions')
                 .select(`
@@ -233,6 +246,7 @@ var db = {
                     cash_box:cash_boxes(id, name, color, currency),
                     contact:contacts(id, name)
                 `)
+                .eq('user_id', user.id)
                 .order('transaction_date', { ascending: false });
 
             if (filters.cashBoxId) {
@@ -246,6 +260,9 @@ var db = {
             }
             if (filters.endDate) {
                 query = query.lte('transaction_date', filters.endDate);
+            }
+            if (filters.limit) {
+                query = query.limit(filters.limit);
             }
 
             const { data, error } = await query;
