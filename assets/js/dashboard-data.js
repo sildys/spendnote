@@ -98,6 +98,7 @@ async function loadDashboardData() {
                 const iconStyle = `background: linear-gradient(135deg, rgba(${rgb}, 0.15), rgba(${rgb}, 0.08)); color: ${color}; border: 2px solid rgba(${rgb}, 0.2);`;
 
                 const sequenceNumber = sequenceById.get(box.id) ?? (index + 1);
+                const cashBoxPrefix = 'cbx';
                 
                 // Format currency (locale + cash box currency)
                 const formattedBalance = (window.SpendNote && typeof window.SpendNote.formatCurrency === 'function')
@@ -124,7 +125,7 @@ async function loadDashboardData() {
                                     </div>
                                     <div class="register-info">
                                         <div class="register-name">${box.name}</div>
-                                        <div class="register-id">${box.id_prefix || 'CB'}-${String(sequenceNumber).padStart(3, '0')}</div>
+                                        <div class="register-id">${cashBoxPrefix}-${String(sequenceNumber).padStart(3, '0')}</div>
                                     </div>
                                 </div>
                                 <div class="register-actions">

@@ -85,6 +85,7 @@ async function loadCashBoxList() {
                 const colorClass = getColorClass(color);
                 const iconStyle = `background: linear-gradient(135deg, rgba(${rgb}, 0.15), rgba(${rgb}, 0.08)); color: ${color}; border: 2px solid rgba(${rgb}, 0.2);`;
 
+                const cashBoxPrefix = 'cbx';
                 const sequenceNumber = sequenceById.get(box.id) ?? (index + 1);
                 
                 // Format currency (locale + cash box currency)
@@ -109,7 +110,7 @@ async function loadCashBoxList() {
                             </div>
                             <div class="register-info">
                                 <div class="register-name">${box.name}</div>
-                                <div class="register-id">${box.id_prefix || 'CB'}-${String(sequenceNumber).padStart(3, '0')}</div>
+                                <div class="register-id">${cashBoxPrefix}-${String(sequenceNumber).padStart(3, '0')}</div>
                             </div>
                         </div>
                         
