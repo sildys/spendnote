@@ -124,12 +124,18 @@ var db = {
         },
 
         async create(cashBox) {
-            const { error } = await supabaseClient
+            console.log('🔍 Attempting to insert cash box:', cashBox);
+            const result = await supabaseClient
                 .from('cash_boxes')
                 .insert([cashBox]);
-            if (error) {
-                console.error('Error creating cash box:', error);
-                return { success: false, error: error.message };
+            
+            console.log('📦 Insert result:', result);
+            console.log('❌ Insert error:', result.error);
+            console.log('✅ Insert data:', result.data);
+            
+            if (result.error) {
+                console.error('Error creating cash box:', result.error);
+                return { success: false, error: result.error.message };
             }
             return { success: true, data: cashBox };
         },
