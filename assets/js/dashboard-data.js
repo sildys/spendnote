@@ -111,14 +111,15 @@
                 swiperWrapper.insertAdjacentHTML('beforeend', slideHTML);
             });
             
-            // Re-add the add cash box slide at the end if it existed
-            if (addCashBoxSlide) {
-                swiperWrapper.appendChild(addCashBoxSlide);
-            }
-            
             // Reinitialize Swiper after adding slides
             if (window.registersSwiper) {
                 window.registersSwiper.update();
+                
+                // Re-add the add cash box slide at the end if it existed
+                if (addCashBoxSlide) {
+                    swiperWrapper.appendChild(addCashBoxSlide);
+                    window.registersSwiper.update();
+                }
                 
                 // Set initial active card color
                 const activeCard = document.querySelector('.register-card.active');
