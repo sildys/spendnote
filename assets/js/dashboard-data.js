@@ -52,7 +52,8 @@ async function loadDashboardData() {
                 return colorMap[color] || 'green';
             }
             
-            // Generate slides for each cash box
+            // Generate HTML for all cash boxes
+            let allSlidesHTML = '';
             cashBoxes.forEach((box, index) => {
                 const rgb = hexToRgb(box.color);
                 const iconClass = getIconClass(box.icon);
@@ -66,7 +67,7 @@ async function loadDashboardData() {
                 }).format(box.current_balance || 0);
                 
                 // Create slide HTML
-                const slideHTML = `
+                allSlidesHTML += `
                     <div class="swiper-slide">
                         <div class="register-card ${isActive}" 
                              data-id="${box.id}" 
@@ -109,16 +110,16 @@ async function loadDashboardData() {
                         </div>
                     </div>
                 `;
-                
-                // Insert before the add-cash-box-card slide if it exists
-                const allCurrentSlides = Array.from(swiperWrapper.querySelectorAll('.swiper-slide'));
-                const addCashBoxSlide = allCurrentSlides.find(slide => slide.querySelector('.add-cash-box-card'));
-                if (addCashBoxSlide) {
-                    addCashBoxSlide.insertAdjacentHTML('beforebegin', slideHTML);
-                } else {
-                    swiperWrapper.insertAdjacentHTML('beforeend', slideHTML);
-                }
             });
+            
+            // Insert all cash boxes before the add-cash-box-card slide
+            const allCurrentSlides = Array.from(swiperWrapper.querySelectorAll('.swiper-slide'));
+            const addCashBoxSlide = allCurrentSlides.find(slide => slide.querySelector('.add-cash-box-card'));
+            if (addCashBoxSlide) {
+                addCashBoxSlide.insertAdjacentHTML('beforebegin', allSlidesHTML);
+            } else {
+                swiperWrapper.insertAdjacentHTML('beforeend', allSlidesHTML);
+            }
             
             console.log('✅ Inserted', cashBoxes.length, 'cash boxes before Add Cash Box card');
             
