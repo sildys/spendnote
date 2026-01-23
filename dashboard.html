@@ -3786,9 +3786,9 @@ tr:hover [data-category-tag] {
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=11"></script>
+    <script src="assets/js/supabase-config.js?v=12"></script>
     <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/dashboard-data.js?v=11"></script>
+    <script src="assets/js/dashboard-data.js?v=12"></script>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -3816,15 +3816,6 @@ tr:hover [data-category-tag] {
 
                 updateMenuColors(color);
                 updateTableHeaderColor(rgb);
-
-                if (window.registersSwiper) {
-                    const slideEl = card.closest('.swiper-slide');
-                    const slides = Array.from(window.registersSwiper.slides || []);
-                    const idx = slideEl ? slides.indexOf(slideEl) : -1;
-                    if (idx >= 0) {
-                        window.registersSwiper.slideTo(idx);
-                    }
-                }
             };
             
             cards.forEach(card => {
@@ -3923,27 +3914,8 @@ tr:hover [data-category-tag] {
             },
         });
 
-        window.registersSwiper.on('slideChange', () => {
-            const slideEl = window.registersSwiper.slides?.[window.registersSwiper.activeIndex];
-            const card = slideEl ? slideEl.querySelector('.register-card') : null;
-            if (!card) return;
-
-            const color = card.dataset.color;
-            const rgb = card.dataset.rgb;
-
-            document.querySelectorAll('.register-card').forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-
-            document.documentElement.style.setProperty('--active', color);
-            document.documentElement.style.setProperty('--active-rgb', rgb);
-
-            localStorage.setItem('activeCashBoxColor', color);
-            localStorage.setItem('activeCashBoxRgb', rgb);
-            localStorage.setItem('activeCashBoxId', card.dataset.id);
-
-            updateMenuColors(color);
-            updateTableHeaderColor(rgb);
-        });
+        // Note: we intentionally do NOT update the selected cash box on slide change.
+        // Selection should follow click, while Swiper navigation only changes what is visible.
 
         // ========================================
         // INITIALIZE EVERYTHING AFTER SWIPER
@@ -4083,6 +4055,6 @@ tr:hover [data-category-tag] {
 
     </script>
     
-    <script src="assets/js/main.js?v=11"></script>
+    <script src="assets/js/main.js?v=12"></script>
 </body>
 </html>
