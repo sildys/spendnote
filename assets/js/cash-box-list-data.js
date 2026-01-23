@@ -78,39 +78,28 @@ async function loadCashBoxList() {
                          data-name="${box.name}" 
                          data-color="${box.color}" 
                          data-rgb="${rgb}"
-                         onclick="window.location.href='spendnote-cash-box-detail.html?id=${box.id}'"
-                         role="button" 
-                         tabindex="0">
-                        <div class="register-top">
-                            <div class="register-header-left">
-                                <div class="register-icon ${colorClass}">
-                                    <i class="fas ${iconClass}"></i>
-                                </div>
-                                <div class="register-info">
-                                    <div class="register-name">${box.name}</div>
-                                    <div class="register-id">${box.id_prefix || 'CB'}-${String(index + 1).padStart(3, '0')}</div>
-                                </div>
+                         style="--card-color: ${box.color}; --card-rgb: ${rgb};">
+                        <div class="register-header">
+                            <div class="register-icon ${colorClass}">
+                                <i class="fas ${iconClass}"></i>
                             </div>
-                            <div class="register-actions" onclick="event.stopPropagation();">
-                                <a href="spendnote-cash-box-settings.html?id=${box.id}" class="register-kebab" aria-label="Cash Box settings">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </a>
+                            <div class="register-info">
+                                <div class="register-name">${box.name}</div>
+                                <div class="register-id">${box.id_prefix || 'CB'}-${String(index + 1).padStart(3, '0')}</div>
                             </div>
                         </div>
                         
                         <div class="register-balance">${formattedBalance}</div>
                         
-                        <div class="register-stats">
-                            <div class="stat-item">
-                                <div class="tooltip">Loading...</div>
-                                <div class="stat-label">Today In</div>
-                                <div class="stat-value in">+$0</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="tooltip">Loading...</div>
-                                <div class="stat-label">Today Out</div>
-                                <div class="stat-value out">-$0</div>
-                            </div>
+                        <div class="register-actions">
+                            <button class="action-btn primary" onclick="window.location.href='spendnote-cash-box-detail.html?id=${box.id}'">
+                                <i class="fas fa-eye"></i>
+                                View
+                            </button>
+                            <button class="action-btn" onclick="window.location.href='spendnote-cash-box-settings.html?id=${box.id}'">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </button>
                         </div>
                     </div>
                 `;
