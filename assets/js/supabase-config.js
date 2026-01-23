@@ -3,10 +3,10 @@ const SUPABASE_URL = 'https://zrnnharudlgxuvewqryj.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_Vg44Z7eJacwji3iLii0Dxg_mQlSfwi-';
 
 // Initialize Supabase client
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Auth helper functions
-const auth = {
+var auth = {
     // Get current user
     async getCurrentUser() {
         const { data: { user }, error } = await supabaseClient.auth.getUser();
@@ -88,7 +88,7 @@ const auth = {
 };
 
 // Database helper functions
-const db = {
+var db = {
     // Cash Boxes
     cashBoxes: {
         async getAll() {
