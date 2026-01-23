@@ -61,6 +61,26 @@ async function loadCashBoxData(id) {
         // Populate the name field
         const nameInput = document.getElementById('cashBoxNameInput');
         if (nameInput) nameInput.value = cashBox.name || '';
+
+        // Populate currency
+        const currencySelect = document.getElementById('currencySelect');
+        if (currencySelect && cashBox.currency) {
+            currencySelect.value = cashBox.currency;
+        }
+
+        // Populate color selection
+        if (cashBox.color) {
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.toggle('selected', option.dataset.color === cashBox.color);
+            });
+        }
+
+        // Populate icon selection
+        if (cashBox.icon) {
+            document.querySelectorAll('.icon-option').forEach(option => {
+                option.classList.toggle('selected', option.dataset.icon === cashBox.icon);
+            });
+        }
         
         console.log('✅ Cash box data loaded:', cashBox.name);
         
@@ -129,11 +149,13 @@ async function handleSave(e) {
         
         // Prepare data (match actual table columns)
         const currencySelect = document.getElementById('currencySelect');
+        const selectedColor = document.querySelector('.color-option.selected')?.dataset.color;
+        const selectedIcon = document.querySelector('.icon-option.selected')?.dataset.icon;
         const formData = {
             name: name,
             currency: currencySelect ? currencySelect.value : 'USD',
-            color: '#059669',
-            icon: 'building',
+            color: selectedColor || '#059669',
+            icon: selectedIcon || 'building',
             current_balance: 0,
             user_id: user.id
         };
