@@ -26,19 +26,21 @@ async function initCashBoxSettings() {
             if (pageTitle) pageTitle.textContent = 'Create Cash Box';
         }
         
-        // Setup Save Changes button handler
-        const saveBtns = document.querySelectorAll('.btn-primary');
-        console.log('🔍 Found', saveBtns.length, 'primary buttons');
-        
-        saveBtns.forEach(btn => {
-            console.log('🔍 Button text:', btn.textContent);
-            if (btn.textContent.includes('Save')) {
-                btn.addEventListener('click', handleSave);
-                console.log('✅ Save button handler attached');
-            }
-        });
-        
         console.log('✅ Cash Box Settings initialized', isEditMode ? '(Edit mode)' : '(Create mode)');
+        
+        // Setup Save Changes button handler (with small delay to ensure DOM is ready)
+        setTimeout(() => {
+            const saveBtns = document.querySelectorAll('.btn-primary');
+            console.log('🔍 Found', saveBtns.length, 'primary buttons');
+            
+            saveBtns.forEach(btn => {
+                console.log('🔍 Button text:', btn.textContent);
+                if (btn.textContent.includes('Save')) {
+                    btn.addEventListener('click', handleSave);
+                    console.log('✅ Save button handler attached');
+                }
+            });
+        }, 100);
         
     } catch (error) {
         console.error('❌ Error initializing cash box settings:', error);
