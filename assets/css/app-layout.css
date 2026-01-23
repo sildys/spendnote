@@ -325,6 +325,12 @@ body {
     font-size: 14px;
     font-weight: 600;
     color: var(--text);
+    display: block;
+    max-width: 140px;
+    min-width: 84px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* USER DROPDOWN MENU */

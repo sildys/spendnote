@@ -7,10 +7,22 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
     <title>New Transaction - SpendNote</title>
+    <script>
+        (function() {
+            try {
+                var c = localStorage.getItem('activeCashBoxColor');
+                var r = localStorage.getItem('activeCashBoxRgb');
+                if (c && r) {
+                    document.documentElement.style.setProperty('--active', c);
+                    document.documentElement.style.setProperty('--active-rgb', r);
+                }
+            } catch (e) {}
+        })();
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=8">
-    <link rel="stylesheet" href="assets/css/app-layout.css?v=8">
+    <link rel="stylesheet" href="assets/css/app-layout.css?v=9">
     <style>
         .main-content {
             padding-top: 20px;
