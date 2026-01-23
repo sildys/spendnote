@@ -687,19 +687,19 @@
             <div class="modal-actions">
                 <button class="modal-btn modal-btn-cancel" onclick="hideDeleteModal()">
                     Cancel
-                </a>
+                </button>
                 <button class="modal-btn modal-btn-delete" onclick="confirmDelete()">
                     <i class="fas fa-trash"></i>
                     Delete Permanently
-                </a>
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Sticky Add Transaction Button -->
-    <button class="sticky-add-btn" onclick="window.location.href='spendnote-create-transaction.html'" aria-label="Add Transaction">
+    <button class="sticky-add-btn" onclick="window.location.href='dashboard.html#new-transaction'" aria-label="Add Transaction">
         <i class="fas fa-plus"></i>
-    </a>
+    </button>
 
     <script>
         let currentRegisterToDelete = null;
@@ -801,6 +801,15 @@
                 upgradeMessages.forEach(msg => msg.style.display = 'none');
             }
         });
+
+        // New Transaction button: open the dashboard modal flow
+        document.addEventListener('DOMContentLoaded', function() {
+            const newTxBtn = document.getElementById('addTransactionBtn');
+            if (!newTxBtn) return;
+            newTxBtn.addEventListener('click', function() {
+                window.location.href = 'dashboard.html#new-transaction';
+            });
+        });
     </script>
     
     <!-- Supabase -->
@@ -809,6 +818,6 @@
     <script src="assets/js/auth-guard.js"></script>
     <script src="assets/js/cash-box-list-data.js?v=13"></script>
     
-    <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js?v=13"></script>
 </body>
 </html>
