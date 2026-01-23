@@ -1069,12 +1069,66 @@
                             type="text"
                             class="form-input"
                             id="currencySelect"
+                            list="currencyList"
                             value="USD"
                             autocapitalize="characters"
                             autocomplete="off"
                             spellcheck="false"
                             inputmode="latin"
                         >
+                        <datalist id="currencyList">
+                            <option value="USD" label="US Dollar ($)"></option>
+                            <option value="EUR" label="Euro (€)"></option>
+                            <option value="GBP" label="British Pound (£)"></option>
+                            <option value="HUF" label="Hungarian Forint (Ft)"></option>
+                            <option value="JPY" label="Japanese Yen (¥)"></option>
+                            <option value="CHF" label="Swiss Franc (CHF)"></option>
+                            <option value="CAD" label="Canadian Dollar (CA$)"></option>
+                            <option value="AUD" label="Australian Dollar (A$)"></option>
+                            <option value="SEK" label="Swedish Krona (SEK)"></option>
+                            <option value="NOK" label="Norwegian Krone (NOK)"></option>
+                            <option value="DKK" label="Danish Krone (DKK)"></option>
+                            <option value="PLN" label="Polish Złoty (PLN)"></option>
+                            <option value="CZK" label="Czech Koruna (CZK)"></option>
+                            <option value="RON" label="Romanian Leu (RON)"></option>
+                            <option value="BGN" label="Bulgarian Lev (BGN)"></option>
+                            <option value="HRK" label="Croatian Kuna (HRK)"></option>
+                            <option value="RSD" label="Serbian Dinar (RSD)"></option>
+                            <option value="TRY" label="Turkish Lira (TRY)"></option>
+                            <option value="UAH" label="Ukrainian Hryvnia (UAH)"></option>
+                            <option value="RUB" label="Russian Ruble (RUB)"></option>
+                            <option value="CNY" label="Chinese Yuan (CNY)"></option>
+                            <option value="HKD" label="Hong Kong Dollar (HKD)"></option>
+                            <option value="SGD" label="Singapore Dollar (SGD)"></option>
+                            <option value="INR" label="Indian Rupee (INR)"></option>
+                            <option value="KRW" label="South Korean Won (KRW)"></option>
+                            <option value="THB" label="Thai Baht (THB)"></option>
+                            <option value="IDR" label="Indonesian Rupiah (IDR)"></option>
+                            <option value="MYR" label="Malaysian Ringgit (MYR)"></option>
+                            <option value="PHP" label="Philippine Peso (PHP)"></option>
+                            <option value="VND" label="Vietnamese Đồng (VND)"></option>
+                            <option value="BRL" label="Brazilian Real (BRL)"></option>
+                            <option value="MXN" label="Mexican Peso (MXN)"></option>
+                            <option value="ARS" label="Argentine Peso (ARS)"></option>
+                            <option value="CLP" label="Chilean Peso (CLP)"></option>
+                            <option value="COP" label="Colombian Peso (COP)"></option>
+                            <option value="PEN" label="Peruvian Sol (PEN)"></option>
+                            <option value="ZAR" label="South African Rand (ZAR)"></option>
+                            <option value="EGP" label="Egyptian Pound (EGP)"></option>
+                            <option value="MAD" label="Moroccan Dirham (MAD)"></option>
+                            <option value="SAR" label="Saudi Riyal (SAR)"></option>
+                            <option value="AED" label="UAE Dirham (AED)"></option>
+                            <option value="ILS" label="Israeli Shekel (ILS)"></option>
+                            <option value="NZD" label="New Zealand Dollar (NZ$)"></option>
+                            <option value="N/A" label="(type a currency code)"></option>
+
+                            <option value="FT" label="Forint (HUF)"></option>
+                            <option value="FORINT" label="Forint (HUF)"></option>
+                            <option value="EURO" label="Euro (EUR)"></option>
+                            <option value="DOLLAR" label="Dollar (USD)"></option>
+                            <option value="POUND" label="Pound (GBP)"></option>
+                            <option value="YEN" label="Yen (JPY)"></option>
+                        </datalist>
                         <p class="form-hint">Transaction currency</p>
                     </div>
 
@@ -1521,14 +1575,11 @@
             const normalizeCurrency = (value) => (value || '')
                 .toString()
                 .trim()
-                .toUpperCase()
-                .replace(/[^A-Z]/g, '')
-                .slice(0, 3);
+                .toUpperCase();
 
             const updateCurrencyWarning = () => {
                 const current = normalizeCurrency(currencySelect.value);
                 const original = normalizeCurrency(currencySelect.dataset.originalCurrency);
-                currencySelect.value = current;
 
                 if (currencyWarning) {
                     if (current && original && current !== original) {

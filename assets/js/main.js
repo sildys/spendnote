@@ -142,25 +142,38 @@ function bindLogoutLinks() {
 // Utility functions
 const SpendNote = {
     // Format currency
-    formatCurrency: function(amount, currency = 'USD', locale = (navigator.language || 'en-US')) {
+    formatCurrency: function(amount, currency = 'USD', locale = null) {
         const numericAmount = Number(amount);
         const safeAmount = Number.isFinite(numericAmount) ? numericAmount : 0;
 
         const currencyText = (currency || 'USD').toString().trim();
         const isIsoCode = /^[A-Z]{3}$/.test(currencyText);
 
+        const defaultLocaleByCurrency = {
+            USD: 'en-US',
+            EUR: 'de-DE',
+            GBP: 'en-GB',
+            HUF: 'hu-HU',
+            JPY: 'ja-JP',
+            CHF: 'de-CH',
+            CAD: 'en-CA',
+            AUD: 'en-AU'
+        };
+
+        const resolvedLocale = locale || defaultLocaleByCurrency[currencyText] || 'en-US';
+
         if (!isIsoCode) {
-            const formatted = new Intl.NumberFormat(locale).format(safeAmount);
+            const formatted = new Intl.NumberFormat(resolvedLocale).format(safeAmount);
             return currencyText ? `${formatted} ${currencyText}` : formatted;
         }
 
         try {
-            return new Intl.NumberFormat(locale, {
+            return new Intl.NumberFormat(resolvedLocale, {
                 style: 'currency',
                 currency: currencyText
             }).format(safeAmount);
         } catch (error) {
-            const formatted = new Intl.NumberFormat(locale).format(safeAmount);
+            const formatted = new Intl.NumberFormat(resolvedLocale).format(safeAmount);
             return currencyText ? `${formatted} ${currencyText}` : formatted;
         }
     },
