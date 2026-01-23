@@ -575,7 +575,8 @@
         }
 
         .toggle-switch input:checked + .toggle-slider {
-            background-color: #059669;
+            background-color: var(--active);
+            box-shadow: 0 6px 16px rgba(var(--active-rgb), 0.25);
         }
 
         .toggle-switch input:checked + .toggle-slider:before {
