@@ -9,13 +9,10 @@ async function loadDashboardData() {
             const swiperWrapper = document.querySelector('.registers-swiper .swiper-wrapper');
             if (!swiperWrapper) return;
             
-            // Save the add cash box slide before clearing
-            const allSlides = Array.from(swiperWrapper.querySelectorAll('.swiper-slide'));
-            const addCashBoxSlide = allSlides.find(slide => slide.querySelector('.add-cash-box-card'));
-            console.log('🔍 Add Cash Box slide found:', addCashBoxSlide ? 'Yes' : 'No');
-            
-            // Clear all existing slides
-            swiperWrapper.innerHTML = '';
+            // Remove only register-card slides, keep the add-cash-box-card slide
+            const registerSlides = swiperWrapper.querySelectorAll('.swiper-slide:has(.register-card)');
+            registerSlides.forEach(slide => slide.remove());
+            console.log('🗑️ Removed', registerSlides.length, 'demo register slides');
             
             // Helper function to convert hex color to RGB
             function hexToRgb(hex) {
@@ -112,16 +109,16 @@ async function loadDashboardData() {
                     </div>
                 `;
                 
-                swiperWrapper.insertAdjacentHTML('beforeend', slideHTML);
+                // Insert before the add-cash-box-card slide if it exists
+                const addCashBoxSlide = swiperWrapper.querySelector('.swiper-slide:has(.add-cash-box-card)');
+                if (addCashBoxSlide) {
+                    addCashBoxSlide.insertAdjacentHTML('beforebegin', slideHTML);
+                } else {
+                    swiperWrapper.insertAdjacentHTML('beforeend', slideHTML);
+                }
             });
             
-            // Re-add the add cash box slide at the end if it existed
-            if (addCashBoxSlide) {
-                swiperWrapper.appendChild(addCashBoxSlide);
-                console.log('✅ Add Cash Box slide restored');
-            } else {
-                console.log('⚠️ Add Cash Box slide not found, skipping restore');
-            }
+            console.log('✅ Inserted', cashBoxes.length, 'cash boxes before Add Cash Box card');
             
             // Reinitialize Swiper after adding slides
             if (window.registersSwiper) {
