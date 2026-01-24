@@ -64,11 +64,15 @@
             border: 2px solid var(--card-color, var(--active));
             background: linear-gradient(135deg, #ffffff 0%, rgba(var(--card-rgb, var(--active-rgb)), 0.04) 100%);
             box-shadow: 0 4px 16px rgba(var(--card-rgb, var(--active-rgb)), 0.2);
+            filter: grayscale(0%) !important;
+            opacity: 1 !important;
         }
 
         .register-card.active:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 24px rgba(var(--card-rgb, var(--active-rgb)), 0.25);
+            filter: grayscale(0%) !important;
+            opacity: 1 !important;
         }
 
         .register-card.dragging {
