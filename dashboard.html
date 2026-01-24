@@ -3335,8 +3335,18 @@ tr:hover [data-category-tag] {
         // Open modal if hash is #new-transaction
         (function() {
             if (window.location.hash !== '#new-transaction') return;
+            const getPresetFromUrl = () => {
+                const params = new URLSearchParams(window.location.search);
+                const cashBoxId = params.get('cashbox');
+                const direction = params.get('direction');
+                const preset = {};
+                if (cashBoxId) preset.cashBoxId = cashBoxId;
+                if (direction === 'in' || direction === 'out') preset.direction = direction;
+                return preset;
+            };
             const openFromHash = () => {
-                openModal();
+                const preset = getPresetFromUrl();
+                openModal(preset);
                 history.replaceState(null, null, 'dashboard.html');
             };
             if (window.__spendnoteDashboardDataLoaded) {
@@ -4012,6 +4022,7 @@ tr:hover [data-category-tag] {
         // ========================================
         function initCashBoxCards() {
             const cards = document.querySelectorAll('.register-card');
+            const addCashBoxCard = document.querySelector('.add-cash-box-card');
 
             const activateCard = (card) => {
                 if (!card) return;
@@ -4077,6 +4088,18 @@ tr:hover [data-category-tag] {
             const savedCard = savedId ? Array.from(cards).find(card => card.dataset.id === savedId) : null;
             if (savedCard) {
                 activateCard(savedCard);
+            }
+
+            if (addCashBoxCard) {
+                requestAnimationFrame(() => {
+                    const heights = Array.from(document.querySelectorAll('.register-card'))
+                        .map((el) => el.getBoundingClientRect().height)
+                        .filter((h) => Number.isFinite(h) && h > 0);
+                    const maxHeight = heights.length ? Math.max(...heights) : 0;
+                    if (maxHeight) {
+                        addCashBoxCard.style.minHeight = `${Math.ceil(maxHeight)}px`;
+                    }
+                });
             }
         }
 
