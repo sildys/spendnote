@@ -330,40 +330,60 @@ var db = {
                 console.error('No authenticated user');
                 return [];
             }
-            
-            let query = supabaseClient
-                .from('transactions')
-                .select(`
-                    *,
-                    cash_box:cash_boxes(id, name, color, currency),
-                    contact:contacts(id, name)
-                `)
-                .eq('user_id', user.id)
-                .order('transaction_date', { ascending: false })
-                .order('created_at', { ascending: false });
 
-            if (filters.cashBoxId) {
-                query = query.eq('cash_box_id', filters.cashBoxId);
-            }
-            if (filters.type) {
-                query = query.eq('type', filters.type);
-            }
-            if (filters.startDate) {
-                query = query.gte('transaction_date', filters.startDate);
-            }
-            if (filters.endDate) {
-                query = query.lte('transaction_date', filters.endDate);
-            }
-            if (filters.limit) {
-                query = query.limit(filters.limit);
+            const runQuery = async ({ select, withCreatedAtOrder }) => {
+                let query = supabaseClient
+                    .from('transactions')
+                    .select(select)
+                    .eq('user_id', user.id)
+                    .order('transaction_date', { ascending: false });
+
+                if (withCreatedAtOrder) {
+                    query = query.order('created_at', { ascending: false });
+                }
+
+                if (filters.cashBoxId) {
+                    query = query.eq('cash_box_id', filters.cashBoxId);
+                }
+                if (filters.type) {
+                    query = query.eq('type', filters.type);
+                }
+                if (filters.startDate) {
+                    query = query.gte('transaction_date', filters.startDate);
+                }
+                if (filters.endDate) {
+                    query = query.lte('transaction_date', filters.endDate);
+                }
+                if (filters.limit) {
+                    query = query.limit(filters.limit);
+                }
+
+                return await query;
+            };
+
+            const joinedSelect = `
+                *,
+                cash_box:cash_boxes(id, name, color, currency),
+                contact:contacts(id, name)
+            `;
+
+            let result = await runQuery({ select: joinedSelect, withCreatedAtOrder: true });
+            if (result.error) {
+                console.warn('Transactions query (joined + created_at) failed, retrying without created_at order:', result.error);
+                result = await runQuery({ select: joinedSelect, withCreatedAtOrder: false });
             }
 
-            const { data, error } = await query;
-            if (error) {
-                console.error('Error fetching transactions:', error);
+            if (result.error) {
+                console.warn('Transactions query (joined) failed, retrying with select(*):', result.error);
+                result = await runQuery({ select: '*', withCreatedAtOrder: false });
+            }
+
+            if (result.error) {
+                console.error('Error fetching transactions:', result.error);
                 return [];
             }
-            return data;
+
+            return result.data || [];
         },
 
         async getById(id) {

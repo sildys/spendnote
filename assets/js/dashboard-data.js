@@ -211,9 +211,13 @@ async function loadDashboardData() {
         }
         
         // Load recent transactions (already loaded in parallel)
-        if (transactions && transactions.length > 0) {
-            loadRecentTransactionsSync(transactions);
-        }
+        const cashBoxById = new Map((cashBoxes || []).map((b) => [b.id, b]));
+        const enrichedTransactions = (transactions || []).map((tx) => {
+            if (tx && tx.cash_box) return tx;
+            const cashBox = tx ? cashBoxById.get(tx.cash_box_id) : null;
+            return { ...tx, cash_box: cashBox || null };
+        });
+        loadRecentTransactionsSync(enrichedTransactions);
 
         window.__spendnoteDashboardDataLoaded = true;
         document.documentElement.classList.remove('dashboard-loading');
@@ -296,9 +300,15 @@ function updateModalCashBoxDropdown(cashBoxes) {
 // Load recent transactions (synchronous version - data already loaded)
 function loadRecentTransactionsSync(transactions) {
     try {
+        const wrapper = document.getElementById('tableWrapper');
+        if (!wrapper) return;
+
+        // Remove demo rows (keep header)
+        const existingRows = Array.from(wrapper.querySelectorAll('.table-grid'))
+            .filter((el) => !el.classList.contains('table-header'));
+        existingRows.forEach((el) => el.remove());
+
         if (transactions && transactions.length > 0) {
-            const wrapper = document.getElementById('tableWrapper');
-            if (!wrapper) return;
 
             const getRgbFromHex = (hex) => {
                 const cleaned = String(hex || '').trim().replace('#', '');
@@ -309,11 +319,6 @@ function loadRecentTransactionsSync(transactions) {
                 if ([r, g, b].some((v) => Number.isNaN(v))) return '5, 150, 105';
                 return `${r}, ${g}, ${b}`;
             };
-
-            // Remove demo rows (keep header)
-            const existingRows = Array.from(wrapper.querySelectorAll('.table-grid'))
-                .filter((el) => !el.classList.contains('table-header'));
-            existingRows.forEach((el) => el.remove());
 
             transactions.forEach(tx => {
                 const isIncome = tx.type === 'income';
