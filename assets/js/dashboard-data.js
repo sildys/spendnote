@@ -359,6 +359,11 @@ function loadRecentTransactionsSync(transactions) {
                 });
 
                 const createdByName = tx.created_by_user_name || tx.created_by || '—';
+                const seed = String(tx.created_by_user_id || tx.created_by_user_name || tx.created_by || tx.id || '')
+                    .split('')
+                    .reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+                const avatarIndex = (seed % 70) + 1;
+                const avatarUrl = `https://i.pravatar.cc/150?img=${avatarIndex}`;
                 const rowHTML = `
                     <div class="table-grid" tabindex="0" style="--cashbox-rgb: ${cashBoxRgb}; --cashbox-color: ${cashBoxColor};">
                         <div class="tx-type ${isIncome ? 'in' : 'out'}">${isIncome ? 'IN' : 'OUT'}</div>
@@ -370,7 +375,7 @@ function loadRecentTransactionsSync(transactions) {
                         <div class="tx-person">${tx.contact?.name || tx.contact_name || 'N/A'}</div>
                         <div class="tx-desc">${tx.description || 'No description'}</div>
                         <div class="tx-amount ${isIncome ? 'in' : 'out'}">${isIncome ? '+' : '-'}${formattedAmount}</div>
-                        <div class="tx-createdby">${createdByName}</div>
+                        <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${createdByName}"></div><span>${createdByName}</span></div></div>
                         <a href="spendnote-transaction-detail.html?id=${tx.id}" class="tx-action">View</a>
                     </div>
                 `;
