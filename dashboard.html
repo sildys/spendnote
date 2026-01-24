@@ -2983,10 +2983,11 @@ tr:hover [data-category-tag] {
                         <div class="form-group">
                             <label class="form-label">Date <span class="required">*</span></label>
                             <input 
-                                type="date" 
+                                type="text" 
                                 class="form-input" 
                                 id="modalDate"
-                                required
+                                readonly
+                                inputmode="none"
                             >
                         </div>
                     </div>
@@ -3305,7 +3306,7 @@ tr:hover [data-category-tag] {
             console.log('Modal should be visible now');
 
             const dateInput = document.getElementById('modalDate');
-            if (dateInput && !dateInput.value) {
+            if (dateInput) {
                 const now = new Date();
                 const yyyy = now.getFullYear();
                 const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -3868,11 +3869,11 @@ tr:hover [data-category-tag] {
                     return;
                 }
 
-                const transactionDate = String(formData.date || '').trim();
-                if (!transactionDate) {
-                    alert('Please select a date.');
-                    return;
-                }
+                const now = new Date();
+                const yyyy = now.getFullYear();
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const dd = String(now.getDate()).padStart(2, '0');
+                const transactionDate = `${yyyy}-${mm}-${dd}`;
 
                 let profile = null;
                 try {
@@ -3911,10 +3912,22 @@ tr:hover [data-category-tag] {
                     created_by_user_name: profile?.full_name || user.user_metadata?.full_name || user.email || null
                 };
 
-                const ensuredContact = await window.db.contacts.getOrCreate({
-                    name: contactName,
-                    address: payload.contact_address
-                });
+                let ensuredContact = null;
+                if (window.db?.contacts?.getOrCreate && typeof window.db.contacts.getOrCreate === 'function') {
+                    ensuredContact = await window.db.contacts.getOrCreate({
+                        name: contactName,
+                        address: payload.contact_address
+                    });
+                } else if (window.db?.contacts?.create && typeof window.db.contacts.create === 'function') {
+                    ensuredContact = await window.db.contacts.create({
+                        user_id: user.id,
+                        name: contactName,
+                        email: null,
+                        phone: null,
+                        address: payload.contact_address,
+                        notes: null
+                    });
+                }
 
                 if (ensuredContact && ensuredContact.success && ensuredContact.data && ensuredContact.data.id) {
                     payload.contact_id = ensuredContact.data.id;
@@ -3946,7 +3959,7 @@ tr:hover [data-category-tag] {
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=12"></script>
+    <script src="assets/js/supabase-config.js?v=13"></script>
     <script src="assets/js/auth-guard.js"></script>
     <script src="assets/js/dashboard-data.js?v=13"></script>
 
