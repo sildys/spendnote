@@ -31,83 +31,70 @@
             min-height: calc(100vh - 100px);
         }
         
-        /* Cash Boxes GRID */
-        .registers-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+        /* Cash Boxes LIST */
+        .registers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .register-card {
+        .register-row {
             background: var(--surface);
             border: 2px solid var(--border);
-            border-radius: 20px;
-            padding: 14px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            padding: 16px 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             transition: all 0.2s ease;
             position: relative;
             display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            filter: saturate(0%) brightness(1.05) sepia(20%) hue-rotate(80deg);
-            opacity: 0.7;
+            align-items: center;
+            gap: 16px;
+            cursor: grab;
+            overflow: hidden;
         }
 
-        .register-card .register-quick-actions {
-            pointer-events: none;
+        .register-row::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: var(--card-color, var(--active));
+            transition: all 0.2s ease;
         }
 
-        .register-card.active .register-quick-actions {
-            pointer-events: auto;
+        .register-row:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+            border-color: rgba(var(--card-rgb, var(--active-rgb)), 0.3);
         }
 
-        .register-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            filter: saturate(30%) brightness(1.02) sepia(15%) hue-rotate(80deg);
-            opacity: 0.85;
-        }
-
-        .register-card.active {
-            border: 2px solid var(--card-color, var(--active));
-            background: linear-gradient(135deg, #ffffff 0%, rgba(var(--card-rgb, var(--active-rgb)), 0.04) 100%);
+        .register-row.active {
+            background: linear-gradient(90deg, rgba(var(--card-rgb, var(--active-rgb)), 0.08) 0%, var(--surface) 100%);
+            border-color: var(--card-color, var(--active));
             box-shadow: 0 4px 16px rgba(var(--card-rgb, var(--active-rgb)), 0.2);
-            filter: grayscale(0%) !important;
-            opacity: 1 !important;
         }
 
-        .register-card.active:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(var(--card-rgb, var(--active-rgb)), 0.25);
-            filter: grayscale(0%) !important;
-            opacity: 1 !important;
+        .register-row.active::before {
+            width: 5px;
         }
 
-        .register-card.dragging {
-            opacity: 1;
+        .register-row.dragging {
+            opacity: 0.6;
             transform: scale(0.98);
-            border-style: solid;
-            border-color: rgba(0, 0, 0, 0.18);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
-        }
-
-        .register-card.active::before { opacity: 0.06; }
-
-        .register-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 8px;
+            cursor: grabbing;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         }
 
         .register-icon {
-            width: 72px !important;
-            height: 72px !important;
-            border-radius: 18px !important;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px !important;
+            font-size: 22px;
             flex-shrink: 0;
             border-width: 2px;
         }
@@ -144,39 +131,18 @@
 
         .register-info {
             flex: 1;
+            min-width: 0;
         }
 
         .register-name {
             font-size: 16px;
             font-weight: 800;
             letter-spacing: -0.01em;
-            margin-bottom: 4px;
-            position: relative;
-            padding-left: 16px;
+            margin-bottom: 2px;
             color: var(--text);
-        }
-
-        .register-name::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
-        }
-
-        .register-card.green .register-name::before { background: #059669; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.14); }
-        .register-card.orange .register-name::before { background: #f59e0b; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.14); }
-        .register-card.blue .register-name::before { background: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.14); }
-        .register-card.purple .register-name::before { background: #8b5cf6; box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.14); }
-        .register-card.red .register-name::before { background: #ef4444; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.14); }
-
-        .register-card .register-name::before {
-            background: var(--card-color, var(--active));
-            box-shadow: 0 0 0 2px rgba(var(--card-rgb, var(--active-rgb)), 0.14);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .register-id {
@@ -191,16 +157,116 @@
         }
 
         .register-balance {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: 900;
             color: var(--text);
-            margin-bottom: 20px;
-            letter-spacing: -0.04em;
+            letter-spacing: -0.02em;
+            min-width: 140px;
             text-align: right;
+            flex-shrink: 0;
         }
 
 
-        .register-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; margin-top: 0; } .register-kebab { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all 0.2s ease; cursor: pointer; text-decoration: none; border: 2px solid var(--border); background: var(--surface-elevated); flex-shrink: 0; font-size: 18px; } .register-kebab:hover { border-color: var(--primary); color: var(--primary); background: rgba(5, 150, 105, 0.08); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); } .register-quick-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: auto; align-items: stretch; } .register-quick-btn { padding: 10px 12px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface-elevated); font-weight: 800; font-size: 13px; letter-spacing: 0.02em; cursor: pointer; transition: all 0.2s ease; font-family: inherit; display: inline-flex; align-items: center; justify-content: center; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.06); } .register-quick-btn.in { color: #047857; background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.3); } .register-quick-btn.out { color: #b45309; background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.3); } .register-quick-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14); } .register-quick-btn.in:hover { background: rgba(16, 185, 129, 0.18); border-color: rgba(16, 185, 129, 0.4); } .register-quick-btn.out:hover { background: rgba(245, 158, 11, 0.18); border-color: rgba(245, 158, 11, 0.4); } .tx-action { padding: 10px 12px; background: var(--surface-elevated); color: #6b7280; border-radius: 12px; font-weight: 800; font-size: 13px; letter-spacing: 0.02em; transition: all 0.2s ease; text-decoration: none; border: 2px solid var(--border); display: inline-flex; align-items: center; justify-content: center; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.06); } .tx-action:hover { background: #4b5563; color: white; border-color: #4b5563; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5, 150, 105, 0.25); }
+        .register-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .register-quick-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            background: var(--surface-elevated);
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .register-quick-btn.in {
+            color: #047857;
+            background: rgba(16, 185, 129, 0.12);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .register-quick-btn.out {
+            color: #b45309;
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .register-quick-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .register-quick-btn.in:hover {
+            background: rgba(16, 185, 129, 0.18);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .register-quick-btn.out:hover {
+            background: rgba(245, 158, 11, 0.18);
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        .tx-action {
+            padding: 8px 16px;
+            background: var(--surface-elevated);
+            color: #6b7280;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            border: 2px solid var(--border);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .tx-action:hover {
+            background: #4b5563;
+            color: white;
+            border-color: #4b5563;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .register-settings {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-decoration: none;
+            border: 2px solid var(--border);
+            background: var(--surface-elevated);
+            flex-shrink: 0;
+        }
+
+        .register-settings:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(5, 150, 105, 0.08);
+            transform: translateY(-1px);
+        }
 
         .action-btn {
             padding: 14px 20px;
@@ -593,8 +659,8 @@
                 </div>
             </div>
 
-        <!-- Cash Boxes GRID -->
-        <div class="registers-grid">
+        <!-- Cash Boxes LIST -->
+        <div class="registers-list">
             <!-- Cash boxes will be loaded dynamically from Supabase -->
             <!-- Add Cash Box Card - Unified Design -->
             <div class="add-cash-box-card" onclick="handleAddCashBox()" data-plan="pro" data-box-count="5">

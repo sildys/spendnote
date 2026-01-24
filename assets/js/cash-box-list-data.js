@@ -96,35 +96,29 @@ async function loadCashBoxList() {
                         currency: box.currency || 'USD'
                     }).format(box.current_balance || 0);
                 
-                // Create card HTML
+                // Create list row HTML
                 allCardsHTML += `
-                    <div class="register-card ${colorClass}" 
+                    <div class="register-row ${colorClass}" 
                          data-id="${box.id}" 
                          data-name="${box.name}" 
                          data-color="${color}" 
                          data-rgb="${rgb}"
                          style="--card-color: ${color}; --card-rgb: ${rgb};">
-                        <div class="register-header">
-                            <div class="register-icon ${colorClass}" style="${iconStyle}">
-                                <i class="fas ${iconClass}"></i>
-                            </div>
-                            <div class="register-info">
-                                <div class="register-name">${box.name}</div>
-                                <div class="register-id">${cashBoxPrefix}-${String(sequenceNumber).padStart(3, '0')}</div>
-                            </div>
-                            <div class="register-actions">
-                                <a href="spendnote-cash-box-settings.html?id=${box.id}" class="register-kebab" aria-label="Cash Box settings">
-                                    <i class="fas fa-cog"></i>
-                                </a>
-                            </div>
+                        <div class="register-icon ${colorClass}" style="${iconStyle}">
+                            <i class="fas ${iconClass}"></i>
                         </div>
-                        
+                        <div class="register-info">
+                            <div class="register-name">${box.name}</div>
+                            <div class="register-id">${cashBoxPrefix}-${String(sequenceNumber).padStart(3, '0')}</div>
+                        </div>
                         <div class="register-balance">${formattedBalance}</div>
-                        
-                        <div class="register-quick-actions">
+                        <div class="register-actions">
                             <button type="button" class="register-quick-btn in" onclick="window.location.href='dashboard.html?cashbox=${box.id}&direction=in#new-transaction'">IN</button>
                             <button type="button" class="register-quick-btn out" onclick="window.location.href='dashboard.html?cashbox=${box.id}&direction=out#new-transaction'">OUT</button>
                             <a class="tx-action" href="spendnote-cash-box-detail.html?id=${box.id}">View</a>
+                            <a href="spendnote-cash-box-settings.html?id=${box.id}" class="register-settings" aria-label="Cash Box settings">
+                                <i class="fas fa-cog"></i>
+                            </a>
                         </div>
                     </div>
                 `;
@@ -137,9 +131,8 @@ async function loadCashBoxList() {
                 grid.insertAdjacentHTML('beforeend', allCardsHTML);
             }
             
-            // Bind selection + menu color sync for dynamic cards
-            const cashBoxCards = Array.from(grid.querySelectorAll('.register-card'))
-                .filter(card => !card.classList.contains('add-cash-box-card'));
+            // Bind selection + menu color sync for dynamic rows
+            const cashBoxCards = Array.from(grid.querySelectorAll('.register-row'));
 
             const applyMenuColors = (color) => {
                 if (typeof window.updateMenuColors === 'function') {
