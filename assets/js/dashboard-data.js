@@ -320,7 +320,22 @@ function loadRecentTransactionsSync(transactions) {
                 return `${r}, ${g}, ${b}`;
             };
 
-            transactions.forEach(tx => {
+            const parseSortTime = (tx) => {
+                const createdAt = tx?.created_at ? Date.parse(tx.created_at) : NaN;
+                if (Number.isFinite(createdAt)) return createdAt;
+                const transactionDate = tx?.transaction_date ? Date.parse(tx.transaction_date) : NaN;
+                if (Number.isFinite(transactionDate)) return transactionDate;
+                return 0;
+            };
+
+            const sortedTransactions = [...transactions].sort((a, b) => {
+                const bt = parseSortTime(b);
+                const at = parseSortTime(a);
+                if (bt !== at) return bt - at;
+                return String(b?.id || '').localeCompare(String(a?.id || ''));
+            });
+
+            sortedTransactions.forEach(tx => {
                 const isIncome = tx.type === 'income';
                 const cashBoxColor = tx.cash_box?.color || '#10b981';
                 const cashBoxRgb = getRgbFromHex(cashBoxColor);
