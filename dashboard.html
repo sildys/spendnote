@@ -2979,6 +2979,18 @@ tr:hover [data-category-tag] {
                         </div>
                     </div>
 
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Date <span class="required">*</span></label>
+                            <input 
+                                type="date" 
+                                class="form-input" 
+                                id="modalDate"
+                                required
+                            >
+                        </div>
+                    </div>
+
                     <!-- LINE ITEMS -->
                     <div class="form-group">
                         <label class="form-label">Line items (optional)</label>
@@ -3291,6 +3303,15 @@ tr:hover [data-category-tag] {
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
             console.log('Modal should be visible now');
+
+            const dateInput = document.getElementById('modalDate');
+            if (dateInput && !dateInput.value) {
+                const now = new Date();
+                const yyyy = now.getFullYear();
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const dd = String(now.getDate()).padStart(2, '0');
+                dateInput.value = `${yyyy}-${mm}-${dd}`;
+            }
         }
 
         // Make openModal available globally for testing
@@ -3767,23 +3788,30 @@ tr:hover [data-category-tag] {
         }
 
         // Form submission
-        document.getElementById('modalTransactionForm').addEventListener('submit', function(e) {
+        document.getElementById('modalTransactionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const actionBtn = e.submitter;
             const action = actionBtn ? actionBtn.value : 'done';
+
+            const modalDateEl = document.getElementById('modalDate');
             
+            const cashBoxEl = document.getElementById('modalRegister');
+            const contactNameEl = document.getElementById('modalContactName');
+            const amountEl = document.getElementById('modalAmount');
+            const directionEl = document.querySelector('input[name="modalDirection"]:checked');
+
             const formData = {
-                cashBox: document.getElementById('modalRegister').value,
+                cashBox: cashBoxEl ? cashBoxEl.value : '',
                 loggedBy: document.querySelector('.user-name')?.textContent || 'John',
-                ContactName: document.getElementById('modalContactName').value,
-                ContactAddress: document.getElementById('modalContactAddress').value,
-                ContactId: document.getElementById('modalContactId').value,
-                direction: document.querySelector('input[name="modalDirection"]:checked').value,
-                amount: document.getElementById('modalAmount').value,
-                date: document.getElementById('modalDate').value,
-                transactionId: document.getElementById('modalTransactionId').value,
-                note: document.getElementById('modalNote').value,
+                ContactName: contactNameEl ? contactNameEl.value : '',
+                ContactAddress: document.getElementById('modalContactAddress')?.value || '',
+                ContactId: document.getElementById('modalContactId')?.value || '',
+                direction: directionEl ? directionEl.value : 'in',
+                amount: amountEl ? amountEl.value : '',
+                date: modalDateEl ? modalDateEl.value : new Date().toISOString().slice(0, 10),
+                transactionId: document.getElementById('modalTransactionId')?.value || '',
+                note: document.getElementById('modalNote')?.value || '',
                 lineItems: []
             };
 
@@ -3798,14 +3826,120 @@ tr:hover [data-category-tag] {
 
             console.log('Transaction data:', formData);
             console.log('Action:', action);
-            
-            if (action === 'done-receipt') {
-                alert('Transaction saved!\n\nGenerating receipt PDF...\n\nIn production:\n- Save to database\n- Generate & download PDF\n- Update Cash Box balance');
-            } else {
-                alert('Transaction saved!\n\nIn production:\n- Save to database\n- Update Cash Box balance\n- Refresh dashboard');
+
+            const submitButtons = Array.from(e.currentTarget.querySelectorAll('button[type="submit"]'));
+            submitButtons.forEach((btn) => {
+                btn.disabled = true;
+            });
+
+            try {
+                if (!window.auth || !window.db || !window.supabaseClient) {
+                    window.location.href = '/spendnote-login.html';
+                    return;
+                }
+
+                const user = await window.auth.getCurrentUser();
+                if (!user) {
+                    window.location.href = '/spendnote-login.html';
+                    return;
+                }
+
+                const isUuid = (value) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value || ''));
+                if (!isUuid(formData.cashBox)) {
+                    alert('Please create and select a Cash Box first.');
+                    return;
+                }
+
+                const amountValue = Number(formData.amount);
+                if (!Number.isFinite(amountValue) || amountValue <= 0) {
+                    alert('Please enter a valid amount.');
+                    return;
+                }
+
+                const description = (document.getElementById('modalDescription')?.value || '').trim();
+                if (!description) {
+                    alert('Description is required.');
+                    return;
+                }
+
+                const contactName = String(formData.ContactName || '').trim();
+                if (!contactName) {
+                    alert('Contact Name is required.');
+                    return;
+                }
+
+                const transactionDate = String(formData.date || '').trim();
+                if (!transactionDate) {
+                    alert('Please select a date.');
+                    return;
+                }
+
+                let profile = null;
+                try {
+                    profile = await window.db.profiles.getCurrent();
+                } catch (err) {
+                    profile = null;
+                }
+
+                if (!profile) {
+                    const fallbackName = user.user_metadata?.full_name || user.email || 'User';
+                    const { data: createdProfile, error: profileError } = await window.supabaseClient
+                        .from('profiles')
+                        .insert([{ id: user.id, email: user.email, full_name: fallbackName }])
+                        .select()
+                        .single();
+                    if (!profileError) {
+                        profile = createdProfile;
+                    }
+                }
+
+                const payload = {
+                    user_id: user.id,
+                    cash_box_id: formData.cashBox,
+                    type: formData.direction === 'out' ? 'expense' : 'income',
+                    amount: amountValue,
+                    description: description || null,
+                    notes: String(formData.note || '').trim() || null,
+                    transaction_date: transactionDate,
+                    receipt_number: String(formData.transactionId || '').trim() || null,
+                    contact_id: null,
+                    contact_name: contactName,
+                    contact_email: null,
+                    contact_phone: null,
+                    contact_address: String(formData.ContactAddress || '').trim() || null,
+                    created_by_user_id: user.id,
+                    created_by_user_name: profile?.full_name || user.user_metadata?.full_name || user.email || null
+                };
+
+                const ensuredContact = await window.db.contacts.getOrCreate({
+                    name: contactName,
+                    address: payload.contact_address
+                });
+
+                if (ensuredContact && ensuredContact.success && ensuredContact.data && ensuredContact.data.id) {
+                    payload.contact_id = ensuredContact.data.id;
+                }
+
+                const result = await window.db.transactions.create(payload);
+                if (!result || !result.success) {
+                    alert(result?.error || 'Failed to create transaction.');
+                    return;
+                }
+
+                closeModal();
+
+                if (typeof loadDashboardData === 'function') {
+                    await loadDashboardData();
+                }
+
+                if (action === 'done-receipt') {
+                    alert('Transaction saved. Receipt generation is not implemented yet.');
+                }
+            } finally {
+                submitButtons.forEach((btn) => {
+                    btn.disabled = false;
+                });
             }
-            
-            closeModal();
         });
 
     </script>

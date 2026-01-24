@@ -252,6 +252,49 @@ var db = {
             return { success: true, data };
         },
 
+        async getOrCreate(contact) {
+            const user = await auth.getCurrentUser();
+            if (!user) {
+                return { success: false, error: 'Not authenticated' };
+            }
+
+            const name = (contact?.name || '').trim();
+            if (!name) {
+                return { success: false, error: 'Contact name is required' };
+            }
+
+            const email = (contact?.email || '').trim() || null;
+
+            let lookup = supabaseClient
+                .from('contacts')
+                .select('*')
+                .eq('user_id', user.id)
+                .eq('name', name);
+
+            if (email) {
+                lookup = lookup.eq('email', email);
+            }
+
+            const { data: existing, error: existingError } = await lookup
+                .order('created_at', { ascending: true })
+                .limit(1);
+
+            if (!existingError && existing && existing.length) {
+                return { success: true, data: existing[0] };
+            }
+
+            const createPayload = {
+                user_id: user.id,
+                name,
+                email,
+                phone: (contact?.phone || '').trim() || null,
+                address: (contact?.address || '').trim() || null,
+                notes: (contact?.notes || '').trim() || null
+            };
+
+            return await this.create(createPayload);
+        },
+
         async update(id, updates) {
             const { data, error } = await supabaseClient
                 .from('contacts')
