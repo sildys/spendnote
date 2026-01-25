@@ -71,7 +71,7 @@
 
         @media (min-width: 768px) {
             .summary-grid {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+                grid-template-columns: 1fr 1.6fr 1fr;
             }
         }
 
@@ -79,13 +79,31 @@
             background: var(--surface);
             border: 2px solid var(--border);
             border-radius: 16px;
-            padding: 14px 16px;
+            padding: 12px 14px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            min-height: 68px;
+            min-height: 64px;
+        }
+
+        .summary-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(var(--active-rgb), 0.10);
+            border: 2px solid rgba(var(--active-rgb), 0.18);
+            color: var(--active);
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+
+        .summary-main {
+            min-width: 0;
         }
 
         .summary-label {
@@ -98,7 +116,7 @@
         }
 
         .summary-value {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
             letter-spacing: -0.02em;
             color: var(--text);
@@ -744,33 +762,33 @@
                     <h1>Cash Boxes</h1>
                     <p class="page-subtitle">Manage and monitor all your Cash Boxes</p>
                 </div>
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <div id="orderStatus" style="font-size:13px; color: var(--text-muted);"></div>
-                    <button class="btn btn-primary btn-small" onclick="handleAddCashBox()"><i class="fas fa-plus"></i> Add Cash Box</button>
-                </div>
+                <div id="orderStatus" style="font-size:13px; color: var(--text-muted);"></div>
             </div>
 
             <div class="summary-grid">
                 <div class="summary-card">
-                    <div>
+                    <div class="summary-icon"><i class="fas fa-wallet"></i></div>
+                    <div class="summary-main">
                         <div class="summary-label">Cash Boxes</div>
                         <div class="summary-value" id="summaryCashBoxes">—</div>
+                        <div class="summary-sub">Active</div>
                     </div>
-                    <div class="summary-sub">Active</div>
                 </div>
                 <div class="summary-card">
-                    <div>
+                    <div class="summary-icon"><i class="fas fa-coins"></i></div>
+                    <div class="summary-main">
                         <div class="summary-label">Total Balance</div>
                         <div class="summary-sub" id="summaryBalancesHint">Top currencies</div>
                     </div>
                     <div class="currency-pills" id="summaryBalances">—</div>
                 </div>
                 <div class="summary-card">
-                    <div>
+                    <div class="summary-icon"><i class="fas fa-receipt"></i></div>
+                    <div class="summary-main">
                         <div class="summary-label">Transactions</div>
                         <div class="summary-value" id="summaryTransactions">—</div>
+                        <div class="summary-sub">All time</div>
                     </div>
-                    <div class="summary-sub">All time</div>
                 </div>
             </div>
 
