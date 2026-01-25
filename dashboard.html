@@ -265,10 +265,27 @@
             box-shadow: none;
         }
 
+        .register-quick-btn .quick-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.55);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            flex-shrink: 0;
+        }
+
         .register-quick-btn svg {
             width: 16px;
             height: 16px;
             flex-shrink: 0;
+        }
+
+        .register-quick-btn .quick-label {
+            font-weight: 800;
+            letter-spacing: 0.02em;
         }
 
         /* UNIFIED CARD STRUCTURE - SAME AS CASH BOX LIST */
@@ -4050,7 +4067,7 @@ tr:hover [data-category-tag] {
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=15"></script>
     <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/dashboard-data.js?v=30&t=20260125"></script>
+    <script src="assets/js/dashboard-data.js?v=31&t=20260125b"></script>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -4248,27 +4265,7 @@ tr:hover [data-category-tag] {
         // ========================================
         // Load dashboard data after Swiper is initialized
         if (typeof loadDashboardData === 'function') {
-            loadDashboardData().then(() => {
-                // Force update IN/OUT buttons with SVG icons after data loads
-                setTimeout(() => {
-                    document.querySelectorAll('.register-quick-btn.in').forEach(btn => {
-                        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><span>IN</span>';
-                    });
-                    document.querySelectorAll('.register-quick-btn.out').forEach(btn => {
-                        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><span>OUT</span>';
-                    });
-                }, 100);
-            }).catch(() => {
-                // If loadDashboardData doesn't return a promise, try anyway
-                setTimeout(() => {
-                    document.querySelectorAll('.register-quick-btn.in').forEach(btn => {
-                        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><span>IN</span>';
-                    });
-                    document.querySelectorAll('.register-quick-btn.out').forEach(btn => {
-                        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><span>OUT</span>';
-                    });
-                }, 100);
-            });
+            loadDashboardData();
         }
 
         // ========================================

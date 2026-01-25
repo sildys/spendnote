@@ -139,16 +139,24 @@ async function loadDashboardData() {
 
                             <div class="register-quick-actions">
                                 <button type="button" class="register-quick-btn in" data-quick="in">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                                    </svg>
-                                    <span>IN</span>
+                                    <span class="quick-icon" aria-hidden="true">
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3 13H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M8 3V9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M5.5 8.5L8 11L10.5 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                    <span class="quick-label">IN</span>
                                 </button>
                                 <button type="button" class="register-quick-btn out" data-quick="out">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3 8H13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                                    </svg>
-                                    <span>OUT</span>
+                                    <span class="quick-icon" aria-hidden="true">
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3 13H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M8 11V4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M5.5 6.5L8 4L10.5 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                    <span class="quick-label">OUT</span>
                                 </button>
                             </div>
                             
