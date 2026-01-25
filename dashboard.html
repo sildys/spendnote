@@ -234,15 +234,17 @@
         }
 
         .register-quick-btn.in {
-            color: #059669;
-            border-color: rgba(16, 185, 129, 0.3);
-            background: rgba(16, 185, 129, 0.06);
+            --quick-accent: #059669;
+            color: var(--quick-accent);
+            border-color: var(--quick-accent);
+            background: white;
         }
 
         .register-quick-btn.out {
-            color: #f59e0b;
-            border-color: rgba(245, 158, 11, 0.3);
-            background: rgba(245, 158, 11, 0.06);
+            --quick-accent: #f59e0b;
+            color: var(--quick-accent);
+            border-color: var(--quick-accent);
+            background: white;
         }
 
         .register-quick-btn:hover {
@@ -251,13 +253,13 @@
         }
 
         .register-quick-btn.in:hover {
-            background: rgba(16, 185, 129, 0.12);
-            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(5, 150, 105, 0.06);
+            border-color: var(--quick-accent);
         }
 
         .register-quick-btn.out:hover {
-            background: rgba(245, 158, 11, 0.12);
-            border-color: rgba(245, 158, 11, 0.4);
+            background: rgba(245, 158, 11, 0.08);
+            border-color: var(--quick-accent);
         }
 
         .register-quick-btn:active {
@@ -272,8 +274,10 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.55);
-            border: 1px solid rgba(0, 0, 0, 0.04);
+            background: var(--quick-accent);
+            color: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
             flex-shrink: 0;
         }
 
@@ -4067,7 +4071,7 @@ tr:hover [data-category-tag] {
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=15"></script>
     <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/dashboard-data.js?v=31&t=20260125b"></script>
+    <script src="assets/js/dashboard-data.js?v=32&t=20260125c"></script>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
