@@ -418,7 +418,12 @@
             width: 72px !important;
             height: 72px !important;
             border-radius: 18px !important;
-            background: #ffffff;
+            background: linear-gradient(
+                135deg,
+                rgba(var(--card-rgb, var(--active-rgb)), 0.08) 0%,
+                #ffffff 55%,
+                rgba(var(--card-rgb, var(--active-rgb)), 0.03) 100%
+            );
             display: flex;
             align-items: center;
             justify-content: center;
@@ -427,6 +432,7 @@
             border: 3px solid var(--card-color, var(--active));
             box-shadow: 0 6px 18px rgba(var(--card-rgb, var(--active-rgb)), 0.16);
             text-decoration: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
 
         .register-icon:hover {
@@ -4091,7 +4097,7 @@ tr:hover [data-category-tag] {
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=15"></script>
     <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/dashboard-data.js?v=39&t=20260125j"></script>
+    <script src="assets/js/dashboard-data.js?v=40&t=20260125k"></script>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
