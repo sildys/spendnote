@@ -62,6 +62,74 @@
             min-height: 76px;
         }
 
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        @media (min-width: 768px) {
+            .summary-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        .summary-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 14px 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-height: 68px;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 2px;
+        }
+
+        .summary-value {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            line-height: 1.1;
+        }
+
+        .summary-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .currency-pills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+
+        .currency-pill {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text);
+            border: 2px solid var(--border);
+            background: var(--surface-elevated);
+            border-radius: 999px;
+            padding: 6px 10px;
+            white-space: nowrap;
+        }
+
         .register-row:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
@@ -331,17 +399,16 @@
         .add-cash-box-card {
             background: var(--surface);
             border: 2px dashed var(--border);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
+            border-radius: 16px;
+            padding: 16px 16px;
+            display: grid;
+            grid-template-columns: 56px minmax(0, 1fr);
+            column-gap: 12px;
             align-items: center;
-            justify-content: center;
-            text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            min-height: 180px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            min-height: 76px;
         }
 
         .add-cash-box-card:hover {
@@ -366,7 +433,7 @@
         .add-cash-box-icon {
             width: 56px;
             height: 56px;
-            border-radius: 50%;
+            border-radius: 14px;
             background: rgba(5, 150, 105, 0.1);
             border: 2px solid rgba(5, 150, 105, 0.2);
             display: flex;
@@ -374,14 +441,14 @@
             justify-content: center;
             font-size: 24px;
             color: var(--primary);
-            margin-bottom: 12px;
+            margin-bottom: 0;
         }
 
         .add-cash-box-title {
             font-size: 16px;
             font-weight: 800;
             color: var(--text);
-            margin-bottom: 6px;
+            margin-bottom: 2px;
         }
 
         .add-cash-box-subtitle {
@@ -683,16 +750,42 @@
                 </div>
             </div>
 
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div>
+                        <div class="summary-label">Cash Boxes</div>
+                        <div class="summary-value" id="summaryCashBoxes">—</div>
+                    </div>
+                    <div class="summary-sub">Active</div>
+                </div>
+                <div class="summary-card">
+                    <div>
+                        <div class="summary-label">Total Balance</div>
+                        <div class="summary-sub" id="summaryBalancesHint">Top currencies</div>
+                    </div>
+                    <div class="currency-pills" id="summaryBalances">—</div>
+                </div>
+                <div class="summary-card">
+                    <div>
+                        <div class="summary-label">Transactions</div>
+                        <div class="summary-value" id="summaryTransactions">—</div>
+                    </div>
+                    <div class="summary-sub">All time</div>
+                </div>
+            </div>
+
         <!-- Cash Boxes LIST -->
         <div class="registers-list">
             <!-- Cash boxes will be loaded dynamically from Supabase -->
             <!-- Add Cash Box Card - Unified Design -->
-            <div class="add-cash-box-card" onclick="handleAddCashBox()" data-plan="pro" data-box-count="5" style="display:none;">
+            <div class="add-cash-box-card" onclick="handleAddCashBox()" data-plan="pro" data-box-count="5">
                 <div class="add-cash-box-icon">
                     <i class="fas fa-plus"></i>
                 </div>
-                <div class="add-cash-box-title">Add Cash Box</div>
-                <div class="add-cash-box-subtitle">Keep your cash organized</div>
+                <div>
+                    <div class="add-cash-box-title">Add Cash Box</div>
+                    <div class="add-cash-box-subtitle">Keep your cash organized</div>
+                </div>
                 <!-- Conditional upgrade message - only shown when limit reached -->
                 <div class="add-cash-box-upgrade" data-upgrade-text="standard">Upgrade to Standard for more Cash Boxes</div>
                 <div class="add-cash-box-upgrade" data-upgrade-text="pro">Upgrade to Pro for unlimited Cash Boxes</div>
@@ -921,7 +1014,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=14"></script>
     <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/cash-box-list-data.js?v=20"></script>
+    <script src="assets/js/cash-box-list-data.js?v=21"></script>
     
     <script src="assets/js/main.js?v=18"></script>
 </body>
