@@ -211,6 +211,56 @@ const SpendNote = {
             return currencyText ? `${formatted} ${currencyText}` : formatted;
         }
     },
+
+    hexToRgb: function(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(hex || '').trim());
+        return result
+            ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
+            : '5, 150, 105';
+    },
+
+    getIconClass: function(iconName) {
+        const iconMap = {
+            'building': 'fa-building',
+            'calendar': 'fa-calendar-alt',
+            'wallet': 'fa-wallet',
+            'bullhorn': 'fa-bullhorn',
+            'store': 'fa-store',
+            'piggy-bank': 'fa-piggy-bank',
+            'chart-line': 'fa-chart-line',
+            'coins': 'fa-coins',
+            'exclamation-triangle': 'fa-exclamation-triangle',
+            'dollar': 'fa-dollar-sign',
+            'home': 'fa-home',
+            'briefcase': 'fa-briefcase',
+            'chart': 'fa-chart-line',
+            'star': 'fa-star',
+            'flag': 'fa-flag',
+            'heart': 'fa-heart',
+            'bolt': 'fa-bolt',
+            'gift': 'fa-gift',
+            'tag': 'fa-tag',
+            'bell': 'fa-bell'
+        };
+        const key = String(iconName || '').trim();
+        return iconMap[key] || 'fa-building';
+    },
+
+    getColorClass: function(color) {
+        const colorMap = {
+            '#059669': 'green',
+            '#10b981': 'green',
+            '#f59e0b': 'orange',
+            '#3b82f6': 'blue',
+            '#8b5cf6': 'purple',
+            '#ef4444': 'red',
+            '#ec4899': 'pink'
+        };
+        const key = String(color || '').trim().toLowerCase();
+        return colorMap[key] || 'green';
+    },
+
+    getInitials: getInitials,
     
     // Format date
     formatDate: function(date) {

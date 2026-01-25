@@ -8,13 +8,41 @@ var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KE
 // Auth helper functions
 var auth = {
     // Get current user
-    async getCurrentUser() {
-        const { data: { user }, error } = await supabaseClient.auth.getUser();
-        if (error) {
-            console.error('Error getting user:', error);
-            return null;
+    async getCurrentUser(options = {}) {
+        if (!auth.__userCache) {
+            auth.__userCache = { user: null, ts: 0, promise: null };
         }
-        return user;
+
+        const ttlMs = 2000;
+        const now = Date.now();
+        const force = Boolean(options && options.force);
+
+        if (!force && auth.__userCache.user && (now - auth.__userCache.ts) < ttlMs) {
+            return auth.__userCache.user;
+        }
+
+        if (!force && auth.__userCache.promise) {
+            return await auth.__userCache.promise;
+        }
+
+        auth.__userCache.promise = (async () => {
+            const { data: { user }, error } = await supabaseClient.auth.getUser();
+            if (error) {
+                console.error('Error getting user:', error);
+                auth.__userCache.user = null;
+                auth.__userCache.ts = now;
+                return null;
+            }
+            auth.__userCache.user = user || null;
+            auth.__userCache.ts = now;
+            return auth.__userCache.user;
+        })();
+
+        try {
+            return await auth.__userCache.promise;
+        } finally {
+            auth.__userCache.promise = null;
+        }
     },
 
     // Sign up new user
@@ -32,6 +60,11 @@ var auth = {
             console.error('Error signing up:', error);
             return { success: false, error: error.message };
         }
+        if (auth.__userCache) {
+            auth.__userCache.user = null;
+            auth.__userCache.ts = 0;
+            auth.__userCache.promise = null;
+        }
         return { success: true, user: data.user };
     },
 
@@ -45,6 +78,11 @@ var auth = {
             console.error('Error signing in:', error);
             return { success: false, error: error.message };
         }
+        if (auth.__userCache) {
+            auth.__userCache.user = null;
+            auth.__userCache.ts = 0;
+            auth.__userCache.promise = null;
+        }
         return { success: true, user: data.user, session: data.session };
     },
 
@@ -54,6 +92,11 @@ var auth = {
         if (error) {
             console.error('Error signing out:', error);
             return { success: false, error: error.message };
+        }
+        if (auth.__userCache) {
+            auth.__userCache.user = null;
+            auth.__userCache.ts = 0;
+            auth.__userCache.promise = null;
         }
         return { success: true };
     },
@@ -87,21 +130,38 @@ var auth = {
     }
 };
 
+try {
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+        if (!auth.__userCache) {
+            auth.__userCache = { user: null, ts: 0, promise: null };
+        }
+        auth.__userCache.user = session?.user || null;
+        auth.__userCache.ts = Date.now();
+        auth.__userCache.promise = null;
+    });
+} catch (e) {
+
+}
+
 // Database helper functions
 var db = {
     // Cash Boxes
     cashBoxes: {
-        async getAll() {
+        async getAll(options = {}) {
             const user = await auth.getCurrentUser();
             if (!user) {
                 console.error('No authenticated user');
                 return [];
             }
 
+            const select = (options && typeof options.select === 'string' && options.select.trim())
+                ? options.select
+                : '*';
+
             // Prefer stable user-defined ordering (sort_order), fallback to creation order
             const primaryQuery = await supabaseClient
                 .from('cash_boxes')
-                .select('*')
+                .select(select)
                 .eq('user_id', user.id)
                 .order('sort_order', { ascending: true, nullsFirst: false })
                 .order('created_at', { ascending: true });
@@ -114,7 +174,7 @@ var db = {
 
             const fallbackQuery = await supabaseClient
                 .from('cash_boxes')
-                .select('*')
+                .select(select)
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: true });
 
@@ -361,17 +421,19 @@ var db = {
                 return await query;
             };
 
-            const joinedSelect = `
+            const defaultJoinedSelect = `
                 *,
                 cash_box:cash_boxes(id, name, color, currency),
                 contact:contacts(id, name)
             `;
 
-            let result = await runQuery({ select: joinedSelect, withCreatedAtOrder: true });
-            if (result.error) {
-                console.warn('Transactions query (joined + created_at) failed, retrying without created_at order:', result.error);
-                result = await runQuery({ select: joinedSelect, withCreatedAtOrder: false });
-            }
+            const requestedSelect = (filters && typeof filters.select === 'string' && filters.select.trim())
+                ? filters.select
+                : null;
+
+            const joinedSelect = requestedSelect || defaultJoinedSelect;
+
+            let result = await runQuery({ select: joinedSelect, withCreatedAtOrder: false });
 
             if (result.error) {
                 console.warn('Transactions query (joined) failed, retrying with select(*):', result.error);

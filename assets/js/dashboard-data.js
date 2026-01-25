@@ -1,14 +1,17 @@
 // Dashboard Data Loader - Load real data from Supabase
+console.log('SpendNote dashboard-data.js build 20260125q');
 async function loadDashboardData() {
     try {
         const swiperWrapper = document.querySelector('.registers-swiper .swiper-wrapper');
         if (!swiperWrapper) return;
-        
-        // Load cash boxes and transactions in parallel for speed
-        const [cashBoxes, transactions] = await Promise.all([
-            db.cashBoxes.getAll(),
-            db.transactions.getAll({ limit: 5 })
-        ]);
+
+        const cashBoxesPromise = db.cashBoxes.getAll({
+            select: 'id, name, color, currency, icon, current_balance, created_at, sort_order'
+        });
+
+        const transactionsPromise = db.transactions.getAll({ limit: 5 });
+
+        const cashBoxes = await cashBoxesPromise;
         
         if (cashBoxes && cashBoxes.length > 0) {
             // Get the swiper wrapper
@@ -27,54 +30,57 @@ async function loadDashboardData() {
             const registerSlides = allSlides.filter(slide => slide.querySelector('.register-card'));
             registerSlides.forEach(slide => slide.remove());
             console.log('🗑️ Removed', registerSlides.length, 'demo register slides');
-            
-            // Helper function to convert hex color to RGB
-            function hexToRgb(hex) {
-                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-                return result ? 
-                    `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : 
-                    '5, 150, 105';
-            }
-            
-            // Helper function to get icon class from icon name
-            function getIconClass(iconName) {
-                const iconMap = {
-                    'building': 'fa-building',
-                    'calendar': 'fa-calendar-alt',
-                    'wallet': 'fa-wallet',
-                    'bullhorn': 'fa-bullhorn',
-                    'store': 'fa-store',
-                    'piggy-bank': 'fa-piggy-bank',
-                    'chart-line': 'fa-chart-line',
-                    'coins': 'fa-coins',
-                    'dollar': 'fa-dollar-sign',
-                    'home': 'fa-home',
-                    'briefcase': 'fa-briefcase',
-                    'chart': 'fa-chart-line',
-                    'star': 'fa-star',
-                    'flag': 'fa-flag',
-                    'heart': 'fa-heart',
-                    'bolt': 'fa-bolt',
-                    'gift': 'fa-gift',
-                    'tag': 'fa-tag',
-                    'bell': 'fa-bell'
+
+            const hexToRgb = (window.SpendNote && typeof window.SpendNote.hexToRgb === 'function')
+                ? window.SpendNote.hexToRgb
+                : (value) => {
+                    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(value || '').trim());
+                    return result
+                        ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
+                        : '5, 150, 105';
                 };
-                return iconMap[iconName] || 'fa-building';
-            }
-            
-            // Helper function to get color class
-            function getColorClass(color) {
-                const colorMap = {
-                    '#059669': 'green',
-                    '#10b981': 'green',
-                    '#f59e0b': 'orange',
-                    '#3b82f6': 'blue',
-                    '#8b5cf6': 'purple',
-                    '#ef4444': 'red',
-                    '#ec4899': 'pink'
+
+            const getIconClass = (window.SpendNote && typeof window.SpendNote.getIconClass === 'function')
+                ? window.SpendNote.getIconClass
+                : (value) => {
+                    const iconMap = {
+                        'building': 'fa-building',
+                        'calendar': 'fa-calendar-alt',
+                        'wallet': 'fa-wallet',
+                        'bullhorn': 'fa-bullhorn',
+                        'store': 'fa-store',
+                        'piggy-bank': 'fa-piggy-bank',
+                        'chart-line': 'fa-chart-line',
+                        'coins': 'fa-coins',
+                        'dollar': 'fa-dollar-sign',
+                        'home': 'fa-home',
+                        'briefcase': 'fa-briefcase',
+                        'chart': 'fa-chart-line',
+                        'star': 'fa-star',
+                        'flag': 'fa-flag',
+                        'heart': 'fa-heart',
+                        'bolt': 'fa-bolt',
+                        'gift': 'fa-gift',
+                        'tag': 'fa-tag',
+                        'bell': 'fa-bell'
+                    };
+                    return iconMap[String(value || '').trim()] || 'fa-building';
                 };
-                return colorMap[color] || 'green';
-            }
+
+            const getColorClass = (window.SpendNote && typeof window.SpendNote.getColorClass === 'function')
+                ? window.SpendNote.getColorClass
+                : (value) => {
+                    const colorMap = {
+                        '#059669': 'green',
+                        '#10b981': 'green',
+                        '#f59e0b': 'orange',
+                        '#3b82f6': 'blue',
+                        '#8b5cf6': 'purple',
+                        '#ef4444': 'red',
+                        '#ec4899': 'pink'
+                    };
+                    return colorMap[String(value || '').trim().toLowerCase()] || 'green';
+                };
             
             // Generate HTML for all cash boxes
             let allSlidesHTML = '';
@@ -127,6 +133,11 @@ async function loadDashboardData() {
                                         <div class="register-name" style="font-size:24px;font-weight:900;line-height:1.1;">${box.name}</div>
                                         <div class="register-id">${cashBoxPrefix}-${String(sequenceNumber).padStart(3, '0')}</div>
                                     </div>
+                                </div>
+                                <div class="register-actions">
+                                    <a class="register-kebab" href="spendnote-cash-box-settings.html?id=${box.id}" aria-label="Cash Box settings" title="Cash Box settings">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
                                 </div>
                             </div>
                             
@@ -225,8 +236,9 @@ async function loadDashboardData() {
         } else {
             console.log('ℹ️ No cash boxes found in database');
         }
-        
-        // Load recent transactions (already loaded in parallel)
+
+        const transactions = await transactionsPromise;
+
         const cashBoxById = new Map((cashBoxes || []).map((b) => [b.id, b]));
         const enrichedTransactions = (transactions || []).map((tx) => {
             if (tx && tx.cash_box) return tx;
@@ -257,40 +269,42 @@ function updateModalCashBoxDropdown(cashBoxes) {
     
     // Clear existing options
     modalRegisterSelect.innerHTML = '';
-    
-    // Helper function to get icon class from icon name
-    function getIconClass(iconName) {
-        const iconMap = {
-            'building': 'fa-building',
-            'calendar': 'fa-calendar-alt',
-            'wallet': 'fa-wallet',
-            'bullhorn': 'fa-bullhorn',
-            'store': 'fa-store',
-            'piggy-bank': 'fa-piggy-bank',
-            'chart-line': 'fa-chart-line',
-            'coins': 'fa-coins',
-            'dollar': 'fa-dollar-sign',
-            'home': 'fa-home',
-            'briefcase': 'fa-briefcase',
-            'chart': 'fa-chart-line',
-            'star': 'fa-star',
-            'flag': 'fa-flag',
-            'heart': 'fa-heart',
-            'bolt': 'fa-bolt',
-            'gift': 'fa-gift',
-            'tag': 'fa-tag',
-            'bell': 'fa-bell'
+
+    const getIconClass = (window.SpendNote && typeof window.SpendNote.getIconClass === 'function')
+        ? window.SpendNote.getIconClass
+        : (value) => {
+            const iconMap = {
+                'building': 'fa-building',
+                'calendar': 'fa-calendar-alt',
+                'wallet': 'fa-wallet',
+                'bullhorn': 'fa-bullhorn',
+                'store': 'fa-store',
+                'piggy-bank': 'fa-piggy-bank',
+                'chart-line': 'fa-chart-line',
+                'coins': 'fa-coins',
+                'dollar': 'fa-dollar-sign',
+                'home': 'fa-home',
+                'briefcase': 'fa-briefcase',
+                'chart': 'fa-chart-line',
+                'star': 'fa-star',
+                'flag': 'fa-flag',
+                'heart': 'fa-heart',
+                'bolt': 'fa-bolt',
+                'gift': 'fa-gift',
+                'tag': 'fa-tag',
+                'bell': 'fa-bell'
+            };
+            return iconMap[String(value || '').trim()] || 'fa-building';
         };
-        return iconMap[iconName] || 'fa-building';
-    }
-    
-    // Helper function to convert hex color to RGB
-    function hexToRgb(hex) {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? 
-            `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : 
-            '5, 150, 105';
-    }
+
+    const hexToRgb = (window.SpendNote && typeof window.SpendNote.hexToRgb === 'function')
+        ? window.SpendNote.hexToRgb
+        : (value) => {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(value || '').trim());
+            return result
+                ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
+                : '5, 150, 105';
+        };
     
     // Add options for each cash box
     cashBoxes.forEach((box, index) => {
@@ -375,14 +389,9 @@ function loadRecentTransactionsSync(transactions) {
                 });
 
                 const createdByName = tx.created_by_user_name || tx.created_by || '—';
-                const getInitials = (name) => {
-                    if (!name || name === '—') return 'U';
-                    const parts = String(name).trim().split(/\s+/).filter(Boolean);
-                    const initials = parts.slice(0, 2).map((part) => part[0].toUpperCase()).join('');
-                    return initials || 'U';
-                };
-
-                const initials = getInitials(createdByName);
+                const initials = (window.SpendNote && typeof window.SpendNote.getInitials === 'function')
+                    ? window.SpendNote.getInitials(createdByName === '—' ? '' : createdByName)
+                    : 'U';
                 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="32" fill="#10b981"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="700" fill="#ffffff">${initials}</text></svg>`;
                 const avatarUrl = `data:image/svg+xml,${encodeURIComponent(svg)}`;
                 const rowHTML = `

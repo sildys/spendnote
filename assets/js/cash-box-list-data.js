@@ -16,55 +16,6 @@ async function loadCashBoxList() {
             const registerCards = grid.querySelectorAll('.register-card');
             registerCards.forEach(card => card.remove());
             
-            // Helper function to convert hex color to RGB
-            function hexToRgb(hex) {
-                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-                return result ? 
-                    `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : 
-                    '5, 150, 105';
-            }
-            
-            // Helper function to get icon class from icon name
-            function getIconClass(iconName) {
-                const iconMap = {
-                    'building': 'fa-building',
-                    'calendar': 'fa-calendar-alt',
-                    'wallet': 'fa-wallet',
-                    'bullhorn': 'fa-bullhorn',
-                    'store': 'fa-store',
-                    'piggy-bank': 'fa-piggy-bank',
-                    'chart-line': 'fa-chart-line',
-                    'coins': 'fa-coins',
-                    'exclamation-triangle': 'fa-exclamation-triangle',
-                    'dollar': 'fa-dollar-sign',
-                    'home': 'fa-home',
-                    'briefcase': 'fa-briefcase',
-                    'chart': 'fa-chart-line',
-                    'star': 'fa-star',
-                    'flag': 'fa-flag',
-                    'heart': 'fa-heart',
-                    'bolt': 'fa-bolt',
-                    'gift': 'fa-gift',
-                    'tag': 'fa-tag',
-                    'bell': 'fa-bell'
-                };
-                return iconMap[iconName] || 'fa-building';
-            }
-            
-            // Helper function to get color class from color hex
-            function getColorClass(color) {
-                const colorMap = {
-                    '#059669': 'green',
-                    '#10b981': 'green',
-                    '#f59e0b': 'orange',
-                    '#3b82f6': 'blue',
-                    '#8b5cf6': 'purple',
-                    '#ef4444': 'red',
-                    '#ec4899': 'pink'
-                };
-                return colorMap[color] || 'green';
-            }
-            
             // Generate HTML for all cash boxes
             let allCardsHTML = '';
             const cashBoxesForNumbering = [...cashBoxes].sort((a, b) => {
@@ -80,9 +31,15 @@ async function loadCashBoxList() {
 
             cashBoxes.forEach((box, index) => {
                 const color = box.color || '#059669';
-                const rgb = hexToRgb(color);
-                const iconClass = getIconClass(box.icon);
-                const colorClass = getColorClass(color);
+                const rgb = (window.SpendNote && typeof window.SpendNote.hexToRgb === 'function')
+                    ? window.SpendNote.hexToRgb(color)
+                    : '5, 150, 105';
+                const iconClass = (window.SpendNote && typeof window.SpendNote.getIconClass === 'function')
+                    ? window.SpendNote.getIconClass(box.icon)
+                    : 'fa-building';
+                const colorClass = (window.SpendNote && typeof window.SpendNote.getColorClass === 'function')
+                    ? window.SpendNote.getColorClass(color)
+                    : 'green';
                 
 
                 const cashBoxPrefix = 'cbx';

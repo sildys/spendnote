@@ -247,8 +247,11 @@ async function handleSave(e) {
             alert('Cash box updated successfully!');
         } else {
             // Create new cash box
-            const nextSortOrder = (await db.cashBoxes.getMaxSortOrder()) + 1;
-            const result = await db.cashBoxes.create(createPayload);
+            const [maxSortOrder, result] = await Promise.all([
+                db.cashBoxes.getMaxSortOrder(),
+                db.cashBoxes.create(createPayload)
+            ]);
+            const nextSortOrder = Number(maxSortOrder || 0) + 1;
             console.log('📦 Create result:', result);
             
             if (result.success === false) {
