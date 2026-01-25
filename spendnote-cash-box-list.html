@@ -49,7 +49,7 @@
             display: flex;
             align-items: center;
             gap: 24px;
-            cursor: grab;
+            cursor: pointer;
             overflow: hidden;
             min-height: 100px;
         }
@@ -71,6 +71,24 @@
             transform: scale(0.98);
             cursor: grabbing;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .drag-handle {
+            width: 24px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            opacity: 0.7;
+            flex-shrink: 0;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .drag-handle:hover {
+            opacity: 1;
+            color: var(--text);
         }
 
         .register-icon {
@@ -182,11 +200,6 @@
             opacity: 0.7;
         }
 
-        .register-users-label {
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
         .register-users {
             display: flex;
             align-items: center;
@@ -239,106 +252,6 @@
             align-items: center;
             gap: 10px;
             flex-shrink: 0;
-        }
-
-        .register-quick-btn {
-            padding: 10px 18px;
-            border-radius: 10px;
-            border: 2px solid var(--border);
-            background: var(--surface-elevated);
-            font-weight: 800;
-            font-size: 14px;
-            letter-spacing: 0.02em;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            white-space: nowrap;
-            min-width: 50px;
-        }
-
-        .register-quick-btn.in {
-            color: #047857;
-            background: rgba(16, 185, 129, 0.12);
-            border-color: rgba(16, 185, 129, 0.3);
-        }
-
-        .register-quick-btn.out {
-            color: #b45309;
-            background: rgba(245, 158, 11, 0.12);
-            border-color: rgba(245, 158, 11, 0.3);
-        }
-
-        .register-quick-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-        }
-
-        .register-quick-btn.in:hover {
-            background: rgba(16, 185, 129, 0.18);
-            border-color: rgba(16, 185, 129, 0.4);
-        }
-
-        .register-quick-btn.out:hover {
-            background: rgba(245, 158, 11, 0.18);
-            border-color: rgba(245, 158, 11, 0.4);
-        }
-
-        .tx-action {
-            padding: 10px 18px;
-            background: var(--surface-elevated);
-            color: #6b7280;
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 14px;
-            letter-spacing: 0.02em;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            border: 2px solid var(--border);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            white-space: nowrap;
-            min-width: 60px;
-        }
-
-        .tx-action:hover {
-            background: #4b5563;
-            color: white;
-            border-color: #4b5563;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-        }
-
-        .register-settings-btn {
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            transition: all 0.2s ease;
-            cursor: pointer;
-            text-decoration: none;
-            border: 2px solid var(--border);
-            background: var(--surface-elevated);
-            flex-shrink: 0;
-        }
-
-        .register-settings-btn i {
-            font-size: 17px;
-        }
-
-        .register-settings-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(5, 150, 105, 0.08);
-            transform: translateY(-1px);
         }
 
         .action-btn {
@@ -971,7 +884,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=14"></script>
     <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/cash-box-list-data.js?v=14"></script>
+    <script src="assets/js/cash-box-list-data.js?v=15"></script>
     
     <script src="assets/js/main.js?v=18"></script>
 </body>

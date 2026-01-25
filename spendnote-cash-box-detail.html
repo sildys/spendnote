@@ -753,10 +753,16 @@
                 <div class="header-balance-value">$18,500</div>
             </div>
             <div class="header-actions-compact">
-                <button class="btn btn-secondary" onclick="window.location.href='spendnote-cash-box-settings.html?id=main'" title="Cash Box Settings">
+                <button class="btn btn-secondary btn-small" id="detailQuickInBtn" title="New IN transaction">
+                    IN
+                </button>
+                <button class="btn btn-secondary btn-small" id="detailQuickOutBtn" title="New OUT transaction">
+                    OUT
+                </button>
+                <a class="btn btn-secondary" id="detailSettingsBtn" href="#" title="Cash Box Settings">
                     <i class="fas fa-cog"></i>
                     Settings
-                </button>
+                </a>
             </div>
         </div>
 
@@ -1172,6 +1178,24 @@
             document.documentElement.style.setProperty('--active', colorData.hex);
             document.documentElement.style.setProperty('--active-rgb', colorData.rgb);
             document.documentElement.style.setProperty('--cashbox-rgb', colorData.rgb);
+
+            const inBtn = document.getElementById('detailQuickInBtn');
+            if (inBtn) {
+                inBtn.addEventListener('click', () => {
+                    window.location.href = `dashboard.html?cashbox=${cashboxId}&direction=in#new-transaction`;
+                });
+            }
+            const outBtn = document.getElementById('detailQuickOutBtn');
+            if (outBtn) {
+                outBtn.addEventListener('click', () => {
+                    window.location.href = `dashboard.html?cashbox=${cashboxId}&direction=out#new-transaction`;
+                });
+            }
+
+            const settingsBtn = document.getElementById('detailSettingsBtn');
+            if (settingsBtn) {
+                settingsBtn.setAttribute('href', `spendnote-cash-box-settings.html?id=${cashboxId}`);
+            }
             
             // Update nav menu colors
             updateMenuColors(colorData.hex);

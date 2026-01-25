@@ -115,7 +115,9 @@ async function loadCashBoxList() {
                          data-color="${color}" 
                          data-rgb="${rgb}"
                          style="--card-color: ${color}; --card-rgb: ${rgb};">
-                        <div class="register-id-badge">${cashBoxPrefix.toUpperCase()}-${String(sequenceNumber).padStart(3, '0')}</div>
+                        <div class="drag-handle" title="Drag to reorder" aria-label="Reorder">
+                            <i class="fas fa-grip-vertical"></i>
+                        </div>
                         <div class="register-icon ${colorClass}" style="${iconStyle}">
                             <i class="fas ${iconClass}"></i>
                         </div>
@@ -128,9 +130,6 @@ async function loadCashBoxList() {
                         </div>
                         <div class="register-balance">${formattedBalance}</div>
                         <div class="register-actions">
-                            <button type="button" class="register-quick-btn in" onclick="window.location.href='dashboard.html?cashbox=${box.id}&direction=in#new-transaction'">IN</button>
-                            <button type="button" class="register-quick-btn out" onclick="window.location.href='dashboard.html?cashbox=${box.id}&direction=out#new-transaction'">OUT</button>
-                            <a class="tx-action" href="spendnote-cash-box-detail.html?id=${box.id}">View</a>
                             <a class="btn btn-secondary btn-small" href="spendnote-cash-box-settings.html?id=${box.id}" title="Cash Box Settings" aria-label="Cash Box Settings">
                                 <i class="fas fa-cog"></i>
                                 Settings
@@ -224,7 +223,11 @@ async function loadCashBoxList() {
 
             const enableDragAndDrop = () => {
                 cashBoxCards.forEach(card => {
-                    card.setAttribute('draggable', 'true');
+                    card.removeAttribute('draggable');
+                    const handle = card.querySelector('.drag-handle');
+                    if (handle) {
+                        handle.setAttribute('draggable', 'true');
+                    }
                 });
 
                 grid.addEventListener('dragstart', (event) => {
@@ -233,6 +236,10 @@ async function loadCashBoxList() {
                         : (event.target && event.target.parentElement ? event.target.parentElement : null);
                     const card = targetEl ? targetEl.closest('.register-row') : null;
                     if (!card) return;
+                    if (!targetEl || !targetEl.closest('.drag-handle')) {
+                        event.preventDefault();
+                        return;
+                    }
                     if (targetEl && (targetEl.closest('.register-actions') || targetEl.closest('a') || targetEl.closest('button'))) {
                         event.preventDefault();
                         return;
@@ -288,10 +295,14 @@ async function loadCashBoxList() {
 
             cashBoxCards.forEach(card => {
                 card.addEventListener('click', (event) => {
-                    if (event.target.closest('.register-actions') || event.target.closest('.register-quick-btn') || event.target.closest('.tx-action') || event.target.closest('a') || event.target.closest('button')) {
+                    if (event.target.closest('.drag-handle') || event.target.closest('.register-actions') || event.target.closest('a') || event.target.closest('button')) {
                         return;
                     }
                     setActiveCard(card);
+                    const id = card.dataset.id;
+                    if (id) {
+                        window.location.href = `spendnote-cash-box-detail.html?id=${id}`;
+                    }
                 });
             });
 
