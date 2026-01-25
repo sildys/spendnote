@@ -103,9 +103,14 @@ async function loadCashBoxList() {
                 const users = box.users || [
                     { name: 'Sramli Ildikó', initials: 'SI', color: '#059669' }
                 ];
-                const usersHTML = users.map(user => 
-                    `<div class="user-avatar" style="background: ${user.color}20; color: ${user.color}; border-color: ${user.color}40;" title="${user.name}">${user.initials}</div>`
-                ).join('');
+                const visibleUsers = users.slice(0, 3);
+                const remainingCount = Math.max(0, users.length - visibleUsers.length);
+                const usersHTML = [
+                    ...visibleUsers.map(user =>
+                        `<div class="user-avatar" style="background: ${user.color}20; color: ${user.color}; border-color: ${user.color}40;" title="${user.name}">${user.initials}</div>`
+                    ),
+                    ...(remainingCount > 0 ? [`<div class="user-avatar more" title="${remainingCount} more">+${remainingCount}</div>`] : [])
+                ].join('');
                 
                 // Create list row HTML
                 allCardsHTML += `
@@ -127,7 +132,7 @@ async function loadCashBoxList() {
                                 <div class="register-balance">${formattedBalance}</div>
                             </div>
                             <div class="register-meta">
-                                <span class="register-tx-count"><i class="fas fa-receipt"></i> ${txCount} transactions</span>
+                                <span class="register-tx-count"><i class="fas fa-receipt"></i> ${txCount} tx</span>
                                 <div class="register-users">${usersHTML}</div>
                             </div>
                         </div>
