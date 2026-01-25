@@ -960,34 +960,20 @@
         }
         .row-tooltip strong { color: #10b981; }
 
-        /* Type badge - IN/OUT (cleaner: icon + label) */
+        /* Type badge - IN/OUT (simple text-only) */
         .tx-type {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
             padding: 6px 10px;
-            border-radius: 10px;
+            border-radius: 999px;
             font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 0.02em;
+            font-weight: 900;
+            letter-spacing: 0.06em;
             border: 2px solid;
             background: #ffffff;
             width: fit-content;
-            min-width: 0;
-        }
-        .tx-type-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 999px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid currentColor;
-            background: rgba(255, 255, 255, 0.6);
-            flex-shrink: 0;
-        }
-        .tx-type-label {
-            line-height: 1;
+            min-width: 52px;
         }
         .tx-type.in {
             color: #059669;
@@ -4114,7 +4100,7 @@ tr:hover [data-category-tag] {
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=15"></script>
     <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/dashboard-data.js?v=42&t=20260125m"></script>
+    <script src="assets/js/dashboard-data.js?v=43&t=20260125n"></script>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
