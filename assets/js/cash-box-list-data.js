@@ -122,13 +122,15 @@ async function loadCashBoxList() {
                             <i class="fas ${iconClass}"></i>
                         </div>
                         <div class="register-info">
-                            <div class="register-name">${box.name}</div>
+                            <div class="register-title-row">
+                                <div class="register-name">${box.name}</div>
+                                <div class="register-balance">${formattedBalance}</div>
+                            </div>
                             <div class="register-meta">
                                 <span class="register-tx-count"><i class="fas fa-receipt"></i> ${txCount} transactions</span>
                                 <div class="register-users">${usersHTML}</div>
                             </div>
                         </div>
-                        <div class="register-balance">${formattedBalance}</div>
                         <div class="register-actions">
                             <a class="btn btn-secondary btn-small" href="spendnote-cash-box-settings.html?id=${box.id}" title="Cash Box Settings" aria-label="Cash Box Settings">
                                 <i class="fas fa-cog"></i>
@@ -282,7 +284,7 @@ async function loadCashBoxList() {
                     }
 
                     const rect = overCard.getBoundingClientRect();
-                    const insertAfter = (event.clientY - rect.top) > rect.height / 2;
+                    const insertAfter = (event.clientX - rect.left) > rect.width / 2;
                     grid.insertBefore(draggedCard, insertAfter ? overCard.nextSibling : overCard);
                 });
 

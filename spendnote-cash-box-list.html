@@ -33,16 +33,22 @@
         
         /* Cash Boxes LIST */
         .registers-list {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 12px;
+        }
+
+        @media (min-width: 1024px) {
+            .registers-list {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
 
         .register-row {
             background: var(--surface);
             border: 2px solid var(--border);
             border-radius: 16px;
-            padding: 24px 28px;
+            padding: 16px 16px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             transition: all 0.2s ease;
             position: relative;
@@ -51,11 +57,11 @@
             gap: 24px;
             cursor: pointer;
             overflow: hidden;
-            min-height: 100px;
+            min-height: 76px;
         }
 
         .register-row:hover {
-            transform: translateX(4px);
+            transform: translateY(-2px);
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
             border-color: rgba(var(--card-rgb, var(--active-rgb)), 0.3);
         }
@@ -151,11 +157,19 @@
             min-width: 0;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
+        }
+
+        .register-title-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
         }
 
         .register-name {
-            font-size: 19px;
+            font-size: 16px;
             font-weight: 800;
             letter-spacing: -0.02em;
             color: var(--text);
@@ -238,13 +252,13 @@
         }
 
         .register-balance {
-            font-size: 26px;
+            font-size: 18px;
             font-weight: 900;
             color: var(--text);
             letter-spacing: -0.02em;
-            min-width: 160px;
             text-align: right;
             flex-shrink: 0;
+            white-space: nowrap;
         }
 
         .register-actions {
@@ -562,7 +576,7 @@
 
         /* RESPONSIVE */
         @media (max-width: 1200px) {
-            .register-row { padding: 20px 22px; }
+            .register-row { padding: 14px 14px; }
         }
         @media (max-width: 768px) {
             .register-actions { flex-wrap: wrap; justify-content: flex-end; }
