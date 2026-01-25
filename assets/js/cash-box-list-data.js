@@ -136,7 +136,7 @@ async function loadCashBoxList() {
                         </div>
                         <div class="register-balance">${formattedBalance}</div>
                         <div class="register-actions">
-                            <a class="btn btn-secondary btn-small" href="spendnote-cash-box-settings.html?id=${box.id}" title="Cash Box Settings" aria-label="Cash Box Settings">
+                            <a class="btn btn-secondary btn-small register-settings-link" href="spendnote-cash-box-settings.html?id=${box.id}" title="Cash Box Settings" aria-label="Cash Box Settings">
                                 <i class="fas fa-cog"></i>
                                 <span class="btn-small-text">Settings</span>
                             </a>
@@ -317,6 +317,18 @@ async function loadCashBoxList() {
             })();
 
             cashBoxCards.forEach(card => {
+                const iconLink = card.querySelector('.register-icon-link');
+                const settingsLink = card.querySelector('.register-settings-link');
+                [iconLink, settingsLink].forEach((el) => {
+                    if (!el) return;
+                    el.addEventListener('click', (event) => {
+                        if (card.classList.contains('active')) return;
+                        event.preventDefault();
+                        event.stopPropagation();
+                        setActiveCard(card);
+                    });
+                });
+
                 card.addEventListener('click', (event) => {
                     if (event.target.closest('.drag-handle') || event.target.closest('.register-actions') || event.target.closest('a') || event.target.closest('button')) {
                         return;

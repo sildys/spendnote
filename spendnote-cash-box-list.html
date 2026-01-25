@@ -75,6 +75,28 @@
             box-shadow: 0 4px 16px rgba(var(--card-rgb, var(--active-rgb)), 0.2);
         }
 
+        .register-row.active .register-icon-link:hover,
+        .register-row.active .register-actions .btn-small:hover {
+            transform: translateY(-1px);
+        }
+
+        .register-icon-link,
+        .register-actions .btn-small {
+            transition: transform 0.15s ease;
+        }
+
+        .register-icon-link:focus,
+        .register-actions .btn-small:focus {
+            outline: none;
+        }
+
+        .register-icon-link:focus-visible,
+        .register-actions .btn-small:focus-visible {
+            outline: 2px solid rgba(var(--active-rgb), 0.35);
+            outline-offset: 3px;
+            border-radius: 12px;
+        }
+
         .register-row.dragging {
             opacity: 0.6;
             transform: scale(0.98);
@@ -950,7 +972,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=14"></script>
     <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/cash-box-list-data.js?v=26"></script>
+    <script src="assets/js/cash-box-list-data.js?v=27"></script>
     
     <script src="assets/js/main.js?v=18"></script>
 </body>
