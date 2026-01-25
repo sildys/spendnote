@@ -141,9 +141,8 @@ async function loadDashboardData() {
                                 <button type="button" class="register-quick-btn in" data-quick="in">
                                     <span class="quick-icon" aria-hidden="true">
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M3 13H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M8 3V9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M5.5 8.5L8 11L10.5 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M8 3V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M4.5 8.8L8 12.3L11.5 8.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
                                     </span>
                                     <span class="quick-label">IN</span>
@@ -151,9 +150,8 @@ async function loadDashboardData() {
                                 <button type="button" class="register-quick-btn out" data-quick="out">
                                     <span class="quick-icon" aria-hidden="true">
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M3 13H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M8 11V4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M5.5 6.5L8 4L10.5 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M8 13V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M4.5 7.2L8 3.7L11.5 7.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
                                     </span>
                                     <span class="quick-label">OUT</span>
