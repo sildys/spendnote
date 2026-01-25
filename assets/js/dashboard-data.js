@@ -139,11 +139,15 @@ async function loadDashboardData() {
 
                             <div class="register-quick-actions">
                                 <button type="button" class="register-quick-btn in" data-quick="in">
-                                    <i class="fas fa-plus"></i>
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                                    </svg>
                                     <span>IN</span>
                                 </button>
                                 <button type="button" class="register-quick-btn out" data-quick="out">
-                                    <i class="fas fa-minus"></i>
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3 8H13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                                    </svg>
                                     <span>OUT</span>
                                 </button>
                             </div>
