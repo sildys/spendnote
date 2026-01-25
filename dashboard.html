@@ -1015,9 +1015,9 @@
 
         .tx-action {
             padding: 8px 14px;
-            background: white;
-            color: var(--text);
-            border: 2px solid var(--border);
+            background: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
             border-radius: 10px;
             font-size: 13px;
             font-weight: 700;
@@ -1029,16 +1029,16 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
         }
         .tx-action:hover {
-            background: var(--surface-elevated);
-            border-color: var(--text-muted);
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
         }
         .tx-action i {
             font-size: 11px;
-            opacity: 0.7;
         }
 
         .bulk-actions {
@@ -4050,7 +4050,7 @@ tr:hover [data-category-tag] {
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=15"></script>
     <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/dashboard-data.js?v=22"></script>
+    <script src="assets/js/dashboard-data.js?v=23"></script>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
