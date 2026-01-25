@@ -138,8 +138,14 @@ async function loadDashboardData() {
                             <div class="register-balance">${formattedBalance}</div>
 
                             <div class="register-quick-actions">
-                                <button type="button" class="register-quick-btn in" data-quick="in">IN</button>
-                                <button type="button" class="register-quick-btn out" data-quick="out">OUT</button>
+                                <button type="button" class="register-quick-btn in" data-quick="in">
+                                    <i class="fas fa-plus"></i>
+                                    <span>IN</span>
+                                </button>
+                                <button type="button" class="register-quick-btn out" data-quick="out">
+                                    <i class="fas fa-minus"></i>
+                                    <span>OUT</span>
+                                </button>
                             </div>
                             
                             <div class="register-stats">
@@ -386,7 +392,10 @@ function loadRecentTransactionsSync(transactions) {
                         <div class="tx-desc">${tx.description || 'No description'}</div>
                         <div class="tx-amount ${isIncome ? 'in' : 'out'}">${isIncome ? '+' : '-'}${formattedAmount}</div>
                         <div class="tx-createdby"><div class="avatar-with-name"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${createdByName}"></div><span>${createdByName}</span></div></div>
-                        <a href="spendnote-transaction-detail.html?id=${tx.id}" class="tx-action">View</a>
+                        <a href="spendnote-transaction-detail.html?id=${tx.id}" class="tx-action btn-view">
+                            <span>View</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 `;
 
