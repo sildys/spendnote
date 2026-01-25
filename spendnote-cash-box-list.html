@@ -21,8 +21,8 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/main.css?v=8">
-    <link rel="stylesheet" href="assets/css/app-layout.css?v=9">
+    <link rel="stylesheet" href="assets/css/main.css?v=9">
+    <link rel="stylesheet" href="assets/css/app-layout.css?v=11">
     <style>
         /* ===== CASH BOX LIST PAGE SPECIFIC STYLES ===== */
         
@@ -54,17 +54,6 @@
             min-height: 100px;
         }
 
-        .register-row::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 5px;
-            background: var(--card-color, var(--active));
-            transition: all 0.2s ease;
-        }
-
         .register-row:hover {
             transform: translateX(4px);
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
@@ -72,13 +61,9 @@
         }
 
         .register-row.active {
-            background: linear-gradient(90deg, rgba(var(--card-rgb, var(--active-rgb)), 0.08) 0%, var(--surface) 100%);
+            background: rgba(var(--card-rgb, var(--active-rgb)), 0.06);
             border-color: var(--card-color, var(--active));
             box-shadow: 0 4px 16px rgba(var(--card-rgb, var(--active-rgb)), 0.2);
-        }
-
-        .register-row.active::before {
-            width: 5px;
         }
 
         .register-row.dragging {
@@ -156,10 +141,25 @@
             font-weight: 800;
             letter-spacing: -0.02em;
             color: var(--text);
+            position: relative;
+            padding-left: 14px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             margin-bottom: 2px;
+        }
+
+        .register-name::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--card-color, var(--active));
+            box-shadow: 0 0 0 2px rgba(var(--card-rgb, var(--active-rgb)), 0.12);
         }
 
         .register-meta {
@@ -207,6 +207,12 @@
             cursor: help;
         }
 
+        .user-avatar.placeholder {
+            background: var(--surface-elevated);
+            border-color: var(--border);
+            color: transparent;
+        }
+
         .register-id {
             font-size: 11px;
             color: var(--text-muted);
@@ -227,7 +233,6 @@
             text-align: right;
             flex-shrink: 0;
         }
-
 
         .register-actions {
             display: flex;
@@ -644,14 +649,10 @@
 
         /* RESPONSIVE */
         @media (max-width: 1200px) {
-            .registers-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .register-row { padding: 20px 22px; }
         }
         @media (max-width: 768px) {
-            .registers-grid {
-                grid-template-columns: 1fr;
-            }
+            .register-actions { flex-wrap: wrap; justify-content: flex-end; }
 
             .page-header {
                 flex-direction: column;
@@ -664,7 +665,8 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /></head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+</head>
 <body>
 <nav class="site-nav">
   <div class="nav-container">
@@ -725,13 +727,17 @@
                     <h1>Cash Boxes</h1>
                     <p class="page-subtitle">Manage and monitor all your Cash Boxes</p>
                 </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div id="orderStatus" style="font-size:13px; color: var(--text-muted);"></div>
+                    <button class="btn btn-primary btn-small" onclick="handleAddCashBox()"><i class="fas fa-plus"></i> Add Cash Box</button>
+                </div>
             </div>
 
         <!-- Cash Boxes LIST -->
         <div class="registers-list">
             <!-- Cash boxes will be loaded dynamically from Supabase -->
             <!-- Add Cash Box Card - Unified Design -->
-            <div class="add-cash-box-card" onclick="handleAddCashBox()" data-plan="pro" data-box-count="5">
+            <div class="add-cash-box-card" onclick="handleAddCashBox()" data-plan="pro" data-box-count="5" style="display:none;">
                 <div class="add-cash-box-icon">
                     <i class="fas fa-plus"></i>
                 </div>
@@ -963,10 +969,10 @@
     
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=13"></script>
+    <script src="assets/js/supabase-config.js?v=14"></script>
     <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/cash-box-list-data.js?v=13"></script>
+    <script src="assets/js/cash-box-list-data.js?v=14"></script>
     
-    <script src="assets/js/main.js?v=17"></script>
+    <script src="assets/js/main.js?v=18"></script>
 </body>
 </html>

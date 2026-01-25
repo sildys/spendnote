@@ -123,7 +123,6 @@ async function loadCashBoxList() {
                             <div class="register-name">${box.name}</div>
                             <div class="register-meta">
                                 <span class="register-tx-count"><i class="fas fa-receipt"></i> ${txCount} transactions</span>
-                                <span class="register-users-label">Access:</span>
                                 <div class="register-users">${usersHTML}</div>
                             </div>
                         </div>
@@ -132,8 +131,9 @@ async function loadCashBoxList() {
                             <button type="button" class="register-quick-btn in" onclick="window.location.href='dashboard.html?cashbox=${box.id}&direction=in#new-transaction'">IN</button>
                             <button type="button" class="register-quick-btn out" onclick="window.location.href='dashboard.html?cashbox=${box.id}&direction=out#new-transaction'">OUT</button>
                             <a class="tx-action" href="spendnote-cash-box-detail.html?id=${box.id}">View</a>
-                            <a href="spendnote-cash-box-settings.html?id=${box.id}" class="register-settings-btn" aria-label="Cash Box settings">
+                            <a class="btn btn-secondary btn-small" href="spendnote-cash-box-settings.html?id=${box.id}" title="Cash Box Settings" aria-label="Cash Box Settings">
                                 <i class="fas fa-cog"></i>
+                                Settings
                             </a>
                         </div>
                     </div>
@@ -186,26 +186,36 @@ async function loadCashBoxList() {
             let draggedCard = null;
             let isSavingOrder = false;
 
+            const orderStatusEl = document.getElementById('orderStatus');
+            const setOrderStatus = (text) => {
+                if (!orderStatusEl) return;
+                orderStatusEl.textContent = text || '';
+            };
+
             const persistOrder = async () => {
                 if (isSavingOrder) return;
                 isSavingOrder = true;
 
                 try {
-                    const orderedCards = Array.from(grid.querySelectorAll('.register-card'))
-                        .filter(card => !card.classList.contains('add-cash-box-card'));
+                    const orderedCards = Array.from(grid.querySelectorAll('.register-row'));
 
                     const updates = orderedCards
                         .map(card => card.dataset.id)
                         .filter(Boolean)
                         .map((id, idx) => db.cashBoxes.update(id, { sort_order: idx + 1 }));
 
+                    setOrderStatus('Saving...');
                     const results = await Promise.all(updates);
                     const failed = results.find(r => r && r.success === false);
                     if (failed) {
                         throw new Error(failed.error || 'Failed to save cash box order');
                     }
+
+                    setOrderStatus('Saved');
+                    setTimeout(() => setOrderStatus(''), 1200);
                 } catch (error) {
                     console.error('❌ Failed to persist cash box order:', error);
+                    setOrderStatus('Could not save');
                     alert('Could not save cash box order yet. Please make sure the database has a sort_order column.');
                 } finally {
                     isSavingOrder = false;
@@ -221,9 +231,9 @@ async function loadCashBoxList() {
                     const targetEl = (event.target instanceof Element)
                         ? event.target
                         : (event.target && event.target.parentElement ? event.target.parentElement : null);
-                    const card = targetEl ? targetEl.closest('.register-card') : null;
-                    if (!card || card.classList.contains('add-cash-box-card')) return;
-                    if (targetEl && targetEl.closest('.action-btn')) {
+                    const card = targetEl ? targetEl.closest('.register-row') : null;
+                    if (!card) return;
+                    if (targetEl && (targetEl.closest('.register-actions') || targetEl.closest('a') || targetEl.closest('button'))) {
                         event.preventDefault();
                         return;
                     }
@@ -259,8 +269,8 @@ async function loadCashBoxList() {
                     event.preventDefault();
 
                     const hit = document.elementFromPoint(event.clientX, event.clientY);
-                    const overCard = hit ? hit.closest('.register-card') : null;
-                    if (!overCard || overCard === draggedCard || overCard.classList.contains('add-cash-box-card')) {
+                    const overCard = hit ? hit.closest('.register-row') : null;
+                    if (!overCard || overCard === draggedCard) {
                         return;
                     }
 
@@ -278,7 +288,7 @@ async function loadCashBoxList() {
 
             cashBoxCards.forEach(card => {
                 card.addEventListener('click', (event) => {
-                    if (event.target.closest('.action-btn') || event.target.closest('.register-quick-btn') || event.target.closest('.tx-action') || event.target.closest('.register-kebab')) {
+                    if (event.target.closest('.register-actions') || event.target.closest('.register-quick-btn') || event.target.closest('.tx-action') || event.target.closest('a') || event.target.closest('button')) {
                         return;
                     }
                     setActiveCard(card);
