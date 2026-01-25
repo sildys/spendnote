@@ -119,7 +119,8 @@ async function loadCashBoxList() {
                          data-name="${box.name}" 
                          data-color="${color}" 
                          data-rgb="${rgb}"
-                         style="--card-color: ${color}; --card-rgb: ${rgb};">
+                         style="--card-color: ${color}; --card-rgb: ${rgb};"
+                         title="Double-click to open details">
                         <div class="drag-handle" title="Drag to reorder" aria-label="Reorder">
                             <i class="fas fa-grip-vertical"></i>
                         </div>
