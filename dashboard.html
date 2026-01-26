@@ -2139,11 +2139,6 @@ tr:hover [data-category-tag] {
     position: relative;
 }
 
-.modal-date-top-right {
-    position: absolute;
-    top: 16px;
-    right: 60px;
-}
 
 .modal-title {
     font-size: 20px;
@@ -2589,7 +2584,7 @@ tr:hover [data-category-tag] {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex: 1;
+    max-width: 320px;
 }
 
 .cashbox-carousel-controls {
@@ -2673,53 +2668,69 @@ tr:hover [data-category-tag] {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 16px 24px;
-    border-radius: 14px;
+    padding: 12px 16px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
-    border: 3px solid var(--border);
+    border: 2px solid var(--border);
     background: white;
-    min-width: 100px;
+    width: 80px;
+    height: 80px;
 }
 
-.direction-primary-btn i {
-    font-size: 24px;
-    color: var(--text-muted);
+.direction-primary-btn .quick-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+    flex-shrink: 0;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.direction-primary-btn.in .quick-icon {
+    background: #059669;
+}
+
+.direction-primary-btn.out .quick-icon {
+    background: #6b7280;
 }
 
 .direction-primary-btn span {
-    font-size: 14px;
-    font-weight: 900;
+    font-size: 11px;
+    font-weight: 800;
     color: var(--text-muted);
     letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 .direction-primary-btn:hover {
     border-color: var(--active);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
 }
 
 #modalDirectionIn:checked + .direction-primary-btn.in {
-    background: linear-gradient(135deg, #059669, #047857);
-    border-color: #047857;
-    box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+    border-color: #059669;
+    background: rgba(5, 150, 105, 0.06);
 }
 
-#modalDirectionIn:checked + .direction-primary-btn.in i,
 #modalDirectionIn:checked + .direction-primary-btn.in span {
-    color: white;
+    color: #059669;
 }
 
 #modalDirectionOut:checked + .direction-primary-btn.out {
-    background: linear-gradient(135deg, #6b7280, #4b5563);
-    border-color: #4b5563;
-    box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+    border-color: #6b7280;
+    background: rgba(107, 114, 128, 0.06);
 }
 
-#modalDirectionOut:checked + .direction-primary-btn.out i,
 #modalDirectionOut:checked + .direction-primary-btn.out span {
-    color: white;
+    color: #6b7280;
 }
 
 .cashbox-name {
@@ -3494,12 +3505,16 @@ tr:hover [data-category-tag] {
                     <div class="modal-direction-primary">
                         <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
                         <label for="modalDirectionIn" class="direction-primary-btn in">
-                            <i class="fas fa-arrow-down"></i>
+                            <span class="quick-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </span>
                             <span>IN</span>
                         </label>
                         <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
                         <label for="modalDirectionOut" class="direction-primary-btn out">
-                            <i class="fas fa-arrow-up"></i>
+                            <span class="quick-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </span>
                             <span>OUT</span>
                         </label>
                     </div>
@@ -3525,9 +3540,7 @@ tr:hover [data-category-tag] {
                         <input type="hidden" id="modalCashBoxId" value="">
                     </div>
                     
-                </div>
-                <!-- Date in top right corner -->
-                <div class="modal-date-top-right">
+                    <!-- 3. DATE -->
                     <div class="modal-date-info" id="modalDate">
                         <i class="fas fa-clock"></i>
                         <span id="modalDateText">Loading...</span>
@@ -3542,7 +3555,7 @@ tr:hover [data-category-tag] {
                     <!-- Contact Section -->
                     <div class="modal-section" style="padding: 12px;">
                         <div class="modal-section-title">RECEIPT INFORMATION</div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                        <div style="display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 10px;">
                             <div class="form-group">
                                 <label for="modalContactName">Name *</label>
                                 <input 
@@ -3569,7 +3582,7 @@ tr:hover [data-category-tag] {
                                     type="text" 
                                     id="modalContactCompanyId" 
                                     class="form-control" 
-                                    placeholder="Tax ID, Company ID"
+                                    placeholder="Company ID"
                                 >
                             </div>
                         </div>
