@@ -2153,21 +2153,25 @@ tr:hover [data-category-tag] {
      overflow: hidden;
  }
 
- #createTransactionModalContainer .modal-header::before {
+ #createTransactionModalContainer .modal-header-left {
+     position: relative;
+ }
+
+ #createTransactionModalContainer .modal-header-left::after {
      content: "IN";
      position: absolute;
-     right: 24px;
-     bottom: -14px;
-     font-size: 56px;
+     right: 10px;
+     top: 6px;
+     font-size: 44px;
      font-weight: 900;
-     letter-spacing: 0.08em;
-     color: rgba(var(--modal-dir-rgb), 0.10);
+     letter-spacing: 0.10em;
+     color: rgba(var(--modal-dir-rgb), 0.14);
      pointer-events: none;
      user-select: none;
      white-space: nowrap;
  }
 
- #createTransactionModalContainer[data-direction="out"] .modal-header::before {
+ #createTransactionModalContainer[data-direction="out"] .modal-header-left::after {
      content: "OUT";
  }
 
@@ -2182,28 +2186,7 @@ tr:hover [data-category-tag] {
      pointer-events: none;
  }
 
- .label-with-badge {
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     gap: 10px;
- }
 
- .modal-direction-badge {
-     display: inline-flex;
-     align-items: center;
-     justify-content: center;
-     padding: 2px 8px;
-     border-radius: 999px;
-     font-size: 10px;
-     font-weight: 900;
-     letter-spacing: 0.08em;
-     text-transform: uppercase;
-     color: var(--modal-dir-color);
-     background: rgba(var(--modal-dir-rgb), 0.12);
-     border: 1px solid rgba(var(--modal-dir-rgb), 0.35);
-     white-space: nowrap;
- }
 
 
 .modal-title {
@@ -2695,6 +2678,7 @@ tr:hover [data-category-tag] {
     border-radius: 10px;
     background: linear-gradient(135deg, rgba(var(--active-rgb), 0.08), rgba(var(--active-rgb), 0.02));
     transition: all 0.3s ease;
+    height: 64px;
 }
 
 .cashbox-icon {
@@ -2838,6 +2822,7 @@ tr:hover [data-category-tag] {
     display: flex;
     align-items: center;
     gap: 6px;
+    height: 64px;
 }
 
 .modal-date-info i {
@@ -3631,10 +3616,7 @@ tr:hover [data-category-tag] {
                         <div class="modal-section-title">RECEIPT INFORMATION</div>
                         <div style="display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 10px;">
                             <div class="form-group">
-                                <label for="modalContactName" class="label-with-badge">
-                                    <span>Name *</span>
-                                    <span class="modal-direction-badge" id="modalDirectionBadge">IN</span>
-                                </label>
+                                <label for="modalContactName">Name *</label>
                                 <input 
                                     type="text" 
                                     id="modalContactName" 
@@ -4042,13 +4024,11 @@ tr:hover [data-category-tag] {
         const cancelModalBtn = document.getElementById('modalCancelBtn');
 
         const modalContainerEl = document.getElementById('createTransactionModalContainer');
-        const dirBadgeEl = document.getElementById('modalDirectionBadge');
 
         function updateModalDirectionUI(direction) {
             if (!modalContainerEl) return;
             const dir = direction === 'out' ? 'out' : 'in';
             modalContainerEl.dataset.direction = dir;
-            if (dirBadgeEl) dirBadgeEl.textContent = dir.toUpperCase();
         }
 
         function openModal(preset) {
