@@ -2119,28 +2119,31 @@ tr:hover [data-category-tag] {
 
 .modal-header {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
-    padding: 24px 32px;
+    padding: 0;
     border-bottom: 1px solid var(--border);
-    gap: 20px;
+    gap: 0;
     background: white;
 }
 
 .modal-header-left {
     display: flex;
-    align-items: center;
-    gap: 16px;
+    align-items: stretch;
     flex: 1;
 }
 
 .modal-title {
-    font-size: 20px;
+    display: flex;
+    align-items: center;
+    padding: 24px 28px;
+    font-size: 18px;
     font-weight: 900;
     color: var(--text);
     margin: 0;
     letter-spacing: -0.02em;
     white-space: nowrap;
+    border-left: 1px solid var(--border);
 }
 
 .header-info-item i {
@@ -2202,24 +2205,21 @@ tr:hover [data-category-tag] {
 }
 
 .modal-close {
-    width: 40px;
-    height: 40px;
-    border: none;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 50%;
-    cursor: pointer;
+    width: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: none;
+    background: white;
+    cursor: pointer;
     transition: all 0.2s;
     color: var(--text-muted);
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .modal-close:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--surface-elevated);
     color: var(--text);
-    transform: rotate(90deg);
 }
 
 .modal-body {
@@ -2403,7 +2403,8 @@ tr:hover [data-category-tag] {
 
 .modal-direction-group {
     display: flex;
-    gap: 6px;
+    flex-direction: column;
+    width: 80px;
 }
 
 .modal-direction-group input[type="radio"] {
@@ -2412,69 +2413,90 @@ tr:hover [data-category-tag] {
 
 .modal-direction-btn {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 12px 20px;
-    border-radius: 12px;
-    font-size: 14px;
+    gap: 6px;
+    padding: 20px 12px;
+    font-size: 11px;
     font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     cursor: pointer;
     transition: all 0.2s;
-    border: 2px solid var(--border);
+    border: none;
+    border-right: 1px solid var(--border);
     background: white;
-    color: var(--text);
+    color: var(--text-muted);
     user-select: none;
+    flex: 1;
 }
 
 .modal-direction-btn:hover {
-    border-color: var(--active);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: var(--surface-elevated);
 }
 
 .modal-direction-btn .quick-icon {
-    width: 22px;
-    height: 22px;
+    width: 32px;
+    height: 32px;
     border-radius: 999px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     flex-shrink: 0;
-    font-size: 12px;
+    font-size: 14px;
+    transition: all 0.2s;
 }
 
 .modal-direction-btn.in .quick-icon {
-    background: #059669;
+    background: #e5e7eb;
+    color: var(--text-muted);
 }
 
 .modal-direction-btn.out .quick-icon {
-    background: var(--out);
+    background: #e5e7eb;
+    color: var(--text-muted);
 }
 
 #modalDirectionIn:checked + .modal-direction-btn.in {
-    border-color: #059669;
-    background: rgba(5, 150, 105, 0.06);
+    background: rgba(5, 150, 105, 0.08);
     color: #059669;
 }
 
+#modalDirectionIn:checked + .modal-direction-btn.in .quick-icon {
+    background: #059669;
+    color: white;
+    border-color: #047857;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
 #modalDirectionOut:checked + .modal-direction-btn.out {
-    border-color: var(--out);
-    background: rgba(var(--out-rgb), 0.06);
+    background: rgba(var(--out-rgb), 0.08);
     color: var(--out);
 }
 
+#modalDirectionOut:checked + .modal-direction-btn.out .quick-icon {
+    background: var(--out);
+    color: white;
+    border-color: #dc2626;
+    box-shadow: 0 4px 12px rgba(var(--out-rgb), 0.3);
+}
+
 .modal-date-input {
-    padding: 12px 16px;
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px;
+    border: none;
+    border-right: 1px solid var(--border);
+    font-size: 13px;
     font-weight: 700;
     color: var(--text);
     background: white;
-    min-width: 130px;
+    min-width: 160px;
     text-align: center;
 }
 
@@ -2482,32 +2504,32 @@ tr:hover [data-category-tag] {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border: 2px solid var(--border);
-    border-radius: 12px;
+    gap: 16px;
+    padding: 24px 28px;
+    border: none;
+    border-right: 1px solid var(--border);
     background: white;
     cursor: pointer;
     transition: all 0.2s;
-    min-width: 200px;
+    flex: 1;
 }
 
 .modal-cashbox-select:hover {
-    border-color: var(--active);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: var(--surface-elevated);
 }
 
 .modal-cashbox-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: 13px;
+    font-size: 20px;
     color: white;
     transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(var(--active-rgb), 0.2);
 }
 
 .modal-cashbox-select select {
@@ -2518,15 +2540,30 @@ tr:hover [data-category-tag] {
     width: 100%;
 }
 
-.modal-cashbox-label {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
+.modal-cashbox-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     flex: 1;
 }
 
-.modal-cashbox-select i.fa-chevron-down {
+.modal-cashbox-label {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--text);
+    letter-spacing: -0.01em;
+}
+
+.modal-cashbox-sublabel {
     font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.modal-cashbox-select i.fa-chevron-down {
+    font-size: 13px;
     color: var(--text-muted);
 }
 
@@ -3255,7 +3292,7 @@ tr:hover [data-category-tag] {
         <div class="modal-container">
             <div class="modal-header">
                 <div class="modal-header-left">
-                    <!-- IN/OUT Direction Buttons -->
+                    <!-- IN/OUT Direction Buttons (Vertical) -->
                     <div class="modal-direction-group">
                         <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
                         <label for="modalDirectionIn" class="modal-direction-btn in">
@@ -3273,12 +3310,15 @@ tr:hover [data-category-tag] {
                         </label>
                     </div>
                     
-                    <!-- Cash Box Selector -->
+                    <!-- Cash Box Selector (Large, Prominent) -->
                     <div class="modal-cashbox-select">
                         <div class="modal-cashbox-icon" id="modalCashboxIcon" style="background: #059669;">
                             <i class="fas fa-building"></i>
                         </div>
-                        <div class="modal-cashbox-label" id="modalCashboxLabel">Main Office</div>
+                        <div class="modal-cashbox-info">
+                            <div class="modal-cashbox-sublabel">Cash Box</div>
+                            <div class="modal-cashbox-label" id="modalCashboxLabel">Main Office</div>
+                        </div>
                         <i class="fas fa-chevron-down"></i>
                         <select id="modalRegister">
                             <option value="main" data-color="#059669" data-rgb="5, 150, 105" data-icon="fa-building">Main Office</option>
@@ -3287,7 +3327,7 @@ tr:hover [data-category-tag] {
                         </select>
                     </div>
                     
-                    <!-- Date Input -->
+                    <!-- Date & Time -->
                     <input 
                         type="text" 
                         class="modal-date-input" 
@@ -3715,7 +3755,9 @@ tr:hover [data-category-tag] {
                 const yyyy = now.getFullYear();
                 const mm = String(now.getMonth() + 1).padStart(2, '0');
                 const dd = String(now.getDate()).padStart(2, '0');
-                dateInput.value = `${yyyy}-${mm}-${dd}`;
+                const hh = String(now.getHours()).padStart(2, '0');
+                const min = String(now.getMinutes()).padStart(2, '0');
+                dateInput.value = `${yyyy}-${mm}-${dd} ${hh}:${min}`;
             }
 
             const registerSelect = document.getElementById('modalRegister');
