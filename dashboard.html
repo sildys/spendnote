@@ -2582,30 +2582,29 @@ tr:hover [data-category-tag] {
 }
 
 .cashbox-arrow {
-    width: 40px;
-    height: 40px;
-    border: 2px solid var(--border);
-    background: white;
-    border-radius: 10px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-muted);
-    font-size: 14px;
+    font-size: 16px;
     transition: all 0.2s;
     flex-shrink: 0;
+    opacity: 0.5;
 }
 
 .cashbox-arrow:hover {
-    background: var(--active);
-    color: white;
-    border-color: var(--active);
-    transform: scale(1.05);
+    color: var(--active);
+    opacity: 1;
+    transform: scale(1.2);
 }
 
 .cashbox-arrow:active {
-    transform: scale(0.95);
+    transform: scale(0.9);
 }
 
 .cashbox-display {
@@ -2613,23 +2612,12 @@ tr:hover [data-category-tag] {
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 14px 20px;
+    padding: 16px 20px;
     border: 2px solid var(--active);
     border-radius: 14px;
     background: linear-gradient(135deg, rgba(var(--active-rgb), 0.1), rgba(var(--active-rgb), 0.03));
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.cashbox-display::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: var(--active);
+    box-shadow: 0 2px 8px rgba(var(--active-rgb), 0.12);
 }
 
 .cashbox-icon {
@@ -2651,7 +2639,43 @@ tr:hover [data-category-tag] {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
+}
+
+.cashbox-direction-mini {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.cashbox-direction-mini input[type="radio"] {
+    display: none;
+}
+
+.cashbox-direction-mini label {
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid var(--border);
+    background: white;
+    color: var(--text-muted);
+}
+
+.cashbox-direction-mini input[type="radio"]:checked + label.in {
+    background: #059669;
+    color: white;
+    border-color: #059669;
+}
+
+.cashbox-direction-mini input[type="radio"]:checked + label.out {
+    background: var(--out);
+    color: white;
+    border-color: var(--out);
 }
 
 .cashbox-name {
@@ -3406,24 +3430,6 @@ tr:hover [data-category-tag] {
         <div class="modal-container">
             <div class="modal-header">
                 <div class="modal-header-left">
-                    <!-- IN/OUT Direction Buttons -->
-                    <div class="modal-direction-group">
-                        <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
-                        <label for="modalDirectionIn" class="modal-direction-btn in">
-                            <span class="quick-icon">
-                                <i class="fas fa-arrow-down"></i>
-                            </span>
-                            <span class="quick-label">IN</span>
-                        </label>
-                        <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
-                        <label for="modalDirectionOut" class="modal-direction-btn out">
-                            <span class="quick-icon">
-                                <i class="fas fa-arrow-up"></i>
-                            </span>
-                            <span class="quick-label">OUT</span>
-                        </label>
-                    </div>
-                    
                     <!-- Cash Box Selector (Carousel) -->
                     <div class="modal-cashbox-carousel">
                         <div class="cashbox-carousel-controls">
@@ -3433,6 +3439,13 @@ tr:hover [data-category-tag] {
                             <div class="cashbox-display" id="modalCashboxDisplay">
                                 <div class="cashbox-icon" id="modalCashboxIcon"></div>
                                 <div class="cashbox-info">
+                                    <!-- IN/OUT Direction (integrated) -->
+                                    <div class="cashbox-direction-mini">
+                                        <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
+                                        <label for="modalDirectionIn" class="in">IN</label>
+                                        <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
+                                        <label for="modalDirectionOut" class="out">OUT</label>
+                                    </div>
                                     <div class="cashbox-name" id="modalCashboxName">Loading...</div>
                                     <div class="cashbox-balance" id="modalCashboxBalance"></div>
                                 </div>
