@@ -2134,6 +2134,10 @@ tr:hover [data-category-tag] {
     flex: 1;
 }
 
+.modal-header {
+    padding: 20px 24px;
+}
+
 .modal-title {
     font-size: 20px;
     font-weight: 900;
@@ -2222,7 +2226,7 @@ tr:hover [data-category-tag] {
 }
 
 .modal-body {
-    padding: 16px 24px 18px 24px;
+    padding: 16px 24px;
 }
 
 .expanded-fields {
@@ -2420,10 +2424,7 @@ tr:hover [data-category-tag] {
     font-weight: 800;
     cursor: pointer;
     transition: all 0.2s;
-    border: 2px solid var(--border);
-    background: white;
-    color: var(--text);
-    user-select: none;
+    border: 1px solid transparent;
 }
 
 .modal-direction-btn:hover {
@@ -2450,7 +2451,7 @@ tr:hover [data-category-tag] {
 }
 
 .modal-direction-btn.out .quick-icon {
-    background: var(--out);
+    background: #6b7280;
 }
 
 #modalDirectionIn:checked + .modal-direction-btn.in {
@@ -2459,12 +2460,21 @@ tr:hover [data-category-tag] {
     color: #059669;
 }
 
-#modalDirectionOut:checked + .modal-direction-btn.out {
-    border-color: var(--out);
-    background: rgba(var(--out-rgb), 0.06);
-    color: var(--out);
+#modalDirectionIn:checked + .modal-direction-btn.in i,
+#modalDirectionIn:checked + .modal-direction-btn.in span {
+    color: white;
 }
 
+#modalDirectionOut:checked + .modal-direction-btn.out {
+    border-color: #6b7280;
+    background: rgba(107, 114, 128, 0.06);
+    color: #6b7280;
+}
+
+#modalDirectionOut:checked + .modal-direction-btn.out i,
+#modalDirectionOut:checked + .modal-direction-btn.out span {
+    color: white;
+}
 
 .modal-cashbox-select {
     position: relative;
@@ -2695,9 +2705,9 @@ tr:hover [data-category-tag] {
 }
 
 #modalDirectionOut:checked + .direction-primary-btn.out {
-    background: linear-gradient(135deg, var(--out), #dc2626);
-    border-color: #dc2626;
-    box-shadow: 0 6px 20px rgba(var(--out-rgb), 0.4);
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    border-color: #4b5563;
+    box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
 }
 
 #modalDirectionOut:checked + .direction-primary-btn.out i,
@@ -2729,14 +2739,27 @@ tr:hover [data-category-tag] {
 }
 
 .modal-date-compact {
-    padding: 10px 14px;
+    padding: 8px 12px;
     border: 2px solid var(--border);
-    border-radius: 10px;
-    font-size: 12px;
+    border-radius: 8px;
+    font-size: 11px;
     font-weight: 700;
-    color: var(--text);
+    color: var(--text-muted);
     background: white;
     white-space: nowrap;
+    text-align: center;
+}
+
+.contact-details-toggle summary {
+    list-style: none;
+}
+
+.contact-details-toggle summary::-webkit-details-marker {
+    display: none;
+}
+
+.contact-details-toggle[open] summary i.fa-plus-circle::before {
+    content: "\f056";
 }
 
 .modal-section-title {
@@ -3147,21 +3170,21 @@ tr:hover [data-category-tag] {
 }
 
 .direction-btn-out {
-    background: linear-gradient(135deg, rgba(var(--out-rgb),0.12), rgba(var(--out-rgb),0.06));
-    color: var(--out);
-    border-color: rgba(var(--out-rgb), 0.15);
+    background: linear-gradient(135deg, rgba(107,114,128,0.12), rgba(107,114,128,0.06));
+    color: #6b7280;
+    border-color: rgba(107,114,128, 0.15);
 }
 
 .direction-btn-out:hover {
-    background: linear-gradient(135deg, rgba(var(--out-rgb), 0.18), rgba(var(--out-rgb), 0.10));
-    border-color: rgba(var(--out-rgb), 0.25);
+    background: linear-gradient(135deg, rgba(107,114,128, 0.18), rgba(107,114,128, 0.10));
+    border-color: rgba(107,114,128, 0.25);
 }
 
 #modalDirectionOut:checked + .direction-btn-out {
-    background: linear-gradient(135deg, var(--out), var(--out));
+    background: linear-gradient(135deg, #6b7280, #4b5563);
     color: white;
-    border-color: var(--out);
-    box-shadow: 0 0 0 3px rgba(var(--out-rgb), 0.2);
+    border-color: #4b5563;
+    box-shadow: 0 0 0 3px rgba(107,114,128, 0.2);
     font-weight: 700;
 }
 
@@ -3492,70 +3515,86 @@ tr:hover [data-category-tag] {
                         <input type="hidden" id="modalCashBoxId" value="">
                     </div>
                     
-                    <!-- 3. DATE -->
-                    <div class="modal-date-compact" id="modalDate"></div>
                 </div>
-                <h2 class="modal-title">Create Transaction</h2>
                 <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close modal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body" style="padding: 16px 24px;">
                 <form id="modalTransactionForm" style="display: flex; flex-direction: column; gap: 12px;">
-                    <!-- Contact Section (3 columns) -->
+                    <!-- Contact Section -->
                     <div class="modal-section" style="padding: 12px;">
-                        <div class="modal-section-title">Contact Information</div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label">Name <span class="required">*</span></label>
-                                <div class="autocomplete-wrapper">
-                                    <input 
-                                        type="text" 
-                                        class="form-input" 
-                                        id="modalContactName"
-                                        placeholder="Contact name"
-                                        autocomplete="off"
-                                        required
-                                    >
-                                    <div class="autocomplete-dropdown" id="ContactAutocomplete"></div>
-                                </div>
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label">Phone</label>
-                                <input 
-                                    type="tel" 
-                                    class="form-input" 
-                                    id="modalContactPhone"
-                                    placeholder="+1 (555) 123-4567"
-                                >
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label">Email</label>
-                                <input 
-                                    type="email" 
-                                    class="form-input" 
-                                    id="modalContactEmail"
-                                    placeholder="email@example.com"
-                                >
-                            </div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label">Address</label>
+                        <div class="modal-section-title">RECEIPT INFORMATION</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 120px; gap: 10px; align-items: end;">
+                            <div class="form-group">
+                                <label for="modalContactName">Name *</label>
                                 <input 
                                     type="text" 
-                                    class="form-input" 
-                                    id="modalContactAddress"
-                                    placeholder="Street, City, State, ZIP"
+                                    id="modalContactName" 
+                                    class="form-control" 
+                                    placeholder="Contact name"
+                                    autocomplete="off"
+                                >
+                                <div id="ContactAutocomplete" class="autocomplete-dropdown"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="modalContactAddress">Address</label>
+                                <input 
+                                    type="text" 
+                                    id="modalContactAddress" 
+                                    class="form-control" 
+                                    placeholder="Street, City, State"
                                 >
                             </div>
-                            <div style="display: flex; align-items: flex-end;">
-                                <button type="button" class="add-contact-btn" id="modalAddContactBtn">
-                                    <i class="fas fa-user-plus"></i>
-                                    Add to Contacts
-                                </button>
+                            <div class="form-group">
+                                <label for="modalContactCompanyId">Other ID / Company ID</label>
+                                <input 
+                                    type="text" 
+                                    id="modalContactCompanyId" 
+                                    class="form-control" 
+                                    placeholder="Tax ID, Company ID"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="modalDate" style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">Date & Time</label>
+                                <div class="modal-date-compact" id="modalDate" style="margin: 0;"></div>
                             </div>
                         </div>
+                        
+                        <!-- Additional Contact Details (Collapsible) -->
+                        <details class="contact-details-toggle" style="margin-top: 12px;">
+                            <summary style="cursor: pointer; font-size: 11px; font-weight: 700; color: var(--active); user-select: none;">
+                                <i class="fas fa-plus-circle" style="margin-right: 6px;"></i>
+                                Add Phone/Email & Save to Contacts
+                            </summary>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; padding: 10px; background: var(--surface-elevated); border-radius: 8px;">
+                                <div class="form-group">
+                                    <label for="modalContactPhone">Phone</label>
+                                    <input 
+                                        type="tel" 
+                                        id="modalContactPhone" 
+                                        class="form-control" 
+                                        placeholder="+1 (555) 123-4567"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label for="modalContactEmail">Email</label>
+                                    <input 
+                                        type="email" 
+                                        id="modalContactEmail" 
+                                        class="form-control" 
+                                        placeholder="email@example.com"
+                                    >
+                                </div>
+                                <div style="grid-column: 1 / -1;">
+                                    <button type="button" id="modalAddContactBtn" class="add-contact-btn" style="width: 100%;">
+                                        <i class="fas fa-user-plus"></i>
+                                        Save to Contacts
+                                    </button>
+                                </div>
+                            </div>
+                        </details>
+                        <input type="hidden" id="modalContactId">
                     </div>
 
                     <!-- Items Section -->
