@@ -2324,6 +2324,76 @@ tr:hover [data-category-tag] {
     }
 }
 
+.receipt-modal-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.receipt-modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 16px;
+}
+
+.receipt-panel {
+    background: rgba(15, 23, 42, 0.02);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+}
+
+.receipt-panel-title {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.receipt-items-header {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 12px;
+    padding: 0 2px 8px 2px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.receipt-items-header div:last-child {
+    text-align: right;
+}
+
+.receipt-meta-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.receipt-meta-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.receipt-notes .form-textarea {
+    min-height: 88px;
+}
+
+@media (max-width: 900px) {
+    .receipt-modal-grid {
+        grid-template-columns: 1fr;
+    }
+    .receipt-meta-split {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* ===== FORM STYLES FOR MODAL ===== */
 .form-row {
     display: grid;
@@ -2950,31 +3020,26 @@ tr:hover [data-category-tag] {
             </div>
             <div class="modal-body">
                 <form id="modalTransactionForm">
-                    <!-- Contact NAME + DIRECTION INLINE -->
-                    <div class="form-row">
-                        <div class="form-group form-group-flex">
-                            <label class="form-label">Contact <span class="required">*</span></label>
-                            <div class="input-with-button">
-                                <div class="autocomplete-wrapper">
-                                    <input 
-                                        type="text" 
-                                        class="form-input" 
-                                        id="modalContactName"
-                                        placeholder="Search by name or Contact ID..."
-                                        autocomplete="off"
-                                        required
-                                    >
-                                    <div class="autocomplete-dropdown" id="ContactAutocomplete"></div>
+                    <div class="receipt-modal-layout">
+                        <div class="receipt-modal-grid">
+                            <div class="receipt-panel">
+                                <div class="receipt-panel-title">From / To</div>
+                                <div class="form-group">
+                                    <label class="form-label">Contact <span class="required">*</span></label>
+                                    <div class="autocomplete-wrapper">
+                                        <input 
+                                            type="text" 
+                                            class="form-input" 
+                                            id="modalContactName"
+                                            placeholder="Name or Contact ID"
+                                            autocomplete="off"
+                                            required
+                                        >
+                                        <div class="autocomplete-dropdown" id="ContactAutocomplete"></div>
+                                    </div>
                                 </div>
-                                <button type="button" class="add-detail-btn" id="modalToggleContactDetails" title="Add Contact details">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                            
-                            <!-- Expanded Contact details -->
-                            <div class="expanded-fields" id="modalContactDetailsFields">
-                                <div class="expanded-field">
-                                    <label>Address</label>
+                                <div class="form-group">
+                                    <label class="form-label">Address</label>
                                     <input 
                                         type="text" 
                                         class="form-input" 
@@ -2982,133 +3047,112 @@ tr:hover [data-category-tag] {
                                         placeholder="Street, City, State, ZIP"
                                     >
                                 </div>
-                                <div class="expanded-field">
-                                    <label>Additional Info</label>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label class="form-label">Client / Company ID</label>
                                     <input 
                                         type="text" 
                                         class="form-input" 
                                         id="modalContactId"
-                                        placeholder="Client ID, License number, etc."
+                                        placeholder="e.g. COMP-12345"
                                     >
+                                </div>
+                            </div>
+
+                            <div class="receipt-panel">
+                                <div class="receipt-panel-title">Receipt Info</div>
+                                <div class="receipt-meta-split">
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label class="form-label">Type <span class="required">*</span></label>
+                                        <div class="direction-toggle-compact">
+                                            <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
+                                            <label for="modalDirectionIn" class="direction-btn direction-btn-in">IN</label>
+                                            <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
+                                            <label for="modalDirectionOut" class="direction-btn direction-btn-out">OUT</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label class="form-label">Date <span class="required">*</span></label>
+                                        <input 
+                                            type="text" 
+                                            class="form-input" 
+                                            id="modalDate"
+                                            readonly
+                                            inputmode="none"
+                                        >
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-top:12px; margin-bottom:0;">
+                                    <label class="form-label">Reference ID</label>
+                                    <div class="autocomplete-wrapper">
+                                        <input 
+                                            type="text" 
+                                            class="form-input" 
+                                            id="modalTransactionId"
+                                            placeholder="e.g., TRX-2026-00342"
+                                        >
+                                        <div class="autocomplete-dropdown" id="transactionIdAutocomplete"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- DIRECTION COMPACT -->
-                        <div class="form-group form-group-compact">
-                            <label class="form-label">Type <span class="required">*</span></label>
-                            <div class="direction-toggle-compact">
-                                <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
-                                <label for="modalDirectionIn" class="direction-btn direction-btn-in">
-                                    IN
-                                </label>
-                                <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
-                                <label for="modalDirectionOut" class="direction-btn direction-btn-out">
-                                    OUT
-                                </label>
+                        <div class="receipt-panel">
+                            <div class="receipt-panel-title">Items</div>
+                            <div class="receipt-items-header">
+                                <div>Description</div>
+                                <div>Amount</div>
+                            </div>
+
+                            <div class="form-row-line-item" style="margin-top:12px;">
+                                <div class="form-group">
+                                    <div class="autocomplete-wrapper">
+                                        <input 
+                                            type="text" 
+                                            class="form-input" 
+                                            id="modalDescription"
+                                            placeholder="Brief description"
+                                            autocomplete="off"
+                                            required
+                                        >
+                                        <div class="autocomplete-dropdown" id="descriptionAutocomplete"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-with-prefix">
+                                        <span class="input-prefix">$</span>
+                                        <input 
+                                            type="number" 
+                                            class="form-input" 
+                                            id="modalAmount"
+                                            placeholder="0.00"
+                                            step="0.01"
+                                            min="0"
+                                            required
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="line-items-container" id="modalLineItemsContainer"></div>
+                            <button type="button" class="add-line-item-btn" id="modalAddLineItemBtn">
+                                <i class="fas fa-plus"></i>
+                                Add line item (max 4)
+                            </button>
+                            <div id="lineItemsTotal" style="display: block; margin-top: 12px; padding: 12px; background: var(--surface-elevated); border-radius: 12px; font-weight: 800; font-size: 16px; display:flex; justify-content: space-between; align-items:center;">
+                                <span>Total handled over</span>
+                                <span id="lineItemsTotalAmount" style="color: var(--active);">$0.00</span>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- DESCRIPTION + AMOUNT IN ONE ROW -->
-                    <div class="form-row-line-item">
-                        <div class="form-group">
-                            <label class="form-label">Description <span class="required">*</span></label>
-                            <div class="autocomplete-wrapper">
-                                <input 
-                                    type="text" 
-                                    class="form-input" 
-                                    id="modalDescription"
-                                    placeholder="Brief description"
-                                    autocomplete="off"
-                                    required
-                                >
-                                <div class="autocomplete-dropdown" id="descriptionAutocomplete"></div>
-                            </div>
+                        <div class="receipt-panel receipt-notes">
+                            <div class="receipt-panel-title">Notes</div>
+                            <textarea 
+                                class="form-textarea" 
+                                id="modalNote"
+                                placeholder="Add any additional notes or comments"
+                                rows="3"
+                            ></textarea>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" style="white-space: nowrap;">Amount <span class="required">*</span></label>
-                            <div class="input-with-prefix">
-                                <span class="input-prefix">$</span>
-                                <input 
-                                    type="number" 
-                                    class="form-input" 
-                                    id="modalAmount"
-                                    placeholder="0.00"
-                                    step="0.01"
-                                    min="0"
-                                    required
-                                >
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Date <span class="required">*</span></label>
-                            <input 
-                                type="text" 
-                                class="form-input" 
-                                id="modalDate"
-                                readonly
-                                inputmode="none"
-                            >
-                        </div>
-                    </div>
-
-                    <!-- LINE ITEMS -->
-                    <div class="form-group">
-                        <label class="form-label">Receipt Line Items (optional)</label>
-                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
-                            Add up to 4 additional items. Total will be calculated automatically.
-                        </p>
-                        <div class="line-items-container" id="modalLineItemsContainer">
-                            <!-- Line items will be added here -->
-                        </div>
-                        <button type="button" class="add-line-item-btn" id="modalAddLineItemBtn">
-                            <i class="fas fa-plus"></i>
-                            Add line item (max 4)
-                        </button>
-                        <div id="lineItemsTotal" style="display: block; margin-top: 12px; padding: 12px; background: var(--surface-elevated); border-radius: 8px; font-weight: 700; font-size: 15px;">
-                            Receipt Total: <span id="lineItemsTotalAmount" style="color: var(--active);">$0.00</span>
-                        </div>
-                    </div>
-
-                    <!-- OPTIONAL BUTTONS IN ONE ROW -->
-                    <div class="optional-buttons-row">
-                        <button type="button" class="add-section-btn" id="modalToggleTransactionId">
-                            <i class="fas fa-plus"></i>
-                            <span>Reference ID</span>
-                        </button>
-                        <button type="button" class="add-section-btn" id="modalToggleNote">
-                            <i class="fas fa-plus"></i>
-                            <span>Note</span>
-                        </button>
-                    </div>
-
-                    <!-- REFERENCE ID FIELD -->
-                    <div class="form-group" id="modalTransactionIdGroup" style="display: none;">
-                        <label class="form-label">Reference ID</label>
-                        <div class="autocomplete-wrapper">
-                            <input 
-                                type="text" 
-                                class="form-input" 
-                                id="modalTransactionId"
-                                placeholder="e.g., INV-2024-001, PO-12345"
-                            >
-                            <div class="autocomplete-dropdown" id="transactionIdAutocomplete"></div>
-                        </div>
-                    </div>
-
-                    <!-- NOTE FIELD (FULL WIDTH) -->
-                    <div class="form-group" id="modalNoteGroup" style="display: none;">
-                        <label class="form-label">Note</label>
-                        <textarea 
-                            class="form-textarea" 
-                            id="modalNote"
-                            placeholder="Add any additional notes or comments"
-                            rows="3"
-                        ></textarea>
                     </div>
 
                     <div class="form-row" style="margin-top: 8px;">
@@ -3457,12 +3501,15 @@ tr:hover [data-category-tag] {
             document.body.style.overflow = '';
             // Reset form
             document.getElementById('modalTransactionForm').reset();
-            document.getElementById('modalContactDetailsFields').classList.remove('show');
-            document.getElementById('modalTransactionIdGroup').style.display = 'none';
-            document.getElementById('modalNoteGroup').style.display = 'none';
-            document.getElementById('modalLineItemsContainer').innerHTML = '';
+            const lineItemsContainer = document.getElementById('modalLineItemsContainer');
+            if (lineItemsContainer) {
+                lineItemsContainer.innerHTML = '';
+            }
             modalLineItemCount = 0;
             updateModalLineItemsButton();
+            if (typeof updateLineItemsTotal === 'function') {
+                updateLineItemsTotal();
+            }
         }
 
         closeModalBtn.addEventListener('click', closeModal);
@@ -3608,21 +3655,10 @@ tr:hover [data-category-tag] {
         
         function selectContact(Contact) {
             ContactInput.value = Contact.name;
-            ContactAddressInput.value = Contact.address || '';
-            ContactIdInput.value = Contact.id || '';
+            document.getElementById('modalContactAddress').value = Contact.address;
+            document.getElementById('modalContactId').value = Contact.id;
             ContactDropdown.classList.remove('show');
             selectedContactIndex = -1;
-            
-            // Auto-expand Contact details if they have data
-            if (Contact.address || Contact.id) {
-                const detailsFields = document.getElementById('modalContactDetailsFields');
-                const toggleBtn = document.getElementById('modalToggleContactDetails');
-                if (!detailsFields.classList.contains('show')) {
-                    detailsFields.classList.add('show');
-                    toggleBtn.classList.add('active');
-                    toggleBtn.innerHTML = '<i class="fas fa-minus"></i>';
-                }
-            }
         }
         
         // Input event
@@ -3800,53 +3836,7 @@ tr:hover [data-category-tag] {
         
         setupSimpleAutocomplete(transactionIdInput, transactionIdDropdown, recentTransactionIds);
 
-        // Toggle Contact details
-        document.getElementById('modalToggleContactDetails').addEventListener('click', function() {
-            const fields = document.getElementById('modalContactDetailsFields');
-            const isVisible = fields.classList.contains('show');
-            
-            if (isVisible) {
-                fields.classList.remove('show');
-                this.classList.remove('active');
-                this.innerHTML = '<i class="fas fa-plus"></i>';
-            } else {
-                fields.classList.add('show');
-                this.classList.add('active');
-                this.innerHTML = '<i class="fas fa-minus"></i>';
-            }
-        });
-
-        // Toggle transaction ID
-        document.getElementById('modalToggleTransactionId').addEventListener('click', function() {
-            const group = document.getElementById('modalTransactionIdGroup');
-            const isVisible = group.style.display !== 'none';
-            
-            if (isVisible) {
-                group.style.display = 'none';
-                this.classList.remove('active');
-                this.querySelector('i').className = 'fas fa-plus';
-            } else {
-                group.style.display = 'block';
-                this.classList.add('active');
-                this.querySelector('i').className = 'fas fa-minus';
-            }
-        });
-
-        // Toggle note
-        document.getElementById('modalToggleNote').addEventListener('click', function() {
-            const group = document.getElementById('modalNoteGroup');
-            const isVisible = group.style.display !== 'none';
-            
-            if (isVisible) {
-                group.style.display = 'none';
-                this.classList.remove('active');
-                this.querySelector('i').className = 'fas fa-plus';
-            } else {
-                group.style.display = 'block';
-                this.classList.add('active');
-                this.querySelector('i').className = 'fas fa-minus';
-            }
-        });
+        // Receipt-style modal: fields are always visible (no toggle sections)
 
         // Line items management
         let modalLineItemCount = 0;
