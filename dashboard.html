@@ -2664,78 +2664,80 @@ tr:hover [data-category-tag] {
 
 .direction-primary-btn {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 12px 18px;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
-    border: 2px solid transparent;
-    width: 132px;
-    height: 80px;
-    color: #ffffff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.10);
+    border: 2px solid var(--border);
+    background: white;
+    width: 164px;
+    height: 64px;
+    color: var(--text-muted);
 }
 
 .direction-primary-btn .quick-icon {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 999px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    background: rgba(255, 255, 255, 0.16);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
+    color: var(--dir-color);
+    border: 2px solid var(--dir-color);
+    background: linear-gradient(135deg, rgba(var(--dir-rgb), 0.16), #ffffff);
+    box-shadow: 0 4px 12px rgba(var(--dir-rgb), 0.18);
     flex-shrink: 0;
     font-size: 14px;
     transition: all 0.2s;
 }
 
-.direction-primary-btn.in .quick-icon {
-    background: rgba(255, 255, 255, 0.16);
-}
-
-.direction-primary-btn.out .quick-icon {
-    background: rgba(255, 255, 255, 0.16);
-}
-
-.direction-primary-btn span {
-    font-size: 11px;
-    font-weight: 800;
-    color: #ffffff;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-}
-
 .direction-primary-btn.in {
-    background: linear-gradient(135deg, #059669, #047857);
-    border-color: rgba(255, 255, 255, 0.16);
+    --dir-color: #059669;
+    --dir-rgb: 5, 150, 105;
 }
 
 .direction-primary-btn.out {
-    background: linear-gradient(135deg, #6b7280, #4b5563);
-    border-color: rgba(255, 255, 255, 0.14);
+    --dir-color: #6b7280;
+    --dir-rgb: 107, 114, 128;
+}
+
+.direction-primary-btn .direction-label {
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    line-height: 1;
 }
 
 .direction-primary-btn:hover {
-    filter: brightness(1.02);
+    border-color: rgba(var(--dir-rgb), 0.55);
+    box-shadow: 0 6px 18px rgba(var(--dir-rgb), 0.14);
     transform: translateY(-1px);
 }
 
-#modalDirectionIn:checked + .direction-primary-btn.in {
-    border-color: rgba(255, 255, 255, 0.45);
-    box-shadow: 0 10px 26px rgba(5, 150, 105, 0.35);
-    transform: translateY(-1px);
-}
-
+#modalDirectionIn:checked + .direction-primary-btn.in,
 #modalDirectionOut:checked + .direction-primary-btn.out {
-    border-color: rgba(255, 255, 255, 0.45);
-    box-shadow: 0 10px 26px rgba(107, 114, 128, 0.32);
-    transform: translateY(-1px);
+    background: var(--dir-color);
+    border-color: var(--dir-color);
+    box-shadow: 0 10px 26px rgba(var(--dir-rgb), 0.32);
+}
+
+#modalDirectionIn:checked + .direction-primary-btn.in .direction-label,
+#modalDirectionOut:checked + .direction-primary-btn.out .direction-label {
+    color: #ffffff;
+}
+
+#modalDirectionIn:checked + .direction-primary-btn.in .quick-icon,
+#modalDirectionOut:checked + .direction-primary-btn.out .quick-icon {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
 }
 
 
@@ -3514,14 +3516,14 @@ tr:hover [data-category-tag] {
                             <span class="quick-icon">
                                 <i class="fas fa-arrow-down"></i>
                             </span>
-                            <span>IN</span>
+                            <span class="direction-label">IN</span>
                         </label>
                         <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
                         <label for="modalDirectionOut" class="direction-primary-btn out">
                             <span class="quick-icon">
                                 <i class="fas fa-arrow-up"></i>
                             </span>
-                            <span>OUT</span>
+                            <span class="direction-label">OUT</span>
                         </label>
                     </div>
                     
