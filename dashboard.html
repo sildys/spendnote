@@ -2411,6 +2411,119 @@ tr:hover [data-category-tag] {
     margin-bottom: 0;
 }
 
+.receipt-compact-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.receipt-top-row {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 12px;
+    align-items: end;
+}
+
+.receipt-top-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.receipt-top-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.modal-direction-pills {
+    display: flex;
+    gap: 8px;
+}
+
+.modal-direction-pills input[type="radio"] {
+    display: none;
+}
+
+.modal-direction-pills .tx-type {
+    width: auto;
+    padding: 10px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    user-select: none;
+}
+
+#modalDirectionIn:checked + label.tx-type.in {
+    background: #059669;
+    color: #fff;
+    border-color: #047857;
+    box-shadow: 0 0 0 3px rgba(16,185,129,0.18);
+}
+
+#modalDirectionOut:checked + label.tx-type.out {
+    background: var(--out);
+    color: #fff;
+    border-color: var(--out);
+    box-shadow: 0 0 0 3px rgba(var(--out-rgb),0.18);
+}
+
+.receipt-collapsible {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px;
+}
+
+.receipt-collapsible > summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.receipt-collapsible > summary::-webkit-details-marker {
+    display: none;
+}
+
+.receipt-collapsible > summary .summary-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.receipt-collapsible > summary .summary-meta {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.receipt-collapsible[open] {
+    padding: 14px 16px;
+}
+
+.receipt-collapsible[open] > summary {
+    margin-bottom: 12px;
+}
+
+.receipt-collapsible-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+@media (max-width: 900px) {
+    .receipt-top-row {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 900px) {
     .receipt-modal-grid {
         grid-template-columns: 1fr;
@@ -3046,90 +3159,51 @@ tr:hover [data-category-tag] {
             </div>
             <div class="modal-body">
                 <form id="modalTransactionForm">
-                    <div class="receipt-modal-layout">
-                        <div class="receipt-modal-grid">
-                            <div class="receipt-panel">
-                                <div class="receipt-panel-title">From / To</div>
-                                <div class="form-group">
-                                    <label class="form-label">Contact <span class="required">*</span></label>
-                                    <div class="autocomplete-wrapper">
-                                        <input 
-                                            type="text" 
-                                            class="form-input" 
-                                            id="modalContactName"
-                                            placeholder="Name or Contact ID"
-                                            autocomplete="off"
-                                            required
-                                        >
-                                        <div class="autocomplete-dropdown" id="ContactAutocomplete"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Address</label>
-                                    <input 
-                                        type="text" 
-                                        class="form-input" 
-                                        id="modalContactAddress"
-                                        placeholder="Street, City, State, ZIP"
-                                    >
-                                </div>
-                                <div class="form-group" style="margin-bottom:0;">
-                                    <label class="form-label">Client / Company ID</label>
-                                    <input 
-                                        type="text" 
-                                        class="form-input" 
-                                        id="modalContactId"
-                                        placeholder="e.g. COMP-12345"
-                                    >
+                    <div class="receipt-compact-layout">
+                        <div class="receipt-top-row">
+                            <div class="receipt-top-block">
+                                <div class="receipt-top-label">Direction</div>
+                                <div class="modal-direction-pills" aria-label="Transaction direction">
+                                    <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
+                                    <label for="modalDirectionIn" class="tx-type in">IN</label>
+                                    <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
+                                    <label for="modalDirectionOut" class="tx-type out">OUT</label>
                                 </div>
                             </div>
-
-                            <div class="receipt-panel">
-                                <div class="receipt-panel-title">Receipt Info</div>
-                                <div class="receipt-meta-split">
-                                    <div class="form-group" style="margin-bottom:0;">
-                                        <label class="form-label">Type <span class="required">*</span></label>
-                                        <div class="direction-toggle-compact">
-                                            <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
-                                            <label for="modalDirectionIn" class="direction-btn direction-btn-in">IN</label>
-                                            <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
-                                            <label for="modalDirectionOut" class="direction-btn direction-btn-out">OUT</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" style="margin-bottom:0;">
-                                        <label class="form-label">Date <span class="required">*</span></label>
-                                        <input 
-                                            type="text" 
-                                            class="form-input" 
-                                            id="modalDate"
-                                            readonly
-                                            inputmode="none"
-                                        >
-                                    </div>
-                                </div>
-                                <div class="form-group" style="margin-top:12px; margin-bottom:0;">
-                                    <label class="form-label">Reference ID</label>
-                                    <div class="autocomplete-wrapper">
-                                        <input 
-                                            type="text" 
-                                            class="form-input" 
-                                            id="modalTransactionId"
-                                            placeholder="e.g., TRX-2026-00342"
-                                        >
-                                        <div class="autocomplete-dropdown" id="transactionIdAutocomplete"></div>
-                                    </div>
-                                </div>
+                            <div class="receipt-top-block">
+                                <div class="receipt-top-label">Date</div>
+                                <input 
+                                    type="text" 
+                                    class="form-input" 
+                                    id="modalDate"
+                                    readonly
+                                    inputmode="none"
+                                >
                             </div>
                         </div>
 
-                        <div class="receipt-panel">
-                            <div class="receipt-panel-title">Items</div>
-                            <div class="receipt-items-header">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Contact <span class="required">*</span></label>
+                            <div class="autocomplete-wrapper">
+                                <input 
+                                    type="text" 
+                                    class="form-input" 
+                                    id="modalContactName"
+                                    placeholder="Name or Contact ID"
+                                    autocomplete="off"
+                                    required
+                                >
+                                <div class="autocomplete-dropdown" id="ContactAutocomplete"></div>
+                            </div>
+                        </div>
+
+                        <div class="receipt-panel" style="padding: 12px 16px;">
+                            <div class="receipt-items-header" style="border-bottom: 1px solid var(--border); padding-bottom: 8px;">
                                 <div>Description</div>
                                 <div>Amount</div>
                             </div>
 
-                            <div class="form-row-line-item" style="margin-top:10px;">
+                            <div class="form-row-line-item" style="margin-top: 8px; margin-bottom: 8px;">
                                 <div class="form-group">
                                     <div class="autocomplete-wrapper">
                                         <input 
@@ -3159,26 +3233,83 @@ tr:hover [data-category-tag] {
                                 </div>
                             </div>
 
-                            <div class="line-items-container" id="modalLineItemsContainer"></div>
-                            <button type="button" class="add-line-item-btn" id="modalAddLineItemBtn">
-                                <i class="fas fa-plus"></i>
-                                Add line item (max 4)
-                            </button>
-                            <div id="lineItemsTotal" style="display: flex; margin-top: 12px; padding: 12px 16px; background: linear-gradient(135deg, rgba(var(--active-rgb), 0.08), rgba(var(--active-rgb), 0.03)); border: 2px solid var(--active); border-radius: 10px; font-weight: 800; font-size: 16px; justify-content: space-between; align-items:center; box-shadow: 0 4px 12px rgba(var(--active-rgb), 0.12);">
-                                <span style="color: var(--text);">Total handled over</span>
-                                <span id="lineItemsTotalAmount" style="color: var(--active); font-size: 20px; letter-spacing: -0.02em;">$0.00</span>
+                            <div id="lineItemsTotal" style="display: flex; margin-top: 8px; padding: 10px 12px; background: linear-gradient(135deg, rgba(var(--active-rgb), 0.08), rgba(var(--active-rgb), 0.03)); border: 1px solid rgba(var(--active-rgb), 0.35); border-radius: 10px; font-weight: 800; font-size: 15px; justify-content: space-between; align-items:center;">
+                                <span style="color: var(--text);">Total</span>
+                                <span id="lineItemsTotalAmount" style="color: var(--active); font-size: 18px; letter-spacing: -0.02em;">$0.00</span>
                             </div>
+
+                            <details class="receipt-collapsible" id="modalExtraItemsDetails" style="margin-top: 10px;">
+                                <summary>
+                                    <span class="summary-title">
+                                        <i class="fas fa-list"></i>
+                                        Additional items
+                                    </span>
+                                    <span class="summary-meta">Optional</span>
+                                </summary>
+                                <div class="receipt-collapsible-content">
+                                    <div class="line-items-container" id="modalLineItemsContainer"></div>
+                                    <button type="button" class="add-line-item-btn" id="modalAddLineItemBtn">
+                                        <i class="fas fa-plus"></i>
+                                        Add line item (max 4)
+                                    </button>
+                                </div>
+                            </details>
                         </div>
 
-                        <div class="receipt-panel receipt-notes">
-                            <div class="receipt-panel-title">Notes</div>
-                            <textarea 
-                                class="form-textarea" 
-                                id="modalNote"
-                                placeholder="Add any additional notes or comments"
-                                rows="3"
-                            ></textarea>
-                        </div>
+                        <details class="receipt-collapsible" id="modalDetailsSection">
+                            <summary>
+                                <span class="summary-title">
+                                    <i class="fas fa-pen"></i>
+                                    Details
+                                </span>
+                                <span class="summary-meta">Optional</span>
+                            </summary>
+                            <div class="receipt-collapsible-content">
+                                <div class="receipt-meta-split">
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label class="form-label">Address</label>
+                                        <input 
+                                            type="text" 
+                                            class="form-input" 
+                                            id="modalContactAddress"
+                                            placeholder="Street, City, State, ZIP"
+                                        >
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:0;">
+                                        <label class="form-label">Client / Company ID</label>
+                                        <input 
+                                            type="text" 
+                                            class="form-input" 
+                                            id="modalContactId"
+                                            placeholder="e.g. COMP-12345"
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label class="form-label">Reference ID</label>
+                                    <div class="autocomplete-wrapper">
+                                        <input 
+                                            type="text" 
+                                            class="form-input" 
+                                            id="modalTransactionId"
+                                            placeholder="e.g., TRX-2026-00342"
+                                        >
+                                        <div class="autocomplete-dropdown" id="transactionIdAutocomplete"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label class="form-label">Note</label>
+                                    <textarea 
+                                        class="form-textarea" 
+                                        id="modalNote"
+                                        placeholder="Add any additional notes or comments"
+                                        rows="2"
+                                    ></textarea>
+                                </div>
+                            </div>
+                        </details>
                     </div>
 
                     <div class="form-row" style="margin-top: 8px;">
@@ -3443,13 +3574,6 @@ tr:hover [data-category-tag] {
         function openModal(preset) {
             const isEventLike = preset && typeof preset === 'object' && 'preventDefault' in preset && 'target' in preset;
             const options = isEventLike ? {} : (preset || {});
-            console.log('openModal called, modal element:', modal);
-            if (!modal) {
-                console.error('Modal element not found!');
-                return;
-            }
-            
-            console.log('Adding active class to modal');
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
             console.log('Modal should be visible now');
@@ -3464,26 +3588,30 @@ tr:hover [data-category-tag] {
             }
 
             const registerSelect = document.getElementById('modalRegister');
-            if (registerSelect && options.cashBoxId) {
-                registerSelect.value = options.cashBoxId;
+            if (registerSelect && preset.cashBoxId) {
+                registerSelect.value = preset.cashBoxId;
                 if (typeof updateModalRegisterColor === 'function') {
                     updateModalRegisterColor();
                 }
             }
 
-            if (options.direction === 'in' || options.direction === 'out') {
+            if (preset.direction === 'in' || preset.direction === 'out') {
                 const inEl = document.getElementById('modalDirectionIn');
                 const outEl = document.getElementById('modalDirectionOut');
                 if (inEl && outEl) {
-                    inEl.checked = options.direction === 'in';
-                    outEl.checked = options.direction === 'out';
+                    inEl.checked = preset.direction === 'in';
+                    outEl.checked = preset.direction === 'out';
                 }
             }
 
-            const amountEl = document.getElementById('modalAmount');
-            if (amountEl) {
-                amountEl.focus();
-                amountEl.select?.();
+            const detailsSection = document.getElementById('modalDetailsSection');
+            if (detailsSection) detailsSection.open = false;
+            const extraItemsDetails = document.getElementById('modalExtraItemsDetails');
+            if (extraItemsDetails) extraItemsDetails.open = false;
+
+            const dirInEl = document.getElementById('modalDirectionIn');
+            if (dirInEl) {
+                dirInEl.focus();
             }
         }
 
@@ -3531,6 +3659,10 @@ tr:hover [data-category-tag] {
             if (lineItemsContainer) {
                 lineItemsContainer.innerHTML = '';
             }
+            const detailsSection = document.getElementById('modalDetailsSection');
+            if (detailsSection) detailsSection.open = false;
+            const extraItemsDetails = document.getElementById('modalExtraItemsDetails');
+            if (extraItemsDetails) extraItemsDetails.open = false;
             modalLineItemCount = 0;
             updateModalLineItemsButton();
             if (typeof updateLineItemsTotal === 'function') {
@@ -4150,6 +4282,11 @@ tr:hover [data-category-tag] {
                     if (txIdInput) txIdInput.value = '';
                     if (noteInput) noteInput.value = '';
 
+                    const detailsSection = document.getElementById('modalDetailsSection');
+                    if (detailsSection) detailsSection.open = false;
+                    const extraItemsDetails = document.getElementById('modalExtraItemsDetails');
+                    if (extraItemsDetails) extraItemsDetails.open = false;
+
                     const txIdGroup = document.getElementById('modalTransactionIdGroup');
                     const noteGroup = document.getElementById('modalNoteGroup');
                     if (txIdGroup) txIdGroup.style.display = 'none';
@@ -4162,9 +4299,9 @@ tr:hover [data-category-tag] {
                         updateLineItemsTotal();
                     }
 
-                    if (amountInput) {
-                        amountInput.focus();
-                        amountInput.select?.();
+                    const dirInEl = document.getElementById('modalDirectionIn');
+                    if (dirInEl) {
+                        dirInEl.focus();
                     }
                     return;
                 }
