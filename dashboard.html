@@ -2431,35 +2431,56 @@ tr:hover [data-category-tag] {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 10px 18px;
+    gap: 10px;
+    padding: 12px 20px;
     border-radius: 12px;
     font-size: 14px;
     font-weight: 800;
     cursor: pointer;
     transition: all 0.2s;
-    border: 2px solid transparent;
-    background: var(--surface-elevated);
-    color: var(--text-muted);
+    border: 2px solid var(--border);
+    background: white;
+    color: var(--text);
     user-select: none;
 }
 
-.modal-direction-btn i {
-    font-size: 16px;
+.modal-direction-btn:hover {
+    border-color: var(--active);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.modal-direction-btn .quick-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+    flex-shrink: 0;
+    font-size: 12px;
+}
+
+.modal-direction-btn.in .quick-icon {
+    background: #059669;
+}
+
+.modal-direction-btn.out .quick-icon {
+    background: var(--out);
 }
 
 #modalDirectionIn:checked + .modal-direction-btn.in {
-    background: linear-gradient(135deg, #059669, #047857);
-    color: white;
-    border-color: #047857;
-    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    border-color: #059669;
+    background: rgba(5, 150, 105, 0.06);
+    color: #059669;
 }
 
 #modalDirectionOut:checked + .modal-direction-btn.out {
-    background: linear-gradient(135deg, var(--out), #dc2626);
-    color: white;
     border-color: var(--out);
-    box-shadow: 0 4px 12px rgba(var(--out-rgb), 0.3);
+    background: rgba(var(--out-rgb), 0.06);
+    color: var(--out);
 }
 
 .modal-date-input {
@@ -2478,18 +2499,18 @@ tr:hover [data-category-tag] {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
     background: white;
     cursor: pointer;
     transition: all 0.2s;
-    min-width: 200px;
+    min-width: 220px;
 }
 
 .modal-cashbox-select:hover {
     border-color: var(--active);
-    box-shadow: 0 0 0 3px rgba(var(--active-rgb), 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .modal-cashbox-dot {
@@ -2516,7 +2537,7 @@ tr:hover [data-category-tag] {
 }
 
 .modal-cashbox-select i {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-muted);
 }
 
@@ -2560,16 +2581,21 @@ tr:hover [data-category-tag] {
 }
 
 .modal-collapsible {
-    background: var(--surface-elevated);
+    background: white;
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 12px 14px;
+    padding: 14px 16px;
     transition: all 0.2s;
 }
 
+.modal-collapsible:hover {
+    border-color: rgba(var(--active-rgb), 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
 .modal-collapsible[open] {
-    padding: 14px 16px;
-    background: white;
+    border-color: var(--active);
+    box-shadow: 0 2px 12px rgba(var(--active-rgb), 0.08);
 }
 
 .modal-collapsible > summary {
@@ -3258,13 +3284,17 @@ tr:hover [data-category-tag] {
                     <div class="modal-direction-group">
                         <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
                         <label for="modalDirectionIn" class="modal-direction-btn in">
-                            <i class="fas fa-arrow-down"></i>
-                            IN
+                            <span class="quick-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </span>
+                            <span class="quick-label">IN</span>
                         </label>
                         <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
                         <label for="modalDirectionOut" class="modal-direction-btn out">
-                            <i class="fas fa-arrow-up"></i>
-                            OUT
+                            <span class="quick-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </span>
+                            <span class="quick-label">OUT</span>
                         </label>
                     </div>
                     
@@ -3293,8 +3323,8 @@ tr:hover [data-category-tag] {
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body">
-                <form id="modalTransactionForm">
+            <div class="modal-body" style="padding: 20px 28px;">
+                <form id="modalTransactionForm" style="display: flex; flex-direction: column; gap: 16px;">
                     <!-- Contact Section (2 columns) -->
                     <div class="modal-section">
                         <div class="modal-section-title">Contact Information</div>
