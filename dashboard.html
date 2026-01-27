@@ -2108,7 +2108,7 @@ tr:hover [data-category-tag] {
 .modal-container {
     background: white;
     border-radius: 16px;
-    max-width: 900px;
+    max-width: 1000px;
     width: 100%;
     max-height: 92vh;
     overflow-y: auto;
@@ -2130,28 +2130,42 @@ tr:hover [data-category-tag] {
     background: linear-gradient(180deg, rgba(107, 114, 128, 0.08) 0%, white 120px);
 }
 
-/* Modal Header - 2 rows */
+/* Modal Header - single row with watermark */
 .modal-header {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px 20px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
     border-bottom: 3px solid rgba(var(--modal-dir-rgb), 0.6);
     background: white;
+    position: relative;
+    overflow: hidden;
 }
 
-.modal-header-row {
+.modal-header-left {
     display: flex;
     align-items: center;
     gap: 16px;
+    z-index: 1;
 }
 
-.modal-header-row-1 {
-    justify-content: flex-start;
+/* Watermark */
+.modal-header::after {
+    content: "IN";
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 64px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: rgba(var(--modal-dir-rgb), 0.12);
+    pointer-events: none;
+    user-select: none;
 }
 
-.modal-header-row-2 {
-    justify-content: space-between;
+#createTransactionModalContainer[data-direction="out"] .modal-header::after {
+    content: "OUT";
 }
 
 /* Direction buttons */
@@ -2224,53 +2238,56 @@ tr:hover [data-category-tag] {
     color: white;
 }
 
-/* Cashbox selector */
+/* Cashbox selector - elegant compact design */
 .modal-cashbox-carousel {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0;
+    background: var(--surface-elevated);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 4px;
 }
 
 .cashbox-arrow {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 32px;
     border: none;
-    background: var(--surface-elevated);
-    border-radius: 6px;
+    background: transparent;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-muted);
-    font-size: 12px;
+    font-size: 10px;
     transition: all 0.15s;
+    border-radius: 6px;
 }
 
 .cashbox-arrow:hover {
-    background: var(--border);
+    background: rgba(0,0,0,0.05);
     color: var(--text);
 }
 
 .cashbox-display {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    gap: 8px;
+    padding: 4px 8px;
     background: white;
-    min-width: 200px;
-    max-width: 280px;
+    border-radius: 6px;
+    min-width: 140px;
+    max-width: 200px;
 }
 
 .cashbox-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 11px;
     color: white;
     background: var(--active);
     flex-shrink: 0;
@@ -2282,31 +2299,33 @@ tr:hover [data-category-tag] {
 }
 
 .cashbox-name {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.2;
 }
 
 .cashbox-balance {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-muted);
+    line-height: 1.2;
 }
 
 .cashbox-position {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
     color: var(--text-muted);
+    padding: 2px 4px;
+    border-radius: 3px;
     background: var(--surface-elevated);
-    padding: 2px 6px;
-    border-radius: 4px;
 }
 
-/* Mode toggle */
+/* Mode toggle - positioned in form area */
 .modal-mode-toggle {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     padding: 3px;
     border-radius: 8px;
@@ -2325,10 +2344,10 @@ tr:hover [data-category-tag] {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 28px;
-    padding: 0 12px;
-    border-radius: 6px;
-    font-size: 12px;
+    height: 26px;
+    padding: 0 10px;
+    border-radius: 5px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--text-muted);
     cursor: pointer;
@@ -2341,25 +2360,6 @@ tr:hover [data-category-tag] {
     background: white;
     color: var(--text);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Date display */
-.modal-date-info {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    padding: 6px 12px;
-    background: var(--surface-elevated);
-    border-radius: 8px;
-    border: 1px solid var(--border);
-}
-
-.modal-date-info i {
-    color: var(--active);
-    font-size: 12px;
 }
 
 /* Close button */
@@ -2385,7 +2385,7 @@ tr:hover [data-category-tag] {
 
 /* Quick mode overrides */
 #createTransactionModalContainer[data-mode="quick"] {
-    max-width: 700px;
+    max-width: 800px;
 }
 
 #createTransactionModalContainer[data-mode="quick"] .modal-detailed-only {
@@ -2397,7 +2397,7 @@ tr:hover [data-category-tag] {
 }
 
 #createTransactionModalContainer[data-mode="quick"] .modal-contact-grid {
-    grid-template-columns: 1.5fr 1fr !important;
+    grid-template-columns: 1fr 2fr 2fr !important;
 }
 
 /* Direction-based field styling */
@@ -3850,8 +3850,8 @@ tr:hover [data-category-tag] {
     <div class="modal-overlay" id="createTransactionModal">
         <div class="modal-container" id="createTransactionModalContainer" data-direction="in" data-mode="quick">
             <div class="modal-header">
-                <!-- Row 1: Direction + Cashbox -->
-                <div class="modal-header-row modal-header-row-1">
+                <div class="modal-header-left">
+                    <!-- Direction buttons -->
                     <div class="modal-direction-primary">
                         <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
                         <label for="modalDirectionIn" class="direction-primary-btn in">
@@ -3865,6 +3865,7 @@ tr:hover [data-category-tag] {
                         </label>
                     </div>
                     
+                    <!-- Cashbox selector -->
                     <div class="modal-cashbox-carousel">
                         <button type="button" class="cashbox-arrow" id="modalCashboxPrev" title="Previous">
                             <i class="fas fa-chevron-left"></i>
@@ -3884,31 +3885,30 @@ tr:hover [data-category-tag] {
                     </div>
                 </div>
                 
-                <!-- Row 2: Mode + Date + Close -->
-                <div class="modal-header-row modal-header-row-2">
-                    <div class="modal-mode-toggle" id="modalModeToggle">
-                        <input type="radio" name="modalMode" id="modalModeQuick" value="quick" checked>
-                        <label for="modalModeQuick">Quick</label>
-                        <input type="radio" name="modalMode" id="modalModeDetailed" value="detailed">
-                        <label for="modalModeDetailed">Detailed</label>
-                    </div>
-                    
-                    <div class="modal-date-info" id="modalDate">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span id="modalDateText">Loading...</span>
-                    </div>
-                    
-                    <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close modal">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+                <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="modal-body" style="padding: 16px 24px;">
                 <form id="modalTransactionForm" style="display: flex; flex-direction: column; gap: 12px;">
                     <!-- Contact Section -->
-                    <div class="modal-section" style="padding: 12px;">
-                        <div class="modal-section-title">RECEIPT INFORMATION</div>
-                        <div class="modal-contact-grid" style="display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 10px;">
+                    <div class="modal-section" style="padding: 16px;">
+                        <!-- Mode toggle + Date row -->
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                            <div class="modal-mode-toggle" id="modalModeToggle">
+                                <input type="radio" name="modalMode" id="modalModeQuick" value="quick" checked>
+                                <label for="modalModeQuick">Quick</label>
+                                <input type="radio" name="modalMode" id="modalModeDetailed" value="detailed">
+                                <label for="modalModeDetailed">Detailed</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Date + Name + Address row -->
+                        <div class="modal-contact-grid" style="display: grid; grid-template-columns: 1fr 2fr 2fr 1fr; gap: 10px;">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="text" id="modalDateField" class="form-control" readonly style="background: var(--surface-elevated); cursor: default;">
+                            </div>
                             <div class="form-group">
                                 <label for="modalContactName">Name <span class="required">*</span></label>
                                 <input 
@@ -4385,15 +4385,16 @@ tr:hover [data-category-tag] {
             document.body.style.overflow = 'hidden';
             console.log('Modal should be visible now');
 
-            const dateTextEl = document.getElementById('modalDateText');
-            if (dateTextEl) {
+            const dateFieldEl = document.getElementById('modalDateField');
+            if (dateFieldEl) {
                 const now = new Date();
+                const yyyy = now.getFullYear();
                 const mm = String(now.getMonth() + 1).padStart(2, '0');
                 const dd = String(now.getDate()).padStart(2, '0');
                 const hh = String(now.getHours()).padStart(2, '0');
                 const min = String(now.getMinutes()).padStart(2, '0');
-                dateTextEl.textContent = `${mm}/${dd} ${hh}:${min}`;
-                dateTextEl.dataset.fullDate = now.toISOString();
+                dateFieldEl.value = `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+                dateFieldEl.dataset.fullDate = now.toISOString();
             }
             
             // Initialize cash box carousel from real Supabase data
