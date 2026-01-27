@@ -2311,15 +2311,15 @@ tr:hover [data-category-tag] {
     color: white;
 }
 
-/* Mode toggle - positioned in form area */
+/* Mode toggle - polished pill style */
 .modal-mode-toggle {
     display: inline-flex;
     align-items: center;
-    padding: 3px;
-    border-radius: 8px;
-    background: var(--surface-elevated);
-    border: 1px solid var(--border);
-    gap: 2px;
+    padding: 4px;
+    border-radius: 10px;
+    background: white;
+    border: 2px solid rgba(var(--modal-dir-rgb), 0.2);
+    gap: 4px;
 }
 
 .modal-mode-toggle input {
@@ -2332,22 +2332,29 @@ tr:hover [data-category-tag] {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 26px;
-    padding: 0 10px;
-    border-radius: 5px;
-    font-size: 11px;
+    height: 32px;
+    padding: 0 16px;
+    border-radius: 7px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--text-muted);
     cursor: pointer;
     user-select: none;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.modal-mode-toggle label:hover {
+    color: var(--text);
+    background: rgba(var(--modal-dir-rgb), 0.05);
 }
 
 #modalModeQuick:checked + label,
 #modalModeDetailed:checked + label {
-    background: white;
-    color: var(--text);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background: var(--modal-dir-color);
+    color: white;
+    box-shadow: 0 2px 8px rgba(var(--modal-dir-rgb), 0.3);
 }
 
 /* Close button */
@@ -3894,7 +3901,7 @@ tr:hover [data-category-tag] {
                         </div>
                         
                         <!-- Name + Address row -->
-                        <div class="modal-contact-grid" style="display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 10px;">
+                        <div class="modal-contact-grid" style="display: grid; grid-template-columns: 3fr 3fr 1fr; gap: 12px;">
                             <div class="form-group">
                                 <label for="modalContactName">Name <span class="required">*</span></label>
                                 <input 
