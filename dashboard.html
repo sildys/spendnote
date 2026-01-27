@@ -2091,7 +2091,7 @@ tr:hover [data-category-tag] {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
     z-index: 9999;
     display: none;
@@ -2106,9 +2106,9 @@ tr:hover [data-category-tag] {
 }
 
 .modal-container {
-    background: var(--surface);
-    border-radius: 24px;
-    max-width: 1100px;
+    background: white;
+    border-radius: 16px;
+    max-width: 900px;
     width: 100%;
     max-height: 92vh;
     overflow-y: auto;
@@ -2117,154 +2117,288 @@ tr:hover [data-category-tag] {
     margin: auto;
 }
 
-.modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 28px;
-    border-bottom: 1px solid var(--border);
-    gap: 16px;
-    background: white;
-}
-
-.modal-header-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-    flex-wrap: wrap;
-}
-
-.modal-header {
-    padding: 16px 24px;
-    position: relative;
-}
-
- #createTransactionModalContainer {
-     --modal-dir-color: #059669;
-     --modal-dir-rgb: 5, 150, 105;
-     --modal-mode-bg: rgba(0, 0, 0, 0.04);
-     background: rgba(5, 150, 105, 0.15);
+/* Modal direction-based background tint */
+#createTransactionModalContainer {
+    --modal-dir-color: #059669;
+    --modal-dir-rgb: 5, 150, 105;
+    background: linear-gradient(180deg, rgba(5, 150, 105, 0.08) 0%, white 120px);
 }
 
 #createTransactionModalContainer[data-direction="out"] {
-     --modal-dir-color: #6b7280;
-     --modal-dir-rgb: 107, 114, 128;
-     background: rgba(107, 114, 128, 0.15);
+    --modal-dir-color: #6b7280;
+    --modal-dir-rgb: 107, 114, 128;
+    background: linear-gradient(180deg, rgba(107, 114, 128, 0.08) 0%, white 120px);
 }
 
- #createTransactionModalContainer[data-mode="quick"] {
-     max-width: 860px;
- }
-
- #createTransactionModalContainer[data-mode="quick"] .modal-body {
-     padding: 12px 18px !important;
- }
-
- #createTransactionModalContainer[data-mode="quick"] #modalTransactionForm {
-     gap: 10px !important;
- }
-
- #createTransactionModalContainer[data-mode="quick"] .modal-section {
-     padding: 10px !important;
- }
-
- .modal-mode-toggle {
-     display: inline-flex;
-     align-items: center;
-     padding: 3px;
-     border-radius: 999px;
-     background: var(--modal-mode-bg);
-     border: 1px solid rgba(0, 0, 0, 0.08);
-     gap: 2px;
-     height: 36px;
-     flex-shrink: 0;
+/* Modal Header - 2 rows */
+.modal-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 3px solid rgba(var(--modal-dir-rgb), 0.6);
+    background: white;
 }
 
- .modal-mode-toggle input {
-     position: absolute;
-     opacity: 0;
-     pointer-events: none;
- }
+.modal-header-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
 
- .modal-mode-toggle label {
-     display: inline-flex;
-     align-items: center;
-     justify-content: center;
-     height: 30px;
-     padding: 0 10px;
-     border-radius: 999px;
-     font-size: 11px;
-     font-weight: 900;
-     letter-spacing: 0.06em;
-     text-transform: uppercase;
-     color: var(--text-muted);
-     cursor: pointer;
-     user-select: none;
-     transition: all 0.15s ease;
-     white-space: nowrap;
- }
+.modal-header-row-1 {
+    justify-content: flex-start;
+}
 
- #modalModeQuick:checked + label,
- #modalModeDetailed:checked + label {
-     background: #ffffff;
-     color: var(--text);
-     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
- }
+.modal-header-row-2 {
+    justify-content: space-between;
+}
 
- #createTransactionModalContainer[data-mode="quick"] .modal-detailed-only {
-     display: none !important;
- }
+/* Direction buttons */
+.modal-direction-primary {
+    display: flex;
+    gap: 8px;
+}
 
- #createTransactionModalContainer[data-mode="quick"] #lineItemsTotal {
-     display: none !important;
- }
+.modal-direction-primary input[type="radio"] {
+    display: none;
+}
 
- #createTransactionModalContainer[data-mode="quick"] .modal-contact-grid {
-     grid-template-columns: 2fr 1.5fr !important;
- }
+.direction-primary-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid var(--border);
+    background: white;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    transition: all 0.15s ease;
+}
 
- #createTransactionModalContainer[data-mode="quick"] .modal-section-title {
-     font-size: 11px;
-     margin-bottom: 10px;
- }
+.direction-primary-btn .quick-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.15s ease;
+}
 
- #createTransactionModalContainer .modal-header {
-     overflow: hidden;
- }
+.direction-primary-btn.in .quick-icon {
+    background: rgba(5, 150, 105, 0.1);
+    color: #059669;
+}
 
- #createTransactionModalContainer .modal-header-left {
-     position: relative;
- }
+.direction-primary-btn.out .quick-icon {
+    background: rgba(107, 114, 128, 0.1);
+    color: #6b7280;
+}
 
- #createTransactionModalContainer .modal-header-left::after {
-     content: "IN";
-     position: absolute;
-     right: 10px;
-     top: 6px;
-     font-size: 44px;
-     font-weight: 900;
-     letter-spacing: 0.10em;
-     color: rgba(var(--modal-dir-rgb), 0.14);
-     pointer-events: none;
-     user-select: none;
-     white-space: nowrap;
- }
+#modalDirectionIn:checked + .direction-primary-btn.in {
+    background: #059669;
+    border-color: #059669;
+    color: white;
+}
 
- #createTransactionModalContainer[data-direction="out"] .modal-header-left::after {
-     content: "OUT";
- }
+#modalDirectionIn:checked + .direction-primary-btn.in .quick-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
 
- #createTransactionModalContainer .modal-header::after {
-     content: "";
-     position: absolute;
-     left: 0;
-     bottom: 0;
-     height: 4px;
-     width: 100%;
-     background: linear-gradient(90deg, rgba(var(--modal-dir-rgb), 0.85), rgba(var(--modal-dir-rgb), 0.22));
-     pointer-events: none;
- }
+#modalDirectionOut:checked + .direction-primary-btn.out {
+    background: #6b7280;
+    border-color: #6b7280;
+    color: white;
+}
+
+#modalDirectionOut:checked + .direction-primary-btn.out .quick-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Cashbox selector */
+.modal-cashbox-carousel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cashbox-arrow {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: var(--surface-elevated);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    transition: all 0.15s;
+}
+
+.cashbox-arrow:hover {
+    background: var(--border);
+    color: var(--text);
+}
+
+.cashbox-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    min-width: 200px;
+    max-width: 280px;
+}
+
+.cashbox-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+    background: var(--active);
+    flex-shrink: 0;
+}
+
+.cashbox-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.cashbox-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cashbox-balance {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.cashbox-position {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--surface-elevated);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Mode toggle */
+.modal-mode-toggle {
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    border-radius: 8px;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    gap: 2px;
+}
+
+.modal-mode-toggle input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-mode-toggle label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s ease;
+}
+
+#modalModeQuick:checked + label,
+#modalModeDetailed:checked + label {
+    background: white;
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Date display */
+.modal-date-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    padding: 6px 12px;
+    background: var(--surface-elevated);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.modal-date-info i {
+    color: var(--active);
+    font-size: 12px;
+}
+
+/* Close button */
+.modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--surface-elevated);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    transition: all 0.15s;
+}
+
+.modal-close:hover {
+    background: var(--border);
+    color: var(--text);
+}
+
+/* Quick mode overrides */
+#createTransactionModalContainer[data-mode="quick"] {
+    max-width: 700px;
+}
+
+#createTransactionModalContainer[data-mode="quick"] .modal-detailed-only {
+    display: none !important;
+}
+
+#createTransactionModalContainer[data-mode="quick"] #lineItemsTotal {
+    display: none !important;
+}
+
+#createTransactionModalContainer[data-mode="quick"] .modal-contact-grid {
+    grid-template-columns: 1.5fr 1fr !important;
+}
 
 
 
@@ -3647,63 +3781,58 @@ tr:hover [data-category-tag] {
     <div class="modal-overlay" id="createTransactionModal">
         <div class="modal-container" id="createTransactionModalContainer" data-direction="in" data-mode="quick">
             <div class="modal-header">
-                <div class="modal-header-left">
-                    <!-- 1. DIRECTION (MOST IMPORTANT) -->
+                <!-- Row 1: Direction + Cashbox -->
+                <div class="modal-header-row modal-header-row-1">
                     <div class="modal-direction-primary">
                         <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
                         <label for="modalDirectionIn" class="direction-primary-btn in">
-                            <span class="quick-icon">
-                                <i class="fas fa-arrow-down"></i>
-                            </span>
-                            <span class="direction-label">IN</span>
+                            <span class="quick-icon"><i class="fas fa-arrow-down"></i></span>
+                            <span>IN</span>
                         </label>
                         <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
                         <label for="modalDirectionOut" class="direction-primary-btn out">
-                            <span class="quick-icon">
-                                <i class="fas fa-arrow-up"></i>
-                            </span>
-                            <span class="direction-label">OUT</span>
+                            <span class="quick-icon"><i class="fas fa-arrow-up"></i></span>
+                            <span>OUT</span>
                         </label>
                     </div>
                     
-                    <!-- 2. CASH BOX -->
                     <div class="modal-cashbox-carousel">
-                        <div class="cashbox-carousel-controls">
-                            <button type="button" class="cashbox-arrow" id="modalCashboxPrev" title="Previous">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <div class="cashbox-display" id="modalCashboxDisplay">
-                                <div class="cashbox-icon" id="modalCashboxIcon"></div>
-                                <div class="cashbox-info">
-                                    <div class="cashbox-name" id="modalCashboxName">Loading...</div>
-                                    <div class="cashbox-balance" id="modalCashboxBalance"></div>
-                                </div>
-                                <div class="cashbox-position" id="modalCashboxPosition">1/1</div>
+                        <button type="button" class="cashbox-arrow" id="modalCashboxPrev" title="Previous">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="cashbox-display" id="modalCashboxDisplay">
+                            <div class="cashbox-icon" id="modalCashboxIcon"></div>
+                            <div class="cashbox-info">
+                                <div class="cashbox-name" id="modalCashboxName">Loading...</div>
+                                <div class="cashbox-balance" id="modalCashboxBalance"></div>
                             </div>
-                            <button type="button" class="cashbox-arrow" id="modalCashboxNext" title="Next">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
+                            <div class="cashbox-position" id="modalCashboxPosition">1/1</div>
                         </div>
+                        <button type="button" class="cashbox-arrow" id="modalCashboxNext" title="Next">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
                         <input type="hidden" id="modalCashBoxId" value="">
                     </div>
-
-                    <!-- MODE -->
-                    <div class="modal-mode-toggle" id="modalModeToggle" aria-label="Transaction entry mode">
+                </div>
+                
+                <!-- Row 2: Mode + Date + Close -->
+                <div class="modal-header-row modal-header-row-2">
+                    <div class="modal-mode-toggle" id="modalModeToggle">
                         <input type="radio" name="modalMode" id="modalModeQuick" value="quick" checked>
                         <label for="modalModeQuick">Quick</label>
                         <input type="radio" name="modalMode" id="modalModeDetailed" value="detailed">
                         <label for="modalModeDetailed">Detailed</label>
                     </div>
                     
-                    <!-- 3. DATE -->
                     <div class="modal-date-info" id="modalDate">
-                        <i class="fas fa-clock"></i>
+                        <i class="fas fa-calendar-alt"></i>
                         <span id="modalDateText">Loading...</span>
                     </div>
+                    
+                    <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close modal">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-                <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close modal">
-                    <i class="fas fa-times"></i>
-                </button>
             </div>
             <div class="modal-body" style="padding: 16px 24px;">
                 <form id="modalTransactionForm" style="display: flex; flex-direction: column; gap: 12px;">
