@@ -2108,7 +2108,7 @@ tr:hover [data-category-tag] {
 .modal-container {
     background: white;
     border-radius: 16px;
-    max-width: 1000px;
+    max-width: 1200px;
     width: 100%;
     max-height: 92vh;
     overflow-y: auto;
@@ -2238,89 +2238,128 @@ tr:hover [data-category-tag] {
     color: white;
 }
 
-/* Cashbox selector - elegant compact design */
-.modal-cashbox-carousel {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    background: var(--surface-elevated);
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    padding: 4px;
+/* Cashbox selector - elegant dropdown style */
+.modal-cashbox-selector {
+    position: relative;
 }
 
-.cashbox-arrow {
-    width: 24px;
-    height: 32px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
+.cashbox-selected {
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    font-size: 10px;
-    transition: all 0.15s;
-    border-radius: 6px;
-}
-
-.cashbox-arrow:hover {
-    background: rgba(0,0,0,0.05);
-    color: var(--text);
-}
-
-.cashbox-display {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 8px;
+    gap: 10px;
+    padding: 8px 14px;
     background: white;
-    border-radius: 6px;
-    min-width: 140px;
-    max-width: 200px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-width: 180px;
 }
 
-.cashbox-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
+.cashbox-selected:hover {
+    border-color: var(--active);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.cashbox-selected .cashbox-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
+    font-size: 12px;
     color: white;
-    background: var(--active);
     flex-shrink: 0;
 }
 
-.cashbox-info {
+.cashbox-selected .cashbox-info {
     flex: 1;
     min-width: 0;
 }
 
-.cashbox-name {
-    font-size: 12px;
+.cashbox-selected .cashbox-name {
+    font-size: 13px;
     font-weight: 700;
     color: var(--text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1.2;
 }
 
-.cashbox-balance {
-    font-size: 10px;
+.cashbox-selected .cashbox-balance {
+    font-size: 11px;
     color: var(--text-muted);
-    line-height: 1.2;
 }
 
-.cashbox-position {
-    font-size: 9px;
-    font-weight: 600;
+.cashbox-selected .cashbox-chevron {
     color: var(--text-muted);
-    padding: 2px 4px;
-    border-radius: 3px;
+    font-size: 12px;
+    transition: transform 0.2s;
+}
+
+.modal-cashbox-selector.open .cashbox-chevron {
+    transform: rotate(180deg);
+}
+
+.cashbox-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    z-index: 100;
+    display: none;
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+.modal-cashbox-selector.open .cashbox-dropdown {
+    display: block;
+}
+
+.cashbox-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.cashbox-option:hover {
     background: var(--surface-elevated);
+}
+
+.cashbox-option.selected {
+    background: rgba(var(--active-rgb), 0.08);
+}
+
+.cashbox-option .cashbox-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.cashbox-option .cashbox-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.cashbox-option .cashbox-balance {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: auto;
 }
 
 /* Mode toggle - positioned in form area */
@@ -2385,7 +2424,7 @@ tr:hover [data-category-tag] {
 
 /* Quick mode overrides */
 #createTransactionModalContainer[data-mode="quick"] {
-    max-width: 800px;
+    max-width: 1000px;
 }
 
 #createTransactionModalContainer[data-mode="quick"] .modal-detailed-only {
@@ -3865,22 +3904,19 @@ tr:hover [data-category-tag] {
                         </label>
                     </div>
                     
-                    <!-- Cashbox selector -->
-                    <div class="modal-cashbox-carousel">
-                        <button type="button" class="cashbox-arrow" id="modalCashboxPrev" title="Previous">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <div class="cashbox-display" id="modalCashboxDisplay">
+                    <!-- Cashbox selector (dropdown) -->
+                    <div class="modal-cashbox-selector" id="modalCashboxSelector">
+                        <div class="cashbox-selected" id="modalCashboxSelected">
                             <div class="cashbox-icon" id="modalCashboxIcon"></div>
                             <div class="cashbox-info">
-                                <div class="cashbox-name" id="modalCashboxName">Loading...</div>
+                                <div class="cashbox-name" id="modalCashboxName">Select cash box...</div>
                                 <div class="cashbox-balance" id="modalCashboxBalance"></div>
                             </div>
-                            <div class="cashbox-position" id="modalCashboxPosition">1/1</div>
+                            <i class="fas fa-chevron-down cashbox-chevron"></i>
                         </div>
-                        <button type="button" class="cashbox-arrow" id="modalCashboxNext" title="Next">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+                        <div class="cashbox-dropdown" id="modalCashboxDropdown">
+                            <!-- Options populated by JS -->
+                        </div>
                         <input type="hidden" id="modalCashBoxId" value="">
                     </div>
                 </div>
@@ -4556,7 +4592,6 @@ tr:hover [data-category-tag] {
             const iconEl = document.getElementById('modalCashboxIcon');
             const nameEl = document.getElementById('modalCashboxName');
             const balanceEl = document.getElementById('modalCashboxBalance');
-            const positionEl = document.getElementById('modalCashboxPosition');
             const idInput = document.getElementById('modalCashBoxId');
             
             if (iconEl) {
@@ -4572,9 +4607,6 @@ tr:hover [data-category-tag] {
                 const balanceText = dashboardCard?.querySelector('.register-balance')?.textContent || '';
                 balanceEl.textContent = balanceText ? `Balance: ${balanceText}` : '';
             }
-            if (positionEl) {
-                positionEl.textContent = `${modalCashBoxIndex + 1}/${modalCashBoxes.length}`;
-            }
             if (idInput) {
                 idInput.value = cashbox.id;
             }
@@ -4589,27 +4621,54 @@ tr:hover [data-category-tag] {
             }
         }
         
-        // Cash box carousel navigation
-        const cashboxPrevBtn = document.getElementById('modalCashboxPrev');
-        const cashboxNextBtn = document.getElementById('modalCashboxNext');
+        // Cash box dropdown selector
+        const cashboxSelector = document.getElementById('modalCashboxSelector');
+        const cashboxSelected = document.getElementById('modalCashboxSelected');
+        const cashboxDropdown = document.getElementById('modalCashboxDropdown');
         
-        if (cashboxPrevBtn) {
-            cashboxPrevBtn.addEventListener('click', () => {
-                if (modalCashBoxes.length > 1) {
-                    modalCashBoxIndex = (modalCashBoxIndex - 1 + modalCashBoxes.length) % modalCashBoxes.length;
-                    updateModalCashboxDisplay();
+        if (cashboxSelected) {
+            cashboxSelected.addEventListener('click', (e) => {
+                e.stopPropagation();
+                cashboxSelector.classList.toggle('open');
+                if (cashboxSelector.classList.contains('open')) {
+                    renderCashboxDropdown();
                 }
             });
         }
         
-        if (cashboxNextBtn) {
-            cashboxNextBtn.addEventListener('click', () => {
-                if (modalCashBoxes.length > 1) {
-                    modalCashBoxIndex = (modalCashBoxIndex + 1) % modalCashBoxes.length;
+        function renderCashboxDropdown() {
+            if (!cashboxDropdown) return;
+            cashboxDropdown.innerHTML = modalCashBoxes.map((cb, idx) => `
+                <div class="cashbox-option ${idx === modalCashBoxIndex ? 'selected' : ''}" data-index="${idx}">
+                    <div class="cashbox-icon" style="background: ${cb.color}">
+                        <i class="fas ${cb.icon}"></i>
+                    </div>
+                    <span class="cashbox-name">${cb.name}</span>
+                    <span class="cashbox-balance">${getBalanceForCashbox(cb.id)}</span>
+                </div>
+            `).join('');
+            
+            // Add click handlers
+            cashboxDropdown.querySelectorAll('.cashbox-option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    modalCashBoxIndex = parseInt(opt.dataset.index);
                     updateModalCashboxDisplay();
-                }
+                    cashboxSelector.classList.remove('open');
+                });
             });
         }
+        
+        function getBalanceForCashbox(id) {
+            const card = document.querySelector(`.register-card[data-id="${id}"]`);
+            return card?.querySelector('.register-balance')?.textContent || '';
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (cashboxSelector && !cashboxSelector.contains(e.target)) {
+                cashboxSelector.classList.remove('open');
+            }
+        });
         
         // Add to Contacts button
         const addContactBtn = document.getElementById('modalAddContactBtn');
