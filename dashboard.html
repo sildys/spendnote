@@ -2142,16 +2142,15 @@ tr:hover [data-category-tag] {
  #createTransactionModalContainer {
      --modal-dir-color: #059669;
      --modal-dir-rgb: 5, 150, 105;
- }
+     --modal-mode-bg: rgba(0, 0, 0, 0.04);
+     background: rgba(5, 150, 105, 0.025);
+}
 
- #createTransactionModalContainer[data-direction="out"] {
+#createTransactionModalContainer[data-direction="out"] {
      --modal-dir-color: #6b7280;
      --modal-dir-rgb: 107, 114, 128;
- }
-
- #createTransactionModalContainer {
-     --modal-mode-bg: rgba(0, 0, 0, 0.04);
- }
+     background: rgba(107, 114, 128, 0.025);
+}
 
  #createTransactionModalContainer[data-mode="quick"] {
      max-width: 860px;
@@ -2220,7 +2219,12 @@ tr:hover [data-category-tag] {
  }
 
  #createTransactionModalContainer[data-mode="quick"] .modal-contact-grid {
-     grid-template-columns: 1fr 1fr !important;
+     grid-template-columns: 2fr 1.5fr !important;
+ }
+
+ #createTransactionModalContainer[data-mode="quick"] .modal-section-title {
+     font-size: 11px;
+     margin-bottom: 10px;
  }
 
  #createTransactionModalContainer[data-mode="detailed"] .modal-collapsible > summary,
@@ -2232,6 +2236,14 @@ tr:hover [data-category-tag] {
      border: 1px solid var(--border);
      border-radius: 12px;
      background: white;
+     padding: 16px;
+ }
+
+ #createTransactionModalContainer[data-mode="detailed"] .contact-details-toggle {
+     background: var(--surface-elevated);
+     border: 1px solid var(--border);
+     border-radius: 10px;
+     padding: 12px;
  }
 
  #createTransactionModalContainer .modal-header {
@@ -2764,6 +2776,8 @@ tr:hover [data-category-tag] {
     background: linear-gradient(135deg, rgba(var(--active-rgb), 0.08), rgba(var(--active-rgb), 0.02));
     transition: all 0.3s ease;
     height: 64px;
+    min-width: 280px;
+    max-width: 380px;
 }
 
 .cashbox-icon {
@@ -2900,19 +2914,24 @@ tr:hover [data-category-tag] {
 }
 
 .modal-date-info {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
     white-space: nowrap;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     height: 64px;
+    padding: 0 12px;
+    background: var(--surface-elevated);
+    border-radius: 10px;
+    border: 1px solid var(--border);
 }
 
 .modal-date-info i {
-    font-size: 10px;
-    opacity: 0.7;
+    font-size: 13px;
+    opacity: 0.6;
+    color: var(--active);
 }
 
 .contact-details-toggle summary {
@@ -2957,13 +2976,11 @@ tr:hover [data-category-tag] {
 }
 
 .modal-collapsible:hover {
-    border-color: rgba(var(--active-rgb), 0.3);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border-color: var(--border);
 }
 
 .modal-collapsible[open] {
-    border-color: var(--active);
-    box-shadow: 0 2px 12px rgba(var(--active-rgb), 0.08);
+    border-color: var(--border);
 }
 
 .modal-collapsible > summary {
@@ -3709,7 +3726,7 @@ tr:hover [data-category-tag] {
                         <div class="modal-section-title">RECEIPT INFORMATION</div>
                         <div class="modal-contact-grid" style="display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 10px;">
                             <div class="form-group">
-                                <label for="modalContactName">Name *</label>
+                                <label for="modalContactName">Name <span class="required">*</span></label>
                                 <input 
                                     type="text" 
                                     id="modalContactName" 
@@ -3720,7 +3737,7 @@ tr:hover [data-category-tag] {
                                 <div id="ContactAutocomplete" class="autocomplete-dropdown"></div>
                             </div>
                             <div class="form-group">
-                                <label for="modalContactAddress">Address</label>
+                                <label for="modalContactAddress">Address <span style="font-size: 11px; color: var(--text-muted); font-weight: 500;">(optional)</span></label>
                                 <input 
                                     type="text" 
                                     id="modalContactAddress" 
@@ -3741,11 +3758,11 @@ tr:hover [data-category-tag] {
                         
                         <!-- Additional Contact Details (Collapsible) -->
                         <details class="contact-details-toggle modal-detailed-only" id="modalContactDetails" style="margin-top: 12px;">
-                            <summary style="cursor: pointer; font-size: 11px; font-weight: 700; color: var(--active); user-select: none;">
-                                <i class="fas fa-plus-circle" style="margin-right: 6px;"></i>
-                                Add Phone/Email & Save to Contacts
+                            <summary style="cursor: pointer; font-size: 11px; font-weight: 700; color: var(--text); user-select: none;">
+                                <i class="fas fa-plus-circle" style="margin-right: 6px; color: var(--active);"></i>
+                                Phone/Email & Save to Contacts
                             </summary>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; padding: 10px; background: var(--surface-elevated); border-radius: 8px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
                                 <div class="form-group">
                                     <label for="modalContactPhone">Phone</label>
                                     <input 
@@ -3781,8 +3798,8 @@ tr:hover [data-category-tag] {
                         
                         <!-- First Item (always visible) -->
                         <div class="receipt-items-header" style="border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 8px;">
-                            <div>Description</div>
-                            <div>Amount</div>
+                            <div>Description <span class="required">*</span></div>
+                            <div>Amount <span class="required">*</span></div>
                         </div>
                         
                         <div class="form-row-line-item" style="margin-bottom: 10px;">
@@ -3816,9 +3833,9 @@ tr:hover [data-category-tag] {
                         </div>
 
                         <!-- Total (always visible) -->
-                        <div id="lineItemsTotal" style="display: flex; padding: 10px 14px; background: linear-gradient(135deg, rgba(var(--active-rgb), 0.08), rgba(var(--active-rgb), 0.03)); border: 2px solid rgba(var(--active-rgb), 0.4); border-radius: 10px; font-weight: 800; font-size: 15px; justify-content: space-between; align-items:center; margin-bottom: 10px;">
+                        <div id="lineItemsTotal" style="display: flex; padding: 12px 16px; background: white; border: 2px solid var(--border); border-radius: 10px; font-weight: 800; font-size: 15px; justify-content: space-between; align-items:center; margin-bottom: 10px;">
                             <span style="color: var(--text);">Total</span>
-                            <span id="lineItemsTotalAmount" style="color: var(--active); font-size: 18px; letter-spacing: -0.02em;">$0.00</span>
+                            <span id="lineItemsTotalAmount" style="color: var(--text); font-size: 18px; letter-spacing: -0.02em;">$0.00</span>
                         </div>
 
                         <!-- Additional Items (collapsible) -->
