@@ -2130,8 +2130,9 @@ tr:hover [data-category-tag] {
 .modal-header-left {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     flex: 1;
+    flex-wrap: wrap;
 }
 
 .modal-header {
@@ -2143,13 +2144,13 @@ tr:hover [data-category-tag] {
      --modal-dir-color: #059669;
      --modal-dir-rgb: 5, 150, 105;
      --modal-mode-bg: rgba(0, 0, 0, 0.04);
-     background: rgba(5, 150, 105, 0.025);
+     background: rgba(5, 150, 105, 0.06);
 }
 
 #createTransactionModalContainer[data-direction="out"] {
      --modal-dir-color: #6b7280;
      --modal-dir-rgb: 107, 114, 128;
-     background: rgba(107, 114, 128, 0.025);
+     background: rgba(107, 114, 128, 0.06);
 }
 
  #createTransactionModalContainer[data-mode="quick"] {
@@ -2177,7 +2178,8 @@ tr:hover [data-category-tag] {
      border: 1px solid rgba(0, 0, 0, 0.08);
      gap: 2px;
      height: 36px;
- }
+     flex-shrink: 0;
+}
 
  .modal-mode-toggle input {
      position: absolute;
@@ -2225,25 +2227,6 @@ tr:hover [data-category-tag] {
  #createTransactionModalContainer[data-mode="quick"] .modal-section-title {
      font-size: 11px;
      margin-bottom: 10px;
- }
-
- #createTransactionModalContainer[data-mode="detailed"] .modal-collapsible > summary,
- #createTransactionModalContainer[data-mode="detailed"] .contact-details-toggle > summary {
-     display: none;
- }
-
- #createTransactionModalContainer[data-mode="detailed"] .modal-collapsible {
-     border: 1px solid var(--border);
-     border-radius: 12px;
-     background: white;
-     padding: 16px;
- }
-
- #createTransactionModalContainer[data-mode="detailed"] .contact-details-toggle {
-     background: var(--surface-elevated);
-     border: 1px solid var(--border);
-     border-radius: 10px;
-     padding: 12px;
  }
 
  #createTransactionModalContainer .modal-header {
@@ -2731,6 +2714,7 @@ tr:hover [data-category-tag] {
     flex-direction: column;
     gap: 10px;
     max-width: 420px;
+    flex-shrink: 0;
 }
 
 .cashbox-carousel-controls {
@@ -2805,6 +2789,7 @@ tr:hover [data-category-tag] {
 .modal-direction-primary {
     display: flex;
     gap: 8px;
+    flex-shrink: 0;
 }
 
 .modal-direction-primary input[type="radio"] {
@@ -2921,11 +2906,12 @@ tr:hover [data-category-tag] {
     display: flex;
     align-items: center;
     gap: 8px;
-    height: 64px;
+    height: 36px;
     padding: 0 12px;
     background: var(--surface-elevated);
     border-radius: 10px;
     border: 1px solid var(--border);
+    flex-shrink: 0;
 }
 
 .modal-date-info i {
@@ -3762,7 +3748,7 @@ tr:hover [data-category-tag] {
                                 <i class="fas fa-plus-circle" style="margin-right: 6px; color: var(--active);"></i>
                                 Phone/Email & Save to Contacts
                             </summary>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; padding: 12px; background: white; border: 1px solid var(--border); border-radius: 8px;">
                                 <div class="form-group">
                                     <label for="modalContactPhone">Phone</label>
                                     <input 
