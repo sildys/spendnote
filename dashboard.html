@@ -2688,7 +2688,7 @@ tr:hover [data-category-tag] {
 
 .receipt-items-header {
     display: grid;
-    grid-template-columns: 1fr 200px;
+    grid-template-columns: 1fr 150px;
     gap: 12px;
     padding: 0 4px 8px 4px;
     border-bottom: 2px solid var(--border);
@@ -3253,7 +3253,7 @@ tr:hover [data-category-tag] {
 
 .form-row-line-item {
     display: grid;
-    grid-template-columns: 1fr 200px;
+    grid-template-columns: 1fr 150px;
     gap: 12px;
     margin-bottom: 12px;
 }
@@ -3897,13 +3897,13 @@ tr:hover [data-category-tag] {
                                 <input type="radio" name="modalMode" id="modalModeDetailed" value="detailed">
                                 <label for="modalModeDetailed">Detailed</label>
                             </div>
-                            <div class="form-group" style="margin: 0; min-width: 160px;">
-                                <input type="text" id="modalDateField" class="form-control" readonly style="background: rgba(255,255,255,0.7); cursor: default; color: var(--text-muted); text-align: center;">
+                            <div class="form-group" style="margin: 0; width: 140px;">
+                                <input type="text" id="modalDateField" class="form-control" readonly style="background: rgba(255,255,255,0.7); cursor: default; color: var(--text-muted); text-align: center; font-size: 12px;">
                             </div>
                         </div>
                         
                         <!-- Name + Address row -->
-                        <div class="modal-contact-grid" style="display: grid; grid-template-columns: 3fr 3fr 1fr; gap: 12px;">
+                        <div class="modal-contact-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                             <div class="form-group">
                                 <label for="modalContactName">Name <span class="required">*</span></label>
                                 <input 
@@ -4053,15 +4053,12 @@ tr:hover [data-category-tag] {
                         </div>
                     </details>
 
-                    <div class="form-row" style="margin-top: 8px;">
-                        <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); font-weight: 600; cursor: pointer; user-select: none;">
+                    <!-- ACTIONS -->
+                    <div class="form-actions">
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); font-weight: 600; cursor: pointer; user-select: none; margin-right: auto;">
                             <input type="checkbox" id="modalAddAnother" style="width: 16px; height: 16px;">
                             <span>Add another after saving</span>
                         </label>
-                    </div>
-
-                    <!-- ACTIONS -->
-                    <div class="form-actions">
                         <button type="submit" class="btn btn-blue" name="action" value="done">
                             <i class="fas fa-check"></i>
                             Done
