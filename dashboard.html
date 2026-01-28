@@ -2105,6 +2105,15 @@ tr:hover [data-category-tag] {
      overflow: hidden;
  }
 
+ body.modal-open > *:not(#createTransactionModal) {
+     pointer-events: none;
+     user-select: none;
+ }
+
+ body.modal-open #createTransactionModal {
+     pointer-events: auto;
+ }
+
  .modal-overlay.active {
      display: flex;
  }
@@ -4902,7 +4911,13 @@ tr:hover [data-category-tag] {
         if (modal) {
             modal.addEventListener('click', (e) => {
                 if (isModalSubmitting) return;
-                if (e.target === modal) closeModal();
+                if (e.target === modal) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (modalContainerEl && typeof modalContainerEl.focus === 'function') {
+                        modalContainerEl.focus();
+                    }
+                }
             });
         }
 
