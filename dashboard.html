@@ -4081,6 +4081,8 @@ tr:hover [data-category-tag] {
                                 <input type="text" id="modalDateField" class="form-control" readonly style="background: rgba(255,255,255,0.7); cursor: default; color: var(--text-muted); text-align: center; font-size: 12px;">
                             </div>
                         </div>
+
+                        <input type="hidden" id="modalDate">
                         
                         <div class="modal-contact-grid">
                             <div class="form-group modal-contact-name">
@@ -4740,10 +4742,11 @@ tr:hover [data-category-tag] {
                 const yyyy = now.getFullYear();
                 const mm = String(now.getMonth() + 1).padStart(2, '0');
                 const dd = String(now.getDate()).padStart(2, '0');
-                const hh = String(now.getHours()).padStart(2, '0');
-                const min = String(now.getMinutes()).padStart(2, '0');
-                dateFieldEl.value = `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+                dateFieldEl.value = `${mm}/${dd}/${yyyy}`;
                 dateFieldEl.dataset.fullDate = now.toISOString();
+
+                const dateValueEl = document.getElementById('modalDate');
+                if (dateValueEl) dateValueEl.value = `${yyyy}-${mm}-${dd}`;
             }
             
             // Initialize cash box carousel from real Supabase data
