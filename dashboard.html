@@ -895,9 +895,9 @@
 
         .table-grid {
             display: grid;
-            grid-template-columns: 70px 130px 140px 160px 1fr 110px 130px 80px;
-            gap: 16px;
-            padding: 12px 16px; /* Alacsonyabb (volt: 14px 20px) */
+            grid-template-columns: 65px 115px 130px 150px 1fr 120px 130px 85px;
+            gap: 12px;
+            padding: 12px 16px;
             align-items: center;
             border-bottom: 1px solid var(--border);
             transition: all 0.2s;
@@ -921,15 +921,13 @@
             color: var(--text-muted) !important;
             font-weight: 700 !important;
             text-transform: uppercase !important;
-            letter-spacing: 0.06em !important;
-            background: transparent !important;
-            border-bottom: 1px solid rgba(var(--cashbox-rgb, var(--active-rgb)), 0.15) !important;
+            letter-spacing: 0.05em !important;
+            background: var(--surface) !important;
+            border-bottom: 2px solid var(--border) !important;
             position: sticky;
             top: 0;
             z-index: 10;
-            padding: 12px 16px !important;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            padding: 10px 16px !important;
         }
         .table-header:hover { 
             background: rgba(var(--cashbox-rgb, var(--active-rgb)), 0.03) !important;
@@ -992,10 +990,13 @@
         .cashbox-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-weight: 600;
             font-size: 13px;
             color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .cashbox-badge::before {
             content: '';
@@ -1035,44 +1036,55 @@
         .tx-desc {
             font-size: 13px; 
             font-weight: 500; 
-            color: var(--text-muted); 
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .tx-person {
-            font-size: 14px; 
+            font-size: 13px; 
             color: var(--text); 
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .tx-amount {
-            font-size: 17px;
-            font-weight: 900;
+            font-size: 15px;
+            font-weight: 800;
             text-align: right;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em;
         }
         .tx-amount.in { color: #10b981; }
         .tx-amount.out { color: var(--out); }
         .tx-datetime {
             font-size: 12px;
             color: var(--text);
-            font-weight: 600;
+            font-weight: 500;
             text-align: left;
-            padding-left: 20px;
+            line-height: 1.4;
         }
         .tx-datetime .date {
             display: block;
-            font-weight: 700;
+            font-weight: 600;
+            color: var(--text);
         }
         .tx-datetime .time {
             display: block;
+            font-weight: 500;
             color: var(--text-muted);
+            font-size: 11px;
         }
 
         .tx-action {
-            padding: 8px 14px;
+            padding: 6px 12px;
             background: white;
             color: var(--primary);
-            border: 2px solid var(--primary);
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 700;
+            border: 1.5px solid var(--primary);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
@@ -1080,7 +1092,8 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 5px;
+            white-space: nowrap;
         }
         .tx-action:hover {
             background: rgba(5, 150, 105, 0.08);
