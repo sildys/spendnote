@@ -4510,11 +4510,13 @@ tr:hover [data-category-tag] {
             const mainDescInputEl = document.getElementById('modalDescription');
 
             const isQuick = m === 'quick';
-            const titleText = isQuick ? 'Transaction details' : 'Items';
             const descHeaderText = isQuick ? 'Transaction description' : 'Description';
             const descPlaceholder = isQuick ? 'Transaction description' : 'Item description';
 
-            if (itemsTitleEl) itemsTitleEl.textContent = titleText;
+            if (itemsTitleEl) {
+                itemsTitleEl.textContent = 'Items';
+                itemsTitleEl.style.display = isQuick ? 'none' : '';
+            }
             if (itemsDescHeaderEl) {
                 const required = itemsDescHeaderEl.querySelector('.required');
                 itemsDescHeaderEl.textContent = descHeaderText + ' ';
