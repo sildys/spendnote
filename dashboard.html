@@ -2430,6 +2430,25 @@ tr:hover [data-category-tag] {
     font-size: 14px;
 }
 
+#createTransactionModalContainer .modal-contact-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+#createTransactionModalContainer .modal-contact-details-actions {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+#createTransactionModalContainer .modal-contact-details-actions .add-contact-btn {
+    width: auto;
+    white-space: nowrap;
+    height: 46px;
+    padding: 10px 14px;
+}
+
 #createTransactionModalContainer[data-mode="quick"] .modal-detailed-only {
     display: none !important;
 }
@@ -4004,24 +4023,19 @@ tr:hover [data-category-tag] {
                                     placeholder="Street, City, State"
                                 >
                             </div>
-                            <div class="form-group modal-detailed-only">
-                                <label for="modalContactCompanyId">Other ID / Company ID</label>
-                                <input 
-                                    type="text" 
-                                    id="modalContactCompanyId" 
-                                    class="form-control" 
-                                    placeholder="Company ID"
-                                >
-                            </div>
                         </div>
                         
-                        <!-- Additional Contact Details (Collapsible) -->
-                        <details class="contact-details-toggle modal-detailed-only" id="modalContactDetails" style="margin-top: 12px;">
-                            <summary style="cursor: pointer; font-size: 11px; font-weight: 700; color: var(--text); user-select: none;">
-                                <i class="fas fa-plus-circle" style="margin-right: 6px; color: var(--active);"></i>
-                                Phone/Email & Save to Contacts
-                            </summary>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; padding: 12px; background: white; border: 1px solid var(--border); border-radius: 8px;">
+                        <div class="modal-detailed-only" id="modalContactDetails" style="margin-top: 12px;">
+                            <div class="modal-contact-details-grid">
+                                <div class="form-group">
+                                    <label for="modalContactCompanyId">Other ID / Company ID</label>
+                                    <input 
+                                        type="text" 
+                                        id="modalContactCompanyId" 
+                                        class="form-control" 
+                                        placeholder="Company ID"
+                                    >
+                                </div>
                                 <div class="form-group">
                                     <label for="modalContactPhone">Phone</label>
                                     <input 
@@ -4031,7 +4045,9 @@ tr:hover [data-category-tag] {
                                         placeholder="+1 (555) 123-4567"
                                     >
                                 </div>
-                                <div class="form-group">
+                            </div>
+                            <div class="modal-contact-details-actions" style="margin-top: 12px;">
+                                <div class="form-group" style="flex: 1; margin: 0;">
                                     <label for="modalContactEmail">Email</label>
                                     <input 
                                         type="email" 
@@ -4040,14 +4056,12 @@ tr:hover [data-category-tag] {
                                         placeholder="email@example.com"
                                     >
                                 </div>
-                                <div style="grid-column: 1 / -1;">
-                                    <button type="button" id="modalAddContactBtn" class="add-contact-btn" style="width: 100%;">
-                                        <i class="fas fa-user-plus"></i>
-                                        Save to Contacts
-                                    </button>
-                                </div>
+                                <button type="button" id="modalAddContactBtn" class="add-contact-btn">
+                                    <i class="fas fa-user-plus"></i>
+                                    Save
+                                </button>
                             </div>
-                        </details>
+                        </div>
                         <input type="hidden" id="modalContactId">
                     </div>
 
@@ -4091,28 +4105,18 @@ tr:hover [data-category-tag] {
                             </div>
                         </div>
 
+                        <button type="button" class="add-line-item-btn modal-detailed-only" id="modalExpandItemsBtn" style="width: 100%; margin-bottom: 10px;">
+                            <i class="fas fa-plus-circle"></i>
+                            Add more items
+                        </button>
+
+                        <div class="line-items-container modal-detailed-only" id="modalLineItemsContainer" style="display: none;"></div>
+
                         <!-- Total (always visible) -->
                         <div id="lineItemsTotal" style="display: flex; padding: 12px 16px; background: white; border: 2px solid var(--border); border-radius: 10px; font-weight: 800; font-size: 15px; justify-content: space-between; align-items:center; margin-bottom: 10px;">
                             <span style="color: var(--text);">Total</span>
                             <span id="lineItemsTotalAmount" style="color: var(--text); font-size: 18px; letter-spacing: -0.02em;">$0.00</span>
                         </div>
-
-                        <!-- Additional Items (collapsible) -->
-                        <details class="modal-collapsible modal-detailed-only" id="modalExtraItemsDetails" style="padding: 10px 12px;">
-                            <summary>
-                                <span class="summary-icon">
-                                    <i class="fas fa-plus-circle"></i>
-                                    Add more items
-                                </span>
-                            </summary>
-                            <div class="modal-collapsible-content">
-                                <div class="line-items-container" id="modalLineItemsContainer"></div>
-                                <button type="button" class="add-line-item-btn" id="modalAddLineItemBtn">
-                                    <i class="fas fa-plus"></i>
-                                    Add line item (max 4)
-                                </button>
-                            </div>
-                        </details>
                     </div>
 
                     <!-- Note Section (collapsible) -->
@@ -4393,7 +4397,6 @@ tr:hover [data-category-tag] {
         const modeQuickEl = document.getElementById('modalModeQuick');
         const modeDetailedEl = document.getElementById('modalModeDetailed');
         const contactDetailsEl = document.getElementById('modalContactDetails');
-        const extraItemsDetailsEl = document.getElementById('modalExtraItemsDetails');
         const noteDetailsEl = document.getElementById('modalNoteSection');
 
         let lastModalFocusEl = null;
@@ -4402,7 +4405,8 @@ tr:hover [data-category-tag] {
         let modalLineItemCount = 0;
         const maxModalLineItems = 4;
         const modalLineItemsContainer = document.getElementById('modalLineItemsContainer');
-        const modalAddLineItemBtn = document.getElementById('modalAddLineItemBtn');
+        const modalExpandItemsBtn = document.getElementById('modalExpandItemsBtn');
+        let modalItemsExpanded = false;
 
         function setModalSubmittingState(isSubmitting) {
             isModalSubmitting = Boolean(isSubmitting);
@@ -4524,12 +4528,51 @@ tr:hover [data-category-tag] {
             }
         }
 
-        function ensureExtraLineItems(targetCount) {
-            const btn = document.getElementById('modalAddLineItemBtn');
-            if (!btn) return;
-            if (typeof modalLineItemCount !== 'number') return;
-            while (!btn.disabled && modalLineItemCount < targetCount) {
-                btn.click();
+        function setDetailedItemsExpanded(expanded) {
+            modalItemsExpanded = Boolean(expanded);
+            if (modalLineItemsContainer) {
+                modalLineItemsContainer.style.display = modalItemsExpanded ? '' : 'none';
+                if (!modalItemsExpanded) {
+                    modalLineItemsContainer.innerHTML = '';
+                    modalLineItemCount = 0;
+                }
+            }
+            if (modalExpandItemsBtn) {
+                modalExpandItemsBtn.style.display = modalItemsExpanded ? 'none' : '';
+            }
+            if (typeof updateLineItemsTotal === 'function') updateLineItemsTotal();
+        }
+
+        function renderDetailedExtraItems(count) {
+            if (!modalLineItemsContainer) return;
+            modalLineItemsContainer.innerHTML = '';
+            modalLineItemCount = 0;
+
+            for (let i = 1; i <= count; i++) {
+                modalLineItemCount++;
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'line-item';
+                itemDiv.innerHTML = `
+                    <input 
+                        type="text" 
+                        class="line-item-input" 
+                        placeholder="Item description"
+                        data-item-index="${modalLineItemCount}"
+                    >
+                    <input 
+                        type="number" 
+                        class="line-item-input line-item-amount" 
+                        placeholder="$0.00"
+                        step="0.01"
+                        min="0"
+                        data-amount-index="${modalLineItemCount}"
+                    >
+                `;
+
+                modalLineItemsContainer.appendChild(itemDiv);
+                itemDiv.querySelectorAll('.line-item-amount').forEach(input => {
+                    input.addEventListener('input', updateLineItemsTotal);
+                });
             }
         }
 
@@ -4543,12 +4586,11 @@ tr:hover [data-category-tag] {
                 modeDetailedEl.checked = m === 'detailed';
             }
 
-            if (m === 'detailed') {
-                if (contactDetailsEl) contactDetailsEl.open = true;
-                if (extraItemsDetailsEl) extraItemsDetailsEl.open = true;
-                if (noteDetailsEl) noteDetailsEl.open = true;
-                // 5 item rows total = main row + 4 extras
-                ensureExtraLineItems(4);
+            if (m !== 'detailed') {
+                setDetailedItemsExpanded(false);
+            } else {
+                if (modalExpandItemsBtn) modalExpandItemsBtn.style.display = '';
+                if (modalLineItemsContainer && !modalItemsExpanded) modalLineItemsContainer.style.display = 'none';
             }
 
             const itemsTitleEl = document.getElementById('modalItemsSectionTitle');
@@ -4570,7 +4612,7 @@ tr:hover [data-category-tag] {
             }
             if (mainDescInputEl) mainDescInputEl.placeholder = descPlaceholder;
 
-            const extraDescInputs = Array.from(document.querySelectorAll('#modalLineItemsContainer .line-item-input'));
+            const extraDescInputs = Array.from(document.querySelectorAll('#modalLineItemsContainer .line-item-input:not(.line-item-amount)'));
             extraDescInputs.forEach((el) => {
                 if (el && el.placeholder) el.placeholder = descPlaceholder;
             });
@@ -4635,8 +4677,6 @@ tr:hover [data-category-tag] {
             updateModalModeUI(initialMode, { persist: false });
 
             if (initialMode !== 'detailed') {
-                const extraItemsDetails = document.getElementById('modalExtraItemsDetails');
-                if (extraItemsDetails) extraItemsDetails.open = false;
                 const noteSection = document.getElementById('modalNoteSection');
                 if (noteSection) noteSection.open = false;
             }
@@ -4709,13 +4749,9 @@ tr:hover [data-category-tag] {
             if (lineItemsContainer) {
                 lineItemsContainer.innerHTML = '';
             }
-            if (contactDetailsEl) contactDetailsEl.open = false;
-            const extraItemsDetails = document.getElementById('modalExtraItemsDetails');
-            if (extraItemsDetails) extraItemsDetails.open = false;
+            setDetailedItemsExpanded(false);
             const noteSection = document.getElementById('modalNoteSection');
             if (noteSection) noteSection.open = false;
-            modalLineItemCount = 0;
-            updateModalLineItemsButton();
             if (typeof updateLineItemsTotal === 'function') {
                 updateLineItemsTotal();
             }
@@ -5151,61 +5187,11 @@ tr:hover [data-category-tag] {
             setupSimpleAutocomplete(transactionIdInput, transactionIdDropdown, recentTransactionIds);
         }
 
-        // Receipt-style modal: fields are always visible (no toggle sections)
-
-        // Line items management
-        if (modalAddLineItemBtn && modalLineItemsContainer) modalAddLineItemBtn.addEventListener('click', () => {
-            if (modalLineItemCount >= maxModalLineItems) return;
-            
-            modalLineItemCount++;
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'line-item';
-            itemDiv.innerHTML = `
-                <input 
-                    type="text" 
-                    class="line-item-input" 
-                    placeholder="Item description"
-                    data-item-index="${modalLineItemCount}"
-                >
-                <input 
-                    type="number" 
-                    class="line-item-input line-item-amount" 
-                    placeholder="$0.00"
-                    step="0.01"
-                    min="0"
-                    data-amount-index="${modalLineItemCount}"
-                >
-                <button type="button" class="remove-item-btn" data-remove-index="${modalLineItemCount}">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            
-            modalLineItemsContainer.appendChild(itemDiv);
-            
-            // Remove button
-            itemDiv.querySelector('.remove-item-btn').addEventListener('click', function() {
-                itemDiv.remove();
-                modalLineItemCount--;
-                updateModalLineItemsButton();
-                updateLineItemsTotal();
+        if (modalExpandItemsBtn) {
+            modalExpandItemsBtn.addEventListener('click', () => {
+                renderDetailedExtraItems(maxModalLineItems);
+                setDetailedItemsExpanded(true);
             });
-            
-            // Add input listeners for live total calculation
-            itemDiv.querySelectorAll('.line-item-amount').forEach(input => {
-                input.addEventListener('input', updateLineItemsTotal);
-            });
-            
-            updateModalLineItemsButton();
-            updateLineItemsTotal();
-        });
-
-        function updateModalLineItemsButton() {
-            if (!modalAddLineItemBtn) return;
-            modalAddLineItemBtn.disabled = modalLineItemCount >= maxModalLineItems;
-            modalAddLineItemBtn.innerHTML = `
-                <i class="fas fa-plus"></i>
-                Add line item (${modalLineItemCount}/${maxModalLineItems})
-            `;
         }
 
         function parseModalAmount(value) {
@@ -5457,8 +5443,7 @@ tr:hover [data-category-tag] {
                     if (txIdInput) txIdInput.value = '';
                     if (noteInput) noteInput.value = '';
 
-                    const extraItemsDetails = document.getElementById('modalExtraItemsDetails');
-                    if (extraItemsDetails) extraItemsDetails.open = false;
+                    setDetailedItemsExpanded(false);
                     const noteSection = document.getElementById('modalNoteSection');
                     if (noteSection) noteSection.open = false;
 
@@ -5469,8 +5454,6 @@ tr:hover [data-category-tag] {
 
                     if (lineItemsContainer) {
                         lineItemsContainer.innerHTML = '';
-                        modalLineItemCount = 0;
-                        updateModalLineItemsButton();
                         updateLineItemsTotal();
                     }
 
