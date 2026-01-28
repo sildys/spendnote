@@ -888,14 +888,14 @@
         .table-wrapper {
             max-height: 600px;
             overflow-y: auto;
-            overflow-x: hidden;
+            overflow-x: auto;
             position: relative;
             width: 100%;
         }
 
         .table-grid {
             display: grid;
-            grid-template-columns: 70px 130px 140px 180px 200px 130px 160px 90px;
+            grid-template-columns: 72px 150px minmax(130px, 1.1fr) minmax(130px, 1.1fr) minmax(220px, 2fr) 140px minmax(150px, 1.2fr) 100px;
             gap: 16px;
             padding: 14px 20px;
             align-items: center;
@@ -904,6 +904,17 @@
             position: relative;
             width: 100%;
             box-sizing: border-box;
+        }
+        .table-grid > div,
+        .table-grid > a {
+            min-width: 0;
+        }
+        .table-grid > :nth-child(6) {
+            justify-self: end;
+            text-align: right;
+        }
+        .table-grid > :nth-child(8) {
+            justify-self: end;
         }
         /* Row hover/focus uses cashbox color */
         .table-grid:not(.table-header):hover {
