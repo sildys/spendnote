@@ -4007,11 +4007,11 @@ tr:hover [data-category-tag] {
 
                     <!-- Items Section -->
                     <div class="modal-section" style="padding: 12px;">
-                        <div class="modal-section-title">Items</div>
+                        <div class="modal-section-title" id="modalItemsSectionTitle">Items</div>
                         
                         <!-- First Item (always visible) -->
                         <div class="receipt-items-header" style="border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 8px;">
-                            <div>Description <span class="required">*</span></div>
+                            <div id="modalItemsDescriptionHeader">Description <span class="required">*</span></div>
                             <div>Amount <span class="required">*</span></div>
                         </div>
                         
@@ -4504,6 +4504,28 @@ tr:hover [data-category-tag] {
                 // 5 item rows total = main row + 4 extras
                 ensureExtraLineItems(4);
             }
+
+            const itemsTitleEl = document.getElementById('modalItemsSectionTitle');
+            const itemsDescHeaderEl = document.getElementById('modalItemsDescriptionHeader');
+            const mainDescInputEl = document.getElementById('modalDescription');
+
+            const isQuick = m === 'quick';
+            const titleText = isQuick ? 'Transaction details' : 'Items';
+            const descHeaderText = isQuick ? 'Transaction description' : 'Description';
+            const descPlaceholder = isQuick ? 'Transaction description' : 'Item description';
+
+            if (itemsTitleEl) itemsTitleEl.textContent = titleText;
+            if (itemsDescHeaderEl) {
+                const required = itemsDescHeaderEl.querySelector('.required');
+                itemsDescHeaderEl.textContent = descHeaderText + ' ';
+                if (required) itemsDescHeaderEl.appendChild(required);
+            }
+            if (mainDescInputEl) mainDescInputEl.placeholder = descPlaceholder;
+
+            const extraDescInputs = Array.from(document.querySelectorAll('#modalLineItemsContainer .line-item-input'));
+            extraDescInputs.forEach((el) => {
+                if (el && el.placeholder) el.placeholder = descPlaceholder;
+            });
 
             if (persist) storeModalMode(m);
             if (typeof updateLineItemsTotal === 'function') updateLineItemsTotal();
