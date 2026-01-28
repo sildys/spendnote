@@ -1613,6 +1613,14 @@
                     opt.classList.remove('selected');
                 });
                 this.classList.add('selected');
+
+                const color = this.dataset.color;
+                if (color) {
+                    document.documentElement.style.setProperty('--active', color);
+                    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(color).trim());
+                    const rgb = m ? `${parseInt(m[1], 16)}, ${parseInt(m[2], 16)}, ${parseInt(m[3], 16)}` : '5, 150, 105';
+                    document.documentElement.style.setProperty('--active-rgb', rgb);
+                }
             });
         });
 
