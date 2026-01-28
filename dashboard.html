@@ -2162,11 +2162,11 @@ tr:hover [data-category-tag] {
     position: relative;
 }
 
-/* Watermark - grouped with cashbox selector */
-.modal-header-right::after {
+/* Watermark - behind cashbox selector, not overlapping */
+.modal-header-right::before {
     content: "IN";
     position: absolute;
-    right: 54px;
+    right: 240px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 64px;
@@ -2175,9 +2175,10 @@ tr:hover [data-category-tag] {
     color: rgba(var(--active-rgb), 0.15);
     pointer-events: none;
     user-select: none;
+    z-index: 0;
 }
 
-#createTransactionModalContainer[data-direction="out"] .modal-header-right::after {
+#createTransactionModalContainer[data-direction="out"] .modal-header-right::before {
     content: "OUT";
 }
 
