@@ -2448,7 +2448,7 @@ tr:hover [data-category-tag] {
 
 #createTransactionModalContainer .receipt-items-header {
     border-bottom-color: rgba(var(--modal-dir-rgb), 0.2);
-    grid-template-columns: 1fr 220px;
+    grid-template-columns: minmax(0, 1fr) 260px !important;
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0;
@@ -2457,7 +2457,7 @@ tr:hover [data-category-tag] {
 }
 
 #createTransactionModalContainer .form-row-line-item {
-    grid-template-columns: 1fr 220px;
+    grid-template-columns: minmax(0, 1fr) 260px !important;
 }
 
 #createTransactionModalContainer #lineItemsTotal {
