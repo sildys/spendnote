@@ -895,9 +895,9 @@
 
         .table-grid {
             display: grid;
-            grid-template-columns: 65px 115px 130px 150px 1fr 120px 130px 85px;
-            gap: 12px;
-            padding: 12px 16px;
+            grid-template-columns: 70px 130px 140px 180px 200px 130px 160px 90px;
+            gap: 16px;
+            padding: 14px 20px;
             align-items: center;
             border-bottom: 1px solid var(--border);
             transition: all 0.2s;
@@ -917,17 +917,17 @@
         }
         .table-grid:hover .row-tooltip { opacity: 1; }
         .table-header {
-            font-size: 11px !important;
+            font-size: 12px !important;
             color: var(--text-muted) !important;
-            font-weight: 700 !important;
+            font-weight: 600 !important;
             text-transform: uppercase !important;
-            letter-spacing: 0.05em !important;
+            letter-spacing: 0.04em !important;
             background: var(--surface) !important;
             border-bottom: 2px solid var(--border) !important;
             position: sticky;
             top: 0;
             z-index: 10;
-            padding: 10px 16px !important;
+            padding: 14px 20px !important;
         }
         .table-header:hover { 
             background: rgba(var(--cashbox-rgb, var(--active-rgb)), 0.03) !important;
@@ -985,14 +985,14 @@
         
         /* Cash Box badge */
         .tx-cashbox {
-            font-size: 13px;
+            font-size: 14px;
         }
         .cashbox-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text);
             white-space: nowrap;
             overflow: hidden;
@@ -1034,7 +1034,7 @@
             font-family: monospace;
         }
         .tx-desc {
-            font-size: 13px; 
+            font-size: 14px; 
             font-weight: 500; 
             color: var(--text-muted);
             white-space: nowrap;
@@ -1042,7 +1042,7 @@
             text-overflow: ellipsis;
         }
         .tx-person {
-            font-size: 13px; 
+            font-size: 14px; 
             color: var(--text); 
             font-weight: 600;
             white-space: nowrap;
@@ -1050,20 +1050,19 @@
             text-overflow: ellipsis;
         }
         .tx-amount {
-            font-size: 15px;
-            font-weight: 800;
+            font-size: 16px;
+            font-weight: 700;
             text-align: right;
             font-variant-numeric: tabular-nums;
-            letter-spacing: -0.02em;
         }
         .tx-amount.in { color: #10b981; }
         .tx-amount.out { color: var(--out); }
         .tx-datetime {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text);
             font-weight: 500;
             text-align: left;
-            line-height: 1.4;
+            line-height: 1.5;
         }
         .tx-datetime .date {
             display: block;
@@ -1074,7 +1073,7 @@
             display: block;
             font-weight: 500;
             color: var(--text-muted);
-            font-size: 11px;
+            font-size: 12px;
         }
 
         .tx-action {
