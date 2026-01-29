@@ -227,6 +227,15 @@
         });
     }
 
+    function renderErrorRow(tbody, message) {
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        const tr = document.createElement('tr');
+        const text = message ? String(message) : 'Failed to load transactions.';
+        tr.innerHTML = `<td colspan="10" style="padding: 24px 10px; text-align: center; color: var(--text-muted); font-weight: 700;">${text}</td>`;
+        tbody.appendChild(tr);
+    }
+
     function updateStatsFromList(list) {
         const elTotal = qs('#statTotalTransactions');
         const elIn = qs('#statTotalIn');
@@ -393,8 +402,9 @@
                 return tx;
             });
         } catch (e) {
-            if (tbody) tbody.innerHTML = '';
+            if (window.SpendNoteDebug) console.error('Failed to load transaction history:', e);
             updateStatsFromList([]);
+            renderErrorRow(tbody, `Failed to load transactions: ${e && e.message ? e.message : e}`);
             return;
         }
 
