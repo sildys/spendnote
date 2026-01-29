@@ -50,68 +50,19 @@
     }
 
     function getDisplayId(tx) {
-        // Use SN format if available (generated client-side)
-        if (tx?._snId) return tx._snId;
+        // Use Supabase sequence numbers if available (SN{cash_box_seq}-{tx_seq})
+        const cbSeq = tx?.cash_box_sequence;
+        const txSeq = tx?.tx_sequence_in_box;
+        if (cbSeq && txSeq) {
+            const txSeqStr = String(txSeq).padStart(3, '0');
+            return `SN${cbSeq}-${txSeqStr}`;
+        }
         // Fallback to receipt_number or truncated UUID
         const receipt = safeText(tx?.receipt_number, '');
         if (receipt) return receipt;
         const id = safeText(tx?.id, '');
         if (!id) return '—';
         return id.length > 10 ? `${id.slice(0, 8)}…` : id;
-    }
-
-    // Generate SN sequence numbers for cash boxes and transactions
-    function assignSnSequences(cashBoxes, transactions) {
-        // Sort cash boxes by created_at to assign stable sequence
-        const sortedBoxes = [...cashBoxes].sort((a, b) => {
-            const aTime = a?.created_at ? new Date(a.created_at).getTime() : 0;
-            const bTime = b?.created_at ? new Date(b.created_at).getTime() : 0;
-            return aTime - bTime;
-        });
-
-        // Map cash box ID to SN sequence number
-        const cbSnMap = new Map();
-        sortedBoxes.forEach((cb, idx) => {
-            if (cb && cb.id) {
-                const snSeq = idx + 1;
-                cbSnMap.set(String(cb.id), snSeq);
-                cb._snSeq = snSeq;
-                cb._snId = `SN${snSeq}`;
-            }
-        });
-
-        // Group transactions by cash box
-        const txByCashBox = new Map();
-        transactions.forEach((tx) => {
-            const cbId = String(tx?.cash_box_id || '');
-            if (!txByCashBox.has(cbId)) {
-                txByCashBox.set(cbId, []);
-            }
-            txByCashBox.get(cbId).push(tx);
-        });
-
-        // Sort each group by created_at and assign sequence within cash box
-        txByCashBox.forEach((txList, cbId) => {
-            txList.sort((a, b) => {
-                const aTime = a?.created_at ? new Date(a.created_at).getTime() : 0;
-                const bTime = b?.created_at ? new Date(b.created_at).getTime() : 0;
-                return aTime - bTime;
-            });
-
-            const cbSnSeq = cbSnMap.get(cbId) || 0;
-            // Dynamic padding: at least 3 digits, grows if needed
-            const maxSeq = txList.length;
-            const padLength = Math.max(3, String(maxSeq).length);
-
-            txList.forEach((tx, idx) => {
-                const txSeq = String(idx + 1).padStart(padLength, '0');
-                tx._snId = `SN${cbSnSeq}-${txSeq}`;
-                tx._cbSnSeq = cbSnSeq;
-                tx._txSeqInBox = idx + 1;
-            });
-        });
-
-        return { cbSnMap, txByCashBox };
     }
 
     function ensureCashBoxSelectOptions(selectEl, cashBoxes, selectedId) {
@@ -506,7 +457,7 @@
             ensureCurrencySelectOptions(currencySelect, state.cashBoxes);
 
             console.log('[TxHistory] Fetching transactions...');
-            const txSelect = 'id, cash_box_id, type, amount, description, notes, receipt_number, transaction_date, created_at, contact_id, contact_name, created_by_user_id, created_by_user_name';
+            const txSelect = 'id, cash_box_id, type, amount, description, notes, receipt_number, transaction_date, created_at, contact_id, contact_name, created_by_user_id, created_by_user_name, cash_box_sequence, tx_sequence_in_box';
             state.allTx = await window.db.transactions.getAll({ select: txSelect });
             console.log('[TxHistory] Got', (state.allTx || []).length, 'transactions');
 
@@ -518,9 +469,7 @@
                 return tx;
             });
 
-            // Assign SN sequence numbers (SN1-001, SN2-001, etc.)
-            assignSnSequences(state.cashBoxes, state.allTx);
-            console.log('[TxHistory] SN sequences assigned');
+            console.log('[TxHistory] Data loaded, using Supabase sequence numbers');
         } catch (e) {
             console.error('[TxHistory] Failed to load:', e);
             updateStatsFromList([], null, [], []);
