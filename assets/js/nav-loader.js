@@ -2,7 +2,7 @@
 // This eliminates duplicate nav HTML across 10+ files
 
 const NAV_HTML = `
-<nav class="top-nav">
+<nav class="site-nav">
     <div class="nav-container">
         <a href="dashboard.html" class="nav-logo">
             <svg class="nav-logo-icon" width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
