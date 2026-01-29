@@ -243,6 +243,7 @@
             const tr = document.createElement('tr');
             tr.style.setProperty('--cashbox-rgb', cashBoxRgb);
             tr.style.setProperty('--cashbox-color', cashBoxColor);
+            tr.style.borderLeft = `4px solid ${cashBoxColor}`;
 
             const displayId = getDisplayId(tx);
             const contactName = safeText(tx.contact?.name || tx.contact_name, '—');
