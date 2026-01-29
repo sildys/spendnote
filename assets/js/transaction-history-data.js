@@ -187,6 +187,13 @@
         if (!tbody) return;
         tbody.innerHTML = '';
 
+        if (!txs || txs.length === 0) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td colspan="10" style="padding: 24px 10px; text-align: center; color: var(--text-muted); font-weight: 600;">No transactions yet.</td>';
+            tbody.appendChild(tr);
+            return;
+        }
+
         txs.forEach((tx) => {
             const t = safeText(tx.type, '').toLowerCase();
             const isIncome = t === 'income';
