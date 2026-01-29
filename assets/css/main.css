@@ -395,7 +395,7 @@ label {
 .app-footer-container {
     max-width: var(--max-width-page);
     margin: 0 auto;
-    padding: 0 var(--space-xl);
+    padding: 0 var(--page-gutter);
 }
 
 .app-footer-top {
@@ -414,7 +414,7 @@ label {
 .app-footer-brand-logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 4px;
     text-decoration: none;
     margin-bottom: var(--space-md);
 }
