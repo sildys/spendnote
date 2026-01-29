@@ -195,7 +195,7 @@ body {
 /* Cash-related nav items (Dashboard, Cash Boxes, Transactions) - Dynamic color via JS */
 .site-nav .nav-links a.nav-cash-item {
     color: var(--active);
-    font-weight: 700;
+    font-weight: 600;
     text-decoration: none;
     transition: all 0.2s ease;
 }
