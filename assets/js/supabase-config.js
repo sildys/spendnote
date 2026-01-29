@@ -237,7 +237,7 @@ var db = {
         },
 
         async create(cashBox) {
-            console.log('🔍 Attempting to create cash box via RPC:', cashBox);
+            if (window.SpendNoteDebug) console.log('Creating cash box via RPC:', cashBox);
             
             // Use RPC function to bypass schema cache issue
             const { data, error } = await supabaseClient.rpc('create_cash_box', {
@@ -249,14 +249,14 @@ var db = {
                 p_current_balance: cashBox.current_balance || 0
             });
             
-            console.log('📦 RPC result:', { data, error });
+            if (window.SpendNoteDebug) console.log('RPC result:', { data, error });
             
             if (error) {
                 console.error('Error creating cash box:', error);
                 return { success: false, error: error.message };
             }
             
-            console.log('✅ Cash box created with ID:', data);
+            if (window.SpendNoteDebug) console.log('Cash box created with ID:', data);
             return { success: true, data: { ...cashBox, id: data } };
         },
 
