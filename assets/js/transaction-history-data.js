@@ -85,8 +85,33 @@
         }
     }
 
+    function ensureCurrencySelectOptions(selectEl, cashBoxes) {
+        if (!selectEl) return;
+
+        // Collect unique currencies from cash boxes
+        const currencies = new Set();
+        cashBoxes.forEach((cb) => {
+            if (cb && cb.currency) currencies.add(cb.currency);
+        });
+
+        selectEl.innerHTML = '';
+        const optAll = document.createElement('option');
+        optAll.value = '';
+        optAll.textContent = 'All Currencies';
+        selectEl.appendChild(optAll);
+
+        // Sort currencies alphabetically
+        [...currencies].sort().forEach((currency) => {
+            const opt = document.createElement('option');
+            opt.value = currency;
+            opt.textContent = currency;
+            selectEl.appendChild(opt);
+        });
+    }
+
     function getFiltersFromUi(state) {
         const cashBoxId = safeText(qs('#filterRegister')?.value, '');
+        const currency = safeText(qs('#filterCurrency')?.value, '');
         const contactNameQuery = safeText(qs('#filterContact')?.value, '').toLowerCase();
         const contactIdQuery = safeText(qs('#filterContactId')?.value, '').toLowerCase();
         const recorderQuery = safeText(qs('#filterRecorder')?.value, '').toLowerCase();
@@ -99,6 +124,7 @@
 
         return {
             cashBoxId: cashBoxId || null,
+            currency: currency || null,
             direction: state.direction,
             contactNameQuery,
             contactIdQuery,
@@ -113,6 +139,11 @@
     function applyFilters(allTx, filters) {
         return allTx.filter((tx) => {
             if (filters.cashBoxId && String(tx.cash_box_id || tx.cash_box?.id || '') !== String(filters.cashBoxId)) {
+                return false;
+            }
+
+            // Filter by currency (cash box's currency)
+            if (filters.currency && tx.cash_box?.currency !== filters.currency) {
                 return false;
             }
 
@@ -236,7 +267,7 @@
         tbody.appendChild(tr);
     }
 
-    function updateStatsFromList(list, selectedCashBox) {
+    function updateStatsFromList(list, selectedCurrency) {
         const elTotal = qs('#statTotalTransactions');
         const elIn = qs('#statTotalIn');
         const elOut = qs('#statTotalOut');
@@ -259,12 +290,11 @@
         if (elTotal) elTotal.textContent = String(list.length);
         if (elBoxes) elBoxes.textContent = String(cashBoxIds.size);
 
-        // Only show monetary totals if a single cash box is selected (same currency)
-        if (selectedCashBox && selectedCashBox.currency) {
-            const currency = selectedCashBox.currency;
-            if (elIn) elIn.textContent = formatCurrency(totalIn, currency);
-            if (elOut) elOut.textContent = formatCurrency(totalOut, currency);
-            if (elNet) elNet.textContent = formatCurrency(totalIn - totalOut, currency);
+        // Only show monetary totals if currency filter is active (same currency for all)
+        if (selectedCurrency) {
+            if (elIn) elIn.textContent = formatCurrency(totalIn, selectedCurrency);
+            if (elOut) elOut.textContent = formatCurrency(totalOut, selectedCurrency);
+            if (elNet) elNet.textContent = formatCurrency(totalIn - totalOut, selectedCurrency);
         } else {
             // Multiple currencies - can't sum, show placeholder
             if (elIn) elIn.textContent = '—';
@@ -418,6 +448,10 @@
             // Only pre-select cash box if explicitly passed via URL (e.g. from cash box detail page)
             ensureCashBoxSelectOptions(cashBoxSelect, state.cashBoxes, urlCashBoxId || null);
 
+            // Populate currency filter dropdown
+            const currencySelect = qs('#filterCurrency');
+            ensureCurrencySelectOptions(currencySelect, state.cashBoxes);
+
             console.log('[TxHistory] Fetching transactions...');
             const txSelect = 'id, cash_box_id, type, amount, description, notes, receipt_number, transaction_date, created_at, contact_id, contact_name, created_by_user_id, created_by_user_name';
             state.allTx = await window.db.transactions.getAll({ select: txSelect });
@@ -538,9 +572,8 @@
             console.log('[TxHistory] after filter:', visible.length);
             visible = sortTransactions(visible, state.sort);
 
-            // Pass selected cash box for currency-aware stats (null if "All Cash Boxes")
-            const selectedCashBox = filters.cashBoxId ? cashBoxById.get(String(filters.cashBoxId)) : null;
-            updateStatsFromList(visible, selectedCashBox);
+            // Pass selected currency for stats (null if "All Currencies" - no monetary totals)
+            updateStatsFromList(visible, filters.currency);
 
             const totalCount = visible.length;
             const startIdx = (state.pagination.page - 1) * state.pagination.perPage;
