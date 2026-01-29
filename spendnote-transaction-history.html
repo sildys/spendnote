@@ -107,7 +107,7 @@
 
         .filter-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(6, minmax(0, 1fr));
             gap: 16px;
             margin-bottom: 20px;
         }
@@ -151,18 +151,43 @@
         }
 
         .amount-range {
-            display: flex;
+            display: grid;
             align-items: center;
+            grid-template-columns: 1fr auto 1fr;
             gap: 8px;
+            width: 100%;
         }
 
         .amount-range input {
-            flex: 1;
+            min-width: 0;
         }
 
         .amount-range span {
             color: var(--text-muted);
             font-weight: 600;
+        }
+
+        #filterGroupTxId {
+            grid-column: span 1;
+        }
+
+        #filterGroupCashBox,
+        #filterGroupContact {
+            grid-column: span 2;
+        }
+
+        #filterGroupCurrency {
+            grid-column: span 1;
+        }
+
+        #filterGroupCurrency .filter-select {
+            width: 160px;
+        }
+
+        #filterGroupDateRange,
+        #filterGroupAmountRange,
+        #filterGroupCreatedBy {
+            grid-column: span 2;
         }
 
         .filter-actions {
@@ -761,7 +786,7 @@
             </div>
             <div class="filter-panel" id="filterPanel" style="display: none;">
                 <div class="filter-grid">
-                    <div class="filter-group">
+                    <div class="filter-group" id="filterGroupTxId">
                         <label class="filter-label"><i class="fas fa-hashtag"></i> ID</label>
                         <input type="text" class="filter-input" placeholder="e.g., SN1-001" id="filterTxId">
                     </div>
@@ -781,15 +806,15 @@
                         <input type="text" class="filter-input" placeholder="Search by name or ID..." id="filterContactQuery" list="contactDatalist">
                         <datalist id="contactDatalist"></datalist>
                     </div>
-                    <div class="filter-group">
+                    <div class="filter-group" id="filterGroupDateRange">
                         <label class="filter-label"><i class="fas fa-calendar"></i> Date Range</label>
                         <div class="amount-range">
-                            <input type="date" class="filter-input" id="filterDateFrom">
+                            <input type="date" class="filter-input" id="filterDateFrom" lang="hu">
                             <span>–</span>
-                            <input type="date" class="filter-input" id="filterDateTo">
+                            <input type="date" class="filter-input" id="filterDateTo" lang="hu">
                         </div>
                     </div>
-                    <div class="filter-group">
+                    <div class="filter-group" id="filterGroupAmountRange">
                         <label class="filter-label"><i class="fas fa-dollar-sign"></i> Amount Range</label>
                         <div class="amount-range">
                             <input type="number" class="filter-input" placeholder="Min" id="filterAmountMin" step="0.01">
@@ -1320,6 +1345,6 @@ Showing 0-0 of 0
     <script src="assets/js/nav-loader.js?v=7"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=20"></script>
-    <script src="assets/js/transaction-history-data.js?v=27"></script>
+    <script src="assets/js/transaction-history-data.js?v=28"></script>
 </body>
 </html>
