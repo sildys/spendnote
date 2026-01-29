@@ -7,16 +7,15 @@ const NAV_HTML = `
         <a href="dashboard.html" class="nav-logo">
             <svg class="nav-logo-icon" width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#nav-logo-gradient)"/>
-                <circle cx="17" cy="14" r="3" fill="white"/>
-                <rect x="23" y="12" width="10" height="2" rx="1" fill="white" opacity="0.9"/>
-                <rect x="23" y="16" width="6" height="2" rx="1" fill="white" opacity="0.7"/>
-                <rect x="14" y="22" width="20" height="2" rx="1" fill="white" opacity="0.5"/>
-                <rect x="14" y="26" width="20" height="2" rx="1" fill="white" opacity="0.5"/>
-                <rect x="14" y="30" width="14" height="2" rx="1" fill="white" opacity="0.5"/>
+                <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.15"/>
+                <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
                 <defs>
-                    <linearGradient id="nav-logo-gradient" x1="10" y1="4" x2="38" y2="40" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="var(--active, #059669)"/>
-                        <stop offset="1" stop-color="var(--active, #059669)"/>
+                    <linearGradient id="nav-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#059669"/>
+                        <stop offset="100%" stop-color="#10b981"/>
                     </linearGradient>
                 </defs>
             </svg>
@@ -24,7 +23,7 @@ const NAV_HTML = `
         </a>
         <ul class="nav-links">
             <li><a href="dashboard.html" class="nav-cash-item" data-page="dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-            <li><a href="spendnote-cash-box-list.html" class="nav-cash-item" data-page="cash-boxes"><i class="fas fa-cash-register"></i> Cash Boxes</a></li>
+            <li><a href="spendnote-cash-box-list.html" class="nav-cash-item" data-page="cash-boxes"><i class="fas fa-box-open"></i> Cash Boxes</a></li>
             <li><a href="spendnote-transaction-history.html" id="navTransactions" class="nav-cash-item" data-page="transactions"><i class="fas fa-exchange-alt"></i> Transactions</a></li>
             <li><a href="spendnote-contact-list.html" class="nav-cash-item" data-page="contacts"><i class="fas fa-address-book"></i> Contacts</a></li>
             <li>
