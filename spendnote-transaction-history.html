@@ -413,6 +413,56 @@
             min-width: 60px;
         }
 
+        .tx-type-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 12px;
+            border: 2px solid;
+            background: white;
+            font-weight: 800;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            width: 84px;
+            box-sizing: border-box;
+        }
+
+        .tx-type-pill.in {
+            --quick-accent: #059669;
+            color: var(--quick-accent);
+            border-color: var(--quick-accent);
+        }
+
+        .tx-type-pill.out {
+            --quick-accent: var(--out);
+            color: var(--quick-accent);
+            border-color: var(--quick-accent);
+        }
+
+        .tx-type-pill .quick-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--quick-accent);
+            color: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+            flex-shrink: 0;
+        }
+
+        .tx-type-pill .quick-icon i {
+            font-size: 10px;
+        }
+
+        .tx-type-pill .quick-label {
+            font-weight: 900;
+        }
+
         .tx-direction.in {
             background: rgba(16,185,129,0.15);
             color: #059669;
@@ -1257,6 +1307,6 @@ Showing 0-0 of 0
     <script src="assets/js/nav-loader.js?v=7"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=20"></script>
-    <script src="assets/js/transaction-history-data.js?v=18"></script>
+    <script src="assets/js/transaction-history-data.js?v=19"></script>
 </body>
 </html>

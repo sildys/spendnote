@@ -252,7 +252,12 @@
 
             tr.innerHTML = `
                 <td><input type="checkbox" class="row-checkbox" data-tx-id="${safeText(tx.id, '')}"></td>
-                <td><span class="tx-direction ${isIncome ? 'in' : 'out'}">${isIncome ? 'IN' : 'OUT'}</span></td>
+                <td>
+                    <div class="tx-type-pill ${isIncome ? 'in' : 'out'}">
+                        <span class="quick-icon"><i class="fas ${isIncome ? 'fa-arrow-down' : 'fa-arrow-up'}"></i></span>
+                        <span class="quick-label">${isIncome ? 'IN' : 'OUT'}</span>
+                    </div>
+                </td>
                 <td><span class="tx-id">${displayId}</span></td>
                 <td><span class="tx-date">${formatDateShort(tx.transaction_date || tx.created_at)}</span></td>
                 <td><span class="cashbox-badge" style="--cb-color: ${cashBoxColor};">${safeText(tx.cash_box?.name, 'Unknown')}</span></td>

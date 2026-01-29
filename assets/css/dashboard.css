@@ -975,7 +975,57 @@
             background: rgba(var(--out-rgb), 0.10);
             border-color: rgba(var(--out-rgb), 0.18);
         }
-        
+
+        .tx-type-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 12px;
+            border: 2px solid;
+            background: white;
+            font-weight: 800;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            width: 84px;
+            box-sizing: border-box;
+        }
+
+        .tx-type-pill.in {
+            --quick-accent: #059669;
+            color: var(--quick-accent);
+            border-color: var(--quick-accent);
+        }
+
+        .tx-type-pill.out {
+            --quick-accent: var(--out);
+            color: var(--quick-accent);
+            border-color: var(--quick-accent);
+        }
+
+        .tx-type-pill .quick-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--quick-accent);
+            color: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+            flex-shrink: 0;
+        }
+
+        .tx-type-pill .quick-icon i {
+            font-size: 10px;
+        }
+
+        .tx-type-pill .quick-label {
+            font-weight: 900;
+        }
+
         /* Cash Box badge */
         .tx-cashbox {
             font-size: 14px;
@@ -3893,4 +3943,4 @@ tr:hover [data-category-tag] {
     color: var(--text-muted);
     font-style: italic;
 }
-
+

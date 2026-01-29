@@ -340,7 +340,10 @@ function loadRecentTransactionsSync(transactions) {
                 const avatarUrl = `data:image/svg+xml,${encodeURIComponent(svg)}`;
                 const rowHTML = `
                     <div class="table-grid" tabindex="0" style="--cashbox-rgb: ${cashBoxRgb}; --cashbox-color: ${cashBoxColor};">
-                        <div class="tx-type ${isIncome ? 'in' : 'out'}">${isIncome ? 'IN' : 'OUT'}</div>
+                        <div class="tx-type-pill ${isIncome ? 'in' : 'out'}">
+                            <span class="quick-icon"><i class="fas ${isIncome ? 'fa-arrow-down' : 'fa-arrow-up'}"></i></span>
+                            <span class="quick-label">${isIncome ? 'IN' : 'OUT'}</span>
+                        </div>
                         <div class="tx-datetime">
                             <span class="date">${formattedDate}</span>
                             <span class="time">${formattedTime}</span>
