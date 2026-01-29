@@ -483,6 +483,15 @@
             font-variant-numeric: tabular-nums;
         }
 
+        th.col-amount {
+            text-align: right;
+        }
+
+        th.col-action,
+        #transactionsTable tbody td:last-child {
+            text-align: center;
+        }
+
         .tx-amount.in {
             color: var(--primary);
         }
@@ -840,9 +849,9 @@
                             <th class="sortable">Cash Box</th>
                             <th class="sortable">Contact</th>
                             <th class="sortable">Contact ID</th>
-                            <th class="sortable">Amount</th>
+                            <th class="sortable col-amount">Amount</th>
                             <th class="sortable">Created by</th>
-                            <th style="width: 40px;"></th>
+                            <th class="col-action" style="width: 90px;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1313,6 +1322,6 @@ Showing 0-0 of 0
     <script src="assets/js/nav-loader.js?v=7"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=20"></script>
-    <script src="assets/js/transaction-history-data.js?v=23"></script>
+    <script src="assets/js/transaction-history-data.js?v=24"></script>
 </body>
 </html>
