@@ -340,11 +340,21 @@
     }
 
     async function loadTransactionsPage() {
+        const tbody = qs('#transactionsTable tbody');
         if (!window.db || !window.db.transactions || !window.db.cashBoxes) {
+            const tries = (window.__txHistoryInitTries || 0) + 1;
+            window.__txHistoryInitTries = tries;
+
+            if (tries < 20) {
+                setTimeout(loadTransactionsPage, 150);
+                return;
+            }
+
+            updateStatsFromList([]);
+            renderErrorRow(tbody, 'App database not initialized.');
             return;
         }
 
-        const tbody = qs('#transactionsTable tbody');
         const cashBoxSelect = qs('#filterRegister');
         const pagination = qs('.pagination-controls');
         const paginationInfo = qs('.pagination-info');
