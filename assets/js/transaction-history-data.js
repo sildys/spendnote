@@ -105,6 +105,96 @@
         }
     }
 
+    function ensureCashBoxDatalist(datalistEl, cashBoxes) {
+        if (!datalistEl) return;
+        datalistEl.innerHTML = '';
+
+        (cashBoxes || []).forEach((box) => {
+            if (!box) return;
+            const opt = document.createElement('option');
+            const name = safeText(box.name, '');
+            const id = safeText(box.id, '');
+            opt.value = name || id;
+            opt.label = id ? `${name || id} (${id})` : (name || id);
+            datalistEl.appendChild(opt);
+        });
+    }
+
+    function ensureContactDatalist(datalistEl, txs) {
+        if (!datalistEl) return;
+        datalistEl.innerHTML = '';
+
+        const seen = new Set();
+        (txs || []).forEach((tx) => {
+            const name = safeText(tx?.contact?.name || tx?.contact_name, '');
+            const id = safeText(tx?.contact_id, '');
+            if (!name && !id) return;
+
+            const label = id ? `${name || id} (${id})` : (name || id);
+            const value = name || id;
+            const key = `${value}||${label}`;
+            if (seen.has(key)) return;
+            seen.add(key);
+
+            const opt = document.createElement('option');
+            opt.value = value;
+            opt.label = label;
+            datalistEl.appendChild(opt);
+        });
+    }
+
+    function getCashBoxIdFromQuery(query, cashBoxes) {
+        const q = safeText(query, '').trim().toLowerCase();
+        if (!q) return null;
+
+        // Exact ID match
+        const exactId = (cashBoxes || []).find((b) => safeText(b?.id, '').toLowerCase() === q);
+        if (exactId && exactId.id) return exactId.id;
+
+        // Exact name match
+        const exactName = (cashBoxes || []).find((b) => safeText(b?.name, '').trim().toLowerCase() === q);
+        if (exactName && exactName.id) return exactName.id;
+
+        // Partial match: name contains query
+        const partial = (cashBoxes || []).find((b) => safeText(b?.name, '').toLowerCase().includes(q));
+        if (partial && partial.id) return partial.id;
+
+        return null;
+    }
+
+    function ensureCreatedBySelectOptions(selectEl, txs) {
+        if (!selectEl) return [];
+
+        const map = new Map();
+        (txs || []).forEach((tx) => {
+            const id = safeText(tx?.created_by_user_id || tx?.created_by, '');
+            const name = safeText(tx?.created_by_user_name || tx?.created_by, '');
+            if (!id && !name) return;
+            const key = id || name;
+            if (!map.has(key)) map.set(key, name || id);
+        });
+
+        const entries = Array.from(map.entries()).map(([id, name]) => ({ id, name }));
+        entries.sort((a, b) => a.name.localeCompare(b.name));
+
+        const current = safeText(selectEl.value, '');
+        selectEl.innerHTML = '';
+        const optAll = document.createElement('option');
+        optAll.value = '';
+        optAll.textContent = 'All team members';
+        selectEl.appendChild(optAll);
+
+        entries.forEach((u) => {
+            const opt = document.createElement('option');
+            opt.value = u.id;
+            opt.textContent = u.name;
+            selectEl.appendChild(opt);
+        });
+
+        if (current) selectEl.value = current;
+        return entries;
+    }
+
     function ensureCurrencySelectOptions(selectEl, cashBoxes) {
         if (!selectEl) return;
 
@@ -130,11 +220,12 @@
     }
 
     function getFiltersFromUi(state) {
-        const cashBoxId = safeText(qs('#filterRegister')?.value, '');
+        const cashBoxQuery = safeText(qs('#filterCashBoxQuery')?.value, '');
+        const cashBoxId = getCashBoxIdFromQuery(cashBoxQuery, state.cashBoxes);
         const currency = safeText(qs('#filterCurrency')?.value, '');
-        const contactNameQuery = safeText(qs('#filterContact')?.value, '').toLowerCase();
-        const contactIdQuery = safeText(qs('#filterContactId')?.value, '').toLowerCase();
-        const recorderQuery = safeText(qs('#filterRecorder')?.value, '').toLowerCase();
+        const txIdQuery = safeText(qs('#filterTxId')?.value, '').toLowerCase();
+        const contactQuery = safeText(qs('#filterContactQuery')?.value, '').toLowerCase();
+        const createdById = safeText(qs('#filterCreatedBy')?.value, '');
 
         const dateFrom = safeText(qs('#filterDateFrom')?.value, '');
         const dateTo = safeText(qs('#filterDateTo')?.value, '');
@@ -143,12 +234,13 @@
         const amountMax = safeText(qs('#filterAmountMax')?.value, '');
 
         return {
+            cashBoxQuery: safeText(cashBoxQuery, '').toLowerCase(),
             cashBoxId: cashBoxId || null,
             currency: currency || null,
             direction: state.direction,
-            contactNameQuery,
-            contactIdQuery,
-            recorderQuery,
+            txIdQuery,
+            contactQuery,
+            createdById: createdById || null,
             dateFrom: dateFrom || null,
             dateTo: dateTo || null,
             amountMin: amountMin ? Number(amountMin) : null,
@@ -158,8 +250,23 @@
 
     function applyFilters(allTx, filters) {
         return allTx.filter((tx) => {
-            if (filters.cashBoxId && String(tx.cash_box_id || tx.cash_box?.id || '') !== String(filters.cashBoxId)) {
-                return false;
+            if (filters.txIdQuery) {
+                const display = getDisplayId(tx).toLowerCase();
+                const raw = safeText(tx?.id, '').toLowerCase();
+                const receipt = safeText(tx?.receipt_number, '').toLowerCase();
+                if (!display.includes(filters.txIdQuery) && !raw.includes(filters.txIdQuery) && !receipt.includes(filters.txIdQuery)) {
+                    return false;
+                }
+            }
+
+            if (filters.cashBoxId) {
+                if (String(tx.cash_box_id || tx.cash_box?.id || '') !== String(filters.cashBoxId)) {
+                    return false;
+                }
+            } else if (filters.cashBoxQuery) {
+                const cbName = safeText(tx.cash_box?.name, '').toLowerCase();
+                const cbId = safeText(tx.cash_box_id || tx.cash_box?.id, '').toLowerCase();
+                if (!cbName.includes(filters.cashBoxQuery) && !cbId.includes(filters.cashBoxQuery)) return false;
             }
 
             // Filter by currency (cash box's currency)
@@ -173,19 +280,15 @@
                 if (dir !== filters.direction) return false;
             }
 
-            if (filters.contactNameQuery) {
+            if (filters.contactQuery) {
                 const name = safeText(tx.contact?.name || tx.contact_name, '').toLowerCase();
-                if (!name.includes(filters.contactNameQuery)) return false;
-            }
-
-            if (filters.contactIdQuery) {
                 const cid = safeText(tx.contact_id, '').toLowerCase();
-                if (!cid.includes(filters.contactIdQuery)) return false;
+                if (!name.includes(filters.contactQuery) && !cid.includes(filters.contactQuery)) return false;
             }
 
-            if (filters.recorderQuery) {
-                const recorder = safeText(tx.created_by_user_name || tx.created_by, '').toLowerCase();
-                if (!recorder.includes(filters.recorderQuery)) return false;
+            if (filters.createdById) {
+                const rawId = safeText(tx.created_by_user_id || tx.created_by, '');
+                if (String(rawId) !== String(filters.createdById)) return false;
             }
 
             if (filters.dateFrom || filters.dateTo) {
@@ -464,6 +567,50 @@
 
         const cashBoxById = new Map();
 
+        const applyAutoDefaults = () => {
+            const cashBoxQueryInput = qs('#filterCashBoxQuery');
+            const cashBoxGroup = qs('#filterGroupCashBox');
+
+            if (cashBoxQueryInput && cashBoxGroup) {
+                // If only one cash box exists, prefill + hide the filter
+                if (state.cashBoxes.length === 1) {
+                    const only = state.cashBoxes[0];
+                    cashBoxQueryInput.value = safeText(only.name, only.id);
+                    cashBoxGroup.style.display = 'none';
+                } else if (urlCashBoxId) {
+                    const pre = state.cashBoxes.find((b) => String(b?.id) === String(urlCashBoxId));
+                    cashBoxQueryInput.value = pre ? safeText(pre.name, pre.id) : urlCashBoxId;
+                    cashBoxGroup.style.display = '';
+                } else {
+                    cashBoxGroup.style.display = '';
+                }
+            }
+
+            const currencySelect = qs('#filterCurrency');
+            const currencyGroup = qs('#filterGroupCurrency');
+            if (currencySelect && currencyGroup) {
+                const currencyOptions = qsa('option', currencySelect).filter((o) => safeText(o.value, ''));
+                if (currencyOptions.length <= 1) {
+                    if (currencyOptions.length === 1) currencySelect.value = currencyOptions[0].value;
+                    currencyGroup.style.display = 'none';
+                } else {
+                    currencyGroup.style.display = '';
+                }
+            }
+
+            const createdBySelect = qs('#filterCreatedBy');
+            const createdByGroup = qs('#filterGroupCreatedBy');
+            if (createdBySelect && createdByGroup) {
+                const real = qsa('option', createdBySelect).filter((o) => safeText(o.value, ''));
+                if (real.length <= 1) {
+                    if (real.length === 1) createdBySelect.value = real[0].value;
+                    createdByGroup.style.display = 'none';
+                } else {
+                    createdByGroup.style.display = '';
+                }
+            }
+        };
+
         try {
             console.log('[TxHistory] Fetching cash boxes...');
             const cashBoxes = await window.db.cashBoxes.getAll({ select: 'id, name, color, currency' });
@@ -478,6 +625,9 @@
 
             // Only pre-select cash box if explicitly passed via URL (e.g. from cash box detail page)
             ensureCashBoxSelectOptions(cashBoxSelect, state.cashBoxes, urlCashBoxId || null);
+
+            const cashBoxDatalist = qs('#cashBoxDatalist');
+            ensureCashBoxDatalist(cashBoxDatalist, state.cashBoxes);
 
             // Populate currency filter dropdown
             const currencySelect = qs('#filterCurrency');
@@ -495,6 +645,15 @@
                 }
                 return tx;
             });
+
+            const createdBySelect = qs('#filterCreatedBy');
+            const createdByGroup = qs('#filterGroupCreatedBy');
+            const createdByUsers = ensureCreatedBySelectOptions(createdBySelect, state.allTx);
+
+            const contactDatalist = qs('#contactDatalist');
+            ensureContactDatalist(contactDatalist, state.allTx);
+
+            applyAutoDefaults();
 
             console.log('[TxHistory] Data loaded, using Supabase sequence numbers');
         } catch (e) {
@@ -537,6 +696,9 @@
                 qsa('.filter-select', qs('#filterPanel')).forEach((el) => {
                     el.selectedIndex = 0;
                 });
+
+                applyAutoDefaults();
+
                 // Reset direction tabs to "All"
                 tabs.forEach((t) => t.classList.remove('active'));
                 const allTab = tabs.find((t) => t.dataset.filter === 'all');
