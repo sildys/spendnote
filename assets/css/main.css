@@ -9,7 +9,6 @@
 *:focus,
 *:focus-visible {
     outline: none !important;
-    box-shadow: none !important;
 }
 
 /* ========================================
@@ -233,22 +232,7 @@ body {
 .site-nav .nav-links a.active {
     color: var(--active);
     position: relative;
-    text-decoration-line: underline;
-    text-decoration-color: var(--active);
-    text-decoration-thickness: 3px;
-    text-underline-offset: 10px;
-    text-decoration-skip-ink: none;
-}
-
-.site-nav .nav-links a.active::after {
-    content: '';
-    position: absolute;
-    left: 12px;
-    right: 12px;
-    bottom: 2px;
-    height: 3px;
-    background: var(--active);
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    box-shadow: inset 0 -3px 0 var(--active);
 }
 
 /* ========================================
