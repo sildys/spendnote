@@ -1850,7 +1850,7 @@
         .invite-btn:hover{ filter: brightness(0.98); }
         .dismiss-btn:hover{ filter: brightness(0.98); }
 
-        .tx-createdby{ font-weight:700; color: rgba(15,23,42,0.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tx-createdby{ display:flex; justify-content:center; align-items:center; }
 
 /* --- FIX: Filters wrap into two rows (no overflow) --- */
 .filters-row, .filters-grid, .filters-container {

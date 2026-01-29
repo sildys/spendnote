@@ -280,7 +280,7 @@
                 <td><span class="tx-Contact">${contactName}</span></td>
                 <td><span class="tx-contact-id">${contactId}</span></td>
                 <td><span class="tx-amount ${isIncome ? 'in' : 'out'}">${formatCurrency(tx.amount, currency)}</span></td>
-                <td><span class="tx-recorder"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${createdBy}"></div></span></td>
+                <td><div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${createdBy}"></div></div></td>
                 <td>
                     <a href="spendnote-transaction-detail.html?id=${encodeURIComponent(tx.id)}" class="tx-action btn-view">
                         <span>View</span>
