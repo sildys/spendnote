@@ -96,6 +96,31 @@ function initNavEvents() {
         }
     });
 
+    // Logout (delegated)
+    document.addEventListener('click', async (e) => {
+        const logoutLink = e.target && (e.target.closest ? e.target.closest('[data-action="logout"]') : null);
+        if (!logoutLink) {
+            return;
+        }
+
+        e.preventDefault();
+
+        try {
+            if (window.auth && typeof window.auth.signOut === 'function') {
+                await window.auth.signOut();
+            }
+        } finally {
+            try {
+                localStorage.removeItem('activeCashBoxColor');
+                localStorage.removeItem('activeCashBoxRgb');
+                localStorage.removeItem('activeCashBoxId');
+            } catch (_) {
+                // ignore
+            }
+            window.location.href = 'spendnote-login.html';
+        }
+    });
+
     // New Transaction button
     const addTransactionBtn = document.getElementById('addTransactionBtn');
     const hasModal = Boolean(document.getElementById('createTransactionModal'));
@@ -118,17 +143,6 @@ function initNavEvents() {
             });
         }
     }
-
-    // Logout links
-    document.querySelectorAll('[data-action="logout"]').forEach(link => {
-        link.addEventListener('click', async (e) => {
-            e.preventDefault();
-            if (window.auth && typeof window.auth.logout === 'function') {
-                await window.auth.logout();
-            }
-            window.location.href = 'spendnote-login.html';
-        });
-    });
 
     // Update user info if available
     if (window.auth && typeof window.updateUserNav === 'function') {
