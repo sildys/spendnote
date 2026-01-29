@@ -967,6 +967,7 @@
     </button>
 
     <script>
+        if (false) {
         // Toggle filters panel - using event listener instead of inline onclick
         document.addEventListener('DOMContentLoaded', function() {
             console.log('=== TOGGLE FILTERS SCRIPT LOADED ===');
@@ -1322,6 +1323,7 @@
             console.log(`Show ${perPage} transactions per page`);
             alert(`Per page changed to ${perPage}\n\nIn production:\n- Reload table with ${perPage} rows\n- Update pagination buttons\n- Update "Showing X-Y of Z" text`);
         });
+        }
     </script>
     
     <!-- Supabase -->
@@ -1331,5 +1333,6 @@
     <script src="assets/js/nav-loader.js?v=7"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=20"></script>
+    <script src="assets/js/transaction-history-data.js?v=1"></script>
 </body>
 </html>
