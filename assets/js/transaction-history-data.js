@@ -243,7 +243,7 @@
             const tr = document.createElement('tr');
             tr.style.setProperty('--cashbox-rgb', cashBoxRgb);
             tr.style.setProperty('--cashbox-color', cashBoxColor);
-            tr.style.background = `rgba(${cashBoxRgb}, 0.06)`;
+            tr.tabIndex = 0;
 
             const displayId = getDisplayId(tx);
             const contactName = safeText(tx.contact?.name || tx.contact_name, '—');
@@ -534,6 +534,8 @@
             selectAllHeader.addEventListener('change', () => {
                 qsa('.row-checkbox', tbody).forEach((cb) => {
                     cb.checked = Boolean(selectAllHeader.checked);
+                    const row = cb.closest('tr');
+                    if (row) row.classList.toggle('is-selected', cb.checked);
                 });
                 updateBulk();
             });
@@ -551,6 +553,8 @@
             tbody.addEventListener('change', (e) => {
                 const target = e.target;
                 if (target && target.classList && target.classList.contains('row-checkbox')) {
+                    const row = target.closest('tr');
+                    if (row) row.classList.toggle('is-selected', target.checked);
                     updateBulk();
                 }
             });
