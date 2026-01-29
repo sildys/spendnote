@@ -68,22 +68,33 @@ function loadNav(containerId = 'nav-container') {
 }
 
 function initNavEvents() {
-    // User avatar dropdown
-    const userAvatarBtn = document.getElementById('userAvatarBtn');
-    const userDropdown = document.getElementById('userDropdown');
-    
-    if (userAvatarBtn && userDropdown) {
-        userAvatarBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            userDropdown.classList.toggle('show');
-        });
-        
-        document.addEventListener('click', (e) => {
-            if (!userAvatarBtn.contains(e.target) && !userDropdown.contains(e.target)) {
-                userDropdown.classList.remove('show');
-            }
-        });
+    if (window.__spendnoteNavEventsBound) {
+        return;
     }
+    window.__spendnoteNavEventsBound = true;
+
+    // User avatar dropdown (delegated)
+    document.addEventListener('click', (e) => {
+        const userAvatarBtn = document.getElementById('userAvatarBtn');
+        const userDropdown = document.getElementById('userDropdown');
+
+        if (!userAvatarBtn || !userDropdown) {
+            return;
+        }
+
+        const clickedAvatar = e.target && (e.target.closest ? e.target.closest('#userAvatarBtn') : null);
+        const clickedDropdown = e.target && (e.target.closest ? e.target.closest('#userDropdown') : null);
+
+        if (clickedAvatar) {
+            e.preventDefault();
+            userDropdown.classList.toggle('show');
+            return;
+        }
+
+        if (!clickedDropdown) {
+            userDropdown.classList.remove('show');
+        }
+    });
 
     // New Transaction button
     const addTransactionBtn = document.getElementById('addTransactionBtn');
