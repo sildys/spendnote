@@ -181,9 +181,16 @@
         }
 
         #filterGroupDateRange,
-        #filterGroupAmountRange,
         #filterGroupCreatedBy {
             grid-column: span 2;
+        }
+
+        #filterGroupAmountRange {
+            grid-column: span 3;
+        }
+
+        #filterGroupCreatedBy {
+            grid-column: span 1;
         }
 
         .filter-actions {
@@ -783,7 +790,7 @@
             <div class="filter-panel" id="filterPanel" style="display: none;">
                 <div class="filter-grid">
                     <div class="filter-group" id="filterGroupTxId">
-                        <label class="filter-label"><i class="fas fa-hashtag"></i> Txn ID</label>
+                        <label class="filter-label"><i class="fas fa-hashtag"></i> Transaction</label>
                         <input type="text" class="filter-input" placeholder="e.g., SN1-001" id="filterTxId">
                     </div>
                     <div class="filter-group" id="filterGroupCashBox">
@@ -1341,6 +1348,6 @@ Showing 0-0 of 0
     <script src="assets/js/nav-loader.js?v=7"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=20"></script>
-    <script src="assets/js/transaction-history-data.js?v=29"></script>
+    <script src="assets/js/transaction-history-data.js?v=30"></script>
 </body>
 </html>
