@@ -236,7 +236,7 @@
         tbody.appendChild(tr);
     }
 
-    function updateStatsFromList(list) {
+    function updateStatsFromList(list, selectedCashBox) {
         const elTotal = qs('#statTotalTransactions');
         const elIn = qs('#statTotalIn');
         const elOut = qs('#statTotalOut');
@@ -245,22 +245,32 @@
 
         let totalIn = 0;
         let totalOut = 0;
-        const cashBoxes = new Set();
+        const cashBoxIds = new Set();
 
         list.forEach((tx) => {
             const type = safeText(tx.type, '').toLowerCase();
             const amt = Number(tx.amount);
             if (type === 'income') totalIn += Number.isFinite(amt) ? amt : 0;
             if (type === 'expense') totalOut += Number.isFinite(amt) ? amt : 0;
-            const cb = tx.cash_box?.name || tx.cash_box_id;
-            if (cb) cashBoxes.add(String(cb));
+            const cbId = tx.cash_box_id || tx.cash_box?.id;
+            if (cbId) cashBoxIds.add(String(cbId));
         });
 
         if (elTotal) elTotal.textContent = String(list.length);
-        if (elIn) elIn.textContent = formatCurrency(totalIn, 'USD');
-        if (elOut) elOut.textContent = formatCurrency(totalOut, 'USD');
-        if (elNet) elNet.textContent = formatCurrency(totalIn - totalOut, 'USD');
-        if (elBoxes) elBoxes.textContent = String(cashBoxes.size);
+        if (elBoxes) elBoxes.textContent = String(cashBoxIds.size);
+
+        // Only show monetary totals if a single cash box is selected (same currency)
+        if (selectedCashBox && selectedCashBox.currency) {
+            const currency = selectedCashBox.currency;
+            if (elIn) elIn.textContent = formatCurrency(totalIn, currency);
+            if (elOut) elOut.textContent = formatCurrency(totalOut, currency);
+            if (elNet) elNet.textContent = formatCurrency(totalIn - totalOut, currency);
+        } else {
+            // Multiple currencies - can't sum, show placeholder
+            if (elIn) elIn.textContent = '—';
+            if (elOut) elOut.textContent = '—';
+            if (elNet) elNet.textContent = '—';
+        }
     }
 
     function getPaginationState() {
@@ -528,7 +538,9 @@
             console.log('[TxHistory] after filter:', visible.length);
             visible = sortTransactions(visible, state.sort);
 
-            updateStatsFromList(visible);
+            // Pass selected cash box for currency-aware stats (null if "All Cash Boxes")
+            const selectedCashBox = filters.cashBoxId ? cashBoxById.get(String(filters.cashBoxId)) : null;
+            updateStatsFromList(visible, selectedCashBox);
 
             const totalCount = visible.length;
             const startIdx = (state.pagination.page - 1) * state.pagination.perPage;
