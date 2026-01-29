@@ -267,31 +267,27 @@
         tbody.appendChild(tr);
     }
 
-    function updateStatsFromList(list, selectedCurrency) {
+    function updateStatsFromList(filteredList, selectedCurrency, allTx, allCashBoxes) {
         const elTotal = qs('#statTotalTransactions');
         const elIn = qs('#statTotalIn');
         const elOut = qs('#statTotalOut');
         const elNet = qs('#statNetBalance');
         const elBoxes = qs('#statCashBoxes');
 
-        let totalIn = 0;
-        let totalOut = 0;
-        const cashBoxIds = new Set();
+        // Total counts always show ALL in system (not filtered)
+        if (elTotal) elTotal.textContent = String(allTx ? allTx.length : 0);
+        if (elBoxes) elBoxes.textContent = String(allCashBoxes ? allCashBoxes.length : 0);
 
-        list.forEach((tx) => {
-            const type = safeText(tx.type, '').toLowerCase();
-            const amt = Number(tx.amount);
-            if (type === 'income') totalIn += Number.isFinite(amt) ? amt : 0;
-            if (type === 'expense') totalOut += Number.isFinite(amt) ? amt : 0;
-            const cbId = tx.cash_box_id || tx.cash_box?.id;
-            if (cbId) cashBoxIds.add(String(cbId));
-        });
-
-        if (elTotal) elTotal.textContent = String(list.length);
-        if (elBoxes) elBoxes.textContent = String(cashBoxIds.size);
-
-        // Only show monetary totals if currency filter is active (same currency for all)
+        // Monetary stats sum the FILTERED list (only when currency filter is active)
         if (selectedCurrency) {
+            let totalIn = 0;
+            let totalOut = 0;
+            filteredList.forEach((tx) => {
+                const type = safeText(tx.type, '').toLowerCase();
+                const amt = Number(tx.amount);
+                if (type === 'income') totalIn += Number.isFinite(amt) ? amt : 0;
+                if (type === 'expense') totalOut += Number.isFinite(amt) ? amt : 0;
+            });
             if (elIn) elIn.textContent = formatCurrency(totalIn, selectedCurrency);
             if (elOut) elOut.textContent = formatCurrency(totalOut, selectedCurrency);
             if (elNet) elNet.textContent = formatCurrency(totalIn - totalOut, selectedCurrency);
@@ -393,7 +389,7 @@
             }
 
             console.error('[TxHistory] db never initialized');
-            updateStatsFromList([]);
+            updateStatsFromList([], null, [], []);
             renderErrorRow(tbody, 'App database not initialized.');
             return;
         }
@@ -467,7 +463,7 @@
             console.log('[TxHistory] Cash boxes mapped to transactions');
         } catch (e) {
             console.error('[TxHistory] Failed to load:', e);
-            updateStatsFromList([]);
+            updateStatsFromList([], null, [], []);
             renderErrorRow(tbody, `Failed to load transactions: ${e && e.message ? e.message : e}`);
             return;
         }
@@ -591,7 +587,8 @@
             visible = sortTransactions(visible, state.sort);
 
             // Pass selected currency for stats (null if "All Currencies" - no monetary totals)
-            updateStatsFromList(visible, filters.currency);
+            // Total counts always show all in system, monetary stats show filtered
+            updateStatsFromList(visible, filters.currency, state.allTx, state.cashBoxes);
 
             const totalCount = visible.length;
             const startIdx = (state.pagination.page - 1) * state.pagination.perPage;
