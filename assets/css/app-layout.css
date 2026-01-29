@@ -25,7 +25,7 @@ body {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
-    padding: 1rem 0; /* Slightly less padding for app pages */
+    padding: 1.25rem 0; /* match main.css */
     box-shadow: 0 2px 8px var(--shadow);
 }
 
@@ -57,13 +57,14 @@ body {
     width: 36px;
     height: 36px;
     flex-shrink: 0;
+    margin-left: var(--logo-optical-offset);
 }
 
 .site-nav .logo span {
     font-size: 24px;
-    font-weight: 900;
+    font-weight: 700;
     color: var(--text);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
 }
 
 /* Top Nav Container (dashboard specific - if used) */
@@ -82,7 +83,7 @@ body {
 /* Navigation Links - App Style */
 .nav-links {
     display: flex;
-    gap: 8px; /* Smaller gap for app pages */
+    gap: 1.5rem; /* match main.css */
     list-style: none;
     align-items: center;
 }
@@ -102,13 +103,14 @@ body {
 }
 
 .nav-links a:hover {
-    color: var(--text);
-    background: var(--surface-elevated);
+    color: var(--active);
+    background: transparent;
 }
 
 /* Active menu item indicator */
 .site-nav .nav-links a.active {
     color: var(--active);
+    position: relative;
 }
 
 .site-nav .nav-links a.active::after {
@@ -116,11 +118,10 @@ body {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -6px;
+    bottom: -1.5rem;
     height: 3px;
-    border-radius: 999px;
     background: var(--active);
-    opacity: 0.9;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
 /* Cash-related nav items (Dashboard, Cash Boxes, Transactions) - only color, not active state */
