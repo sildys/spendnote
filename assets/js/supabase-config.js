@@ -2,6 +2,9 @@
 const SUPABASE_URL = 'https://zrnnharudlgxuvewqryj.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_Vg44Z7eJacwji3iLii0Dxg_mQlSfwi-';
 
+console.log('SpendNote supabase-config.js build 20260129-1339');
+window.__spendnoteSupabaseConfigBuild = '20260129-1339';
+
 // Initialize Supabase client
 var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -421,24 +424,11 @@ var db = {
                 return await query;
             };
 
-            const defaultJoinedSelect = `
-                *,
-                cash_box:cash_boxes(id, name, color, currency),
-                contact:contacts(id, name)
-            `;
-
             const requestedSelect = (filters && typeof filters.select === 'string' && filters.select.trim())
                 ? filters.select
-                : null;
+                : '*';
 
-            const joinedSelect = requestedSelect || defaultJoinedSelect;
-
-            let result = await runQuery({ select: joinedSelect, withCreatedAtOrder: false });
-
-            if (result.error) {
-                console.warn('Transactions query (joined) failed, retrying with select(*):', result.error);
-                result = await runQuery({ select: '*', withCreatedAtOrder: false });
-            }
+            const result = await runQuery({ select: requestedSelect, withCreatedAtOrder: false });
 
             if (result.error) {
                 console.error('Error fetching transactions:', result.error);

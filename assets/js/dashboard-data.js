@@ -1,23 +1,74 @@
 // Dashboard Data Loader - Load real data from Supabase
-console.log('SpendNote dashboard-data.js build 20260125q');
+console.log('SpendNote dashboard-data.js build 20260129-1353');
+
+function getSpendNoteHelpers() {
+    const sn = (typeof window !== 'undefined' && window.SpendNote) ? window.SpendNote : null;
+
+    const hexToRgb = (sn && typeof sn.hexToRgb === 'function')
+        ? sn.hexToRgb.bind(sn)
+        : () => '5, 150, 105';
+
+    const formatCurrency = (sn && typeof sn.formatCurrency === 'function')
+        ? sn.formatCurrency.bind(sn)
+        : (amount, currency) => {
+            try {
+                return new Intl.NumberFormat(navigator.language || 'en-US', {
+                    style: 'currency',
+                    currency: currency || 'USD'
+                }).format(Number(amount) || 0);
+            } catch (e) {
+                return String(amount || 0);
+            }
+        };
+
+    const getIconClass = (sn && typeof sn.getIconClass === 'function')
+        ? sn.getIconClass.bind(sn)
+        : () => 'fa-building';
+
+    const getColorClass = (sn && typeof sn.getColorClass === 'function')
+        ? sn.getColorClass.bind(sn)
+        : () => 'green';
+
+    const getInitials = (sn && typeof sn.getInitials === 'function')
+        ? sn.getInitials.bind(sn)
+        : () => 'U';
+
+    const normalizeHexColor = (value) => {
+        const raw = String(value || '').trim();
+        if (!raw) return '#059669';
+        if (raw.startsWith('#')) return raw;
+        if (/^[a-fA-F\d]{6}$/.test(raw)) return `#${raw}`;
+        return raw;
+    };
+
+    return {
+        hexToRgb,
+        formatCurrency,
+        getIconClass,
+        getColorClass,
+        getInitials,
+        normalizeHexColor
+    };
+}
+
 async function loadDashboardData() {
     try {
         const swiperWrapper = document.querySelector('.registers-swiper .swiper-wrapper');
         if (!swiperWrapper) return;
 
+        const debug = Boolean(window.SpendNoteDebug);
+
+        const { hexToRgb, getIconClass, getColorClass, formatCurrency } = getSpendNoteHelpers();
+
         const cashBoxesPromise = db.cashBoxes.getAll({
             select: 'id, name, color, currency, icon, current_balance, created_at, sort_order'
         });
 
-        const transactionsPromise = db.transactions.getAll({ limit: 5 });
+        const transactionsPromise = db.transactions.getAll({ limit: 5, select: '*' });
 
-        const cashBoxes = await cashBoxesPromise;
+        const [cashBoxes, transactions] = await Promise.all([cashBoxesPromise, transactionsPromise]);
         
         if (cashBoxes && cashBoxes.length > 0) {
-            // Get the swiper wrapper
-            const swiperWrapper = document.querySelector('.registers-swiper .swiper-wrapper');
-            if (!swiperWrapper) return;
-
             const savedActiveId = localStorage.getItem('activeCashBoxId');
             const defaultActiveId = savedActiveId || cashBoxes[cashBoxes.length - 1]?.id;
             
@@ -29,58 +80,6 @@ async function loadDashboardData() {
             const allSlides = Array.from(swiperWrapper.querySelectorAll('.swiper-slide'));
             const registerSlides = allSlides.filter(slide => slide.querySelector('.register-card'));
             registerSlides.forEach(slide => slide.remove());
-            console.log('🗑️ Removed', registerSlides.length, 'demo register slides');
-
-            const hexToRgb = (window.SpendNote && typeof window.SpendNote.hexToRgb === 'function')
-                ? window.SpendNote.hexToRgb
-                : (value) => {
-                    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(value || '').trim());
-                    return result
-                        ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
-                        : '5, 150, 105';
-                };
-
-            const getIconClass = (window.SpendNote && typeof window.SpendNote.getIconClass === 'function')
-                ? window.SpendNote.getIconClass
-                : (value) => {
-                    const iconMap = {
-                        'building': 'fa-building',
-                        'calendar': 'fa-calendar-alt',
-                        'wallet': 'fa-wallet',
-                        'bullhorn': 'fa-bullhorn',
-                        'store': 'fa-store',
-                        'piggy-bank': 'fa-piggy-bank',
-                        'chart-line': 'fa-chart-line',
-                        'coins': 'fa-coins',
-                        'dollar': 'fa-dollar-sign',
-                        'home': 'fa-home',
-                        'briefcase': 'fa-briefcase',
-                        'chart': 'fa-chart-line',
-                        'star': 'fa-star',
-                        'flag': 'fa-flag',
-                        'heart': 'fa-heart',
-                        'bolt': 'fa-bolt',
-                        'gift': 'fa-gift',
-                        'tag': 'fa-tag',
-                        'bell': 'fa-bell'
-                    };
-                    return iconMap[String(value || '').trim()] || 'fa-building';
-                };
-
-            const getColorClass = (window.SpendNote && typeof window.SpendNote.getColorClass === 'function')
-                ? window.SpendNote.getColorClass
-                : (value) => {
-                    const colorMap = {
-                        '#059669': 'green',
-                        '#10b981': 'green',
-                        '#f59e0b': 'orange',
-                        '#3b82f6': 'blue',
-                        '#8b5cf6': 'purple',
-                        '#ef4444': 'red',
-                        '#ec4899': 'pink'
-                    };
-                    return colorMap[String(value || '').trim().toLowerCase()] || 'green';
-                };
             
             // Generate HTML for all cash boxes
             let allSlidesHTML = '';
@@ -107,12 +106,7 @@ async function loadDashboardData() {
                 const cashBoxPrefix = 'cbx';
                 
                 // Format currency (locale + cash box currency)
-                const formattedBalance = (window.SpendNote && typeof window.SpendNote.formatCurrency === 'function')
-                    ? window.SpendNote.formatCurrency(box.current_balance || 0, box.currency || 'USD')
-                    : new Intl.NumberFormat(navigator.language || 'en-US', {
-                        style: 'currency',
-                        currency: box.currency || 'USD'
-                    }).format(box.current_balance || 0);
+                const formattedBalance = formatCurrency(box.current_balance || 0, box.currency || 'USD');
                 
                 // Create slide HTML
                 allSlidesHTML += `
@@ -190,7 +184,7 @@ async function loadDashboardData() {
                 swiperWrapper.insertAdjacentHTML('beforeend', allSlidesHTML);
             }
             
-            console.log('✅ Inserted', cashBoxes.length, 'cash boxes before Add Cash Box card');
+            if (debug) console.log('✅ Inserted', cashBoxes.length, 'cash boxes before Add Cash Box card');
             
             // Reinitialize Swiper after adding slides
             if (window.registersSwiper) {
@@ -229,15 +223,13 @@ async function loadDashboardData() {
                 console.log('⚠️ Swiper not initialized yet');
             }
             
-            console.log('✅ Dashboard loaded with real cash boxes:', cashBoxes.length);
+            if (debug) console.log('✅ Dashboard loaded with real cash boxes:', cashBoxes.length);
             
             // Update modal cash box dropdown
             updateModalCashBoxDropdown(cashBoxes);
         } else {
             console.log('ℹ️ No cash boxes found in database');
         }
-
-        const transactions = await transactionsPromise;
 
         const cashBoxById = new Map((cashBoxes || []).map((b) => [b.id, b]));
         const enrichedTransactions = (transactions || []).map((tx) => {
@@ -264,47 +256,13 @@ function updateModalCashBoxDropdown(cashBoxes) {
     const modalRegisterSelect = document.getElementById('modalRegister');
     if (!modalRegisterSelect || !cashBoxes || cashBoxes.length === 0) return;
 
+    const { getIconClass, hexToRgb } = getSpendNoteHelpers();
+
     const savedActiveId = localStorage.getItem('activeCashBoxId');
     const defaultActiveId = savedActiveId || cashBoxes[cashBoxes.length - 1]?.id;
     
     // Clear existing options
     modalRegisterSelect.innerHTML = '';
-
-    const getIconClass = (window.SpendNote && typeof window.SpendNote.getIconClass === 'function')
-        ? window.SpendNote.getIconClass
-        : (value) => {
-            const iconMap = {
-                'building': 'fa-building',
-                'calendar': 'fa-calendar-alt',
-                'wallet': 'fa-wallet',
-                'bullhorn': 'fa-bullhorn',
-                'store': 'fa-store',
-                'piggy-bank': 'fa-piggy-bank',
-                'chart-line': 'fa-chart-line',
-                'coins': 'fa-coins',
-                'dollar': 'fa-dollar-sign',
-                'home': 'fa-home',
-                'briefcase': 'fa-briefcase',
-                'chart': 'fa-chart-line',
-                'star': 'fa-star',
-                'flag': 'fa-flag',
-                'heart': 'fa-heart',
-                'bolt': 'fa-bolt',
-                'gift': 'fa-gift',
-                'tag': 'fa-tag',
-                'bell': 'fa-bell'
-            };
-            return iconMap[String(value || '').trim()] || 'fa-building';
-        };
-
-    const hexToRgb = (window.SpendNote && typeof window.SpendNote.hexToRgb === 'function')
-        ? window.SpendNote.hexToRgb
-        : (value) => {
-            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(value || '').trim());
-            return result
-                ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
-                : '5, 150, 105';
-        };
     
     // Add options for each cash box
     cashBoxes.forEach((box, index) => {
@@ -324,7 +282,9 @@ function updateModalCashBoxDropdown(cashBoxes) {
         modalRegisterSelect.appendChild(option);
     });
     
-    console.log('✅ Modal cash box dropdown updated with', cashBoxes.length, 'cash boxes');
+    if (Boolean(window.SpendNoteDebug)) {
+        console.log('✅ Modal cash box dropdown updated with', cashBoxes.length, 'cash boxes');
+    }
 }
 
 // Load recent transactions (synchronous version - data already loaded)
@@ -333,23 +293,14 @@ function loadRecentTransactionsSync(transactions) {
         const wrapper = document.getElementById('tableWrapper');
         if (!wrapper) return;
 
+        const { hexToRgb, formatCurrency, getInitials, normalizeHexColor } = getSpendNoteHelpers();
+
         // Remove demo rows (keep header)
         const existingRows = Array.from(wrapper.querySelectorAll('.table-grid'))
             .filter((el) => !el.classList.contains('table-header'));
         existingRows.forEach((el) => el.remove());
 
         if (transactions && transactions.length > 0) {
-
-            const getRgbFromHex = (hex) => {
-                const cleaned = String(hex || '').trim().replace('#', '');
-                if (cleaned.length !== 6) return '5, 150, 105';
-                const r = parseInt(cleaned.slice(0, 2), 16);
-                const g = parseInt(cleaned.slice(2, 4), 16);
-                const b = parseInt(cleaned.slice(4, 6), 16);
-                if ([r, g, b].some((v) => Number.isNaN(v))) return '5, 150, 105';
-                return `${r}, ${g}, ${b}`;
-            };
-
             const parseSortTime = (tx) => {
                 const createdAt = tx?.created_at ? Date.parse(tx.created_at) : NaN;
                 if (Number.isFinite(createdAt)) return createdAt;
@@ -367,15 +318,10 @@ function loadRecentTransactionsSync(transactions) {
 
             sortedTransactions.forEach(tx => {
                 const isIncome = tx.type === 'income';
-                const cashBoxColor = tx.cash_box?.color || '#10b981';
-                const cashBoxRgb = getRgbFromHex(cashBoxColor);
+                const cashBoxColor = normalizeHexColor(tx.cash_box?.color || '#10b981');
+                const cashBoxRgb = hexToRgb(cashBoxColor);
 
-                const formattedAmount = (window.SpendNote && typeof window.SpendNote.formatCurrency === 'function')
-                    ? window.SpendNote.formatCurrency(tx.amount, tx.cash_box?.currency || 'USD')
-                    : new Intl.NumberFormat(navigator.language || 'en-US', {
-                        style: 'currency',
-                        currency: tx.cash_box?.currency || 'USD'
-                    }).format(tx.amount);
+                const formattedAmount = formatCurrency(tx.amount, tx.cash_box?.currency || 'USD');
 
                 const dt = new Date(tx.created_at || tx.transaction_date);
                 const formattedDate = dt.toLocaleDateString('en-US', {
@@ -389,9 +335,7 @@ function loadRecentTransactionsSync(transactions) {
                 });
 
                 const createdByName = tx.created_by_user_name || tx.created_by || '—';
-                const initials = (window.SpendNote && typeof window.SpendNote.getInitials === 'function')
-                    ? window.SpendNote.getInitials(createdByName === '—' ? '' : createdByName)
-                    : 'U';
+                const initials = getInitials(createdByName === '—' ? '' : createdByName);
                 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="32" fill="#10b981"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="700" fill="#ffffff">${initials}</text></svg>`;
                 const avatarUrl = `data:image/svg+xml,${encodeURIComponent(svg)}`;
                 const rowHTML = `
@@ -416,7 +360,9 @@ function loadRecentTransactionsSync(transactions) {
                 wrapper.insertAdjacentHTML('beforeend', rowHTML);
             });
 
-            console.log('✅ Loaded recent transactions:', transactions.length);
+            if (Boolean(window.SpendNoteDebug)) {
+                console.log('✅ Loaded recent transactions:', transactions.length);
+            }
         } else {
             console.log('ℹ️ No transactions found');
         }

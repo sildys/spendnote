@@ -1,4 +1,41 @@
 // Cash Box List Data Loader - Load real data from Supabase
+
+function getSpendNoteHelpers() {
+    const sn = (typeof window !== 'undefined' && window.SpendNote) ? window.SpendNote : null;
+
+    const hexToRgb = (sn && typeof sn.hexToRgb === 'function')
+        ? sn.hexToRgb.bind(sn)
+        : () => '5, 150, 105';
+
+    const formatCurrency = (sn && typeof sn.formatCurrency === 'function')
+        ? sn.formatCurrency.bind(sn)
+        : (amount, currency) => {
+            try {
+                return new Intl.NumberFormat(navigator.language || 'en-US', {
+                    style: 'currency',
+                    currency: currency || 'USD'
+                }).format(Number(amount) || 0);
+            } catch (e) {
+                return String(amount || 0);
+            }
+        };
+
+    const getIconClass = (sn && typeof sn.getIconClass === 'function')
+        ? sn.getIconClass.bind(sn)
+        : () => 'fa-building';
+
+    const getColorClass = (sn && typeof sn.getColorClass === 'function')
+        ? sn.getColorClass.bind(sn)
+        : () => 'green';
+
+    return {
+        hexToRgb,
+        formatCurrency,
+        getIconClass,
+        getColorClass
+    };
+}
+
 async function loadCashBoxList() {
     try {
         // Load cash boxes from database
@@ -29,29 +66,20 @@ async function loadCashBoxList() {
                 cashBoxesForNumbering.map((box, idx) => [box.id, idx + 1])
             );
 
+            const { hexToRgb, formatCurrency, getIconClass, getColorClass } = getSpendNoteHelpers();
+
             cashBoxes.forEach((box, index) => {
                 const color = box.color || '#059669';
-                const rgb = (window.SpendNote && typeof window.SpendNote.hexToRgb === 'function')
-                    ? window.SpendNote.hexToRgb(color)
-                    : '5, 150, 105';
-                const iconClass = (window.SpendNote && typeof window.SpendNote.getIconClass === 'function')
-                    ? window.SpendNote.getIconClass(box.icon)
-                    : 'fa-building';
-                const colorClass = (window.SpendNote && typeof window.SpendNote.getColorClass === 'function')
-                    ? window.SpendNote.getColorClass(color)
-                    : 'green';
+                const rgb = hexToRgb(color);
+                const iconClass = getIconClass(box.icon);
+                const colorClass = getColorClass(color);
                 
 
                 const cashBoxPrefix = 'cbx';
                 const sequenceNumber = sequenceById.get(box.id) ?? (index + 1);
                 
                 // Format currency (locale + cash box currency)
-                const formattedBalance = (window.SpendNote && typeof window.SpendNote.formatCurrency === 'function')
-                    ? window.SpendNote.formatCurrency(box.current_balance || 0, box.currency || 'USD')
-                    : new Intl.NumberFormat(navigator.language || 'en-US', {
-                        style: 'currency',
-                        currency: box.currency || 'USD'
-                    }).format(box.current_balance || 0);
+                const formattedBalance = formatCurrency(box.current_balance || 0, box.currency || 'USD');
                 
                 // Get transaction count from database
                 const txCount = box.transaction_count || 0;

@@ -10,6 +10,7 @@
     <script>
         (function() {
             try {
+                window.__spendnoteDashboardHtmlBuild = '20260129-1353';
                 document.documentElement.classList.add('dashboard-loading');
                 var c = localStorage.getItem('activeCashBoxColor');
                 var r = localStorage.getItem('activeCashBoxRgb');
@@ -4381,8 +4382,10 @@ tr:hover [data-category-tag] {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const card = btn.closest('.register-card');
-                const name = card?.dataset?.name || 'this Cash Box';
-                alert(`Open settings for ${name} (demo).`);
+                const cashBoxId = card?.dataset?.id;
+                if (cashBoxId) {
+                    window.location.href = `spendnote-cash-box-settings.html?id=${encodeURIComponent(cashBoxId)}`;
+                }
                 closeAllRegisterMenus();
             });
         });
@@ -4391,8 +4394,33 @@ tr:hover [data-category-tag] {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const card = btn.closest('.register-card');
+                const cashBoxId = card?.dataset?.id;
                 const name = card?.dataset?.name || 'this Cash Box';
-                alert(`Delete ${name} (demo).`);
+                if (!cashBoxId) {
+                    closeAllRegisterMenus();
+                    return;
+                }
+
+                const confirmed = window.confirm(`Delete "${name}"? This will remove the Cash Box and its data.`);
+                if (!confirmed) {
+                    closeAllRegisterMenus();
+                    return;
+                }
+
+                (async () => {
+                    try {
+                        if (window.db && window.db.cashBoxes && typeof window.db.cashBoxes.delete === 'function') {
+                            const result = await window.db.cashBoxes.delete(cashBoxId);
+                            if (result && result.success === false) {
+                                throw new Error(result.error || 'Delete failed');
+                            }
+                        }
+                        window.location.reload();
+                    } catch (error) {
+                        console.error('Failed to delete cash box:', error);
+                        alert('Could not delete the Cash Box.');
+                    }
+                })();
                 closeAllRegisterMenus();
             });
         });
@@ -4499,7 +4527,8 @@ tr:hover [data-category-tag] {
         const applyFiltersBtn = document.getElementById('applyFilters');
         if (applyFiltersBtn) {
             applyFiltersBtn.addEventListener('click', () => {
-                alert('Filters applied! (Demo mode)');
+                if (filterPanel) filterPanel.classList.remove('expanded');
+                if (filterToggle) filterToggle.classList.remove('active');
             });
         }
 
@@ -5639,10 +5668,10 @@ tr:hover [data-category-tag] {
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=15"></script>
+    <script src="assets/js/supabase-config.js?v=16&t=202601291336"></script>
     <script src="assets/js/auth-guard.js"></script>
     <script src="assets/js/main.js?v=17"></script>
-    <script src="assets/js/dashboard-data.js?v=49&t=202601260002"></script>
+    <script src="assets/js/dashboard-data.js?v=50&t=202601291335"></script>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

@@ -18,6 +18,29 @@ function buildCreateTransactionUrl() {
     return qs ? `spendnote-create-transaction.html?${qs}` : 'spendnote-create-transaction.html';
 }
 
+function updateMenuColors(color) {
+    if (!color) return;
+
+    const navCashItems = document.querySelectorAll('.nav-cash-item');
+    navCashItems.forEach(item => {
+        item.style.color = color;
+    });
+
+    const otherNavItems = document.querySelectorAll('.nav-links a:not(.nav-cash-item):not(.btn)');
+    otherNavItems.forEach(item => {
+        item.style.color = color;
+    });
+
+    const newTransactionBtn = document.querySelector('.nav-new-transaction-btn');
+    if (newTransactionBtn) {
+        newTransactionBtn.style.background = `linear-gradient(135deg, ${color}, ${color})`;
+        newTransactionBtn.style.color = 'white';
+        newTransactionBtn.style.borderColor = color;
+    }
+}
+
+window.updateMenuColors = updateMenuColors;
+
 // Navigation menu functionality
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile menu toggle (if needed in future)
@@ -38,24 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Apply saved colors to CSS variables
         document.documentElement.style.setProperty('--active', savedColor);
         document.documentElement.style.setProperty('--active-rgb', savedRgb);
-        
-        // Update menu item colors
-        const navCashItems = document.querySelectorAll('.nav-cash-item');
-        navCashItems.forEach(item => {
-            item.style.color = savedColor;
-        });
-        
-        const otherNavItems = document.querySelectorAll('.nav-links a:not(.nav-cash-item):not(.btn)');
-        otherNavItems.forEach(item => {
-            item.style.color = savedColor;
-        });
-        
-        // Update New Transaction button background color (keep text white)
-        const newTransactionBtn = document.querySelector('.nav-new-transaction-btn');
-        if (newTransactionBtn) {
-            newTransactionBtn.style.background = `linear-gradient(135deg, ${savedColor}, ${savedColor})`;
-            newTransactionBtn.style.color = 'white';
-        }
+
+        updateMenuColors(savedColor);
     }
     
     // User avatar dropdown
@@ -277,6 +284,8 @@ const SpendNote = {
         alert(message);
     }
 };
+
+SpendNote.updateMenuColors = updateMenuColors;
 
 // Export for use in other scripts
 window.SpendNote = SpendNote;
