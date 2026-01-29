@@ -419,6 +419,7 @@
                 }
                 return tx;
             });
+            console.log('[TxHistory] Cash boxes mapped to transactions');
         } catch (e) {
             console.error('[TxHistory] Failed to load:', e);
             updateStatsFromList([]);
@@ -426,6 +427,7 @@
             return;
         }
 
+        console.log('[TxHistory] Setting up event listeners...');
         const tabs = qsa('.filter-tab');
         tabs.forEach((tab) => {
             tab.addEventListener('click', (e) => {
@@ -515,9 +517,14 @@
             });
         });
 
+        console.log('[TxHistory] All setup done, calling render()');
+
         function render() {
+            console.log('[TxHistory] render() called, allTx count:', state.allTx.length);
             const filters = getFiltersFromUi(state);
+            console.log('[TxHistory] filters:', JSON.stringify(filters));
             let visible = applyFilters(state.allTx, filters);
+            console.log('[TxHistory] after filter:', visible.length);
             visible = sortTransactions(visible, state.sort);
 
             updateStatsFromList(visible);
