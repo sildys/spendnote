@@ -5,6 +5,9 @@ function initTransactionForm() {
     const form = document.getElementById('modalTransactionForm');
     if (!form) return;
 
+    if (form.dataset.txSubmitBound === '1') return;
+    form.dataset.txSubmitBound = '1';
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -237,7 +240,9 @@ function initTransactionForm() {
 
             // Close modal
             if (typeof window.closeModal === 'function') window.closeModal();
-
+        } catch (error) {
+            console.error('Transaction submit failed:', error);
+            alert(error?.message || 'Failed to create transaction.');
         } finally {
             submitButtons.forEach(function(btn) {
                 btn.disabled = false;
@@ -298,3 +303,9 @@ function initTransactionForm() {
 }
 
 window.initTransactionForm = initTransactionForm;
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTransactionForm);
+} else {
+    initTransactionForm();
+}
