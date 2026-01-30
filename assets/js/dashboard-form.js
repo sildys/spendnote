@@ -149,14 +149,19 @@ function initTransactionForm() {
                 created_by_user_name: profile?.full_name || user.user_metadata?.full_name || user.email || null
             };
 
+            const selectedContactId = String(document.getElementById('modalContactId')?.value || '').trim();
+            if (isUuid(selectedContactId)) {
+                payload.contact_id = selectedContactId;
+            }
+
             // Ensure contact exists
             let ensuredContact = null;
-            if (window.db?.contacts?.getOrCreate && typeof window.db.contacts.getOrCreate === 'function') {
+            if (!payload.contact_id && window.db?.contacts?.getOrCreate && typeof window.db.contacts.getOrCreate === 'function') {
                 ensuredContact = await window.db.contacts.getOrCreate({
                     name: contactName,
                     address: payload.contact_address
                 });
-            } else if (window.db?.contacts?.create && typeof window.db.contacts.create === 'function') {
+            } else if (!payload.contact_id && window.db?.contacts?.create && typeof window.db.contacts.create === 'function') {
                 ensuredContact = await window.db.contacts.create({
                     user_id: user.id,
                     name: contactName,

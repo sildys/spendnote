@@ -1184,6 +1184,12 @@
         const ContactDropdown = document.getElementById('ContactAutocomplete');
         const ContactAddressInput = document.getElementById('modalContactAddress');
         const ContactIdInput = document.getElementById('modalContactId');
+
+        function formatContactDisplayId(sequenceNumber) {
+            const n = Number(sequenceNumber);
+            if (!Number.isFinite(n) || n <= 0) return '';
+            return `CONT-${String(n).padStart(3, '0')}`;
+        }
         
         // Contacts loaded from Supabase
         let Contacts = [];
@@ -1197,7 +1203,8 @@
                     id: c.id,
                     name: c.name || '',
                     address: c.address || '',
-                    contact: c.email || ''
+                    contact: c.email || '',
+                    displayId: formatContactDisplayId(c.sequence_number)
                 }));
                 contactsLoaded = true;
             } catch (e) {
@@ -1215,7 +1222,7 @@
             const lowerQuery = query.toLowerCase();
             return Contacts.filter(p => 
                 p.name.toLowerCase().includes(lowerQuery) ||
-                (p.id && p.id.toLowerCase().includes(lowerQuery)) ||
+                (p.displayId && p.displayId.toLowerCase().includes(lowerQuery)) ||
                 (p.address && p.address.toLowerCase().includes(lowerQuery))
             );
         }
@@ -1241,7 +1248,7 @@
                 <div class="autocomplete-item ${index === selectedContactIndex ? 'active' : ''}" data-index="${index}">
                     <div class="autocomplete-item-name">${Contact.name}</div>
                     <div class="autocomplete-item-details">
-                        ${Contact.id ? `<div class="autocomplete-item-detail"><i class="fas fa-tag"></i>${Contact.id}</div>` : ''}
+                        ${Contact.displayId ? `<div class="autocomplete-item-detail"><i class="fas fa-tag"></i>${Contact.displayId}</div>` : ''}
                         ${Contact.address ? `<div class="autocomplete-item-detail"><i class="fas fa-map-marker-alt"></i>${Contact.address.split(',')[0]}</div>` : ''}
                     </div>
                 </div>
@@ -1261,11 +1268,7 @@
             ContactDropdown.querySelectorAll('.autocomplete-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const index = parseInt(item.dataset.index);
-                    selectContact(Contacts.filter(p => 
-                        p.name.toLowerCase().includes(ContactInput.value.toLowerCase()) ||
-                        (p.id && p.id.toLowerCase().includes(ContactInput.value.toLowerCase())) ||
-                        (p.address && p.address.toLowerCase().includes(ContactInput.value.toLowerCase()))
-                    )[index]);
+                    selectContact(filterContacts(ContactInput.value)[index]);
                 });
             });
             
@@ -1285,6 +1288,7 @@
         
         // Input event
         ContactInput.addEventListener('input', (e) => {
+            if (ContactIdInput) ContactIdInput.value = '';
             const results = filterContacts(e.target.value);
             showAutocomplete(results);
             selectedContactIndex = -1;

@@ -1,23 +1,5 @@
 // SpendNote - Main JavaScript
 
-function buildCreateTransactionUrl() {
-    const params = new URLSearchParams();
-    const cashBoxId = localStorage.getItem('activeCashBoxId');
-    if (cashBoxId) {
-        params.set('cashBoxId', cashBoxId);
-    }
-
-    const path = window.location.pathname || '';
-    const file = path.split('/').filter(Boolean).pop() || 'dashboard.html';
-    const returnTo = `${file}${window.location.search || ''}${window.location.hash || ''}`;
-    if (returnTo) {
-        params.set('returnTo', returnTo);
-    }
-
-    const qs = params.toString();
-    return qs ? `spendnote-create-transaction.html?${qs}` : 'spendnote-create-transaction.html';
-}
-
 function updateMenuColors(color) {
     if (!color) return;
 
@@ -103,8 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-window.SpendNoteGetCreateTransactionUrl = buildCreateTransactionUrl;
 
 async function updateUserNav() {
     const nameEls = document.querySelectorAll('.user-name');

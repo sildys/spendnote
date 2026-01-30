@@ -77,6 +77,14 @@
         return id.length > 10 ? `${id.slice(0, 8)}…` : id;
     }
 
+    function getContactDisplayId(tx) {
+        const seq = Number(tx?.contact?.sequence_number);
+        if (Number.isFinite(seq) && seq > 0) {
+            return `CONT-${String(seq).padStart(3, '0')}`;
+        }
+        return '—';
+    }
+
     function ensureCashBoxSelectOptions(selectEl, cashBoxes, selectedId) {
         if (!selectEl) return;
         const existing = qsa('option', selectEl).map((o) => o.value);
@@ -370,7 +378,7 @@
 
             const displayId = getDisplayId(tx);
             const contactName = safeText(tx.contact?.name || tx.contact_name, '—');
-            const contactId = safeText(tx.contact_id, '');
+            const contactId = getContactDisplayId(tx);
             const createdBy = safeText(tx.created_by_user_name || tx.created_by, '—');
 
             const initials = getInitials(createdBy === '—' ? '' : createdBy);
@@ -570,10 +578,11 @@
             pagination: getPaginationState(),
             cashBoxes: [],
             cashBoxById: new Map(),
-            totalTxCount: 0
+            totalTxCount: 0,
+            contactByQuery: new Map()
         };
 
-        const txSelect = 'id, cash_box_id, type, amount, description, receipt_number, transaction_date, created_at, contact_id, contact_name, created_by_user_id, created_by_user_name, cash_box_sequence, tx_sequence_in_box';
+        const txSelect = 'id, cash_box_id, type, amount, description, receipt_number, transaction_date, created_at, contact_id, contact_name, created_by_user_id, created_by_user_name, cash_box_sequence, tx_sequence_in_box, contact:contacts(id, name, sequence_number)';
 
         const filterHeader = qs('#filterHeader');
         const filterPanel = qs('#filterPanel');
@@ -633,12 +642,25 @@
                 if (contactDatalist) {
                     contactDatalist.innerHTML = '';
                     (Array.isArray(contacts) ? contacts : []).forEach((c) => {
+                        const seq = Number(c?.sequence_number);
+                        const displayId = (Number.isFinite(seq) && seq > 0) ? `CONT-${String(seq).padStart(3, '0')}` : '';
                         const opt = document.createElement('option');
                         const name = safeText(c?.name, '');
                         const id = safeText(c?.id, '');
                         opt.value = name || id;
-                        opt.label = id ? `${name || id} (${id})` : (name || id);
+                        opt.label = displayId ? `${name || id} (${displayId})` : (name || id);
                         contactDatalist.appendChild(opt);
+
+                        if (displayId && id) {
+                            state.contactByQuery.set(displayId.toLowerCase(), id);
+                        }
+
+                        if (displayId) {
+                            const opt2 = document.createElement('option');
+                            opt2.value = displayId;
+                            opt2.label = name || id;
+                            contactDatalist.appendChild(opt2);
+                        }
                     });
                 }
             })
@@ -877,6 +899,13 @@
 
         const buildServerQuery = () => {
             const filters = getFiltersFromUi(state);
+
+            if (filters.contactQuery) {
+                const mapped = state.contactByQuery.get(String(filters.contactQuery).toLowerCase());
+                if (mapped) {
+                    filters.contactQuery = mapped;
+                }
+            }
 
             // Resolve currency into cash box ids
             let currencyCashBoxIds = null;
@@ -1119,7 +1148,7 @@
                         escapeCsv(safeText(tx?.cash_box_id, '')),
                         escapeCsv(currency),
                         escapeCsv(safeText(tx?.contact_name, '')),
-                        escapeCsv(safeText(tx?.contact_id, '')),
+                        escapeCsv(getContactDisplayId(tx)),
                         escapeCsv(String(tx?.amount ?? '')),
                         escapeCsv(safeText(tx?.created_by_user_name, '')),
                         escapeCsv(safeText(tx?.description, '')),

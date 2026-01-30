@@ -14,6 +14,12 @@ let modalCashBoxIndex = 0;
 let Contacts = [];
 let contactsLoaded = false;
 
+function formatContactDisplayId(sequenceNumber) {
+    const n = Number(sequenceNumber);
+    if (!Number.isFinite(n) || n <= 0) return '';
+    return `CONT-${String(n).padStart(3, '0')}`;
+}
+
 // ========================================
 // DOM HELPERS
 // ========================================
@@ -380,7 +386,8 @@ async function loadContactsForAutocomplete() {
     try {
         const data = await window.db.contacts.getAll();
         Contacts = (data || []).map(function(c) {
-            return { id: c.id, name: c.name || '', address: c.address || '', contact: c.email || '' };
+            const displayId = formatContactDisplayId(c && c.sequence_number);
+            return { id: c.id, name: c.name || '', address: c.address || '', contact: c.email || '', displayId: displayId };
         });
         contactsLoaded = true;
     } catch (e) { console.error('Failed to load contacts:', e); }
@@ -398,7 +405,9 @@ function initContactAutocomplete() {
         if (!q) return [];
         const lq = q.toLowerCase();
         return Contacts.filter(function(p) {
-            return p.name.toLowerCase().includes(lq) || (p.id && p.id.toLowerCase().includes(lq)) || (p.address && p.address.toLowerCase().includes(lq));
+            return p.name.toLowerCase().includes(lq)
+                || (p.displayId && p.displayId.toLowerCase().includes(lq))
+                || (p.address && p.address.toLowerCase().includes(lq));
         });
     }
 
@@ -419,7 +428,7 @@ function initContactAutocomplete() {
         if (!results.length) { dropdown.classList.remove('show'); return; }
 
         var html = results.map(function(c, i) {
-            return '<div class="autocomplete-item ' + (i === selectedIdx ? 'active' : '') + '" data-index="' + i + '"><div class="autocomplete-item-name">' + c.name + '</div><div class="autocomplete-item-details">' + (c.id ? '<div class="autocomplete-item-detail"><i class="fas fa-tag"></i>' + c.id + '</div>' : '') + (c.address ? '<div class="autocomplete-item-detail"><i class="fas fa-map-marker-alt"></i>' + c.address.split(',')[0] + '</div>' : '') + '</div></div>';
+            return '<div class="autocomplete-item ' + (i === selectedIdx ? 'active' : '') + '" data-index="' + i + '"><div class="autocomplete-item-name">' + c.name + '</div><div class="autocomplete-item-details">' + (c.displayId ? '<div class="autocomplete-item-detail"><i class="fas fa-tag"></i>' + c.displayId + '</div>' : '') + (c.address ? '<div class="autocomplete-item-detail"><i class="fas fa-map-marker-alt"></i>' + c.address.split(',')[0] + '</div>' : '') + '</div></div>';
         }).join('') + '<div class="autocomplete-add-new" data-action="add-new"><i class="fas fa-plus"></i> Add new Contact</div>';
 
         dropdown.innerHTML = html;
@@ -442,7 +451,12 @@ function initContactAutocomplete() {
         if (selectedIdx >= 0 && items[selectedIdx]) items[selectedIdx].scrollIntoView({ block: 'nearest' });
     }
 
-    input.addEventListener('input', function(e) { show(filter(e.target.value)); selectedIdx = -1; });
+    input.addEventListener('input', function(e) {
+        const idEl = getEl('modalContactId');
+        if (idEl) idEl.value = '';
+        show(filter(e.target.value));
+        selectedIdx = -1;
+    });
     input.addEventListener('focus', function(e) { if (e.target.value) show(filter(e.target.value)); });
     input.addEventListener('keydown', function(e) {
         var items = dropdown.querySelectorAll('.autocomplete-item');

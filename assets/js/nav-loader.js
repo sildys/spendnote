@@ -155,7 +155,7 @@ function highlightCurrentPage() {
     const pageMap = {
         'dashboard': ['dashboard.html'],
         'cash-boxes': ['spendnote-cash-box-list.html', 'spendnote-cash-box-detail.html', 'spendnote-cash-box-settings.html'],
-        'transactions': ['spendnote-transaction-history.html', 'spendnote-transaction-detail.html', 'spendnote-create-transaction.html'],
+        'transactions': ['spendnote-transaction-history.html', 'spendnote-transaction-detail.html'],
         'contacts': ['spendnote-contact-list.html', 'spendnote-contact-detail.html']
     };
 
