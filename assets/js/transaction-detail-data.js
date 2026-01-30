@@ -175,7 +175,7 @@
 
         setText(qs('#txTitle'), `Transaction ${displayId}`);
         setInnerHtml(qs('#txMetaDate'), `<i class="fas fa-calendar"></i> ${formatDateShort(txDate)}`);
-        setInnerHtml(qs('#txMetaCashBox'), `<i class="fas fa-building"></i> ${cashBoxName}${cashBoxCode ? ` (${cashBoxCode})` : ''}`);
+        setText(qs('#txMetaCashBoxText'), `${cashBoxName}${cashBoxCode ? ` (${cashBoxCode})` : ''}`);
 
         const txIcon = qs('#txIcon');
         if (txIcon) {
@@ -203,6 +203,12 @@
         const directionLabel = qs('#txDirectionLabel');
         if (directionLabel) {
             directionLabel.textContent = isIncome ? 'Cash IN' : 'Cash OUT';
+        }
+
+        const headerAmount = qs('#txHeaderAmount');
+        if (headerAmount) {
+            headerAmount.classList.toggle('in', isIncome);
+            headerAmount.classList.toggle('out', !isIncome);
         }
 
         const amountValue = qs('#txAmountValue');

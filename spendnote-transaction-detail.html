@@ -86,11 +86,39 @@
             gap: 5px;
         }
 
+        .cashbox-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(var(--active-rgb), 0.10);
+            border: 1px solid rgba(var(--active-rgb), 0.20);
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .cashbox-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: var(--active);
+            box-shadow: 0 0 0 3px rgba(var(--active-rgb), 0.18);
+        }
+
         .header-amount {
             text-align: center;
             padding: 0 32px;
             border-left: 1px solid var(--border);
             border-right: 1px solid var(--border);
+        }
+
+        .header-amount.in {
+            background: rgba(var(--active-rgb), 0.06);
+        }
+
+        .header-amount.out {
+            background: rgba(var(--out-rgb), 0.08);
         }
 
         .header-amount-label {
@@ -115,6 +143,49 @@
             display: flex;
             gap: 8px;
             align-items: center;
+            position: relative;
+        }
+
+        .header-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            min-width: 220px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+            padding: 6px;
+            z-index: 50;
+            display: none;
+        }
+
+        .header-menu.open {
+            display: block;
+        }
+
+        .header-menu button {
+            width: 100%;
+            text-align: left;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-menu button:hover {
+            background: var(--bg);
+        }
+
+        .header-menu .danger {
+            color: var(--error);
         }
 
         .type-badge {
@@ -763,28 +834,31 @@
                     <div class="header-meta">
                         <span id="txMetaDate"><i class="fas fa-calendar"></i> —</span>
                         <span>•</span>
-                        <span id="txMetaCashBox"><i class="fas fa-building"></i> —</span>
+                        <span id="txMetaCashBox" class="cashbox-chip">
+                            <span class="cashbox-dot" aria-hidden="true"></span>
+                            <i class="fas fa-building" aria-hidden="true"></i>
+                            <span id="txMetaCashBoxText">—</span>
+                        </span>
                     </div>
                 </div>
             </div>
-            <div class="header-amount">
+            <div class="header-amount in" id="txHeaderAmount">
                 <div class="header-amount-label" id="txDirectionLabel">Cash IN</div>
                 <div class="header-amount-value in" id="txAmountValue">—</div>
             </div>
             <div class="header-actions">
                 <span class="type-badge in" id="txTypeBadge">IN</span>
-                <button class="btn btn-secondary btn-small" onclick="window.print()" title="Print">
-                    <i class="fas fa-print"></i>
-                </button>
-                <button class="btn btn-secondary btn-small" onclick="alert('Download PDF')">
-                    <i class="fas fa-file-pdf"></i>
-                </button>
                 <button class="btn btn-primary btn-small" onclick="alert('Email Receipt')">
                     <i class="fas fa-envelope"></i> Email
                 </button>
-                <button class="btn btn-danger btn-icon" onclick="if(confirm('Delete this transaction?')) alert('Deleted')" title="Delete">
-                    <i class="fas fa-trash"></i>
+                <button class="btn btn-secondary btn-small btn-icon" id="txMoreBtn" type="button" title="More">
+                    <i class="fas fa-ellipsis-h"></i>
                 </button>
+                <div class="header-menu" id="txMoreMenu" role="menu" aria-label="More actions">
+                    <button type="button" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+                    <button type="button" onclick="alert('Download PDF')"><i class="fas fa-file-pdf"></i> Download PDF</button>
+                    <button type="button" class="danger" onclick="if(confirm('Delete this transaction?')) alert('Deleted')"><i class="fas fa-trash"></i> Delete</button>
+                </div>
             </div>
         </div>
 
@@ -1145,6 +1219,22 @@
     function resetZoom() { currentZoom = 0.6; updateZoom(); }
 
     document.addEventListener('DOMContentLoaded', function() {
+        const moreBtn = document.getElementById('txMoreBtn');
+        const moreMenu = document.getElementById('txMoreMenu');
+        if (moreBtn && moreMenu) {
+            const closeMenu = () => { moreMenu.classList.remove('open'); };
+            moreBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                moreMenu.classList.toggle('open');
+            });
+            document.addEventListener('click', function() { closeMenu(); });
+            moreMenu.addEventListener('click', function(e) { e.stopPropagation(); });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeMenu();
+            });
+        }
+
         try {
             receiptMode = localStorage.getItem('spendnote.receiptMode') === 'detailed' ? 'detailed' : 'quick';
         } catch (e) { receiptMode = 'quick'; }
@@ -1184,6 +1274,6 @@
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/transaction-detail-data.js?v=2"></script>
+<script src="assets/js/transaction-detail-data.js?v=ead362b-1"></script>
 </body>
 </html>
