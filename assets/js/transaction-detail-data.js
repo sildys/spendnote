@@ -175,44 +175,42 @@
 
         setText(qs('#txTitle'), `Transaction ${displayId}`);
         setInnerHtml(qs('#txMetaDate'), `<i class="fas fa-calendar"></i> ${formatDateShort(txDate)}`);
-        setInnerHtml(qs('#txMetaRecorder'), `<i class="fas fa-user"></i> Created by ${createdBy}`);
+        setInnerHtml(qs('#txMetaCashBox'), `<i class="fas fa-building"></i> ${cashBoxName}${cashBoxCode ? ` (${cashBoxCode})` : ''}`);
 
-        const badge = qs('#txMetaStatus');
-        if (badge) {
-            badge.textContent = isIncome ? 'IN' : 'OUT';
-            badge.classList.toggle('in', isIncome);
-            badge.classList.toggle('out', !isIncome);
+        const txIcon = qs('#txIcon');
+        if (txIcon) {
+            txIcon.classList.toggle('out', !isIncome);
+        }
+
+        const typeBadge = qs('#txTypeBadge');
+        if (typeBadge) {
+            typeBadge.textContent = isIncome ? 'IN' : 'OUT';
+            typeBadge.classList.toggle('in', isIncome);
+            typeBadge.classList.toggle('out', !isIncome);
         }
 
         setText(qs('#txCashBoxName'), cashBoxName);
-        setText(qs('#txCashBoxCode'), cashBoxCode ? cashBoxCode : '');
-
-        const settingsLabel = cashBoxName && cashBoxName !== 'Unknown'
-            ? `${cashBoxName}${cashBoxCode ? ` (${cashBoxCode})` : ''}`
-            : '—';
-        setText(qs('#txCashBoxSettingsLabel'), settingsLabel);
+        setText(qs('#txCashBoxCode'), cashBoxCode || '—');
 
         setHtml(qs('#txIdCode'), `<code>${displayId}</code>`);
         setText(qs('#txDateLong'), formatDateLong(txDate));
         setText(qs('#txContactName'), contactName);
         setText(qs('#txContactId'), contactId);
+        setText(qs('#txContactAddress'), safeText(tx.contact?.address, '—'));
 
         setText(qs('#txCreatedBy'), `${createdBy} on ${formatDateTimeShort(createdAt)}`);
 
         const directionLabel = qs('#txDirectionLabel');
         if (directionLabel) {
-            directionLabel.textContent = isIncome ? 'Cash IN (Received)' : 'Cash OUT (Paid)';
-            directionLabel.classList.toggle('in', isIncome);
-            directionLabel.classList.toggle('out', !isIncome);
+            directionLabel.textContent = isIncome ? 'Cash IN' : 'Cash OUT';
         }
 
-        const amountCard = qs('#txAmountCard');
-        if (amountCard) {
-            amountCard.classList.toggle('in', isIncome);
-            amountCard.classList.toggle('out', !isIncome);
+        const amountValue = qs('#txAmountValue');
+        if (amountValue) {
+            amountValue.textContent = formatCurrency(tx.amount, currency);
+            amountValue.classList.toggle('in', isIncome);
+            amountValue.classList.toggle('out', !isIncome);
         }
-
-        setText(qs('#txAmountValue'), formatCurrency(tx.amount, currency));
 
         const lineItems = normalizeLineItems(tx.line_items);
         const lineItemsBody = qs('#txLineItemsBody');
@@ -232,7 +230,12 @@
             lineItemsBody.innerHTML = `${rows}${totalRow}`;
         }
 
-        setText(qs('#txNote'), safeText(tx.notes, ''));
+        const noteText = safeText(tx.notes, '');
+        setText(qs('#txNote'), noteText);
+        const noteSection = qs('#txNoteSection');
+        if (noteSection) {
+            noteSection.style.display = noteText && noteText !== '—' ? 'block' : 'none';
+        }
 
         if (document.title) {
             document.title = `Transaction ${displayId} - SpendNote`;
