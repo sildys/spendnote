@@ -175,7 +175,7 @@
 
         setText(qs('#txTitle'), `Transaction ${displayId}`);
         setInnerHtml(qs('#txMetaDate'), `<i class="fas fa-calendar"></i> ${formatDateShort(txDate)}`);
-        setInnerHtml(qs('#txMetaRecorder'), `<i class="fas fa-user"></i> Logged by ${createdBy}`);
+        setInnerHtml(qs('#txMetaRecorder'), `<i class="fas fa-user"></i> Created by ${createdBy}`);
 
         const badge = qs('#txMetaStatus');
         if (badge) {
@@ -195,7 +195,7 @@
         setHtml(qs('#txIdCode'), `<code>${displayId}</code>`);
         setText(qs('#txDateLong'), formatDateLong(txDate));
         setText(qs('#txContactName'), contactName);
-        setText(qs('#txAdditionalInfo'), contactId);
+        setText(qs('#txContactId'), contactId);
 
         setText(qs('#txCreatedBy'), `${createdBy} on ${formatDateTimeShort(createdAt)}`);
 
