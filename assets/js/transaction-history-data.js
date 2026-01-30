@@ -786,7 +786,10 @@
             const bulkActions = qs('#bulkActions');
             const selectedCount = qs('#selectedCount');
             if (selectedCount) selectedCount.textContent = String(count);
-            if (bulkActions) bulkActions.classList.toggle('show', count > 0);
+            if (bulkActions) {
+                const enabledActions = qsa('.bulk-action-btn:not(:disabled)', bulkActions).length;
+                bulkActions.classList.toggle('show', count > 0 && enabledActions > 0);
+            }
         }
 
         if (tbody) {
@@ -1128,34 +1131,7 @@
             });
         }
 
-        if (bulkDeleteBtn) {
-            bulkDeleteBtn.addEventListener('click', async () => {
-                const ids = qsa('.row-checkbox:checked', tbody)
-                    .map((cb) => safeText(cb?.dataset?.txId, ''))
-                    .filter(Boolean);
-
-                if (ids.length === 0) return;
-                const ok = confirm(`Delete ${ids.length} transaction(s)? This cannot be undone.`);
-                if (!ok) return;
-
-                bulkDeleteBtn.disabled = true;
-                try {
-                    await Promise.all(ids.map((id) => window.db.transactions.delete(id)));
-
-                    try {
-                        const stats = await window.db.transactions.getStats({});
-                        state.totalTxCount = Number(stats?.count) || 0;
-                    } catch (_) {
-                        // ignore count refresh failures
-                    }
-
-                    if (selectAllHeader) selectAllHeader.checked = false;
-                    render();
-                } finally {
-                    bulkDeleteBtn.disabled = false;
-                }
-            });
-        }
+        // bulkDeleteBtn intentionally disabled until admin-only void/storno workflow is implemented
 
         render();
     }
