@@ -1,79 +1,174 @@
 # SpendNote (demo)
 
-SpendNote is a cash receipt / cash box management web app.
-The UI is implemented as **static HTML/CSS/JavaScript** and uses **Supabase** for authentication and database operations.
+SpendNote is a **cash box + transaction + contacts** web app.
+
+- Frontend: **static HTML/CSS/JavaScript** (no framework)
+- Backend: **Supabase** (Auth + Postgres + RLS)
+
+This repository is meant to be deployable as a static site (e.g. Vercel).
 
 ## What the app does (product)
-- Manage **Cash Boxes** (registers) with balances
+
+- Track multiple **Cash Boxes** (registers) with balances
 - Record **Transactions** (IN/OUT) into cash boxes
-- Manage **Contacts** and optionally attach a transaction to a saved contact
+- Maintain **Contacts** and optionally attach a transaction to a saved contact
 - Browse/search/filter **Transaction History**
 
-## Main user flows
-### 1) Sign in
-- Pages use Supabase Auth.
-- App pages are protected by `assets/js/auth-guard.js`.
+## Main flows
 
-### 2) Create a transaction (Dashboard modal)
-- Open Dashboard, create an IN/OUT transaction via modal.
-- Optional: **Save to Contacts** toggle controls whether the contact should be saved as a Contact (implementation is intentionally minimal; no hidden/automatic contact creation).
-- **Negative cash box balance is blocked** for expenses (UI-side check).
+### Authentication
 
-### 3) Manage Contacts
-- Contacts list and contact detail are wired to Supabase.
-- Contacts show a stable display ID: **`CONT-###`** derived from `sequence_number`.
+- Auth uses Supabase Auth.
+- Most app pages include `assets/js/auth-guard.js` which redirects to `spendnote-login.html` when not authenticated.
 
-### 4) Transaction History
+### Create a transaction (Dashboard modal)
+
+- Create IN/OUT transaction via the dashboard modal.
+- Optional: **Save to Contacts** toggle exists. The intended UX is minimal (no “magic” auto-create unless explicitly requested by the toggle/flow).
+- **Negative cash box balance is blocked** for expenses (currently UI-side check).
+
+### Contacts
+
+- Contacts list + detail are wired to Supabase.
+- UI uses a stable display ID: **`CONT-###`** derived from `contacts.sequence_number`.
+
+### Transaction History
+
 - Search/filter across transactions.
 - Contact ID display is intentionally minimal:
-  - if there is no saved contact sequence, it shows **`—`** (no placeholder `CONT-*`).
+  - if there is no saved contact sequence, show **`—`** (no placeholder `CONT-*`).
 
-## Pages (high level)
-- `index.html` / `dashboard.html`: overview + new transaction modal
-- `spendnote-cash-box-list.html`: cash boxes list
-- `spendnote-cash-box-detail.html`: cash box detail
-- `spendnote-transaction-history.html`: transaction history
-- `spendnote-transaction-detail.html`: transaction detail
-- `spendnote-contact-list.html`: contacts list
-- `spendnote-contact-detail.html`: contact detail
-- `spendnote-user-settings.html`: user settings
+## Pages / routes (high level)
 
-## Tech / code structure
-### Frontend
-- No framework (vanilla JS).
-- Shared styles:
-  - `assets/css/main.css`
-  - `assets/css/app-layout.css`
-- Shared JS:
-  - `assets/js/main.js`
-  - `assets/js/nav-loader.js`
-  - `assets/js/auth-guard.js`
-
-### Supabase integration
-- Supabase client config: `assets/js/supabase-config.js`
-- Most data access goes through `window.db.*` helpers defined there.
-
-## Database invariants (important)
-- **User scoping** is done via `public.profiles`.
-  - App tables reference `public.profiles(id)` via `user_id`.
-  - This is not the same as referencing `auth.users` directly.
-- **RLS is enabled** and policies typically use `auth.uid() = user_id`.
-- **Sequence numbers** are used for stable display IDs:
-  - Contacts: `sequence_number` -> `CONT-###`
-  - Transactions: may use sequence fields (depending on schema/migrations) for stable receipt-like IDs.
+- Public
+  - `index.html` (landing)
+  - `spendnote-login.html`, `spendnote-signup.html`, `spendnote-forgot-password.html`
+- App
+  - `dashboard.html` (overview + create transaction modal)
+  - `spendnote-cash-box-list.html`
+  - `spendnote-cash-box-detail.html`
+  - `spendnote-transaction-history.html`
+  - `spendnote-transaction-detail.html`
+  - `spendnote-contact-list.html`
+  - `spendnote-contact-detail.html`
+  - `spendnote-user-settings.html`
 
 ## Local development
-### Run
-- Use `start-server.bat` to serve the static files.
 
-### Configure Supabase
-- Set your Supabase URL + anon key in `assets/js/supabase-config.js` (or the referenced config file if split).
-- Never use the service role key in the browser.
+### Requirements
 
-## “New chat starter” (to avoid re-explaining everything)
-If a chat thread resets/freeze happens, start the new chat with:
+- Node.js (only needed to run the tiny local static server)
+
+### Run the app locally
+
+Run:
+
+```bat
+start-server.bat
+```
+
+Then open:
+
+- `http://localhost:8000`
+
+## Supabase configuration
+
+### Where credentials live
+
+Supabase is configured in:
+
+- `assets/js/supabase-config.js`
+
+It defines:
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `window.supabaseClient`
+- `window.auth` (auth wrapper)
+- `window.db` (DB access wrappers)
+
+### Session behavior
+
+The Supabase client is configured to use **`sessionStorage`**, so closing the tab/browser drops the session.
+
+### Important security note
+
+- Browser code must only use the **anon/public key**.
+- Never put a Supabase **service role key** into this repo.
+
+## Code structure (important entry points)
+
+### Shared CSS
+
+- `assets/css/main.css`
+- `assets/css/app-layout.css`
+
+### Shared JS
+
+- `assets/js/supabase-config.js`
+  - Defines the data layer (`window.db.*`) and auth helpers.
+- `assets/js/auth-guard.js`
+  - Redirects unauthenticated users to login on app pages.
+- `assets/js/nav-loader.js`
+  - Injects the shared navigation (`loadNav()`), binds logout + “New Transaction”.
+- `assets/js/main.js`
+  - Global helpers (formatting, nav avatar, logout binding, theme color persistence).
+
+### Page-specific JS
+
+- Dashboard transaction UI: `assets/js/dashboard-form.js`
+- Transaction History UI/data: `assets/js/transaction-history-data.js`
+
+## Database invariants (critical)
+
+### profiles vs auth.users
+
+- App tables are scoped by `user_id` that references **`public.profiles(id)`**.
+- This means a **profile row must exist** for a newly registered auth user, otherwise FK/RLS will break.
+
+### RLS
+
+- RLS is enabled.
+- Policies typically enforce ownership via `auth.uid() = user_id`.
+
+### Stable display IDs
+
+- Contacts: `contacts.sequence_number` -> `CONT-###`
+- Transactions: may use sequence fields (`cash_box_sequence`, `tx_sequence_in_box`) for stable receipt-like IDs.
+
+### Cash box ordering
+
+- Cash boxes try to use `sort_order` for stable ordering, with fallback to `created_at`.
+
+## Migrations / schema
+
+- Base schema + docs: `database/schema.sql`, `database/SCHEMA-DOCUMENTATION.md`
+- Supabase migrations: `supabase-migrations/*.sql`
+
+## Deployment
+
+This repo is designed to work as a static deployment.
+
+- Vercel config: `vercel.json`
+  - Uses immutable caching for `/assets/*`.
+
+## Troubleshooting
+
+- **Redirect loop to login**
+  - Check that `SUPABASE_URL` / `SUPABASE_ANON_KEY` are correct.
+  - Check that your Supabase Auth settings allow the current site origin.
+- **“No authenticated user” in console**
+  - You are not logged in, or session expired (expected when tab/browser closed).
+- **Foreign key / RLS errors on inserts**
+  - Ensure a `public.profiles` row exists for the auth user.
+
+## “New chat starter” (so you don’t need to re-explain)
+
+If a chat thread resets/freezes, start the new chat with:
+
 - "Read `PROGRESS.md` and `README.md`, then continue from there."
 
 ## Progress tracking
+
 - Canonical status: `PROGRESS.md`
 - Session snapshot (2026-01-30): `SESSION-NOTES-2026-01-30.md`
