@@ -197,9 +197,6 @@
         setText(qs('#txContactName'), contactName);
         setText(qs('#txAdditionalInfo'), contactId);
 
-        const reference = safeText(tx.reference_id || tx.reference || '', '—');
-        setText(qs('#txReferenceId'), reference);
-
         setText(qs('#txCreatedBy'), `${createdBy} on ${formatDateTimeShort(createdAt)}`);
 
         const directionLabel = qs('#txDirectionLabel');
