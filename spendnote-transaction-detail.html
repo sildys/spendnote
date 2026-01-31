@@ -156,14 +156,14 @@
             border-radius: 12px;
             font-weight: 800;
             font-size: 13px;
-            border: 1px solid rgba(239, 68, 68, 0.35);
-            background: rgba(239, 68, 68, 0.06);
-            color: var(--error);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
         }
 
         .tx-delete-trigger:hover {
-            border-color: rgba(239, 68, 68, 0.55);
-            background: rgba(239, 68, 68, 0.10);
+            border-color: rgba(var(--active-rgb, 5, 150, 105), 0.40);
+            background: rgba(var(--active-rgb, 5, 150, 105), 0.06);
         }
 
         .tx-void-panel {
@@ -186,7 +186,7 @@
 
         .tx-void-panel .copy {
             min-width: 0;
-            color: var(--text);
+            color: var(--error);
             font-size: 13px;
             line-height: 1.4;
         }
@@ -1809,6 +1809,6 @@
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/transaction-detail-data.js?v=header-20260131-22"></script>
+<script src="assets/js/transaction-detail-data.js?v=header-20260131-23"></script>
 </body>
 </html>
