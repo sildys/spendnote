@@ -1017,7 +1017,8 @@
             height: 1150px;
             border: none;
             display: block;
-            zoom: 0.6;
+            zoom: 1;
+            transform-origin: 0 0;
         }
 
         /* PRO SECTION */
@@ -1557,7 +1558,13 @@
     function updateZoom() {
         const iframe = document.getElementById('receiptFrame');
         const zoomLevel = document.getElementById('zoomLevel');
-        if (iframe) iframe.style.zoom = currentZoom;
+        if (iframe) {
+            const baseHeight = 1150;
+            iframe.style.zoom = '1';
+            iframe.style.transform = `scale(${currentZoom})`;
+            iframe.style.width = `${100 / currentZoom}%`;
+            iframe.style.height = `${baseHeight / currentZoom}px`;
+        }
         if (zoomLevel) zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
     }
 
@@ -1659,6 +1666,6 @@
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/transaction-detail-data.js?v=header-20260131-20"></script>
+<script src="assets/js/transaction-detail-data.js?v=header-20260131-21"></script>
 </body>
 </html>
