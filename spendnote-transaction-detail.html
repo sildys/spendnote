@@ -24,7 +24,7 @@
         .tx-topbar {
             border-radius: 16px;
             padding: 12px;
-            border: 1px solid rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
             position: relative;
         }
 
@@ -54,19 +54,19 @@
         }
 
         .tx-topbar-card {
-            background: rgba(255,255,255,0.92);
-            border: 1px solid rgba(0,0,0,0.08);
-            border-radius: 14px;
-            padding: 10px 12px;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .tx-info-card {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             position: relative;
             padding-right: 170px;
             padding-bottom: 18px;
@@ -276,7 +276,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-muted);
         }
 
@@ -292,8 +292,8 @@
             gap: 8px;
             padding: 4px 10px;
             border-radius: 999px;
-            background: rgba(255,255,255,0.70);
-            border: 1px solid rgba(0,0,0,0.10);
+            background: var(--bg);
+            border: 2px solid var(--border);
             color: var(--text);
             font-weight: 600;
         }
@@ -303,7 +303,7 @@
             height: 10px;
             border-radius: 999px;
             background: var(--active);
-            box-shadow: 0 0 0 3px rgba(var(--active-rgb), 0.18);
+            box-shadow: 0 0 0 3px rgba(var(--active-rgb), 0.14);
         }
 
         .tx-amount-card {
@@ -348,6 +348,7 @@
             font-weight: 700;
             padding: 0 14px;
             min-width: 120px;
+            border-radius: 12px;
         }
 
         .tx-actions-card .btn i {
