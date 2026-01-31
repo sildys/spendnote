@@ -1478,7 +1478,7 @@
                             </div>
                         </div>
                         <div class="preview-frame-container">
-                            <iframe id="receiptFrame" class="preview-frame" scrolling="yes" src="spendnote-receipt-a4-two-copies.html"></iframe>
+                            <iframe id="receiptFrame" class="preview-frame" scrolling="auto" src="spendnote-receipt-a4-two-copies.html"></iframe>
                         </div>
                     </div>
                 </div>
@@ -1665,11 +1665,10 @@
             if (!style) {
                 style = doc.createElement('style');
                 style.id = 'txReceiptPreviewOverride';
-                style.textContent = `html, body { overflow: auto !important; }`;
+                style.textContent = `html { overflow: hidden !important; } body { overflow: auto !important; }`;
                 doc.head && doc.head.appendChild(style);
             }
 
-            doc.documentElement.style.zoom = String(currentZoom);
             if (doc.body) doc.body.style.zoom = String(currentZoom);
         } catch (_) {}
     }
@@ -1839,6 +1838,6 @@
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/transaction-detail-data.js?v=header-20260131-40"></script>
+<script src="assets/js/transaction-detail-data.js?v=header-20260131-41"></script>
 </body>
 </html>
