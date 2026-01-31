@@ -83,25 +83,89 @@
             min-width: 0;
         }
 
+        .tx-created-by {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 2px;
+        }
+
+        .tx-created-by .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            background: rgba(var(--active-rgb), 0.14);
+            color: var(--active);
+            border: 1px solid rgba(0,0,0,0.08);
+            flex-shrink: 0;
+        }
+
+        .tx-created-by .meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .tx-created-by .meta .label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tx-created-by .meta .value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .tx-summary-amount {
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: flex-end;
             text-align: right;
-            padding: 8px 10px;
-            border-radius: 12px;
-            border: 1px solid rgba(0,0,0,0.08);
-            background: rgba(255,255,255,0.85);
-            min-width: 190px;
+            padding: 2px 0 0 0;
+            min-width: 220px;
         }
 
-        .tx-summary-amount.in {
-            border-color: rgba(5, 150, 105, 0.18);
+        .tx-direction-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-bottom: 2px;
         }
 
-        .tx-summary-amount.out {
-            border-color: rgba(var(--out-rgb), 0.18);
+        .tx-direction-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            background: rgba(var(--dir-rgb, 5, 150, 105), 0.14);
+            color: var(--dir, var(--primary));
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .tx-direction-pill.out {
+            background: rgba(var(--out-rgb), 0.14);
+            color: var(--out);
         }
 
         .tx-info-watermark {
@@ -238,11 +302,11 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--text-muted);
-            margin-bottom: 4px;
+            margin-bottom: 0;
         }
 
         .header-amount-value {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 900;
             letter-spacing: -0.02em;
         }
@@ -252,18 +316,25 @@
 
         .tx-actions-card {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             gap: 10px;
-            align-items: stretch;
-            justify-content: center;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 46px;
         }
 
         .tx-actions-card .btn {
             height: 44px;
-            width: 100%;
+            width: auto;
             justify-content: center;
             font-size: 14px;
             font-weight: 700;
+            padding: 0 14px;
+            min-width: 120px;
+        }
+
+        .tx-actions-card .btn i {
+            margin-right: 8px;
         }
 
         .header-menu {
@@ -288,12 +359,20 @@
         }
 
         .kebab-container .btn {
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: rgba(255,255,255,0.55);
+            border: 1px solid rgba(0,0,0,0.08);
+            opacity: 0.75;
+        }
+
+        .kebab-container .btn:hover {
+            opacity: 1;
+            background: rgba(255,255,255,0.80);
         }
 
         .header-menu.open {
@@ -947,6 +1026,16 @@
                 min-width: 0;
             }
 
+            .tx-direction-row {
+                justify-content: flex-start;
+            }
+
+            .tx-actions-card {
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                padding-right: 0;
+            }
+
             .info-grid {
                 grid-template-columns: 1fr;
             }
@@ -999,10 +1088,21 @@
                                     <span id="txMetaCashBoxText">—</span>
                                 </span>
                             </div>
+
+                            <div class="tx-created-by">
+                                <div class="avatar" id="txCreatedByAvatar" aria-hidden="true">—</div>
+                                <div class="meta">
+                                    <div class="label">Created by</div>
+                                    <div class="value" id="txCreatedBy">—</div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="tx-summary-amount in" id="txHeaderAmount">
-                            <div class="header-amount-label" id="txDirectionLabel">Cash IN</div>
+                            <div class="tx-direction-row">
+                                <div class="header-amount-label" id="txDirectionLabel">Cash IN</div>
+                                <div class="tx-direction-pill" id="txDirectionPill">IN</div>
+                            </div>
                             <div class="header-amount-value in" id="txAmountValue">—</div>
                         </div>
                     </div>
@@ -1402,6 +1502,6 @@
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/transaction-detail-data.js?v=header-20260131-1"></script>
+<script src="assets/js/transaction-detail-data.js?v=header-20260131-2"></script>
 </body>
 </html>

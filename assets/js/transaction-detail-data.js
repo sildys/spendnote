@@ -98,6 +98,16 @@
         el.innerHTML = html;
     }
 
+    function getInitials(name) {
+        const s = safeText(name, '').replace(/\s+/g, ' ').trim();
+        if (!s) return '—';
+        const parts = s.split(' ').filter(Boolean);
+        const first = parts[0] ? parts[0][0] : '';
+        const second = parts.length > 1 ? parts[1][0] : (parts[0] && parts[0].length > 1 ? parts[0][1] : '');
+        const out = `${first}${second}`.toUpperCase();
+        return out || '—';
+    }
+
     function computeLineItemsTotal(lineItems) {
         return lineItems.reduce((sum, it) => {
             const v = Number(it?.amount);
@@ -193,11 +203,25 @@
         setText(qs('#txContactId'), contactId);
         setText(qs('#txContactAddress'), safeText(tx.contact?.address, '—'));
 
-        setText(qs('#txCreatedBy'), `${createdBy} on ${formatDateTimeShort(createdAt)}`);
+        const createdByValue = qs('#txCreatedBy');
+        if (createdByValue) {
+            createdByValue.textContent = `${createdBy} • ${formatDateTimeShort(createdAt)}`;
+        }
+
+        const createdByAvatar = qs('#txCreatedByAvatar');
+        if (createdByAvatar) {
+            createdByAvatar.textContent = getInitials(createdBy);
+        }
 
         const directionLabel = qs('#txDirectionLabel');
         if (directionLabel) {
             directionLabel.textContent = isIncome ? 'Cash IN' : 'Cash OUT';
+        }
+
+        const directionPill = qs('#txDirectionPill');
+        if (directionPill) {
+            directionPill.textContent = isIncome ? 'IN' : 'OUT';
+            directionPill.classList.toggle('out', !isIncome);
         }
 
         const headerAmount = qs('#txHeaderAmount');
