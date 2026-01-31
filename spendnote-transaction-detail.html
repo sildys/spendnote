@@ -743,7 +743,7 @@
             display: grid;
             grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
             gap: 20px;
-            align-items: stretch;
+            align-items: start;
             width: 100%;
             max-width: 100%;
         }
@@ -753,7 +753,6 @@
         }
 
         .settings-grid .collapsible-section {
-            height: 100%;
             display: flex;
             flex-direction: column;
         }
@@ -1088,13 +1087,12 @@
         .preview-frame-container {
             overflow: hidden;
             background: white;
-            flex: 1;
-            min-height: 0;
+            height: 480px;
         }
 
         .preview-frame {
             width: 100%;
-            height: 100%;
+            height: 480px;
             border: none;
             display: block;
             zoom: 1;
@@ -1657,14 +1655,9 @@
             iframe.style.zoom = '1';
             iframe.style.transform = `scale(${currentZoom})`;
             const container = iframe.parentElement;
-            const cw = container ? container.clientWidth : 0;
-            const ch = container ? container.clientHeight : 0;
-            const fallbackW = 520;
-            const fallbackH = 520;
-            const w = (cw || fallbackW) / currentZoom;
-            const h = (ch || fallbackH) / currentZoom;
-            iframe.style.width = `${w}px`;
-            iframe.style.height = `${h}px`;
+            const cw = container ? container.clientWidth : 480;
+            iframe.style.width = `${cw / currentZoom}px`;
+            iframe.style.height = `${480 / currentZoom}px`;
         }
         if (zoomLevel) zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
     }
@@ -1821,6 +1814,6 @@
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/transaction-detail-data.js?v=header-20260131-27"></script>
+<script src="assets/js/transaction-detail-data.js?v=header-20260131-28"></script>
 </body>
 </html>
