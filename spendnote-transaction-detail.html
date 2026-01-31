@@ -1088,12 +1088,13 @@
         .preview-frame-container {
             overflow: hidden;
             background: white;
-            height: 480px;
+            flex: 1;
+            min-height: 0;
         }
 
         .preview-frame {
             width: 100%;
-            height: 480px;
+            height: 100%;
             border: none;
             display: block;
             zoom: 1;
@@ -1657,8 +1658,9 @@
             iframe.style.transform = `scale(${currentZoom})`;
             const container = iframe.parentElement;
             const cw = container ? container.clientWidth : 480;
+            const ch = container ? container.clientHeight : 480;
             iframe.style.width = `${cw / currentZoom}px`;
-            iframe.style.height = `${480 / currentZoom}px`;
+            iframe.style.height = `${ch / currentZoom}px`;
         }
         if (zoomLevel) zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
     }
@@ -1815,6 +1817,6 @@
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/transaction-detail-data.js?v=header-20260131-29"></script>
+<script src="assets/js/transaction-detail-data.js?v=header-20260131-30"></script>
 </body>
 </html>
