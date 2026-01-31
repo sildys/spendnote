@@ -1658,13 +1658,22 @@
 
             const container = iframe.parentElement;
             if (container) {
-                const cw = container.clientWidth || 520;
-                const ch = container.clientHeight || 520;
+                const rect = container.getBoundingClientRect();
+                const cw = rect && rect.width ? rect.width : (container.clientWidth || 520);
+                const ch = rect && rect.height ? rect.height : (container.clientHeight || 520);
                 iframe.style.width = `${cw / currentZoom}px`;
                 iframe.style.height = `${ch / currentZoom}px`;
             }
         }
         if (zoomLevel) zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
+    }
+
+    function scheduleZoomUpdate() {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                updateZoom();
+            });
+        });
     }
 
     function zoomIn() { currentZoom = Math.min(currentZoom + 0.1, 1.2); updateZoom(); }
@@ -1676,6 +1685,17 @@
         const voidPanel = document.getElementById('txVoidPanel');
         const voidBtn = document.getElementById('txVoidBtn');
         const voidNote = document.getElementById('txVoidNote');
+
+        const receiptFrame = document.getElementById('receiptFrame');
+        if (receiptFrame) {
+            receiptFrame.addEventListener('load', () => {
+                scheduleZoomUpdate();
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            scheduleZoomUpdate();
+        });
 
         if (deleteToggle && voidPanel) {
             deleteToggle.addEventListener('click', () => {
@@ -1809,7 +1829,7 @@
 
         applyReceiptMode(receiptMode);
         reloadIframe();
-        updateZoom();
+        scheduleZoomUpdate();
     });
 </script>
 
@@ -1819,6 +1839,6 @@
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/transaction-detail-data.js?v=header-20260131-42"></script>
+<script src="assets/js/transaction-detail-data.js?v=header-20260131-43"></script>
 </body>
 </html>
