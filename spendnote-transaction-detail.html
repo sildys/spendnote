@@ -1094,7 +1094,7 @@
 
         .preview-frame {
             width: 100%;
-            height: 520px;
+            height: 100%;
             border: none;
             display: block;
             zoom: 1;
@@ -1656,8 +1656,15 @@
         if (iframe) {
             iframe.style.zoom = '1';
             iframe.style.transform = `scale(${currentZoom})`;
-            iframe.style.width = '100%';
-            iframe.style.height = '520px';
+            const container = iframe.parentElement;
+            const cw = container ? container.clientWidth : 0;
+            const ch = container ? container.clientHeight : 0;
+            const fallbackW = 520;
+            const fallbackH = 520;
+            const w = (cw || fallbackW) / currentZoom;
+            const h = (ch || fallbackH) / currentZoom;
+            iframe.style.width = `${w}px`;
+            iframe.style.height = `${h}px`;
         }
         if (zoomLevel) zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
     }
@@ -1814,6 +1821,6 @@
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/transaction-detail-data.js?v=header-20260131-26"></script>
+<script src="assets/js/transaction-detail-data.js?v=header-20260131-27"></script>
 </body>
 </html>
