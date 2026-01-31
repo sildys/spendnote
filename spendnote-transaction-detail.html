@@ -1697,6 +1697,10 @@ html, body { height: auto !important; overflow: auto !important; }
     function resetZoom() { currentZoom = 0.6; scheduleZoomUpdate(); }
 
     document.addEventListener('DOMContentLoaded', function() {
+        // #region agent log
+        fetch('http://127.0.0.1:7243/ingest/67fbcfb9-05d9-4fc4-9d50-823ee0474032',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'spendnote-transaction-detail.html:1699',message:'DOMContentLoaded - checking iframe layout',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'A,B,C,D'})}).catch(()=>{});
+        // #endregion
+
         const deleteToggle = document.getElementById('txDeleteToggle');
         const voidPanel = document.getElementById('txVoidPanel');
         const voidBtn = document.getElementById('txVoidBtn');
@@ -1706,11 +1710,30 @@ html, body { height: auto !important; overflow: auto !important; }
         if (receiptFrame) {
             receiptFrame.addEventListener('load', () => {
                 scheduleZoomUpdate();
+                
+                // #region agent log
+                const receiptSection = document.getElementById('receiptSection');
+                const receiptLayout = receiptSection ? receiptSection.querySelector('.receipt-layout') : null;
+                const receiptPreview = document.querySelector('.receipt-preview');
+                const previewContainer = document.getElementById('receiptPreviewContainer');
+                const collapsibleSection = document.querySelector('.settings-grid .collapsible-section');
+                
+                fetch('http://127.0.0.1:7243/ingest/67fbcfb9-05d9-4fc4-9d50-823ee0474032',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'spendnote-transaction-detail.html:1710',message:'Iframe loaded - measuring heights',data:{receiptSectionHeight:receiptSection?receiptSection.offsetHeight:null,receiptLayoutHeight:receiptLayout?receiptLayout.offsetHeight:null,receiptPreviewHeight:receiptPreview?receiptPreview.offsetHeight:null,previewContainerHeight:previewContainer?previewContainer.offsetHeight:null,iframeHeight:receiptFrame?receiptFrame.offsetHeight:null,collapsibleSectionHeight:collapsibleSection?collapsibleSection.offsetHeight:null},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'A,B,C,D'})}).catch(()=>{});
+                // #endregion
             });
         }
 
         window.addEventListener('resize', () => {
             scheduleZoomUpdate();
+            
+            // #region agent log
+            const receiptSection = document.getElementById('receiptSection');
+            const receiptLayout = receiptSection ? receiptSection.querySelector('.receipt-layout') : null;
+            const receiptPreview = document.querySelector('.receipt-preview');
+            const previewContainer = document.getElementById('receiptPreviewContainer');
+            
+            fetch('http://127.0.0.1:7243/ingest/67fbcfb9-05d9-4fc4-9d50-823ee0474032',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'spendnote-transaction-detail.html:1715',message:'Window resized - remeasuring',data:{receiptSectionHeight:receiptSection?receiptSection.offsetHeight:null,receiptLayoutHeight:receiptLayout?receiptLayout.offsetHeight:null,receiptPreviewHeight:receiptPreview?receiptPreview.offsetHeight:null,previewContainerHeight:previewContainer?previewContainer.offsetHeight:null},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'A,B'})}).catch(()=>{});
+            // #endregion
         });
 
         if (deleteToggle && voidPanel) {
@@ -1846,6 +1869,22 @@ html, body { height: auto !important; overflow: auto !important; }
         applyReceiptMode(receiptMode);
         reloadIframe();
         scheduleZoomUpdate();
+        
+        // #region agent log
+        setTimeout(() => {
+            const receiptSection = document.getElementById('receiptSection');
+            const receiptLayout = receiptSection ? receiptSection.querySelector('.receipt-layout') : null;
+            const receiptPreview = document.querySelector('.receipt-preview');
+            const previewContainer = document.getElementById('receiptPreviewContainer');
+            const collapsibleContent = document.querySelector('.settings-grid .collapsible-content');
+            const settingsGrid = document.querySelector('.settings-grid');
+            
+            const receiptPreviewComputedStyle = receiptPreview ? window.getComputedStyle(receiptPreview) : null;
+            const receiptLayoutComputedStyle = receiptLayout ? window.getComputedStyle(receiptLayout) : null;
+            
+            fetch('http://127.0.0.1:7243/ingest/67fbcfb9-05d9-4fc4-9d50-823ee0474032',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'spendnote-transaction-detail.html:1848',message:'After init - final measurements with computed styles',data:{receiptSectionHeight:receiptSection?receiptSection.offsetHeight:null,receiptLayoutHeight:receiptLayout?receiptLayout.offsetHeight:null,receiptPreviewHeight:receiptPreview?receiptPreview.offsetHeight:null,previewContainerHeight:previewContainer?previewContainer.offsetHeight:null,collapsibleContentHeight:collapsibleContent?collapsibleContent.offsetHeight:null,settingsGridHeight:settingsGrid?settingsGrid.offsetHeight:null,receiptPreviewFlexGrow:receiptPreviewComputedStyle?receiptPreviewComputedStyle.flexGrow:null,receiptPreviewHeight_computed:receiptPreviewComputedStyle?receiptPreviewComputedStyle.height:null,receiptLayoutFlex:receiptLayoutComputedStyle?receiptLayoutComputedStyle.flex:null,receiptLayoutHeight_computed:receiptLayoutComputedStyle?receiptLayoutComputedStyle.height:null},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'A,B,C,D'})}).catch(()=>{});
+        }, 500);
+        // #endregion
     });
 </script>
 
