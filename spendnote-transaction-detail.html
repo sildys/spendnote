@@ -665,9 +665,17 @@
 
         .settings-grid {
             display: grid;
-            grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
+            grid-template-columns: minmax(0, 920px) minmax(0, 480px);
             gap: 20px;
             align-items: start;
+        }
+
+        .settings-grid .pro-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .settings-grid .pro-field.full {
+            grid-column: span 1;
         }
 
         @media (max-width: 1200px) {
@@ -726,9 +734,16 @@
         /* RECEIPT SETTINGS */
         .receipt-layout {
             display: grid;
-            grid-template-columns: 320px minmax(360px, 1fr);
+            grid-template-columns: 320px minmax(420px, 560px);
             gap: 20px;
             padding-top: 16px;
+            justify-content: start;
+        }
+
+        .receipt-preview {
+            max-width: 560px;
+            width: 100%;
+            justify-self: start;
         }
 
         @media (max-width: 1100px) {
@@ -1618,6 +1633,6 @@
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/transaction-detail-data.js?v=header-20260131-14"></script>
+<script src="assets/js/transaction-detail-data.js?v=header-20260131-15"></script>
 </body>
 </html>
