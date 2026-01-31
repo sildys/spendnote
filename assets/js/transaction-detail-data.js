@@ -173,9 +173,22 @@
         const contactName = safeText(tx.contact?.name || tx.contact_name, '—');
         const contactId = safeText(tx.contact_id, '—');
 
+        // Set Cash Box Header
+        setText(qs('#txCashBoxName'), cashBoxName);
+        setText(qs('#txCashBoxId'), cashBoxCode || '—');
+        
+        // Set cash box icon
+        const cashBoxIcon = qs('#txCashBoxIcon');
+        if (cashBoxIcon && tx.cash_box?.icon) {
+            const iconClass = tx.cash_box.icon.startsWith('fa-') ? tx.cash_box.icon : 'fa-building';
+            const iconEl = cashBoxIcon.querySelector('i');
+            if (iconEl) {
+                iconEl.className = `fas ${iconClass}`;
+            }
+        }
+
         setText(qs('#txTitle'), displayId);
         setInnerHtml(qs('#txMetaDate'), `<i class="fas fa-calendar"></i> ${formatDateShort(txDate)}`);
-        setText(qs('#txMetaCashBoxText'), `${cashBoxName}${cashBoxCode ? ` (${cashBoxCode})` : ''}`);
 
         const typeWatermark = qs('#txTypeWatermark');
         if (typeWatermark) {

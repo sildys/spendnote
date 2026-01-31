@@ -98,30 +98,111 @@
         .tx-summary-left {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 16px;
             min-width: 0;
+        }
+
+        /* Cash Box Header (dashboard-style) */
+        .tx-cashbox-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .tx-cashbox-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, var(--active), var(--primary-light));
+            box-shadow: 0 4px 12px rgba(var(--active-rgb, 5, 150, 105), 0.3);
+        }
+
+        .tx-cashbox-icon i {
+            font-size: 28px;
+            color: white;
+        }
+
+        .tx-cashbox-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .tx-cashbox-name {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            line-height: 1.1;
+        }
+
+        .tx-cashbox-id {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        /* Transaction ID Section */
+        .tx-id-section {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .tx-id-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tx-id-value {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: var(--text);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        /* Meta Row */
+        .tx-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
         .tx-created-by {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-top: 2px;
+            gap: 6px;
         }
 
-        .tx-created-by-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+        .tx-created-by i {
+            font-size: 12px;
+            color: var(--text-muted);
         }
 
         .tx-date-row {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
             display: flex;
             align-items: center;
             gap: 6px;
+            font-weight: 600;
+        }
+
+        .tx-date-row i {
+            font-size: 12px;
         }
 
         .tx-actions-row {
@@ -227,44 +308,10 @@
             font-weight: 700;
         }
 
-        .tx-created-by-avatar {
-            width: 26px;
-            height: 26px;
-            border-radius: 999px;
-            object-fit: cover;
-            border: 1px solid rgba(0,0,0,0.10);
-            background: rgba(0,0,0,0.06);
-            display: none;
-        }
-
         .tx-created-by-name {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .tx-created-by .meta {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            min-width: 0;
-        }
-
-        .tx-created-by .meta .label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .tx-created-by .meta .value {
             font-size: 13px;
             font-weight: 600;
             color: var(--text);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .tx-summary-amount {
@@ -349,45 +396,6 @@
             color: rgba(var(--active-rgb, 5, 150, 105), 0.18);
         }
 
-        .tx-id-top {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .tx-type-pill {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 6px 10px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 900;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            background: rgba(var(--dir-rgb, 5, 150, 105), 0.18);
-            color: var(--dir, var(--primary));
-        }
-
-        .tx-type-pill.out {
-            background: rgba(var(--out-rgb), 0.18);
-            color: var(--out);
-        }
-
-        .tx-id-label {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-muted);
-        }
-
-        .tx-id-value {
-            font-size: 20px;
-            font-weight: 900;
-            letter-spacing: -0.02em;
-            color: var(--text);
-            margin: 0;
-            line-height: 1.1;
-        }
 
         .tx-icon {
             width: 56px;
@@ -435,25 +443,6 @@
             gap: 5px;
         }
 
-        .cashbox-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            background: var(--bg);
-            border: 2px solid var(--border);
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        .cashbox-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 999px;
-            background: var(--active);
-            box-shadow: 0 0 0 3px rgba(var(--active-rgb), 0.14);
-        }
 
         .tx-amount-card {
             display: flex;
@@ -1192,36 +1181,32 @@
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .compact-header {
+            .tx-cashbox-icon {
+                width: 56px;
+                height: 56px;
+                border-radius: 14px;
+            }
+
+            .tx-cashbox-icon i {
+                font-size: 24px;
+            }
+
+            .tx-cashbox-name {
+                font-size: 18px;
+            }
+
+            .tx-cashbox-id {
+                font-size: 12px;
+            }
+
+            .tx-id-value {
+                font-size: 16px;
+            }
+
+            .tx-meta-row {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 16px;
-            }
-
-            .header-amount {
-                border: none;
-                padding: 16px 0;
-                border-top: 1px solid var(--border);
-                border-bottom: 1px solid var(--border);
-                width: 100%;
-                text-align: left;
-            }
-
-            .header-actions {
-                width: 100%;
-                justify-content: flex-start;
-            }
-
-            .tx-summary-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .tx-summary-amount {
-                width: 100%;
-                align-items: flex-start;
-                text-align: left;
-                min-width: 0;
+                gap: 8px;
             }
 
             .tx-info-card {
@@ -1241,14 +1226,8 @@
                 text-align: left;
             }
 
-            .tx-direction-row {
-                justify-content: flex-start;
-            }
-
-            .tx-actions-card {
-                justify-content: flex-start;
-                flex-wrap: wrap;
-                padding-right: 0;
+            .tx-amount-corner .value {
+                font-size: 28px;
             }
 
             .info-grid {
@@ -1281,24 +1260,30 @@
                     <div class="tx-info-watermark" id="txTypeWatermark">IN</div>
 
                     <div class="tx-summary-left">
-                        <div class="tx-id-top">
+                        <!-- Cash Box Header (similar to dashboard register-card) -->
+                        <div class="tx-cashbox-header">
+                            <div class="tx-cashbox-icon" id="txCashBoxIcon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div class="tx-cashbox-info">
+                                <div class="tx-cashbox-name" id="txCashBoxName">—</div>
+                                <div class="tx-cashbox-id" id="txCashBoxId">—</div>
+                            </div>
+                        </div>
+
+                        <!-- Transaction ID -->
+                        <div class="tx-id-section">
                             <span class="tx-id-label">Transaction ID</span>
-                        </div>
-                        <h1 class="tx-id-value" id="txTitle">—</h1>
-
-                        <div class="header-meta">
-                            <span id="txMetaCashBox" class="cashbox-chip">
-                                <span class="cashbox-dot" aria-hidden="true"></span>
-                                <i class="fas fa-building" aria-hidden="true"></i>
-                                <span id="txMetaCashBoxText">—</span>
-                            </span>
+                            <h1 class="tx-id-value" id="txTitle">—</h1>
                         </div>
 
-                        <div class="tx-date-row" id="txMetaDate"><i class="fas fa-calendar"></i> —</div>
-
-                        <div class="tx-created-by">
-                            <img id="txCreatedByAvatar" class="tx-created-by-avatar" alt="" />
-                            <span class="tx-created-by-name" id="txCreatedBy">—</span>
+                        <!-- Date & Created By -->
+                        <div class="tx-meta-row">
+                            <div class="tx-date-row" id="txMetaDate"><i class="fas fa-calendar"></i> —</div>
+                            <div class="tx-created-by">
+                                <i class="fas fa-user"></i>
+                                <span class="tx-created-by-name" id="txCreatedBy">—</span>
+                            </div>
                         </div>
                     </div>
 
