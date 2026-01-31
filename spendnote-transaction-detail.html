@@ -1085,20 +1085,16 @@
         }
 
         .preview-frame-container {
-            overflow: auto;
+            overflow: hidden;
             background: white;
             height: 520px;
         }
 
-        .preview-scaler {
+        .preview-frame {
             width: 100%;
             height: 100%;
-        }
-
-        .preview-frame {
             border: none;
             display: block;
-            transform-origin: 0 0;
         }
 
         /* PRO SECTION */
@@ -1480,9 +1476,7 @@
                             </div>
                         </div>
                         <div class="preview-frame-container" id="receiptPreviewContainer">
-                            <div class="preview-scaler" id="receiptPreviewScaler">
-                                <iframe id="receiptFrame" class="preview-frame" scrolling="no" src="spendnote-receipt-a4-two-copies.html"></iframe>
-                            </div>
+                            <iframe id="receiptFrame" class="preview-frame" src="spendnote-receipt-a4-two-copies.html"></iframe>
                         </div>
                     </div>
                 </div>
@@ -1652,52 +1646,30 @@
         reloadIframe();
     }
 
-    function measureReceiptContent(iframe) {
+    function applyIframeZoom(iframe) {
         try {
             const doc = iframe.contentDocument;
-            if (!doc) return null;
+            if (!doc) return;
             const de = doc.documentElement;
             const body = doc.body;
-            if (!de || !body) return null;
-            const w = Math.max(de.scrollWidth, body.scrollWidth, de.offsetWidth, body.offsetWidth);
-            const h = Math.max(de.scrollHeight, body.scrollHeight, de.offsetHeight, body.offsetHeight);
-            return { w, h };
-        } catch (_) {
-            return null;
-        }
-    }
+            if (!de || !body) return;
 
-    function getPreviewBaseSize(format, iframe) {
-        const f = String(format || '').toLowerCase();
-        if (f === 'a4') {
-            // A4 at 96dpi (210x297mm)
-            return { w: 794, h: 1123 };
-        }
-        const m = measureReceiptContent(iframe);
-        if (m && m.w && m.h) return m;
-        return { w: 900, h: 1200 };
+            de.style.overflow = 'hidden';
+            body.style.overflow = 'auto';
+            body.style.zoom = String(currentZoom);
+        } catch (_) {}
     }
 
     function updateZoom() {
         const iframe = document.getElementById('receiptFrame');
-        const scaler = document.getElementById('receiptPreviewScaler');
         const zoomLevel = document.getElementById('zoomLevel');
-        if (!iframe || !scaler) {
-            if (zoomLevel) zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
-            return;
+        if (iframe) {
+            iframe.style.transform = 'none';
+            iframe.style.zoom = '1';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            applyIframeZoom(iframe);
         }
-
-        const base = getPreviewBaseSize(currentFormat, iframe);
-        const baseW = base.w;
-        const baseH = base.h;
-
-        iframe.style.width = `${baseW}px`;
-        iframe.style.height = `${baseH}px`;
-        iframe.style.transform = `scale(${currentZoom})`;
-
-        scaler.style.width = `${baseW * currentZoom}px`;
-        scaler.style.height = `${baseH * currentZoom}px`;
-
         if (zoomLevel) zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
     }
 
@@ -1872,6 +1844,6 @@
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/transaction-detail-data.js?v=header-20260131-45"></script>
+<script src="assets/js/transaction-detail-data.js?v=header-20260131-46"></script>
 </body>
 </html>
