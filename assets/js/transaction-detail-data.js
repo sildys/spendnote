@@ -142,8 +142,11 @@
         }
 
         try {
-            if (!tx.cash_box && tx.cash_box_id && window.db?.cashBoxes?.getById) {
-                tx.cash_box = await window.db.cashBoxes.getById(tx.cash_box_id);
+            if (tx.cash_box_id && window.db?.cashBoxes?.getById) {
+                const latestCashBox = await window.db.cashBoxes.getById(tx.cash_box_id);
+                if (latestCashBox) {
+                    tx.cash_box = latestCashBox;
+                }
             }
             if (!tx.contact && tx.contact_id && window.db?.contacts?.getById) {
                 tx.contact = await window.db.contacts.getById(tx.contact_id);
