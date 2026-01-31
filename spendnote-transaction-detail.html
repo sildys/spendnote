@@ -98,62 +98,15 @@
         .tx-summary-left {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
             min-width: 0;
         }
 
-        /* Cash Box Header (dashboard-style) */
-        .tx-cashbox-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .tx-cashbox-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            background: linear-gradient(135deg, var(--active), var(--primary-light));
-            box-shadow: 0 4px 12px rgba(var(--active-rgb, 5, 150, 105), 0.3);
-        }
-
-        .tx-cashbox-icon i {
-            font-size: 28px;
-            color: white;
-        }
-
-        .tx-cashbox-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-width: 0;
-        }
-
-        .tx-cashbox-name {
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: -0.02em;
-            color: var(--text);
-            line-height: 1.1;
-        }
-
-        .tx-cashbox-id {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-        }
-
-        /* Transaction ID Section */
+        /* Transaction ID Section (PRIMARY) */
         .tx-id-section {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
         }
 
         .tx-id-label {
@@ -165,12 +118,58 @@
         }
 
         .tx-id-value {
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -0.01em;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
             color: var(--text);
             margin: 0;
+            line-height: 1.1;
+        }
+
+        /* Cash Box Header (SECONDARY) */
+        .tx-cashbox-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tx-cashbox-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            /* Background color set dynamically via JS */
+        }
+
+        .tx-cashbox-icon i {
+            font-size: 18px;
+            color: white;
+        }
+
+        .tx-cashbox-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .tx-cashbox-name {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--text);
             line-height: 1.2;
+        }
+
+        .tx-cashbox-id {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         /* Meta Row */
@@ -1181,26 +1180,26 @@
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .tx-cashbox-icon {
-                width: 56px;
-                height: 56px;
-                border-radius: 14px;
-            }
-
-            .tx-cashbox-icon i {
+            .tx-id-value {
                 font-size: 24px;
             }
 
+            .tx-cashbox-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 8px;
+            }
+
+            .tx-cashbox-icon i {
+                font-size: 16px;
+            }
+
             .tx-cashbox-name {
-                font-size: 18px;
+                font-size: 13px;
             }
 
             .tx-cashbox-id {
-                font-size: 12px;
-            }
-
-            .tx-id-value {
-                font-size: 16px;
+                font-size: 10px;
             }
 
             .tx-meta-row {
@@ -1260,7 +1259,13 @@
                     <div class="tx-info-watermark" id="txTypeWatermark">IN</div>
 
                     <div class="tx-summary-left">
-                        <!-- Cash Box Header (similar to dashboard register-card) -->
+                        <!-- Transaction ID (PRIMARY) -->
+                        <div class="tx-id-section">
+                            <span class="tx-id-label">Transaction ID</span>
+                            <h1 class="tx-id-value" id="txTitle">—</h1>
+                        </div>
+
+                        <!-- Cash Box Info (SECONDARY) -->
                         <div class="tx-cashbox-header">
                             <div class="tx-cashbox-icon" id="txCashBoxIcon">
                                 <i class="fas fa-building"></i>
@@ -1269,12 +1274,6 @@
                                 <div class="tx-cashbox-name" id="txCashBoxName">—</div>
                                 <div class="tx-cashbox-id" id="txCashBoxId">—</div>
                             </div>
-                        </div>
-
-                        <!-- Transaction ID -->
-                        <div class="tx-id-section">
-                            <span class="tx-id-label">Transaction ID</span>
-                            <h1 class="tx-id-value" id="txTitle">—</h1>
                         </div>
 
                         <!-- Date & Created By -->

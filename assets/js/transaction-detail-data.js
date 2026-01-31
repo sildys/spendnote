@@ -177,14 +177,21 @@
         setText(qs('#txCashBoxName'), cashBoxName);
         setText(qs('#txCashBoxId'), cashBoxCode || '—');
         
-        // Set cash box icon
+        // Set cash box icon and color
         const cashBoxIcon = qs('#txCashBoxIcon');
-        if (cashBoxIcon && tx.cash_box?.icon) {
-            const iconClass = tx.cash_box.icon.startsWith('fa-') ? tx.cash_box.icon : 'fa-building';
-            const iconEl = cashBoxIcon.querySelector('i');
-            if (iconEl) {
-                iconEl.className = `fas ${iconClass}`;
+        if (cashBoxIcon) {
+            // Set icon class
+            if (tx.cash_box?.icon) {
+                const iconClass = tx.cash_box.icon.startsWith('fa-') ? tx.cash_box.icon : 'fa-building';
+                const iconEl = cashBoxIcon.querySelector('i');
+                if (iconEl) {
+                    iconEl.className = `fas ${iconClass}`;
+                }
             }
+            
+            // Set icon background color to cash box color
+            cashBoxIcon.style.background = cashBoxColor;
+            cashBoxIcon.style.boxShadow = `0 2px 8px rgba(${cashBoxRgb}, 0.25)`;
         }
 
         setText(qs('#txTitle'), displayId);
