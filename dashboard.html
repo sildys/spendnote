@@ -1059,9 +1059,22 @@
                         ? Array.from(renderedIconEl.classList).find((cls) => cls.startsWith('fa-') && cls !== 'fa-fw')
                         : null;
 
+                    let displayId = String(card.dataset.displayCode || '').trim();
+                    if (!displayId) {
+                        const idEl = card.querySelector('.register-id');
+                        if (idEl) displayId = String(idEl.textContent || '').trim();
+                    }
+                    if (!displayId) {
+                        const seq = Number(card.dataset.sequenceNumber || '');
+                        if (Number.isFinite(seq) && seq > 0) {
+                            displayId = `SN-${String(seq).padStart(3, '0')}`;
+                        }
+                    }
+
                     modalCashBoxes.push({
                         id: card.dataset.id,
                         name: card.querySelector('.register-name')?.textContent || 'Cash Box',
+                        displayId,
                         color: card.dataset.color || '#059669',
                         rgb: card.dataset.rgb || '5, 150, 105',
                         icon: renderedIconClass || card.dataset.icon || 'fa-cash-register'
@@ -1084,6 +1097,7 @@
             
             const iconEl = document.getElementById('modalCashboxIcon');
             const nameEl = document.getElementById('modalCashboxName');
+            const idDisplayEl = document.getElementById('modalCashboxIdDisplay');
             const balanceEl = document.getElementById('modalCashboxBalance');
             const idInput = document.getElementById('modalCashBoxId');
             
@@ -1093,6 +1107,26 @@
             }
             if (nameEl) {
                 nameEl.textContent = cashbox.name;
+            }
+            if (idDisplayEl) {
+                let codeText = String(cashbox.displayId || '').trim();
+                if (!codeText) {
+                    const dashboardCard = document.querySelector(`.register-card[data-id="${cashbox.id}"]`);
+                    if (dashboardCard) {
+                        codeText = String(dashboardCard.dataset.displayCode || '').trim();
+                        if (!codeText) {
+                            const idEl = dashboardCard.querySelector('.register-id');
+                            if (idEl) codeText = String(idEl.textContent || '').trim();
+                        }
+                        if (!codeText) {
+                            const seq = Number(dashboardCard.dataset.sequenceNumber || '');
+                            if (Number.isFinite(seq) && seq > 0) {
+                                codeText = `SN-${String(seq).padStart(3, '0')}`;
+                            }
+                        }
+                    }
+                }
+                idDisplayEl.textContent = codeText || '—';
             }
             if (balanceEl) {
                 // Get balance from dashboard card if available
