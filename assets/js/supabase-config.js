@@ -558,71 +558,108 @@ var db = {
             const from = Math.max(0, (page - 1) * perPage);
             const to = Math.max(from, from + perPage - 1);
 
-            let query = supabaseClient
-                .from('transactions')
-                .select(select, { count: 'exact' })
-                .eq('user_id', user.id);
+            const buildQuery = (sel) => {
+                let query = supabaseClient
+                    .from('transactions')
+                    .select(sel, { count: 'exact' })
+                    .eq('user_id', user.id);
 
-            if (!options.includeSystem) {
-                query = query.or('is_system.is.null,is_system.eq.false');
+                if (!options.includeSystem) {
+                    query = query.or('is_system.is.null,is_system.eq.false');
+                }
+
+                if (options.status) {
+                    query = query.eq('status', options.status);
+                }
+
+                if (options.cashBoxId) query = query.eq('cash_box_id', options.cashBoxId);
+                if (options.cashBoxIds && Array.isArray(options.cashBoxIds) && options.cashBoxIds.length) {
+                    query = query.in('cash_box_id', options.cashBoxIds);
+                }
+                if (options.type) query = query.eq('type', options.type);
+                if (options.createdByUserId) query = query.eq('created_by_user_id', options.createdByUserId);
+
+                if (options.startDate) query = query.gte('transaction_date', options.startDate);
+                if (options.endDate) query = query.lte('transaction_date', options.endDate);
+
+                if (options.amountMin !== undefined && options.amountMin !== null && options.amountMin !== '') {
+                    query = query.gte('amount', options.amountMin);
+                }
+                if (options.amountMax !== undefined && options.amountMax !== null && options.amountMax !== '') {
+                    query = query.lte('amount', options.amountMax);
+                }
+
+                query = applyTxIdQueryToTransactionsQuery(query, options.txIdQuery);
+                query = applyContactQueryToTransactionsQuery(query, options.contactQuery);
+
+                const sortKey = String(options.sortKey || 'date');
+                const sortDir = String(options.sortDir || 'desc').toLowerCase() === 'asc' ? 'asc' : 'desc';
+                const asc = sortDir === 'asc';
+
+                if (sortKey === 'amount') {
+                    query = query.order('amount', { ascending: asc, nullsFirst: false });
+                    query = query.order('transaction_date', { ascending: false });
+                } else if (sortKey === 'type') {
+                    query = query.order('type', { ascending: asc, nullsFirst: false });
+                    query = query.order('transaction_date', { ascending: false });
+                } else if (sortKey === 'id') {
+                    query = query.order('cash_box_sequence', { ascending: asc, nullsFirst: false });
+                    query = query.order('tx_sequence_in_box', { ascending: asc, nullsFirst: false });
+                    query = query.order('transaction_date', { ascending: false });
+                } else if (sortKey === 'cash_box') {
+                    query = query.order('cash_box_id', { ascending: asc, nullsFirst: false });
+                    query = query.order('transaction_date', { ascending: false });
+                } else if (sortKey === 'contact') {
+                    query = query.order('contact_name', { ascending: asc, nullsFirst: false });
+                    query = query.order('transaction_date', { ascending: false });
+                } else if (sortKey === 'contact_id') {
+                    query = query.order('contact_id', { ascending: asc, nullsFirst: false });
+                    query = query.order('transaction_date', { ascending: false });
+                } else if (sortKey === 'created_by') {
+                    query = query.order('created_by_user_name', { ascending: asc, nullsFirst: false });
+                    query = query.order('transaction_date', { ascending: false });
+                } else {
+                    query = query.order('transaction_date', { ascending: asc, nullsFirst: false });
+                    query = query.order('created_at', { ascending: asc, nullsFirst: false });
+                }
+
+                return query;
+            };
+
+            const stripMissingColumnFromSelect = (sel, missingColumn) => {
+                const col = String(missingColumn || '').trim();
+                if (!col) return sel;
+                const re = new RegExp('(^|,)\\s*' + col.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&') + '\\s*(?=,|$)', 'gi');
+                const next = String(sel || '')
+                    .replace(re, '$1')
+                    .replace(/,\s*,/g, ',')
+                    .replace(/^\s*,\s*/g, '')
+                    .replace(/\s*,\s*$/g, '')
+                    .trim();
+                return next || sel;
+            };
+
+            const run = async (sel) => {
+                const q = buildQuery(sel);
+                return await q.range(from, to);
+            };
+
+            let { data, error, count } = await run(select);
+
+            if (error && typeof error.message === 'string') {
+                const msg = error.message;
+                const m = msg.match(/column\s+transactions\.([a-zA-Z0-9_]+)\s+does\s+not\s+exist/i);
+                if (m && m[1]) {
+                    const fallbackSelect = stripMissingColumnFromSelect(select, m[1]);
+                    if (fallbackSelect && fallbackSelect !== select) {
+                        const retry = await run(fallbackSelect);
+                        data = retry.data;
+                        error = retry.error;
+                        count = retry.count;
+                    }
+                }
             }
 
-            if (options.status) {
-                query = query.eq('status', options.status);
-            }
-
-            if (options.cashBoxId) query = query.eq('cash_box_id', options.cashBoxId);
-            if (options.cashBoxIds && Array.isArray(options.cashBoxIds) && options.cashBoxIds.length) {
-                query = query.in('cash_box_id', options.cashBoxIds);
-            }
-            if (options.type) query = query.eq('type', options.type);
-            if (options.createdByUserId) query = query.eq('created_by_user_id', options.createdByUserId);
-
-            if (options.startDate) query = query.gte('transaction_date', options.startDate);
-            if (options.endDate) query = query.lte('transaction_date', options.endDate);
-
-            if (options.amountMin !== undefined && options.amountMin !== null && options.amountMin !== '') {
-                query = query.gte('amount', options.amountMin);
-            }
-            if (options.amountMax !== undefined && options.amountMax !== null && options.amountMax !== '') {
-                query = query.lte('amount', options.amountMax);
-            }
-
-            query = applyTxIdQueryToTransactionsQuery(query, options.txIdQuery);
-            query = applyContactQueryToTransactionsQuery(query, options.contactQuery);
-
-            const sortKey = String(options.sortKey || 'date');
-            const sortDir = String(options.sortDir || 'desc').toLowerCase() === 'asc' ? 'asc' : 'desc';
-            const asc = sortDir === 'asc';
-
-            if (sortKey === 'amount') {
-                query = query.order('amount', { ascending: asc, nullsFirst: false });
-                query = query.order('transaction_date', { ascending: false });
-            } else if (sortKey === 'type') {
-                query = query.order('type', { ascending: asc, nullsFirst: false });
-                query = query.order('transaction_date', { ascending: false });
-            } else if (sortKey === 'id') {
-                query = query.order('cash_box_sequence', { ascending: asc, nullsFirst: false });
-                query = query.order('tx_sequence_in_box', { ascending: asc, nullsFirst: false });
-                query = query.order('transaction_date', { ascending: false });
-            } else if (sortKey === 'cash_box') {
-                query = query.order('cash_box_id', { ascending: asc, nullsFirst: false });
-                query = query.order('transaction_date', { ascending: false });
-            } else if (sortKey === 'contact') {
-                query = query.order('contact_name', { ascending: asc, nullsFirst: false });
-                query = query.order('transaction_date', { ascending: false });
-            } else if (sortKey === 'contact_id') {
-                query = query.order('contact_id', { ascending: asc, nullsFirst: false });
-                query = query.order('transaction_date', { ascending: false });
-            } else if (sortKey === 'created_by') {
-                query = query.order('created_by_user_name', { ascending: asc, nullsFirst: false });
-                query = query.order('transaction_date', { ascending: false });
-            } else {
-                query = query.order('transaction_date', { ascending: asc, nullsFirst: false });
-                query = query.order('created_at', { ascending: asc, nullsFirst: false });
-            }
-
-            const { data, error, count } = await query.range(from, to);
             if (error) {
                 const detail = typeof error === 'object' ? JSON.stringify(error) : String(error);
                 console.error('Error fetching transactions page:', error);
@@ -670,7 +707,7 @@ var db = {
                 .from('transactions')
                 .select('id,type,amount,status,is_system', { count: 'exact' })
                 .eq('user_id', user.id)
-                .eq('is_system', false);
+                .or('is_system.is.null,is_system.eq.false');
 
             // Fallback stats should ignore voided transactions (the reversal handles balance)
             if (!options.status) {
