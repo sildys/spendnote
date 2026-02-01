@@ -199,8 +199,10 @@ function initModalCashboxCarousel() {
         if (!card.dataset.id) return;
         const iconEl = card.querySelector('.register-icon i');
         const iconClass = iconEl ? Array.from(iconEl.classList).find(function(cls) { return cls.startsWith('fa-') && cls !== 'fa-fw'; }) : null;
-        const idEl = card.querySelector('.register-id');
-        const displayId = idEl ? String(idEl.textContent || '').trim() : '';
+        const displayId = String(card.dataset.displayCode || '').trim() || (function() {
+            const idEl = card.querySelector('.register-id');
+            return idEl ? String(idEl.textContent || '').trim() : '';
+        })();
         modalCashBoxes.push({
             id: card.dataset.id,
             name: card.querySelector('.register-name') ? card.querySelector('.register-name').textContent : 'Cash Box',
@@ -232,7 +234,9 @@ function updateModalCashboxDisplay() {
     if (nameEl) nameEl.textContent = cashbox.name;
     if (idDisplayEl) {
         const card = document.querySelector('.register-card[data-id="' + cashbox.id + '"]');
-        const codeText = card && card.querySelector('.register-id') ? String(card.querySelector('.register-id').textContent || '').trim() : (cashbox.displayId || '');
+        const codeText = card
+            ? (String(card.dataset.displayCode || '').trim() || (card.querySelector('.register-id') ? String(card.querySelector('.register-id').textContent || '').trim() : ''))
+            : (cashbox.displayId || '');
         idDisplayEl.textContent = codeText || '—';
     }
     if (balanceEl) {

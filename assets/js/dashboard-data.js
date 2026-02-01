@@ -107,6 +107,8 @@ async function loadDashboardData() {
                              data-name="${box.name}" 
                              data-color="${color}" 
                              data-rgb="${rgb}"
+                             data-display-code="${displayCode}"
+                             data-sequence-number="${Number.isFinite(seq) ? seq : ''}"
                              role="button" 
                              tabindex="0">
                             <div class="register-top">

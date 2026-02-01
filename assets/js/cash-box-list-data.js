@@ -41,7 +41,7 @@ async function loadCashBoxList() {
     try {
         // Load cash boxes from database
         const cashBoxes = await db.cashBoxes.getAll({
-            select: 'id, name, color, currency, icon, current_balance, created_at, sort_order, sequence_number, transaction_count'
+            select: 'id, name, color, currency, icon, current_balance, created_at, sort_order, sequence_number'
         });
         
         if (cashBoxes && cashBoxes.length > 0) {
