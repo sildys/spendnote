@@ -2335,12 +2335,12 @@ tr:hover [data-category-tag] {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 12px;
+    padding: 8px 12px;
     background: white;
     border: 2px solid var(--border);
     border-radius: 10px;
     min-width: 200px;
-    height: 48px;
+    height: 52px;
 }
 
 .cashbox-display .cashbox-icon {
@@ -2361,6 +2361,7 @@ tr:hover [data-category-tag] {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    justify-content: center;
 }
 
 .cashbox-display .cashbox-name {
@@ -2400,7 +2401,6 @@ tr:hover [data-category-tag] {
     font-size: 11px;
     color: var(--text-muted);
     line-height: 1.1;
-    margin-top: -2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
