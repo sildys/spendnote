@@ -138,6 +138,22 @@ body {
   margin-top: 0mm;
   font-size: 8.5pt;
 }
+.items thead {
+  display: table-header-group;
+}
+.items td {
+  border-bottom: 0.25mm solid #ccc;
+}
+
+body.items-mode-single .items {
+  height: auto;
+}
+body.items-mode-single .items thead {
+  display: none;
+}
+body.items-mode-single .items td {
+  border-bottom: none;
+}
 .items table {
   width: 100%;
   border-collapse: collapse;
@@ -504,6 +520,9 @@ body {
   const urlParams = new URLSearchParams(window.location.search);
   const itemsMode = String(urlParams.get('itemsMode') || '').toLowerCase();
   const isItemsSingle = itemsMode === 'single';
+  if (isItemsSingle) {
+    document.body.classList.add('items-mode-single');
+  }
   const initialVoid = urlParams.get('void') === '1';
   window.__spendnoteReceiptVoid = initialVoid;
   if (initialVoid) {

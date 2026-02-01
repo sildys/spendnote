@@ -172,6 +172,17 @@
       font-size: 14px;
       border-bottom: 1px solid #e0e0e0;
     }
+
+    body.items-mode-single thead {
+      display: none;
+    }
+    body.items-mode-single td {
+      border-bottom: none;
+      padding: 10px 16px;
+    }
+    body.items-mode-single .table-section {
+      margin-bottom: 20px;
+    }
     
     td.amount {
       text-align: right;
@@ -438,6 +449,9 @@
 const urlParams = new URLSearchParams(window.location.search);
 const itemsMode = String(urlParams.get('itemsMode') || '').toLowerCase();
 const isItemsSingle = itemsMode === 'single';
+if (isItemsSingle) {
+  document.body.classList.add('items-mode-single');
+}
 
 const initialVoid = urlParams.get('void') === '1';
 window.__spendnoteReceiptVoid = initialVoid;
