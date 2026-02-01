@@ -138,22 +138,6 @@ body {
   margin-top: 0mm;
   font-size: 8.5pt;
 }
-.items thead {
-  display: table-header-group;
-}
-.items td {
-  border-bottom: 0.25mm solid #ccc;
-}
-
-body.items-mode-single .items {
-  height: auto;
-}
-body.items-mode-single .items thead {
-  display: none;
-}
-body.items-mode-single .items td {
-  border-bottom: none;
-}
 .items table {
   width: 100%;
   border-collapse: collapse;
@@ -520,9 +504,6 @@ body.items-mode-single .items td {
   const urlParams = new URLSearchParams(window.location.search);
   const itemsMode = String(urlParams.get('itemsMode') || '').toLowerCase();
   const isItemsSingle = itemsMode === 'single';
-  if (isItemsSingle) {
-    document.body.classList.add('items-mode-single');
-  }
   const initialVoid = urlParams.get('void') === '1';
   window.__spendnoteReceiptVoid = initialVoid;
   if (initialVoid) {
@@ -709,7 +690,7 @@ body.items-mode-single .items td {
         return `<tr><td>${safeText(it.description, '&nbsp;')}</td><td class="amount">${amount}</td></tr>`;
       });
 
-    while (rows.length < (isItemsSingle ? 1 : 5)) {
+    while (rows.length < 5) {
       rows.push('<tr><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>');
     }
 
@@ -904,8 +885,9 @@ body.items-mode-single .items td {
           const fallbackAmt = Number(tx?.amount);
           const effective = items.length ? items : [{ description: fallbackDesc, amount: fallbackAmt }];
 
-          const maxRows = isItemsSingle ? 1 : 5;
-          const rows = effective.slice(0, maxRows).map((it) => {
+          const fillRows = isItemsSingle ? 1 : 5;
+          const maxRows = 5;
+          const rows = effective.slice(0, fillRows).map((it) => {
             const desc = safeText(it.description, '—');
             const amt = formatMoney(it.amount, currency);
             return `<tr><td>${desc}</td><td class="amount">${amt}</td></tr>`;
