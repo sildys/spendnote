@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=12">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=13">
-    <link rel="stylesheet" href="assets/css/cash-box-settings.css?v=3">
+    <link rel="stylesheet" href="assets/css/cash-box-settings.css?v=4">
 </head>
 <body>
 <div id="nav-container"></div>
@@ -33,7 +33,7 @@
         <!-- PAGE HEADER -->
         <div class="page-header" style="margin-bottom: 16px;">
             <h1 class="page-title">Cash Box Settings</h1>
-            <p class="page-subtitle" id="cashBoxSettingsSubtitle">Configure this cash box and its default receipt appearance settings.</p>
+            <p class="page-subtitle" id="cashBoxSettingsSubtitle">Configure cash box details and default receipt appearance settings.</p>
         </div>
 
         <!-- SUMMARY HEADER ROW -->
@@ -94,6 +94,46 @@
                                 <span class="field-hint">Receipt ID format</span>
                             </div>
                         </div>
+
+                        <div class="team-inline">
+                            <div class="team-header" onclick="toggleTeamAccess()" style="cursor: pointer;">
+                                <div class="team-inline-title">
+                                    <i class="fas fa-users"></i>
+                                    <span>Team Access</span>
+                                    <span class="pro-badge" style="font-size: 9px; padding: 2px 5px;"><i class="fas fa-crown"></i> Pro</span>
+                                </div>
+                                <div class="team-header-right">
+                                    <span class="team-count">3 members</span>
+                                    <i class="fas fa-chevron-down" id="teamToggleIcon" style="transition: transform 0.3s; color: var(--text-muted); font-size: 12px;"></i>
+                                </div>
+                            </div>
+                            <div class="team-content" id="teamContent" style="display: none;">
+                                <div class="team-members-list">
+                                    <div class="team-member-row">
+                                        <img src="https://i.pravatar.cc/150?img=12" alt="John Doe" class="team-avatar">
+                                        <div class="team-member-info">
+                                            <div class="team-member-name">John Doe</div>
+                                            <div class="team-member-role">Owner</div>
+                                        </div>
+                                    </div>
+                                    <div class="team-member-row">
+                                        <img src="https://i.pravatar.cc/150?img=5" alt="Jane Smith" class="team-avatar">
+                                        <div class="team-member-info">
+                                            <div class="team-member-name">Jane Smith</div>
+                                            <div class="team-member-role">Admin</div>
+                                        </div>
+                                    </div>
+                                    <div class="team-member-row">
+                                        <img src="https://i.pravatar.cc/150?img=8" alt="Mike Johnson" class="team-avatar">
+                                        <div class="team-member-info">
+                                            <div class="team-member-name">Mike Johnson</div>
+                                            <div class="team-member-role">Viewer</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="spendnote-user-settings.html?tab=team" class="team-manage-link"><i class="fas fa-cog"></i> Manage in Settings</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -134,57 +174,35 @@
                             <div class="icon-palette" id="iconPalette">
                                 <div class="icon-option selected" data-icon="fa-building"><i class="fas fa-building"></i></div>
                                 <div class="icon-option" data-icon="fa-store"><i class="fas fa-store"></i></div>
-                                <div class="icon-option" data-icon="fa-cash-register"><i class="fas fa-cash-register"></i></div>
+                                <div class="icon-option" data-icon="fa-calendar"><i class="fas fa-calendar"></i></div>
                                 <div class="icon-option" data-icon="fa-wallet"><i class="fas fa-wallet"></i></div>
-                                <div class="icon-option" data-icon="fa-piggy-bank"><i class="fas fa-piggy-bank"></i></div>
-                                <div class="icon-option" data-icon="fa-landmark"><i class="fas fa-landmark"></i></div>
-                                <div class="icon-option" data-icon="fa-briefcase"><i class="fas fa-briefcase"></i></div>
+                                <div class="icon-option" data-icon="fa-bullhorn"><i class="fas fa-bullhorn"></i></div>
+                                <div class="icon-option" data-icon="fa-dollar-sign"><i class="fas fa-dollar-sign"></i></div>
                                 <div class="icon-option" data-icon="fa-home"><i class="fas fa-home"></i></div>
+                                <div class="icon-option" data-icon="fa-briefcase"><i class="fas fa-briefcase"></i></div>
+                                <div class="icon-option" data-icon="fa-chart-line"><i class="fas fa-chart-line"></i></div>
                                 <div class="icon-option" data-icon="fa-star"><i class="fas fa-star"></i></div>
+                                <div class="icon-option" data-icon="fa-flag"><i class="fas fa-flag"></i></div>
                                 <div class="icon-option" data-icon="fa-heart"><i class="fas fa-heart"></i></div>
+                                <div class="icon-option" data-icon="fa-bolt"><i class="fas fa-bolt"></i></div>
                                 <div class="icon-option" data-icon="fa-gift"><i class="fas fa-gift"></i></div>
-                                <div class="icon-option" data-icon="fa-calendar-alt"><i class="fas fa-calendar-alt"></i></div>
+                                <div class="icon-option" data-icon="fa-tag"><i class="fas fa-tag"></i></div>
+                                <div class="icon-option" data-icon="fa-bell"><i class="fas fa-bell"></i></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- TEAM ACCESS CARD -->
-            <div class="settings-card team-card">
-                <div class="team-header" onclick="toggleTeamAccess()" style="cursor: pointer;">
-                    <div class="settings-card-title" style="margin-bottom: 0;"><i class="fas fa-users"></i> Team Access <span class="pro-badge" style="font-size: 9px; padding: 2px 5px;"><i class="fas fa-crown"></i> Pro</span></div>
-                    <div class="team-header-right">
-                        <span class="team-count">3 members</span>
-                        <i class="fas fa-chevron-down" id="teamToggleIcon" style="transition: transform 0.3s; color: var(--text-muted); font-size: 12px;"></i>
-                    </div>
-                </div>
-                <div class="team-content" id="teamContent" style="display: none;">
-                    <div class="team-members-list">
-                        <div class="team-member-row">
-                            <img src="https://i.pravatar.cc/150?img=12" alt="John Doe" class="team-avatar">
-                            <div class="team-member-info">
-                                <div class="team-member-name">John Doe</div>
-                                <div class="team-member-role">Owner</div>
-                            </div>
-                        </div>
-                        <div class="team-member-row">
-                            <img src="https://i.pravatar.cc/150?img=5" alt="Jane Smith" class="team-avatar">
-                            <div class="team-member-info">
-                                <div class="team-member-name">Jane Smith</div>
-                                <div class="team-member-role">Admin</div>
-                            </div>
-                        </div>
-                        <div class="team-member-row">
-                            <img src="https://i.pravatar.cc/150?img=8" alt="Mike Johnson" class="team-avatar">
-                            <div class="team-member-info">
-                                <div class="team-member-name">Mike Johnson</div>
-                                <div class="team-member-role">Viewer</div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="spendnote-user-settings.html?tab=team" class="team-manage-link"><i class="fas fa-cog"></i> Manage in Settings</a>
-                </div>
+        <div class="cb-delete-wrap">
+            <button class="cb-delete-trigger" id="cashBoxDeleteToggle" type="button" onclick="toggleCashBoxDelete()">
+                <span><i class="fas fa-trash"></i> Delete</span>
+                <i class="fas fa-chevron-down" id="cashBoxDeleteIcon" style="transition: transform 0.3s; color: var(--text-muted); font-size: 12px;"></i>
+            </button>
+            <div class="cb-delete-panel" id="cashBoxDeletePanel" style="display: none;">
+                <div class="cb-delete-copy">Permanently delete this Cash Box and all associated transactions. This action cannot be undone.</div>
+                <button class="danger-btn" id="deleteButton" type="button"><i class="fas fa-trash"></i> Delete Cash Box</button>
             </div>
         </div>
 
@@ -357,18 +375,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- DANGER ZONE -->
-        <div class="danger-section">
-            <div class="danger-header">
-                <i class="fas fa-exclamation-triangle"></i>
-                <span class="danger-title">Danger Zone</span>
-            </div>
-            <div class="danger-content">
-                <div class="danger-text">Permanently delete this Cash Box and all associated transactions. This action cannot be undone.</div>
-                <button class="danger-btn" id="deleteButton"><i class="fas fa-trash"></i> Delete Cash Box</button>
             </div>
         </div>
 
@@ -683,6 +689,16 @@ function toggleTeamAccess() {
     }
 }
 
+function toggleCashBoxDelete() {
+    const panel = document.getElementById('cashBoxDeletePanel');
+    const icon = document.getElementById('cashBoxDeleteIcon');
+    if (panel && icon) {
+        const isHidden = panel.style.display === 'none';
+        panel.style.display = isHidden ? 'flex' : 'none';
+        icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+}
+
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded', function() {
     reloadIframe();
@@ -707,7 +723,7 @@ window.addEventListener('DOMContentLoaded', function() {
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=20"></script>
-<script src="assets/js/cash-box-settings-data.js?v=13"></script>
+<script src="assets/js/cash-box-settings-data.js?v=15"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         if (typeof initCashBoxSettings === 'function') {

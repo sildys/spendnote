@@ -135,8 +135,8 @@ async function initCashBoxSettings() {
             const pageTitle = document.querySelector('.page-title');
             if (pageTitle) pageTitle.textContent = 'Create Cash Box';
 
-            const summaryRow = document.querySelector('.summary-row');
-            if (summaryRow) summaryRow.style.display = 'none';
+            const summaryCard = document.querySelector('.summary-card');
+            if (summaryCard) summaryCard.style.display = 'none';
         }
         
         if (DEBUG) console.log('Cash Box Settings initialized', isEditMode ? '(Edit mode)' : '(Create mode)');
@@ -194,16 +194,11 @@ async function loadCashBoxData(id) {
 
         // Populate icon selection
         if (cashBox.icon) {
+            const target = normalizeFaIcon(cashBox.icon);
             document.querySelectorAll('.icon-option').forEach(option => {
-                option.classList.toggle('selected', option.dataset.icon === cashBox.icon);
+                const opt = normalizeFaIcon(option.dataset.icon);
+                option.classList.toggle('selected', opt === target);
             });
-        }
-
-        // Update header subtitle (avoid hardcoded demo values)
-        const displayCode = getCashBoxDisplayCode(cashBox);
-        const subtitle = document.getElementById('cashBoxSettingsSubtitle');
-        if (subtitle) {
-            subtitle.textContent = `Configure ${cashBox.name || '—'} (${displayCode}) and its default receipt appearance settings.`;
         }
 
         currentCashBoxData = cashBox;
@@ -325,7 +320,7 @@ async function handleSave(e) {
         }
 
         const color = selectedColor || '#059669';
-        const icon = selectedIcon || 'building';
+        const icon = selectedIcon || 'fa-building';
 
         const updatePayload = {
             name,
