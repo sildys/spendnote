@@ -582,12 +582,12 @@
             sort: { key: 'date', direction: 'desc' },
             pagination: getPaginationState(),
             cashBoxes: [],
-            cashBoxById: new Map(),status, voided_at, voided_by_user_name, 
+            cashBoxById: new Map(),
             totalTxCount: 0,
             contactByQuery: new Map()
         };
 
-        const txSelect = 'id, cash_box_id, type, amount, description, receipt_number, transaction_date, created_at, contact_id, contact_name, created_by_user_id, created_by_user_name, cash_box_sequence, tx_sequence_in_box, contact:contacts(id, name, sequence_number)';
+        const txSelect = 'id, cash_box_id, type, amount, description, receipt_number, transaction_date, created_at, contact_id, contact_name, created_by_user_id, created_by_user_name, cash_box_sequence, tx_sequence_in_box, status, voided_at, voided_by_user_name, contact:contacts(id, name, sequence_number)';
 
         const filterHeader = qs('#filterHeader');
         const filterPanel = qs('#filterPanel');
