@@ -2377,12 +2377,16 @@ tr:hover [data-category-tag] {
 }
 
 .cashbox-display .cashbox-id {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--active);
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     white-space: nowrap;
     flex-shrink: 0;
+    background: rgba(var(--active-rgb), 0.1);
+    padding: 2px 5px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
 }
 
 .cashbox-display .cashbox-balance {

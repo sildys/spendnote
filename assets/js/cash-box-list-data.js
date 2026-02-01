@@ -118,8 +118,7 @@ async function loadCashBoxList() {
                             <i class="fas ${iconClass}"></i>
                         </a>
                         <div class="register-info">
-                            <div class="register-name">${box.name}</div>
-                            <div class="register-id">${displayCode}</div>
+                            <div class="register-name">${box.name} <span class="register-id">${displayCode}</span></div>
                             <div class="register-meta">
                                 <span class="register-tx-count"><i class="fas fa-receipt"></i> ${txCount} tx</span>
                                 <div class="register-users">${usersHTML}</div>
