@@ -596,6 +596,32 @@ tr:hover {
     color: var(--orange);
 }
 
+ .pro-badge,
+ .upgrade-badge {
+     display: inline-flex !important;
+     align-items: center !important;
+     gap: 6px !important;
+     padding: 4px 10px !important;
+     background: rgba(245, 158, 11, 0.12) !important;
+     border: 1px solid rgba(245, 158, 11, 0.28) !important;
+     border-radius: var(--radius-full) !important;
+     font-size: 11px !important;
+     font-weight: 800 !important;
+     letter-spacing: 0.06em !important;
+     text-transform: uppercase !important;
+     line-height: 1 !important;
+     color: var(--orange) !important;
+ }
+
+ .upgrade-badge {
+     margin-left: 8px !important;
+ }
+
+ .pro-badge i,
+ .upgrade-badge i {
+     font-size: 11px !important;
+ }
+
 .badge-error {
     background: rgba(239, 68, 68, 0.1);
     color: var(--error);
