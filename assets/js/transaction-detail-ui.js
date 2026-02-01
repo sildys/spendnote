@@ -1,0 +1,433 @@
+﻿const QUICK_PRESET = {
+        logo: '1',
+        addresses: '1',
+        tracking: '0',
+        additional: '0',
+        note: '0',
+        signatures: '1'
+    };
+
+    let receiptMode = 'quick';
+    let displayOptions = { ...QUICK_PRESET };
+    let currentFormat = 'a4';
+    let currentZoom = 0.6;
+
+    let receiptText = {
+        receiptTitle: '',
+        totalLabel: '',
+        fromLabel: '',
+        toLabel: '',
+        descriptionLabel: '',
+        amountLabel: '',
+        notesLabel: '',
+        issuedByLabel: '',
+        receivedByLabel: '',
+        footerNote: ''
+    };
+
+    let receiptLogoUrl = '';
+    const RECEIPT_LOGO_KEY = 'spendnote.proLogoDataUrl';
+
+    const txId = new URLSearchParams(window.location.search).get('id');
+
+    function buildReceiptUrl(format) {
+        const baseUrls = {
+            'a4': 'spendnote-receipt-a4-two-copies.html',
+            'pdf': 'spendnote-pdf-receipt.html',
+            'email': 'spendnote-email-receipt.html'
+        };
+        const params = new URLSearchParams();
+        params.append('v', 'receipt-20260201-03');
+        if (txId) params.append('txId', txId);
+        for (const [key, value] of Object.entries(displayOptions)) {
+            params.append(key, value);
+        }
+
+        for (const [key, value] of Object.entries(receiptText)) {
+            const v = String(value || '').trim();
+            if (v) params.append(key, v);
+        }
+
+        let storedLogo = '';
+        try { storedLogo = localStorage.getItem(RECEIPT_LOGO_KEY) || ''; } catch (_) {}
+        if (storedLogo) {
+            params.append('logoKey', RECEIPT_LOGO_KEY);
+        } else if (receiptLogoUrl) {
+            params.append('logoUrl', receiptLogoUrl);
+        }
+
+        return `${baseUrls[format]}?${params.toString()}`;
+    }
+
+    function reloadIframe() {
+        const iframe = document.getElementById('receiptFrame');
+        if (iframe) iframe.src = buildReceiptUrl(currentFormat);
+    }
+
+    function applyReceiptMode(mode) {
+        const m = mode === 'detailed' ? 'detailed' : 'quick';
+        receiptMode = m;
+        try { localStorage.setItem('spendnote.receiptMode', m); } catch (e) {}
+
+        const quickSummary = document.getElementById('receiptQuickSummary');
+        const detailedToggles = document.getElementById('receiptDetailedToggles');
+        if (quickSummary) quickSummary.style.display = m === 'quick' ? 'block' : 'none';
+        if (detailedToggles) detailedToggles.style.display = m === 'detailed' ? 'block' : 'none';
+
+        document.getElementById('receiptModeQuick').checked = m === 'quick';
+        document.getElementById('receiptModeDetailed').checked = m === 'detailed';
+
+        if (m === 'quick') {
+            displayOptions = { ...QUICK_PRESET };
+            document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
+                const field = toggle.dataset.field;
+                if (field) toggle.checked = displayOptions[field] === '1';
+            });
+        } else {
+            document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
+                const field = toggle.dataset.field;
+                if (field) displayOptions[field] = toggle.checked ? '1' : '0';
+            });
+        }
+        reloadIframe();
+    }
+
+    function initReceiptUiFromCashBox(cashBox, profile) {
+        const cb = cashBox || {};
+        receiptText.receiptTitle = cb.receipt_title || '';
+        receiptText.totalLabel = cb.receipt_total_label || '';
+        receiptText.fromLabel = cb.receipt_from_label || '';
+        receiptText.toLabel = cb.receipt_to_label || '';
+        receiptText.descriptionLabel = cb.receipt_description_label || '';
+        receiptText.amountLabel = cb.receipt_amount_label || '';
+        receiptText.notesLabel = cb.receipt_notes_label || '';
+        receiptText.issuedByLabel = cb.receipt_issued_by_label || '';
+        receiptText.receivedByLabel = cb.receipt_received_by_label || '';
+        receiptText.footerNote = cb.receipt_footer_note || '';
+
+        const titleEl = document.getElementById('txReceiptTitle');
+        const totalEl = document.getElementById('txTotalLabel');
+        const fromEl = document.getElementById('txFromLabel');
+        const toEl = document.getElementById('txToLabel');
+        const descEl = document.getElementById('txDescriptionLabel');
+        const amtEl = document.getElementById('txAmountLabel');
+        const footerEl = document.getElementById('txFooterNote');
+
+        const defaults = {
+            receiptTitle: 'Cash Receipt',
+            totalLabel: 'Total handed over',
+            fromLabel: 'FROM',
+            toLabel: 'TO',
+            descriptionLabel: 'Description',
+            amountLabel: 'Amount',
+            footerNote: ''
+        };
+
+        if (titleEl) titleEl.value = receiptText.receiptTitle || defaults.receiptTitle;
+        if (totalEl) totalEl.value = receiptText.totalLabel || defaults.totalLabel;
+        if (fromEl) fromEl.value = receiptText.fromLabel || defaults.fromLabel;
+        if (toEl) toEl.value = receiptText.toLabel || defaults.toLabel;
+        if (descEl) descEl.value = receiptText.descriptionLabel || defaults.descriptionLabel;
+        if (amtEl) amtEl.value = receiptText.amountLabel || defaults.amountLabel;
+        if (footerEl) footerEl.value = receiptText.footerNote || defaults.footerNote;
+
+        const bindText = (el, key) => {
+            if (!el) return;
+            el.addEventListener('input', () => {
+                receiptText[key] = el.value;
+                reloadIframe();
+            });
+        };
+
+        bindText(titleEl, 'receiptTitle');
+        bindText(totalEl, 'totalLabel');
+        bindText(fromEl, 'fromLabel');
+        bindText(toEl, 'toLabel');
+        bindText(descEl, 'descriptionLabel');
+        bindText(amtEl, 'amountLabel');
+        bindText(footerEl, 'footerNote');
+
+        receiptLogoUrl = String(cb.cash_box_logo_url || profile?.account_logo_url || '').trim();
+
+        const storedLogo = (() => {
+            try { return localStorage.getItem(RECEIPT_LOGO_KEY) || ''; } catch (_) { return ''; }
+        })();
+        const resolvedLogo = storedLogo || receiptLogoUrl;
+        if (resolvedLogo) {
+            const logoPreview = document.getElementById('txLogoPreview');
+            const logoPreviewImg = document.getElementById('txLogoPreviewImg');
+            const removeLogoBtn = document.getElementById('txRemoveLogoBtn');
+            if (logoPreview && logoPreviewImg && removeLogoBtn) {
+                logoPreviewImg.src = resolvedLogo;
+                logoPreview.style.display = 'flex';
+                removeLogoBtn.style.display = 'inline-flex';
+            }
+        }
+
+        const mapBool = (v, fallback) => {
+            if (typeof v === 'boolean') return v;
+            if (v === 1 || v === '1') return true;
+            if (v === 0 || v === '0') return false;
+            return fallback;
+        };
+
+        displayOptions = {
+            logo: mapBool(cb.receipt_show_logo, true) ? '1' : '0',
+            addresses: mapBool(cb.receipt_show_addresses, true) ? '1' : '0',
+            tracking: mapBool(cb.receipt_show_tracking, false) ? '1' : '0',
+            additional: mapBool(cb.receipt_show_additional, false) ? '1' : '0',
+            note: mapBool(cb.receipt_show_note, false) ? '1' : '0',
+            signatures: mapBool(cb.receipt_show_signatures, false) ? '1' : '0'
+        };
+
+        document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
+            const field = toggle.dataset.field;
+            if (field && displayOptions[field] !== undefined) {
+                toggle.checked = displayOptions[field] === '1';
+            }
+        });
+
+        applyReceiptMode('detailed');
+    }
+
+    window.onTransactionDetailDataLoaded = ({ tx, cashBox, profile }) => {
+        initReceiptUiFromCashBox(cashBox, profile);
+        reloadIframe();
+    };
+
+    function applyIframeZoom(iframe) {
+        try {
+            const doc = iframe.contentDocument;
+            if (!doc) return;
+            const de = doc.documentElement;
+            const body = doc.body;
+            if (!de || !body) return;
+
+            let style = doc.getElementById('txReceiptPreviewOverride');
+            if (!style) {
+                style = doc.createElement('style');
+                style.id = 'txReceiptPreviewOverride';
+                style.textContent = `
+html, body { height: auto !important; overflow: auto !important; }
+.page { height: auto !important; min-height: 0 !important; }
+`;
+                doc.head && doc.head.appendChild(style);
+            }
+
+            de.style.overflow = 'auto';
+            body.style.overflow = 'auto';
+            body.style.zoom = String(currentZoom);
+        } catch (_) {}
+    }
+
+    function updateZoom() {
+        const iframe = document.getElementById('receiptFrame');
+        const zoomLevel = document.getElementById('zoomLevel');
+        if (iframe) {
+            iframe.style.transform = 'none';
+            iframe.style.zoom = '1';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            applyIframeZoom(iframe);
+        }
+        if (zoomLevel) zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
+    }
+
+    function scheduleZoomUpdate() {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                updateZoom();
+            });
+        });
+    }
+
+    function zoomIn() { currentZoom = Math.min(currentZoom + 0.1, 1.2); scheduleZoomUpdate(); }
+    function zoomOut() { currentZoom = Math.max(currentZoom - 0.1, 0.4); scheduleZoomUpdate(); }
+    function resetZoom() { currentZoom = 0.6; scheduleZoomUpdate(); }
+
+    function setFormat(format) {
+        const f = String(format || '').toLowerCase();
+        if (f !== 'a4' && f !== 'pdf' && f !== 'email') return;
+        document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+        const btn = document.querySelector(`.format-btn[data-format="${f}"]`);
+        if (btn) btn.classList.add('active');
+        currentFormat = f;
+        reloadIframe();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteToggle = document.getElementById('txDeleteToggle');
+        const voidPanel = document.getElementById('txVoidPanel');
+        const voidBtn = document.getElementById('txVoidBtn');
+        const voidNote = document.getElementById('txVoidNote');
+
+        const receiptFrame = document.getElementById('receiptFrame');
+        if (receiptFrame) {
+            receiptFrame.addEventListener('load', () => {
+                scheduleZoomUpdate();
+            });
+        }
+
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomResetBtn = document.getElementById('zoomResetBtn');
+        if (zoomOutBtn) zoomOutBtn.addEventListener('click', zoomOut);
+        if (zoomInBtn) zoomInBtn.addEventListener('click', zoomIn);
+        if (zoomResetBtn) zoomResetBtn.addEventListener('click', resetZoom);
+
+        const printBtn = document.getElementById('txPrintBtn');
+        const pdfBtn = document.getElementById('txPdfBtn');
+        const emailBtn = document.getElementById('txEmailBtn');
+
+        if (printBtn) {
+            printBtn.addEventListener('click', () => {
+                window.print();
+            });
+        }
+        if (pdfBtn) {
+            pdfBtn.addEventListener('click', () => {
+                setFormat('pdf');
+            });
+        }
+        if (emailBtn) {
+            emailBtn.addEventListener('click', () => {
+                setFormat('email');
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            scheduleZoomUpdate();
+        });
+
+        if (deleteToggle && voidPanel) {
+            deleteToggle.addEventListener('click', () => {
+                voidPanel.classList.toggle('open');
+            });
+        }
+
+        const setVoidAccessUi = (isAdmin) => {
+            if (!voidBtn || !voidNote) return;
+            voidBtn.disabled = !isAdmin;
+            voidNote.textContent = isAdmin ? 'Admin verified' : 'Admin required';
+        };
+
+        (async () => {
+            let isAdmin = false;
+            const user = await window.auth?.getCurrentUser?.();
+
+            if (user) {
+                // Default to admin for single-user mode; refine if team role data exists
+                isAdmin = true;
+
+                try {
+                    const rows = await window.db?.teamMembers?.getAll?.();
+                    if (Array.isArray(rows) && rows.length) {
+                        const me = rows.find(r => r?.member_id === user.id || r?.member?.id === user.id);
+                        if (me && typeof me.role === 'string') {
+                            isAdmin = me.role.toLowerCase() === 'admin';
+                        } else {
+                            // If I'm the owner in any row, treat as admin; otherwise assume not admin
+                            const isOwner = rows.some(r => r?.owner_id === user.id);
+                            isAdmin = Boolean(isOwner);
+                        }
+                    }
+                } catch (_) {}
+            } else {
+                isAdmin = false;
+            }
+
+            setVoidAccessUi(isAdmin);
+
+            if (voidBtn) {
+                voidBtn.addEventListener('click', () => {
+                    if (voidBtn.disabled) return;
+                    const ok = confirm('Void this transaction?\n\nThis is irreversible.');
+                    if (!ok) return;
+                    alert('Transaction voided (demo).');
+                });
+            }
+        })();
+
+        const logoInput = document.getElementById('txLogoInput');
+        const uploadLogoBtn = document.getElementById('txUploadLogoBtn');
+        const removeLogoBtn = document.getElementById('txRemoveLogoBtn');
+        const logoPreview = document.getElementById('txLogoPreview');
+        const logoPreviewImg = document.getElementById('txLogoPreviewImg');
+
+        const LOGO_STORAGE_KEY = 'spendnote.proLogoDataUrl';
+
+        const setLogoUi = (dataUrl) => {
+            if (!logoPreview || !logoPreviewImg || !removeLogoBtn) return;
+            if (dataUrl) {
+                logoPreviewImg.src = dataUrl;
+                logoPreview.style.display = 'flex';
+                removeLogoBtn.style.display = 'inline-flex';
+            } else {
+                logoPreviewImg.removeAttribute('src');
+                logoPreview.style.display = 'none';
+                removeLogoBtn.style.display = 'none';
+            }
+        };
+
+        try {
+            const storedLogo = localStorage.getItem(LOGO_STORAGE_KEY) || '';
+            if (storedLogo) setLogoUi(storedLogo);
+        } catch (_) {}
+
+        if (uploadLogoBtn && logoInput) {
+            uploadLogoBtn.addEventListener('click', () => logoInput.click());
+        }
+
+        if (logoInput) {
+            logoInput.addEventListener('change', () => {
+                const file = logoInput.files && logoInput.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const dataUrl = String(reader.result || '');
+                    if (dataUrl) {
+                        setLogoUi(dataUrl);
+                        try { localStorage.setItem(LOGO_STORAGE_KEY, dataUrl); } catch (_) {}
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        if (removeLogoBtn) {
+            removeLogoBtn.addEventListener('click', () => {
+                if (logoInput) logoInput.value = '';
+                setLogoUi('');
+                try { localStorage.removeItem(LOGO_STORAGE_KEY); } catch (_) {}
+            });
+        }
+
+        try {
+            receiptMode = localStorage.getItem('spendnote.receiptMode') === 'detailed' ? 'detailed' : 'quick';
+        } catch (e) { receiptMode = 'quick'; }
+
+        document.getElementById('receiptModeQuick')?.addEventListener('change', () => applyReceiptMode('quick'));
+        document.getElementById('receiptModeDetailed')?.addEventListener('change', () => applyReceiptMode('detailed'));
+
+        document.querySelectorAll('.format-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                setFormat(this.dataset.format);
+            });
+        });
+
+        document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                if (receiptMode !== 'detailed') return;
+                const field = this.dataset.field;
+                if (field) {
+                    displayOptions[field] = this.checked ? '1' : '0';
+                    reloadIframe();
+                }
+            });
+        });
+
+        applyReceiptMode(receiptMode);
+        reloadIframe();
+        scheduleZoomUpdate();
+    });
+
