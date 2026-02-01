@@ -572,6 +572,12 @@ if (window.self !== window.top) {
 
 const urlParams = new URLSearchParams(window.location.search);
 
+const initialVoid = urlParams.get('void') === '1';
+window.__spendnoteReceiptVoid = initialVoid;
+if (initialVoid) {
+  document.querySelectorAll('.void-watermark').forEach((el) => (el.style.display = 'block'));
+}
+
 const resolveLogoUrl = () => {
   const logoKey = urlParams.get('logoKey');
   const logoUrl = urlParams.get('logoUrl');
@@ -823,6 +829,9 @@ if (urlParams.get('signatures') === '0') {
 
           const tx = await window.db.transactions.getById(txId);
           if (!tx) return;
+
+          const shouldShowVoid = Boolean(window.__spendnoteReceiptVoid) || String(tx?.status || 'active').toLowerCase() === 'voided';
+          document.querySelectorAll('.void-watermark').forEach((el) => (el.style.display = shouldShowVoid ? 'block' : 'none'));
 
           try {
             if (( !tx.cash_box || tx.cash_box?.sequence_number === undefined || tx.cash_box?.sequence_number === null) && tx.cash_box_id && window.db?.cashBoxes?.getById) {
