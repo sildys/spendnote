@@ -2333,14 +2333,14 @@ tr:hover [data-category-tag] {
 /* Cashbox selector - elegant carousel with arrows inside card */
 .cashbox-display {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 10px;
     padding: 10px 12px;
     background: white;
     border: 2px solid var(--border);
     border-radius: 10px;
     min-width: 200px;
-    min-height: 58px;
+    height: 48px;
 }
 
 .cashbox-display .cashbox-icon {
@@ -2373,18 +2373,17 @@ tr:hover [data-category-tag] {
 }
 
 .cashbox-display .cashbox-id {
-    font-size: 26px;
+    font-size: 10px;
     font-weight: 700;
-    color: var(--text);
+    color: var(--text-muted);
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    letter-spacing: 0.02em;
-    background: var(--surface-elevated);
-    padding: 6px 12px;
-    border-radius: 8px;
+    letter-spacing: 0.03em;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: baseline;
     flex: 0 0 auto;
-    line-height: 1;
 }
 
 .cashbox-display #modalCashboxName {
