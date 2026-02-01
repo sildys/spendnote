@@ -34,7 +34,7 @@
             row-gap: 6px;
             cursor: pointer;
             overflow: hidden;
-            min-height: 76px;
+            min-height: 88px;
         }
 
 
@@ -278,6 +278,7 @@
             padding: 3px 6px;
             border-radius: 5px;
             display: inline-block;
+            margin-left: 14px;
         }
 
         .register-balance {
@@ -367,7 +368,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            min-height: 76px;
+            min-height: 88px;
         }
 
         .add-cash-box-card:hover {

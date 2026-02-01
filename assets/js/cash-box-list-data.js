@@ -40,7 +40,9 @@ function getSpendNoteHelpers() {
 async function loadCashBoxList() {
     try {
         // Load cash boxes from database
-        const cashBoxes = await db.cashBoxes.getAll();
+        const cashBoxes = await db.cashBoxes.getAll({
+            select: 'id, name, color, currency, icon, current_balance, created_at, sort_order, sequence_number, transaction_count'
+        });
         
         if (cashBoxes && cashBoxes.length > 0) {
             // Get the list container
@@ -76,8 +78,10 @@ async function loadCashBoxList() {
                 const colorClass = getColorClass(color);
                 
 
-                const cashBoxPrefix = 'cbx';
-                const sequenceNumber = sequenceById.get(box.id) ?? (index + 1);
+                const seq = Number(box.sequence_number);
+                const displayCode = Number.isFinite(seq) && seq > 0
+                    ? `SN-${String(seq).padStart(3, '0')}`
+                    : '—';
                 
                 // Format currency (locale + cash box currency)
                 const formattedBalance = formatCurrency(box.current_balance || 0, box.currency || 'USD');
@@ -115,6 +119,7 @@ async function loadCashBoxList() {
                         </a>
                         <div class="register-info">
                             <div class="register-name">${box.name}</div>
+                            <div class="register-id">${displayCode}</div>
                             <div class="register-meta">
                                 <span class="register-tx-count"><i class="fas fa-receipt"></i> ${txCount} tx</span>
                                 <div class="register-users">${usersHTML}</div>

@@ -2369,9 +2369,28 @@ tr:hover [data-category-tag] {
     text-overflow: ellipsis;
 }
 
+.cashbox-display .cashbox-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+}
+
+.cashbox-display .cashbox-id {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
 .cashbox-display .cashbox-balance {
     font-size: 11px;
     color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .cashbox-display .cashbox-arrows {
