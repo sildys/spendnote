@@ -310,6 +310,27 @@
         if (document.title) {
             document.title = `Transaction ${displayId} - SpendNote`;
         }
+
+        try {
+            const profile = window.db?.profiles?.getCurrent
+                ? await window.db.profiles.getCurrent()
+                : null;
+            if (typeof window.onTransactionDetailDataLoaded === 'function') {
+                window.onTransactionDetailDataLoaded({
+                    tx,
+                    cashBox: tx.cash_box || null,
+                    profile
+                });
+            }
+        } catch (_) {
+            if (typeof window.onTransactionDetailDataLoaded === 'function') {
+                window.onTransactionDetailDataLoaded({
+                    tx,
+                    cashBox: tx.cash_box || null,
+                    profile: null
+                });
+            }
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function () {

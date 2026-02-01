@@ -439,6 +439,20 @@
   <script>
 const urlParams = new URLSearchParams(window.location.search);
 
+const resolveLogoUrl = () => {
+  const logoKey = urlParams.get('logoKey');
+  const logoUrl = urlParams.get('logoUrl');
+  if (logoUrl) return logoUrl;
+  if (logoKey) {
+    try {
+      return localStorage.getItem(logoKey) || '';
+    } catch (_) {
+      return '';
+    }
+  }
+  return '';
+};
+
 // Custom text replacements
 const receiptTitle = urlParams.get('receiptTitle');
 const totalLabel = urlParams.get('totalLabel');
@@ -497,6 +511,18 @@ if (footerNote) {
 // Logo
 if (urlParams.get('logo') === '0') {
     document.querySelectorAll('.logo, .logo-box, .logo-img, .sn-logo').forEach(el => el.style.display = 'none');
+} else {
+    const logo = resolveLogoUrl();
+    if (logo) {
+        const svgLogo = document.querySelector('svg.logo');
+        if (svgLogo && svgLogo.parentNode) {
+            const img = document.createElement('img');
+            img.className = 'logo';
+            img.alt = 'Company logo';
+            img.src = logo;
+            svgLogo.parentNode.replaceChild(img, svgLogo);
+        }
+    }
 }
 
 // Addresses (FROM and TO addresses, but keep names visible)
@@ -597,12 +623,19 @@ if (urlParams.get('signatures') === '0') {
         const tx = await window.db.transactions.getById(txId);
         if (!tx) return;
 
+        try {
+          if (!tx.cash_box && tx.cash_box_id && window.db?.cashBoxes?.getById) {
+            tx.cash_box = await window.db.cashBoxes.getById(tx.cash_box_id);
+          }
+        } catch (_) {}
+
         const displayId = getDisplayId(tx);
         const cashBoxCode = getCashBoxCode(tx);
         const createdBy = safeText(tx.created_by_user_name || tx.created_by, '—');
         const txDate = tx.transaction_date || tx.created_at;
-        const contactName = safeText(tx.contact?.name || tx.contact_name, '—');
-        const contactAddress = safeText(tx.contact?.address, '');
+        const contactName = safeText(tx.contact_name || tx.contact?.name, '—');
+        const contactAddress = safeText(tx.contact_address || tx.contact?.address, '');
+        const contactOtherId = safeText(tx.contact_custom_field_1, '');
 
         if (cashBoxCode) setTextAll('span.register-id', cashBoxCode);
         if (displayId) setTextAll('span.receipt-id-line', displayId);
@@ -616,6 +649,9 @@ if (urlParams.get('signatures') === '0') {
           const html = contactAddress.split(/\r?\n/).map((l) => safeText(l, '')).filter(Boolean).join('<br>');
           setHtmlAll('.contact-address', html);
         }
+
+        if (cashBoxCode) setTextAll('.company-id', cashBoxCode);
+        if (contactOtherId) setTextAll('.contact-id', contactOtherId);
 
         if (displayId) {
           document.title = `Cash Receipt - ${displayId}`;

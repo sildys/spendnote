@@ -1478,31 +1478,31 @@
                         </div>
                         <div class="pro-field">
                             <label>Receipt Title</label>
-                            <input type="text" placeholder="Cash Receipt">
+                            <input type="text" ceipt">
                         </div>
                         <div class="pro-field">
                             <label>Total Label</label>
-                            <input type="text" placeholder="Total handed over">
+                            <input type="text"  handed over">
                         </div>
                         <div class="pro-field">
                             <label>From Label</label>
-                            <input type="text" placeholder="FROM">
+                            <input type="text" ">
                         </div>
                         <div class="pro-field">
                             <label>To Label</label>
-                            <input type="text" placeholder="TO">
+                            <input type="text" ">
                         </div>
                         <div class="pro-field">
                             <label>Description Label</label>
-                            <input type="text" placeholder="Description">
+                            <input type="text" ">
                         </div>
                         <div class="pro-field">
                             <label>Amount Label</label>
-                            <input type="text" placeholder="Amount">
+                            <input type="teh=nt">
                         </div>
                         <div class="pro-field full">
                             <label>Footer Note</label>
-                            <textarea rows="2" placeholder="Thank you for your business!"></textarea>
+                            <textarea rows="2"  you for your business!"></textarea>
                         </div>
                     </div>
                 </div>
@@ -1567,6 +1567,22 @@
     let currentFormat = 'a4';
     let currentZoom = 0.6;
 
+    let receiptText = {
+        receiptTitle: '',
+        totalLabel: '',
+        fromLabel: '',
+        toLabel: '',
+        descriptionLabel: '',
+        amountLabel: '',
+        notesLabel: '',
+        issuedByLabel: '',
+        receivedByLabel: '',
+        footerNote: ''
+    };
+
+    let receiptLogoUrl = '';
+    const RECEIPT_LOGO_KEY = 'spendnote.proLogoDataUrl';
+
     const txId = new URLSearchParams(window.location.search).get('id');
 
     function buildReceiptUrl(format) {
@@ -1576,10 +1592,25 @@
             'email': 'spendnote-email-receipt.html'
         };
         const params = new URLSearchParams();
+        params.append('v', 'receipt-20260201-01');
         if (txId) params.append('txId', txId);
         for (const [key, value] of Object.entries(displayOptions)) {
             params.append(key, value);
         }
+
+        for (const [key, value] of Object.entries(receiptText)) {
+            const v = String(value || '').trim();
+            if (v) params.append(key, v);
+        }
+
+        let storedLogo = '';
+        try { storedLogo = localStorage.getItem(RECEIPT_LOGO_KEY) || ''; } catch (_) {}
+        if (storedLogo) {
+            params.append('logoKey', RECEIPT_LOGO_KEY);
+        } else if (receiptLogoUrl) {
+            params.append('logoUrl', receiptLogoUrl);
+        }
+
         return `${baseUrls[format]}?${params.toString()}`;
     }
 
@@ -1615,6 +1646,99 @@
         }
         reloadIframe();
     }
+
+    function initReceiptUiFromCashBox(cashBox, profile) {
+        const cb = cashBox || {};
+        receiptText.receiptTitle = cb.receipt_title || '';
+        receiptText.totalLabel = cb.receipt_total_label || '';
+        receiptText.fromLabel = cb.receipt_from_label || '';
+        receiptText.toLabel = cb.receipt_to_label || '';
+        receiptText.descriptionLabel = cb.receipt_description_label || '';
+        receiptText.amountLabel = cb.receipt_amount_label || '';
+        receiptText.notesLabel = cb.receipt_notes_label || '';
+        receiptText.issuedByLabel = cb.receipt_issued_by_label || '';
+        receiptText.receivedByLabel = cb.receipt_received_by_label || '';
+        receiptText.footerNote = cb.receipt_footer_note || '';
+
+        const titleEl = document.getElementById('txReceiptTitle');
+        const totalEl = document.getElementById('txTotalLabel');
+        const fromEl = document.getElementById('txFromLabel');
+        const toEl = document.getElementById('txToLabel');
+        const descEl = document.getElementById('txDescriptionLabel');
+        const amtEl = document.getElementById('txAmountLabel');
+        const footerEl = document.getElementById('txFooterNote');
+
+        if (titleEl) titleEl.value = receiptText.receiptTitle;
+        if (totalEl) totalEl.value = receiptText.totalLabel;
+        if (fromEl) fromEl.value = receiptText.fromLabel;
+        if (toEl) toEl.value = receiptText.toLabel;
+        if (descEl) descEl.value = receiptText.descriptionLabel;
+        if (amtEl) amtEl.value = receiptText.amountLabel;
+        if (footerEl) footerEl.value = receiptText.footerNote;
+
+        const bindText = (el, key) => {
+            if (!el) return;
+            el.addEventListener('input', () => {
+                receiptText[key] = el.value;
+                reloadIframe();
+            });
+        };
+
+        bindText(titleEl, 'receiptTitle');
+        bindText(totalEl, 'totalLabel');
+        bindText(fromEl, 'fromLabel');
+        bindText(toEl, 'toLabel');
+        bindText(descEl, 'descriptionLabel');
+        bindText(amtEl, 'amountLabel');
+        bindText(footerEl, 'footerNote');
+
+        receiptLogoUrl = String(cb.cash_box_logo_url || profile?.account_logo_url || '').trim();
+
+        const storedLogo = (() => {
+            try { return localStorage.getItem(RECEIPT_LOGO_KEY) || ''; } catch (_) { return ''; }
+        })();
+        const resolvedLogo = storedLogo || receiptLogoUrl;
+        if (resolvedLogo) {
+            const logoPreview = document.getElementById('txLogoPreview');
+            const logoPreviewImg = document.getElementById('txLogoPreviewImg');
+            const removeLogoBtn = document.getElementById('txRemoveLogoBtn');
+            if (logoPreview && logoPreviewImg && removeLogoBtn) {
+                logoPreviewImg.src = resolvedLogo;
+                logoPreview.style.display = 'flex';
+                removeLogoBtn.style.display = 'inline-flex';
+            }
+        }
+
+        const mapBool = (v, fallback) => {
+            if (typeof v === 'boolean') return v;
+            if (v === 1 || v === '1') return true;
+            if (v === 0 || v === '0') return false;
+            return fallback;
+        };
+
+        displayOptions = {
+            logo: mapBool(cb.receipt_show_logo, true) ? '1' : '0',
+            addresses: mapBool(cb.receipt_show_addresses, true) ? '1' : '0',
+            tracking: mapBool(cb.receipt_show_tracking, false) ? '1' : '0',
+            additional: mapBool(cb.receipt_show_additional, false) ? '1' : '0',
+            note: mapBool(cb.receipt_show_note, false) ? '1' : '0',
+            signatures: mapBool(cb.receipt_show_signatures, false) ? '1' : '0'
+        };
+
+        document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
+            const field = toggle.dataset.field;
+            if (field && displayOptions[field] !== undefined) {
+                toggle.checked = displayOptions[field] === '1';
+            }
+        });
+
+        applyReceiptMode('detailed');
+    }
+
+    window.onTransactionDetailDataLoaded = ({ tx, cashBox, profile }) => {
+        initReceiptUiFromCashBox(cashBox, profile);
+        reloadIframe();
+    };
 
     function applyIframeZoom(iframe) {
         try {
@@ -1701,7 +1825,7 @@ html, body { height: auto !important; overflow: auto !important; }
 
             if (user) {
                 // Default to admin for single-user mode; refine if team role data exists
-                isAdmin = true;
+                isAdmin = true;4
 
                 try {
                     const rows = await window.db?.teamMembers?.getAll?.();
