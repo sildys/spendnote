@@ -104,6 +104,7 @@ function initTransactionForm() {
 
             const contactEmail = String(document.getElementById('modalContactEmail')?.value || '').trim() || null;
             const contactPhone = String(document.getElementById('modalContactPhone')?.value || '').trim() || null;
+            const contactOtherId = String(document.getElementById('modalContactCompanyId')?.value || '').trim() || null;
 
             const dateCandidate = String(formData.date || '').trim();
             const transactionDate = /^\d{4}-\d{2}-\d{2}$/.test(dateCandidate)
@@ -153,6 +154,7 @@ function initTransactionForm() {
                 contact_email: contactEmail,
                 contact_phone: contactPhone,
                 contact_address: String(formData.ContactAddress || '').trim() || null,
+                contact_custom_field_1: contactOtherId,
                 created_by_user_id: user.id,
                 created_by_user_name: profile?.full_name || user.user_metadata?.full_name || user.email || null
             };

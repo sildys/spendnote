@@ -202,7 +202,7 @@
         const createdAt = tx.created_at || tx.transaction_date;
 
         const createdBy = safeText(tx.created_by_user_name || tx.created_by, '—');
-        const contactName = safeText(tx.contact?.name || tx.contact_name, '—');
+        const contactName = safeText(tx.contact_name || tx.contact?.name, '—');
         const contactId = safeText(tx.contact_id, '—');
 
         // Set Cash Box Header
@@ -240,7 +240,8 @@
 
         setText(qs('#txContactName'), contactName);
         setText(qs('#txContactId'), contactId);
-        setText(qs('#txContactAddress'), safeText(tx.contact?.address, '—'));
+        setText(qs('#txContactOtherId'), safeText(tx.contact_custom_field_1, '—'));
+        setText(qs('#txContactAddress'), safeText(tx.contact_address || tx.contact?.address, '—'));
 
         const createdByValue = qs('#txCreatedBy');
         if (createdByValue) {
