@@ -49,7 +49,6 @@ function updateSummaryCard(cashBox) {
     const idEl = document.getElementById('summaryId');
     const nameEl = document.getElementById('summaryName');
     const balanceEl = document.getElementById('summaryBalance');
-    const historyBtn = document.getElementById('summaryHistoryBtn');
 
     const displayCode = getCashBoxDisplayCode(cashBox);
     const iconClass = normalizeFaIcon(cashBox?.icon);
@@ -63,7 +62,6 @@ function updateSummaryCard(cashBox) {
     if (idEl) idEl.textContent = displayCode;
     if (nameEl) nameEl.textContent = cashBox?.name || '—';
     if (balanceEl) balanceEl.textContent = formatMoney(cashBox?.current_balance, cashBox?.currency);
-    if (historyBtn) historyBtn.href = currentCashBoxId ? `spendnote-cash-box-detail.html?id=${encodeURIComponent(currentCashBoxId)}` : 'spendnote-cash-box-detail.html';
 
     // Keep page accent in sync (visual only)
     document.documentElement.style.setProperty('--active', color);
@@ -205,7 +203,7 @@ async function loadCashBoxData(id) {
         const displayCode = getCashBoxDisplayCode(cashBox);
         const subtitle = document.getElementById('cashBoxSettingsSubtitle');
         if (subtitle) {
-            subtitle.textContent = `Configure ${cashBox.name || '—'} (${displayCode})`;
+            subtitle.textContent = `Configure ${cashBox.name || '—'} (${displayCode}) and its default receipt appearance settings.`;
         }
 
         currentCashBoxData = cashBox;
