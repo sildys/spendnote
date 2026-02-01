@@ -29,6 +29,10 @@
     const RECEIPT_LOGO_KEY = 'spendnote.proLogoDataUrl';
     const RECEIPT_MODE_KEY = 'spendnote.receiptMode';
 
+    let lastReceiptUrl = '';
+    let reloadTimer = null;
+    let hasInitializedFromTxData = false;
+
     const txId = new URLSearchParams(window.location.search).get('id');
 
     function buildReceiptUrl(format) {
@@ -60,9 +64,25 @@
         return `${baseUrls[format]}?${params.toString()}`;
     }
 
-    function reloadIframe() {
+    function applyReceiptUrlIfChanged(nextUrl) {
+        const url = String(nextUrl || '');
+        if (!url || url === lastReceiptUrl) return;
+        lastReceiptUrl = url;
         const iframe = document.getElementById('receiptFrame');
-        if (iframe) iframe.src = buildReceiptUrl(currentFormat);
+        if (iframe) iframe.src = url;
+    }
+
+    function requestReload(delayMs) {
+        const delay = Number.isFinite(Number(delayMs)) ? Math.max(0, Number(delayMs)) : 0;
+        if (reloadTimer) {
+            clearTimeout(reloadTimer);
+            reloadTimer = null;
+        }
+
+        reloadTimer = setTimeout(() => {
+            reloadTimer = null;
+            applyReceiptUrlIfChanged(buildReceiptUrl(currentFormat));
+        }, delay);
     }
 
     function applyReceiptMode(mode) {
@@ -90,7 +110,7 @@
                 if (field) displayOptions[field] = toggle.checked ? '1' : '0';
             });
         }
-        reloadIframe();
+        requestReload(0);
     }
 
     function getStoredReceiptMode() {
@@ -153,7 +173,7 @@
             if (!el) return;
             el.addEventListener('input', () => {
                 receiptText[key] = el.value;
-                reloadIframe();
+                requestReload(250);
             });
         };
 
@@ -211,8 +231,9 @@
     }
 
     window.onTransactionDetailDataLoaded = ({ tx, cashBox, profile }) => {
+        hasInitializedFromTxData = true;
         initReceiptUiFromCashBox(cashBox, profile);
-        reloadIframe();
+        requestReload(0);
     };
 
     function applyIframeZoom(iframe) {
@@ -272,7 +293,7 @@ html, body { height: auto !important; overflow: auto !important; }
         const btn = document.querySelector(`.format-btn[data-format="${f}"]`);
         if (btn) btn.classList.add('active');
         currentFormat = f;
-        reloadIframe();
+        requestReload(0);
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -314,6 +335,12 @@ html, body { height: auto !important; overflow: auto !important; }
                 setFormat('email');
             });
         }
+
+        setTimeout(() => {
+            if (!hasInitializedFromTxData) {
+                requestReload(0);
+            }
+        }, 700);
 
         window.addEventListener('resize', () => {
             scheduleZoomUpdate();
@@ -440,13 +467,13 @@ html, body { height: auto !important; overflow: auto !important; }
                 const field = this.dataset.field;
                 if (field) {
                     displayOptions[field] = this.checked ? '1' : '0';
-                    reloadIframe();
+                    requestReload(0);
                 }
             });
         });
 
         applyReceiptMode(receiptMode);
-        reloadIframe();
+        requestReload(0);
         scheduleZoomUpdate();
     });
 
