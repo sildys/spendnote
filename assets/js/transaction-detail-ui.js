@@ -32,6 +32,7 @@
     let lastReceiptUrl = '';
     let reloadTimer = null;
     let hasInitializedFromTxData = false;
+    let currentTxIsVoided = false;
 
     const txId = new URLSearchParams(window.location.search).get('id');
 
@@ -232,6 +233,25 @@
 
     window.onTransactionDetailDataLoaded = ({ tx, cashBox, profile }) => {
         hasInitializedFromTxData = true;
+
+        try {
+            const isVoided = String(tx?.status || 'active').toLowerCase() === 'voided';
+            currentTxIsVoided = isVoided;
+            const voidBtn = document.getElementById('txVoidBtn');
+            const voidNote = document.getElementById('txVoidNote');
+            if (isVoided) {
+                if (voidBtn) voidBtn.disabled = true;
+                if (voidNote) {
+                    const when = tx?.voided_at ? new Date(tx.voided_at) : null;
+                    const whenText = when && !Number.isNaN(when.getTime()) ? when.toLocaleString() : '';
+                    const who = String(tx?.voided_by_user_name || '').trim();
+                    voidNote.textContent = who && whenText ? `Voided by ${who} on ${whenText}` : (whenText ? `Voided on ${whenText}` : 'Voided');
+                }
+            }
+        } catch (_) {
+            // ignore void ui sync failures
+        }
+
         initReceiptUiFromCashBox(cashBox, profile);
         requestReload(0);
     };
@@ -354,6 +374,12 @@ html, body { height: auto !important; overflow: auto !important; }
 
         const setVoidAccessUi = (isAdmin) => {
             if (!voidBtn || !voidNote) return;
+
+            if (currentTxIsVoided) {
+                voidBtn.disabled = true;
+                return;
+            }
+
             voidBtn.disabled = !isAdmin;
             voidNote.textContent = isAdmin ? 'Admin verified' : 'Admin required';
         };
@@ -386,11 +412,34 @@ html, body { height: auto !important; overflow: auto !important; }
             setVoidAccessUi(isAdmin);
 
             if (voidBtn) {
-                voidBtn.addEventListener('click', () => {
+                voidBtn.addEventListener('click', async () => {
                     if (voidBtn.disabled) return;
                     const ok = confirm('Void this transaction?\n\nThis is irreversible.');
                     if (!ok) return;
-                    alert('Transaction voided (demo).');
+
+                    const prev = voidBtn.innerHTML;
+                    voidBtn.disabled = true;
+                    voidBtn.innerHTML = '<i class="fas fa-ban"></i> Voiding…';
+
+                    try {
+                        const res = await window.db?.transactions?.voidTransaction?.(txId, null);
+                        if (!res || res.success !== true) {
+                            const msg = String(res?.error || 'Failed to void transaction.');
+                            if (msg.includes('INSUFFICIENT_BALANCE_FOR_VOID')) {
+                                alert('Cannot void: this would make the cash box balance negative.\n\nDeposit funds first, or create a separate correction (expense) transaction.');
+                            } else {
+                                alert(msg);
+                            }
+                            return;
+                        }
+
+                        // Refresh to show updated status
+                        window.location.reload();
+                    } finally {
+                        // If we didn't reload (failed), restore UI
+                        voidBtn.innerHTML = prev;
+                        voidBtn.disabled = currentTxIsVoided ? true : !isAdmin;
+                    }
                 });
             }
         })();

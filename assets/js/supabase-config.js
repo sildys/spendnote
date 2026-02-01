@@ -497,6 +497,14 @@ var db = {
                     .eq('user_id', user.id)
                     .order('transaction_date', { ascending: false });
 
+                if (!filters.includeSystem) {
+                    query = query.eq('is_system', false);
+                }
+
+                if (filters.status) {
+                    query = query.eq('status', filters.status);
+                }
+
                 if (withCreatedAtOrder) {
                     query = query.order('created_at', { ascending: false });
                 }
@@ -554,6 +562,14 @@ var db = {
                 .from('transactions')
                 .select(select, { count: 'exact' })
                 .eq('user_id', user.id);
+
+            if (!options.includeSystem) {
+                query = query.eq('is_system', false);
+            }
+
+            if (options.status) {
+                query = query.eq('status', options.status);
+            }
 
             if (options.cashBoxId) query = query.eq('cash_box_id', options.cashBoxId);
             if (options.cashBoxIds && Array.isArray(options.cashBoxIds) && options.cashBoxIds.length) {
@@ -633,7 +649,8 @@ var db = {
                     p_amount_min: (options.amountMin !== undefined && options.amountMin !== null && options.amountMin !== '') ? options.amountMin : null,
                     p_amount_max: (options.amountMax !== undefined && options.amountMax !== null && options.amountMax !== '') ? options.amountMax : null,
                     p_tx_id_query: options.txIdQuery || null,
-                    p_contact_query: options.contactQuery || null
+                    p_contact_query: options.contactQuery || null,
+                    p_status: options.status || null
                 });
 
                 if (!rpcError && rpcData) {
@@ -650,8 +667,16 @@ var db = {
 
             let query = supabaseClient
                 .from('transactions')
-                .select('id,type,amount', { count: 'exact' })
-                .eq('user_id', user.id);
+                .select('id,type,amount,status,is_system', { count: 'exact' })
+                .eq('user_id', user.id)
+                .eq('is_system', false);
+
+            // Fallback stats should ignore voided transactions (the reversal handles balance)
+            if (!options.status) {
+                query = query.eq('status', 'active');
+            } else {
+                query = query.eq('status', options.status);
+            }
 
             if (options.cashBoxId) query = query.eq('cash_box_id', options.cashBoxId);
             if (options.cashBoxIds && Array.isArray(options.cashBoxIds) && options.cashBoxIds.length) {
@@ -684,12 +709,31 @@ var db = {
             (data || []).forEach((tx) => {
                 const amt = Number(tx?.amount);
                 const type = String(tx?.type || '').toLowerCase();
+                const status = String(tx?.status || 'active').toLowerCase();
+                if (status !== 'active') return;
                 if (!Number.isFinite(amt)) return;
                 if (type === 'income') totalIn += amt;
                 if (type === 'expense') totalOut += amt;
             });
 
             return { count: Number(count) || 0, totalIn, totalOut };
+        },
+
+        async voidTransaction(id, reason) {
+            const txId = String(id || '').trim();
+            if (!txId) return { success: false, error: 'Missing transaction id' };
+
+            const { data, error } = await supabaseClient.rpc('spendnote_void_transaction', {
+                p_tx_id: txId,
+                p_reason: reason || null
+            });
+
+            if (error) {
+                return { success: false, error: error.message };
+            }
+
+            const row = Array.isArray(data) ? data[0] : data;
+            return { success: true, data: row };
         },
 
         async getById(id) {

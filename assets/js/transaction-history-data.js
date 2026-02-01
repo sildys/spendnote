@@ -367,6 +367,7 @@
         txs.forEach((tx) => {
             const t = safeText(tx.type, '').toLowerCase();
             const isIncome = t === 'income';
+            const isVoided = safeText(tx.status, 'active').toLowerCase() === 'voided';
             const cashBoxColor = normalizeHexColor(tx.cash_box?.color || '#059669');
             const cashBoxRgb = hexToRgb(cashBoxColor);
             const currency = tx.cash_box?.currency || 'USD';
@@ -385,12 +386,16 @@
             const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="32" fill="#10b981"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="700" fill="#ffffff">${initials}</text></svg>`;
             const avatarUrl = `data:image/svg+xml,${encodeURIComponent(svg)}`;
 
+            const pillClass = isVoided ? 'void' : (isIncome ? 'in' : 'out');
+            const pillIcon = isVoided ? 'fa-ban' : (isIncome ? 'fa-arrow-down' : 'fa-arrow-up');
+            const pillLabel = isVoided ? 'VOID' : (isIncome ? 'IN' : 'OUT');
+
             tr.innerHTML = `
                 <td><input type="checkbox" class="row-checkbox" data-tx-id="${safeText(tx.id, '')}"></td>
                 <td>
-                    <div class="tx-type-pill ${isIncome ? 'in' : 'out'}">
-                        <span class="quick-icon"><i class="fas ${isIncome ? 'fa-arrow-down' : 'fa-arrow-up'}"></i></span>
-                        <span class="quick-label">${isIncome ? 'IN' : 'OUT'}</span>
+                    <div class="tx-type-pill ${pillClass}">
+                        <span class="quick-icon"><i class="fas ${pillIcon}"></i></span>
+                        <span class="quick-label">${pillLabel}</span>
                     </div>
                 </td>
                 <td><span class="tx-id">${displayId}</span></td>
@@ -398,7 +403,7 @@
                 <td><span class="cashbox-badge" style="--cb-color: ${cashBoxColor};">${safeText(tx.cash_box?.name, 'Unknown')}</span></td>
                 <td><span class="tx-contact">${contactName}</span></td>
                 <td><span class="tx-contact-id">${contactId}</span></td>
-                <td><span class="tx-amount ${isIncome ? 'in' : 'out'}">${formatCurrency(tx.amount, currency)}</span></td>
+                <td><span class="tx-amount ${isIncome ? 'in' : 'out'} ${isVoided ? 'voided' : ''}">${formatCurrency(tx.amount, currency)}</span></td>
                 <td><div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${createdBy}"></div></div></td>
                 <td>
                     <a href="spendnote-transaction-detail.html?id=${encodeURIComponent(tx.id)}" class="tx-action btn-view">
@@ -577,7 +582,7 @@
             sort: { key: 'date', direction: 'desc' },
             pagination: getPaginationState(),
             cashBoxes: [],
-            cashBoxById: new Map(),
+            cashBoxById: new Map(),status, voided_at, voided_by_user_name, 
             totalTxCount: 0,
             contactByQuery: new Map()
         };

@@ -502,6 +502,14 @@
             background: rgba(var(--out-rgb), 0.06);
         }
 
+        .tx-type-pill.void {
+            --void-slate: 100, 116, 139;
+            --quick-accent: rgba(67, 56, 202, 0.92);
+            color: var(--quick-accent);
+            border-color: rgba(var(--void-slate), 0.28);
+            background: rgba(var(--void-slate), 0.10);
+        }
+
         .tx-type-pill .quick-icon {
             width: 14px;
             height: 14px;
@@ -572,6 +580,13 @@
 
         .tx-amount.out {
             color: var(--out);
+        }
+
+        .tx-amount.voided {
+            opacity: 0.55;
+            text-decoration: line-through;
+            text-decoration-thickness: 2px;
+            text-decoration-color: rgba(100, 116, 139, 0.55);
         }
 
         .tx-createdby {

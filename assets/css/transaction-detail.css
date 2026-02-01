@@ -81,6 +81,11 @@
             box-shadow: 0 10px 26px rgba(var(--active-rgb, 5, 150, 105), 0.16);
         }
 
+        .tx-topbar.voided .tx-topbar-card:hover {
+            border-color: rgba(100, 116, 139, 0.55);
+            box-shadow: 0 10px 26px rgba(100, 116, 139, 0.12);
+        }
+
         .tx-summary-left {
             display: flex;
             flex-direction: column;

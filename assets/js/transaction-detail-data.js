@@ -214,6 +214,7 @@
         const displayId = getDisplayId(tx);
         const tType = safeText(tx.type, '').toLowerCase();
         const isIncome = tType === 'income';
+        const isVoided = String(tx?.status || 'active').toLowerCase() === 'voided';
 
         const txDate = tx.transaction_date || tx.created_at;
         const createdAt = tx.created_at || tx.transaction_date;
@@ -245,14 +246,16 @@
 
         const typeWatermark = qs('#txTypeWatermark');
         if (typeWatermark) {
-            typeWatermark.textContent = isIncome ? 'IN' : 'OUT';
-            typeWatermark.classList.toggle('out', !isIncome);
+            typeWatermark.textContent = isVoided ? 'VOID' : (isIncome ? 'IN' : 'OUT');
+            typeWatermark.classList.toggle('out', !isIncome && !isVoided);
+            typeWatermark.classList.toggle('void', isVoided);
         }
 
         const topBar = qs('#txTopbar');
         if (topBar) {
             topBar.classList.toggle('in', isIncome);
             topBar.classList.toggle('out', !isIncome);
+            topBar.classList.toggle('voided', isVoided);
         }
 
         setText(qs('#txContactName'), contactName);
@@ -284,6 +287,7 @@
         if (headerAmount) {
             headerAmount.classList.toggle('in', isIncome);
             headerAmount.classList.toggle('out', !isIncome);
+            headerAmount.classList.toggle('voided', isVoided);
         }
 
         const amountValue = qs('#txAmountValue');
@@ -291,6 +295,7 @@
             amountValue.textContent = formatCurrency(tx.amount, currency);
             amountValue.classList.toggle('in', isIncome);
             amountValue.classList.toggle('out', !isIncome);
+            amountValue.classList.toggle('voided', isVoided);
         }
 
         const lineItems = normalizeLineItems(tx.line_items);
