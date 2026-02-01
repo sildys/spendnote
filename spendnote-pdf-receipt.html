@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cash Receipt - TRX-2026-00342</title>
+  <title>Cash Receipt</title>
   <style>
     @page { 
       size: A4; 
@@ -298,14 +298,14 @@
       <div class="header-left">
         <div class="title">Cash Receipt</div>
         <div class="meta">
-          <span class="recorded-by">Recorded by: John Smith</span><br>
-          <span class="receipt-date">Date: Jan 7, 2026</span>
+          <span class="recorded-by">Recorded by: —</span><br>
+          <span class="receipt-date">Date: —</span>
         </div>
       </div>
       <div class="header-right">
         <div class="identifiers">
-          <strong class="register-id">Cash Box ID:</strong> <span class="register-id">REG-000123</span><br>
-          <strong class="receipt-id-line">Receipt ID:</strong> <span class="receipt-id-line">TRX-2026-00342</span><br>
+          <strong class="register-id">Cash Box ID:</strong> <span class="register-id">—</span><br>
+          <strong class="receipt-id-line">Receipt ID:</strong> <span class="receipt-id-line">—</span><br>
         </div>
         <svg class="logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#pdf-logo-gradient)"/>
@@ -330,21 +330,15 @@
     <div class="parties">
       <div>
         <div class="party-label">From</div>
-        <div class="party-name company-name">Johnson Hardware Store</div>
-        <div class="party-info company-address from-address">
-          123 Main Street<br>
-          Springfield, IL 62701
-        </div>
-        <div class="party-id company-id">COMP-12345</div>
+        <div class="party-name company-name">—</div>
+        <div class="party-info company-address from-address"></div>
+        <div class="party-id company-id"></div>
       </div>
       <div>
         <div class="party-label">To</div>
-        <div class="party-name contact-name">Sarah Johnson</div>
-        <div class="party-info contact-address to-address">
-          456 Oak Avenue<br>
-          Springfield, IL 62702
-        </div>
-        <div class="party-id contact-id">CLIENT-4523</div>
+        <div class="party-name contact-name">—</div>
+        <div class="party-info contact-address to-address"></div>
+        <div class="party-id contact-id"></div>
       </div>
     </div>
 
@@ -358,26 +352,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Office supplies — printer paper</td>
-            <td class="amount">$45.00</td>
-          </tr>
-          <tr>
-            <td>Cleaning materials</td>
-            <td class="amount">$28.50</td>
-          </tr>
-          <tr>
-            <td>Coffee and snacks</td>
-            <td class="amount">$65.00</td>
-          </tr>
-          <tr>
-            <td>Parking fees</td>
-            <td class="amount">$24.00</td>
-          </tr>
-          <tr>
-            <td>Miscellaneous</td>
-            <td class="amount">$12.50</td>
-          </tr>
+          <tr><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>
+          <tr><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>
+          <tr><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>
+          <tr><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>
+          <tr><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>
         </tbody>
       </table>
     </div>
@@ -385,13 +364,13 @@
     <!-- TOTAL -->
     <div class="total">
       <div class="total-label">Total handed over</div>
-      <div class="total-amount">$175.00</div>
+      <div class="total-amount">—</div>
     </div>
 
     <!-- NOTES -->
-    <div class="notes">
+    <div class="notes" style="display:none;">
       <div class="notes-label">Notes</div>
-      <div class="notes-text">Advance payment for client presentations and office maintenance.</div>
+      <div class="notes-text"></div>
     </div>
 
     <!-- SIGNATURES -->
@@ -614,8 +593,11 @@ if (urlParams.get('signatures') === '0') {
       setHtmlAll('.company-address', '');
       setHtmlAll('.contact-address', '');
       document.querySelectorAll('.company-address, .contact-address').forEach((el) => (el.style.display = 'none'));
-      setTextAll('.company-id', '—');
-      setTextAll('.contact-id', '—');
+      setTextAll('.company-id', '');
+      document.querySelectorAll('.company-id').forEach((el) => (el.style.display = 'none'));
+
+      setTextAll('.contact-id', '');
+      document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = 'none'));
       setTextAll('span.register-id', '—');
       setTextAll('span.receipt-id-line', '—');
       const tbodyInit = document.querySelector('.table-section tbody');
@@ -684,7 +666,7 @@ if (urlParams.get('signatures') === '0') {
         if (!tx) return;
 
         try {
-          if (!tx.cash_box && tx.cash_box_id && window.db?.cashBoxes?.getById) {
+          if (( !tx.cash_box || tx.cash_box?.sequence_number === undefined || tx.cash_box?.sequence_number === null) && tx.cash_box_id && window.db?.cashBoxes?.getById) {
             tx.cash_box = await window.db.cashBoxes.getById(tx.cash_box_id);
           }
         } catch (_) {}
@@ -746,11 +728,21 @@ if (urlParams.get('signatures') === '0') {
             notesWrap.style.display = 'none';
           } else if (notesEl) {
             notesEl.textContent = notesText;
+            notesWrap.style.display = '';
           }
         }
 
-        setTextAll('.company-id', cashBoxCode || '—');
-        setTextAll('.contact-id', contactOtherId || '—');
+        // company-id is not a cash box id; keep hidden unless a real company identifier exists.
+        setTextAll('.company-id', '');
+        document.querySelectorAll('.company-id').forEach((el) => (el.style.display = 'none'));
+
+        if (contactOtherId) {
+          setTextAll('.contact-id', contactOtherId);
+          document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = ''));
+        } else {
+          setTextAll('.contact-id', '');
+          document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = 'none'));
+        }
 
         if (displayId) {
           document.title = `Cash Receipt - ${displayId}`;

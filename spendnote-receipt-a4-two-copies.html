@@ -323,12 +323,12 @@ body {
     <div class="topbar">
   <div>
     <div class="title">Cash Receipt</div>
-    <div class="meta"><span class="recorded-by">Recorded by: John Smith</span><span class="date-separator"> &nbsp; </span>Date: Jan 7, 2026</div>
+    <div class="meta"><span class="recorded-by">Recorded by: —</span><span class="date-separator"> &nbsp; </span>Date: —</div>
   </div>
   <div class="right-block">
     <div class="identifiers">
-      <div class="register-id">Cash Box ID: REG-000123</div>
-      <div class="receipt-id-line">Receipt ID: TRX-2026-00342</div>
+      <div class="register-id">Cash Box ID: —</div>
+      <div class="receipt-id-line">Receipt ID: —</div>
     </div>
     <div class="logo-box">Company logo</div>
   </div>
@@ -339,19 +339,15 @@ body {
     <div class="parties">
       <div class="party">
         <strong>FROM</strong>
-        <span class="company-name">Johnson Hardware Store</span><br>
-        <span class="company-address">
-        123 Main Street<br>
-        Springfield, IL 62701</span><br>
-        <span class="party-id company-id">COMP-12345</span>
+        <span class="company-name">—</span><br>
+        <span class="company-address"></span><br>
+        <span class="party-id company-id"></span>
       </div>
       <div class="party right">
         <strong>TO</strong>
         <span class="contact-name">—</span><br>
-        <span class="contact-address">
-        456 Oak Avenue<br>
-        Springfield, IL 62702</span><br>
-        <span class="party-id contact-id">CLIENT-4523</span>
+        <span class="contact-address"></span><br>
+        <span class="party-id contact-id"></span>
       </div>
     </div>
 
@@ -361,7 +357,7 @@ body {
           <tr><th class="description-header">Description</th><th class="amount-header">Amount</th></tr>
         </thead>
         <tbody>
-          <tr><td>Office supplies</td><td class="amount">$175.00</td></tr>
+          <tr><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>
           <tr><td>&nbsp;</td><td></td></tr>
           <tr><td>&nbsp;</td><td></td></tr>
           <tr><td>&nbsp;</td><td></td></tr>
@@ -370,9 +366,9 @@ body {
       </table>
     </div>
 
-    <div class="total"><span>Total handed over</span><span>$175.00</span></div>
+    <div class="total"><span>Total handed over</span><span>—</span></div>
 
-    <div class="notes"><strong>Notes</strong>Advance payment for client presentations and office maintenance.</div>
+    <div class="notes" style="display: none;"><strong>Notes</strong></div>
 
     <div class="signatures">
       <div class="signature">Issued by<div class="line"></div></div>
@@ -409,12 +405,12 @@ body {
     <div class="topbar">
   <div>
     <div class="title">Cash Receipt</div>
-    <div class="meta"><span class="recorded-by">Recorded by: John Smith</span><span class="date-separator"> &nbsp; </span>Date: Jan 7, 2026</div>
+    <div class="meta"><span class="recorded-by">Recorded by: —</span><span class="date-separator"> &nbsp; </span>Date: —</div>
   </div>
   <div class="right-block">
     <div class="identifiers">
-      <div class="register-id">Cash Box ID: REG-000123</div>
-      <div class="receipt-id-line">Receipt ID: TRX-2026-00342</div>
+      <div class="register-id">Cash Box ID: —</div>
+      <div class="receipt-id-line">Receipt ID: —</div>
     </div>
     <div class="logo-box">Company logo</div>
   </div>
@@ -425,19 +421,15 @@ body {
     <div class="parties">
       <div class="party">
         <strong>FROM</strong>
-        <span class="company-name">Johnson Hardware Store</span><br>
-        <span class="company-address">
-        123 Main Street<br>
-        Springfield, IL 62701</span><br>
-        <span class="party-id company-id">COMP-12345</span>
+        <span class="company-name">—</span><br>
+        <span class="company-address"></span><br>
+        <span class="party-id company-id"></span>
       </div>
       <div class="party right">
         <strong>TO</strong>
         <span class="contact-name">—</span><br>
-        <span class="contact-address">
-        456 Oak Avenue<br>
-        Springfield, IL 62702</span><br>
-        <span class="party-id contact-id">CLIENT-4523</span>
+        <span class="contact-address"></span><br>
+        <span class="party-id contact-id"></span>
       </div>
     </div>
 
@@ -447,7 +439,7 @@ body {
           <tr><th class="description-header">Description</th><th class="amount-header">Amount</th></tr>
         </thead>
         <tbody>
-          <tr><td>Office supplies</td><td class="amount">$175.00</td></tr>
+          <tr><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>
           <tr><td>&nbsp;</td><td></td></tr>
           <tr><td>&nbsp;</td><td></td></tr>
           <tr><td>&nbsp;</td><td></td></tr>
@@ -456,9 +448,9 @@ body {
       </table>
     </div>
 
-    <div class="total"><span>Total handed over</span><span>$175.00</span></div>
+    <div class="total"><span>Total handed over</span><span>—</span></div>
 
-    <div class="notes"><strong>Notes</strong>Advance payment for client presentations and office maintenance.</div>
+    <div class="notes" style="display: none;"><strong>Notes</strong></div>
 
     <div class="signatures">
       <div class="signature">Issued by<div class="line"></div></div>
@@ -675,8 +667,11 @@ body {
         setHtmlAll('.company-address', '');
         setHtmlAll('.contact-address', '');
         document.querySelectorAll('.company-address, .contact-address').forEach((el) => (el.style.display = 'none'));
-        setTextAll('.company-id', '—');
-        setTextAll('.contact-id', '—');
+        setTextAll('.company-id', '');
+        document.querySelectorAll('.company-id').forEach((el) => (el.style.display = 'none'));
+
+        setTextAll('.contact-id', '');
+        document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = 'none'));
         setTextAll('.register-id', 'Cash Box ID: —');
         setTextAll('.receipt-id-line', 'Receipt ID: —');
         setHtmlAll('.meta', `<span class="recorded-by">Recorded by: —</span><span class="date-separator"> &nbsp; </span>Date: —`);
@@ -687,6 +682,8 @@ body {
           const spans = el.querySelectorAll('span');
           if (spans.length >= 2) spans[1].textContent = '—';
         });
+
+        document.querySelectorAll('.notes').forEach((el) => (el.style.display = 'none'));
 
         function setTextFirstLine(selector, text) {
           document.querySelectorAll(selector).forEach((el) => {
@@ -749,7 +746,7 @@ body {
           if (!tx) return;
 
           try {
-            if (!tx.cash_box && tx.cash_box_id && window.db?.cashBoxes?.getById) {
+            if (( !tx.cash_box || tx.cash_box?.sequence_number === undefined || tx.cash_box?.sequence_number === null) && tx.cash_box_id && window.db?.cashBoxes?.getById) {
               tx.cash_box = await window.db.cashBoxes.getById(tx.cash_box_id);
             }
           } catch (_) {}
@@ -801,7 +798,8 @@ body {
 
           setTextAll('.register-id', `Cash Box ID: ${cashBoxCode || '—'}`);
           setTextAll('.receipt-id-line', `Receipt ID: ${displayId || '—'}`);
-
+  el.style.display = '';
+          
           const d = formatDateShort(txDate);
           setHtmlAll('.meta', `<span class="recorded-by">Recorded by: ${createdBy || '—'}</span><span class="date-separator"> &nbsp; </span>Date: ${d || '—'}`);
 
@@ -815,8 +813,17 @@ body {
             document.querySelectorAll('.contact-address').forEach((el) => (el.style.display = 'none'));
           }
 
-          setTextAll('.company-id', cashBoxCode || '—');
-          setTextAll('.contact-id', contactOtherId || '—');
+          // company-id is not a cash box id; keep hidden unless a real company identifier exists.
+          setTextAll('.company-id', '');
+          document.querySelectorAll('.company-id').forEach((el) => (el.style.display = 'none'));
+
+          if (contactOtherId) {
+            setTextAll('.contact-id', contactOtherId);
+            document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = ''));
+          } else {
+            setTextAll('.contact-id', '');
+            document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = 'none'));
+          }
         } catch (_) {
           // ignore
         }

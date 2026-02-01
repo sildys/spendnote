@@ -697,7 +697,7 @@ var db = {
                 .from('transactions')
                 .select(`
                     *,
-                    cash_box:cash_boxes(id, name, color, currency),
+                    cash_box:cash_boxes(id, name, color, currency, icon, sequence_number),
                     contact:contacts(id, name, email, phone, address)
                 `)
                 .eq('id', id)
