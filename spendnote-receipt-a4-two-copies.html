@@ -644,7 +644,7 @@ body {
         }
 
         function getCashBoxCode(tx) {
-          const cbSeq = Number(tx?.cash_box_sequence || tx?.cash_box?.sequence_number);
+          const cbSeq = Number(tx?.cash_box?.sequence_number || tx?.cash_box_sequence);
           if (Number.isFinite(cbSeq) && cbSeq > 0) {
             return `CR-${String(cbSeq).padStart(3, '0')}`;
           }
