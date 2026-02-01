@@ -2358,6 +2358,9 @@ tr:hover [data-category-tag] {
 .cashbox-display .cashbox-info {
     flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .cashbox-display .cashbox-name {
@@ -2396,6 +2399,8 @@ tr:hover [data-category-tag] {
 .cashbox-display .cashbox-balance {
     font-size: 11px;
     color: var(--text-muted);
+    line-height: 1.1;
+    margin-top: -2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
