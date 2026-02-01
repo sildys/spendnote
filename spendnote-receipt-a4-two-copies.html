@@ -614,7 +614,15 @@ body {
     <script>
       (async function () {
         const txId = new URLSearchParams(window.location.search).get('txId');
-        if (!txId || !window.db?.transactions?.getById) return;
+        if (!txId) return;
+
+        const waitForDb = async () => {
+          for (let i = 0; i < 50; i++) {
+            if (window.db?.transactions?.getById) return true;
+            await new Promise((r) => setTimeout(r, 50));
+          }
+          return false;
+        };
 
         function safeText(value, fallback) {
           const v = value === undefined || value === null ? '' : String(value);
@@ -661,7 +669,63 @@ body {
           });
         }
 
+        function setTextFirstLine(selector, text) {
+          document.querySelectorAll(selector).forEach((el) => {
+            el.textContent = text;
+          });
+        }
+
+        function formatMoney(amount, currency) {
+          const sn = (typeof window !== 'undefined' && window.SpendNote) ? window.SpendNote : null;
+          if (sn && typeof sn.formatCurrency === 'function') {
+            return sn.formatCurrency(amount, currency);
+          }
+          try {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency || 'USD' }).format(Number(amount) || 0);
+          } catch (_) {
+            return `$${(Number(amount) || 0).toFixed(2)}`;
+          }
+        }
+
+        function renderA4Items(tx, currency) {
+          const raw = Array.isArray(tx?.line_items) ? tx.line_items : [];
+          const items = raw
+            .map((it) => ({
+              description: safeText(it?.description, ''),
+              amount: Number(it?.amount)
+            }))
+            .filter((it) => it.description || Number.isFinite(it.amount));
+
+          const fallbackDesc = safeText(tx?.description, '—');
+          const fallbackAmt = Number(tx?.amount);
+          const effective = items.length ? items : [{ description: fallbackDesc, amount: fallbackAmt }];
+
+          const maxRows = 5;
+          const rows = effective.slice(0, maxRows).map((it) => {
+            const desc = safeText(it.description, '—');
+            const amt = formatMoney(it.amount, currency);
+            return `<tr><td>${desc}</td><td class="amount">${amt}</td></tr>`;
+          });
+          while (rows.length < maxRows) {
+            rows.push('<tr><td>&nbsp;</td><td></td></tr>');
+          }
+
+          document.querySelectorAll('.items tbody').forEach((tbody) => {
+            tbody.innerHTML = rows.join('');
+          });
+
+          const total = Number.isFinite(Number(tx?.amount)) ? Number(tx.amount) : 0;
+          const totalText = formatMoney(total, currency);
+          document.querySelectorAll('.total').forEach((el) => {
+            const spans = el.querySelectorAll('span');
+            if (spans.length >= 2) spans[1].textContent = totalText;
+          });
+        }
+
         try {
+          const ok = await waitForDb();
+          if (!ok) return;
+
           const tx = await window.db.transactions.getById(txId);
           if (!tx) return;
 
@@ -671,6 +735,13 @@ body {
             }
           } catch (_) {}
 
+          let profile = null;
+          try {
+            profile = window.db?.profiles?.getCurrent ? await window.db.profiles.getCurrent() : null;
+          } catch (_) {
+            profile = null;
+          }
+
           const displayId = getDisplayId(tx);
           const cashBoxCode = getCashBoxCode(tx);
           const createdBy = safeText(tx.created_by_user_name || tx.created_by, '');
@@ -678,6 +749,32 @@ body {
           const contactName = safeText(tx.contact_name || tx.contact?.name, '');
           const contactAddress = safeText(tx.contact_address || tx.contact?.address, '');
           const contactOtherId = safeText(tx.contact_custom_field_1, '');
+
+          const currency = safeText(tx.cash_box?.currency, 'USD');
+
+          const companyName = safeText(profile?.company_name || profile?.full_name || tx.cash_box?.name, '—');
+          const companyAddress = safeText(profile?.address, '');
+
+          setTextAll('.company-name', companyName);
+          if (companyAddress) {
+            const html = companyAddress.split(/\r?\n/).map((l) => safeText(l, '')).filter(Boolean).join('<br>');
+            setHtmlAll('.company-address', html);
+          }
+
+          renderA4Items(tx, currency);
+
+          const notes = safeText(tx.notes, '');
+          document.querySelectorAll('.notes').forEach((el) => {
+            if (!notes) {
+              el.style.display = 'none';
+              return;
+            }
+            const strong = el.querySelector('strong');
+            if (!strong) return;
+            el.innerHTML = '';
+            el.appendChild(strong);
+            el.appendChild(document.createTextNode(notes));
+          });
 
           if (cashBoxCode) setTextAll('.register-id', `Cash Box ID: ${cashBoxCode}`);
           if (displayId) setTextAll('.receipt-id-line', `Receipt ID: ${displayId}`);

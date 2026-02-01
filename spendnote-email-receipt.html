@@ -748,6 +748,49 @@ if (urlParams.get('signatures') === '0') {
           });
         }
 
+        function formatMoney(amount, currency) {
+          const sn = (typeof window !== 'undefined' && window.SpendNote) ? window.SpendNote : null;
+          if (sn && typeof sn.formatCurrency === 'function') {
+            return sn.formatCurrency(amount, currency);
+          }
+          try {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency || 'USD' }).format(Number(amount) || 0);
+          } catch (_) {
+            return `$${(Number(amount) || 0).toFixed(2)}`;
+          }
+        }
+
+        function renderItems(tx, currency) {
+          const raw = Array.isArray(tx?.line_items) ? tx.line_items : [];
+          const items = raw
+            .map((it) => ({
+              description: safeText(it?.description, ''),
+              amount: Number(it?.amount)
+            }))
+            .filter((it) => it.description || Number.isFinite(it.amount));
+
+          const fallbackDesc = safeText(tx?.description, '—');
+          const fallbackAmt = Number(tx?.amount);
+          const effective = items.length ? items : [{ description: fallbackDesc, amount: fallbackAmt }];
+
+          const maxRows = 5;
+          const rows = effective.slice(0, maxRows).map((it) => {
+            const desc = safeText(it.description, '—');
+            const amt = formatMoney(it.amount, currency);
+            return `<tr><td>${desc}</td><td class="amount">${amt}</td></tr>`;
+          });
+          while (rows.length < maxRows) {
+            rows.push('<tr><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>');
+          }
+
+          const tbody = document.querySelector('.items-section tbody');
+          if (tbody) tbody.innerHTML = rows.join('');
+
+          const total = Number.isFinite(Number(tx?.amount)) ? Number(tx.amount) : 0;
+          const totalEl = document.querySelector('.total-amount');
+          if (totalEl) totalEl.textContent = formatMoney(total, currency);
+        }
+
         const waitForDb = async () => {
           for (let i = 0; i < 50; i++) {
             if (window.db?.transactions?.getById) return true;
@@ -777,6 +820,18 @@ if (urlParams.get('signatures') === '0') {
           const contactAddress = safeText(tx.contact_address || tx.contact?.address, '');
           const contactOtherId = safeText(tx.contact_custom_field_1, '');
 
+          const currency = safeText(tx.cash_box?.currency, 'USD');
+
+          let profile = null;
+          try {
+            profile = window.db?.profiles?.getCurrent ? await window.db.profiles.getCurrent() : null;
+          } catch (_) {
+            profile = null;
+          }
+
+          const companyName = safeText(profile?.company_name || profile?.full_name || tx.cash_box?.name, '—');
+          const companyAddress = safeText(profile?.address, '');
+
           if (cashBoxCode) setTextAll('span.register-id', cashBoxCode);
           if (displayId) setTextAll('span.receipt-id-line', displayId);
 
@@ -788,6 +843,25 @@ if (urlParams.get('signatures') === '0') {
           if (contactAddress) {
             const html = contactAddress.split(/\r?\n/).map((l) => safeText(l, '')).filter(Boolean).join('<br>');
             setHtmlAll('.contact-address', html);
+          }
+
+          setTextAll('.company-name', companyName);
+          if (companyAddress) {
+            const html = companyAddress.split(/\r?\n/).map((l) => safeText(l, '')).filter(Boolean).join('<br>');
+            setHtmlAll('.company-address', html);
+          }
+
+          renderItems(tx, currency);
+
+          const notesText = safeText(tx.notes, '');
+          const notesWrap = document.querySelector('.notes');
+          const notesEl = document.querySelector('.notes-text');
+          if (notesWrap) {
+            if (!notesText) {
+              notesWrap.style.display = 'none';
+            } else if (notesEl) {
+              notesEl.textContent = notesText;
+            }
           }
 
           if (cashBoxCode) setTextAll('.company-id', cashBoxCode);

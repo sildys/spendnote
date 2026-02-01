@@ -137,10 +137,10 @@ Mode is stored as `data-mode="quick|detailed"` and persisted via `localStorage` 
   - default prefix (SpendNote branding): `SN{cash_box_sequence}-{tx_sequence_in_box}` (example: `SN3-007`)
 - Pro: cash boxes can fully override the prefix (`cash_boxes.id_prefix`), so the receipt identifier does not have to start with `SN`.
 
-### Receipts (planned behavior)
+### Receipts (implemented)
 
 Receipts are generated from **stored transaction data** (single source of truth) and rendered into one of the existing templates.
-The storage part is mostly in place (transactions already persist receipt-relevant snapshot fields). What is still missing is wiring the UI/templates to show the stored data in the right places.
+The storage part is in place (transactions persist receipt-relevant snapshot fields), and the templates are now fully wired to load and display real data.
 
 #### Receipt formats / templates
 
@@ -152,13 +152,15 @@ The storage part is mostly in place (transactions already persist receipt-releva
 
 When generating a receipt for a transaction:
 
-- Owner/account data: from `profiles` (name/address/email/phone)
+- Owner/account data: from `profiles` (company_name, full_name, address)
 - Logo:
   - default: `profiles.account_logo_url`
   - Pro override per cash box: `cash_boxes.cash_box_logo_url`
+  - localStorage override: `spendnote.proLogoDataUrl` (for uploaded logos)
 - Cash box receipt settings: from `cash_boxes` (receipt visibility toggles + optional Pro label customizations)
-- Contact data for the receipt is taken from **transaction snapshot fields** (e.g. `transactions.contact_name`, `transactions.contact_address`, etc.), so receipts can be regenerated even if the Contact record changes.
+- Contact data for the receipt is taken from **transaction snapshot fields** (`transactions.contact_name`, `transactions.contact_address`, `transactions.contact_custom_field_1`), so receipts can be regenerated even if the Contact record changes.
 - Line items: from `transactions.line_items` (the transaction amount is the sum of items)
+- Currency: from `cash_boxes.currency`
 
 #### Per-cash-box receipt settings
 
@@ -194,12 +196,9 @@ This enables localization and per-cash-box personalization.
 
 ### Current gaps / not implemented yet
 
-- Receipt generation/printing/email/PDF is not fully wired into the app flow yet:
-  - templates exist and are Supabase-capable (they load Supabase client + config)
-  - the missing part is the **data binding** (load the transaction by `txId` / URL params and populate the template fields)
-- Dashboard “Latest Transactions” is loaded from Supabase.
+- **Done & Print flow**: the dashboard modal "Done & Print" button saves the transaction but does not yet open the receipt for printing.
+- Dashboard "Latest Transactions" is loaded from Supabase.
 - Transaction History is loaded from Supabase.
-- Transaction Detail base data loading exists, but receipt rendering/preview population is not fully wired end-to-end yet.
 - Contacts cash box filtering / cash box ID handling is not finished yet.
 - Team features (members/roles/cash box access) are not finished yet.
 
@@ -271,11 +270,18 @@ This section is meant to prevent re-explaining core decisions in new chat thread
 
 ### Receipt templates
 
-- Receipt templates already exist as static HTML pages, but they are not fully wired into the app flow yet:
+- Receipt templates are fully wired to load transaction data from Supabase:
   - `spendnote-pdf-receipt.html`
   - `spendnote-email-receipt.html`
   - `spendnote-receipt-a4-two-copies.html`
-- Product intent: templates are populated from the transaction record so the same receipt can be printed/emailed/downloaded again at any time.
+- Templates are populated from the transaction record so the same receipt can be printed/emailed/downloaded again at any time.
+- Each template:
+  - Waits for `window.db` to be ready
+  - Loads transaction by `txId` URL param
+  - Enriches with cash box and profile data
+  - Populates company name/address, contact name/address, line items, total, notes, IDs
+  - Supports logo via `logoUrl` or `logoKey` (localStorage) query params
+  - Respects display toggles (logo, addresses, tracking, additional, note, signatures) via query params
 
 ### Contacts
 
