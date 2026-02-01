@@ -34,7 +34,7 @@
             row-gap: 6px;
             cursor: pointer;
             overflow: hidden;
-            min-height: 76px;
+            min-height: 88px;
         }
 
 
@@ -270,16 +270,13 @@
         }
 
         .register-id {
-            font-size: 9px;
+            font-size: 11px;
             color: var(--text-muted);
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-weight: 700;
-            background: rgba(var(--card-rgb, var(--active-rgb)), 0.08);
-            padding: 2px 5px;
-            border-radius: 4px;
-            display: inline-block;
-            vertical-align: middle;
-            letter-spacing: 0.02em;
+            font-weight: 600;
+            padding-left: 14px;
+            letter-spacing: 0.03em;
+            margin-top: -2px;
         }
 
         .register-balance {
@@ -369,7 +366,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            min-height: 76px;
+            min-height: 88px;
         }
 
         .add-cash-box-card:hover {
@@ -643,3 +640,4 @@
                 padding: 24px;
             }
         }
+
