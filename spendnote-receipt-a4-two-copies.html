@@ -617,7 +617,7 @@ body {
         if (!txId) return;
 
         const waitForDb = async () => {
-          for (let i = 0; i < 50; i++) {
+          for (let i = 0; i < 200; i++) {
             if (window.db?.transactions?.getById) return true;
             await new Promise((r) => setTimeout(r, 50));
           }
@@ -668,6 +668,25 @@ body {
             el.innerHTML = html;
           });
         }
+
+        // Immediately clear demo placeholders so they never show up in the preview
+        setTextAll('.company-name', '—');
+        setTextAll('.contact-name', '—');
+        setHtmlAll('.company-address', '');
+        setHtmlAll('.contact-address', '');
+        document.querySelectorAll('.company-address, .contact-address').forEach((el) => (el.style.display = 'none'));
+        setTextAll('.company-id', '—');
+        setTextAll('.contact-id', '—');
+        setTextAll('.register-id', 'Cash Box ID: —');
+        setTextAll('.receipt-id-line', 'Receipt ID: —');
+        setHtmlAll('.meta', `<span class="recorded-by">Recorded by: —</span><span class="date-separator"> &nbsp; </span>Date: —`);
+        document.querySelectorAll('.items tbody').forEach((tbody) => {
+          tbody.innerHTML = '<tr><td>&nbsp;</td><td></td></tr>'.repeat(5);
+        });
+        document.querySelectorAll('.total').forEach((el) => {
+          const spans = el.querySelectorAll('span');
+          if (spans.length >= 2) spans[1].textContent = '—';
+        });
 
         function setTextFirstLine(selector, text) {
           document.querySelectorAll(selector).forEach((el) => {
@@ -759,6 +778,10 @@ body {
           if (companyAddress) {
             const html = companyAddress.split(/\r?\n/).map((l) => safeText(l, '')).filter(Boolean).join('<br>');
             setHtmlAll('.company-address', html);
+            document.querySelectorAll('.company-address').forEach((el) => (el.style.display = ''));
+          } else {
+            setHtmlAll('.company-address', '');
+            document.querySelectorAll('.company-address').forEach((el) => (el.style.display = 'none'));
           }
 
           renderA4Items(tx, currency);
@@ -776,22 +799,24 @@ body {
             el.appendChild(document.createTextNode(notes));
           });
 
-          if (cashBoxCode) setTextAll('.register-id', `Cash Box ID: ${cashBoxCode}`);
-          if (displayId) setTextAll('.receipt-id-line', `Receipt ID: ${displayId}`);
-          if (createdBy) setTextAll('.recorded-by', `Recorded by: ${createdBy}`);
-          const d = formatDateShort(txDate);
-          if (d) {
-            setHtmlAll('.meta', `<span class="recorded-by">Recorded by: ${createdBy || '—'}</span><span class="date-separator"> &nbsp; </span>Date: ${d}`);
-          }
+          setTextAll('.register-id', `Cash Box ID: ${cashBoxCode || '—'}`);
+          setTextAll('.receipt-id-line', `Receipt ID: ${displayId || '—'}`);
 
-          if (contactName) setTextAll('.contact-name', contactName);
+          const d = formatDateShort(txDate);
+          setHtmlAll('.meta', `<span class="recorded-by">Recorded by: ${createdBy || '—'}</span><span class="date-separator"> &nbsp; </span>Date: ${d || '—'}`);
+
+          setTextAll('.contact-name', contactName || '—');
           if (contactAddress) {
             const html = contactAddress.split(/\r?\n/).map((l) => safeText(l, '')).filter(Boolean).join('<br>');
             setHtmlAll('.contact-address', html);
+            document.querySelectorAll('.contact-address').forEach((el) => (el.style.display = ''));
+          } else {
+            setHtmlAll('.contact-address', '');
+            document.querySelectorAll('.contact-address').forEach((el) => (el.style.display = 'none'));
           }
 
-          if (cashBoxCode) setTextAll('.company-id', cashBoxCode);
-          if (contactOtherId) setTextAll('.contact-id', contactOtherId);
+          setTextAll('.company-id', cashBoxCode || '—');
+          setTextAll('.contact-id', contactOtherId || '—');
         } catch (_) {
           // ignore
         }
