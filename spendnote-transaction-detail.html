@@ -1478,31 +1478,31 @@
                         </div>
                         <div class="pro-field">
                             <label>Receipt Title</label>
-                            <input type="text" ceipt">
+                            <input type="text" id="txReceiptTitle" placeholder="Cash Receipt">
                         </div>
                         <div class="pro-field">
                             <label>Total Label</label>
-                            <input type="text"  handed over">
+                            <input type="text" id="txTotalLabel" placeholder="Total handed over">
                         </div>
                         <div class="pro-field">
                             <label>From Label</label>
-                            <input type="text" ">
+                            <input type="text" id="txFromLabel" placeholder="FROM">
                         </div>
                         <div class="pro-field">
                             <label>To Label</label>
-                            <input type="text" ">
+                            <input type="text" id="txToLabel" placeholder="TO">
                         </div>
                         <div class="pro-field">
                             <label>Description Label</label>
-                            <input type="text" ">
+                            <input type="text" id="txDescriptionLabel" placeholder="Description">
                         </div>
                         <div class="pro-field">
                             <label>Amount Label</label>
-                            <input type="teh=nt">
+                            <input type="text" id="txAmountLabel" placeholder="Amount">
                         </div>
                         <div class="pro-field full">
                             <label>Footer Note</label>
-                            <textarea rows="2"  you for your business!"></textarea>
+                            <textarea rows="2" id="txFooterNote" placeholder="Thank you for your business!"></textarea>
                         </div>
                     </div>
                 </div>
@@ -1668,13 +1668,23 @@
         const amtEl = document.getElementById('txAmountLabel');
         const footerEl = document.getElementById('txFooterNote');
 
-        if (titleEl) titleEl.value = receiptText.receiptTitle;
-        if (totalEl) totalEl.value = receiptText.totalLabel;
-        if (fromEl) fromEl.value = receiptText.fromLabel;
-        if (toEl) toEl.value = receiptText.toLabel;
-        if (descEl) descEl.value = receiptText.descriptionLabel;
-        if (amtEl) amtEl.value = receiptText.amountLabel;
-        if (footerEl) footerEl.value = receiptText.footerNote;
+        const defaults = {
+            receiptTitle: 'Cash Receipt',
+            totalLabel: 'Total handed over',
+            fromLabel: 'FROM',
+            toLabel: 'TO',
+            descriptionLabel: 'Description',
+            amountLabel: 'Amount',
+            footerNote: ''
+        };
+
+        if (titleEl) titleEl.value = receiptText.receiptTitle || defaults.receiptTitle;
+        if (totalEl) totalEl.value = receiptText.totalLabel || defaults.totalLabel;
+        if (fromEl) fromEl.value = receiptText.fromLabel || defaults.fromLabel;
+        if (toEl) toEl.value = receiptText.toLabel || defaults.toLabel;
+        if (descEl) descEl.value = receiptText.descriptionLabel || defaults.descriptionLabel;
+        if (amtEl) amtEl.value = receiptText.amountLabel || defaults.amountLabel;
+        if (footerEl) footerEl.value = receiptText.footerNote || defaults.footerNote;
 
         const bindText = (el, key) => {
             if (!el) return;
