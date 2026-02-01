@@ -1763,18 +1763,7 @@
         if (transactionsLink) {
             transactionsLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                
-                // Get active cash box
-                const activeCashBox = document.querySelector('.register-card.active');
-                if (activeCashBox && activeCashBox.dataset.id) {
-                    const cashBoxId = activeCashBox.dataset.id;
-                    
-                    // Navigate with cashBoxId UUID parameter
-                    window.location.href = `spendnote-transaction-history.html?cashBoxId=${encodeURIComponent(cashBoxId)}`;
-                } else {
-                    // No active cash box, navigate without filter
-                    window.location.href = 'spendnote-transaction-history.html';
-                }
+                window.location.href = 'spendnote-transaction-history.html';
             });
         }
 

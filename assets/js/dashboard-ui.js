@@ -285,10 +285,7 @@ function initAddCashBoxCard() {
 function initTransactionsNavLink() {
     document.getElementById('navTransactions')?.addEventListener('click', (e) => {
         e.preventDefault();
-        const active = document.querySelector('.register-card.active');
-        window.location.href = active && active.dataset.id
-            ? `spendnote-transaction-history.html?cashBoxId=${encodeURIComponent(active.dataset.id)}`
-            : 'spendnote-transaction-history.html';
+        window.location.href = 'spendnote-transaction-history.html';
     });
 }
 

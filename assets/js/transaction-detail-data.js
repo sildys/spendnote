@@ -251,6 +251,21 @@
             typeWatermark.classList.toggle('void', isVoided);
         }
 
+        const voidMeta = qs('#txVoidMeta');
+        if (voidMeta) {
+            if (isVoided) {
+                const when = tx?.voided_at ? new Date(tx.voided_at) : null;
+                const whenText = when && !Number.isNaN(when.getTime()) ? when.toLocaleString() : '';
+                const who = safeText(tx?.voided_by_user_name, '');
+                const text = who && whenText ? `Voided by ${who} on ${whenText}` : (whenText ? `Voided on ${whenText}` : (who ? `Voided by ${who}` : ''));
+                voidMeta.textContent = text;
+                voidMeta.style.display = text ? 'block' : 'none';
+            } else {
+                voidMeta.textContent = '';
+                voidMeta.style.display = 'none';
+            }
+        }
+
         const topBar = qs('#txTopbar');
         if (topBar) {
             topBar.classList.toggle('in', isIncome);

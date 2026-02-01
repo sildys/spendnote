@@ -337,6 +337,13 @@
             line-height: 1;
         }
 
+        .tx-amount-corner .value.voided {
+            opacity: 0.58;
+            text-decoration: line-through;
+            text-decoration-thickness: 2px;
+            text-decoration-color: rgba(99, 102, 241, 0.55);
+        }
+
         .tx-main-row {
             display: grid;
             grid-template-columns: 0.95fr 1.35fr;
@@ -384,6 +391,23 @@
             user-select: none;
             line-height: 1;
             color: rgba(var(--active-rgb, 5, 150, 105), 0.18);
+        }
+
+        .tx-info-watermark.void {
+            color: rgba(99, 102, 241, 0.22);
+        }
+
+        .tx-void-meta {
+            position: absolute;
+            right: 12px;
+            top: 78px;
+            max-width: 260px;
+            text-align: right;
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(55, 65, 81, 0.80);
+            pointer-events: none;
+            user-select: none;
         }
 
 
