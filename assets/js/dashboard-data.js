@@ -61,7 +61,7 @@ async function loadDashboardData() {
         const { hexToRgb, getIconClass, getColorClass, formatCurrency } = getSpendNoteHelpers();
 
         const cashBoxesPromise = db.cashBoxes.getAll({
-            select: 'id, name, color, currency, icon, current_balance, created_at, sort_order'
+            select: 'id, name, color, currency, icon, current_balance, created_at, sort_order, sequence_number'
         });
 
         const transactionsPromise = db.transactions.getAll({ limit: 5, select: '*' });
@@ -83,17 +83,6 @@ async function loadDashboardData() {
             
             // Generate HTML for all cash boxes
             let allSlidesHTML = '';
-            const cashBoxesForNumbering = [...cashBoxes].sort((a, b) => {
-                const aTime = a?.created_at ? new Date(a.created_at).getTime() : 0;
-                const bTime = b?.created_at ? new Date(b.created_at).getTime() : 0;
-                if (aTime !== bTime) return aTime - bTime;
-                return String(a?.id || '').localeCompare(String(b?.id || ''));
-            });
-
-            const sequenceById = new Map(
-                cashBoxesForNumbering.map((box, idx) => [box.id, idx + 1])
-            );
-
             cashBoxes.forEach((box, index) => {
                 const color = box.color || '#059669';
                 const rgb = hexToRgb(color);
@@ -102,8 +91,10 @@ async function loadDashboardData() {
                 const isActive = (defaultActiveId && box.id === defaultActiveId) ? 'active' : '';
                 const iconStyle = '';
 
-                const sequenceNumber = sequenceById.get(box.id) ?? (index + 1);
-                const cashBoxPrefix = 'cbx';
+                const seq = Number(box.sequence_number);
+                const displayCode = Number.isFinite(seq) && seq > 0
+                    ? `SN-${String(seq).padStart(3, '0')}`
+                    : '—';
                 
                 // Format currency (locale + cash box currency)
                 const formattedBalance = formatCurrency(box.current_balance || 0, box.currency || 'USD');
@@ -125,7 +116,7 @@ async function loadDashboardData() {
                                     </a>
                                     <div class="register-info">
                                         <div class="register-name" style="font-size:24px;font-weight:900;line-height:1.1;">${box.name}</div>
-                                        <div class="register-id">${cashBoxPrefix}-${String(sequenceNumber).padStart(3, '0')}</div>
+                                        <div class="register-id">${displayCode}</div>
                                     </div>
                                 </div>
                                 <div class="register-actions">
