@@ -567,13 +567,28 @@
     flex-direction: column;
 }
 
+.settings-grid #receiptSection .receipt-layout {
+    flex: 1;
+}
+
 /* RECEIPT LAYOUT */
 .receipt-layout {
     display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: 320px minmax(0, 520px);
     gap: 20px;
     padding-top: 16px;
+    justify-content: start;
+    min-width: 0;
     align-items: stretch;
+}
+
+.receipt-layout .receipt-preview {
+    max-width: 520px;
+    width: 100%;
+    justify-self: start;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 @media (max-width: 900px) {
