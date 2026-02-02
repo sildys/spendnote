@@ -5,6 +5,96 @@ let currentCashBoxId = null;
 let currentCashBoxData = null;
 let hasInitialized = false;
 
+async function getCashBoxTransactionCount(cashBoxId) {
+    try {
+        if (!cashBoxId || !window.supabaseClient) return 0;
+
+        const { count, error } = await window.supabaseClient
+            .from('transactions')
+            .select('id', { count: 'exact', head: true })
+            .eq('cash_box_id', cashBoxId);
+
+        if (error) {
+            console.error('Error counting transactions for cash box:', error);
+            return 0;
+        }
+
+        return Number.isFinite(count) ? count : 0;
+    } catch (e) {
+        console.error('Error counting transactions for cash box:', e);
+        return 0;
+    }
+}
+
+function clearActiveCashBoxIfMatches(cashBoxId) {
+    try {
+        const activeId = localStorage.getItem('activeCashBoxId');
+        if (activeId && cashBoxId && String(activeId) === String(cashBoxId)) {
+            localStorage.removeItem('activeCashBoxId');
+            localStorage.removeItem('activeCashBoxColor');
+            localStorage.removeItem('activeCashBoxRgb');
+        }
+    } catch (e) {}
+}
+
+async function handleDeleteCashBox() {
+    try {
+        if (!currentCashBoxId) {
+            alert('You can only delete a Cash Box after it has been created.');
+            return;
+        }
+
+        const name = document.getElementById('cashBoxNameInput')?.value?.trim() || 'this Cash Box';
+        const txCount = await getCashBoxTransactionCount(currentCashBoxId);
+
+        const confirmed = window.confirm(
+            `Delete "${name}"?\n\n` +
+            `This will permanently delete:\n` +
+            `• This Cash Box\n` +
+            `• ${txCount} transaction${txCount === 1 ? '' : 's'}\n\n` +
+            `Before deleting, export your data if you need it.\n` +
+            `This action cannot be undone.`
+        );
+        if (!confirmed) return;
+
+        const typed = window.prompt(
+            `Type DELETE to confirm permanent deletion of "${name}".\n\n` +
+            `This will also delete ${txCount} transaction${txCount === 1 ? '' : 's'}.`
+        );
+        if (typed !== 'DELETE') {
+            alert('Deletion cancelled.');
+            return;
+        }
+
+        const deleteBtn = document.getElementById('deleteButton');
+        if (deleteBtn) {
+            deleteBtn.disabled = true;
+            deleteBtn.classList.add('is-loading');
+        }
+
+        if (!window.db?.cashBoxes?.delete) {
+            throw new Error('Delete is not available');
+        }
+
+        const result = await window.db.cashBoxes.delete(currentCashBoxId);
+        if (result?.success === false) {
+            throw new Error(result.error || 'Delete failed');
+        }
+
+        clearActiveCashBoxIfMatches(currentCashBoxId);
+        window.location.replace('spendnote-cash-box-list.html');
+    } catch (error) {
+        console.error('Failed to delete cash box:', error);
+        alert('Could not delete the Cash Box.');
+
+        const deleteBtn = document.getElementById('deleteButton');
+        if (deleteBtn) {
+            deleteBtn.disabled = false;
+            deleteBtn.classList.remove('is-loading');
+        }
+    }
+}
+
 function toRgbStringFromHex(hex) {
     try {
         const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(hex || '').trim());
@@ -137,6 +227,11 @@ async function initCashBoxSettings() {
 
             const summaryCard = document.querySelector('.summary-card');
             if (summaryCard) summaryCard.style.display = 'none';
+
+            const deleteToggle = document.getElementById('cashBoxDeleteToggle');
+            const deletePanel = document.getElementById('cashBoxDeletePanel');
+            if (deleteToggle) deleteToggle.style.display = 'none';
+            if (deletePanel) deletePanel.style.display = 'none';
         }
         
         if (DEBUG) console.log('Cash Box Settings initialized', isEditMode ? '(Edit mode)' : '(Create mode)');
@@ -158,6 +253,11 @@ async function initCashBoxSettings() {
                     window.location.replace('spendnote-cash-box-list.html');
                 }
             });
+        }
+
+        const deleteBtn = document.getElementById('deleteButton');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', handleDeleteCashBox);
         }
 
         // Summary live updates (name/icon/color)

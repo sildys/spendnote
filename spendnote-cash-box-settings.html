@@ -710,14 +710,6 @@ removeLogoBtn?.addEventListener('click', () => {
     reloadIframe();
 });
 
-// ===== DELETE BUTTON =====
-document.getElementById('deleteButton')?.addEventListener('click', function() {
-    const name = document.getElementById('cashBoxNameInput')?.value || 'this Cash Box';
-    if (confirm(`Are you sure you want to delete "${name}"?\n\nThis will permanently delete:\n• This Cash Box\n• All transactions\n• All associated data\n\nThis action cannot be undone.`)) {
-        alert('Cash Box deleted (demo only)');
-    }
-});
-
 // ===== TEAM ACCESS TOGGLE =====
 function toggleTeamAccess() {
     const content = document.getElementById('teamContent');
@@ -762,7 +754,7 @@ window.addEventListener('DOMContentLoaded', function() {
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=20"></script>
-<script src="assets/js/cash-box-settings-data.js?v=16"></script>
+<script src="assets/js/cash-box-settings-data.js?v=17"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         if (typeof initCashBoxSettings === 'function') {
