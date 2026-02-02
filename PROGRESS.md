@@ -12,7 +12,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
 
-## Current state (last updated: 2026-02-01 23:58)
+## Current state (last updated: 2026-02-02 20:55)
 - **Dashboard**
   - Transaction modal works again (fixed duplicate modal JS load + ensured submit handler binds).
   - **Save to Contacts** toggle exists (no auto-save by default).
@@ -59,6 +59,7 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Cash Box Detail: loads from Supabase (UUID id param), displays `SN-###` code.
   - Cash Box Settings: loads cash box data, displays `SN-###` in subtitle.
   - Cash Box Settings: receipt preview uses demo data (A4/PDF/Email) and respects quick/detailed + toggles.
+  - Cash Box Settings: Danger Zone hard delete implemented (shows transaction count, requires typing `DELETE`, deletes cash box + cascaded transactions).
   - Cash Box List: delete modal subtitle ready for dynamic data.
 
 ## Key decisions / invariants
@@ -88,6 +89,8 @@ If a chat thread freezes / context is lost: in the new thread say:
 - `40d9127` Quick receipt: single item mode + show receipt id by default
 - `460556c` Settings demo receipt: cash-only copy + single-line addresses + toggles
 - `77d489e` Docs: add UX/bug backlog items
+- `b824e8b` Docs: reflect receipt preview + quick receipt changes
+- `983150d` Cash Box Settings: hard delete with tx count confirmation
 
 ## Next focus (pick one)
 - **A)** Implement end-to-end transaction create flow + robust error handling (Supabase insert + balance update)

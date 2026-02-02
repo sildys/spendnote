@@ -214,6 +214,12 @@ Additional UX/bug backlog:
 - "Save to Contacts" checkbox: add a short inline hint ("so you can reuse it later").
 - Footer redesign.
 
+Cash Box deletion:
+
+- Cash Box Settings includes a Danger Zone **hard delete** action.
+- The UI shows the number of transactions that will be deleted and requires typing `DELETE` to confirm.
+- Deleting a cash box also deletes its transactions (FK `ON DELETE CASCADE`).
+
 ## Canonical conventions / decisions (do not change casually)
 
 This section is meant to prevent re-explaining core decisions in new chat threads.
