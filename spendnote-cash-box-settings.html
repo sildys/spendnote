@@ -563,31 +563,33 @@ function applyReceiptMode(mode) {
 function reloadIframe() {
     const iframe = document.getElementById('receiptFrame');
     if (iframe) {
-        iframe.onload = () => {
-            applyIframeZoom(iframe);
-        };
         iframe.src = buildReceiptUrl(currentFormat);
     }
 }
 
 function applyIframeZoom(iframe) {
-    if (!iframe) return;
     try {
         const doc = iframe.contentDocument;
         if (!doc) return;
         const de = doc.documentElement;
         const body = doc.body;
-        if (de) {
-            de.style.overflow = 'auto';
-            de.style.zoom = String(currentZoom);
+        if (!de || !body) return;
+
+        let style = doc.getElementById('txReceiptPreviewOverride');
+        if (!style) {
+            style = doc.createElement('style');
+            style.id = 'txReceiptPreviewOverride';
+            style.textContent = `
+html, body { height: auto !important; overflow: auto !important; }
+.page { height: auto !important; min-height: 0 !important; }
+`;
+            doc.head && doc.head.appendChild(style);
         }
-        if (body) {
-            body.style.overflow = 'auto';
-            body.style.zoom = String(currentZoom);
-        }
-    } catch (e) {
-        // ignore cross-origin / timing issues
-    }
+
+        de.style.overflow = 'auto';
+        body.style.overflow = 'auto';
+        body.style.zoom = String(currentZoom);
+    } catch (_) {}
 }
 
 function updateZoom() {
@@ -604,6 +606,18 @@ function updateZoom() {
         zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
     }
 }
+
+function scheduleZoomUpdate() {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            updateZoom();
+        });
+    });
+}
+
+function zoomIn() { currentZoom = Math.min(currentZoom + 0.1, 1.2); scheduleZoomUpdate(); }
+function zoomOut() { currentZoom = Math.max(currentZoom - 0.1, 0.4); scheduleZoomUpdate(); }
+function resetZoom() { currentZoom = 0.6; scheduleZoomUpdate(); }
 
 // ===== COLOR PICKER =====
 document.querySelectorAll('.color-option').forEach(option => {
@@ -672,24 +686,9 @@ document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle 
 });
 
 // ===== ZOOM CONTROLS =====
-document.getElementById('zoomOutBtn')?.addEventListener('click', () => {
-    if (currentZoom > 0.4) {
-        currentZoom = Math.max(currentZoom - 0.05, 0.4);
-        updateZoom();
-    }
-});
-
-document.getElementById('zoomInBtn')?.addEventListener('click', () => {
-    if (currentZoom < 1.2) {
-        currentZoom = Math.min(currentZoom + 0.05, 1.2);
-        updateZoom();
-    }
-});
-
-document.getElementById('zoomResetBtn')?.addEventListener('click', () => {
-    currentZoom = 0.6;
-    updateZoom();
-});
+document.getElementById('zoomOutBtn')?.addEventListener('click', zoomOut);
+document.getElementById('zoomInBtn')?.addEventListener('click', zoomIn);
+document.getElementById('zoomResetBtn')?.addEventListener('click', resetZoom);
 
 // ===== LOGO UPLOAD =====
 const logoInput = document.getElementById('logoInput');
@@ -742,7 +741,15 @@ removeLogoBtn?.addEventListener('click', () => {
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded', function() {
     applyReceiptMode('quick');
-    updateZoom();
+
+    const receiptFrame = document.getElementById('receiptFrame');
+    if (receiptFrame) {
+        receiptFrame.addEventListener('load', () => {
+            scheduleZoomUpdate();
+        });
+    }
+
+    scheduleZoomUpdate();
     
     // Load saved logo
     try {
