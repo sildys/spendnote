@@ -1065,8 +1065,10 @@
 
             // On pages that don't show the system-wide cash box count (e.g. Cash Box Detail),
             // display the filtered total instead of the global total.
-            if (elTotal && !elBoxes) {
-                elTotal.textContent = String(Number(pageRes?.count) || 0);
+            const pageTotalEl = qs('#statTotalTransactions');
+            const boxesEl = qs('#statCashBoxes');
+            if (pageTotalEl && !boxesEl) {
+                pageTotalEl.textContent = String(Number(pageRes?.count) || 0);
             }
 
             await updateStats(serverCtx);
