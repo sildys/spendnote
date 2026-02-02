@@ -220,6 +220,11 @@ Cash Box deletion:
 - The UI shows the number of transactions that will be deleted and requires typing `DELETE` to confirm.
 - Deleting a cash box also deletes its transactions (FK `ON DELETE CASCADE`).
 
+Cash Box Settings status:
+
+- Receipt & Print Settings preview behavior is now aligned with Transaction Detail (same layout sizing + zoom behavior).
+- Inline `onclick` handlers have been removed; event bindings are handled in JS.
+
 ## Canonical conventions / decisions (do not change casually)
 
 This section is meant to prevent re-explaining core decisions in new chat threads.
