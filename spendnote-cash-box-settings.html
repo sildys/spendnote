@@ -563,15 +563,44 @@ function applyReceiptMode(mode) {
 function reloadIframe() {
     const iframe = document.getElementById('receiptFrame');
     if (iframe) {
+        iframe.onload = () => {
+            applyIframeZoom(iframe);
+        };
         iframe.src = buildReceiptUrl(currentFormat);
+    }
+}
+
+function applyIframeZoom(iframe) {
+    if (!iframe) return;
+    try {
+        const doc = iframe.contentDocument;
+        if (!doc) return;
+        const de = doc.documentElement;
+        const body = doc.body;
+        if (de) {
+            de.style.overflow = 'auto';
+            de.style.zoom = String(currentZoom);
+        }
+        if (body) {
+            body.style.overflow = 'auto';
+            body.style.zoom = String(currentZoom);
+        }
+    } catch (e) {
+        // ignore cross-origin / timing issues
     }
 }
 
 function updateZoom() {
     const iframe = document.getElementById('receiptFrame');
     const zoomLevel = document.getElementById('zoomLevel');
-    if (iframe && zoomLevel) {
-        iframe.style.zoom = currentZoom;
+    if (iframe) {
+        iframe.style.transform = 'none';
+        iframe.style.zoom = '1';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        applyIframeZoom(iframe);
+    }
+    if (zoomLevel) {
         zoomLevel.textContent = Math.round(currentZoom * 100) + '%';
     }
 }
