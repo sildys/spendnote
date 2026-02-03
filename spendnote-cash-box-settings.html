@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=12">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=13">
-    <link rel="stylesheet" href="assets/css/cash-box-settings.css?v=6">
+    <link rel="stylesheet" href="assets/css/cash-box-settings.css?v=7">
 </head>
 <body>
 <div id="nav-container"></div>
@@ -363,6 +363,14 @@
                                 <label>Amount Label</label>
                                 <input type="text" id="amountLabel" placeholder="Amount">
                             </div>
+                            <div class="pro-field">
+                                <label>Issued By Label</label>
+                                <input type="text" id="issuedByLabel" placeholder="Issued by">
+                            </div>
+                            <div class="pro-field">
+                                <label>Received By Label</label>
+                                <input type="text" id="receivedByLabel" placeholder="Received by">
+                            </div>
                             <div class="pro-field full">
                                 <label>Footer Note</label>
                                 <textarea rows="2" id="footerNote" placeholder="Thank you for your business!"></textarea>
@@ -518,6 +526,8 @@ function buildReceiptUrl(format) {
     const toLabel = document.getElementById('toLabel')?.value;
     const descriptionLabel = document.getElementById('descriptionLabel')?.value;
     const amountLabel = document.getElementById('amountLabel')?.value;
+    const issuedByLabel = document.getElementById('issuedByLabel')?.value;
+    const receivedByLabel = document.getElementById('receivedByLabel')?.value;
     const footerNote = document.getElementById('footerNote')?.value;
     
     if (receiptTitle) params.append('receiptTitle', receiptTitle);
@@ -526,6 +536,8 @@ function buildReceiptUrl(format) {
     if (toLabel) params.append('toLabel', toLabel);
     if (descriptionLabel) params.append('descriptionLabel', descriptionLabel);
     if (amountLabel) params.append('amountLabel', amountLabel);
+    if (issuedByLabel) params.append('issuedByLabel', issuedByLabel);
+    if (receivedByLabel) params.append('receivedByLabel', receivedByLabel);
     if (footerNote) params.append('footerNote', footerNote);
     
     return `${baseUrls[format]}?${params.toString()}`;
@@ -676,7 +688,7 @@ document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle 
 });
 
 // ===== PRO TEXT FIELDS =====
-['receiptTitle', 'totalLabel', 'fromLabel', 'toLabel', 'descriptionLabel', 'amountLabel', 'footerNote'].forEach(fieldId => {
+['receiptTitle', 'totalLabel', 'fromLabel', 'toLabel', 'descriptionLabel', 'amountLabel', 'issuedByLabel', 'receivedByLabel', 'footerNote'].forEach(fieldId => {
     const field = document.getElementById(fieldId);
     if (field) {
         field.addEventListener('input', function() {
@@ -770,6 +782,6 @@ window.addEventListener('DOMContentLoaded', function() {
 <script src="assets/js/nav-loader.js?v=7"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=20"></script>
-<script src="assets/js/cash-box-settings-data.js?v=18"></script>
+<script src="assets/js/cash-box-settings-data.js?v=19"></script>
 </body>
 </html>

@@ -342,6 +342,27 @@ async function loadCashBoxData(id) {
             });
         }
 
+        // Populate Pro Options receipt labels (cash box defaults)
+        const receiptTitleEl = document.getElementById('receiptTitle');
+        const totalLabelEl = document.getElementById('totalLabel');
+        const fromLabelEl = document.getElementById('fromLabel');
+        const toLabelEl = document.getElementById('toLabel');
+        const descriptionLabelEl = document.getElementById('descriptionLabel');
+        const amountLabelEl = document.getElementById('amountLabel');
+        const issuedByLabelEl = document.getElementById('issuedByLabel');
+        const receivedByLabelEl = document.getElementById('receivedByLabel');
+        const footerNoteEl = document.getElementById('footerNote');
+
+        if (receiptTitleEl) receiptTitleEl.value = cashBox.receipt_title || '';
+        if (totalLabelEl) totalLabelEl.value = cashBox.receipt_total_label || '';
+        if (fromLabelEl) fromLabelEl.value = cashBox.receipt_from_label || '';
+        if (toLabelEl) toLabelEl.value = cashBox.receipt_to_label || '';
+        if (descriptionLabelEl) descriptionLabelEl.value = cashBox.receipt_description_label || '';
+        if (amountLabelEl) amountLabelEl.value = cashBox.receipt_amount_label || '';
+        if (issuedByLabelEl) issuedByLabelEl.value = cashBox.receipt_issued_by_label || '';
+        if (receivedByLabelEl) receivedByLabelEl.value = cashBox.receipt_received_by_label || '';
+        if (footerNoteEl) footerNoteEl.value = cashBox.receipt_footer_note || '';
+
         currentCashBoxData = cashBox;
         updateSummaryCard(cashBox);
         
@@ -463,11 +484,25 @@ async function handleSave(e) {
         const color = selectedColor || '#059669';
         const icon = selectedIcon || 'fa-building';
 
+        const safeText = (v) => {
+            const s = String(v || '').trim();
+            return s ? s : null;
+        };
+
         const updatePayload = {
             name,
             currency,
             color,
-            icon
+            icon,
+            receipt_title: safeText(document.getElementById('receiptTitle')?.value),
+            receipt_total_label: safeText(document.getElementById('totalLabel')?.value),
+            receipt_from_label: safeText(document.getElementById('fromLabel')?.value),
+            receipt_to_label: safeText(document.getElementById('toLabel')?.value),
+            receipt_description_label: safeText(document.getElementById('descriptionLabel')?.value),
+            receipt_amount_label: safeText(document.getElementById('amountLabel')?.value),
+            receipt_issued_by_label: safeText(document.getElementById('issuedByLabel')?.value),
+            receipt_received_by_label: safeText(document.getElementById('receivedByLabel')?.value),
+            receipt_footer_note: safeText(document.getElementById('footerNote')?.value)
         };
 
         const createPayload = {
