@@ -844,6 +844,30 @@ body {
           });
         }
 
+        function addressToHtml(raw) {
+          const value = safeText(raw, '');
+          if (!value) return '';
+          if (value.includes('|')) {
+            const idx = value.indexOf('|');
+            const first = safeText(value.slice(0, idx), '').trim();
+            const rest = safeText(value.slice(idx + 1), '').trim();
+            return rest ? `${first}<br>${rest}` : first;
+          }
+          if (value.includes('\n')) {
+            return value
+              .split(/\r?\n/)
+              .map((l) => safeText(l, ''))
+              .filter(Boolean)
+              .slice(0, 2)
+              .join('<br>');
+          }
+          const idx = value.indexOf(',');
+          if (idx === -1) return value;
+          const first = safeText(value.slice(0, idx), '');
+          const rest = safeText(value.slice(idx + 1), '');
+          return rest ? `${first}<br>${rest}` : first;
+        }
+
         // Immediately clear demo placeholders so they never show up in the preview
         setTextAll('.company-name', '—');
         setTextAll('.contact-name', '—');
