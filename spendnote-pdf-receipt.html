@@ -858,6 +858,13 @@ if (urlParams.get('signatures') === '0') {
           }
         } catch (_) {}
 
+        try {
+          const hasContactAddress = Boolean(String(tx?.contact_address || tx?.contact?.address || '').trim());
+          if (!hasContactAddress && tx.contact_id && window.db?.contacts?.getById) {
+            tx.contact = await window.db.contacts.getById(tx.contact_id);
+          }
+        } catch (_) {}
+
         const displayId = getDisplayId(tx);
         const cashBoxCode = getCashBoxCode(tx);
         const createdBy = safeText(tx.created_by_user_name || tx.created_by, '—');

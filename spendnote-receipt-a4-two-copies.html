@@ -939,6 +939,13 @@ body {
             }
           } catch (_) {}
 
+          try {
+            const hasContactAddress = Boolean(String(tx?.contact_address || tx?.contact?.address || '').trim());
+            if (!hasContactAddress && tx.contact_id && window.db?.contacts?.getById) {
+              tx.contact = await window.db.contacts.getById(tx.contact_id);
+            }
+          } catch (_) {}
+
           let profile = null;
           try {
             profile = window.db?.profiles?.getCurrent ? await window.db.profiles.getCurrent() : null;
