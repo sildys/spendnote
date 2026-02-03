@@ -271,6 +271,13 @@
             border-radius: 16px;
             padding: 14px 16px;
             box-shadow: 0 2px 8px var(--shadow);
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--active);
+            box-shadow: 0 4px 16px rgba(var(--active-rgb), 0.2);
+            transform: translateY(-2px);
         }
 
         .stat-card.in {
@@ -368,49 +375,7 @@
             font-size: 13px;
         }
 
-        /* TEAM ACCESS */
-        .team-access-collapsible {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 10px 14px;
-            margin-bottom: 12px;
-        }
-
-        .team-members-compact {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .team-member-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .team-avatar-mini {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--border);
-        }
-
-        .team-info-mini { flex: 1; }
-
-        .team-name-mini {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .team-role-mini {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* FILTER SECTION */
+/* FILTER SECTION */
         .filter-section {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -1119,47 +1084,6 @@
             </div>
         </div>
 
-        <!-- TEAM ACCESS -->
-        <div class="team-access-collapsible">
-            <div class="team-header" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-users" style="color: var(--text-muted);"></i>
-                    <span style="font-size: 14px; font-weight: 600; color: var(--text);">Team Access</span>
-                    <span style="font-size: 13px; color: var(--text-muted);">(3 members)</span>
-                </div>
-                <i class="fas fa-chevron-down" id="teamToggleIcon" style="transition: transform 0.3s; color: var(--text-muted); font-size: 12px;"></i>
-            </div>
-            <div class="team-content" id="teamContent" style="display: none; padding-top: 12px;">
-                <div class="team-members-compact">
-                    <div class="team-member-row">
-                        <img src="https://i.pravatar.cc/150?img=12" alt="John Doe" class="team-avatar-mini">
-                        <div class="team-info-mini">
-                            <div class="team-name-mini">John Doe</div>
-                            <div class="team-role-mini">Owner</div>
-                        </div>
-                    </div>
-                    <div class="team-member-row">
-                        <img src="https://i.pravatar.cc/150?img=5" alt="Jane Smith" class="team-avatar-mini">
-                        <div class="team-info-mini">
-                            <div class="team-name-mini">Jane Smith</div>
-                            <div class="team-role-mini">Admin</div>
-                        </div>
-                    </div>
-                    <div class="team-member-row">
-                        <img src="https://i.pravatar.cc/150?img=8" alt="Mike Johnson" class="team-avatar-mini">
-                        <div class="team-info-mini">
-                            <div class="team-name-mini">Mike Johnson</div>
-                            <div class="team-role-mini">Viewer</div>
-                        </div>
-                    </div>
-                </div>
-                <a href="spendnote-user-settings.html?tab=team" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 13px; font-weight: 600; color: var(--active); text-decoration: none;">
-                    <i class="fas fa-cog" style="font-size: 11px;"></i>
-                    Manage in Settings
-                </a>
-            </div>
-        </div>
-
         <!-- RECENT TRANSACTIONS -->
         <div class="section-header">
             <h2 class="section-title">Recent Transactions</h2>
@@ -1355,18 +1279,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const cashboxId = urlParams.get('id');
-
-            // Team toggle (no inline handlers)
-            const teamHeader = document.querySelector('.team-access-collapsible .team-header');
-            const teamContent = document.getElementById('teamContent');
-            const teamToggleIcon = document.getElementById('teamToggleIcon');
-            if (teamHeader && teamContent && teamToggleIcon) {
-                teamHeader.addEventListener('click', () => {
-                    const isHidden = teamContent.style.display === 'none' || teamContent.style.display === '';
-                    teamContent.style.display = isHidden ? 'block' : 'none';
-                    teamToggleIcon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-                });
-            }
 
             (async () => {
                 if (!cashboxId || !window.db?.cashBoxes?.getById) {
