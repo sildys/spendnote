@@ -2627,6 +2627,51 @@ tr:hover [data-category-tag] {
     grid-template-columns: 1.2fr 1.8fr !important;
 }
 
+#createTransactionModalContainer .split-address-control {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 12px;
+    border: 2px solid rgba(var(--modal-dir-rgb), 0.25);
+    border-radius: 10px;
+    background: var(--surface);
+    height: 46px;
+    box-sizing: border-box;
+    gap: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#createTransactionModalContainer .split-address-control:focus-within {
+    border-color: rgba(var(--modal-dir-rgb), 0.6);
+    box-shadow: 0 0 0 3px rgba(var(--modal-dir-rgb), 0.1);
+}
+
+#createTransactionModalContainer .split-address-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+    height: 100%;
+    min-width: 0;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--text);
+}
+
+#createTransactionModalContainer #modalContactAddressLine1 {
+    flex: 1.2;
+}
+
+#createTransactionModalContainer #modalContactAddressLine2 {
+    flex: 1;
+}
+
+#createTransactionModalContainer .split-address-sep {
+    font-weight: 800;
+    color: rgba(var(--modal-dir-rgb), 0.85);
+    user-select: none;
+}
+
 /* Direction-based field styling */
 #createTransactionModalContainer .form-control,
 #createTransactionModalContainer .form-input,

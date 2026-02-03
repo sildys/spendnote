@@ -8,6 +8,55 @@ function initTransactionForm() {
     if (form.dataset.txSubmitBound === '1') return;
     form.dataset.txSubmitBound = '1';
 
+    const addressHidden = document.getElementById('modalContactAddress');
+    const addressLine1 = document.getElementById('modalContactAddressLine1');
+    const addressLine2 = document.getElementById('modalContactAddressLine2');
+    const setAddressFromParts = () => {
+        if (!addressHidden) return;
+        const left = String(addressLine1?.value || '').trim();
+        const right = String(addressLine2?.value || '').trim();
+        if (left && right) {
+            addressHidden.value = `${left} | ${right}`;
+        } else {
+            addressHidden.value = left || right || '';
+        }
+    };
+    const setPartsFromAddress = (raw) => {
+        const value = String(raw || '');
+        const idx = value.indexOf('|');
+        if (idx !== -1) {
+            const left = value.slice(0, idx).trim();
+            const right = value.slice(idx + 1).trim();
+            if (addressLine1) addressLine1.value = left;
+            if (addressLine2) addressLine2.value = right;
+        } else {
+            if (addressLine1) addressLine1.value = value.trim();
+            if (addressLine2) addressLine2.value = '';
+        }
+        if (addressHidden) addressHidden.value = value;
+    };
+
+    if (addressLine1 && addressLine2 && addressHidden) {
+        // Initialize split parts from existing hidden value (if any)
+        setPartsFromAddress(addressHidden.value);
+
+        window.__setModalContactAddress = (value) => {
+            setPartsFromAddress(value);
+        };
+
+        [addressLine1, addressLine2].forEach((el) => {
+            el.addEventListener('input', setAddressFromParts);
+        });
+
+        // Typing '|' in line1 jumps to line2
+        addressLine1.addEventListener('keydown', (e) => {
+            if (e.key === '|') {
+                e.preventDefault();
+                addressLine2.focus();
+            }
+        });
+    }
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -338,6 +387,7 @@ function initTransactionForm() {
             }
         });
     }
+
 }
 
 window.initTransactionForm = initTransactionForm;
