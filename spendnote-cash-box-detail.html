@@ -1031,14 +1031,6 @@
             </div>
 
             <div class="summary-actions">
-                <button class="register-quick-btn in" id="detailQuickInBtn" title="New IN transaction">
-                    <span class="quick-icon"><i class="fas fa-arrow-down"></i></span>
-                    <span class="quick-label">IN</span>
-                </button>
-                <button class="register-quick-btn out" id="detailQuickOutBtn" title="New OUT transaction">
-                    <span class="quick-icon"><i class="fas fa-arrow-up"></i></span>
-                    <span class="quick-label">OUT</span>
-                </button>
                 <a class="btn btn-secondary" id="detailSettingsBtn" href="#" title="Cash Box Settings">
                     <i class="fas fa-cog"></i>
                     Settings
@@ -1325,19 +1317,6 @@
 
                 if (typeof window.updateMenuColors === 'function') {
                     window.updateMenuColors(color);
-                }
-
-                const inBtn = document.getElementById('detailQuickInBtn');
-                if (inBtn) {
-                    inBtn.addEventListener('click', () => {
-                        window.location.href = `dashboard.html?cashBoxId=${cashboxId}&direction=in#new-transaction`;
-                    });
-                }
-                const outBtn = document.getElementById('detailQuickOutBtn');
-                if (outBtn) {
-                    outBtn.addEventListener('click', () => {
-                        window.location.href = `dashboard.html?cashBoxId=${cashboxId}&direction=out#new-transaction`;
-                    });
                 }
 
                 const settingsBtn = document.getElementById('detailSettingsBtn');
