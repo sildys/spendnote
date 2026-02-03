@@ -2557,7 +2557,7 @@ tr:hover [data-category-tag] {
 }
 
 #createTransactionModalContainer[data-mode="detailed"] .modal-contact-grid {
-    grid-template-columns: 1.8fr 1.4fr 0.9fr;
+    grid-template-columns: 1.1fr 2.1fr 0.9fr;
     gap: 10px;
 }
 
@@ -2567,12 +2567,6 @@ tr:hover [data-category-tag] {
 #createTransactionModalContainer[data-mode="detailed"] .modal-contact-phone { grid-column: 1; grid-row: 2; }
 #createTransactionModalContainer[data-mode="detailed"] .modal-contact-email { grid-column: 2; grid-row: 2; }
 #createTransactionModalContainer[data-mode="detailed"] .modal-contact-save { grid-column: 3; grid-row: 2; }
-
-#createTransactionModalContainer #modalContactAddress {
-    height: 48px;
-    resize: none;
-    overflow-y: auto;
-}
 
 #createTransactionModalContainer[data-mode="detailed"] .modal-label-spacer {
     height: 20px;
@@ -2630,7 +2624,7 @@ tr:hover [data-category-tag] {
 }
 
 #createTransactionModalContainer[data-mode="quick"] .modal-contact-grid {
-    grid-template-columns: 1.8fr 1.2fr !important;
+    grid-template-columns: 1.2fr 1.8fr !important;
 }
 
 /* Direction-based field styling */

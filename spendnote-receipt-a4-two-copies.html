@@ -631,6 +631,12 @@ body {
     const addressToHtml = (raw) => {
       const value = safeText(raw, '');
       if (!value) return '';
+      if (value.includes('|')) {
+        const idx = value.indexOf('|');
+        const first = safeText(value.slice(0, idx), '').trim();
+        const rest = safeText(value.slice(idx + 1), '').trim();
+        return rest ? `${first}<br>${rest}` : first;
+      }
       if (value.includes('\n')) {
         return value
           .split(/\r?\n/)
@@ -954,8 +960,7 @@ body {
 
           setTextAll('.company-name', companyName);
           if (companyAddress) {
-            const html = companyAddress.split(/\r?\n/).map((l) => safeText(l, '')).filter(Boolean).join('<br>');
-            setHtmlAll('.company-address', html);
+            setHtmlAll('.company-address', addressToHtml(companyAddress));
             document.querySelectorAll('.company-address').forEach((el) => (el.style.display = ''));
           } else {
             setHtmlAll('.company-address', '');
@@ -986,8 +991,7 @@ body {
 
           setTextAll('.contact-name', contactName || '—');
           if (contactAddress) {
-            const html = contactAddress.split(/\r?\n/).map((l) => safeText(l, '')).filter(Boolean).join('<br>');
-            setHtmlAll('.contact-address', html);
+            setHtmlAll('.contact-address', addressToHtml(contactAddress));
             document.querySelectorAll('.contact-address').forEach((el) => (el.style.display = ''));
           } else {
             setHtmlAll('.contact-address', '');

@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=12">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=12">
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=4">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=5">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /></head>
 <body>
 <!-- Navigation loaded dynamically by nav-loader.js -->
@@ -200,12 +200,12 @@
                             </div>
                             <div class="form-group modal-contact-address">
                                 <label for="modalContactAddress">Address <span style="font-size: 11px; color: var(--text-muted); font-weight: 500;">(optional)</span></label>
-                                <textarea 
+                                <input 
+                                    type="text" 
                                     id="modalContactAddress" 
                                     class="form-control" 
-                                    placeholder="Street, City, State"
-                                    rows="2"
-                                ></textarea>
+                                    placeholder="Street | City, ZIP"
+                                >
                             </div>
                             <div class="form-group modal-detailed-only modal-contact-company" id="modalContactDetails">
                                 <label for="modalContactCompanyId">Other ID</label>
