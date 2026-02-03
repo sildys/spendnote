@@ -9,7 +9,7 @@ function initTransactionForm() {
     form.dataset.txSubmitBound = '1';
 
     const addressTextarea = document.getElementById('modalContactAddress');
-    const ADDRESS_LINE_MAX = 34;
+    const ADDRESS_LINE_MAX = 48;
 
     const enforceAddressConstraints = () => {
         if (!addressTextarea) return;
