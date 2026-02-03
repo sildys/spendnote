@@ -89,7 +89,7 @@ async function loadDashboardData() {
                 const iconClass = getIconClass(box.icon);
                 const colorClass = getColorClass(color);
                 const isActive = (defaultActiveId && box.id === defaultActiveId) ? 'active' : '';
-                const iconStyle = '';
+                const iconStyle = `background: ${color};`;
 
                 const seq = Number(box.sequence_number);
                 const displayCode = Number.isFinite(seq) && seq > 0
