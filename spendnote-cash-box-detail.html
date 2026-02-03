@@ -122,6 +122,80 @@
             flex-shrink: 0;
         }
 
+        .register-quick-btn {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid;
+            background: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 104px;
+        }
+
+        .register-quick-btn.in {
+            --quick-accent: #059669;
+            color: var(--quick-accent);
+            border-color: var(--quick-accent);
+            background: white;
+        }
+
+        .register-quick-btn.out {
+            --quick-accent: var(--out);
+            color: var(--quick-accent);
+            border-color: var(--quick-accent);
+            background: white;
+        }
+
+        .register-quick-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .register-quick-btn.in:hover {
+            background: rgba(5, 150, 105, 0.06);
+            border-color: var(--quick-accent);
+        }
+
+        .register-quick-btn.out:hover {
+            background: rgba(var(--out-rgb), 0.08);
+            border-color: var(--quick-accent);
+        }
+
+        .register-quick-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .register-quick-btn .quick-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--quick-accent);
+            color: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+            flex-shrink: 0;
+        }
+
+        .register-quick-btn .quick-icon i {
+            font-size: 11px;
+        }
+
+        .register-quick-btn .quick-label {
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+
         .header-left {
             display: flex;
             align-items: center;
@@ -750,8 +824,7 @@
             font-weight: 900;
             font-size: 11px;
             letter-spacing: 0.04em;
-            min-width: 74px;
-            width: auto;
+            width: 74px;
             box-sizing: border-box;
         }
 
@@ -781,10 +854,13 @@
             width: 14px;
             height: 14px;
             border-radius: 999px;
-            background: rgba(0, 0, 0, 0.06);
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            background: var(--quick-accent);
+            color: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: none;
             flex-shrink: 0;
         }
 
@@ -990,8 +1066,14 @@
             </div>
 
             <div class="summary-actions">
-                <button class="btn btn-secondary btn-small" id="detailQuickInBtn" title="New IN transaction">IN</button>
-                <button class="btn btn-secondary btn-small" id="detailQuickOutBtn" title="New OUT transaction">OUT</button>
+                <button class="register-quick-btn in" id="detailQuickInBtn" title="New IN transaction">
+                    <span class="quick-icon"><i class="fas fa-arrow-down"></i></span>
+                    <span class="quick-label">IN</span>
+                </button>
+                <button class="register-quick-btn out" id="detailQuickOutBtn" title="New OUT transaction">
+                    <span class="quick-icon"><i class="fas fa-arrow-up"></i></span>
+                    <span class="quick-label">OUT</span>
+                </button>
                 <a class="btn btn-secondary" id="detailSettingsBtn" href="#" title="Cash Box Settings">
                     <i class="fas fa-cog"></i>
                     Settings
@@ -1294,6 +1376,18 @@
                 const code = Number.isFinite(seq) && seq > 0 ? `SN-${String(seq).padStart(3, '0')}` : '—';
                 const codeEl = document.getElementById('cashBoxDetailCode');
                 if (codeEl) codeEl.textContent = code;
+
+                const balanceEl = document.getElementById('cashBoxDetailBalance');
+                if (balanceEl) {
+                    const fmt = (window.SpendNote && typeof window.SpendNote.formatCurrency === 'function')
+                        ? window.SpendNote.formatCurrency
+                        : ((amt, curr) => {
+                            const n = Number(amt);
+                            const v = Number.isFinite(n) ? n : 0;
+                            return `${String(curr || 'USD')} ${v.toFixed(2)}`;
+                        });
+                    balanceEl.textContent = fmt(cashBox.current_balance, cashBox.currency || 'USD');
+                }
 
                 const color = String(cashBox.color || '#059669');
                 const rgb = (window.SpendNote && typeof window.SpendNote.hexToRgb === 'function')
