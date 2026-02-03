@@ -8,6 +8,33 @@
         return v.trim() ? v : (fallback || '—');
     }
 
+    function addressToHtml(raw) {
+        const value = safeText(raw, '');
+        if (!value || value === '—') return '—';
+        if (value.includes('|')) {
+            const idx = value.indexOf('|');
+            const first = safeText(value.slice(0, idx), '').trim();
+            const rest = safeText(value.slice(idx + 1), '').trim();
+            return rest ? `${escapeHtml(first)}<br>${escapeHtml(rest)}` : escapeHtml(first);
+        }
+        if (value.includes('\n')) {
+            return value
+                .split(/\r?\n/)
+                .map((l) => safeText(l, ''))
+                .filter(Boolean)
+                .slice(0, 2)
+                .map(escapeHtml)
+                .join('<br>');
+        }
+        return escapeHtml(value);
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
     function normalizeHexColor(hex) {
         const h = String(hex || '').trim();
         if (!h) return '#059669';
@@ -276,7 +303,10 @@
         setText(qs('#txContactName'), contactName);
         setText(qs('#txContactId'), contactId);
         setText(qs('#txContactOtherId'), safeText(tx.contact_custom_field_1, '—'));
-        setText(qs('#txContactAddress'), safeText(tx.contact?.address || tx.contact_address, '—'));
+        const addrEl = qs('#txContactAddress');
+        if (addrEl) {
+            addrEl.innerHTML = addressToHtml(tx.contact?.address || tx.contact_address);
+        }
 
         const createdByValue = qs('#txCreatedBy');
         if (createdByValue) {
