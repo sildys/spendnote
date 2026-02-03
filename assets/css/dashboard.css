@@ -2636,10 +2636,12 @@ tr:hover [data-category-tag] {
     padding-top: 12px;
     padding-bottom: 12px;
     line-height: 20px;
+    transition: height 0.15s ease;
 }
 
 #createTransactionModalContainer .modal-address-textarea.is-two-lines {
     height: 72px;
+    min-height: 72px;
 }
 
 /* Direction-based field styling */
