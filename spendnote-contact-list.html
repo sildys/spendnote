@@ -720,12 +720,35 @@
         searchInput.addEventListener('input', applyFilters);
         cashBoxFilter.addEventListener('change', applyFilters);
 
-        if (cashBoxFilter) {
-            cashBoxFilter.disabled = true;
+        function normalizeHexColor(value, fallback = '#94a3b8') {
+            const v = String(value || '').trim();
+            if (/^#?[0-9a-f]{6}$/i.test(v)) {
+                return v.startsWith('#') ? v : `#${v}`;
+            }
+            return fallback;
+        }
+
+        function formatDateShort(value) {
+            const dt = new Date(value || '');
+            if (!Number.isFinite(dt.getTime())) return '—';
+            return dt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function getTxDisplayId(tx) {
+            const cbSeq = Number(tx?.cash_box_sequence);
+            const txSeq = Number(tx?.tx_sequence_in_box);
+            if (Number.isFinite(cbSeq) && cbSeq > 0 && Number.isFinite(txSeq) && txSeq > 0) {
+                return `SN${cbSeq}-${String(txSeq).padStart(3, '0')}`;
+            }
+            const receiptNumber = String(tx?.receipt_number || '').trim();
+            if (receiptNumber) return receiptNumber;
+            const id = String(tx?.id || '').trim();
+            return id ? id.slice(0, 8) : '—';
         }
         
         function applyFilters() {
             const searchTerm = String(searchInput.value || '').trim().toLowerCase();
+            const selectedCashBoxId = String(cashBoxFilter?.value || '').trim();
 
             filteredRows = allRows.filter((row) => {
                 if (!row) return false;
@@ -736,8 +759,15 @@
                         return false;
                     }
                 }
+                if (selectedCashBoxId) {
+                    const rowCashBoxes = String(row.dataset.cashBoxIds || '');
+                    if (!rowCashBoxes.split(',').includes(selectedCashBoxId)) {
+                        return false;
+                    }
+                }
 
                 if (!searchTerm) return true;
+
                 return row.textContent.toLowerCase().includes(searchTerm);
             });
 
@@ -766,7 +796,89 @@
                 return;
             }
 
-            const contacts = await window.db.contacts.getAll();
+            const [user, contacts, cashBoxes] = await Promise.all([
+                window.auth?.getCurrentUser ? window.auth.getCurrentUser() : Promise.resolve(null),
+                window.db.contacts.getAll(),
+                window.db.cashBoxes?.getAll
+                    ? window.db.cashBoxes.getAll({ select: 'id,name,color,sequence_number' })
+                    : Promise.resolve([])
+            ]);
+
+            let transactions = [];
+            try {
+                const contactIds = (Array.isArray(contacts) ? contacts : [])
+                    .map((c) => String(c?.id || '').trim())
+                    .filter(Boolean);
+
+                if (user && window.supabaseClient && contactIds.length) {
+                    const { data, error } = await window.supabaseClient
+                        .from('transactions')
+                        .select('id,cash_box_id,contact_id,type,receipt_number,transaction_date,created_at,cash_box_sequence,tx_sequence_in_box,status,is_system')
+                        .eq('user_id', user.id)
+                        .in('contact_id', contactIds)
+                        .or('is_system.is.null,is_system.eq.false')
+                        .order('transaction_date', { ascending: false, nullsFirst: false })
+                        .order('created_at', { ascending: false, nullsFirst: false })
+                        .range(0, 4999);
+
+                    if (!error) {
+                        transactions = data || [];
+                    }
+                }
+            } catch (e) {
+                // ignore
+            }
+
+            const cashBoxById = new Map((Array.isArray(cashBoxes) ? cashBoxes : []).map((cb) => [String(cb?.id || ''), cb]));
+
+            if (cashBoxFilter) {
+                const previous = cashBoxFilter.value;
+                cashBoxFilter.innerHTML = '<option value="">All Cash Boxes</option>';
+                (Array.isArray(cashBoxes) ? cashBoxes : []).forEach((cb) => {
+                    const id = String(cb?.id || '').trim();
+                    if (!id) return;
+                    const name = String(cb?.name || '').trim() || 'Cash Box';
+                    const seq = Number(cb?.sequence_number);
+                    const code = (Number.isFinite(seq) && seq > 0) ? `SN-${String(seq).padStart(3, '0')}` : '';
+                    const opt = document.createElement('option');
+                    opt.value = id;
+                    opt.textContent = code ? `${name} (${code})` : name;
+                    cashBoxFilter.appendChild(opt);
+                });
+                cashBoxFilter.disabled = false;
+                if (previous) {
+                    cashBoxFilter.value = previous;
+                }
+            }
+
+            const statsByContactId = new Map();
+            (Array.isArray(transactions) ? transactions : []).forEach((tx) => {
+                const contactId = String(tx?.contact_id || '').trim();
+                if (!contactId) return;
+                const status = String(tx?.status || 'active').toLowerCase();
+                if (status !== 'active') return;
+
+                let entry = statsByContactId.get(contactId);
+                if (!entry) {
+                    entry = { count: 0, cashBoxIds: new Set(), lastTx: null, lastDt: null };
+                    statsByContactId.set(contactId, entry);
+                }
+
+                entry.count += 1;
+                const cbId = String(tx?.cash_box_id || '').trim();
+                if (cbId) {
+                    entry.cashBoxIds.add(cbId);
+                }
+
+                const dt = new Date(tx?.transaction_date || tx?.created_at || '');
+                const t = dt.getTime();
+                if (!Number.isFinite(t)) return;
+                if (!entry.lastDt || t > entry.lastDt.getTime()) {
+                    entry.lastDt = dt;
+                    entry.lastTx = tx;
+                }
+            });
+
             tableBody.innerHTML = '';
 
             (Array.isArray(contacts) ? contacts : []).forEach((c) => {
@@ -774,16 +886,43 @@
                 const name = String(c?.name || '').trim() || '—';
                 const email = String(c?.email || '').trim();
                 const phone = String(c?.phone || '').trim();
+                const address = String(c?.address || '').trim();
                 const contactText = email || phone || '—';
                 const contactTextHtml = contactText === '—'
                     ? '<div class="Contact-contact" style="color: var(--text-muted); font-style: italic;">—</div>'
                     : `<div class="Contact-contact">${escapeHtml(contactText)}</div>`;
+
+                const addressHtml = address
+                    ? `<div class="Contact-address">${escapeHtml(address)}</div>`
+                    : '';
+
+                const stats = (c?.id && statsByContactId.has(String(c.id))) ? statsByContactId.get(String(c.id)) : null;
+                const txCount = stats ? stats.count : 0;
+                const lastTx = stats ? stats.lastTx : null;
+                const lastTxDisplay = lastTx ? getTxDisplayId(lastTx) : '—';
+                const lastTxDate = stats?.lastDt ? formatDateShort(stats.lastDt) : '—';
+                const lastTxTs = stats?.lastDt ? stats.lastDt.getTime() : 0;
+
+                const cashBoxIds = stats ? Array.from(stats.cashBoxIds) : [];
+                const dotsHtml = cashBoxIds.length
+                    ? cashBoxIds
+                        .map((id) => {
+                            const cb = cashBoxById.get(String(id)) || null;
+                            const cbName = String(cb?.name || 'Cash Box').trim();
+                            const cbColor = normalizeHexColor(cb?.color, '#94a3b8');
+                            return `<span class="cashbox-dot" style="background: ${escapeHtml(cbColor)};" title="${escapeHtml(cbName)}"></span>`;
+                        })
+                        .join('')
+                    : '<span class="cashbox-dot" style="background: #94a3b8;" title="—"></span>';
 
                 const href = c?.id
                     ? `spendnote-contact-detail.html?id=${encodeURIComponent(String(c.id))}`
                     : 'spendnote-contact-list.html';
 
                 const tr = document.createElement('tr');
+                tr.dataset.cashBoxIds = cashBoxIds.join(',');
+                tr.dataset.txCount = String(txCount || 0);
+                tr.dataset.lastTxTs = String(Number.isFinite(lastTxTs) ? lastTxTs : 0);
                 tr.innerHTML = `
                         <td><input type="checkbox" class="row-checkbox"></td>
                         <td>
@@ -794,17 +933,19 @@
                         </td>
                         <td>
                             ${contactTextHtml}
+                            ${addressHtml}
                         </td>
                         <td style="text-align: center;">
                             <div style="display: flex; gap: 4px; justify-content: center;">
-                                <span class="cashbox-dot" style="background: #94a3b8;" title="—"></span>
+                                ${dotsHtml}
                             </div>
                         </td>
                         <td>
-                            <div class="Contact-contact" style="font-weight: 700; color: var(--text);">—</div>
+                            <div class="Contact-contact" style="font-weight: 700; color: var(--text);">${txCount ? escapeHtml(String(txCount)) : '—'}</div>
                         </td>
                         <td>
-                            <div class="Contact-contact">—</div>
+                            <div class="Contact-contact" style="font-weight: 700; color: var(--text);">${escapeHtml(lastTxDisplay)}</div>
+                            <div class="Contact-contact">${escapeHtml(lastTxDate)}</div>
                         </td>
                         <td style="text-align: center;">
                             <a href="${href}" class="tx-action btn-view"><span>View</span><i class="fas fa-arrow-right"></i></a>
@@ -886,11 +1027,11 @@
                     aValue = a.cells[3].textContent.trim().toLowerCase();
                     bValue = b.cells[3].textContent.trim().toLowerCase();
                 } else if (column === 'transactions') {
-                    aValue = parseInt(a.cells[5].textContent.trim()) || 0;
-                    bValue = parseInt(b.cells[5].textContent.trim()) || 0;
+                    aValue = Number(a.dataset.txCount) || 0;
+                    bValue = Number(b.dataset.txCount) || 0;
                 } else if (column === 'date') {
-                    aValue = new Date(a.cells[6].textContent.trim());
-                    bValue = new Date(b.cells[6].textContent.trim());
+                    aValue = Number(a.dataset.lastTxTs) || 0;
+                    bValue = Number(b.dataset.lastTxTs) || 0;
                 }
                 
                 if (direction === 'asc') {

@@ -500,6 +500,39 @@
             return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value || ''));
         }
 
+        function safeText(value, fallback = '') {
+            const s = String(value ?? '').trim();
+            return s ? s : fallback;
+        }
+
+        function formatDateShort(value) {
+            const dt = value ? new Date(value) : null;
+            if (!dt || Number.isNaN(dt.getTime())) return '—';
+            return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function normalizeHexColor(value, fallback = '#94a3b8') {
+            const v = String(value || '').trim();
+            if (/^#?[0-9a-f]{6}$/i.test(v)) {
+                return v.startsWith('#') ? v : `#${v}`;
+            }
+            return fallback;
+        }
+
+        function getTxDisplayId(tx) {
+            const cbSeq = Number(tx?.cash_box_sequence);
+            const txSeq = Number(tx?.tx_sequence_in_box);
+            if (Number.isFinite(cbSeq) && cbSeq > 0 && Number.isFinite(txSeq) && txSeq > 0) {
+                return `SN${cbSeq}-${String(txSeq).padStart(3, '0')}`;
+            }
+            const receiptNumber = safeText(tx?.receipt_number, '');
+            if (receiptNumber) return receiptNumber;
+            const id = safeText(tx?.id, '');
+            return id ? (id.length > 10 ? `${id.slice(0, 8)}…` : id) : '—';
+        }
+
+        let resolvedContactUuid = null;
+
         async function resolveContactBySequence(seq) {
             const user = await window.auth.getCurrentUser();
             if (!user) return null;
@@ -571,6 +604,8 @@
                 badge.textContent = displayId;
                 badge.style.opacity = '1';
             }
+
+            resolvedContactUuid = safeText(resolved?.id, null);
             document.getElementById('pageTitle').textContent = resolved.name || 'Contact';
 
             document.getElementById('contactName').value = resolved.name || '';
@@ -579,11 +614,111 @@
             document.getElementById('contactAddress').value = resolved.address || '';
             document.getElementById('contactNotes').value = resolved.notes || '';
 
+            const createdAt = resolved?.created_at || resolved?.created || null;
+            const meta = document.getElementById('contactMeta');
+            if (meta) {
+                meta.innerHTML = `<span><i class="fas fa-calendar"></i> Created: ${formatDateShort(createdAt)}</span>`;
+            }
+
             document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(field => {
                 field.disabled = false;
             });
 
             setHeaderActions();
+
+            await loadContactActivity(resolvedContactUuid);
+        }
+
+        async function loadContactActivity(contactUuid) {
+            const statsTx = document.getElementById('statTransactions');
+            const statsLast = document.getElementById('statLastActivity');
+            const list = document.getElementById('transactionsList');
+
+            if (!list || !window.supabaseClient || !window.auth) {
+                return;
+            }
+
+            const user = await window.auth.getCurrentUser();
+            if (!user) {
+                return;
+            }
+
+            const id = safeText(contactUuid, '');
+            if (!id) {
+                return;
+            }
+
+            const { data, error, count } = await window.supabaseClient
+                .from('transactions')
+                .select('id,type,amount,receipt_number,transaction_date,created_at,cash_box_id,cash_box_sequence,tx_sequence_in_box,status,is_system,cash_box:cash_boxes(id,name,color,currency,sequence_number)', { count: 'exact' })
+                .eq('user_id', user.id)
+                .eq('contact_id', id)
+                .or('is_system.is.null,is_system.eq.false')
+                .eq('status', 'active')
+                .order('transaction_date', { ascending: false, nullsFirst: false })
+                .order('created_at', { ascending: false, nullsFirst: false })
+                .range(0, 4);
+
+            if (error) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-text">Unable to load transactions.</div></div>';
+                return;
+            }
+
+            const txs = Array.isArray(data) ? data : [];
+            const txCount = Number(count) || txs.length;
+            if (statsTx) {
+                statsTx.textContent = String(txCount || 0);
+            }
+
+            const lastDt = txs.length ? new Date(txs[0]?.transaction_date || txs[0]?.created_at || '') : null;
+            if (statsLast) {
+                statsLast.textContent = (lastDt && Number.isFinite(lastDt.getTime())) ? formatDateShort(lastDt) : '—';
+            }
+
+            if (!txs.length) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-text">No transactions yet.</div></div>';
+                return;
+            }
+
+            const sn = (typeof window !== 'undefined' && window.SpendNote) ? window.SpendNote : null;
+            const fmtCurrency = (amount, currency) => {
+                if (sn && typeof sn.formatCurrency === 'function') {
+                    return sn.formatCurrency(amount, currency || 'USD');
+                }
+                try {
+                    return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency || 'USD' }).format(Number(amount) || 0);
+                } catch (_) {
+                    return String(amount ?? '—');
+                }
+            };
+
+            list.innerHTML = txs
+                .map((tx) => {
+                    const type = safeText(tx?.type, '').toLowerCase();
+                    const isIn = type === 'income' || type === 'in';
+                    const iconCls = isIn ? 'in' : 'out';
+                    const displayId = getTxDisplayId(tx);
+                    const dt = tx?.transaction_date || tx?.created_at;
+                    const dateText = formatDateShort(dt);
+                    const cbName = safeText(tx?.cash_box?.name, 'Cash Box');
+                    const cbColor = normalizeHexColor(tx?.cash_box?.color, '#94a3b8');
+                    const amountText = fmtCurrency(tx?.amount, tx?.cash_box?.currency || 'USD');
+                    return `
+                        <a class="transaction-item" href="spendnote-transaction-detail.html?id=${encodeURIComponent(safeText(tx?.id, ''))}">
+                            <div class="transaction-left">
+                                <div class="transaction-icon ${iconCls}">
+                                    <i class="fas ${isIn ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
+                                </div>
+                                <div class="transaction-info">
+                                    <div class="transaction-id">${safeText(displayId, '—')}</div>
+                                    <div class="transaction-date">${safeText(dateText, '—')} • <span style="color: ${cbColor}; font-weight: 700;">${safeText(cbName, '—')}</span></div>
+                                </div>
+                            </div>
+                            <div class="transaction-amount ${iconCls}">${safeText(amountText, '—')}</div>
+                        </a>
+                    `;
+                })
+                .join('');
         }
 
         window.addEventListener('load', () => {
@@ -623,7 +758,7 @@
                         return;
                     }
 
-                    const id = isUuid(contactId) ? contactId : null;
+                    const id = resolvedContactUuid || (isUuid(contactId) ? contactId : null);
                     if (!id) {
                         alert('Invalid contact id.');
                         return;
