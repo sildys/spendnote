@@ -787,6 +787,51 @@
         window.addEventListener('load', () => {
             init();
 
+            const normalizeNewlines = (value) => {
+                return String(value ?? '')
+                    .replace(/\r\n/g, '\n')
+                    .replace(/\r/g, '\n');
+            };
+
+            const clampToTwoLines = (value) => {
+                const lines = normalizeNewlines(value).split('\n');
+                return lines.slice(0, 2).join('\n');
+            };
+
+            const bindTwoLineTextarea = (el) => {
+                if (!el) return;
+
+                const applyClamp = () => {
+                    const before = String(el.value ?? '');
+                    const after = clampToTwoLines(before);
+                    if (before === after) return;
+
+                    const pos = (typeof el.selectionStart === 'number') ? el.selectionStart : after.length;
+                    el.value = after;
+                    try {
+                        const nextPos = Math.min(after.length, pos);
+                        el.setSelectionRange(nextPos, nextPos);
+                    } catch (_) {
+                        // ignore
+                    }
+                };
+
+                el.addEventListener('keydown', (e) => {
+                    if (e.key !== 'Enter') return;
+                    const lines = clampToTwoLines(el.value).split('\n');
+                    if (lines.length >= 2) {
+                        e.preventDefault();
+                    }
+                });
+
+                el.addEventListener('input', applyClamp);
+                el.addEventListener('paste', () => setTimeout(applyClamp, 0));
+                applyClamp();
+            };
+
+            bindTwoLineTextarea(document.getElementById('contactAddress'));
+            bindTwoLineTextarea(document.getElementById('contactNotes'));
+
             document.getElementById('contactForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
 
