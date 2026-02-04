@@ -780,6 +780,15 @@
             });
         }
 
+        // Currency filter should apply immediately (common expectation)
+        const currencySelect = qs('#filterCurrency');
+        if (currencySelect) {
+            currencySelect.addEventListener('change', () => {
+                state.pagination.page = 1;
+                render();
+            });
+        }
+
         // Clear Filters button - reset all filter inputs and re-render
         const clearFiltersBtn = qs('#clearFilters');
         if (clearFiltersBtn) {
