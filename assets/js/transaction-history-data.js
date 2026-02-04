@@ -433,15 +433,24 @@
         const elNet = qs('#statNetBalance');
         const elBoxes = qs('#statCashBoxes');
 
-        // Total counts always show ALL in system (not filtered)
-        if (elTotal) elTotal.textContent = String(allTx ? allTx.length : 0);
-        if (elBoxes) elBoxes.textContent = String(allCashBoxes ? allCashBoxes.length : 0);
+        // Counts should reflect the active filter result
+        const list = Array.isArray(filteredList) ? filteredList : [];
+        if (elTotal) elTotal.textContent = String(list.length);
+
+        if (elBoxes) {
+            const unique = new Set();
+            list.forEach((tx) => {
+                const id = safeText(tx?.cash_box_id || tx?.cash_box?.id, '').trim();
+                if (id) unique.add(id);
+            });
+            elBoxes.textContent = String(unique.size);
+        }
 
         // Monetary stats sum the FILTERED list (only when currency filter is active)
         if (selectedCurrency) {
             let totalIn = 0;
             let totalOut = 0;
-            filteredList.forEach((tx) => {
+            list.forEach((tx) => {
                 const type = safeText(tx.type, '').toLowerCase();
                 const amt = Number(tx.amount);
                 if (type === 'income') totalIn += Number.isFinite(amt) ? amt : 0;
