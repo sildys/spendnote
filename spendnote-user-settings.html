@@ -257,28 +257,6 @@
             <div>
                 <div class="card" style="margin-bottom: 16px;">
                     <div class="card-header">
-                        <h2 class="card-title">Notifications</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="toggle-group">
-                            <div class="toggle-info">
-                                <div class="toggle-label">Weekly Summary</div>
-                                <div class="toggle-description">Receive a weekly summary of your cash box activity.</div>
-                            </div>
-                            <label class="toggle">
-                                <input type="checkbox" id="prefWeeklySummary">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-
-                        <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px;">
-                            <button type="button" class="btn btn-primary" id="prefsSaveBtn"><i class="fas fa-save"></i> Save</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card" style="margin-bottom: 16px;">
-                    <div class="card-header">
                         <h2 class="card-title">Security</h2>
                     </div>
                     <div class="card-body">
@@ -385,25 +363,6 @@
             return (a + b).trim() || a || '—';
         };
 
-        const PREFS_KEY = 'spendnote.user.prefs.v1';
-
-        const readPrefs = () => {
-            try {
-                const raw = localStorage.getItem(PREFS_KEY);
-                return raw ? JSON.parse(raw) : {};
-            } catch (_) {
-                return {};
-            }
-        };
-
-        const writePrefs = (prefs) => {
-            try {
-                localStorage.setItem(PREFS_KEY, JSON.stringify(prefs || {}));
-            } catch (_) {
-                // ignore
-            }
-        };
-
         let lastLoadedProfile = null;
 
         const fillProfileForm = (profile) => {
@@ -432,9 +391,6 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             await loadProfile();
-
-            const prefs = readPrefs();
-            document.getElementById('prefWeeklySummary').checked = Boolean(prefs.weeklySummary);
 
             document.getElementById('profileResetBtn').addEventListener('click', () => {
                 fillProfileForm(lastLoadedProfile);
@@ -485,15 +441,6 @@
                 }
                 fillProfileForm(result.data);
                 alert('Receipt identity saved.');
-            });
-
-            document.getElementById('prefsSaveBtn').addEventListener('click', () => {
-                const next = {
-                    ...readPrefs(),
-                    weeklySummary: Boolean(document.getElementById('prefWeeklySummary').checked)
-                };
-                writePrefs(next);
-                alert('Preferences saved.');
             });
 
             document.getElementById('passwordForm').addEventListener('submit', async (e) => {
