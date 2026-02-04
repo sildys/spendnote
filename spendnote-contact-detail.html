@@ -15,123 +15,49 @@
     <style>
         /* ===== CONTACT DETAIL PAGE SPECIFIC STYLES ===== */
 
-        /* HEADER */
-        .contact-summary-card {
+        /* PAGE HEADER */
+        .page-header-row {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: flex-start;
             gap: 16px;
-            padding: 14px 16px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            box-shadow: 0 2px 8px var(--shadow);
             flex-wrap: wrap;
         }
 
-        .summary-left {
+        .page-header-actions {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 0;
-            flex: 1;
-        }
-
-        .contact-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: rgba(var(--active-rgb), 0.10);
-            color: var(--active);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 900;
-            letter-spacing: 0.04em;
-            flex-shrink: 0;
-        }
-
-        .summary-info {
-            min-width: 0;
-        }
-
-        .contact-id-badge {
-            display: inline-flex;
-            align-items: center;
             gap: 8px;
-            margin-bottom: 2px;
-        }
-
-        .summary-name {
-            font-size: 20px;
-            font-weight: 900;
-            color: var(--text);
-            letter-spacing: -0.02em;
-            line-height: 1.1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 520px;
-        }
-
-        .contact-meta {
-            font-size: 13px;
-            color: var(--text-muted);
-            display: flex;
             align-items: center;
+        }
+
+        /* STATS */
+        .stats-row {
+            display: flex;
             gap: 12px;
-            margin-top: 6px;
-            flex-wrap: wrap;
+            margin-bottom: 16px;
         }
 
-        .contact-meta span {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .summary-center {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .summary-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .summary-stat {
-            background: var(--bg);
+        .stat-box {
+            background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 10px 12px;
-            min-width: 140px;
+            padding: 12px 16px;
+            min-width: 120px;
         }
 
-        .summary-stat-label {
+        .stat-box-label {
             font-size: 11px;
-            font-weight: 800;
+            font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 6px;
+            letter-spacing: 0.04em;
+            margin-bottom: 4px;
         }
 
-        .summary-stat-value {
-            font-size: 16px;
+        .stat-box-value {
+            font-size: 18px;
             font-weight: 900;
             color: var(--text);
-        }
-
-        .summary-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-shrink: 0;
         }
 
         /* CONTENT GRID */
@@ -241,10 +167,10 @@
 
         .two-line-textarea {
             min-height: unset;
-            height: calc(2 * 1.4em + 28px);
-            line-height: 1.4;
+            height: 56px;
+            line-height: 1.5;
             resize: none;
-            overflow: auto;
+            overflow-y: auto;
         }
 
         .form-help {
@@ -380,32 +306,13 @@
 <div class="app-container">
     <main class="main-content">
         <div class="page-header">
-            <div class="contact-summary-card">
-                <div class="summary-left">
-                    <div class="contact-avatar" id="contactAvatar">—</div>
-                    <div class="summary-info">
-                        <div class="contact-id-badge">
-                            <span class="badge badge-success" id="contactIdBadge">—</span>
-                        </div>
-                        <div class="summary-name" id="pageTitle">Contact Details</div>
-                        <div class="contact-meta" id="contactMeta">
-                            <span style="color: var(--text-muted); font-style: italic;">Loading…</span>
-                        </div>
-                    </div>
+            <div class="page-header-row">
+                <div class="page-title-group">
+                    <span class="badge badge-success" id="contactIdBadge">—</span>
+                    <h1 class="page-title" id="pageTitle">Contact Details</h1>
+                    <p class="page-subtitle" id="contactMeta">Loading…</p>
                 </div>
-                <div class="summary-center" id="contactSummaryStats">
-                    <div class="summary-stats">
-                        <div class="summary-stat">
-                            <div class="summary-stat-label">Transactions</div>
-                            <div class="summary-stat-value" id="statTransactions">—</div>
-                        </div>
-                        <div class="summary-stat">
-                            <div class="summary-stat-label">Last Activity</div>
-                            <div class="summary-stat-value" id="statLastActivity">—</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="summary-actions" id="headerActions"></div>
+                <div class="page-header-actions" id="headerActions"></div>
             </div>
         </div>
 
@@ -462,6 +369,18 @@
 
             <!-- Right Column: Stats & Transactions -->
             <div>
+                <!-- Stats -->
+                <div class="stats-row" id="statsRow">
+                    <div class="stat-box">
+                        <div class="stat-box-label">Transactions</div>
+                        <div class="stat-box-value" id="statTransactions">—</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-label">Last Activity</div>
+                        <div class="stat-box-value" id="statLastActivity">—</div>
+                    </div>
+                </div>
+
                 <!-- Recent Transactions Card -->
                 <div class="card" id="transactionsCard">
                     <div class="card-header">
@@ -622,12 +541,10 @@
                     badge.textContent = '—';
                     badge.style.opacity = '0.5';
                 }
-                const statsWrap = document.getElementById('contactSummaryStats');
-                if (statsWrap) statsWrap.style.display = 'none';
+                const statsRow = document.getElementById('statsRow');
+                if (statsRow) statsRow.style.display = 'none';
                 document.getElementById('pageTitle').textContent = 'Add New Contact';
-                document.getElementById('contactMeta').innerHTML = `
-                    <span style="color: var(--text-muted); font-style: italic;">New contact - ID will be assigned on save</span>
-                `;
+                document.getElementById('contactMeta').textContent = 'New contact - ID will be assigned on save';
                 document.getElementById('transactionsCard').style.display = 'none';
                 document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(field => {
                     field.disabled = false;
@@ -658,14 +575,6 @@
                 badge.style.opacity = '1';
             }
 
-            const avatar = document.getElementById('contactAvatar');
-            if (avatar) {
-                const name = safeText(resolved?.name, '').trim();
-                const parts = name.split(/\s+/).filter(Boolean);
-                const initials = parts.length ? `${(parts[0]?.[0] || '').toUpperCase()}${(parts[1]?.[0] || '').toUpperCase()}`.trim() : '—';
-                avatar.textContent = initials || '—';
-            }
-
             resolvedContactUuid = safeText(resolved?.id, null);
             document.getElementById('pageTitle').textContent = resolved.name || 'Contact';
 
@@ -678,26 +587,7 @@
             const createdAt = resolved?.created_at || resolved?.created || null;
             const meta = document.getElementById('contactMeta');
             if (meta) {
-                meta.innerHTML = '';
-                const items = [];
-
-                items.push({ icon: 'fa-calendar', text: `Created: ${formatDateShort(createdAt)}` });
-
-                const email = safeText(resolved?.email, '');
-                if (email) items.push({ icon: 'fa-envelope', text: email });
-
-                const phone = safeText(resolved?.phone, '');
-                if (phone) items.push({ icon: 'fa-phone', text: phone });
-
-                items.forEach(({ icon, text }) => {
-                    const span = document.createElement('span');
-                    const i = document.createElement('i');
-                    i.className = `fas ${icon}`;
-                    const t = document.createTextNode(` ${text}`);
-                    span.appendChild(i);
-                    span.appendChild(t);
-                    meta.appendChild(span);
-                });
+                meta.textContent = `Created: ${formatDateShort(createdAt)}`;
             }
 
             document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(field => {
