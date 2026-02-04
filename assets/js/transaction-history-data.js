@@ -978,21 +978,14 @@
             return hasCashBox || hasCurrency || hasDir || hasText || hasCreated || hasDates || hasAmount;
         };
 
-        const getFilteredCashBoxCount = async (ctx) => {
-            const ids = Array.isArray(ctx?.cashBoxIds) ? ctx.cashBoxIds.filter(Boolean) : null;
-            if (ids) return ids.length;
-
-            if (!hasAnyActiveFilter(ctx)) {
-                return state.cashBoxes.length || 0;
-            }
-
-            // Cache by filters (avoid repeated scans)
+        const scanFilteredCashBoxIds = async (ctx) => {
             const key = JSON.stringify({
                 f: ctx?.filters || {},
                 type: ctx?.type || null
             });
-            if (state.__cashBoxCountCacheKey === key && Number.isFinite(state.__cashBoxCountCacheValue)) {
-                return state.__cashBoxCountCacheValue;
+
+            if (state.__cashBoxIdsScanCacheKey === key && state.__cashBoxIdsScanCacheValue instanceof Set) {
+                return state.__cashBoxIdsScanCacheValue;
             }
 
             const seen = new Set();
@@ -1032,8 +1025,20 @@
                 page += 1;
             }
 
-            state.__cashBoxCountCacheKey = key;
-            state.__cashBoxCountCacheValue = seen.size;
+            state.__cashBoxIdsScanCacheKey = key;
+            state.__cashBoxIdsScanCacheValue = seen;
+            return seen;
+        };
+
+        const getFilteredCashBoxCount = async (ctx) => {
+            const ids = Array.isArray(ctx?.cashBoxIds) ? ctx.cashBoxIds.filter(Boolean) : null;
+            if (ids) return ids.length;
+
+            if (!hasAnyActiveFilter(ctx)) {
+                return state.cashBoxes.length || 0;
+            }
+
+            const seen = await scanFilteredCashBoxIds(ctx);
             return seen.size;
         };
 
@@ -1064,12 +1069,31 @@
                     const currencies = new Set();
                     ids.forEach((id) => {
                         const cb = cashBoxById.get(String(id));
-                        const c = safeText(cb?.currency, '');
+                        const c = safeText(cb?.currency, '').trim().toUpperCase();
                         if (c) currencies.add(c);
                     });
                     if (currencies.size === 1) {
                         currency = Array.from(currencies)[0];
                     }
+                }
+            }
+
+            if (!currency && hasAnyActiveFilter(serverCtx)) {
+                try {
+                    const ids = await scanFilteredCashBoxIds(serverCtx);
+                    if (ids && ids.size) {
+                        const currencies = new Set();
+                        ids.forEach((id) => {
+                            const cb = cashBoxById.get(String(id));
+                            const c = safeText(cb?.currency, '').trim().toUpperCase();
+                            if (c) currencies.add(c);
+                        });
+                        if (currencies.size === 1) {
+                            currency = Array.from(currencies)[0];
+                        }
+                    }
+                } catch (_) {
+                    // ignore
                 }
             }
 
@@ -1091,7 +1115,8 @@
                 amountMin: serverCtx.filters.amountMin,
                 amountMax: serverCtx.filters.amountMax,
                 txIdQuery: serverCtx.filters.txIdQuery || null,
-                contactQuery: serverCtx.filters.contactQuery || null
+                contactQuery: serverCtx.filters.contactQuery || null,
+                status: 'active'
             });
 
             const totalIn = Number(stats?.totalIn);
@@ -1114,7 +1139,8 @@
                     amountMin: serverCtx.filters.amountMin,
                     amountMax: serverCtx.filters.amountMax,
                     txIdQuery: serverCtx.filters.txIdQuery || null,
-                    contactQuery: serverCtx.filters.contactQuery || null
+                    contactQuery: serverCtx.filters.contactQuery || null,
+                    status: 'active'
                 });
 
                 const todayIn = Number(dailyStats?.totalIn);
