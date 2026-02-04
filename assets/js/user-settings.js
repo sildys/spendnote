@@ -13,6 +13,11 @@ const AVATAR_KEY = 'spendnote.user.avatar.v1';
 const readAvatar = () => { try { return localStorage.getItem(AVATAR_KEY); } catch { return null; } };
 const writeAvatar = (dataUrl) => { try { dataUrl ? localStorage.setItem(AVATAR_KEY, dataUrl) : localStorage.removeItem(AVATAR_KEY); } catch {} };
 
+// Logo localStorage
+const LOGO_KEY = 'spendnote.receipt.logo.v1';
+const readLogo = () => { try { return localStorage.getItem(LOGO_KEY); } catch { return null; } };
+const writeLogo = (dataUrl) => { try { dataUrl ? localStorage.setItem(LOGO_KEY, dataUrl) : localStorage.removeItem(LOGO_KEY); } catch {} };
+
 // State
 let currentProfile = null;
 let teamMembers = [];
@@ -40,6 +45,20 @@ const applyAvatar = (fullName) => {
     }
 };
 
+const applyLogo = () => {
+    const wrap = document.getElementById('logoPreview');
+    const img = document.getElementById('logoImg');
+    if (!wrap || !img) return;
+    const stored = readLogo();
+    if (stored) {
+        wrap.classList.add('has-image');
+        img.src = stored;
+    } else {
+        wrap.classList.remove('has-image');
+        img.removeAttribute('src');
+    }
+};
+
 const fillProfile = (p) => {
     currentProfile = p ? { ...p } : null;
     const fullName = String(p?.full_name || '').trim();
@@ -49,12 +68,12 @@ const fillProfile = (p) => {
     document.getElementById('profileDisplayName').textContent = fullName || '—';
     document.getElementById('profileDisplayEmail').textContent = String(p?.email || '—');
 
-    document.getElementById('receiptCompanyName').value = String(p?.company_name || '');
+    document.getElementById('receiptDisplayName').value = String(p?.company_name || '');
     document.getElementById('receiptPhone').value = String(p?.phone || '');
     document.getElementById('receiptAddress').value = String(p?.address || '');
-    document.getElementById('receiptLogoUrl').value = String(p?.account_logo_url || '');
 
     applyAvatar(fullName);
+    applyLogo();
 };
 
 const loadProfile = async () => {
@@ -251,20 +270,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert('Profile saved.');
     });
 
+    // Logo upload
+    document.getElementById('logoUploadBtn')?.addEventListener('click', () => document.getElementById('logoFileInput')?.click());
+    document.getElementById('logoFileInput')?.addEventListener('change', (e) => {
+        const file = e.target?.files?.[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) { alert('Max logo size is 2MB.'); return; }
+        const reader = new FileReader();
+        reader.onload = () => {
+            const dataUrl = reader.result;
+            if (!dataUrl?.startsWith('data:image/')) { alert('Invalid image.'); return; }
+            writeLogo(dataUrl);
+            applyLogo();
+        };
+        reader.readAsDataURL(file);
+    });
+    document.getElementById('logoRemoveBtn')?.addEventListener('click', () => {
+        writeLogo(null);
+        applyLogo();
+    });
+
     // Receipt form
     document.getElementById('receiptResetBtn')?.addEventListener('click', () => fillProfile(currentProfile));
     document.getElementById('receiptForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const payload = {
-            company_name: document.getElementById('receiptCompanyName')?.value?.trim() || null,
+            company_name: document.getElementById('receiptDisplayName')?.value?.trim() || null,
             phone: document.getElementById('receiptPhone')?.value?.trim() || null,
-            address: document.getElementById('receiptAddress')?.value?.trim() || null,
-            account_logo_url: document.getElementById('receiptLogoUrl')?.value?.trim() || null
+            address: document.getElementById('receiptAddress')?.value?.trim() || null
         };
         const result = await window.db.profiles.update(payload);
         if (!result?.success) { alert(result?.error || 'Failed to save.'); return; }
         fillProfile(result.data);
         alert('Receipt identity saved.');
+    });
+
+    // Delete Account collapsible toggle
+    document.getElementById('deleteAccountToggle')?.addEventListener('click', () => {
+        document.querySelector('.collapsible-card')?.classList.toggle('open');
     });
 
     // Password form

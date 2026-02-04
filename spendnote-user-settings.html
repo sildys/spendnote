@@ -81,19 +81,30 @@
                             <div class="settings-card-subtitle">Information displayed on your receipts</div>
                         </div>
                     </div>
+                    <div class="logo-upload-section">
+                        <div class="logo-preview" id="logoPreview">
+                            <i class="fas fa-image" id="logoPlaceholder"></i>
+                            <img id="logoImg" alt="Logo">
+                        </div>
+                        <div class="logo-info">
+                            <div class="logo-label">Receipt Logo</div>
+                            <div class="logo-hint">Recommended: 200x200px, PNG or JPG</div>
+                            <div class="avatar-actions">
+                                <input type="file" id="logoFileInput" accept="image/*" style="display:none;">
+                                <button type="button" class="btn btn-secondary btn-small" id="logoUploadBtn"><i class="fas fa-upload"></i> Upload</button>
+                                <button type="button" class="btn btn-secondary btn-small" id="logoRemoveBtn"><i class="fas fa-trash"></i> Remove</button>
+                            </div>
+                        </div>
+                    </div>
                     <form id="receiptForm">
                         <div class="form-grid">
                             <div class="form-group span-2">
-                                <label for="receiptCompanyName">Company / Business Name</label>
-                                <input type="text" id="receiptCompanyName" placeholder="Your company name">
+                                <label for="receiptDisplayName">Display Name</label>
+                                <input type="text" id="receiptDisplayName" placeholder="Name shown on receipts (e.g. your business name)">
                             </div>
                             <div class="form-group">
                                 <label for="receiptPhone">Phone</label>
                                 <input type="tel" id="receiptPhone" placeholder="+1 (555) 000-0000">
-                            </div>
-                            <div class="form-group">
-                                <label for="receiptLogoUrl">Logo URL</label>
-                                <input type="url" id="receiptLogoUrl" placeholder="https://...">
                             </div>
                             <div class="form-group span-2">
                                 <label for="receiptAddress">Address</label>
@@ -132,33 +143,39 @@
                     </form>
                 </div>
 
-                <!-- DANGER ZONE -->
-                <div class="settings-card danger-card">
-                    <div class="settings-card-header">
-                        <div>
-                            <div class="settings-card-title">Danger Zone</div>
-                            <div class="settings-card-subtitle">Irreversible actions</div>
+                <!-- DELETE ACCOUNT (collapsible) -->
+                <div class="settings-card danger-card collapsible-card">
+                    <div class="collapsible-header" id="deleteAccountToggle">
+                        <div class="collapsible-header-left">
+                            <i class="fas fa-trash-alt" style="color:#dc2626;"></i>
+                            <div>
+                                <div class="settings-card-title">Delete Account</div>
+                                <div class="settings-card-subtitle">Permanently delete your account and all data</div>
+                            </div>
                         </div>
+                        <i class="fas fa-chevron-down collapsible-icon"></i>
                     </div>
-                    <div class="danger-warning">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <div class="danger-warning-text">
-                            <strong>Warning: This action cannot be undone</strong>
-                            <ul>
-                                <li>All Cash Boxes will be permanently deleted</li>
-                                <li>All transactions and receipts will be lost</li>
-                                <li>Your subscription will be cancelled immediately</li>
-                            </ul>
+                    <div class="collapsible-content" id="deleteAccountContent">
+                        <div class="danger-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="danger-warning-text">
+                                <strong>Warning: This action cannot be undone</strong>
+                                <ul>
+                                    <li>All Cash Boxes will be permanently deleted</li>
+                                    <li>All transactions and receipts will be lost</li>
+                                    <li>Your subscription will be cancelled immediately</li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-grid">
-                        <div class="form-group span-2">
-                            <label for="deleteConfirmInput">Type "DELETE" to confirm</label>
-                            <input type="text" id="deleteConfirmInput" placeholder="DELETE">
+                        <div class="form-grid">
+                            <div class="form-group span-2">
+                                <label for="deleteConfirmInput">Type "DELETE" to confirm</label>
+                                <input type="text" id="deleteConfirmInput" placeholder="DELETE">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="deleteAccountBtn" style="color:#dc2626;border-color:rgba(239,68,68,0.3);"><i class="fas fa-trash"></i> Delete Account</button>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="deleteAccountBtn" style="color:#dc2626;border-color:rgba(239,68,68,0.3);"><i class="fas fa-trash"></i> Delete Account</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -169,7 +186,7 @@
                 <div class="settings-card">
                     <div class="settings-card-header">
                         <div>
-                            <div class="settings-card-title">Team Management</div>
+                            <div class="settings-card-title">Team Management <span class="badge badge-warning">PRO</span></div>
                             <div class="settings-card-subtitle">Manage members and their permissions</div>
                         </div>
                         <button type="button" class="btn btn-primary btn-small" id="inviteMemberBtn"><i class="fas fa-user-plus"></i> Invite</button>
