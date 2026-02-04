@@ -481,27 +481,6 @@
         const contactId = urlParams.get('id');
         const mode = urlParams.get('mode');
 
-        // Demo data
-        const contactData = {
-            'CONT-001': {
-                name: 'ABC Supplies',
-                email: 'contact@abcsupplies.com',
-                phone: '+1 (555) 123-4567',
-                address: '123 Main St, New York, NY 10001',
-                notes: 'Primary supplier for office materials',
-                created: 'Jan 1, 2026',
-                transactions: 8,
-                lastActivity: 'Jan 3, 2026',
-                recentTransactions: [
-                    { id: 'TRX-342', type: 'IN', amount: '$1,200.00', date: 'Jan 3, 2026' },
-                    { id: 'TRX-341', type: 'OUT', amount: '$450.00', date: 'Jan 2, 2026' },
-                    { id: 'TRX-338', type: 'OUT', amount: '$450.00', date: 'Dec 28, 2025' },
-                    { id: 'TRX-320', type: 'IN', amount: '$850.00', date: 'Dec 15, 2025' },
-                    { id: 'TRX-315', type: 'IN', amount: '$1,100.00', date: 'Dec 10, 2025' }
-                ]
-            }
-        };
-
         // Initialize page
         function formatContactDisplayId(sequenceNumber) {
             const n = Number(sequenceNumber);
