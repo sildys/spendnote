@@ -1057,6 +1057,21 @@ var db = {
                 return [];
             }
             return data;
+        },
+
+        async getForUser(userId) {
+            const { data, error } = await supabaseClient
+                .from('cash_box_access')
+                .select(`
+                    *,
+                    cash_box:cash_boxes!cash_box_id(id, name, color)
+                `)
+                .eq('user_id', userId);
+            if (error) {
+                console.error('Error fetching user cash box access:', error);
+                return [];
+            }
+            return data;
         }
     }
 };

@@ -1,0 +1,369 @@
+// ===== USER SETTINGS PAGE LOGIC =====
+
+const escapeHtml = (str) => String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const getInitials = (name) => {
+    const n = String(name || '').trim();
+    if (!n) return '—';
+    const parts = n.split(/\s+/).filter(Boolean);
+    return ((parts[0]?.[0] || '') + (parts[1]?.[0] || '')).toUpperCase() || n[0]?.toUpperCase() || '—';
+};
+
+// Avatar localStorage
+const AVATAR_KEY = 'spendnote.user.avatar.v1';
+const readAvatar = () => { try { return localStorage.getItem(AVATAR_KEY); } catch { return null; } };
+const writeAvatar = (dataUrl) => { try { dataUrl ? localStorage.setItem(AVATAR_KEY, dataUrl) : localStorage.removeItem(AVATAR_KEY); } catch {} };
+
+// State
+let currentProfile = null;
+let teamMembers = [];
+let cashBoxes = [];
+let selectedMemberForAccess = null;
+
+// Member colors
+const memberColors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#6366f1'];
+const getMemberColor = (idx) => memberColors[idx % memberColors.length];
+
+// ===== PROFILE =====
+const applyAvatar = (fullName) => {
+    const wrap = document.getElementById('avatarPreview');
+    const img = document.getElementById('avatarImg');
+    const initials = document.getElementById('avatarInitials');
+    if (!wrap || !img || !initials) return;
+    const stored = readAvatar();
+    initials.textContent = getInitials(fullName);
+    if (stored) {
+        wrap.classList.add('has-image');
+        img.src = stored;
+    } else {
+        wrap.classList.remove('has-image');
+        img.removeAttribute('src');
+    }
+};
+
+const fillProfile = (p) => {
+    currentProfile = p ? { ...p } : null;
+    const fullName = String(p?.full_name || '').trim();
+    document.getElementById('profileFullName').value = fullName;
+    document.getElementById('profileEmail').value = String(p?.email || '');
+    document.getElementById('profilePlan').value = String(p?.subscription_tier || 'free').replace(/^\w/, c => c.toUpperCase());
+    document.getElementById('profileDisplayName').textContent = fullName || '—';
+    document.getElementById('profileDisplayEmail').textContent = String(p?.email || '—');
+
+    document.getElementById('receiptCompanyName').value = String(p?.company_name || '');
+    document.getElementById('receiptPhone').value = String(p?.phone || '');
+    document.getElementById('receiptAddress').value = String(p?.address || '');
+    document.getElementById('receiptLogoUrl').value = String(p?.account_logo_url || '');
+
+    applyAvatar(fullName);
+};
+
+const loadProfile = async () => {
+    if (!window.db?.profiles?.getCurrent) return;
+    const p = await window.db.profiles.getCurrent();
+    fillProfile(p);
+};
+
+// ===== TEAM =====
+const renderTeamTable = () => {
+    const tbody = document.getElementById('teamTableBody');
+    if (!tbody) return;
+
+    const total = teamMembers.length;
+    const active = teamMembers.filter(m => m.status === 'active').length;
+    const pending = teamMembers.filter(m => m.status === 'pending').length;
+
+    document.getElementById('statTotalMembers').textContent = total;
+    document.getElementById('statMembersNote').textContent = 'of plan limit';
+    document.getElementById('statActiveMembers').textContent = active;
+    document.getElementById('statPendingMembers').textContent = pending;
+
+    if (!total) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px;">No team members yet. Click "Invite" to add.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = teamMembers.map((m, idx) => {
+        const name = m.member?.full_name || m.invited_email || '—';
+        const email = m.member?.email || m.invited_email || '—';
+        const role = m.role || 'member';
+        const status = m.status || 'active';
+        const isOwner = m.is_owner || (idx === 0 && role === 'admin');
+        const color = getMemberColor(idx);
+
+        const roleClass = isOwner ? 'owner' : role;
+        const roleLabel = isOwner ? '<i class="fas fa-crown"></i> Owner' : (role === 'admin' ? 'Admin' : 'Member');
+        const statusClass = status === 'active' ? 'active' : (status === 'pending' ? 'pending' : 'inactive');
+
+        return `
+            <tr data-member-id="${m.id || ''}">
+                <td>
+                    <div class="member-cell">
+                        <div class="member-avatar" style="background:${color}">${getInitials(name)}</div>
+                        <div>
+                            <div class="member-name">${escapeHtml(name)}</div>
+                            <div class="member-email">${escapeHtml(email)}</div>
+                        </div>
+                    </div>
+                </td>
+                <td><span class="role-badge ${roleClass}">${roleLabel}</span></td>
+                <td><span class="status-badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+                <td>
+                    ${isOwner ? '<span style="color:var(--text-muted)">—</span>' : `
+                        <button type="button" class="btn btn-secondary btn-small" data-action="access" data-id="${m.id}"><i class="fas fa-key"></i> Access</button>
+                        <button type="button" class="btn btn-secondary btn-small" data-action="remove" data-id="${m.id}" style="color:#dc2626;border-color:rgba(239,68,68,0.3);margin-left:4px;"><i class="fas fa-trash"></i></button>
+                    `}
+                </td>
+            </tr>
+        `;
+    }).join('');
+};
+
+const loadTeam = async () => {
+    if (!window.db?.teamMembers?.getAll) {
+        teamMembers = [];
+        renderTeamTable();
+        return;
+    }
+    teamMembers = await window.db.teamMembers.getAll() || [];
+    renderTeamTable();
+};
+
+// ===== CASH BOX ACCESS =====
+const loadCashBoxes = async () => {
+    if (!window.db?.cashBoxes?.getAll) return;
+    cashBoxes = await window.db.cashBoxes.getAll() || [];
+};
+
+const openAccessModal = async (memberId) => {
+    const member = teamMembers.find(m => m.id === memberId);
+    if (!member) return;
+    selectedMemberForAccess = member;
+
+    document.getElementById('accessMemberName').textContent = member.member?.full_name || member.invited_email || '—';
+    document.getElementById('accessMemberEmail').textContent = member.member?.email || member.invited_email || '—';
+
+    const list = document.getElementById('accessCashBoxList');
+    list.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+    document.getElementById('accessModal').classList.add('active');
+
+    // Get current access for this member
+    let memberAccess = [];
+    const userId = member.member_id || member.member?.id;
+    if (userId && window.db?.cashBoxAccess?.getForUser) {
+        memberAccess = await window.db.cashBoxAccess.getForUser(userId) || [];
+    }
+    const accessSet = new Set(memberAccess.map(a => a.cash_box_id));
+
+    if (!cashBoxes.length) {
+        list.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px;">No Cash Boxes available.</div>';
+        return;
+    }
+
+    list.innerHTML = cashBoxes.map(cb => {
+        const hasAccess = accessSet.has(cb.id);
+        return `
+            <div class="access-item">
+                <div class="access-item-left">
+                    <div class="access-dot" style="background:${cb.color || '#6b7280'}"></div>
+                    <div class="access-name">${escapeHtml(cb.name)}</div>
+                </div>
+                <button type="button" class="btn btn-small ${hasAccess ? 'btn-primary' : 'btn-secondary'}" 
+                        data-cb-id="${cb.id}" data-has-access="${hasAccess}">
+                    ${hasAccess ? '<i class="fas fa-check"></i> Has Access' : '<i class="fas fa-plus"></i> Grant'}
+                </button>
+            </div>
+        `;
+    }).join('');
+};
+
+// ===== BILLING =====
+let isYearly = true;
+
+const updatePricing = () => {
+    const monthlyLabel = document.getElementById('monthlyLabel');
+    const yearlyLabel = document.getElementById('yearlyLabel');
+    const toggle = document.getElementById('billingToggle');
+
+    if (isYearly) {
+        toggle.classList.add('yearly');
+        yearlyLabel.classList.add('active');
+        monthlyLabel.classList.remove('active');
+        document.getElementById('standardPrice').textContent = '$190';
+        document.getElementById('standardPeriod').textContent = 'per year';
+        document.getElementById('standardSavings').textContent = 'Save $38 vs monthly';
+        document.getElementById('proPrice').textContent = '$290';
+        document.getElementById('proPeriod').textContent = 'per year';
+        document.getElementById('proSavings').textContent = 'Save $58 vs monthly';
+    } else {
+        toggle.classList.remove('yearly');
+        monthlyLabel.classList.add('active');
+        yearlyLabel.classList.remove('active');
+        document.getElementById('standardPrice').textContent = '$19';
+        document.getElementById('standardPeriod').textContent = 'per month';
+        document.getElementById('standardSavings').textContent = '';
+        document.getElementById('proPrice').textContent = '$29';
+        document.getElementById('proPeriod').textContent = 'per month';
+        document.getElementById('proSavings').textContent = '';
+    }
+};
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', async () => {
+    // Wait for Supabase to be ready
+    const waitForDb = () => new Promise(resolve => {
+        const check = () => window.db?.profiles ? resolve() : setTimeout(check, 50);
+        check();
+    });
+    await waitForDb();
+
+    // Load data
+    await Promise.all([loadProfile(), loadTeam(), loadCashBoxes()]);
+
+    // Avatar upload
+    document.getElementById('avatarUploadBtn')?.addEventListener('click', () => document.getElementById('avatarFileInput')?.click());
+    document.getElementById('avatarFileInput')?.addEventListener('change', (e) => {
+        const file = e.target?.files?.[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) { alert('Max avatar size is 2MB.'); return; }
+        const reader = new FileReader();
+        reader.onload = () => {
+            const dataUrl = reader.result;
+            if (!dataUrl?.startsWith('data:image/')) { alert('Invalid image.'); return; }
+            writeAvatar(dataUrl);
+            applyAvatar(document.getElementById('profileFullName')?.value);
+        };
+        reader.readAsDataURL(file);
+    });
+    document.getElementById('avatarRemoveBtn')?.addEventListener('click', () => {
+        writeAvatar(null);
+        applyAvatar(document.getElementById('profileFullName')?.value);
+    });
+
+    // Profile form
+    document.getElementById('profileResetBtn')?.addEventListener('click', () => fillProfile(currentProfile));
+    document.getElementById('profileForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fullName = document.getElementById('profileFullName')?.value?.trim();
+        if (!fullName) { alert('Full Name is required.'); return; }
+        const result = await window.db.profiles.update({ full_name: fullName });
+        if (!result?.success) { alert(result?.error || 'Failed to save.'); return; }
+        fillProfile(result.data);
+        alert('Profile saved.');
+    });
+
+    // Receipt form
+    document.getElementById('receiptResetBtn')?.addEventListener('click', () => fillProfile(currentProfile));
+    document.getElementById('receiptForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+            company_name: document.getElementById('receiptCompanyName')?.value?.trim() || null,
+            phone: document.getElementById('receiptPhone')?.value?.trim() || null,
+            address: document.getElementById('receiptAddress')?.value?.trim() || null,
+            account_logo_url: document.getElementById('receiptLogoUrl')?.value?.trim() || null
+        };
+        const result = await window.db.profiles.update(payload);
+        if (!result?.success) { alert(result?.error || 'Failed to save.'); return; }
+        fillProfile(result.data);
+        alert('Receipt identity saved.');
+    });
+
+    // Password form
+    document.getElementById('passwordForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pw = document.getElementById('newPassword')?.value;
+        const pw2 = document.getElementById('confirmPassword')?.value;
+        if (!pw || pw.length < 8) { alert('Password must be at least 8 characters.'); return; }
+        if (pw !== pw2) { alert('Passwords do not match.'); return; }
+        try {
+            const { error } = await window.supabaseClient.auth.updateUser({ password: pw });
+            if (error) throw error;
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            alert('Password updated.');
+        } catch (err) {
+            alert(err.message || 'Failed to update password.');
+        }
+    });
+
+    // Delete account
+    document.getElementById('deleteAccountBtn')?.addEventListener('click', () => {
+        if (document.getElementById('deleteConfirmInput')?.value !== 'DELETE') {
+            alert('Please type "DELETE" to confirm.');
+            return;
+        }
+        alert('Account deletion is not implemented yet. Contact support.');
+    });
+
+    // Invite modal
+    const inviteModal = document.getElementById('inviteModal');
+    document.getElementById('inviteMemberBtn')?.addEventListener('click', () => inviteModal?.classList.add('active'));
+    document.getElementById('inviteModalClose')?.addEventListener('click', () => inviteModal?.classList.remove('active'));
+    document.getElementById('inviteModalCancel')?.addEventListener('click', () => inviteModal?.classList.remove('active'));
+    document.getElementById('inviteModalSubmit')?.addEventListener('click', async () => {
+        const email = document.getElementById('inviteEmail')?.value?.trim();
+        const role = document.getElementById('inviteRole')?.value;
+        if (!email) { alert('Email is required.'); return; }
+        if (!window.db?.teamMembers?.invite) { alert('Team feature not available.'); return; }
+        const result = await window.db.teamMembers.invite(email, role);
+        if (!result?.success) { alert(result?.error || 'Failed to invite.'); return; }
+        inviteModal?.classList.remove('active');
+        document.getElementById('inviteEmail').value = '';
+        await loadTeam();
+        alert('Invitation sent.');
+    });
+
+    // Team table actions
+    document.getElementById('teamTableBody')?.addEventListener('click', async (e) => {
+        const btn = e.target?.closest('button[data-action]');
+        if (!btn) return;
+        const action = btn.dataset.action;
+        const id = btn.dataset.id;
+        if (action === 'access') {
+            await openAccessModal(id);
+        } else if (action === 'remove') {
+            if (!confirm('Remove this team member?')) return;
+            if (!window.db?.teamMembers?.remove) return;
+            const result = await window.db.teamMembers.remove(id);
+            if (!result?.success) { alert(result?.error || 'Failed to remove.'); return; }
+            await loadTeam();
+        }
+    });
+
+    // Access modal
+    const accessModal = document.getElementById('accessModal');
+    document.getElementById('accessModalClose')?.addEventListener('click', () => accessModal?.classList.remove('active'));
+    document.getElementById('accessModalClose2')?.addEventListener('click', () => accessModal?.classList.remove('active'));
+    document.getElementById('accessCashBoxList')?.addEventListener('click', async (e) => {
+        const btn = e.target?.closest('button[data-cb-id]');
+        if (!btn || !selectedMemberForAccess) return;
+        const cbId = btn.dataset.cbId;
+        const hasAccess = btn.dataset.hasAccess === 'true';
+        const userId = selectedMemberForAccess.member_id || selectedMemberForAccess.member?.id;
+        if (!userId) { alert('Cannot determine member ID.'); return; }
+
+        if (hasAccess) {
+            if (!window.db?.cashBoxAccess?.revoke) return;
+            await window.db.cashBoxAccess.revoke(cbId, userId);
+        } else {
+            if (!window.db?.cashBoxAccess?.grant) return;
+            await window.db.cashBoxAccess.grant(cbId, userId);
+        }
+        await openAccessModal(selectedMemberForAccess.id);
+    });
+
+    // Billing toggle
+    document.getElementById('billingToggle')?.addEventListener('click', () => { isYearly = !isYearly; updatePricing(); });
+    document.getElementById('monthlyLabel')?.addEventListener('click', () => { isYearly = false; updatePricing(); });
+    document.getElementById('yearlyLabel')?.addEventListener('click', () => { isYearly = true; updatePricing(); });
+
+    // Billing buttons (placeholders for Stripe integration)
+    document.getElementById('cancelSubscriptionBtn')?.addEventListener('click', () => {
+        alert('Cancel Subscription\n\nIn production: Opens Stripe portal to cancel.');
+    });
+    document.getElementById('upgradeProBtn')?.addEventListener('click', () => {
+        alert('Upgrade to Pro\n\nIn production: Opens Stripe checkout for Pro plan.');
+    });
+    document.getElementById('manageBillingBtn')?.addEventListener('click', () => {
+        alert('Manage Billing\n\nIn production: Opens Stripe customer portal to manage payment methods and view invoices.');
+    });
+});

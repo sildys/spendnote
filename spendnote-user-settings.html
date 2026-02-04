@@ -11,236 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=12">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=14">
-    <style>
-        /* ===== USER SETTINGS PAGE SPECIFIC STYLES ===== */
-
-        .settings-grid {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 24px;
-        }
-
-        @media (max-width: 1024px) {
-            .settings-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .avatar-row {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .avatar-preview {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            background: rgba(var(--active-rgb), 0.10);
-            color: var(--active);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: 900;
-            letter-spacing: 0.04em;
-        }
-
-        .avatar-preview img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-        }
-
-        .avatar-preview.has-image img {
-            display: block;
-        }
-
-        .avatar-preview.has-image span {
-            display: none;
-        }
-
-        .avatar-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .team-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .team-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: var(--bg);
-        }
-
-        .team-item-left {
-            min-width: 0;
-        }
-
-        .team-item-name {
-            font-weight: 800;
-            font-size: 13px;
-            color: var(--text);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 520px;
-        }
-
-        .team-item-meta {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 520px;
-        }
-
-        .team-item-right {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 0;
-        }
-
-        .form-group.span-2 {
-            grid-column: span 2;
-        }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-group.span-2 {
-                grid-column: span 1;
-            }
-        }
-
-        .toggle-group {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .toggle-group:last-child {
-            border-bottom: none;
-        }
-
-        .toggle-info {
-            flex: 1;
-        }
-
-        .toggle-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .toggle-description {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .toggle {
-            position: relative;
-            width: 52px;
-            height: 28px;
-            flex-shrink: 0;
-        }
-
-        .toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #d1d5db;
-            border-radius: 28px;
-            transition: 0.3s;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 3px;
-            bottom: 3px;
-            background: white;
-            border-radius: 50%;
-            transition: 0.3s;
-        }
-
-        .toggle input:checked + .toggle-slider {
-            background: var(--primary);
-        }
-
-        .toggle input:checked + .toggle-slider:before {
-            transform: translateX(24px);
-        }
-
-        .danger-zone {
-            border-color: rgba(239, 68, 68, 0.25) !important;
-            background: rgba(239, 68, 68, 0.05);
-        }
-
-        .danger-note {
-            background: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(239, 68, 68, 0.18);
-            border-radius: 12px;
-            padding: 12px 14px;
-            color: #b91c1c;
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 12px;
-        }
-    </style>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /></head>
+    <link rel="stylesheet" href="assets/css/user-settings.css?v=1">
+</head>
 <body>
-<!-- Navigation loaded dynamically by nav-loader.js -->
 <div id="nav-container"></div>
 
 <div class="app-container">
@@ -248,181 +21,338 @@
         <div class="page-header">
             <div class="page-title-group">
                 <h1 class="page-title">Account Settings</h1>
-                <p class="page-subtitle">Manage your profile, receipt identity, and preferences.</p>
+                <p class="page-subtitle">Manage your profile, team, subscription, and preferences.</p>
             </div>
         </div>
 
-        <div class="settings-grid">
+        <div class="settings-layout">
+            <!-- LEFT COLUMN -->
             <div>
-                <div class="card" style="margin-bottom: 16px;">
-                    <div class="card-header">
-                        <h2 class="card-title">Profile</h2>
+                <!-- PROFILE -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div>
+                            <div class="settings-card-title">Profile</div>
+                            <div class="settings-card-subtitle">Your personal information</div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="avatar-row" style="margin-bottom: 16px;">
-                            <div class="avatar-preview" id="settingsAvatar">
-                                <span id="settingsAvatarInitials">—</span>
-                                <img id="settingsAvatarImg" alt="Avatar">
-                            </div>
-                            <div style="min-width: 0;">
-                                <div style="font-weight: 800;" id="settingsProfileTitle">—</div>
-                                <div style="font-size: 13px; color: var(--text-muted);" id="settingsProfileEmail">—</div>
-                                <div style="margin-top: 10px;">
-                                    <div class="avatar-actions">
-                                        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
-                                        <button type="button" class="btn btn-secondary" id="avatarUploadBtn"><i class="fas fa-upload"></i> Upload</button>
-                                        <button type="button" class="btn btn-secondary" id="avatarRemoveBtn"><i class="fas fa-trash"></i> Remove</button>
-                                    </div>
-                                </div>
+                    <div class="avatar-section">
+                        <div class="avatar-preview" id="avatarPreview">
+                            <span id="avatarInitials">—</span>
+                            <img id="avatarImg" alt="Avatar">
+                        </div>
+                        <div class="avatar-info">
+                            <div class="avatar-name" id="profileDisplayName">—</div>
+                            <div class="avatar-email" id="profileDisplayEmail">—</div>
+                            <div class="avatar-actions">
+                                <input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
+                                <button type="button" class="btn btn-secondary btn-small" id="avatarUploadBtn"><i class="fas fa-upload"></i> Upload</button>
+                                <button type="button" class="btn btn-secondary btn-small" id="avatarRemoveBtn"><i class="fas fa-trash"></i> Remove</button>
                             </div>
                         </div>
-
-                        <form id="profileForm">
-                            <div class="form-grid">
-                                <div class="form-group span-2">
-                                    <label for="profileFullName">Full Name</label>
-                                    <input type="text" id="profileFullName" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="profileTier">Plan</label>
-                                    <input type="text" id="profileTier" disabled>
-                                </div>
-                            </div>
-
-                            <div style="display: flex; gap: 8px; justify-content: flex-end;">
-                                <button type="button" class="btn btn-secondary" id="profileResetBtn">Reset</button>
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
-                            </div>
-                        </form>
                     </div>
+                    <form id="profileForm">
+                        <div class="form-grid">
+                            <div class="form-group span-2">
+                                <label for="profileFullName">Full Name</label>
+                                <input type="text" id="profileFullName" required placeholder="Your full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileEmail">Email</label>
+                                <input type="email" id="profileEmail" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="profilePlan">Plan</label>
+                                <input type="text" id="profilePlan" disabled>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="profileResetBtn">Reset</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+                        </div>
+                    </form>
                 </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Receipt Identity</h2>
-                    </div>
-                    <div class="card-body">
-                        <form id="receiptIdentityForm">
-                            <div class="form-grid">
-                                <div class="form-group span-2">
-                                    <label for="receiptCompanyName">Company / Receipt Name</label>
-                                    <input type="text" id="receiptCompanyName" placeholder="Optional">
-                                </div>
-                                <div class="form-group">
-                                    <label for="receiptPhone">Phone</label>
-                                    <input type="text" id="receiptPhone" placeholder="Optional">
-                                </div>
-                                <div class="form-group">
-                                    <label for="receiptLogoUrl">Receipt Logo URL</label>
-                                    <input type="text" id="receiptLogoUrl" placeholder="Optional">
-                                </div>
-                                <div class="form-group span-2">
-                                    <label for="receiptAddress">Address</label>
-                                    <textarea id="receiptAddress" rows="3" placeholder="Optional"></textarea>
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: 8px; justify-content: flex-end;">
-                                <button type="button" class="btn btn-secondary" id="receiptIdentityResetBtn">Reset</button>
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
-                            </div>
-                        </form>
-                        <div style="margin-top: 10px; font-size: 13px; color: var(--text-muted);">
-                            This information is used as your default receipt identity.
+                <!-- RECEIPT IDENTITY -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div>
+                            <div class="settings-card-title">Receipt Identity</div>
+                            <div class="settings-card-subtitle">Information displayed on your receipts</div>
                         </div>
+                    </div>
+                    <form id="receiptForm">
+                        <div class="form-grid">
+                            <div class="form-group span-2">
+                                <label for="receiptCompanyName">Company / Business Name</label>
+                                <input type="text" id="receiptCompanyName" placeholder="Your company name">
+                            </div>
+                            <div class="form-group">
+                                <label for="receiptPhone">Phone</label>
+                                <input type="tel" id="receiptPhone" placeholder="+1 (555) 000-0000">
+                            </div>
+                            <div class="form-group">
+                                <label for="receiptLogoUrl">Logo URL</label>
+                                <input type="url" id="receiptLogoUrl" placeholder="https://...">
+                            </div>
+                            <div class="form-group span-2">
+                                <label for="receiptAddress">Address</label>
+                                <textarea id="receiptAddress" rows="2" placeholder="Street, City, State, ZIP"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="receiptResetBtn">Reset</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- SECURITY -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div>
+                            <div class="settings-card-title">Security</div>
+                            <div class="settings-card-subtitle">Update your password</div>
+                        </div>
+                    </div>
+                    <form id="passwordForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" placeholder="Min. 8 characters">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" placeholder="Repeat password">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-key"></i> Update Password</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- DANGER ZONE -->
+                <div class="settings-card danger-card">
+                    <div class="settings-card-header">
+                        <div>
+                            <div class="settings-card-title">Danger Zone</div>
+                            <div class="settings-card-subtitle">Irreversible actions</div>
+                        </div>
+                    </div>
+                    <div class="danger-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="danger-warning-text">
+                            <strong>Warning: This action cannot be undone</strong>
+                            <ul>
+                                <li>All Cash Boxes will be permanently deleted</li>
+                                <li>All transactions and receipts will be lost</li>
+                                <li>Your subscription will be cancelled immediately</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group span-2">
+                            <label for="deleteConfirmInput">Type "DELETE" to confirm</label>
+                            <input type="text" id="deleteConfirmInput" placeholder="DELETE">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="deleteAccountBtn" style="color:#dc2626;border-color:rgba(239,68,68,0.3);"><i class="fas fa-trash"></i> Delete Account</button>
                     </div>
                 </div>
             </div>
 
+            <!-- RIGHT COLUMN -->
             <div>
-                <div class="card" style="margin-bottom: 16px;">
-                    <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
-                        <h2 class="card-title">Team</h2>
-                        <button type="button" class="btn btn-primary" id="inviteMemberBtn"><i class="fas fa-user-plus"></i> Invite</button>
-                    </div>
-                    <div class="card-body">
-                        <div class="team-list" id="teamMembersList">
-                            <div style="color: var(--text-muted); font-style: italic;">Loading…</div>
+                <!-- TEAM MANAGEMENT -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div>
+                            <div class="settings-card-title">Team Management</div>
+                            <div class="settings-card-subtitle">Manage members and their permissions</div>
                         </div>
-                        <div style="margin-top: 10px; font-size: 13px; color: var(--text-muted);">
-                            Team management is available when enabled for your account.
+                        <button type="button" class="btn btn-primary btn-small" id="inviteMemberBtn"><i class="fas fa-user-plus"></i> Invite</button>
+                    </div>
+                    <div class="stats-row">
+                        <div class="stat-box">
+                            <div class="stat-label">Total Members</div>
+                            <div class="stat-value" id="statTotalMembers">—</div>
+                            <div class="stat-note" id="statMembersNote">Loading...</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Active</div>
+                            <div class="stat-value" id="statActiveMembers">—</div>
+                            <div class="stat-note">Members active</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Pending</div>
+                            <div class="stat-value" id="statPendingMembers">—</div>
+                            <div class="stat-note">Awaiting acceptance</div>
                         </div>
                     </div>
+                    <div class="team-table-wrap">
+                        <table class="team-table">
+                            <thead>
+                                <tr>
+                                    <th>Member</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teamTableBody">
+                                <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px;"><i class="fas fa-spinner fa-spin"></i> Loading team...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top:16px;font-size:12px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> Click "Access" to configure which Cash Boxes each member can access.</div>
                 </div>
 
-                <div class="card" style="margin-bottom: 16px;">
-                    <div class="card-header">
-                        <h2 class="card-title">Security</h2>
-                    </div>
-                    <div class="card-body">
-                        <form id="passwordForm">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="newPassword">New Password</label>
-                                    <input type="password" id="newPassword" placeholder="Min. 8 characters">
-                                </div>
-                                <div class="form-group">
-                                    <label for="confirmPassword">Confirm New Password</label>
-                                    <input type="password" id="confirmPassword" placeholder="Repeat new password">
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: 8px; justify-content: flex-end;">
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-key"></i> Update Password</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card danger-zone">
-                    <div class="card-header">
-                        <h2 class="card-title">Danger Zone</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="danger-note"><i class="fas fa-exclamation-triangle"></i> This action cannot be undone.</div>
-                        <div class="form-group">
-                            <label for="deleteConfirm">Type "DELETE" to confirm</label>
-                            <input type="text" id="deleteConfirm" placeholder="DELETE">
+                <!-- SUBSCRIPTION & BILLING -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div>
+                            <div class="settings-card-title">Subscription & Billing</div>
+                            <div class="settings-card-subtitle">Manage your plan and payment details</div>
                         </div>
-                        <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px;">
-                            <button type="button" class="btn btn-secondary" id="deleteAccountBtn" style="border-color: rgba(239, 68, 68, 0.25); color: #b91c1c;"><i class="fas fa-trash"></i> Delete Account</button>
+                    </div>
+                    <div class="billing-info">
+                        <div class="billing-info-left">
+                            <i class="fas fa-calendar-check"></i>
+                            <div class="billing-info-text">
+                                <span>You're on <strong id="currentPlanName">Standard (Yearly)</strong></span>
+                                <div id="nextBillingInfo">Next billing: Feb 1, 2026 • $190.00</div>
+                            </div>
                         </div>
+                        <button type="button" class="btn btn-secondary btn-small" id="cancelSubscriptionBtn"><i class="fas fa-times"></i> Cancel</button>
+                    </div>
+                    <div class="billing-toggle">
+                        <span class="billing-toggle-label" id="monthlyLabel">Monthly</span>
+                        <div class="toggle-switch yearly" id="billingToggle"><div class="toggle-switch-slider"></div></div>
+                        <span class="billing-toggle-label active" id="yearlyLabel">Yearly <span class="badge badge-warning" style="font-size:10px;">SAVE 20%</span></span>
+                    </div>
+                    <div class="plan-cards">
+                        <div class="plan-card">
+                            <div class="plan-name">Free Trial</div>
+                            <div class="plan-desc">14 days or 20 receipts</div>
+                            <div class="plan-price">$0</div>
+                            <div class="plan-period">Try it out</div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> 1 Cash Box</li>
+                                <li><i class="fas fa-check"></i> 1 user</li>
+                                <li><i class="fas fa-check"></i> 20 receipts</li>
+                                <li><i class="fas fa-check"></i> Basic templates</li>
+                            </ul>
+                            <button class="btn btn-secondary btn-small" style="width:100%;opacity:0.5;cursor:not-allowed;" disabled>Trial Expired</button>
+                        </div>
+                        <div class="plan-card current">
+                            <div class="plan-badge current">Current Plan</div>
+                            <div class="plan-name">Standard</div>
+                            <div class="plan-desc">Solo users & small teams</div>
+                            <div class="plan-price" id="standardPrice">$190</div>
+                            <div class="plan-period" id="standardPeriod">per year</div>
+                            <div class="plan-savings" id="standardSavings">Save $38 vs monthly</div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> 2 Cash Boxes</li>
+                                <li><i class="fas fa-check"></i> 1 user</li>
+                                <li><i class="fas fa-check"></i> Unlimited receipts</li>
+                                <li><i class="fas fa-check"></i> Custom logo</li>
+                                <li><i class="fas fa-check"></i> PDF & CSV export</li>
+                            </ul>
+                            <button class="btn btn-secondary btn-small" style="width:100%;opacity:0.5;cursor:not-allowed;" disabled>Current Plan</button>
+                        </div>
+                        <div class="plan-card popular">
+                            <div class="plan-badge popular">Most Popular</div>
+                            <div class="plan-name">Pro</div>
+                            <div class="plan-desc">Growing teams</div>
+                            <div class="plan-price" id="proPrice">$290</div>
+                            <div class="plan-period" id="proPeriod">per year</div>
+                            <div class="plan-savings" id="proSavings">Save $58 vs monthly</div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> Unlimited Cash Boxes</li>
+                                <li><i class="fas fa-check"></i> 3 users included</li>
+                                <li><i class="fas fa-check"></i> +$5/mo per extra user</li>
+                                <li><i class="fas fa-check"></i> Email receipts</li>
+                                <li><i class="fas fa-check"></i> Role-based access</li>
+                            </ul>
+                            <button class="btn btn-primary btn-small" style="width:100%;background:var(--orange);" id="upgradeProBtn">Upgrade to Pro</button>
+                        </div>
+                    </div>
+                    <div style="text-align:center;margin-top:20px;">
+                        <button type="button" class="btn btn-secondary" id="manageBillingBtn"><i class="fas fa-credit-card"></i> Manage Billing & Invoices</button>
+                    </div>
+                    <div class="guarantee-box">
+                        <i class="fas fa-shield-check"></i>
+                        <p><strong>30-Day Money-Back Guarantee</strong> • Cancel anytime • No questions asked</p>
                     </div>
                 </div>
             </div>
         </div>
-        </main>
+    </main>
+</div>
+
+<!-- MODAL: Invite Member -->
+<div class="modal-backdrop" id="inviteModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Invite Team Member</div>
+            <button type="button" class="modal-close" id="inviteModalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group" style="margin-bottom:16px;">
+                <label for="inviteEmail">Email Address</label>
+                <input type="email" id="inviteEmail" required placeholder="colleague@example.com">
+            </div>
+            <div class="form-group">
+                <label for="inviteRole">Role</label>
+                <select id="inviteRole">
+                    <option value="member">Member — Can record transactions</option>
+                    <option value="admin">Admin — Full access to assigned Cash Boxes</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="inviteModalCancel">Cancel</button>
+            <button type="button" class="btn btn-primary" id="inviteModalSubmit"><i class="fas fa-paper-plane"></i> Send Invite</button>
+        </div>
     </div>
+</div>
 
-    <!-- Modern 2-Row Footer -->
+<!-- MODAL: Cash Box Access -->
+<div class="modal-backdrop" id="accessModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Manage Cash Box Access</div>
+            <button type="button" class="modal-close" id="accessModalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div style="margin-bottom:16px;">
+                <strong id="accessMemberName">—</strong>
+                <div style="font-size:13px;color:var(--text-muted);" id="accessMemberEmail">—</div>
+            </div>
+            <div style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Select which Cash Boxes this member can access:</div>
+            <div class="access-list" id="accessCashBoxList">
+                <div style="text-align:center;color:var(--text-muted);padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="accessModalClose2">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
 <footer class="app-footer">
     <div class="app-footer-container">
-        <!-- Top Row -->
         <div class="app-footer-top">
-            <!-- Brand Section with Disclaimer -->
             <div class="app-footer-brand">
                 <a href="dashboard.html" class="app-footer-brand-logo">
-                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Main body with subtle gray pattern -->
-                        <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="white"/>
-                        <!-- Folded corner - darker gray -->
-                        <path d="M32 4 L38 10 L32 10 Z" fill="rgba(0,0,0,0.15)"/>
-                        <!-- Folded corner outline -->
-                        <path d="M32 4 L32 10 L38 10" stroke="rgba(0,0,0,0.2)" stroke-width="1.5" stroke-linejoin="round"/>
-                        <!-- Receipt lines - light gray -->
-                        <line x1="14" y1="14" x2="30" y2="14" stroke="rgba(0,0,0,0.15)" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="14" y1="19" x2="26" y2="19" stroke="rgba(0,0,0,0.12)" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="14" y1="24" x2="30" y2="24" stroke="rgba(0,0,0,0.15)" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="14" y1="29" x2="22" y2="29" stroke="rgba(0,0,0,0.1)" stroke-width="2.5" stroke-linecap="round"/>
-                        <!-- Bottom zigzag - gray -->
-                        <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="rgba(0,0,0,0.2)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none"><path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="white"/><path d="M32 4 L38 10 L32 10 Z" fill="rgba(0,0,0,0.15)"/></svg>
                     <span>SpendNote</span>
                 </a>
-                <p class="app-footer-brand-desc">
-                    Cash receipt management for modern teams. Simple, secure, transparent.
-                </p>
+                <p class="app-footer-brand-desc">Cash receipt management for modern teams.</p>
             </div>
-            
-            <!-- Right: Links + Disclaimer -->
             <div class="app-footer-right">
                 <div class="app-footer-links-simple">
                     <a href="index.html#features">Features</a>
@@ -430,329 +360,19 @@
                     <a href="spendnote-faq.html">FAQ</a>
                     <a href="spendnote-terms.html">Legal</a>
                 </div>
-                
-                <!-- Disclaimer on right side -->
-                <div class="app-footer-brand-disclaimer">
-                    <i class="fas fa-info-circle"></i>
-                    <span>Cash handoff documentation only. Not a tax or accounting tool.</span>
-                </div>
+                <div class="app-footer-brand-disclaimer"><i class="fas fa-info-circle"></i><span>Cash handoff documentation only. Not a tax or accounting tool.</span></div>
             </div>
         </div>
-        
-        <!-- Bottom Row -->
-        <div class="app-footer-bottom">
-            <div class="app-footer-copyright">
-                2026 SpendNote. All rights reserved.
-            </div>
-        </div>
+        <div class="app-footer-bottom"><div class="app-footer-copyright">2026 SpendNote. All rights reserved.</div></div>
     </div>
 </footer>
-    <script>
-        const getInitials = (name) => {
-            const n = String(name || '').trim();
-            if (!n) return '—';
-            const parts = n.split(/\s+/).filter(Boolean);
-            const a = (parts[0]?.[0] || '').toUpperCase();
-            const b = (parts[1]?.[0] || '').toUpperCase();
-            return (a + b).trim() || a || '—';
-        };
 
-        const AVATAR_KEY = 'spendnote.user.avatar.dataUrl.v1';
-
-        const readAvatar = () => {
-            try {
-                return localStorage.getItem(AVATAR_KEY);
-            } catch (_) {
-                return null;
-            }
-        };
-
-        const writeAvatar = (dataUrl) => {
-            try {
-                if (!dataUrl) localStorage.removeItem(AVATAR_KEY);
-                else localStorage.setItem(AVATAR_KEY, dataUrl);
-            } catch (_) {
-                // ignore
-            }
-        };
-
-        const applyAvatarUi = (fullName) => {
-            const avatarWrap = document.getElementById('settingsAvatar');
-            const img = document.getElementById('settingsAvatarImg');
-            const initialsEl = document.getElementById('settingsAvatarInitials');
-            const stored = readAvatar();
-
-            if (!avatarWrap || !img || !initialsEl) return;
-
-            initialsEl.textContent = getInitials(fullName);
-
-            if (stored) {
-                avatarWrap.classList.add('has-image');
-                img.src = stored;
-            } else {
-                avatarWrap.classList.remove('has-image');
-                img.removeAttribute('src');
-            }
-        };
-
-        let lastLoadedProfile = null;
-
-        const fillProfileForm = (profile) => {
-            lastLoadedProfile = profile ? { ...profile } : null;
-
-            const fullName = String(profile?.full_name || '').trim();
-            document.getElementById('profileFullName').value = fullName;
-            document.getElementById('profileTier').value = String(profile?.subscription_tier || 'free');
-
-            document.getElementById('receiptCompanyName').value = String(profile?.company_name || '');
-            document.getElementById('receiptPhone').value = String(profile?.phone || '');
-            document.getElementById('receiptAddress').value = String(profile?.address || '');
-            document.getElementById('receiptLogoUrl').value = String(profile?.account_logo_url || '');
-
-            document.getElementById('settingsProfileTitle').textContent = fullName || '—';
-            document.getElementById('settingsProfileEmail').textContent = String(profile?.email || '—');
-            applyAvatarUi(fullName);
-        };
-
-        const renderTeamMembers = (rows) => {
-            const wrap = document.getElementById('teamMembersList');
-            if (!wrap) return;
-
-            const items = Array.isArray(rows) ? rows : [];
-            if (!items.length) {
-                wrap.innerHTML = '<div style="color: var(--text-muted); font-style: italic;">No team members.</div>';
-                return;
-            }
-
-            wrap.innerHTML = items
-                .map((row) => {
-                    const memberName = String(row?.member?.full_name || row?.invited_email || '—');
-                    const memberEmail = String(row?.member?.email || row?.invited_email || '—');
-                    const role = String(row?.role || 'member');
-                    const status = String(row?.status || 'active');
-                    const id = String(row?.id || '');
-
-                    const badge = `<span class="badge ${role === 'admin' ? 'badge-warning' : 'badge-success'}">${role.toUpperCase()}</span>`;
-                    const meta = `${memberEmail} • ${status}`;
-
-                    const btn = (status === 'active')
-                        ? `<button type="button" class="btn btn-secondary" data-team-remove="${id}" style="border-color: rgba(239, 68, 68, 0.25); color: #b91c1c;"><i class="fas fa-trash"></i> Remove</button>`
-                        : `<button type="button" class="btn btn-secondary" data-team-remove="${id}" style="border-color: rgba(239, 68, 68, 0.25); color: #b91c1c;"><i class="fas fa-trash"></i> Remove</button>`;
-
-                    return `
-                        <div class="team-item">
-                            <div class="team-item-left">
-                                <div class="team-item-name">${escapeHtml(memberName)} ${badge}</div>
-                                <div class="team-item-meta">${escapeHtml(meta)}</div>
-                            </div>
-                            <div class="team-item-right">${btn}</div>
-                        </div>
-                    `;
-                })
-                .join('');
-        };
-
-        const escapeHtml = (value) => {
-            return String(value ?? '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        };
-
-        const loadTeam = async () => {
-            const wrap = document.getElementById('teamMembersList');
-            if (!wrap) return;
-            if (!window.db?.teamMembers?.getAll) {
-                wrap.innerHTML = '<div style="color: var(--text-muted); font-style: italic;">Team is not available.</div>';
-                return;
-            }
-
-            const rows = await window.db.teamMembers.getAll();
-            renderTeamMembers(rows);
-        };
-
-        const loadProfile = async () => {
-            if (!window.db?.profiles?.getCurrent) return;
-            const profile = await window.db.profiles.getCurrent();
-            fillProfileForm(profile);
-        };
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadProfile();
-            await loadTeam();
-
-            document.getElementById('avatarUploadBtn').addEventListener('click', () => {
-                const input = document.getElementById('avatarFileInput');
-                if (input) input.click();
-            });
-
-            document.getElementById('avatarRemoveBtn').addEventListener('click', () => {
-                writeAvatar(null);
-                const fullName = String(document.getElementById('profileFullName').value || '').trim();
-                applyAvatarUi(fullName);
-            });
-
-            document.getElementById('avatarFileInput').addEventListener('change', async (e) => {
-                const file = e?.target?.files?.[0];
-                if (!file) return;
-                if (file.size > 2 * 1024 * 1024) {
-                    alert('Max avatar size is 2MB.');
-                    e.target.value = '';
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const dataUrl = String(reader.result || '');
-                    if (!dataUrl.startsWith('data:image/')) {
-                        alert('Invalid image file.');
-                        return;
-                    }
-                    writeAvatar(dataUrl);
-                    const fullName = String(document.getElementById('profileFullName').value || '').trim();
-                    applyAvatarUi(fullName);
-                };
-                reader.readAsDataURL(file);
-            });
-
-            document.getElementById('profileResetBtn').addEventListener('click', () => {
-                fillProfileForm(lastLoadedProfile);
-            });
-
-            document.getElementById('receiptIdentityResetBtn').addEventListener('click', () => {
-                fillProfileForm(lastLoadedProfile);
-            });
-
-            document.getElementById('profileForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const fullName = String(document.getElementById('profileFullName').value || '').trim();
-                if (!fullName) {
-                    alert('Full Name is required.');
-                    return;
-                }
-
-                const payload = {
-                    full_name: fullName
-                };
-
-                const result = await window.db.profiles.update(payload);
-                if (!result?.success) {
-                    alert(result?.error || 'Unable to save profile.');
-                    return;
-                }
-                fillProfileForm(result.data);
-                alert('Profile saved.');
-            });
-
-            document.getElementById('receiptIdentityForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const companyName = String(document.getElementById('receiptCompanyName').value || '').trim() || null;
-                const phone = String(document.getElementById('receiptPhone').value || '').trim() || null;
-                const address = String(document.getElementById('receiptAddress').value || '').trim() || null;
-                const logoUrl = String(document.getElementById('receiptLogoUrl').value || '').trim() || null;
-
-                const payload = {
-                    company_name: companyName,
-                    phone,
-                    address,
-                    account_logo_url: logoUrl
-                };
-
-                const result = await window.db.profiles.update(payload);
-                if (!result?.success) {
-                    alert(result?.error || 'Unable to save receipt identity.');
-                    return;
-                }
-                fillProfileForm(result.data);
-                alert('Receipt identity saved.');
-            });
-
-            document.getElementById('passwordForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                const pw = String(document.getElementById('newPassword').value || '');
-                const pw2 = String(document.getElementById('confirmPassword').value || '');
-                if (!pw || pw.length < 8) {
-                    alert('Password must be at least 8 characters.');
-                    return;
-                }
-                if (pw !== pw2) {
-                    alert('Passwords do not match.');
-                    return;
-                }
-
-                if (!window.supabaseClient?.auth?.updateUser) {
-                    alert('Unable to update password in this build.');
-                    return;
-                }
-
-                const { error } = await window.supabaseClient.auth.updateUser({ password: pw });
-                if (error) {
-                    alert(error.message || 'Unable to update password.');
-                    return;
-                }
-
-                document.getElementById('newPassword').value = '';
-                document.getElementById('confirmPassword').value = '';
-                alert('Password updated.');
-            });
-
-            document.getElementById('deleteAccountBtn').addEventListener('click', () => {
-                const confirmText = String(document.getElementById('deleteConfirm').value || '');
-                if (confirmText !== 'DELETE') {
-                    alert('Please type "DELETE" exactly to confirm account deletion.');
-                    return;
-                }
-                alert('Account deletion is not implemented yet.');
-            });
-
-            document.getElementById('inviteMemberBtn').addEventListener('click', async () => {
-                if (!window.db?.teamMembers?.invite) {
-                    alert('Team is not available.');
-                    return;
-                }
-
-                const email = String(prompt('Invite email:') || '').trim();
-                if (!email) return;
-
-                const roleInput = String(prompt('Role (admin/member):', 'member') || '').trim().toLowerCase();
-                const role = (roleInput === 'admin') ? 'admin' : 'member';
-
-                const result = await window.db.teamMembers.invite(email, role);
-                if (!result?.success) {
-                    alert(result?.error || 'Unable to invite member.');
-                    return;
-                }
-                await loadTeam();
-            });
-
-            document.getElementById('teamMembersList').addEventListener('click', async (e) => {
-                const btn = e?.target?.closest?.('[data-team-remove]');
-                if (!btn) return;
-                if (!window.db?.teamMembers?.remove) return;
-
-                const id = String(btn.getAttribute('data-team-remove') || '');
-                if (!id) return;
-                if (!confirm('Remove team member?')) return;
-
-                const result = await window.db.teamMembers.remove(id);
-                if (!result?.success) {
-                    alert(result?.error || 'Unable to remove member.');
-                    return;
-                }
-                await loadTeam();
-            });
-        });
-    </script>
-    
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=22"></script>
-    <script src="assets/js/auth-guard.js"></script>
-    <script src="assets/js/nav-loader.js?v=8"></script>
-    <script>loadNav();</script>
-    <script src="assets/js/main.js?v=20"></script>
+<script src="assets/js/user-settings.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase-config.js?v=22"></script>
+<script src="assets/js/auth-guard.js"></script>
+<script src="assets/js/nav-loader.js?v=8"></script>
+<script>loadNav();</script>
+<script src="assets/js/main.js?v=20"></script>
 </body>
 </html>
