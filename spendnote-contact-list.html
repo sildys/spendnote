@@ -809,24 +809,36 @@
             ]);
 
             let transactions = [];
-            try {
-                const contactIds = (Array.isArray(contacts) ? contacts : [])
-                    .map((c) => String(c?.id || '').trim())
-                    .filter(Boolean);
+            const contactNameMap = new Map(); // name -> contact id
+            (Array.isArray(contacts) ? contacts : []).forEach((c) => {
+                const name = String(c?.name || '').trim().toLowerCase();
+                const id = String(c?.id || '').trim();
+                if (name && id) contactNameMap.set(name, id);
+            });
 
-                if (user && window.supabaseClient && contactIds.length) {
+            try {
+                if (user && window.supabaseClient) {
+                    // Fetch all user transactions to match by contact_id OR contact_name
                     const { data, error } = await window.supabaseClient
                         .from('transactions')
-                        .select('id,cash_box_id,contact_id,type,receipt_number,transaction_date,created_at,cash_box_sequence,tx_sequence_in_box,status,is_system')
+                        .select('id,cash_box_id,contact_id,contact_name,type,receipt_number,transaction_date,created_at,cash_box_sequence,tx_sequence_in_box,status,is_system')
                         .eq('user_id', user.id)
-                        .in('contact_id', contactIds)
                         .or('is_system.is.null,is_system.eq.false')
                         .order('transaction_date', { ascending: false, nullsFirst: false })
                         .order('created_at', { ascending: false, nullsFirst: false })
                         .range(0, 4999);
 
-                    if (!error) {
-                        transactions = data || [];
+                    if (!error && data) {
+                        // For transactions without contact_id, try to match by contact_name
+                        transactions = data.map(tx => {
+                            if (!tx.contact_id && tx.contact_name) {
+                                const matchedId = contactNameMap.get(String(tx.contact_name || '').trim().toLowerCase());
+                                if (matchedId) {
+                                    return { ...tx, contact_id: matchedId };
+                                }
+                            }
+                            return tx;
+                        });
                     }
                 }
             } catch (e) {
