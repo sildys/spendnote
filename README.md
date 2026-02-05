@@ -51,6 +51,14 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
   - `--active-rgb`
 - The navigation reflects the active cash box color (including the "New Transaction" button).
 
+### User avatar personalization (UI)
+
+- The user avatar shown in the navigation and tables can be customized on `spendnote-user-settings.html`.
+- Current persistence is **client-side** (localStorage):
+  - `spendnote.user.avatar.v1` (uploaded image as data URL)
+  - `spendnote.user.avatarColor.v1` (monogram background color)
+- If no image is uploaded, the UI renders a monogram avatar using the saved color.
+
 ### Create a transaction / receipt (Dashboard modal)
 
 The transaction modal is the core data entry flow. It is designed for a fast "~30 seconds" receipt workflow.
@@ -138,6 +146,12 @@ Mode is stored as `data-mode="quick|detailed"` and persisted via `localStorage` 
   - default prefix (SpendNote branding): `SN{cash_box_sequence}-{tx_sequence_in_box}` (example: `SN3-007`)
 - Pro: cash boxes can fully override the prefix (`cash_boxes.id_prefix`), so the receipt identifier does not have to start with `SN`.
 
+#### Duplicate transaction
+
+- Duplicate creates a **new** transaction draft.
+- It always uses the **current date** (today) for the duplicated transaction.
+- It clears transaction/receipt identifiers so Supabase can generate a new one.
+
 ### Receipts (implemented)
 
 Receipts are generated from **stored transaction data** (single source of truth) and rendered into one of the existing templates.
@@ -208,7 +222,6 @@ Additional UX/bug backlog:
 
 - Dashboard modal: cash box selection does not propagate correctly.
 - CSV export still uses internal IDs instead of display IDs.
-- Avatar image shows an unwanted colored highlight/ring.
 - Table column widths need adjustment.
 - "Save to Contacts" checkbox: add a short inline hint ("so you can reuse it later").
 - Footer redesign.

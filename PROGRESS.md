@@ -12,7 +12,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
 
-## Current state (last updated: 2026-02-04 02:07)
+## Current state (last updated: 2026-02-06 00:01)
 - **Dashboard**
   - Transaction modal works again (fixed duplicate modal JS load + ensured submit handler binds).
   - **Save to Contacts** toggle exists (no auto-save by default).
@@ -76,6 +76,23 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Active page menu item is underlined.
   - Active page detection works for pretty URLs (e.g. `/dashboard` as well as `dashboard.html`).
 
+- **User Settings (Profile) / Avatar** ✅
+  - Profile section redesigned.
+  - Avatar upload + remove works.
+  - Monogram avatar supports a modern preset color palette.
+  - Avatar personalization persistence (client-side):
+    - `spendnote.user.avatar.v1`
+    - `spendnote.user.avatarColor.v1`
+  - Nav avatar refresh is robust across pages (waits for auth/nav load).
+  - Removed colored ring/border around avatars (neutral border only).
+
+- **Tables (Created by avatar)** ✅
+  - Dashboard + Transaction History tables use saved avatar image/color (no hardcoded green SVG).
+
+- **Duplicate transaction** ✅
+  - Duplicate always uses the **current date** (today), not the original transaction date.
+  - Duplicate clears receipt/transaction identifier so a **new** one is generated.
+
 ## Key decisions / invariants
 - **“Unsaved contact” indicator**: keep it minimal in Transaction History.
   - If there is no saved contact/sequence, show **`—`** (no extra `CONT-*` placeholder marker).
@@ -110,6 +127,10 @@ If a chat thread freezes / context is lost: in the new thread say:
  - `23ad8c8` Cash Box Settings: fix receipt preview zoom
  - `2d19b05` Cash Box Settings: align preview zoom with transaction detail
  - `439758a` Cash Box Settings: match receipt layout CSS with transaction detail
+- `ede2407` Duplicate: always use current date and generate new receipt
+- `aae2c3f` Unify table action button borders to dashboard thickness
+- `1d525a7` Cash Box Detail: use 2px brand green border for action button
+- `26a241a` Settings: add nicer avatar color palette
 
 ## Next focus (pick one)
 - **A)** Implement end-to-end transaction create flow + robust error handling (Supabase insert + balance update)
