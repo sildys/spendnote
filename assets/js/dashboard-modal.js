@@ -382,10 +382,8 @@ function openModal(preset) {
         const contactEl = getEl('modalContactName');
         if (contactEl) contactEl.value = options.contactName || '';
     }
-    if (Object.prototype.hasOwnProperty.call(options, 'contactId')) {
-        const contactIdEl = getEl('modalContactId');
-        if (contactIdEl) contactIdEl.value = options.contactId || '';
-    }
+    const contactIdEl = getEl('modalContactId');
+    if (contactIdEl) contactIdEl.value = '';
     if (Object.prototype.hasOwnProperty.call(options, 'transactionId')) {
         const txIdEl = getEl('modalTransactionId');
         if (txIdEl) txIdEl.value = options.transactionId || '';
@@ -680,8 +678,6 @@ function initDashboardModal() {
     const modalAmount = getEl('modalAmount');
     if (modalAmount) modalAmount.addEventListener('input', updateLineItemsTotal);
 
-    initContactAutocomplete();
-
     const descInput = getEl('modalDescription');
     const descDropdown = getEl('descriptionAutocomplete');
     if (descInput && descDropdown) {
@@ -713,13 +709,12 @@ function initDashboardModal() {
                         amount: params.get('amount') || '',
                         description: params.get('description') || '',
                         contactName: params.get('contactName') || '',
-                        contactId: params.get('contactId') || '',
                         date: params.get('date') || null,
                         transactionId: ''
                     };
 
                     const hasAnyPrefill = Boolean(
-                        preset.cashBoxId || preset.direction || preset.amount || preset.description || preset.contactName || preset.contactId || preset.date
+                        preset.cashBoxId || preset.direction || preset.amount || preset.description || preset.contactName || preset.date
                     );
 
                     if (hasAnyPrefill) {
@@ -767,7 +762,6 @@ async function duplicateTransaction(txId) {
             amount: tx.amount || '',
             description: tx.description || '',
             contactName: tx.contact?.name || tx.contact_name || '',
-            contactId: tx.contact_id || tx.contact?.id || '',
             date: tx.transaction_date || tx.created_at || null,
             transactionId: '', // Clear the transaction ID for duplicate
             note: tx.notes || tx.note || ''
