@@ -566,8 +566,10 @@ function initContactAutocomplete() {
             const addrEl = getEl('modalContactAddress');
             if (addrEl) addrEl.value = c.address;
         }
-        const idEl = getEl('modalContactId');
-        if (idEl) idEl.value = '';
+        const otherIdEl = getEl('modalContactCompanyId');
+        if (otherIdEl) otherIdEl.value = c.phone || '';
+        const contactIdEl = getEl('modalContactId');
+        if (contactIdEl) contactIdEl.value = c.id;
         dropdown.classList.remove('show');
         selectedIdx = -1;
     }

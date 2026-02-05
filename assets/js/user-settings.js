@@ -8,6 +8,19 @@ const getInitials = (name) => {
     return ((parts[0]?.[0] || '') + (parts[1]?.[0] || '')).toUpperCase() || n[0]?.toUpperCase() || '—';
 };
 
+const applyRoleBadge = (roleValue) => {
+    const roleEl = document.getElementById('profileRole');
+    if (!roleEl) return;
+
+    const role = String(roleValue || '').trim().toLowerCase();
+    const normalized = (role === 'owner' || role === 'admin' || role === 'user') ? role : 'user';
+    const label = normalized === 'owner' ? 'Owner' : (normalized === 'admin' ? 'Admin' : 'User');
+
+    roleEl.textContent = label;
+    roleEl.classList.remove('owner', 'admin', 'member');
+    roleEl.classList.add(normalized === 'owner' ? 'owner' : (normalized === 'admin' ? 'admin' : 'member'));
+};
+
 // Avatar localStorage
 const AVATAR_KEY = 'spendnote.user.avatar.v1';
 const readAvatar = () => { try { return localStorage.getItem(AVATAR_KEY); } catch { return null; } };
@@ -23,6 +36,7 @@ let currentProfile = null;
 let teamMembers = [];
 let cashBoxes = [];
 let selectedMemberForAccess = null;
+let currentRole = 'owner';
 
 // Member colors
 const memberColors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#6366f1'];
@@ -64,12 +78,15 @@ const fillProfile = (p) => {
     const fullName = String(p?.full_name || '').trim();
     document.getElementById('profileFullName').value = fullName;
     document.getElementById('profileEmail').value = String(p?.email || '');
-    document.getElementById('profilePlan').value = String(p?.subscription_tier || 'free').replace(/^\w/, c => c.toUpperCase());
+
+    applyRoleBadge(currentRole);
     document.getElementById('profileDisplayName').textContent = fullName || '—';
     document.getElementById('profileDisplayEmail').textContent = String(p?.email || '—');
 
     document.getElementById('receiptDisplayName').value = String(p?.company_name || '');
-    document.getElementById('receiptPhone').value = String(p?.phone || '');
+    // Reuse profiles.phone as Receipt Identity "Other ID"
+    const otherIdEl = document.getElementById('receiptOtherId');
+    if (otherIdEl) otherIdEl.value = String(p?.phone || '');
     document.getElementById('receiptAddress').value = String(p?.address || '');
 
     applyAvatar(fullName);
@@ -80,6 +97,33 @@ const loadProfile = async () => {
     if (!window.db?.profiles?.getCurrent) return;
     const p = await window.db.profiles.getCurrent();
     fillProfile(p);
+};
+
+const computeAndApplyRole = async () => {
+    try {
+        const user = await window.auth?.getCurrentUser?.();
+        if (!user) return;
+
+        // Default: owner (solo account)
+        let role = 'owner';
+
+        // If teamMembers are available and user is listed as member, downgrade to admin/user
+        const asMember = (Array.isArray(teamMembers) ? teamMembers : []).find((tm) => {
+            const memberId = String(tm?.member_id || tm?.member?.id || '').trim();
+            const ownerId = String(tm?.owner_id || '').trim();
+            return memberId === String(user.id) && ownerId && ownerId !== String(user.id);
+        });
+
+        if (asMember) {
+            const tmRole = String(asMember?.role || 'member').toLowerCase();
+            role = tmRole === 'admin' ? 'admin' : 'user';
+        }
+
+        currentRole = role;
+        applyRoleBadge(currentRole);
+    } catch (_) {
+        // ignore
+    }
 };
 
 // ===== TEAM =====
@@ -237,6 +281,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Load data
     await Promise.all([loadProfile(), loadTeam(), loadCashBoxes()]);
+    await computeAndApplyRole();
 
     // Avatar upload
     document.getElementById('avatarUploadBtn')?.addEventListener('click', () => document.getElementById('avatarFileInput')?.click());
@@ -296,7 +341,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         e.preventDefault();
         const payload = {
             company_name: document.getElementById('receiptDisplayName')?.value?.trim() || null,
-            phone: document.getElementById('receiptPhone')?.value?.trim() || null,
+            phone: document.getElementById('receiptOtherId')?.value?.trim() || null,
             address: document.getElementById('receiptAddress')?.value?.trim() || null
         };
         const result = await window.db.profiles.update(payload);
@@ -315,7 +360,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         e.preventDefault();
         const pw = document.getElementById('newPassword')?.value;
         const pw2 = document.getElementById('confirmPassword')?.value;
+        // Match signup strength expectations: >=8 chars, and at least one number OR symbol
         if (!pw || pw.length < 8) { alert('Password must be at least 8 characters.'); return; }
+        const hasNumber = /\d/.test(pw);
+        const hasSymbol = /[^a-zA-Z0-9]/.test(pw);
+        if (!hasNumber && !hasSymbol) { alert('Password must include at least 1 number or symbol.'); return; }
         if (pw !== pw2) { alert('Passwords do not match.'); return; }
         try {
             const { error } = await window.supabaseClient.auth.updateUser({ password: pw });

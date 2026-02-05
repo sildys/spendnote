@@ -414,6 +414,12 @@
                             <p class="form-help">Optional - contact's email address</p>
                         </div>
 
+                        <div class="form-group">
+                            <label for="contactOtherId">Other ID</label>
+                            <input type="text" id="contactOtherId" name="contactOtherId">
+                            <p class="form-help">Optional - reference ID for this contact</p>
+                        </div>
+
                         <div id="formActions" style="display: none;">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Save Contact
@@ -669,6 +675,8 @@
             document.getElementById('contactName').value = resolved.name || '';
             document.getElementById('contactAddress').value = resolved.address || '';
             document.getElementById('contactEmail').value = resolved.email || '';
+            const otherIdEl = document.getElementById('contactOtherId');
+            if (otherIdEl) otherIdEl.value = resolved.phone || '';
 
             const createdAt = resolved?.created_at || resolved?.created || null;
             const meta = document.getElementById('contactMeta');
@@ -903,7 +911,8 @@
                     user_id: user.id,
                     name: document.getElementById('contactName').value.trim(),
                     email: document.getElementById('contactEmail').value.trim() || null,
-                    address: rawAddress.trim() || null
+                    address: rawAddress.trim() || null,
+                    phone: document.getElementById('contactOtherId')?.value?.trim() || null
                 };
 
                 if (!payload.name) {
