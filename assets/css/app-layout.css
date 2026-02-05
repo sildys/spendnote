@@ -243,8 +243,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(var(--active-rgb), 0.10);
-    border: 2px solid rgba(var(--active-rgb), 0.35);
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
     flex-shrink: 0;
 }
 
@@ -263,8 +263,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(var(--active-rgb), 0.10);
-    border: 2px solid rgba(var(--active-rgb), 0.35);
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
     flex-shrink: 0;
 }
 
@@ -283,8 +283,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(var(--active-rgb), 0.10);
-    border: 2px solid rgba(var(--active-rgb), 0.35);
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
     flex-shrink: 0;
 }
 
