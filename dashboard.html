@@ -164,7 +164,9 @@
                 </div>
             </div>
             <div class="modal-body" style="padding: 16px 24px;">
-                <form id="modalTransactionForm" style="display: flex; flex-direction: column; gap: 12px;">
+                <form id="modalTransactionForm" autocomplete="off" style="display: flex; flex-direction: column; gap: 12px;">
+                    <input type="text" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
+                    <input type="password" name="password" autocomplete="new-password" tabindex="-1" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
                     <!-- Contact Section -->
                     <div class="modal-section" style="padding: 16px;">
                         <!-- Mode toggle + Date row -->
@@ -188,9 +190,13 @@
                                 <input 
                                     type="text" 
                                     id="modalContactName" 
+                                    name="modalContactName"
                                     class="form-control" 
                                     placeholder="Contact name"
-                                    autocomplete="off"
+                                    autocomplete="new-password"
+                                    spellcheck="false"
+                                    autocapitalize="off"
+                                    autocorrect="off"
                                 >
                                 <div id="ContactAutocomplete" class="autocomplete-dropdown"></div>
                                 <label for="modalSaveContact" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--text-muted);">
@@ -202,6 +208,11 @@
                                 <label for="modalContactAddress">Address <span style="font-size: 11px; color: var(--text-muted); font-weight: 500;">(optional)</span></label>
                                 <textarea 
                                     id="modalContactAddress" 
+                                    name="modalContactAddress"
+                                    autocomplete="off"
+                                    spellcheck="false"
+                                    autocapitalize="off"
+                                    autocorrect="off"
                                     class="form-control modal-address-textarea" 
                                     placeholder="Street (press Enter for line 2)"
                                     rows="1"
