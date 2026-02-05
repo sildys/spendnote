@@ -1,6 +1,8 @@
 // Dashboard Modal - Transaction creation modal logic
 // Extracted from dashboard.html for better code organization
 
+(function() {
+
 // ========================================
 // MODAL STATE
 // ========================================
@@ -794,3 +796,5 @@ if (document.readyState === 'loading') {
 } else {
     initDashboardModal();
 }
+
+})();
