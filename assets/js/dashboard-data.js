@@ -352,7 +352,6 @@ function loadRecentTransactionsSync(transactions) {
                 const contactName = tx.contact?.name || tx.contact_name || '';
                 const contactId = tx.contact_id || tx.contact?.id || '';
                 const cashBoxId = tx.cash_box_id || tx.cash_box?.id || '';
-                const dateIso = tx.transaction_date || tx.created_at || '';
                 const descEnc = encodeURIComponent(String(tx.description || ''));
                 const contactEnc = encodeURIComponent(String(contactName || ''));
                 const rowHTML = `
@@ -371,7 +370,7 @@ function loadRecentTransactionsSync(transactions) {
                         <div class="tx-amount ${isIncome ? 'in' : 'out'}">${isIncome ? '+' : '-'}${formattedAmount}</div>
                         <div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${createdByName}"></div></div>
                         <div class="tx-actions">
-                            <button type="button" class="tx-action btn-duplicate" data-tx-id="${tx.id}" data-cash-box-id="${cashBoxId}" data-direction="${isIncome ? 'in' : 'out'}" data-amount="${String(tx.amount ?? '')}" data-date="${String(dateIso || '')}" data-contact-id="${String(contactId || '')}" data-description="${descEnc}" data-contact-name="${contactEnc}">
+                            <button type="button" class="tx-action btn-duplicate" data-tx-id="${tx.id}" data-cash-box-id="${cashBoxId}" data-direction="${isIncome ? 'in' : 'out'}" data-amount="${String(tx.amount ?? '')}" data-contact-id="${String(contactId || '')}" data-description="${descEnc}" data-contact-name="${contactEnc}">
                                 <i class="fas fa-copy"></i>
                                 <span>Duplicate</span>
                             </button>

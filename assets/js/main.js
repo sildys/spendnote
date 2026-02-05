@@ -376,7 +376,6 @@ document.addEventListener('click', function(e) {
         cashBoxId: btn.dataset.cashBoxId || null,
         direction: btn.dataset.direction || null,
         amount: decode(btn.dataset.amount || ''),
-        date: btn.dataset.date || null,
         contactId: btn.dataset.contactId || '',
         contactName: decode(btn.dataset.contactName || ''),
         description: decode(btn.dataset.description || ''),
@@ -397,7 +396,6 @@ document.addEventListener('click', function(e) {
         if (preset.cashBoxId) params.set('cashBoxId', preset.cashBoxId);
         if (preset.direction) params.set('direction', preset.direction);
         if (preset.amount !== undefined && preset.amount !== null) params.set('amount', String(preset.amount));
-        if (preset.date) params.set('date', String(preset.date));
         if (preset.contactId) params.set('contactId', String(preset.contactId));
         if (preset.contactName) params.set('contactName', String(preset.contactName));
         if (preset.description) params.set('description', String(preset.description));

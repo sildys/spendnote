@@ -315,7 +315,7 @@ function openModal(preset) {
         if (dateValue) dateValue.value = yyyy + '-' + mm + '-' + dd;
     }
 
-    if (Object.prototype.hasOwnProperty.call(options, 'date') && options.date) {
+    if (Object.prototype.hasOwnProperty.call(options, 'date') && options.date && !options.isDuplicate) {
         const raw = String(options.date);
         let yyyy = '', mm = '', dd = '';
         if (/^\d{4}-\d{2}-\d{2}/.test(raw)) {
@@ -818,7 +818,7 @@ async function duplicateTransaction(txId) {
             contactName: tx.contact?.name || tx.contact_name || '',
             contactAddress: tx.contact_address || tx.contact?.address || '',
             contactOtherId: tx.contact_custom_field_1 || '',
-            date: tx.transaction_date || tx.created_at || null,
+            isDuplicate: true,
             transactionId: '', // Clear the transaction ID for duplicate
             note: tx.notes || tx.note || '',
             lineItems: extraItems
