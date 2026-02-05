@@ -101,7 +101,6 @@ function initTransactionForm() {
             loggedBy: document.querySelector('.user-name')?.textContent || 'John',
             ContactName: document.getElementById('modalContactName')?.value || '',
             ContactAddress: document.getElementById('modalContactAddress')?.value || '',
-            ContactId: document.getElementById('modalContactId')?.value || '',
             direction: document.querySelector('input[name="modalDirection"]:checked')?.value || 'in',
             amount: document.getElementById('modalAmount')?.value || '',
             date: document.getElementById('modalDate')?.value || new Date().toISOString().slice(0, 10),
@@ -246,11 +245,6 @@ function initTransactionForm() {
                 }
             }
 
-            const selectedContactId = String(document.getElementById('modalContactId')?.value || '').trim();
-            if (isUuid(selectedContactId)) {
-                payload.contact_id = selectedContactId;
-            }
-
             // Ensure contact exists
             let ensuredContact = null;
             const shouldSaveContact = Boolean(document.getElementById('modalSaveContact')?.checked);
@@ -271,12 +265,6 @@ function initTransactionForm() {
             if (shouldSaveContact && ensuredContact && ensuredContact.success === false) {
                 alert(ensuredContact?.error || 'Could not save contact. Please try again.');
                 return;
-            }
-
-            if (ensuredContact && ensuredContact.success && ensuredContact.data && ensuredContact.data.id) {
-                payload.contact_id = ensuredContact.data.id;
-                const contactIdEl = document.getElementById('modalContactId');
-                if (contactIdEl) contactIdEl.value = ensuredContact.data.id;
             }
 
             // Create transaction
