@@ -505,13 +505,17 @@ function initContactAutocomplete() {
     loadContactsForAutocomplete();
     let selectedIdx = -1;
 
+    function removeAccents(str) {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
     function filter(q) {
         if (!q) return [];
-        const lq = q.toLowerCase();
+        const lq = removeAccents(q.toLowerCase());
         return Contacts.filter(function(p) {
-            return p.name.toLowerCase().includes(lq)
-                || (p.displayId && p.displayId.toLowerCase().includes(lq))
-                || (p.address && p.address.toLowerCase().includes(lq));
+            return removeAccents(p.name.toLowerCase()).includes(lq)
+                || (p.displayId && removeAccents(p.displayId.toLowerCase()).includes(lq))
+                || (p.address && removeAccents(p.address.toLowerCase()).includes(lq));
         });
     }
 
