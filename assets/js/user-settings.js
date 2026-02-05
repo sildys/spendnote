@@ -31,6 +31,53 @@ const LOGO_KEY = 'spendnote.receipt.logo.v1';
 const readLogo = () => { try { return localStorage.getItem(LOGO_KEY); } catch { return null; } };
 const writeLogo = (dataUrl) => { try { dataUrl ? localStorage.setItem(LOGO_KEY, dataUrl) : localStorage.removeItem(LOGO_KEY); } catch {} };
 
+// Accent color localStorage (reuse existing app keys)
+const ACTIVE_COLOR_KEY = 'activeCashBoxColor';
+const ACTIVE_RGB_KEY = 'activeCashBoxRgb';
+const readAccentColor = () => {
+    try { return localStorage.getItem(ACTIVE_COLOR_KEY); } catch { return null; }
+};
+const readAccentRgb = () => {
+    try { return localStorage.getItem(ACTIVE_RGB_KEY); } catch { return null; }
+};
+const writeAccent = (hex) => {
+    const safeHex = String(hex || '').trim();
+    if (!safeHex) return;
+    const rgb = (window.SpendNote && typeof window.SpendNote.hexToRgb === 'function')
+        ? window.SpendNote.hexToRgb(safeHex)
+        : '5, 150, 105';
+    try {
+        localStorage.setItem(ACTIVE_COLOR_KEY, safeHex);
+        localStorage.setItem(ACTIVE_RGB_KEY, rgb);
+    } catch {}
+};
+
+const applyAccent = (hex) => {
+    const safeHex = String(hex || '').trim();
+    if (!safeHex) return;
+    const rgb = (window.SpendNote && typeof window.SpendNote.hexToRgb === 'function')
+        ? window.SpendNote.hexToRgb(safeHex)
+        : (readAccentRgb() || '5, 150, 105');
+
+    document.documentElement.style.setProperty('--active', safeHex);
+    document.documentElement.style.setProperty('--active-rgb', rgb);
+    if (typeof window.updateMenuColors === 'function') {
+        window.updateMenuColors(safeHex);
+    }
+};
+
+const setAccentUi = (hex) => {
+    const picker = document.getElementById('accentColorPicker');
+    const valueEl = document.getElementById('accentColorValue');
+    if (picker) picker.value = hex;
+    if (valueEl) valueEl.textContent = String(hex || '').toLowerCase();
+
+    document.querySelectorAll('.accent-swatch').forEach((btn) => {
+        const c = String(btn.dataset.color || '').toLowerCase();
+        btn.classList.toggle('active', c && c === String(hex || '').toLowerCase());
+    });
+};
+
 // State
 let currentProfile = null;
 let teamMembers = [];
@@ -91,6 +138,10 @@ const fillProfile = (p) => {
 
     applyAvatar(fullName);
     applyLogo();
+
+    const saved = readAccentColor() || '#10b981';
+    setAccentUi(saved);
+    applyAccent(saved);
 };
 
 const loadProfile = async () => {
@@ -283,6 +334,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     await Promise.all([loadProfile(), loadTeam(), loadCashBoxes()]);
     await computeAndApplyRole();
 
+    // Accent color init
+    {
+        const saved = readAccentColor() || '#10b981';
+        setAccentUi(saved);
+        applyAccent(saved);
+
+        document.getElementById('accentSwatches')?.addEventListener('click', (e) => {
+            const btn = e.target?.closest('.accent-swatch');
+            if (!btn) return;
+            const hex = String(btn.dataset.color || '').trim();
+            if (!hex) return;
+            setAccentUi(hex);
+            applyAccent(hex);
+        });
+
+        document.getElementById('accentColorPicker')?.addEventListener('input', (e) => {
+            const hex = String(e.target?.value || '').trim();
+            if (!hex) return;
+            setAccentUi(hex);
+            applyAccent(hex);
+        });
+    }
+
     // Avatar upload
     document.getElementById('avatarUploadBtn')?.addEventListener('click', () => document.getElementById('avatarFileInput')?.click());
     document.getElementById('avatarFileInput')?.addEventListener('change', (e) => {
@@ -309,6 +383,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         e.preventDefault();
         const fullName = document.getElementById('profileFullName')?.value?.trim();
         if (!fullName) { alert('Full Name is required.'); return; }
+
+        const accentHex = document.getElementById('accentColorPicker')?.value || readAccentColor() || '#10b981';
+        writeAccent(accentHex);
+        applyAccent(accentHex);
+
         const result = await window.db.profiles.update({ full_name: fullName });
         if (!result?.success) { alert(result?.error || 'Failed to save.'); return; }
         fillProfile(result.data);

@@ -33,6 +33,13 @@
     flex-wrap: wrap;
 }
 
+.profile-header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
 .settings-card-title {
     font-size: 16px;
     font-weight: 800;
@@ -52,6 +59,49 @@
     gap: 20px;
     margin-bottom: 24px;
     flex-wrap: wrap;
+}
+
+/* Accent color controls */
+.accent-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.accent-swatches {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.accent-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.08);
+    cursor: pointer;
+    padding: 0;
+}
+
+.accent-swatch.active {
+    outline: 3px solid rgba(var(--active-rgb), 0.20);
+    border-color: rgba(var(--active-rgb), 0.55);
+}
+
+#accentColorPicker {
+    width: 40px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+}
+
+.accent-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
 }
 
 .avatar-preview {
