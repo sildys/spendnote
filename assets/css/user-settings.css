@@ -84,7 +84,7 @@
 .avatar-upload-row {
     display: flex;
     gap: 8px;
-    margin-bottom: 16px;
+    margin-top: 16px;
 }
 
 .avatar-color-row {

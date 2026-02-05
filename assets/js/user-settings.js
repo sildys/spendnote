@@ -90,8 +90,6 @@ const fillProfile = (p) => {
     document.getElementById('profileEmail').value = String(p?.email || '');
 
     applyRoleBadge(currentRole);
-    document.getElementById('profileDisplayName').textContent = fullName || '—';
-    document.getElementById('profileDisplayEmail').textContent = String(p?.email || '—');
 
     document.getElementById('receiptDisplayName').value = String(p?.company_name || '');
     // Reuse profiles.phone as Receipt Identity "Other ID"
