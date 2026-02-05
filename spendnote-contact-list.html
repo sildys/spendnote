@@ -926,9 +926,10 @@
                 const maxDots = 3;
                 const visibleIds = cashBoxIds.slice(0, maxDots);
                 const extraCount = cashBoxIds.length - maxDots;
-                const allNames = cashBoxIds.map(id => {
+                const extraIds = cashBoxIds.slice(maxDots);
+                const extraNames = extraIds.map(id => {
                     const cb = cashBoxById.get(String(id)) || null;
-                    return String(cb?.name || 'Cash Box').trim();
+                    return cb?.name || id.slice(0, 8);
                 }).join(', ');
                 
                 let dotsHtml = '';
@@ -944,7 +945,7 @@
                         })
                         .join('');
                     if (extraCount > 0) {
-                        dotsHtml += `<span style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-left: 2px;" title="${escapeHtml(allNames)}">+${extraCount}</span>`;
+                        dotsHtml += `<span style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-left: 2px;" title="${escapeHtml(extraNames || 'More cash boxes')}">+${extraCount}</span>`;
                     }
                 }
 
