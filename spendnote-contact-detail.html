@@ -703,15 +703,16 @@
 
             if (window.SpendNoteDebug) console.log('Loading transactions for contact:', id, 'user:', user.id);
 
-            // First try simple query without join - order by created_at for newest first
+            // Query by contact_id OR contact_name (for legacy transactions without contact_id)
+            const contactName = document.getElementById('contactName')?.value || '';
             let { data, error, count } = await window.supabaseClient
                 .from('transactions')
                 .select('*', { count: 'exact' })
                 .eq('user_id', user.id)
-                .eq('contact_id', id)
+                .or(`contact_id.eq.${id},contact_name.ilike.${contactName}`)
                 .order('created_at', { ascending: false })
                 .order('transaction_date', { ascending: false })
-                .limit(5);
+                .limit(10);
 
             if (window.SpendNoteDebug) console.log('Transaction query result:', { data, error, count });
 
