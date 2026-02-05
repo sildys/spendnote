@@ -665,7 +665,8 @@
                     return;
                 }
                 e.preventDefault();
-                closeModal();
+                if (typeof window.closeModal === 'function') window.closeModal();
+                else legacyCloseModal();
                 return;
             }
 
