@@ -212,6 +212,19 @@
             min-width: 0;
         }
 
+        .tx-actions-row .left .btn {
+            height: 44px;
+            padding: 0 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            min-width: 132px;
+        }
+
+        .tx-actions-row .left .btn i {
+            margin-right: 8px;
+        }
+
         .tx-actions-row .right {
             display: flex;
             align-items: center;

@@ -347,9 +347,16 @@ html, body { height: auto !important; overflow: auto !important; }
 
     document.addEventListener('DOMContentLoaded', function() {
         const deleteToggle = document.getElementById('txDeleteToggle');
+        const duplicateBtn = document.getElementById('txDuplicateBtn');
         const voidPanel = document.getElementById('txVoidPanel');
         const voidBtn = document.getElementById('txVoidBtn');
         const voidNote = document.getElementById('txVoidNote');
+
+        if (duplicateBtn) {
+            const id = new URLSearchParams(window.location.search).get('id');
+            duplicateBtn.dataset.txId = id || '';
+            if (!id) duplicateBtn.disabled = true;
+        }
 
         const receiptFrame = document.getElementById('receiptFrame');
         if (receiptFrame) {
