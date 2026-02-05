@@ -271,6 +271,18 @@ function initTransactionForm() {
             console.log('[TxSave] Creating transaction with payload:', payload);
             const result = await window.db.transactions.create(payload);
             console.log('[TxSave] Result:', result);
+            
+            // Verification: immediately check if transaction exists
+            if (result && result.success && result.data && result.data.id) {
+                const verifyId = result.data.id;
+                console.log('[TxSave] Verifying transaction exists with ID:', verifyId);
+                const verify = await window.db.transactions.getById(verifyId);
+                console.log('[TxSave] Verification result:', verify);
+                if (!verify) {
+                    console.error('[TxSave] CRITICAL: Transaction returned success but does NOT exist in database!');
+                }
+            }
+            
             if (!result || !result.success) {
                 const raw = String(result?.error || '').trim();
                 const lower = raw.toLowerCase();
