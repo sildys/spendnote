@@ -337,6 +337,28 @@ function openModal(preset) {
         if (noteSection) noteSection.open = false;
     }
 
+    // Pre-fill fields if provided (for duplicate functionality)
+    if (options.amount) {
+        const amountEl = getEl('modalAmount');
+        if (amountEl) amountEl.value = options.amount;
+    }
+    if (options.description) {
+        const descEl = getEl('modalDescription');
+        if (descEl) descEl.value = options.description;
+    }
+    if (options.contactName) {
+        const contactEl = getEl('modalContact');
+        if (contactEl) contactEl.value = options.contactName;
+    }
+    if (options.transactionId) {
+        const txIdEl = getEl('modalTransactionId');
+        if (txIdEl) txIdEl.value = options.transactionId;
+    }
+    if (options.note) {
+        const noteEl = getEl('modalNote');
+        if (noteEl) noteEl.value = options.note;
+    }
+
     requestAnimationFrame(function() {
         requestAnimationFrame(function() {
             const dirEl = document.querySelector('input[name="modalDirection"]:checked');
@@ -643,14 +665,79 @@ function initDashboardModal() {
     // Hash-based modal opening
     if (window.location.hash === '#new-transaction') {
         const params = new URLSearchParams(window.location.search);
-        const preset = {};
-        if (params.get('cashBoxId')) preset.cashBoxId = params.get('cashBoxId');
-        if (params.get('direction') === 'in' || params.get('direction') === 'out') preset.direction = params.get('direction');
+        const duplicateTxId = params.get('duplicate');
 
-        const doOpen = function() { setTimeout(function() { openModal(preset); }, 0); history.replaceState(null, null, 'dashboard.html'); };
+        const doOpen = async function() {
+            setTimeout(async function() {
+                if (duplicateTxId) {
+                    // Duplicate mode: fetch transaction and open with pre-filled data
+                    await duplicateTransaction(duplicateTxId);
+                } else {
+                    // Normal new transaction mode
+                    const preset = {};
+                    if (params.get('cashBoxId')) preset.cashBoxId = params.get('cashBoxId');
+                    if (params.get('direction') === 'in' || params.get('direction') === 'out') preset.direction = params.get('direction');
+                    openModal(preset);
+                }
+                history.replaceState(null, null, 'dashboard.html');
+            }, 0);
+        };
+
         if (window.__spendnoteDashboardDataLoaded) { doOpen(); }
         else { window.addEventListener('SpendNoteDashboardDataLoaded', doOpen, { once: true }); }
     }
 }
 
 window.initDashboardModal = initDashboardModal;
+
+// ========================================
+// DUPLICATE TRANSACTION
+// ========================================
+async function duplicateTransaction(txId) {
+    if (!txId || !window.db?.transactions?.getById) {
+        console.warn('Cannot duplicate: missing txId or db.transactions.getById');
+        return;
+    }
+
+    try {
+        const tx = await window.db.transactions.getById(txId);
+        if (!tx) {
+            alert('Transaction not found.');
+            return;
+        }
+
+        const preset = {
+            cashBoxId: tx.cash_box_id || tx.cash_box?.id || null,
+            direction: tx.type === 'income' ? 'in' : 'out',
+            amount: tx.amount || '',
+            description: tx.description || '',
+            contactName: tx.contact?.name || tx.contact_name || '',
+            transactionId: '', // Clear the transaction ID for duplicate
+            note: tx.notes || tx.note || ''
+        };
+
+        // Navigate to dashboard if not already there
+        if (!document.getElementById('createTransactionModal')) {
+            const params = new URLSearchParams();
+            params.set('duplicate', txId);
+            window.location.href = 'dashboard.html?' + params.toString() + '#new-transaction';
+            return;
+        }
+
+        openModal(preset);
+    } catch (err) {
+        console.error('Error duplicating transaction:', err);
+        alert('Failed to duplicate transaction.');
+    }
+}
+
+window.duplicateTransaction = duplicateTransaction;
+
+// Setup duplicate button click handler (delegated)
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.btn-duplicate[data-tx-id]');
+    if (!btn) return;
+    e.preventDefault();
+    const txId = btn.dataset.txId;
+    if (txId) duplicateTransaction(txId);
+});

@@ -407,10 +407,16 @@
                 <td><span class="tx-amount ${isIncome ? 'in' : 'out'} ${isVoided ? 'voided' : ''}">${formatCurrency(tx.amount, currency)}</span></td>
                 <td><div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${createdBy}"></div></div></td>
                 <td>
-                    <a href="spendnote-transaction-detail.html?id=${encodeURIComponent(tx.id)}" class="tx-action btn-view">
-                        <span>View</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                    <div class="tx-actions">
+                        <button type="button" class="tx-action btn-duplicate" data-tx-id="${safeText(tx.id, '')}">
+                            <i class="fas fa-copy"></i>
+                            <span>Duplicate</span>
+                        </button>
+                        <a href="spendnote-transaction-detail.html?id=${encodeURIComponent(tx.id)}" class="tx-action btn-view">
+                            <span>View</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </td>
             `;
 
