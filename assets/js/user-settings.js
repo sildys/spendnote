@@ -23,8 +23,11 @@ const applyRoleBadge = (roleValue) => {
 
 // Avatar localStorage
 const AVATAR_KEY = 'spendnote.user.avatar.v1';
+const AVATAR_COLOR_KEY = 'spendnote.user.avatarColor.v1';
 const readAvatar = () => { try { return localStorage.getItem(AVATAR_KEY); } catch { return null; } };
 const writeAvatar = (dataUrl) => { try { dataUrl ? localStorage.setItem(AVATAR_KEY, dataUrl) : localStorage.removeItem(AVATAR_KEY); } catch {} };
+const readAvatarColor = () => { try { return localStorage.getItem(AVATAR_COLOR_KEY) || '#10b981'; } catch { return '#10b981'; } };
+const writeAvatarColor = (color) => { try { localStorage.setItem(AVATAR_COLOR_KEY, color); } catch {} };
 
 // Logo localStorage
 const LOGO_KEY = 'spendnote.receipt.logo.v1';
@@ -50,6 +53,8 @@ const applyAvatar = (fullName) => {
     const initials = document.getElementById('avatarInitials');
     if (!wrap || !img || !initials) return;
     const stored = readAvatar();
+    const color = readAvatarColor();
+    wrap.style.background = color;
     initials.textContent = getInitials(fullName);
     if (stored) {
         wrap.classList.add('has-image');
@@ -58,6 +63,10 @@ const applyAvatar = (fullName) => {
         wrap.classList.remove('has-image');
         img.removeAttribute('src');
     }
+    
+    document.querySelectorAll('.avatar-color-swatch').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.color === color);
+    });
 };
 
 const applyLogo = () => {
@@ -283,6 +292,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Load data
     await Promise.all([loadProfile(), loadTeam(), loadCashBoxes()]);
     await computeAndApplyRole();
+
+    // Avatar color picker
+    document.getElementById('avatarColorSwatches')?.addEventListener('click', (e) => {
+        const btn = e.target?.closest('.avatar-color-swatch');
+        if (!btn) return;
+        const color = btn.dataset.color;
+        if (!color) return;
+        writeAvatarColor(color);
+        const fullName = document.getElementById('profileFullName')?.value || '';
+        applyAvatar(fullName);
+    });
 
     // Avatar upload
     document.getElementById('avatarUploadBtn')?.addEventListener('click', () => document.getElementById('avatarFileInput')?.click());

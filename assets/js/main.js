@@ -114,14 +114,31 @@ async function updateUserNav() {
     });
 
     if (avatarImgs.length) {
-        if (avatarUrl) {
+        // Check for custom avatar from localStorage
+        let customAvatar = null;
+        try {
+            customAvatar = localStorage.getItem('spendnote.user.avatar.v1');
+        } catch {}
+
+        if (customAvatar) {
+            avatarImgs.forEach((img) => {
+                img.src = customAvatar;
+                img.alt = displayName;
+            });
+        } else if (avatarUrl) {
             avatarImgs.forEach((img) => {
                 img.src = avatarUrl;
                 img.alt = displayName;
             });
         } else {
+            // Get saved avatar color or default
+            let avatarColor = '#10b981';
+            try {
+                avatarColor = localStorage.getItem('spendnote.user.avatarColor.v1') || '#10b981';
+            } catch {}
+
             const initials = getInitials(displayName);
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="32" fill="#10b981"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="700" fill="#ffffff">${initials}</text></svg>`;
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="${avatarColor}"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="700" fill="#ffffff">${initials}</text></svg>`;
             const dataUrl = `data:image/svg+xml,${encodeURIComponent(svg)}`;
 
             avatarImgs.forEach((img) => {

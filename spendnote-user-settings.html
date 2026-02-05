@@ -30,25 +30,35 @@
             <div>
                 <!-- PROFILE -->
                 <div class="settings-card">
-                    <div class="profile-header-section">
-                        <div class="avatar-preview" id="avatarPreview">
+                    <div class="settings-card-header">
+                        <div>
+                            <div class="settings-card-title">Profile</div>
+                            <div class="settings-card-subtitle">Your personal information and avatar</div>
+                        </div>
+                    </div>
+                    <div class="profile-avatar-section">
+                        <div class="avatar-preview-circle" id="avatarPreview">
                             <span id="avatarInitials">—</span>
                             <img id="avatarImg" alt="Avatar">
                         </div>
-                        <div class="profile-header-info">
-                            <div class="avatar-name" id="profileDisplayName">—</div>
-                            <div class="avatar-email" id="profileDisplayEmail">—</div>
-                            <div class="avatar-actions">
+                        <div class="avatar-controls">
+                            <div class="avatar-upload-row">
                                 <input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
-                                <button type="button" class="btn btn-secondary btn-small" id="avatarUploadBtn"><i class="fas fa-upload"></i> Upload</button>
+                                <button type="button" class="btn btn-secondary btn-small" id="avatarUploadBtn"><i class="fas fa-upload"></i> Upload Photo</button>
                                 <button type="button" class="btn btn-secondary btn-small" id="avatarRemoveBtn"><i class="fas fa-trash"></i> Remove</button>
                             </div>
-                        </div>
-                    </div>
-                    <div class="settings-card-header">
-                        <div>
-                            <div class="settings-card-title">Profile Information</div>
-                            <div class="settings-card-subtitle">Your account details</div>
+                            <div class="avatar-color-row">
+                                <label style="font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; display: block;">Monogram Color</label>
+                                <div class="avatar-color-swatches" id="avatarColorSwatches">
+                                    <button type="button" class="avatar-color-swatch" data-color="#10b981" style="background:#10b981;"></button>
+                                    <button type="button" class="avatar-color-swatch" data-color="#3b82f6" style="background:#3b82f6;"></button>
+                                    <button type="button" class="avatar-color-swatch" data-color="#8b5cf6" style="background:#8b5cf6;"></button>
+                                    <button type="button" class="avatar-color-swatch" data-color="#f59e0b" style="background:#f59e0b;"></button>
+                                    <button type="button" class="avatar-color-swatch" data-color="#ec4899" style="background:#ec4899;"></button>
+                                    <button type="button" class="avatar-color-swatch" data-color="#ef4444" style="background:#ef4444;"></button>
+                                    <button type="button" class="avatar-color-swatch" data-color="#6b7280" style="background:#6b7280;"></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <form id="profileForm">
