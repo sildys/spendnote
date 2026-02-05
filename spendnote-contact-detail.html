@@ -703,12 +703,13 @@
 
             if (window.SpendNoteDebug) console.log('Loading transactions for contact:', id, 'user:', user.id);
 
-            // First try simple query without join
+            // First try simple query without join - order by created_at for newest first
             let { data, error, count } = await window.supabaseClient
                 .from('transactions')
                 .select('*', { count: 'exact' })
                 .eq('user_id', user.id)
                 .eq('contact_id', id)
+                .order('created_at', { ascending: false })
                 .order('transaction_date', { ascending: false })
                 .limit(5);
 
