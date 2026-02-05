@@ -570,6 +570,10 @@
             <div class="bulk-actions" id="bulkActions">
                 <span class="bulk-actions-text"><strong><span id="selectedCount">0</span> selected</strong></span>
                 <div class="bulk-actions-buttons">
+                    <button class="bulk-action-btn" id="bulkDelete" style="color: var(--error);">
+                        <i class="fas fa-trash"></i>
+                        Delete
+                    </button>
                     <button class="bulk-action-btn" id="bulkExportCSV">
                         <i class="fas fa-file-csv"></i>
                         Export CSV
@@ -1001,6 +1005,46 @@
             const checked = document.querySelectorAll('.row-checkbox:checked').length;
             alert(`Export PDF - ${checked} SELECTED CONTACTS\n\nIn production:\n- Generate PDF report with selected contact data\n- Download file: contacts_selected.pdf`);
             console.log('Exporting selected contacts to PDF...');
+        });
+
+        // Bulk Delete
+        document.getElementById('bulkDelete').addEventListener('click', async () => {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            const count = checkedBoxes.length;
+            if (count === 0) return;
+            
+            if (!confirm(`Are you sure you want to delete ${count} contact(s)? This cannot be undone.`)) return;
+            
+            // Get contact IDs from the rows
+            const ids = [];
+            checkedBoxes.forEach(cb => {
+                const row = cb.closest('tr');
+                if (row) {
+                    const viewLink = row.querySelector('a.btn-view');
+                    if (viewLink && viewLink.href) {
+                        const url = new URL(viewLink.href);
+                        const id = url.searchParams.get('id');
+                        if (id) ids.push(id);
+                    }
+                }
+            });
+            
+            if (ids.length === 0) {
+                alert('Could not find contact IDs to delete.');
+                return;
+            }
+            
+            try {
+                const res = await window.db.contacts.bulkDelete(ids);
+                if (!res || !res.success) {
+                    alert(res?.error || 'Failed to delete contacts.');
+                    return;
+                }
+                window.location.reload();
+            } catch (err) {
+                console.error('Bulk delete failed:', err);
+                alert(err?.message || 'Failed to delete contacts.');
+            }
         });
 
         // Pagination variables

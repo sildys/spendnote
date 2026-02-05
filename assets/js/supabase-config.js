@@ -515,6 +515,21 @@ var db = {
                 return { success: false, error: error.message };
             }
             return { success: true };
+        },
+
+        async bulkDelete(ids) {
+            if (!Array.isArray(ids) || ids.length === 0) {
+                return { success: false, error: 'No IDs provided' };
+            }
+            const { error } = await supabaseClient
+                .from('contacts')
+                .delete()
+                .in('id', ids);
+            if (error) {
+                console.error('Error bulk deleting contacts:', error);
+                return { success: false, error: error.message };
+            }
+            return { success: true, count: ids.length };
         }
     },
 
