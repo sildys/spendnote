@@ -749,26 +749,8 @@ function initDashboardModal() {
         const doOpen = async function() {
             setTimeout(async function() {
                 if (duplicateTxId) {
-                    // Duplicate mode: prefer URL-provided preset (no fetch), fallback to fetch
-                    const preset = {
-                        cashBoxId: params.get('cashBoxId') || null,
-                        direction: params.get('direction') || null,
-                        amount: params.get('amount') || '',
-                        description: params.get('description') || '',
-                        contactName: params.get('contactName') || '',
-                        date: params.get('date') || null,
-                        transactionId: ''
-                    };
-
-                    const hasAnyPrefill = Boolean(
-                        preset.cashBoxId || preset.direction || preset.amount || preset.description || preset.contactName || preset.date
-                    );
-
-                    if (hasAnyPrefill) {
-                        openModal(preset);
-                    } else {
-                        await duplicateTransaction(duplicateTxId);
-                    }
+                    // Always fetch full transaction data for duplicate
+                    await duplicateTransaction(duplicateTxId);
                 } else {
                     // Normal new transaction mode
                     const preset = {};
