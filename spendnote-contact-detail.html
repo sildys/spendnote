@@ -712,7 +712,7 @@
                 .or(`contact_id.eq.${id},contact_name.ilike.${contactName}`)
                 .order('created_at', { ascending: false })
                 .order('transaction_date', { ascending: false })
-                .limit(10);
+                .limit(5);
 
             if (window.SpendNoteDebug) console.log('Transaction query result:', { data, error, count });
 
