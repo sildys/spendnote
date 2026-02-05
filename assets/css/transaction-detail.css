@@ -225,6 +225,20 @@
             margin-right: 8px;
         }
 
+        .btn-outline-primary {
+            background: white;
+            color: var(--primary) !important;
+            border: 1.5px solid var(--primary);
+            box-shadow: none;
+        }
+
+        .btn-outline-primary:hover {
+            background: rgba(5, 150, 105, 0.08);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+        }
+
         .tx-actions-row .right {
             display: flex;
             align-items: center;
