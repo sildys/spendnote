@@ -179,9 +179,6 @@ function initTransactionForm() {
                 alert('Contact Name is required.');
                 return;
             }
-
-            const contactEmail = String(document.getElementById('modalContactEmail')?.value || '').trim() || null;
-            const contactPhone = String(document.getElementById('modalContactPhone')?.value || '').trim() || null;
             const contactOtherId = String(document.getElementById('modalContactCompanyId')?.value || '').trim() || null;
 
             const dateCandidate = String(formData.date || '').trim();
@@ -229,8 +226,8 @@ function initTransactionForm() {
                 line_items: persistedLineItems,
                 contact_id: null,
                 contact_name: contactName,
-                contact_email: contactEmail,
-                contact_phone: contactPhone,
+                contact_email: null,
+                contact_phone: null,
                 contact_address: String(formData.ContactAddress || '').trim() || null,
                 contact_custom_field_1: contactOtherId,
                 created_by_user_id: user.id,
@@ -260,16 +257,12 @@ function initTransactionForm() {
             if (!payload.contact_id && shouldSaveContact && window.db?.contacts?.getOrCreate && typeof window.db.contacts.getOrCreate === 'function') {
                 ensuredContact = await window.db.contacts.getOrCreate({
                     name: contactName,
-                    email: contactEmail,
-                    phone: contactPhone,
                     address: payload.contact_address
                 });
             } else if (!payload.contact_id && shouldSaveContact && window.db?.contacts?.create && typeof window.db.contacts.create === 'function') {
                 ensuredContact = await window.db.contacts.create({
                     user_id: user.id,
                     name: contactName,
-                    email: contactEmail,
-                    phone: contactPhone,
                     address: payload.contact_address,
                     notes: null
                 });
@@ -369,53 +362,6 @@ function initTransactionForm() {
             }
         }
     });
-
-    // Add Contact button
-    var addContactBtn = document.getElementById('modalAddContactBtn');
-    if (addContactBtn) {
-        addContactBtn.addEventListener('click', async function() {
-            var name = document.getElementById('modalContactName').value;
-            var phone = document.getElementById('modalContactPhone').value;
-            var email = document.getElementById('modalContactEmail').value;
-            var address = document.getElementById('modalContactAddress').value;
-
-            if (!name.trim()) {
-                alert('Please enter a contact name first.');
-                return;
-            }
-
-            if (!window.db || !window.db.contacts) {
-                alert('Database not available. Please refresh the page.');
-                return;
-            }
-
-            try {
-                var user = await window.auth.getCurrentUser();
-                if (!user) {
-                    alert('Please log in to add contacts.');
-                    return;
-                }
-
-                var result = await window.db.contacts.create({
-                    user_id: user.id,
-                    name: name.trim(),
-                    phone: phone.trim() || null,
-                    email: email.trim() || null,
-                    address: address.trim() || null
-                });
-
-                if (result && result.success && result.data && result.data.id) {
-                    alert('Contact "' + name + '" added successfully.');
-                    document.getElementById('modalContactId').value = result.data.id;
-                } else {
-                    alert(result?.error || 'Could not add contact. Please try again.');
-                }
-            } catch (error) {
-                console.error('Failed to add contact:', error);
-                alert('Could not add contact. Please try again.');
-            }
-        });
-    }
 
 }
 

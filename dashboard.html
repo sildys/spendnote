@@ -216,31 +216,6 @@
                                     placeholder="Other ID"
                                 >
                             </div>
-                            <div class="form-group modal-detailed-only modal-contact-phone">
-                                <label for="modalContactPhone">Phone</label>
-                                <input 
-                                    type="tel" 
-                                    id="modalContactPhone" 
-                                    class="form-control" 
-                                    placeholder="+1 (555) 123-4567"
-                                >
-                            </div>
-                            <div class="form-group modal-detailed-only modal-contact-email">
-                                <label for="modalContactEmail">Email</label>
-                                <input 
-                                    type="email" 
-                                    id="modalContactEmail" 
-                                    class="form-control" 
-                                    placeholder="email@example.com"
-                                >
-                            </div>
-                            <div class="modal-detailed-only modal-contact-save">
-                                <div class="modal-label-spacer" aria-hidden="true"></div>
-                                <button type="button" id="modalAddContactBtn" class="add-contact-btn">
-                                    <i class="fas fa-user-plus"></i>
-                                    Save
-                                </button>
-                            </div>
                         </div>
                         <input type="hidden" id="modalContactId">
                     </div>
@@ -1188,53 +1163,6 @@
                 }
             });
         }
-        
-        // Add to Contacts button
-        const addContactBtn = document.getElementById('modalAddContactBtn');
-        if (addContactBtn) {
-            addContactBtn.addEventListener('click', async () => {
-                const name = document.getElementById('modalContactName').value;
-                const phone = document.getElementById('modalContactPhone').value;
-                const email = document.getElementById('modalContactEmail').value;
-                const address = document.getElementById('modalContactAddress').value;
-                
-                if (!name.trim()) {
-                    alert('Please enter a contact name first.');
-                    return;
-                }
-                
-                if (!window.db || !window.db.contacts) {
-                    alert('Database not available. Please refresh the page.');
-                    return;
-                }
-
-                try {
-                    const user = await window.auth.getCurrentUser();
-                    if (!user) {
-                        alert('Please log in to add contacts.');
-                        return;
-                    }
-
-                    const result = await window.db.contacts.create({
-                        user_id: user.id,
-                        name: name.trim(),
-                        phone: phone.trim() || null,
-                        email: email.trim() || null,
-                        address: address.trim() || null
-                    });
-
-                    if (result && result.id) {
-                        alert(`Contact "${name}" added successfully.`);
-                        document.getElementById('modalContactId').value = result.id;
-                    } else {
-                        alert('Could not add contact. Please try again.');
-                    }
-                } catch (error) {
-                    console.error('Failed to add contact:', error);
-                    alert('Could not add contact. Please try again.');
-                }
-            });
-        }
 
         // Contact Autocomplete
         const ContactInput = document.getElementById('modalContactName');
@@ -1607,7 +1535,7 @@
     <script src="assets/js/main.js?v=21"></script>
     <script src="assets/js/dashboard-ui.js?v=3"></script>
     <script src="assets/js/dashboard-modal.js?v=2"></script>
-    <script src="assets/js/dashboard-form.js?v=2"></script>
+    <script src="assets/js/dashboard-form.js?v=3"></script>
     <script src="assets/js/dashboard-data.js?v=58"></script>
 
     <!-- Swiper JS -->
