@@ -382,6 +382,18 @@ function openModal(preset) {
         const contactEl = getEl('modalContactName');
         if (contactEl) contactEl.value = options.contactName || '';
     }
+    if (Object.prototype.hasOwnProperty.call(options, 'contactAddress')) {
+        if (typeof window.__setModalContactAddress === 'function') {
+            window.__setModalContactAddress(options.contactAddress || '');
+        } else {
+            const addrEl = getEl('modalContactAddress');
+            if (addrEl) addrEl.value = options.contactAddress || '';
+        }
+    }
+    if (Object.prototype.hasOwnProperty.call(options, 'contactOtherId')) {
+        const otherIdEl = getEl('modalContactCompanyId');
+        if (otherIdEl) otherIdEl.value = options.contactOtherId || '';
+    }
     const contactIdEl = getEl('modalContactId');
     if (contactIdEl) contactIdEl.value = '';
     if (Object.prototype.hasOwnProperty.call(options, 'transactionId')) {
@@ -391,6 +403,26 @@ function openModal(preset) {
     if (Object.prototype.hasOwnProperty.call(options, 'note')) {
         const noteEl = getEl('modalNote');
         if (noteEl) noteEl.value = options.note || '';
+    }
+
+    // Pre-fill line items if provided (for duplicate)
+    if (Array.isArray(options.lineItems) && options.lineItems.length > 0) {
+        // Switch to detailed mode to show line items
+        updateModalModeUI('detailed', { persist: false });
+        
+        // Render extra line items
+        const container = getEl('modalLineItemsContainer');
+        if (container) {
+            container.innerHTML = '';
+            options.lineItems.forEach(function(item, idx) {
+                const row = document.createElement('div');
+                row.className = 'form-row-line-item';
+                row.innerHTML = '<div class="form-group"><input type="text" class="line-item-input" data-item-index="' + (idx + 1) + '" placeholder="Item description" value="' + (item.description || '').replace(/"/g, '&quot;') + '"></div><div class="form-group"><div class="amount-input-wrapper"><span class="currency-symbol">$</span><input type="text" class="line-item-input line-item-amount" data-amount-index="' + (idx + 1) + '" placeholder="0.00" value="' + (item.amount || '') + '"></div></div>';
+                container.appendChild(row);
+            });
+            setDetailedItemsExpanded(true);
+            updateLineItemsTotal();
+        }
     }
 
     requestAnimationFrame(function() {
@@ -771,15 +803,23 @@ async function duplicateTransaction(txId) {
             return;
         }
 
+        // Parse line items - first item is main description/amount, rest are extras
+        const lineItems = Array.isArray(tx.line_items) ? tx.line_items : [];
+        const firstItem = lineItems[0] || {};
+        const extraItems = lineItems.slice(1);
+
         const preset = {
             cashBoxId: tx.cash_box_id || tx.cash_box?.id || null,
             direction: tx.type === 'income' ? 'in' : 'out',
-            amount: tx.amount || '',
-            description: tx.description || '',
+            amount: firstItem.amount || tx.amount || '',
+            description: firstItem.description || tx.description || '',
             contactName: tx.contact?.name || tx.contact_name || '',
+            contactAddress: tx.contact_address || tx.contact?.address || '',
+            contactOtherId: tx.contact_custom_field_1 || '',
             date: tx.transaction_date || tx.created_at || null,
             transactionId: '', // Clear the transaction ID for duplicate
-            note: tx.notes || tx.note || ''
+            note: tx.notes || tx.note || '',
+            lineItems: extraItems
         };
 
         // Navigate to dashboard if not already there
