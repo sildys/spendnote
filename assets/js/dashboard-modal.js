@@ -496,7 +496,7 @@ async function loadContactsForAutocomplete() {
 function initContactAutocomplete() {
     const input = getEl('modalContactName');
     const dropdown = getEl('ContactAutocomplete');
-    if (!input || !dropdown) return;
+    if (!input || !dropdown) { console.warn('Contact autocomplete: input or dropdown not found'); return; }
 
     loadContactsForAutocomplete();
     let selectedIdx = -1;
@@ -557,13 +557,17 @@ function initContactAutocomplete() {
         if (selectedIdx >= 0 && items[selectedIdx]) items[selectedIdx].scrollIntoView({ block: 'nearest' });
     }
 
-    input.addEventListener('input', function(e) {
+    input.addEventListener('input', async function(e) {
         const idEl = getEl('modalContactId');
         if (idEl) idEl.value = '';
+        if (!contactsLoaded) await loadContactsForAutocomplete();
         show(filter(e.target.value));
         selectedIdx = -1;
     });
-    input.addEventListener('focus', function(e) { if (e.target.value) show(filter(e.target.value)); });
+    input.addEventListener('focus', async function(e) {
+        if (!contactsLoaded) await loadContactsForAutocomplete();
+        if (e.target.value) show(filter(e.target.value));
+    });
     input.addEventListener('keydown', function(e) {
         var items = dropdown.querySelectorAll('.autocomplete-item');
         if (e.key === 'ArrowDown') { e.preventDefault(); selectedIdx = Math.min(selectedIdx + 1, items.length - 1); updateActive(); }
