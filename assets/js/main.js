@@ -310,9 +310,9 @@ document.addEventListener('click', function(e) {
         transactionId: ''
     };
 
-    // If on dashboard and duplicateTransaction is available, use it directly
-    if (typeof window.openModal === 'function' && document.getElementById('createTransactionModal')) {
-        window.openModal(preset);
+    // If on dashboard and duplicateTransaction is available, use it to fetch full data
+    if (typeof window.duplicateTransaction === 'function' && document.getElementById('createTransactionModal')) {
+        window.duplicateTransaction(txId);
         return;
     }
     if (typeof window.duplicateTransaction === 'function') {
