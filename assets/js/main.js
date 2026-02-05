@@ -294,6 +294,11 @@ document.addEventListener('click', function(e) {
     const txId = btn.dataset.txId;
     if (!txId) return;
 
-    // Navigate to dashboard with duplicate parameter
-    window.location.href = 'dashboard.html?duplicate=' + encodeURIComponent(txId) + '#new-transaction';
+    // If on dashboard and duplicateTransaction is available, use it directly
+    if (typeof window.duplicateTransaction === 'function') {
+        window.duplicateTransaction(txId);
+    } else {
+        // Navigate to dashboard with duplicate parameter
+        window.location.href = 'dashboard.html?duplicate=' + encodeURIComponent(txId) + '#new-transaction';
+    }
 });
