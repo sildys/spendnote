@@ -118,20 +118,24 @@ async function updateUserNav() {
         return;
     }
 
-    const user = await window.auth.getCurrentUser();
-    if (!user) {
-        return;
+    let user = null;
+    try {
+        user = await window.auth.getCurrentUser();
+    } catch (_) {
+        user = null;
     }
 
     let profile = null;
-    try {
-        profile = await window.db.profiles.getCurrent();
-    } catch (error) {
-        console.warn('Unable to load profile for nav:', error);
+    if (user) {
+        try {
+            profile = await window.db.profiles.getCurrent();
+        } catch (error) {
+            console.warn('Unable to load profile for nav:', error);
+        }
     }
 
-    const displayName = profile?.full_name || user.user_metadata?.full_name || user.email || 'Account';
-    const avatarUrl = user.user_metadata?.avatar_url || null;
+    const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.email || 'Account';
+    const avatarUrl = user?.user_metadata?.avatar_url || null;
 
     nameEls.forEach((el) => {
         el.textContent = displayName;
@@ -192,12 +196,8 @@ async function waitForUserNavReady(maxMs = 4000) {
             continue;
         }
 
-        if (window.auth && typeof window.auth.getCurrentUser === 'function') {
-            const user = await window.auth.getCurrentUser({ force: true });
-            if (user) return true;
-        }
-
-        await new Promise(r => setTimeout(r, 200));
+        // Don't block rendering on auth. We can render a localStorage avatar immediately.
+        return true;
     }
     return false;
 }
