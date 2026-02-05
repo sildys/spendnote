@@ -655,8 +655,9 @@ var db = {
                     query = query.order('created_by_user_name', { ascending: asc, nullsFirst: false });
                     query = query.order('transaction_date', { ascending: false });
                 } else {
-                    query = query.order('transaction_date', { ascending: asc, nullsFirst: false });
+                    // Sort by created_at first (includes time), then transaction_date as fallback
                     query = query.order('created_at', { ascending: asc, nullsFirst: false });
+                    query = query.order('transaction_date', { ascending: asc, nullsFirst: false });
                 }
 
                 return query;
