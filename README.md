@@ -238,6 +238,34 @@ This enables localization and per-cash-box personalization.
 - The email contains a **public PDF download link** (no login required for recipients).
 - Email address autocomplete/picker is deferred until roles + the final contacts model is in place.
 
+### Bulk Actions & Export (Transaction History & Cash Box Detail) - COMPLETED
+
+Both Transaction History and Cash Box Detail tables include bulk actions:
+
+- **Bulk Void**: void multiple selected transactions at once (admin-only)
+- **Bulk Export CSV**: export selected rows to CSV with user-facing IDs
+- **Bulk Export PDF**: export selected rows to PDF with professional overlay design
+- **Filtered Export CSV**: export all filtered transactions (with pagination, max 500 rows)
+- **Filtered Export PDF**: export all filtered transactions with:
+  - Professional SpendNote-branded header with receipt logo
+  - All active filters displayed (date range, cash box, currency, direction, etc.)
+  - Transaction table with zebra striping
+  - Net balance summary per currency (IN/OUT/Net)
+  - Generated timestamp
+  - Print-friendly layout (no popup blockers)
+
+CSV exports use **only user-facing IDs** (no database UUIDs):
+- Transaction ID: `SN{cash_box_seq}-{tx_seq}` format
+- Cash Box ID: `CB-{seq}` format or name
+- Contact ID: `CONT-{seq}` format
+
+PDF overlay design:
+- SpendNote receipt logo (green gradient)
+- Brand colors only (green for IN, gray for OUT, black text)
+- Filter metadata in grid layout
+- Summary card with gradient background
+- Footer with branding
+
 ### Current gaps / not implemented yet
 
 - Contacts cash box filtering / cash box ID handling is not finished yet.
@@ -246,7 +274,6 @@ This enables localization and per-cash-box personalization.
 Additional UX/bug backlog:
 
 - Dashboard modal: cash box selection does not propagate correctly.
-- CSV export still uses internal IDs instead of display IDs.
 - Table column widths need adjustment.
 - "Save to Contacts" checkbox: add a short inline hint ("so you can reuse it later").
 - Footer redesign.

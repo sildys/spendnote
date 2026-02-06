@@ -12,7 +12,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
 
-## Current state (last updated: 2026-02-06 19:05)
+## Current state (last updated: 2026-02-06 21:33)
 - **Dashboard**
   - Transaction modal works again (fixed duplicate modal JS load + ensured submit handler binds).
   - **Save to Contacts** toggle exists (no auto-save by default).
@@ -76,6 +76,24 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Email uses an **email-client compatible** layout.
   - Email includes a **public PDF link** (recipient does not need an account).
   - Email address autocomplete deferred until roles + final contacts model.
+
+- **Bulk Actions & Export (Transaction History & Cash Box Detail)** ✅
+  - **Bulk Void**: void multiple selected transactions at once
+  - **Bulk Export CSV**: export selected rows with user-facing IDs only
+  - **Bulk Export PDF**: export selected rows with professional overlay
+  - **Filtered Export CSV**: export all filtered transactions (pagination, max 500)
+  - **Filtered Export PDF**: export all filtered transactions with:
+    - SpendNote-branded header with receipt logo (green gradient)
+    - All active filters displayed in grid layout
+    - Transaction table with zebra striping
+    - Net balance summary per currency (IN/OUT/Net)
+    - Generated timestamp and branding footer
+    - Print-friendly (no popup blockers)
+  - CSV exports use **only user-facing IDs** (no database UUIDs):
+    - Transaction ID: `SN{cash_box_seq}-{tx_seq}` format
+    - Cash Box ID: `CB-{seq}` format or name
+    - Contact ID: `CONT-{seq}` format
+  - PDF overlay uses brand colors only (green for IN, gray for OUT, black text)
 - **Cash Box pages**
   - Cash Box Detail: loads from Supabase (UUID id param), displays `SN-###` code.
   - Cash Box Settings: loads cash box data, displays `SN-###` in subtitle.
@@ -146,7 +164,6 @@ If a chat thread freezes / context is lost: in the new thread say:
 ## Backlog (UX + bugs)
 - **High**
   - Dashboard modal: cash box selection does not propagate to the dashboard state.
-  - CSV export still uses internal IDs instead of display IDs.
 - **Medium**
   - Table column widths need adjustment.
   - Navigation underline styling is still inconsistent.
