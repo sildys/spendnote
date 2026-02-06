@@ -487,17 +487,14 @@ html, body { height: auto !important; overflow: auto !important; }
                     const txTitle = document.getElementById('txTitle')?.textContent || 'Receipt';
                     const subject = `Your Cash Receipt - ${txTitle}`;
 
-                    let accessToken = '';
-                    try {
-                        const session = await window.supabaseClient?.auth?.getSession?.();
-                        accessToken = session?.data?.session?.access_token || '';
-                    } catch (_) {}
+                    const anonKey = 'sb_publishable_Vg44Z7eJacwji3iLii0Dxg_mQlSfwi-';
 
                     const res = await fetch('https://zrnnharudlgxuvewqryj.supabase.co/functions/v1/send-receipt-email', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${accessToken}`
+                            'Authorization': `Bearer ${anonKey}`,
+                            'apikey': anonKey
                         },
                         body: JSON.stringify({
                             to: email,
