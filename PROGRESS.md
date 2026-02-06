@@ -12,7 +12,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
 
-## Current state (last updated: 2026-02-06 21:38)
+## Current state (last updated: 2026-02-06 22:45)
 - **Dashboard** ✅
   - Transaction modal fully wired to Supabase:
     - **Transaction create** via `db.transactions.create()` with full payload
@@ -28,6 +28,10 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Contacts list + detail are wired to Supabase.
   - UI shows **Contact ID as `CONT-###`** using `sequence_number`.
   - Contacts list **View column + bottom pagination** aligned with Transaction History UI.
+  - Contacts List performance: uses Supabase RPC **`spendnote_contacts_stats()`** to populate:
+    - `#` (active tx count)
+    - `Boxes` dot list
+    - `Last Tx` (ID + date)
 - **Transaction History** ✅
   - Loads from Supabase (server-side pagination + filters).
   - Does **not** auto-filter by the previously selected Cash Box (dashboard active cash box).
@@ -44,6 +48,11 @@ If a chat thread freezes / context is lost: in the new thread say:
     - amount is dimmed + struck-through
     - reversal/writeback is not visible as a separate transaction
   - Contact ID column is intentionally minimal: **shows `—`** when there is no saved contact sequence.
+  - Filter mapping:
+    - Contact filter accepts `CONT-###` and maps to UUID internally
+    - Cash Box filter accepts `CB-###` / `SN-###` and maps to UUID internally
+    - Transaction query normalizes `SNx-y` to `SNx-yyy`
+  - No UUIDs shown in Cash Box / Contact suggestions.
 - **Transaction Detail + Receipt Preview** ✅
   - Receipt preview iframe now loads real Supabase data (transaction + cash box + profile).
   - All receipt-related UI controls (toggles, Pro text fields) are initialized from `cash_boxes.receipt_*` settings.
@@ -67,6 +76,7 @@ If a chat thread freezes / context is lost: in the new thread say:
     - shows **Voided by + date**
     - receipt previews include a diagonal grey **VOID** watermark (A4/PDF/Email)
   - Pro badge styling unified across the app (consistent orange badge with crown icon).
+  - URL hardening: invalid/missing `txId` redirects to Transaction History.
 - **Receipt Export (PDF/Print)** ✅
   - **PDF download**: Letter size (8.5" x 11"), white background, receipt at top with 10mm margins.
   - **PDF download flow**: hidden iframe triggers download without visible preview or popup.
@@ -100,8 +110,8 @@ If a chat thread freezes / context is lost: in the new thread say:
     - Contact ID: `CONT-{seq}` format
   - PDF overlay uses brand colors only (green for IN, gray for OUT, black text)
 - **Cash Box pages**
-  - Cash Box Detail: loads from Supabase (UUID id param), displays `SN-###` code.
-  - Cash Box Settings: loads cash box data, displays `SN-###` in subtitle.
+  - Cash Box Detail: validates URL `id`/`cashBoxId` as UUID, displays `SN-###` code.
+  - Cash Box Settings: validates URL `id`/`cashBoxId` as UUID, displays `SN-###` in subtitle.
   - Cash Box Settings: receipt preview uses demo data (A4/PDF/Email) and respects quick/detailed + toggles.
   - Cash Box Settings: receipt preview layout/height + zoom behavior matches Transaction Detail.
   - Cash Box Settings: removed inline `onclick` handlers (bindings live in JS).
@@ -166,7 +176,6 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ## Backlog (UX + bugs)
 - **High**
-  - Dashboard modal: cash box selection does not propagate to the dashboard state.
 - **Medium**
   - Table column widths need adjustment.
   - Navigation underline styling is still inconsistent.

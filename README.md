@@ -266,6 +266,18 @@ PDF overlay design:
 - Summary card with gradient background
 - Footer with branding
 
+### Contacts List performance (server-side stats RPC) - COMPLETED
+
+The Contacts List avoids loading thousands of transactions on page load by using a server-side stats function:
+
+- RPC: `spendnote_contacts_stats()`
+- Returns per-contact:
+  - transaction count (`#`)
+  - cash boxes involved (dot list)
+  - last transaction (ID + date)
+
+If the RPC is not available yet in a given Supabase project, the UI falls back to a client-side scan.
+
 ### Current gaps / not implemented yet
 
 - Contacts cash box filtering / cash box ID handling is not finished yet.
