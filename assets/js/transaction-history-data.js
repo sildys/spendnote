@@ -701,78 +701,112 @@
                     amount: safeText(tr.querySelector('.tx-amount')?.textContent, '')
                 }));
 
-            const w = window.open('', '_blank', 'noopener,noreferrer');
-            if (!w) {
-                alert('PDF export opens a new tab.\n\nPopup blocked: please allow popups for this site, then click PDF again.');
-                return;
+            const overlayId = 'spendnoteBulkPdfOverlay';
+            const printStyleId = 'spendnoteBulkPdfPrintStyle';
+
+            let overlay = document.getElementById(overlayId);
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = overlayId;
+                overlay.style.position = 'fixed';
+                overlay.style.inset = '0';
+                overlay.style.zIndex = '9999';
+                overlay.style.background = 'rgba(0,0,0,0.55)';
+                overlay.style.display = 'none';
+                overlay.style.padding = '22px';
+                overlay.innerHTML = `
+                  <div id="${overlayId}Panel" style="max-width:1100px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,0.35);overflow:hidden;">
+                    <div style="padding:18px 18px 14px;border-bottom:1px solid #e5e7eb;">
+                      <div style="font-size:16px;font-weight:900;color:#0f172a;">Export selected transactions</div>
+                      <div style="margin-top:6px;font-size:12px;color:#64748b;line-height:1.5;">Click <strong>Print / Save as PDF</strong>, then choose <strong>Save as PDF</strong> in the print dialog. (Shortcut: <strong>Ctrl+P</strong>)</div>
+                      <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
+                        <button type="button" id="${overlayId}Print" style="appearance:none;border:1px solid #0f172a;background:#0f172a;color:#fff;border-radius:12px;padding:10px 12px;font-size:12px;font-weight:900;cursor:pointer;">Print / Save as PDF</button>
+                        <button type="button" id="${overlayId}Close" style="appearance:none;border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:12px;padding:10px 12px;font-size:12px;font-weight:900;cursor:pointer;">Close</button>
+                        <div style="margin-left:auto;font-size:12px;color:#64748b;font-weight:800;">Selected: <span id="${overlayId}Count">0</span></div>
+                      </div>
+                    </div>
+                    <div style="padding:14px 18px 18px;max-height:72vh;overflow:auto;">
+                      <table style="width:100%;border-collapse:collapse;">
+                        <thead>
+                          <tr>
+                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Type</th>
+                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">ID</th>
+                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Date</th>
+                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Cash Box</th>
+                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Contact</th>
+                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Contact ID</th>
+                            <th style="text-align:right;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody id="${overlayId}Body"></tbody>
+                      </table>
+                    </div>
+                  </div>
+                `;
+                document.body.appendChild(overlay);
             }
 
-            const tableRows = rows.map((r) => `
-                <tr>
-                    <td>${escapeHtml(r.type)}</td>
-                    <td>${escapeHtml(r.id)}</td>
-                    <td>${escapeHtml(r.date)}</td>
-                    <td>${escapeHtml(r.cashBox)}</td>
-                    <td>${escapeHtml(r.contact)}</td>
-                    <td>${escapeHtml(r.contactId)}</td>
-                    <td style="text-align:right;">${escapeHtml(r.amount)}</td>
-                </tr>
-            `).join('');
+            let printStyle = document.getElementById(printStyleId);
+            if (!printStyle) {
+                printStyle = document.createElement('style');
+                printStyle.id = printStyleId;
+                printStyle.textContent = `
+                  @media print {
+                    body * { visibility: hidden !important; }
+                    #${overlayId}, #${overlayId} * { visibility: visible !important; }
+                    #${overlayId} { position: absolute !important; inset: 0 !important; background: #ffffff !important; padding: 0 !important; }
+                    #${overlayId}Panel { box-shadow: none !important; border-radius: 0 !important; max-width: none !important; }
+                    #${overlayId}Print, #${overlayId}Close { display: none !important; }
+                  }
+                `;
+                document.head.appendChild(printStyle);
+            }
 
-            w.document.open();
-            w.document.write(`<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Transactions export</title>
-    <style>
-      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; padding: 24px; }
-      h1 { font-size: 16px; margin: 0 0 12px; }
-      .hint { color: #6b7280; font-size: 12px; margin: 0 0 16px; line-height: 1.5; }
-      .actions { display: flex; gap: 10px; margin: 0 0 16px; }
-      .btn { appearance: none; border: 1px solid #d1d5db; background: #ffffff; color: #111827; border-radius: 10px; padding: 10px 12px; font-weight: 800; font-size: 12px; cursor: pointer; }
-      .btn.primary { background: #111827; color: #ffffff; border-color: #111827; }
-      table { width: 100%; border-collapse: collapse; }
-      th, td { border-bottom: 1px solid #e5e7eb; padding: 10px 8px; font-size: 12px; }
-      th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: #6b7280; }
-      @media print { body { padding: 0; } .actions, .hint { display: none; } }
-    </style>
-  </head>
-  <body>
-    <h1>Selected transactions (${rows.length})</h1>
-    <p class="hint">This page opens your browser's print dialog. Choose <strong>Save as PDF</strong> to download. If it doesn't open automatically, click <strong>Print / Save as PDF</strong> or press <strong>Ctrl+P</strong>.</p>
-    <div class="actions">
-      <button class="btn primary" type="button" id="printBtn">Print / Save as PDF</button>
-      <button class="btn" type="button" id="closeBtn">Close tab</button>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>ID</th>
-          <th>Date</th>
-          <th>Cash Box</th>
-          <th>Contact</th>
-          <th>Contact ID</th>
-          <th style="text-align:right;">Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${tableRows}
-      </tbody>
-    </table>
-    <script>
-      const printBtn = document.getElementById('printBtn');
-      const closeBtn = document.getElementById('closeBtn');
-      if (printBtn) printBtn.addEventListener('click', () => window.print());
-      if (closeBtn) closeBtn.addEventListener('click', () => window.close());
-      window.addEventListener('load', () => { setTimeout(() => window.print(), 150); });
-    <\/script>
-  </body>
-</html>`);
-            w.document.close();
-            try { w.focus(); } catch (_) {}
+            const tbodyEl = document.getElementById(`${overlayId}Body`);
+            const countEl = document.getElementById(`${overlayId}Count`);
+            if (countEl) countEl.textContent = String(rows.length);
+            if (tbodyEl) {
+                tbodyEl.innerHTML = rows.map((r) => `
+                  <tr>
+                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;">${escapeHtml(r.type)}</td>
+                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;font-weight:900;">${escapeHtml(r.id)}</td>
+                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;">${escapeHtml(r.date)}</td>
+                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;">${escapeHtml(r.cashBox)}</td>
+                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;">${escapeHtml(r.contact)}</td>
+                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;">${escapeHtml(r.contactId)}</td>
+                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;text-align:right;font-weight:900;">${escapeHtml(r.amount)}</td>
+                  </tr>
+                `).join('');
+            }
+
+            const close = () => {
+                overlay.style.display = 'none';
+                try { document.body.classList.remove('spendnote-bulk-pdf-open'); } catch (_) {}
+            };
+
+            const printBtn = document.getElementById(`${overlayId}Print`);
+            const closeBtn = document.getElementById(`${overlayId}Close`);
+
+            if (printBtn) {
+                printBtn.onclick = () => {
+                    window.print();
+                };
+            }
+            if (closeBtn) {
+                closeBtn.onclick = close;
+            }
+
+            overlay.onclick = (e) => {
+                const panel = document.getElementById(`${overlayId}Panel`);
+                if (panel && e.target === overlay) close();
+            };
+
+            const afterPrintHandler = () => close();
+            window.removeEventListener('afterprint', afterPrintHandler);
+            window.addEventListener('afterprint', afterPrintHandler, { once: true });
+
+            overlay.style.display = 'block';
+            try { document.body.classList.add('spendnote-bulk-pdf-open'); } catch (_) {}
         }
 
         const urlParams = new URLSearchParams(window.location.search);
