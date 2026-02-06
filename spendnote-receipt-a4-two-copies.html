@@ -216,12 +216,12 @@ body {
 
 /* CUT BAND */
 .cut-band {
-  height: 8mm;              /* more space */
+  height: 6mm;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  font-size: 7pt;
+  font-size: 7.5pt;
   color: #666;
   clear: both;
 }
@@ -1041,6 +1041,10 @@ body {
           } else {
             setTextAll('.contact-id', '');
             document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = 'none'));
+          }
+
+          if (displayId) {
+            document.title = displayId;
           }
 
           try {
