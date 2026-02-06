@@ -569,9 +569,12 @@ async function downloadReceiptPdf() {
     const pageW = pdf.internal.pageSize.getWidth();
     const pageH = pdf.internal.pageSize.getHeight();
 
-    const marginX = 0;
-    const marginTop = 0;
-    const marginBottom = 0;
+    pdf.setFillColor(255, 255, 255);
+    pdf.rect(0, 0, pageW, pageH, 'F');
+
+    const marginX = 10;
+    const marginTop = 10;
+    const marginBottom = 10;
     const targetW = pageW - marginX * 2;
     const targetH = pageH - marginTop - marginBottom;
 
@@ -583,7 +586,7 @@ async function downloadReceiptPdf() {
     }
 
     const x = marginX + (targetW - renderW) / 2;
-    const y = marginTop;
+    const y = marginTop + (targetH - renderH) / 2;
     pdf.addImage(imgData, 'PNG', x, y, renderW, renderH, undefined, 'FAST');
 
     const displayId = document.title || 'receipt';
