@@ -12,7 +12,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
 
-## Current state (last updated: 2026-02-06 00:01)
+## Current state (last updated: 2026-02-06 03:06)
 - **Dashboard**
   - Transaction modal works again (fixed duplicate modal JS load + ensured submit handler binds).
   - **Save to Contacts** toggle exists (no auto-save by default).
@@ -79,15 +79,18 @@ If a chat thread freezes / context is lost: in the new thread say:
 - **User Settings (Profile) / Avatar** ✅
   - Profile section redesigned.
   - Avatar upload + remove works.
-  - Monogram avatar supports a modern preset color palette.
+  - Monogram avatar uses **outline style** (neutral fill, colored ring + colored letters).
+  - Monogram palette updated to a **softer** selection (less saturated).
   - Avatar personalization persistence (client-side):
     - `spendnote.user.avatar.v1`
     - `spendnote.user.avatarColor.v1`
+    - `spendnote.user.fullName.v1`
   - Nav avatar refresh is robust across pages (waits for auth/nav load).
   - Removed colored ring/border around avatars (neutral border only).
 
 - **Tables (Created by avatar)** ✅
   - Dashboard + Transaction History tables use saved avatar image/color (no hardcoded green SVG).
+  - Dashboard falls back to the current user's saved full name when `created_by_user_name` is missing.
 
 - **Duplicate transaction** ✅
   - Duplicate always uses the **current date** (today), not the original transaction date.
@@ -130,7 +133,11 @@ If a chat thread freezes / context is lost: in the new thread say:
 - `ede2407` Duplicate: always use current date and generate new receipt
 - `aae2c3f` Unify table action button borders to dashboard thickness
 - `1d525a7` Cash Box Detail: use 2px brand green border for action button
-- `26a241a` Settings: add nicer avatar color palette
+- `b23733c` Nav: stop inline coloring and ensure avatar renders on Settings
+- `c54d16d` Nav avatar: use saved full name initials for fallback monogram
+- `5fc9f00` Monogram avatars: outline ring + colored initials
+- `b6ca13c` Avatar: soften monogram color palette
+- `4487807` Dashboard: created-by avatar fallback uses current user name
 
 ## Next focus (pick one)
 - **A)** Implement end-to-end transaction create flow + robust error handling (Supabase insert + balance update)
@@ -143,7 +150,6 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Dashboard modal: cash box selection does not propagate to the dashboard state.
   - CSV export still uses internal IDs instead of display IDs.
 - **Medium**
-  - Avatar image should not show a colored highlight/ring.
   - Table column widths need adjustment.
   - Navigation underline styling is still inconsistent.
   - "Save to Contacts" checkbox: add a short inline hint ("so you can reuse it later").

@@ -56,8 +56,10 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 - The user avatar shown in the navigation and tables can be customized on `spendnote-user-settings.html`.
 - Current persistence is **client-side** (localStorage):
   - `spendnote.user.avatar.v1` (uploaded image as data URL)
-  - `spendnote.user.avatarColor.v1` (monogram background color)
+  - `spendnote.user.avatarColor.v1` (monogram accent color)
+  - `spendnote.user.fullName.v1` (used to render initials immediately)
 - If no image is uploaded, the UI renders a monogram avatar using the saved color.
+- Monogram style is **outline** (neutral fill, colored ring + colored letters).
 
 ### Create a transaction / receipt (Dashboard modal)
 
@@ -468,6 +470,10 @@ This repo is designed to work as a static deployment.
   - You are not logged in, or session expired (expected when tab/browser closed).
 - **Foreign key / RLS errors on inserts**
   - Ensure a `public.profiles` row exists for the auth user.
+
+- **Changes to JS/CSS don’t show up**
+  - This repo uses immutable caching for `/assets/*` in `vercel.json`.
+  - When you update files under `assets/`, bump the `?v=` query param in the consuming HTML page(s).
 
 ## “New chat starter” (so you don’t need to re-explain)
 
