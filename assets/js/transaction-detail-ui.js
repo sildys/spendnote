@@ -584,6 +584,10 @@ html, body { height: auto !important; overflow: auto !important; }
                     `<tr><td style="padding:10px 8px;border-bottom:1px solid #f0f0f0;font-size:13px;">${safeText(it.description, '—')}</td><td style="padding:10px 8px;border-bottom:1px solid #f0f0f0;font-size:13px;text-align:right;font-weight:700;">${formatMoney(it.amount)}</td></tr>`
                 ).join('');
 
+                const total = formatMoney(tx.amount);
+                const notesText = safeText(tx.notes, '');
+                const notesHtml = notesText ? `<div style="background:#f0f9ff;border-left:4px solid #059669;padding:16px;border-radius:4px;margin-bottom:20px;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#666;margin-bottom:8px;">Notes</div><div style="font-size:13px;color:#333;line-height:1.6;">${notesText}</div></div>` : '';
+
                 const pdfParams = new URLSearchParams();
                 pdfParams.set('demo', '1');
                 pdfParams.set('download', '1');
@@ -630,10 +634,6 @@ html, body { height: auto !important; overflow: auto !important; }
                 if (currentTxIsVoided) pdfParams.set('void', '1');
 
                 const pdfUrl = `${window.location.origin}/spendnote-pdf-receipt.html?${pdfParams.toString()}`;
-
-                const total = formatMoney(tx.amount);
-                const notesText = safeText(tx.notes, '');
-                const notesHtml = notesText ? `<div style="background:#f0f9ff;border-left:4px solid #059669;padding:16px;border-radius:4px;margin-bottom:20px;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#666;margin-bottom:8px;">Notes</div><div style="font-size:13px;color:#333;line-height:1.6;">${notesText}</div></div>` : '';
 
                 const isVoided = tx.status === 'voided';
                 const voidWatermark = isVoided ? `<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:86px;font-weight:900;letter-spacing:4px;color:rgba(120,120,120,0.12);text-transform:uppercase;pointer-events:none;z-index:3;">VOID</div>` : '';
