@@ -12,7 +12,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
 
-## Current state (last updated: 2026-02-06 22:45)
+## Current state (last updated: 2026-02-06 22:54)
 - **Dashboard** ✅
   - Transaction modal fully wired to Supabase:
     - **Transaction create** via `db.transactions.create()` with full payload
@@ -32,6 +32,7 @@ If a chat thread freezes / context is lost: in the new thread say:
     - `#` (active tx count)
     - `Boxes` dot list
     - `Last Tx` (ID + date)
+  - Verification: Contacts List logs stats source (`rpc` vs `scan`) and stores it in `window.__spendnoteContactsStatsSource`.
 - **Transaction History** ✅
   - Loads from Supabase (server-side pagination + filters).
   - Does **not** auto-filter by the previously selected Cash Box (dashboard active cash box).

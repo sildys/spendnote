@@ -278,6 +278,8 @@ The Contacts List avoids loading thousands of transactions on page load by using
 
 If the RPC is not available yet in a given Supabase project, the UI falls back to a client-side scan.
 
+Verification note: the Contacts List logs the stats source to the console (`rpc` vs `scan`) and stores it in `window.__spendnoteContactsStatsSource`.
+
 ### Current gaps / not implemented yet
 
 - Contacts cash box filtering / cash box ID handling is not finished yet.
