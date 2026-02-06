@@ -346,7 +346,15 @@ function loadRecentTransactionsSync(transactions) {
                     minute: '2-digit'
                 });
 
-                const createdByName = tx.created_by_user_name || tx.created_by || '—';
+                let createdByName = tx.created_by_user_name || tx.created_by || '';
+                if (!createdByName || String(createdByName).trim() === '—') {
+                    try {
+                        createdByName = localStorage.getItem('spendnote.user.fullName.v1') || '';
+                    } catch (_) {
+                        createdByName = '';
+                    }
+                }
+                createdByName = String(createdByName || '').trim() || '—';
                 const avatarUrl = getCreatedByAvatarUrl(createdByName);
 
                 const contactName = tx.contact?.name || tx.contact_name || '';
