@@ -5,6 +5,10 @@ let currentCashBoxId = null;
 let currentCashBoxData = null;
 let hasInitialized = false;
 
+function isUuid(value) {
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value || ''));
+}
+
 function getReceiptFormatStorageKey(cashBoxId) {
     const id = String(cashBoxId || '').trim();
     if (!id) return '';
@@ -268,10 +272,16 @@ async function initCashBoxSettings() {
         if (hasInitialized) return;
         hasInitialized = true;
 
-        // Check if we're in edit mode (URL has id parameter)
         const urlParams = new URLSearchParams(window.location.search);
-        currentCashBoxId = urlParams.get('id');
+        const idRaw = urlParams.get('id') || urlParams.get('cashBoxId');
+        currentCashBoxId = isUuid(idRaw) ? String(idRaw).trim() : null;
         
+        if (idRaw && !currentCashBoxId) {
+            alert('Invalid Cash Box ID.');
+            window.location.replace('spendnote-cash-box-list.html');
+            return;
+        }
+
         if (currentCashBoxId) {
             // Edit mode - load existing cash box
             isEditMode = true;
