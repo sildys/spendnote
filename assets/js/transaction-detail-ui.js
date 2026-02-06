@@ -589,6 +589,7 @@ html, body { height: auto !important; overflow: auto !important; }
                 const notesHtml = notesText ? `<div style="background:#f0f9ff;border-left:4px solid #059669;padding:16px;border-radius:4px;margin-bottom:20px;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#666;margin-bottom:8px;">Notes</div><div style="font-size:13px;color:#333;line-height:1.6;">${notesText}</div></div>` : '';
 
                 const pdfParams = new URLSearchParams();
+                pdfParams.set('v', 'receipt-20260206-23');
                 pdfParams.set('demo', '1');
                 pdfParams.set('download', '1');
                 pdfParams.set('preview', '0');

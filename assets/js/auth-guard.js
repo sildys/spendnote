@@ -4,10 +4,11 @@
 (async function() {
     try {
         const path = String(window.location.pathname || '').toLowerCase();
+        const file = path.split('/').filter(Boolean).pop() || '';
         const isReceiptTemplate =
-            path.endsWith('/spendnote-pdf-receipt.html') ||
-            path.endsWith('/spendnote-email-receipt.html') ||
-            path.endsWith('/spendnote-receipt-a4-two-copies.html');
+            file.startsWith('spendnote-') &&
+            file.includes('receipt') &&
+            (file.includes('pdf') || file.includes('email') || file.includes('a4'));
         const sp = new URLSearchParams(window.location.search);
         const hasPublicToken = sp.has('publicToken');
         const isDemo = sp.get('demo') === '1';
