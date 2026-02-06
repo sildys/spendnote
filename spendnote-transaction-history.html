@@ -921,13 +921,13 @@
         <div class="bulk-actions" id="bulkActions">
             <span class="bulk-actions-text"><strong><span id="selectedCount">0</span> selected</strong></span>
             <div class="bulk-actions-buttons">
-                <button class="bulk-action-btn" id="bulkPrint" disabled title="Coming soon">
-                    <i class="fas fa-print"></i>
-                    Print
+                <button class="bulk-action-btn" id="bulkExportCsv" title="Export selected rows to CSV">
+                    <i class="fas fa-file-csv"></i>
+                    CSV
                 </button>
-                <button class="bulk-action-btn" id="bulkEmail" disabled title="Coming soon">
-                    <i class="fas fa-envelope"></i>
-                    Email
+                <button class="bulk-action-btn" id="bulkExportPdf" title="Export selected rows to PDF (opens print dialog)">
+                    <i class="fas fa-file-pdf"></i>
+                    PDF
                 </button>
                 <button class="bulk-action-btn delete" id="bulkDelete" title="Void selected transactions">
                     <i class="fas fa-ban"></i>
@@ -1051,6 +1051,6 @@
     <script src="assets/js/nav-loader.js?v=8"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=20"></script>
-    <script src="assets/js/transaction-history-data.js?v=46"></script>
+    <script src="assets/js/transaction-history-data.js?v=47"></script>
 </body>
 </html>

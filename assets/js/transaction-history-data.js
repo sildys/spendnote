@@ -639,6 +639,128 @@
             });
         }
 
+        function exportSelectedCsv() {
+            const selected = new Set(getSelectedTxIdsFromTable(tbody));
+            if (!selected.size) return;
+
+            const rows = qsa('tr', tbody)
+                .filter((tr) => {
+                    const id = safeText(tr.querySelector('.row-checkbox')?.dataset?.txId, '').trim();
+                    return id && selected.has(id);
+                });
+
+            const header = [
+                'Transaction ID',
+                'Type',
+                'Date',
+                'Cash Box',
+                'Contact',
+                'Contact ID',
+                'Amount'
+            ].join(',');
+
+            const lines = [header];
+            rows.forEach((tr) => {
+                const type = safeText(tr.querySelector('.tx-type-pill .quick-label')?.textContent, '');
+                const id = safeText(tr.querySelector('.tx-id')?.textContent, '');
+                const date = safeText(tr.querySelector('.tx-date')?.textContent, '');
+                const cashBox = safeText(tr.querySelector('.cashbox-badge')?.textContent, '');
+                const contact = safeText(tr.querySelector('.tx-contact')?.textContent, '');
+                const contactId = safeText(tr.querySelector('.tx-contact-id')?.textContent, '');
+                const amount = safeText(tr.querySelector('.tx-amount')?.textContent, '');
+                lines.push([
+                    escapeCsv(id),
+                    escapeCsv(type),
+                    escapeCsv(date),
+                    escapeCsv(cashBox),
+                    escapeCsv(contact),
+                    escapeCsv(contactId),
+                    escapeCsv(amount)
+                ].join(','));
+            });
+
+            downloadTextFile(lines.join('\n'), 'transactions-selected.csv', 'text/csv;charset=utf-8');
+        }
+
+        function exportSelectedPdf() {
+            const selected = new Set(getSelectedTxIdsFromTable(tbody));
+            if (!selected.size) return;
+
+            const rows = qsa('tr', tbody)
+                .filter((tr) => {
+                    const id = safeText(tr.querySelector('.row-checkbox')?.dataset?.txId, '').trim();
+                    return id && selected.has(id);
+                })
+                .map((tr) => ({
+                    type: safeText(tr.querySelector('.tx-type-pill .quick-label')?.textContent, ''),
+                    id: safeText(tr.querySelector('.tx-id')?.textContent, ''),
+                    date: safeText(tr.querySelector('.tx-date')?.textContent, ''),
+                    cashBox: safeText(tr.querySelector('.cashbox-badge')?.textContent, ''),
+                    contact: safeText(tr.querySelector('.tx-contact')?.textContent, ''),
+                    contactId: safeText(tr.querySelector('.tx-contact-id')?.textContent, ''),
+                    amount: safeText(tr.querySelector('.tx-amount')?.textContent, '')
+                }));
+
+            const w = window.open('', '_blank', 'noopener,noreferrer');
+            if (!w) {
+                alert('Popup blocked. Please allow popups for PDF export.');
+                return;
+            }
+
+            const tableRows = rows.map((r) => `
+                <tr>
+                    <td>${escapeHtml(r.type)}</td>
+                    <td>${escapeHtml(r.id)}</td>
+                    <td>${escapeHtml(r.date)}</td>
+                    <td>${escapeHtml(r.cashBox)}</td>
+                    <td>${escapeHtml(r.contact)}</td>
+                    <td>${escapeHtml(r.contactId)}</td>
+                    <td style="text-align:right;">${escapeHtml(r.amount)}</td>
+                </tr>
+            `).join('');
+
+            w.document.open();
+            w.document.write(`<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Transactions export</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; padding: 24px; }
+      h1 { font-size: 16px; margin: 0 0 12px; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { border-bottom: 1px solid #e5e7eb; padding: 10px 8px; font-size: 12px; }
+      th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: #6b7280; }
+      @media print { body { padding: 0; } }
+    </style>
+  </head>
+  <body>
+    <h1>Selected transactions (${rows.length})</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Cash Box</th>
+          <th>Contact</th>
+          <th>Contact ID</th>
+          <th style="text-align:right;">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRows}
+      </tbody>
+    </table>
+    <script>
+      window.addEventListener('load', () => { setTimeout(() => window.print(), 50); });
+    <\/script>
+  </body>
+</html>`);
+            w.document.close();
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const urlCashBoxIdRaw = urlParams.get('cashBoxId') || urlParams.get('id');
         const urlCashBoxId = isUuid(urlCashBoxIdRaw) ? urlCashBoxIdRaw : null;
@@ -866,6 +988,8 @@
             const bulkActions = qs('#bulkActions');
             const selectedCount = qs('#selectedCount');
             const bulkDeleteBtn = qs('#bulkDelete');
+            const bulkExportCsvBtn = qs('#bulkExportCsv');
+            const bulkExportPdfBtn = qs('#bulkExportPdf');
             if (selectedCount) selectedCount.textContent = String(count);
             if (bulkActions) {
                 bulkActions.classList.toggle('show', count > 0);
@@ -873,6 +997,8 @@
             if (bulkDeleteBtn && bulkDeleteBtn.dataset.busy !== '1') {
                 bulkDeleteBtn.disabled = count === 0;
             }
+            if (bulkExportCsvBtn) bulkExportCsvBtn.disabled = count === 0;
+            if (bulkExportPdfBtn) bulkExportPdfBtn.disabled = count === 0;
         }
 
         if (tbody) {
@@ -916,6 +1042,21 @@
             setTimeout(() => URL.revokeObjectURL(url), 500);
         }
 
+        function getSelectedTxIdsFromTable(tbody) {
+            return qsa('.row-checkbox:checked', tbody)
+                .map((cb) => safeText(cb?.dataset?.txId, '').trim())
+                .filter(Boolean);
+        }
+
+        function escapeHtml(value) {
+            return String(value === undefined || value === null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
         qsa('#transactionsTable thead th.sortable').forEach((th, idx) => {
             th.addEventListener('click', () => {
                 const key = sortMap[idx + 1];
@@ -938,6 +1079,15 @@
         const exportCsvBtn = qs('#exportCSV');
         const exportPdfBtn = qs('#exportPDF');
         const bulkDeleteBtn = qs('#bulkDelete');
+        const bulkExportCsvBtn = qs('#bulkExportCsv');
+        const bulkExportPdfBtn = qs('#bulkExportPdf');
+
+        if (bulkExportCsvBtn) {
+            bulkExportCsvBtn.addEventListener('click', exportSelectedCsv);
+        }
+        if (bulkExportPdfBtn) {
+            bulkExportPdfBtn.addEventListener('click', exportSelectedPdf);
+        }
 
         if (exportPdfBtn) {
             exportPdfBtn.addEventListener('click', () => {
@@ -947,9 +1097,7 @@
 
         if (bulkDeleteBtn) {
             bulkDeleteBtn.addEventListener('click', async () => {
-                const selected = qsa('.row-checkbox:checked', tbody)
-                    .map((cb) => safeText(cb?.dataset?.txId, '').trim())
-                    .filter(Boolean);
+                const selected = getSelectedTxIdsFromTable(tbody);
 
                 if (!selected.length) return;
 
