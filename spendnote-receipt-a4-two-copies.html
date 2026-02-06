@@ -718,7 +718,7 @@ body {
 
     const rowsSource = (() => {
       const fallback = items.length ? items : [{ description: '—', amount: totalValue }];
-      if (!isItemsSingle) return fallback.slice(0, 4);
+      if (!isItemsSingle) return fallback;
       const firstDesc = safeText(fallback[0]?.description, '—');
       return [{ description: firstDesc, amount: totalValue }];
     })();
