@@ -905,6 +905,33 @@ var db = {
         },
 
         async create(transaction) {
+            // Prefer atomic RPC: insert transaction + enforce balance rules under a row lock.
+            // Fallback to direct insert if RPC is not installed.
+            try {
+                const rpc = await supabaseClient.rpc('spendnote_create_transaction', { p_tx: transaction });
+                if (!rpc.error) {
+                    const row = Array.isArray(rpc.data) ? rpc.data[0] : rpc.data;
+                    const id = row?.transaction_id || row?.transactionId || row?.id;
+                    if (id) {
+                        return { success: true, data: { id } };
+                    }
+                    return { success: false, error: 'Transaction created but no id returned.' };
+                }
+
+                const msg = String(rpc.error?.message || '');
+                const code = String(rpc.error?.code || '');
+                const isMissingRpc = code === '42883' || msg.toLowerCase().includes('function') && msg.toLowerCase().includes('does not exist');
+                if (!isMissingRpc) {
+                    if (msg.includes('INSUFFICIENT_BALANCE')) {
+                        return { success: false, error: 'INSUFFICIENT_BALANCE' };
+                    }
+                    console.error('Error creating transaction (RPC):', rpc.error);
+                    return { success: false, error: rpc.error.message || 'Failed to create transaction.' };
+                }
+            } catch (e) {
+                // ignore and fallback below
+            }
+
             const { data, error } = await supabaseClient
                 .from('transactions')
                 .insert([transaction])

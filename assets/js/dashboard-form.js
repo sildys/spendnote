@@ -404,6 +404,9 @@ function initTransactionForm() {
                 const raw = String(result?.error || '').trim();
                 const lower = raw.toLowerCase();
                 let msg = raw || 'Failed to create transaction.';
+                if (raw === 'INSUFFICIENT_BALANCE' || lower.includes('insufficient_balance')) {
+                    msg = 'Not enough funds in this Cash Box.';
+                } else
                 if (lower.includes('permission denied') || lower.includes('row level security') || lower.includes('rls')) {
                     msg = 'Permission denied (RLS). Please log out and log in again. If the problem persists, your profile row may be missing.';
                 } else if (lower.includes('foreign key') && (lower.includes('profiles') || lower.includes('user_id'))) {
