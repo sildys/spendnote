@@ -93,12 +93,10 @@
             const txSeqStr = String(txSeq).padStart(3, '0');
             return `SN${cbSeq}-${txSeqStr}`;
         }
-        // Fallback to receipt_number or truncated UUID
+        // Fallback to receipt_number
         const receipt = safeText(tx?.receipt_number, '');
         if (receipt) return receipt;
-        const id = safeText(tx?.id, '');
-        if (!id) return '—';
-        return id.length > 10 ? `${id.slice(0, 8)}…` : id;
+        return '—';
     }
 
     function getContactDisplayId(tx) {
