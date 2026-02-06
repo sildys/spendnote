@@ -649,69 +649,78 @@
                 overlay.id = overlayId;
                 overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,0.6);display:none;padding:20px;overflow-y:auto;';
                 overlay.innerHTML = `
-                  <div id="${overlayId}Panel" style="max-width:900px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 25px 60px rgba(0,0,0,0.25);overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-                    <!-- Header -->
-                    <div style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);padding:24px 28px;color:#fff;">
-                      <div style="display:flex;align-items:center;gap:14px;">
-                        <div style="width:42px;height:42px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;">
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <div id="${overlayId}Panel" style="max-width:1000px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,0.2);overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+                    <!-- Header with Logo -->
+                    <div style="background:#fff;padding:24px 32px;border-bottom:2px solid #e2e8f0;">
+                      <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                          <div style="width:48px;height:48px;background:linear-gradient(135deg,#0f172a 0%,#334155 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(15,23,42,0.3);">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                          </div>
+                          <div>
+                            <div style="font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-0.02em;">SpendNote</div>
+                            <div style="font-size:12px;color:#64748b;font-weight:600;margin-top:1px;">Transaction Report</div>
+                          </div>
                         </div>
-                        <div>
-                          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;opacity:0.7;">SpendNote Report</div>
-                          <div id="${overlayId}Title" style="font-size:20px;font-weight:800;margin-top:2px;"></div>
-                        </div>
-                        <div style="margin-left:auto;text-align:right;">
-                          <div id="${overlayId}Brand" style="font-size:11px;opacity:0.7;"></div>
-                          <div style="font-size:13px;font-weight:700;margin-top:2px;"><span id="${overlayId}Count">0</span> transactions</div>
+                        <div style="text-align:right;">
+                          <div id="${overlayId}Brand" style="font-size:11px;color:#94a3b8;font-weight:600;"></div>
+                          <div style="font-size:14px;font-weight:700;color:#0f172a;margin-top:2px;"><span id="${overlayId}Count">0</span> transactions</div>
                         </div>
                       </div>
                     </div>
+                    <!-- Report Title -->
+                    <div style="background:linear-gradient(to bottom,#f8fafc 0%,#fff 100%);padding:20px 32px;border-bottom:1px solid #e2e8f0;">
+                      <div id="${overlayId}Title" style="font-size:18px;font-weight:700;color:#0f172a;"></div>
+                    </div>
                     <!-- Filter Info -->
-                    <div id="${overlayId}MetaWrap" style="background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:16px 28px;">
-                      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:10px;">Applied Filters</div>
-                      <div id="${overlayId}Meta" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 20px;"></div>
+                    <div id="${overlayId}MetaWrap" style="background:#f8fafc;padding:20px 32px;border-bottom:1px solid #e2e8f0;">
+                      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#64748b;margin-bottom:12px;">Applied Filters</div>
+                      <div id="${overlayId}Meta" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px 24px;"></div>
                     </div>
                     <!-- Hint (screen only) -->
-                    <div id="${overlayId}Hint" style="background:#fffbeb;border-bottom:1px solid #fde68a;padding:12px 28px;display:flex;align-items:center;gap:10px;">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                      <span style="font-size:12px;color:#92400e;">Click <strong>Print / Save as PDF</strong>, then choose <strong>Save as PDF</strong> in the print dialog. <span style="opacity:0.7;">(Shortcut: Ctrl+P)</span></span>
+                    <div id="${overlayId}Hint" style="background:#fef3c7;border-bottom:1px solid #fde68a;padding:14px 32px;display:flex;align-items:center;gap:12px;">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                      <span style="font-size:13px;color:#92400e;font-weight:500;">Click <strong>Print / Save as PDF</strong> below, then choose <strong>Save as PDF</strong> in your browser's print dialog.</span>
                     </div>
                     <!-- Actions -->
-                    <div id="${overlayId}Actions" style="padding:16px 28px;border-bottom:1px solid #e2e8f0;display:flex;gap:10px;align-items:center;">
-                      <button type="button" id="${overlayId}Print" style="appearance:none;border:none;background:linear-gradient(135deg,#0f172a 0%,#334155 100%);color:#fff;border-radius:10px;padding:11px 20px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(15,23,42,0.2);">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                    <div id="${overlayId}Actions" style="padding:18px 32px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;gap:12px;align-items:center;">
+                      <button type="button" id="${overlayId}Print" style="appearance:none;border:none;background:#0f172a;color:#fff;border-radius:8px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(15,23,42,0.15);transition:all 0.2s;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
                         Print / Save as PDF
                       </button>
-                      <button type="button" id="${overlayId}Close" style="appearance:none;border:1px solid #cbd5e1;background:#fff;color:#475569;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;">Close</button>
+                      <button type="button" id="${overlayId}Close" style="appearance:none;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:8px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;">Close</button>
                     </div>
                     <!-- Table -->
-                    <div id="${overlayId}Content" style="padding:0 28px 24px;max-height:50vh;overflow:auto;">
-                      <table style="width:100%;border-collapse:collapse;margin-top:16px;">
+                    <div id="${overlayId}Content" style="padding:24px 32px;max-height:55vh;overflow:auto;background:#fff;">
+                      <table style="width:100%;border-collapse:collapse;">
                         <thead>
-                          <tr style="background:#f1f5f9;">
-                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Type</th>
-                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">ID</th>
-                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Date</th>
-                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Cash Box</th>
-                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Contact</th>
-                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Contact ID</th>
-                            <th style="text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Amount</th>
+                          <tr style="background:#f1f5f9;border-radius:8px;">
+                            <th style="text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;padding:14px 12px;border-bottom:2px solid #cbd5e1;">Type</th>
+                            <th style="text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;padding:14px 12px;border-bottom:2px solid #cbd5e1;">ID</th>
+                            <th style="text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;padding:14px 12px;border-bottom:2px solid #cbd5e1;">Date</th>
+                            <th style="text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;padding:14px 12px;border-bottom:2px solid #cbd5e1;">Cash Box</th>
+                            <th style="text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;padding:14px 12px;border-bottom:2px solid #cbd5e1;">Contact</th>
+                            <th style="text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;padding:14px 12px;border-bottom:2px solid #cbd5e1;">Contact ID</th>
+                            <th style="text-align:right;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;padding:14px 12px;border-bottom:2px solid #cbd5e1;">Amount</th>
                           </tr>
                         </thead>
                         <tbody id="${overlayId}Body"></tbody>
                       </table>
                     </div>
                     <!-- Summary -->
-                    <div id="${overlayId}Summary" style="padding:0 28px 24px;"></div>
+                    <div id="${overlayId}Summary" style="padding:0 32px 28px;background:#fff;"></div>
                     <!-- Footer -->
-                    <div id="${overlayId}Footer" style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;">
-                      <div style="display:flex;align-items:center;gap:8px;">
-                        <div style="width:22px;height:22px;background:#0f172a;border-radius:5px;display:flex;align-items:center;justify-content:center;">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <div id="${overlayId}Footer" style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;">
+                      <div style="display:flex;align-items:center;gap:10px;">
+                        <div style="width:28px;height:28px;background:#0f172a;border-radius:6px;display:flex;align-items:center;justify-content:center;">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                         </div>
-                        <span style="font-size:12px;font-weight:700;color:#334155;">SpendNote</span>
+                        <div>
+                          <div style="font-size:13px;font-weight:700;color:#0f172a;">SpendNote</div>
+                          <div style="font-size:10px;color:#64748b;margin-top:-1px;">Cash management made simple</div>
+                        </div>
                       </div>
-                      <div style="font-size:11px;color:#64748b;">Cash management made simple</div>
+                      <div style="font-size:11px;color:#94a3b8;">spendnote.com</div>
                     </div>
                   </div>
                 `;
@@ -750,7 +759,7 @@
                     metaEl.innerHTML = metaLines.map((line) => {
                         const [label, ...rest] = line.split(':');
                         const value = rest.join(':').trim() || '—';
-                        return `<div style="display:flex;gap:6px;font-size:12px;"><span style="color:#64748b;white-space:nowrap;">${escapeHtml(label)}:</span><span style="font-weight:600;color:#0f172a;">${escapeHtml(value)}</span></div>`;
+                        return `<div style="display:flex;gap:8px;font-size:12px;line-height:1.6;"><span style="color:#64748b;font-weight:600;min-width:100px;">${escapeHtml(label)}</span><span style="font-weight:700;color:#0f172a;">${escapeHtml(value)}</span></div>`;
                     }).join('');
                 }
             }
