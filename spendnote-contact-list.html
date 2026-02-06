@@ -807,41 +807,118 @@
                     : Promise.resolve([])
             ]);
 
-            let transactions = [];
-            const contactNameMap = new Map(); // name -> contact id
-            (Array.isArray(contacts) ? contacts : []).forEach((c) => {
-                const name = String(c?.name || '').trim().toLowerCase();
-                const id = String(c?.id || '').trim();
-                if (name && id) contactNameMap.set(name, id);
-            });
+            const statsByContactId = new Map();
 
-            try {
-                if (user && window.supabaseClient) {
-                    // Fetch all user transactions to match by contact_id OR contact_name
-                    const { data, error } = await window.supabaseClient
-                        .from('transactions')
-                        .select('id,cash_box_id,contact_id,contact_name,type,receipt_number,transaction_date,created_at,cash_box_sequence,tx_sequence_in_box,status,is_system')
-                        .eq('user_id', user.id)
-                        .or('is_system.is.null,is_system.eq.false')
-                        .order('transaction_date', { ascending: false, nullsFirst: false })
-                        .order('created_at', { ascending: false, nullsFirst: false })
-                        .range(0, 4999);
-
-                    if (!error && data) {
-                        // For transactions without contact_id, try to match by contact_name
-                        transactions = data.map(tx => {
-                            if (!tx.contact_id && tx.contact_name) {
-                                const matchedId = contactNameMap.get(String(tx.contact_name || '').trim().toLowerCase());
-                                if (matchedId) {
-                                    return { ...tx, contact_id: matchedId };
-                                }
-                            }
-                            return tx;
-                        });
+            const loadStatsViaRpc = async () => {
+                if (!user || !window.supabaseClient) return false;
+                try {
+                    const { data, error } = await window.supabaseClient.rpc('spendnote_contacts_stats');
+                    if (error || !Array.isArray(data)) {
+                        return false;
                     }
+
+                    data.forEach((row) => {
+                        const cid = String(row?.contact_id || '').trim();
+                        if (!cid) return;
+
+                        const cashBoxIds = Array.isArray(row?.cash_box_ids) ? row.cash_box_ids : [];
+                        const lastTx = row?.last_tx_id ? {
+                            id: row.last_tx_id,
+                            cash_box_id: row.last_tx_cash_box_id,
+                            transaction_date: row.last_tx_transaction_date,
+                            created_at: row.last_tx_created_at,
+                            receipt_number: row.last_tx_receipt_number,
+                            cash_box_sequence: row.last_tx_cash_box_sequence,
+                            tx_sequence_in_box: row.last_tx_tx_sequence_in_box,
+                            status: row.last_tx_status
+                        } : null;
+
+                        const lastRaw = row?.last_tx_transaction_date || row?.last_tx_created_at;
+                        const lastDt = lastRaw ? new Date(lastRaw) : null;
+
+                        statsByContactId.set(cid, {
+                            count: Number(row?.tx_count) || 0,
+                            cashBoxIds: new Set(cashBoxIds.map((v) => String(v))),
+                            lastTx,
+                            lastDt: lastDt && Number.isFinite(lastDt.getTime()) ? lastDt : null
+                        });
+                    });
+
+                    return true;
+                } catch (_) {
+                    return false;
                 }
-            } catch (e) {
-                // ignore
+            };
+
+            const loadStatsViaScan = async () => {
+                let transactions = [];
+                const contactNameMap = new Map(); // name -> contact id
+                (Array.isArray(contacts) ? contacts : []).forEach((c) => {
+                    const name = String(c?.name || '').trim().toLowerCase();
+                    const id = String(c?.id || '').trim();
+                    if (name && id) contactNameMap.set(name, id);
+                });
+
+                try {
+                    if (user && window.supabaseClient) {
+                        const { data, error } = await window.supabaseClient
+                            .from('transactions')
+                            .select('id,cash_box_id,contact_id,contact_name,type,receipt_number,transaction_date,created_at,cash_box_sequence,tx_sequence_in_box,status,is_system')
+                            .eq('user_id', user.id)
+                            .or('is_system.is.null,is_system.eq.false')
+                            .order('transaction_date', { ascending: false, nullsFirst: false })
+                            .order('created_at', { ascending: false, nullsFirst: false })
+                            .range(0, 4999);
+
+                        if (!error && data) {
+                            transactions = data.map(tx => {
+                                if (!tx.contact_id && tx.contact_name) {
+                                    const matchedId = contactNameMap.get(String(tx.contact_name || '').trim().toLowerCase());
+                                    if (matchedId) {
+                                        return { ...tx, contact_id: matchedId };
+                                    }
+                                }
+                                return tx;
+                            });
+                        }
+                    }
+                } catch (_) {
+                    transactions = [];
+                }
+
+                (Array.isArray(transactions) ? transactions : []).forEach((tx) => {
+                    const contactId = String(tx?.contact_id || '').trim();
+                    if (!contactId) return;
+                    const status = String(tx?.status || 'active').toLowerCase();
+                    if (status !== 'active') return;
+
+                    let entry = statsByContactId.get(contactId);
+                    if (!entry) {
+                        entry = { count: 0, cashBoxIds: new Set(), lastTx: null, lastDt: null };
+                        statsByContactId.set(contactId, entry);
+                    }
+
+                    entry.count += 1;
+                    const cbId = String(tx?.cash_box_id || '').trim();
+                    if (cbId) {
+                        entry.cashBoxIds.add(cbId);
+                    }
+
+                    const dt = new Date(tx?.transaction_date || tx?.created_at || '');
+                    const t = dt.getTime();
+                    if (!Number.isFinite(t)) return;
+                    if (!entry.lastDt || t > entry.lastDt.getTime()) {
+                        entry.lastDt = dt;
+                        entry.lastTx = tx;
+                    }
+                });
+
+                return true;
+            };
+
+            const gotRpcStats = await loadStatsViaRpc();
+            if (!gotRpcStats) {
+                await loadStatsViaScan();
             }
 
             const cashBoxById = new Map((Array.isArray(cashBoxes) ? cashBoxes : []).map((cb) => [String(cb?.id || ''), cb]));
@@ -865,34 +942,6 @@
                     cashBoxFilter.value = previous;
                 }
             }
-
-            const statsByContactId = new Map();
-            (Array.isArray(transactions) ? transactions : []).forEach((tx) => {
-                const contactId = String(tx?.contact_id || '').trim();
-                if (!contactId) return;
-                const status = String(tx?.status || 'active').toLowerCase();
-                if (status !== 'active') return;
-
-                let entry = statsByContactId.get(contactId);
-                if (!entry) {
-                    entry = { count: 0, cashBoxIds: new Set(), lastTx: null, lastDt: null };
-                    statsByContactId.set(contactId, entry);
-                }
-
-                entry.count += 1;
-                const cbId = String(tx?.cash_box_id || '').trim();
-                if (cbId) {
-                    entry.cashBoxIds.add(cbId);
-                }
-
-                const dt = new Date(tx?.transaction_date || tx?.created_at || '');
-                const t = dt.getTime();
-                if (!Number.isFinite(t)) return;
-                if (!entry.lastDt || t > entry.lastDt.getTime()) {
-                    entry.lastDt = dt;
-                    entry.lastTx = tx;
-                }
-            });
 
             tableBody.innerHTML = '';
 
