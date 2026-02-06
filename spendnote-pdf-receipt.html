@@ -565,7 +565,7 @@ async function downloadReceiptPdf() {
 
     const imgData = canvas.toDataURL('image/png');
 
-    const pdf = new JsPDF({ orientation: 'p', unit: 'mm', format: 'legal' });
+    const pdf = new JsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
     const pageW = pdf.internal.pageSize.getWidth();
     const pageH = pdf.internal.pageSize.getHeight();
 
