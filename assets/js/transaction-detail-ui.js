@@ -45,7 +45,7 @@
             'email': 'spendnote-email-receipt.html'
         };
         const params = new URLSearchParams();
-        params.append('v', 'receipt-20260206-18');
+        params.append('v', 'receipt-20260206-19');
         if (txId) params.append('txId', txId);
 
         const addrOverride = String(overrideContactAddress || '').trim();
@@ -118,7 +118,8 @@
 
         reloadTimer = setTimeout(() => {
             reloadTimer = null;
-            applyReceiptUrlIfChanged(buildReceiptUrl(currentFormat));
+            const extra = currentFormat === 'pdf' ? { preview: '1', download: '0' } : null;
+            applyReceiptUrlIfChanged(buildReceiptUrl(currentFormat, extra));
         }, delay);
     }
 

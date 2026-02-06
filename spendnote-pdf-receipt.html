@@ -506,11 +506,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const itemsMode = String(urlParams.get('itemsMode') || '').toLowerCase();
 const isItemsSingle = itemsMode === 'single';
 
-const shouldAutoDownload = urlParams.get('download') === '1' || (
-  Boolean(urlParams.get('txId')) &&
-  urlParams.get('download') !== '0' &&
-  urlParams.get('preview') !== '1'
-);
+const shouldAutoDownload = urlParams.get('download') === '1' && urlParams.get('preview') !== '1';
 
 const EMPTY_ROW_HTML = '<tr class="empty-row"><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>';
 
@@ -574,16 +570,19 @@ async function downloadReceiptPdf() {
     const targetW = pageW - marginX * 2;
     const targetH = pageH - marginTop - marginBottom;
 
-    let renderW = targetW;
-    let renderH = (canvas.height * renderW) / canvas.width;
-    if (renderH > targetH) {
-      renderH = targetH;
-      renderW = (canvas.width * renderH) / canvas.height;
-    }
-    const x = marginX + (targetW - renderW) / 2;
+    const renderW = targetW;
+    const renderH = (canvas.height * renderW) / canvas.width;
+    const x = marginX;
     const y = marginTop;
 
-    pdf.addImage(imgData, 'PNG', x, y, renderW, renderH, undefined, 'FAST');
+    const pageCount = Math.max(1, Math.ceil(renderH / targetH));
+    for (let pageIndex = 0; pageIndex < pageCount; pageIndex++) {
+      if (pageIndex > 0) {
+        pdf.addPage();
+      }
+      const yOffset = y - pageIndex * targetH;
+      pdf.addImage(imgData, 'PNG', x, yOffset, renderW, renderH, undefined, 'FAST');
+    }
 
     const displayId = document.title || 'receipt';
     const fileName = `${toSafeFileName(displayId)}.pdf`;
