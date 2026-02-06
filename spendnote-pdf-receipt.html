@@ -207,6 +207,10 @@
       font-weight: 700;
       color: #000;
     }
+
+    .table-section tbody tr {
+      height: 44px;
+    }
     
     tr:last-child td {
       border-bottom: none;
@@ -573,6 +577,11 @@ try {
   if (btn) btn.addEventListener('click', downloadReceiptPdf);
 } catch (_) {}
 
+const shouldAutoDownload = urlParams.get('download') === '1' || (
+  Boolean(urlParams.get('txId')) &&
+  urlParams.get('download') !== '0' &&
+  urlParams.get('preview') !== '1'
+);
 const initialVoid = urlParams.get('void') === '1';
 window.__spendnoteReceiptVoid = initialVoid;
 if (initialVoid) {
@@ -804,9 +813,6 @@ if (isDemo) {
     if (shouldAutoDownload) {
       setTimeout(() => {
         downloadReceiptPdf();
-        setTimeout(() => {
-          try { window.close(); } catch (_) {}
-        }, 800);
       }, 150);
     }
   } catch (_) {}
@@ -1125,12 +1131,16 @@ if (urlParams.get('signatures') === '0') {
           if (shouldAutoDownload) {
             setTimeout(() => {
               downloadReceiptPdf();
-              setTimeout(() => {
-                try { window.close(); } catch (_) {}
-              }, 800);
             }, 150);
           }
         } catch (_) {}
+      } catch (_) {
+        // ignore
+      }
+    })();
+  </script>
+</body>
+</html>
       } catch (_) {
         // ignore
       }

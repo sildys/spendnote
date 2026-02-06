@@ -351,7 +351,7 @@ function initTransactionForm() {
                     };
 
                     const params = new URLSearchParams();
-                    params.set('v', 'print-20260206-14');
+                    params.set('v', 'print-20260206-16');
                     if (createdId) params.set('txId', createdId);
 
                     params.set('itemsMode', mode === 'quick' ? 'single' : 'full');
