@@ -107,6 +107,14 @@
         return '—';
     }
 
+    function getCashBoxDisplayId(cb) {
+        const seq = Number(cb?.sequence_number);
+        if (Number.isFinite(seq) && seq > 0) {
+            return `CB-${String(seq).padStart(3, '0')}`;
+        }
+        return safeText(cb?.name, '—');
+    }
+
     function ensureCashBoxSelectOptions(selectEl, cashBoxes, selectedId) {
         if (!selectEl) return;
         const existing = qsa('option', selectEl).map((o) => o.value);
@@ -1940,7 +1948,7 @@
                         escapeCsv(type),
                         escapeCsv(date),
                         escapeCsv(safeText(cb?.name, '')),
-                        escapeCsv(safeText(tx?.cash_box_id, '')),
+                        escapeCsv(getCashBoxDisplayId(cb)),
                         escapeCsv(currency),
                         escapeCsv(safeText(tx?.contact_name, '')),
                         escapeCsv(getContactDisplayId(tx)),
