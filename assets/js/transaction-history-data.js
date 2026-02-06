@@ -725,7 +725,7 @@
                         <div style="margin-left:auto;font-size:12px;color:#64748b;font-weight:800;">Selected: <span id="${overlayId}Count">0</span></div>
                       </div>
                     </div>
-                    <div style="padding:14px 18px 18px;max-height:72vh;overflow:auto;">
+                    <div id="${overlayId}Content" style="padding:14px 18px 18px;max-height:72vh;overflow:auto;">
                       <table style="width:100%;border-collapse:collapse;">
                         <thead>
                           <tr>
@@ -752,10 +752,12 @@
                 printStyle.id = printStyleId;
                 printStyle.textContent = `
                   @media print {
+                    @page { margin: 12mm; }
                     body * { visibility: hidden !important; }
                     #${overlayId}, #${overlayId} * { visibility: visible !important; }
-                    #${overlayId} { position: absolute !important; inset: 0 !important; background: #ffffff !important; padding: 0 !important; }
+                    #${overlayId} { position: static !important; inset: auto !important; background: #ffffff !important; padding: 0 !important; }
                     #${overlayId}Panel { box-shadow: none !important; border-radius: 0 !important; max-width: none !important; }
+                    #${overlayId}Content { max-height: none !important; overflow: visible !important; }
                     #${overlayId}Print, #${overlayId}Close { display: none !important; }
                   }
                 `;
