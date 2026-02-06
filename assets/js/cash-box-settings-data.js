@@ -5,6 +5,38 @@ let currentCashBoxId = null;
 let currentCashBoxData = null;
 let hasInitialized = false;
 
+function getReceiptFormatStorageKey(cashBoxId) {
+    const id = String(cashBoxId || '').trim();
+    if (!id) return '';
+    return `spendnote.cashBox.${id}.defaultReceiptFormat.v1`;
+}
+
+function applyReceiptFormatUi(format) {
+    const f = String(format || '').trim().toLowerCase();
+    if (f !== 'a4' && f !== 'pdf' && f !== 'email') return;
+    document.querySelectorAll('.format-btn').forEach((btn) => {
+        btn.classList.toggle('active', String(btn?.dataset?.format || '').toLowerCase() === f);
+    });
+}
+
+function bindReceiptFormatButtons() {
+    document.querySelectorAll('.format-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const format = String(btn?.dataset?.format || '').trim().toLowerCase();
+            if (format !== 'a4' && format !== 'pdf' && format !== 'email') return;
+            applyReceiptFormatUi(format);
+            if (!currentCashBoxId) return;
+            const key = getReceiptFormatStorageKey(currentCashBoxId);
+            if (!key) return;
+            try {
+                localStorage.setItem(key, format);
+            } catch (_) {
+                // ignore
+            }
+        });
+    });
+}
+
 async function getCashBoxTransactionCount(cashBoxId) {
     try {
         if (!cashBoxId || !window.supabaseClient) return 0;
@@ -294,6 +326,26 @@ async function initCashBoxSettings() {
         bindTeamAccessToggle();
         if (isEditMode) {
             bindCashBoxDeletePanelToggle();
+        }
+
+        bindReceiptFormatButtons();
+
+        // Apply persisted Default Format (localStorage) so the UI matches what Done & Print will use.
+        if (currentCashBoxId) {
+            try {
+                const key = getReceiptFormatStorageKey(currentCashBoxId);
+                const stored = key ? String(localStorage.getItem(key) || '').trim().toLowerCase() : '';
+                if (stored) {
+                    const btn = document.querySelector(`.format-btn[data-format="${stored}"]`);
+                    if (btn && typeof btn.click === 'function') {
+                        btn.click();
+                    } else {
+                        applyReceiptFormatUi(stored);
+                    }
+                }
+            } catch (_) {
+                // ignore
+            }
         }
 
         // Summary live updates (name/icon/color)

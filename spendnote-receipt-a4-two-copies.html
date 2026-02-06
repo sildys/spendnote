@@ -1042,6 +1042,18 @@ body {
             setTextAll('.contact-id', '');
             document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = 'none'));
           }
+
+          try {
+            const params = new URLSearchParams(window.location.search);
+            const shouldAutoPrint = params.get('autoPrint') === '1' && params.get('txId');
+            if (shouldAutoPrint) {
+              setTimeout(() => {
+                try { window.print(); } catch (_) {}
+              }, 50);
+            }
+          } catch (_) {
+            // ignore
+          }
         } catch (_) {
           // ignore
         }

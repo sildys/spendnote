@@ -93,6 +93,17 @@ function initTransactionForm() {
         
         const actionBtn = e.submitter;
         const action = actionBtn ? actionBtn.value : 'done';
+        const wantsReceipt = action === 'done-receipt';
+        const receiptWindow = wantsReceipt ? window.open('about:blank', '_blank') : null;
+        const closeReceiptWindow = () => {
+            try {
+                if (receiptWindow && !receiptWindow.closed) {
+                    receiptWindow.close();
+                }
+            } catch (_) {
+                // ignore
+            }
+        };
         const container = document.getElementById('createTransactionModalContainer');
         const mode = container && container.dataset.mode === 'detailed' ? 'detailed' : 'quick';
 
@@ -140,12 +151,14 @@ function initTransactionForm() {
 
         try {
             if (!window.auth || !window.db || !window.supabaseClient) {
+                closeReceiptWindow();
                 window.location.href = '/spendnote-login.html';
                 return;
             }
 
             const user = await window.auth.getCurrentUser();
             if (!user) {
+                closeReceiptWindow();
                 window.location.href = '/spendnote-login.html';
                 return;
             }
@@ -155,6 +168,7 @@ function initTransactionForm() {
             };
 
             if (!isUuid(formData.cashBox)) {
+                closeReceiptWindow();
                 alert('Please create and select a Cash Box first.');
                 return;
             }
@@ -163,18 +177,21 @@ function initTransactionForm() {
             const amountValue = parseAmount(formData.amount);
             
             if (!Number.isFinite(amountValue) || amountValue <= 0) {
+                closeReceiptWindow();
                 alert('Please enter a valid amount.');
                 return;
             }
 
             const description = (document.getElementById('modalDescription')?.value || '').trim();
             if (!description) {
+                closeReceiptWindow();
                 alert('Description is required.');
                 return;
             }
 
             const contactName = String(formData.ContactName || '').trim();
             if (!contactName) {
+                closeReceiptWindow();
                 alert('Contact Name is required.');
                 return;
             }
@@ -240,6 +257,7 @@ function initTransactionForm() {
                 const currentBalance = Number(cb?.current_balance);
                 const balance = Number.isFinite(currentBalance) ? currentBalance : 0;
                 if (finalAmount > balance) {
+                    closeReceiptWindow();
                     alert('Not enough funds in this Cash Box.');
                     return;
                 }
@@ -277,6 +295,7 @@ function initTransactionForm() {
             }
 
             if (shouldSaveContact && ensuredContact && ensuredContact.success === false) {
+                closeReceiptWindow();
                 alert(ensuredContact?.error || 'Could not save contact. Please try again.');
                 return;
             }
@@ -298,6 +317,7 @@ function initTransactionForm() {
             }
             
             if (!result || !result.success) {
+                closeReceiptWindow();
                 const raw = String(result?.error || '').trim();
                 const lower = raw.toLowerCase();
                 let msg = raw || 'Failed to create transaction.';
@@ -312,6 +332,8 @@ function initTransactionForm() {
                 return;
             }
 
+            const createdId = result?.data?.id;
+
             const addAnother = Boolean(document.getElementById('modalAddAnother')?.checked);
 
             // Reload dashboard data
@@ -321,8 +343,86 @@ function initTransactionForm() {
 
             // Handle print receipt action
             if (action === 'done-receipt') {
+                const buildReceiptUrl = async () => {
+                    const baseUrls = {
+                        a4: 'spendnote-receipt-a4-two-copies.html',
+                        pdf: 'spendnote-pdf-receipt.html',
+                        email: 'spendnote-email-receipt.html'
+                    };
+
+                    const params = new URLSearchParams();
+                    params.set('v', 'print-20260206-01');
+                    if (createdId) params.set('txId', createdId);
+
+                    params.set('itemsMode', mode === 'quick' ? 'single' : 'full');
+                    params.set('recordedBy', '0');
+
+                    let format = 'a4';
+                    try {
+                        const cbId = String(payload.cash_box_id || '').trim();
+                        if (cbId) {
+                            const key = `spendnote.cashBox.${cbId}.defaultReceiptFormat.v1`;
+                            const stored = String(localStorage.getItem(key) || '').trim().toLowerCase();
+                            if (stored === 'a4' || stored === 'pdf' || stored === 'email') {
+                                format = stored;
+                            }
+                        }
+                    } catch (_) {
+                        format = 'a4';
+                    }
+
+                    if (format === 'a4') {
+                        params.set('autoPrint', '1');
+                    }
+
+                    let cb = null;
+                    try {
+                        cb = createdId && payload.cash_box_id && window.db?.cashBoxes?.getById
+                            ? await window.db.cashBoxes.getById(payload.cash_box_id)
+                            : null;
+                    } catch (_) {
+                        cb = null;
+                    }
+
+                    const yn = (value, fallback) => {
+                        if (value === true) return '1';
+                        if (value === false) return '0';
+                        return fallback;
+                    };
+
+                    params.set('logo', yn(cb?.receipt_show_logo, '1'));
+                    params.set('addresses', yn(cb?.receipt_show_addresses, '1'));
+                    params.set('tracking', yn(cb?.receipt_show_tracking, '1'));
+                    params.set('additional', yn(cb?.receipt_show_additional, '0'));
+                    params.set('note', yn(cb?.receipt_show_note, '0'));
+                    params.set('signatures', yn(cb?.receipt_show_signatures, '1'));
+
+                    try {
+                        const storedLogo = localStorage.getItem('spendnote.proLogoDataUrl') || '';
+                        if (storedLogo) {
+                            params.set('logoKey', 'spendnote.proLogoDataUrl');
+                        } else if (cb?.cash_box_logo_url) {
+                            params.set('logoUrl', cb.cash_box_logo_url);
+                        }
+                    } catch (_) {
+                        // ignore
+                    }
+
+                    const baseUrl = baseUrls[format] || baseUrls.a4;
+                    return `${baseUrl}?${params.toString()}`;
+                };
+
+                const url = await buildReceiptUrl();
+                if (receiptWindow && !receiptWindow.closed) {
+                    receiptWindow.location.href = url;
+                } else {
+                    const opened = window.open(url, '_blank');
+                    if (!opened) {
+                        alert('Popup blocked. Please allow popups to print receipts.');
+                    }
+                }
+
                 if (typeof window.closeModal === 'function') window.closeModal();
-                alert('Transaction saved. Printing is not implemented yet.');
                 return;
             }
 
