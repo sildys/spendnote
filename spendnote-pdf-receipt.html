@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cash Receipt</title>
   <style>
-    @page { 
-      size: A4; 
-      margin: 20mm; 
+    @page {
+      size: letter;
+      margin: 0.5in;
     }
     
     * {
@@ -336,14 +336,12 @@
 
     body.exporting {
       background: white;
-      padding: 0;
+      padding: 20px;
     }
 
     body.exporting .receipt {
       box-shadow: none;
       border-radius: 0;
-      padding: 0;
-      max-width: 100%;
     }
     
     /* SCREEN */
@@ -533,13 +531,15 @@ async function downloadReceiptPdf() {
 
     const imgData = canvas.toDataURL('image/png');
 
-    const pdf = new JsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+    const pdf = new JsPDF({ orientation: 'p', unit: 'mm', format: 'letter' });
     const pageW = pdf.internal.pageSize.getWidth();
     const pageH = pdf.internal.pageSize.getHeight();
 
-    const margin = 10;
-    const targetW = pageW - margin * 2;
-    const targetH = pageH - margin * 2;
+    const marginX = 12.7;
+    const marginTop = 20;
+    const marginBottom = 12.7;
+    const targetW = pageW - marginX * 2;
+    const targetH = pageH - marginTop - marginBottom;
 
     const imgW = canvas.width;
     const imgH = canvas.height;
@@ -547,8 +547,8 @@ async function downloadReceiptPdf() {
 
     const renderW = imgW * ratio;
     const renderH = imgH * ratio;
-    const x = margin + (targetW - renderW) / 2;
-    const y = margin;
+    const x = marginX + (targetW - renderW) / 2;
+    const y = marginTop;
 
     pdf.addImage(imgData, 'PNG', x, y, renderW, renderH, undefined, 'FAST');
 
