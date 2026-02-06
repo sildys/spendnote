@@ -817,6 +817,9 @@ async function duplicateTransaction(txId) {
         const firstItem = lineItems[0] || {};
         const extraItems = lineItems.slice(1);
 
+        const fallbackContactId = formatContactDisplayId(tx?.contact?.sequence_number);
+        const contactOtherId = String(tx?.contact_custom_field_1 || '').trim() || fallbackContactId || '';
+
         const preset = {
             cashBoxId: tx.cash_box_id || tx.cash_box?.id || null,
             direction: tx.type === 'income' ? 'in' : 'out',
@@ -824,7 +827,7 @@ async function duplicateTransaction(txId) {
             description: firstItem.description || tx.description || '',
             contactName: tx.contact?.name || tx.contact_name || '',
             contactAddress: tx.contact_address || tx.contact?.address || '',
-            contactOtherId: tx.contact_custom_field_1 || '',
+            contactOtherId: contactOtherId,
             isDuplicate: true,
             transactionId: '', // Clear the transaction ID for duplicate
             note: tx.notes || tx.note || '',
