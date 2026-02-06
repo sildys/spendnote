@@ -647,41 +647,71 @@
             if (!overlay) {
                 overlay = document.createElement('div');
                 overlay.id = overlayId;
-                overlay.style.position = 'fixed';
-                overlay.style.inset = '0';
-                overlay.style.zIndex = '9999';
-                overlay.style.background = 'rgba(0,0,0,0.55)';
-                overlay.style.display = 'none';
-                overlay.style.padding = '22px';
+                overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,0.6);display:none;padding:20px;overflow-y:auto;';
                 overlay.innerHTML = `
-                  <div id="${overlayId}Panel" style="max-width:1100px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,0.35);overflow:hidden;">
-                    <div style="padding:18px 18px 14px;border-bottom:1px solid #e5e7eb;">
-                      <div id="${overlayId}Title" style="font-size:16px;font-weight:900;color:#0f172a;"></div>
-                      <div id="${overlayId}Meta" style="margin-top:6px;font-size:12px;color:#0f172a;opacity:0.7;line-height:1.4;white-space:pre-line;"></div>
-                      <div id="${overlayId}Brand" style="margin-top:6px;font-size:11px;color:#64748b;line-height:1.4;font-weight:800;"></div>
-                      <div id="${overlayId}Hint" style="margin-top:6px;font-size:12px;color:#64748b;line-height:1.5;">Click <strong>Print / Save as PDF</strong>, then choose <strong>Save as PDF</strong> in the print dialog. (Shortcut: <strong>Ctrl+P</strong>)</div>
-                      <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
-                        <button type="button" id="${overlayId}Print" style="appearance:none;border:1px solid #0f172a;background:#0f172a;color:#fff;border-radius:12px;padding:10px 12px;font-size:12px;font-weight:900;cursor:pointer;">Print / Save as PDF</button>
-                        <button type="button" id="${overlayId}Close" style="appearance:none;border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:12px;padding:10px 12px;font-size:12px;font-weight:900;cursor:pointer;">Close</button>
-                        <div style="margin-left:auto;font-size:12px;color:#64748b;font-weight:800;">Rows: <span id="${overlayId}Count">0</span></div>
+                  <div id="${overlayId}Panel" style="max-width:900px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 25px 60px rgba(0,0,0,0.25);overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+                    <!-- Header -->
+                    <div style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);padding:24px 28px;color:#fff;">
+                      <div style="display:flex;align-items:center;gap:14px;">
+                        <div style="width:42px;height:42px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <div>
+                          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;opacity:0.7;">SpendNote Report</div>
+                          <div id="${overlayId}Title" style="font-size:20px;font-weight:800;margin-top:2px;"></div>
+                        </div>
+                        <div style="margin-left:auto;text-align:right;">
+                          <div id="${overlayId}Brand" style="font-size:11px;opacity:0.7;"></div>
+                          <div style="font-size:13px;font-weight:700;margin-top:2px;"><span id="${overlayId}Count">0</span> transactions</div>
+                        </div>
                       </div>
                     </div>
-                    <div id="${overlayId}Content" style="padding:14px 18px 18px;max-height:72vh;overflow:auto;">
-                      <table style="width:100%;border-collapse:collapse;">
+                    <!-- Filter Info -->
+                    <div id="${overlayId}MetaWrap" style="background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:16px 28px;">
+                      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:10px;">Applied Filters</div>
+                      <div id="${overlayId}Meta" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 20px;"></div>
+                    </div>
+                    <!-- Hint (screen only) -->
+                    <div id="${overlayId}Hint" style="background:#fffbeb;border-bottom:1px solid #fde68a;padding:12px 28px;display:flex;align-items:center;gap:10px;">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                      <span style="font-size:12px;color:#92400e;">Click <strong>Print / Save as PDF</strong>, then choose <strong>Save as PDF</strong> in the print dialog. <span style="opacity:0.7;">(Shortcut: Ctrl+P)</span></span>
+                    </div>
+                    <!-- Actions -->
+                    <div id="${overlayId}Actions" style="padding:16px 28px;border-bottom:1px solid #e2e8f0;display:flex;gap:10px;align-items:center;">
+                      <button type="button" id="${overlayId}Print" style="appearance:none;border:none;background:linear-gradient(135deg,#0f172a 0%,#334155 100%);color:#fff;border-radius:10px;padding:11px 20px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(15,23,42,0.2);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                        Print / Save as PDF
+                      </button>
+                      <button type="button" id="${overlayId}Close" style="appearance:none;border:1px solid #cbd5e1;background:#fff;color:#475569;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;">Close</button>
+                    </div>
+                    <!-- Table -->
+                    <div id="${overlayId}Content" style="padding:0 28px 24px;max-height:50vh;overflow:auto;">
+                      <table style="width:100%;border-collapse:collapse;margin-top:16px;">
                         <thead>
-                          <tr>
-                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Type</th>
-                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">ID</th>
-                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Date</th>
-                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Cash Box</th>
-                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Contact</th>
-                            <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Contact ID</th>
-                            <th style="text-align:right;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:10px 8px;border-bottom:1px solid #e5e7eb;">Amount</th>
+                          <tr style="background:#f1f5f9;">
+                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Type</th>
+                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">ID</th>
+                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Date</th>
+                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Cash Box</th>
+                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Contact</th>
+                            <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Contact ID</th>
+                            <th style="text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#475569;padding:12px 10px;border-bottom:2px solid #e2e8f0;">Amount</th>
                           </tr>
                         </thead>
                         <tbody id="${overlayId}Body"></tbody>
                       </table>
-                      <div id="${overlayId}Summary" style="margin-top:14px;padding-top:12px;border-top:1px solid #e5e7eb;"></div>
+                    </div>
+                    <!-- Summary -->
+                    <div id="${overlayId}Summary" style="padding:0 28px 24px;"></div>
+                    <!-- Footer -->
+                    <div id="${overlayId}Footer" style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;">
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <div style="width:22px;height:22px;background:#0f172a;border-radius:5px;display:flex;align-items:center;justify-content:center;">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <span style="font-size:12px;font-weight:700;color:#334155;">SpendNote</span>
+                      </div>
+                      <div style="font-size:11px;color:#64748b;">Cash management made simple</div>
                     </div>
                   </div>
                 `;
@@ -694,26 +724,35 @@
                 printStyle.id = printStyleId;
                 printStyle.textContent = `
                   @media print {
-                    @page { margin: 12mm; }
+                    @page { margin: 10mm; size: A4; }
                     body > *:not(#${overlayId}) { display: none !important; }
-                    #${overlayId} { display: block !important; position: static !important; inset: auto !important; background: #ffffff !important; padding: 0 !important; }
+                    #${overlayId} { display: block !important; position: static !important; inset: auto !important; background: #fff !important; padding: 0 !important; overflow: visible !important; }
                     #${overlayId}Panel { box-shadow: none !important; border-radius: 0 !important; max-width: none !important; }
-                    #${overlayId}Content { max-height: none !important; overflow: visible !important; }
-                    #${overlayId}Hint { display: none !important; }
-                    #${overlayId}Print, #${overlayId}Close { display: none !important; }
+                    #${overlayId}Content { max-height: none !important; overflow: visible !important; padding-bottom: 12px !important; }
+                    #${overlayId}Hint, #${overlayId}Actions { display: none !important; }
+                    #${overlayId}Footer { position: fixed; bottom: 0; left: 0; right: 0; }
                   }
                 `;
                 document.head.appendChild(printStyle);
             }
 
             const titleEl = document.getElementById(`${overlayId}Title`);
-            if (titleEl) titleEl.textContent = String(title || 'Export');
+            if (titleEl) titleEl.textContent = String(title || 'Transaction Report');
 
             const metaEl = document.getElementById(`${overlayId}Meta`);
-            const meta = String(metaText || '').trim();
-            if (metaEl) {
-                metaEl.textContent = meta;
-                metaEl.style.display = meta ? 'block' : 'none';
+            const metaWrap = document.getElementById(`${overlayId}MetaWrap`);
+            const metaLines = String(metaText || '').trim().split('\n').filter(Boolean);
+            if (metaEl && metaWrap) {
+                if (!metaLines.length) {
+                    metaWrap.style.display = 'none';
+                } else {
+                    metaWrap.style.display = 'block';
+                    metaEl.innerHTML = metaLines.map((line) => {
+                        const [label, ...rest] = line.split(':');
+                        const value = rest.join(':').trim() || '—';
+                        return `<div style="display:flex;gap:6px;font-size:12px;"><span style="color:#64748b;white-space:nowrap;">${escapeHtml(label)}:</span><span style="font-weight:600;color:#0f172a;">${escapeHtml(value)}</span></div>`;
+                    }).join('');
+                }
             }
 
             const brandEl = document.getElementById(`${overlayId}Brand`);
@@ -721,8 +760,7 @@
                 const dt = new Date();
                 const pad2 = (n) => String(n).padStart(2, '0');
                 const stamp = `${dt.getFullYear()}-${pad2(dt.getMonth() + 1)}-${pad2(dt.getDate())} ${pad2(dt.getHours())}:${pad2(dt.getMinutes())}`;
-                brandEl.textContent = `Generated with SpendNote • ${stamp}`;
-                brandEl.style.display = 'block';
+                brandEl.textContent = `Generated ${stamp}`;
             }
 
             const tbodyEl = document.getElementById(`${overlayId}Body`);
@@ -731,17 +769,21 @@
             if (countEl) countEl.textContent = String(Array.isArray(rowsForPdf) ? rowsForPdf.length : 0);
             if (tbodyEl) {
                 const list = Array.isArray(rowsForPdf) ? rowsForPdf : [];
-                tbodyEl.innerHTML = list.map((r) => `
-                  <tr>
-                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;">${escapeHtml(r.type)}</td>
-                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;font-weight:900;">${escapeHtml(r.id)}</td>
-                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;">${escapeHtml(r.date)}</td>
-                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;">${escapeHtml(r.cashBox)}</td>
-                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;">${escapeHtml(r.contact)}</td>
-                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;">${escapeHtml(r.contactId)}</td>
-                    <td style="padding:10px 8px;border-bottom:1px solid #eef2f7;font-size:12px;text-align:right;font-weight:900;">${escapeHtml(r.amount)}</td>
-                  </tr>
-                `).join('');
+                tbodyEl.innerHTML = list.map((r, i) => {
+                    const bg = i % 2 === 1 ? 'background:#f8fafc;' : '';
+                    const typeColor = String(r.type).toUpperCase() === 'IN' ? 'color:#059669;' : (String(r.type).toUpperCase() === 'OUT' ? 'color:#dc2626;' : 'color:#64748b;');
+                    return `
+                      <tr style="${bg}">
+                        <td style="padding:10px;border-bottom:1px solid #f1f5f9;font-size:12px;font-weight:700;${typeColor}">${escapeHtml(r.type)}</td>
+                        <td style="padding:10px;border-bottom:1px solid #f1f5f9;font-size:12px;font-weight:600;color:#0f172a;">${escapeHtml(r.id)}</td>
+                        <td style="padding:10px;border-bottom:1px solid #f1f5f9;font-size:12px;color:#475569;">${escapeHtml(r.date)}</td>
+                        <td style="padding:10px;border-bottom:1px solid #f1f5f9;font-size:12px;color:#475569;">${escapeHtml(r.cashBox)}</td>
+                        <td style="padding:10px;border-bottom:1px solid #f1f5f9;font-size:12px;color:#475569;">${escapeHtml(r.contact)}</td>
+                        <td style="padding:10px;border-bottom:1px solid #f1f5f9;font-size:12px;color:#94a3b8;">${escapeHtml(r.contactId)}</td>
+                        <td style="padding:10px;border-bottom:1px solid #f1f5f9;font-size:12px;text-align:right;font-weight:700;color:#0f172a;">${escapeHtml(r.amount)}</td>
+                      </tr>
+                    `;
+                }).join('');
             }
 
             if (summaryEl) {
@@ -750,23 +792,24 @@
                     summaryEl.innerHTML = '';
                 } else {
                     summaryEl.innerHTML = `
-                      <div style="display:flex;justify-content:flex-end;">
-                        <table style="border-collapse:collapse;min-width:320px;">
+                      <div style="background:linear-gradient(135deg,#f0fdf4 0%,#ecfeff 100%);border:1px solid #d1fae5;border-radius:12px;padding:18px 20px;">
+                        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#059669;margin-bottom:14px;">Net Balance Summary</div>
+                        <table style="width:100%;border-collapse:collapse;">
                           <thead>
                             <tr>
-                              <th style="text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:8px 10px;border-bottom:1px solid #e5e7eb;">Currency</th>
-                              <th style="text-align:right;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:8px 10px;border-bottom:1px solid #e5e7eb;">In</th>
-                              <th style="text-align:right;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:8px 10px;border-bottom:1px solid #e5e7eb;">Out</th>
-                              <th style="text-align:right;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:8px 10px;border-bottom:1px solid #e5e7eb;">Net</th>
+                              <th style="text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;padding:8px 12px;border-bottom:1px solid #d1fae5;">Currency</th>
+                              <th style="text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#059669;padding:8px 12px;border-bottom:1px solid #d1fae5;">+ In</th>
+                              <th style="text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#dc2626;padding:8px 12px;border-bottom:1px solid #d1fae5;">− Out</th>
+                              <th style="text-align:right;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#0f172a;padding:8px 12px;border-bottom:1px solid #d1fae5;">Net</th>
                             </tr>
                           </thead>
                           <tbody>
                             ${lines.map((l) => `
                               <tr>
-                                <td style="padding:8px 10px;border-bottom:1px solid #eef2f7;font-size:12px;font-weight:900;">${escapeHtml(l.currency)}</td>
-                                <td style="padding:8px 10px;border-bottom:1px solid #eef2f7;font-size:12px;text-align:right;font-weight:900;color:#059669;">${escapeHtml(l.inText)}</td>
-                                <td style="padding:8px 10px;border-bottom:1px solid #eef2f7;font-size:12px;text-align:right;font-weight:900;color:#b91c1c;">${escapeHtml(l.outText)}</td>
-                                <td style="padding:8px 10px;border-bottom:1px solid #eef2f7;font-size:12px;text-align:right;font-weight:900;">${escapeHtml(l.netText)}</td>
+                                <td style="padding:10px 12px;font-size:13px;font-weight:700;color:#0f172a;">${escapeHtml(l.currency)}</td>
+                                <td style="padding:10px 12px;font-size:13px;text-align:right;font-weight:700;color:#059669;">+${escapeHtml(l.inText)}</td>
+                                <td style="padding:10px 12px;font-size:13px;text-align:right;font-weight:700;color:#dc2626;">−${escapeHtml(l.outText)}</td>
+                                <td style="padding:10px 12px;font-size:14px;text-align:right;font-weight:800;color:#0f172a;">${escapeHtml(l.netText)}</td>
                               </tr>
                             `).join('')}
                           </tbody>
