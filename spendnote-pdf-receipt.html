@@ -586,7 +586,7 @@ async function downloadReceiptPdf() {
     }
 
     const x = marginX + (targetW - renderW) / 2;
-    const y = marginTop + (targetH - renderH) / 2;
+    const y = marginTop;
     pdf.addImage(imgData, 'PNG', x, y, renderW, renderH, undefined, 'FAST');
 
     const displayId = document.title || 'receipt';
