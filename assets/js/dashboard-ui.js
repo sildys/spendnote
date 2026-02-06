@@ -178,6 +178,53 @@ function updateTableHeaderColor(rgb) {
     document.getElementById('transactionsHeader')?.style.setProperty('--cashbox-rgb', rgb);
 }
 
+function syncDashboardCashBoxSelection(cashBoxId, options) {
+    const opts = options && typeof options === 'object' ? options : {};
+    const id = String(cashBoxId || '').trim();
+    if (!id) return;
+
+    const cards = Array.from(document.querySelectorAll('.register-card'));
+    if (!cards.length) return;
+
+    const card = cards.find((c) => String(c?.dataset?.id || '') === id) || null;
+    if (!card) return;
+
+    cards.forEach((c) => c.classList.toggle('active', c === card));
+
+    const color = card.dataset.color;
+    const rgb = card.dataset.rgb;
+
+    if (color) document.documentElement.style.setProperty('--active', color);
+    if (rgb) document.documentElement.style.setProperty('--active-rgb', rgb);
+
+    try {
+        if (color) localStorage.setItem('activeCashBoxColor', color);
+        if (rgb) localStorage.setItem('activeCashBoxRgb', rgb);
+        localStorage.setItem('activeCashBoxId', id);
+    } catch (_) {
+        // ignore
+    }
+
+    if (color) window.updateMenuColors?.(color);
+    if (rgb) updateTableHeaderColor(rgb);
+
+    const swiper = window.registersSwiper;
+    if (swiper && typeof swiper.slideTo === 'function') {
+        const slides = Array.from(document.querySelectorAll('.registers-swiper .swiper-slide'));
+        const idx = slides.findIndex((s) => s && s.querySelector(`.register-card[data-id="${id}"]`));
+        if (idx >= 0) {
+            swiper.slideTo(idx, 0);
+        }
+    }
+
+    if (opts.scrollPage) {
+        const section = document.querySelector('.registers-carousel-section');
+        if (section && typeof section.scrollIntoView === 'function') {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+}
+
 // ========================================
 // CASH BOX CARDS
 // ========================================
@@ -296,6 +343,7 @@ window.closeAllRegisterMenus = closeAllRegisterMenus;
 window.updateTableHeaderColor = updateTableHeaderColor;
 window.initCashBoxCards = initCashBoxCards;
 window.handleAddCashBoxDashboard = handleAddCashBoxDashboard;
+window.syncDashboardCashBoxSelection = syncDashboardCashBoxSelection;
 
 window.initDashboardUI = function() {
     initKebabMenus();

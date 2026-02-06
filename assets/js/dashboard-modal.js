@@ -280,6 +280,14 @@ function updateModalCashboxDisplay() {
         } catch (e) {}
         if (typeof window.updateMenuColors === 'function') window.updateMenuColors(cashbox.color);
     }
+
+    try {
+        if (typeof window.syncDashboardCashBoxSelection === 'function') {
+            window.syncDashboardCashBoxSelection(cashbox.id, { scrollPage: false });
+        }
+    } catch (_) {
+        // ignore
+    }
 }
 
 // ========================================
@@ -477,6 +485,15 @@ function closeModal() {
         try { lastModalFocusEl.focus(); } catch (e) {}
     }
     lastModalFocusEl = null;
+
+    try {
+        const activeId = localStorage.getItem('activeCashBoxId');
+        if (activeId && typeof window.syncDashboardCashBoxSelection === 'function') {
+            window.syncDashboardCashBoxSelection(activeId, { scrollPage: true });
+        }
+    } catch (_) {
+        // ignore
+    }
 }
 
 window.openModal = openModal;
