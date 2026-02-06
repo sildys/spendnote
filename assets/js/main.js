@@ -3,21 +3,20 @@
 function updateMenuColors(color) {
     if (!color) return;
 
-    const navCashItems = document.querySelectorAll('.nav-cash-item');
-    navCashItems.forEach(item => {
-        item.style.color = color;
-    });
-
-    const otherNavItems = document.querySelectorAll('.nav-links a:not(.nav-cash-item):not(.btn)');
-    otherNavItems.forEach(item => {
-        item.style.color = color;
-    });
-
-    const newTransactionBtn = document.querySelector('.nav-new-transaction-btn');
-    if (newTransactionBtn) {
-        newTransactionBtn.style.background = `linear-gradient(135deg, ${color}, ${color})`;
-        newTransactionBtn.style.color = 'white';
-        newTransactionBtn.style.borderColor = color;
+    document.documentElement.style.setProperty('--active', color);
+    try {
+        const hex = String(color || '').trim();
+        if (/^#?[0-9a-f]{6}$/i.test(hex)) {
+            const h = hex.startsWith('#') ? hex.slice(1) : hex;
+            const r = parseInt(h.slice(0, 2), 16);
+            const g = parseInt(h.slice(2, 4), 16);
+            const b = parseInt(h.slice(4, 6), 16);
+            if ([r, g, b].every((n) => Number.isFinite(n))) {
+                document.documentElement.style.setProperty('--active-rgb', `${r}, ${g}, ${b}`);
+            }
+        }
+    } catch (_) {
+        // ignore
     }
 }
 
@@ -68,16 +67,17 @@ function initSpendNoteNav() {
         });
     }
 
-    // Populate user identity in nav + real logout
+    // Populate user identity in nav
+    setTimeout(() => {
+        if (typeof window.refreshUserNav === 'function') {
+            window.refreshUserNav();
+        } else {
+            updateUserNav();
+        }
+    }, 0);
+
+    // Real logout + auth refresh when Supabase is available
     if (window.auth && window.db && window.supabaseClient) {
-        // Defer refresh so window.refreshUserNav is guaranteed to be assigned.
-        setTimeout(() => {
-            if (typeof window.refreshUserNav === 'function') {
-                window.refreshUserNav();
-            } else {
-                updateUserNav();
-            }
-        }, 0);
         bindLogoutLinks();
 
         if (!window.__spendnoteAuthListenerBound && window.supabaseClient?.auth?.onAuthStateChange) {

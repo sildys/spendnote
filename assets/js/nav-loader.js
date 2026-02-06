@@ -64,6 +64,35 @@ function loadNav(containerId = 'nav-container') {
         highlightCurrentPage();
         initNavEvents();
 
+        try {
+            const avatarImg = container.querySelector('.user-avatar img');
+            if (avatarImg) {
+                let customAvatar = null;
+                try {
+                    customAvatar = localStorage.getItem('spendnote.user.avatar.v1');
+                } catch (_) {
+                    customAvatar = null;
+                }
+
+                if (customAvatar) {
+                    avatarImg.src = customAvatar;
+                } else {
+                    let avatarColor = '#10b981';
+                    try {
+                        avatarColor = localStorage.getItem('spendnote.user.avatarColor.v1') || '#10b981';
+                    } catch (_) {
+                        avatarColor = '#10b981';
+                    }
+
+                    const initials = 'U';
+                    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="${avatarColor}"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="700" fill="#ffffff">${initials}</text></svg>`;
+                    avatarImg.src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+                }
+            }
+        } catch (_) {
+            // ignore
+        }
+
         // Ensure avatar/identity gets refreshed even if main.js loads after nav.
         (function scheduleIdentityRefresh() {
             let tries = 0;
