@@ -213,10 +213,22 @@ This enables localization and per-cash-box personalization.
   - it cannot be hidden via toggles
   - it cannot be edited (even in Pro)
 
+### Receipt Export (PDF / Print) - COMPLETED
+
+- **PDF download**:
+  - Letter size (8.5" x 11")
+  - White background with 10mm margins
+  - Receipt positioned at top of page
+  - Uses html2canvas + jsPDF
+  - Hidden iframe download (no visible preview or popup)
+- **Print (A4)**:
+  - Opens in normal window with auto-print
+  - Two copies per page
+- **Line items**: no artificial limits; all transaction items displayed
+- **Cache-busting**: versioned `v` param on receipt URLs
+
 ### Current gaps / not implemented yet
 
-- **Done & Print flow**: the dashboard modal "Done & Print" button saves the transaction but does not yet open the receipt for printing.
-- Dashboard "Latest Transactions" is loaded from Supabase.
 - Contacts cash box filtering / cash box ID handling is not finished yet.
 - Team features (members/roles/cash box access) are not finished yet.
 

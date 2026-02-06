@@ -12,7 +12,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
 
-## Current state (last updated: 2026-02-06 03:06)
+## Current state (last updated: 2026-02-06 15:40)
 - **Dashboard**
   - Transaction modal works again (fixed duplicate modal JS load + ensured submit handler binds).
   - **Save to Contacts** toggle exists (no auto-save by default).
@@ -62,6 +62,12 @@ If a chat thread freezes / context is lost: in the new thread say:
     - shows **Voided by + date**
     - receipt previews include a diagonal grey **VOID** watermark (A4/PDF/Email)
   - Pro badge styling unified across the app (consistent orange badge with crown icon).
+- **Receipt Export (PDF/Print)** ✅
+  - **PDF download**: Letter size (8.5" x 11"), white background, receipt at top with 10mm margins.
+  - **PDF download flow**: hidden iframe triggers download without visible preview or popup.
+  - **Print (A4)**: opens normal window with auto-print; no more tiny offscreen popup.
+  - **Line items**: no 4-item limit; all items display on both A4 and PDF receipts.
+  - **Cache-busting**: receipt URLs use versioned `v` param to force reload after updates.
 - **Cash Box pages**
   - Cash Box Detail: loads from Supabase (UUID id param), displays `SN-###` code.
   - Cash Box Settings: loads cash box data, displays `SN-###` in subtitle.
@@ -106,37 +112,21 @@ If a chat thread freezes / context is lost: in the new thread say:
   - `SESSION-NOTES-2026-01-30.md`
 
 ## Recent commits (high level)
+- `e00a7ec` Fix A4 receipt: remove 4-item limit in transaction loading section
+- `261a67d` Remove 4-item limit on A4 print receipt - show all line items
+- `7338406` Change PDF format from Legal to Letter
+- `3ebee71` Fix PDF: place receipt at top of page, not centered vertically
+- `cdf64b3` Add white background to PDF page and center receipt with margins
+- `dd2bf35` Fix PDF export: remove download-mode during capture so receipt is visible
+- `55effe9` Fix hidden iframe viewport for PDF download; bump receipt cache params
 - `f964a6e` Cash Box Settings: init function on load
 - `c3eca8c` Dashboard: use SN-### cash box display code
 - `6247202` Print receipt: show date only; remove recorded-by; unify cash box code to SN-###
 - `3d23334` Receipts: remove demo placeholders and fix cash box/other id mapping
 - `f53ec9c` Transaction Detail: bind receipt controls and previews to Supabase data
 - `4ce4d87` Unified Pro badge styling across the app
-- `b407890` Add session notes (2026-01-30)
-- `a960cf9` Fix Transaction History crash (void fields)
-- `bcf4bc7` Fix Transaction History query for legacy is_system null
-- `e727ef3` Fallback when void columns missing in transactions select
-- `ba3ebf6` UX: History nav unfiltered; Transaction Detail void metadata + styling
-- `f1b2b74` Receipts: show VOID watermark in templates
-- `275b5fc` Quick receipt: single row equals total
-- `f24facc` Quick receipt: keep 5-row grid, fill only first row
-- `40d9127` Quick receipt: single item mode + show receipt id by default
-- `460556c` Settings demo receipt: cash-only copy + single-line addresses + toggles
-- `77d489e` Docs: add UX/bug backlog items
-- `b824e8b` Docs: reflect receipt preview + quick receipt changes
-- `983150d` Cash Box Settings: hard delete with tx count confirmation
- - `50772d8` Cash Box Settings: remove inline onclick handlers
- - `8b4826f` Cash Box Settings: match receipt preview iframe height
- - `23ad8c8` Cash Box Settings: fix receipt preview zoom
- - `2d19b05` Cash Box Settings: align preview zoom with transaction detail
- - `439758a` Cash Box Settings: match receipt layout CSS with transaction detail
 - `ede2407` Duplicate: always use current date and generate new receipt
-- `aae2c3f` Unify table action button borders to dashboard thickness
-- `1d525a7` Cash Box Detail: use 2px brand green border for action button
-- `b23733c` Nav: stop inline coloring and ensure avatar renders on Settings
-- `c54d16d` Nav avatar: use saved full name initials for fallback monogram
 - `5fc9f00` Monogram avatars: outline ring + colored initials
-- `b6ca13c` Avatar: soften monogram color palette
 - `4487807` Dashboard: created-by avatar fallback uses current user name
 
 ## Next focus (pick one)
