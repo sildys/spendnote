@@ -817,10 +817,12 @@ async function duplicateTransaction(txId) {
         const firstItem = lineItems[0] || {};
         const extraItems = lineItems.slice(1);
 
-        const duplicateMode = extraItems.length > 0 ? 'detailed' : 'quick';
+        const rawOtherId = String(tx?.contact_custom_field_1 || '').trim();
+        const rawNote = String(tx?.notes || tx?.note || '').trim();
+        const duplicateMode = (extraItems.length > 0 || Boolean(rawOtherId) || Boolean(rawNote)) ? 'detailed' : 'quick';
 
         const fallbackContactId = formatContactDisplayId(tx?.contact?.sequence_number);
-        const contactOtherId = String(tx?.contact_custom_field_1 || '').trim() || fallbackContactId || '';
+        const contactOtherId = rawOtherId || fallbackContactId || '';
 
         const preset = {
             cashBoxId: tx.cash_box_id || tx.cash_box?.id || null,
