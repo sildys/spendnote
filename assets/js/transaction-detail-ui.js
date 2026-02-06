@@ -487,7 +487,7 @@ html, body { height: auto !important; overflow: auto !important; }
                     const txTitle = document.getElementById('txTitle')?.textContent || 'Receipt';
                     const subject = `Your Cash Receipt - ${txTitle}`;
 
-                    const anonKey = 'sb_publishable_Vg44Z7eJacwji3iLii0Dxg_mQlSfwi-';
+                    const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpybm5oYXJ1ZGxneHV2ZXdxcnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyOTkxMDgsImV4cCI6MjA4Mjg3NTEwOH0.kQLRMVrl_uYYzZwX387uFs_BAXc9c5v7EhcvGhPR7v4';
 
                     const res = await fetch('https://zrnnharudlgxuvewqryj.supabase.co/functions/v1/send-receipt-email', {
                         method: 'POST',
