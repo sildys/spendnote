@@ -718,7 +718,7 @@
                   <div id="${overlayId}Panel" style="max-width:1100px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,0.35);overflow:hidden;">
                     <div style="padding:18px 18px 14px;border-bottom:1px solid #e5e7eb;">
                       <div style="font-size:16px;font-weight:900;color:#0f172a;">Export selected transactions</div>
-                      <div style="margin-top:6px;font-size:12px;color:#64748b;line-height:1.5;">Click <strong>Print / Save as PDF</strong>, then choose <strong>Save as PDF</strong> in the print dialog. (Shortcut: <strong>Ctrl+P</strong>)</div>
+                      <div id="${overlayId}Hint" style="margin-top:6px;font-size:12px;color:#64748b;line-height:1.5;">Click <strong>Print / Save as PDF</strong>, then choose <strong>Save as PDF</strong> in the print dialog. (Shortcut: <strong>Ctrl+P</strong>)</div>
                       <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
                         <button type="button" id="${overlayId}Print" style="appearance:none;border:1px solid #0f172a;background:#0f172a;color:#fff;border-radius:12px;padding:10px 12px;font-size:12px;font-weight:900;cursor:pointer;">Print / Save as PDF</button>
                         <button type="button" id="${overlayId}Close" style="appearance:none;border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:12px;padding:10px 12px;font-size:12px;font-weight:900;cursor:pointer;">Close</button>
@@ -757,6 +757,7 @@
                     #${overlayId} { display: block !important; position: static !important; inset: auto !important; background: #ffffff !important; padding: 0 !important; }
                     #${overlayId}Panel { box-shadow: none !important; border-radius: 0 !important; max-width: none !important; }
                     #${overlayId}Content { max-height: none !important; overflow: visible !important; }
+                    #${overlayId}Hint { display: none !important; }
                     #${overlayId}Print, #${overlayId}Close { display: none !important; }
                   }
                 `;
