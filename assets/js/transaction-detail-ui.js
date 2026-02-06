@@ -451,9 +451,154 @@ html, body { height: auto !important; overflow: auto !important; }
             });
         }
         if (emailBtn) {
-            emailBtn.addEventListener('click', () => {
-                setFormat('email');
+            emailBtn.addEventListener('click', async () => {
+                const recipientEmail = prompt('Enter recipient email address:');
+                if (!recipientEmail || !recipientEmail.trim()) return;
+                
+                const email = recipientEmail.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert('Please enter a valid email address.');
+                    return;
+                }
+
+                emailBtn.disabled = true;
+                const originalText = emailBtn.innerHTML;
+                emailBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+                try {
+                    const emailHtml = await generateEmailHtml();
+                    if (!emailHtml) {
+                        throw new Error('Failed to generate email content');
+                    }
+
+                    const txTitle = document.getElementById('txTitle')?.textContent || 'Receipt';
+                    const subject = `Your Cash Receipt - ${txTitle}`;
+
+                    const res = await fetch('https://zrnnharudlgxuvewqryj.supabase.co/functions/v1/send-receipt-email', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${window.supabaseClient?.auth?.session?.()?.access_token || ''}`
+                        },
+                        body: JSON.stringify({
+                            to: email,
+                            subject: subject,
+                            html: emailHtml
+                        })
+                    });
+
+                    const data = await res.json();
+                    if (!res.ok) {
+                        throw new Error(data.error?.message || data.error || 'Failed to send email');
+                    }
+
+                    alert('Receipt sent successfully to ' + email);
+                } catch (err) {
+                    console.error('Email send error:', err);
+                    alert('Failed to send email: ' + (err.message || 'Unknown error'));
+                } finally {
+                    emailBtn.disabled = false;
+                    emailBtn.innerHTML = originalText;
+                }
             });
+        }
+
+        async function generateEmailHtml() {
+            try {
+                if (!txId || !window.db?.transactions?.getById) return null;
+                
+                const tx = await window.db.transactions.getById(txId);
+                if (!tx) return null;
+
+                let cashBox = tx.cash_box;
+                if (!cashBox && tx.cash_box_id && window.db?.cashBoxes?.getById) {
+                    cashBox = await window.db.cashBoxes.getById(tx.cash_box_id);
+                }
+
+                let profile = null;
+                try {
+                    profile = window.db?.profiles?.getCurrent ? await window.db.profiles.getCurrent() : null;
+                } catch (_) {}
+
+                const currency = cashBox?.currency || 'USD';
+                const formatMoney = (amt) => {
+                    try {
+                        return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(Number(amt) || 0);
+                    } catch (_) {
+                        return `$${(Number(amt) || 0).toFixed(2)}`;
+                    }
+                };
+
+                const safeText = (v, fb) => (v === undefined || v === null ? '' : String(v).trim()) || fb || '';
+                
+                const cbSeq = cashBox?.sequence_number || tx.cash_box_sequence;
+                const txSeq = tx.tx_sequence_in_box;
+                const receiptId = (cbSeq && txSeq) ? `SN${cbSeq}-${String(txSeq).padStart(3, '0')}` : safeText(tx.receipt_number, tx.id?.slice(0, 8) || '—');
+                const cashBoxCode = cbSeq ? `SN-${String(cbSeq).padStart(3, '0')}` : '—';
+
+                const txDate = tx.transaction_date || tx.created_at;
+                const dateStr = txDate ? new Date(txDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+
+                const companyName = safeText(profile?.company_name || profile?.full_name || cashBox?.name, '—');
+                const companyAddress = safeText(profile?.address, '');
+                const contactName = safeText(tx.contact_name || tx.contact?.name, '—');
+                const contactAddress = safeText(tx.contact_address || tx.contact?.address, '');
+
+                const items = Array.isArray(tx.line_items) ? tx.line_items : [];
+                const effectiveItems = items.length ? items : [{ description: tx.description || '—', amount: tx.amount }];
+                const itemsHtml = effectiveItems.map(it => 
+                    `<tr><td style="padding:10px 8px;border-bottom:1px solid #f0f0f0;font-size:13px;">${safeText(it.description, '—')}</td><td style="padding:10px 8px;border-bottom:1px solid #f0f0f0;font-size:13px;text-align:right;font-weight:700;">${formatMoney(it.amount)}</td></tr>`
+                ).join('');
+
+                const total = formatMoney(tx.amount);
+                const notesText = safeText(tx.notes, '');
+                const notesHtml = notesText ? `<div style="background:#f0f9ff;border-left:4px solid #059669;padding:16px;border-radius:4px;margin-bottom:20px;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#666;margin-bottom:8px;">Notes</div><div style="font-size:13px;color:#333;line-height:1.6;">${notesText}</div></div>` : '';
+
+                const isVoided = tx.status === 'voided';
+                const voidWatermark = isVoided ? `<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:86px;font-weight:900;letter-spacing:4px;color:rgba(120,120,120,0.12);text-transform:uppercase;pointer-events:none;z-index:3;">VOID</div>` : '';
+
+                return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Arial,sans-serif;background:#f5f5f5;">
+<div style="max-width:600px;margin:0 auto;padding:40px 20px;">
+<div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+<div style="background:linear-gradient(135deg,#059669 0%,#10b981 100%);padding:32px 40px;text-align:center;">
+<h1 style="color:#fff;font-size:24px;font-weight:900;margin:0 0 8px 0;">Cash Receipt</h1>
+<p style="color:rgba(255,255,255,0.9);font-size:14px;margin:0;">Your receipt is ready</p>
+</div>
+<div style="padding:40px;">
+<div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:24px;margin-bottom:32px;position:relative;">
+${voidWatermark}
+<div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+<div><div style="font-size:20px;font-weight:900;color:#000;margin-bottom:4px;">Cash Receipt</div><div style="font-size:12px;color:#666;">Date: ${dateStr}</div></div>
+<div style="text-align:right;font-size:11px;color:#666;"><strong>Cash Box ID:</strong> ${cashBoxCode}<br><strong>Receipt ID:</strong> ${receiptId}</div>
+</div>
+<div style="height:2px;background:#000;margin:16px 0 20px;"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+<div><div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;margin-bottom:8px;">From</div><div style="font-size:14px;font-weight:800;color:#000;margin-bottom:4px;">${companyName}</div><div style="font-size:13px;color:#666;">${companyAddress.replace(/\n/g, '<br>')}</div></div>
+<div><div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;margin-bottom:8px;">To</div><div style="font-size:14px;font-weight:800;color:#000;margin-bottom:4px;">${contactName}</div><div style="font-size:13px;color:#666;">${contactAddress.replace(/\n/g, '<br>')}</div></div>
+</div>
+<table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+<thead><tr><th style="background:#f8fafc;font-size:11px;font-weight:700;text-transform:uppercase;color:#666;text-align:left;padding:10px 8px;border-bottom:1px solid #e0e0e0;">Description</th><th style="background:#f8fafc;font-size:11px;font-weight:700;text-transform:uppercase;color:#666;text-align:right;padding:10px 8px;border-bottom:1px solid #e0e0e0;">Amount</th></tr></thead>
+<tbody>${itemsHtml}</tbody>
+</table>
+<div style="background:linear-gradient(135deg,#059669 0%,#10b981 100%);color:#fff;padding:16px 20px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+<div style="font-size:13px;font-weight:700;text-transform:uppercase;">Total handed over</div>
+<div style="font-size:24px;font-weight:900;">${total}</div>
+</div>
+${notesHtml}
+</div>
+</div>
+<div style="background:#fafafa;padding:32px 40px;text-align:center;border-top:1px solid #e0e0e0;">
+<div style="font-size:14px;font-weight:700;color:#000;margin-bottom:16px;">SpendNote</div>
+<p style="font-size:12px;color:#999;margin:0;">Proof of cash handoff. Not a tax document.<br>2026 SpendNote. All rights reserved.</p>
+</div>
+</div>
+</div>
+</body></html>`;
+            } catch (err) {
+                console.error('Generate email HTML error:', err);
+                return null;
+            }
         }
 
         setTimeout(() => {
