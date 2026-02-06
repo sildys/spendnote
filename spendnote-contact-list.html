@@ -817,6 +817,13 @@
                         return false;
                     }
 
+                    try {
+                        window.__spendnoteContactsStatsSource = 'rpc';
+                        console.log('[ContactsList] Stats source: rpc', { rows: data.length });
+                    } catch (_) {
+                        // ignore
+                    }
+
                     data.forEach((row) => {
                         const cid = String(row?.contact_id || '').trim();
                         if (!cid) return;
@@ -851,6 +858,12 @@
             };
 
             const loadStatsViaScan = async () => {
+                try {
+                    window.__spendnoteContactsStatsSource = 'scan';
+                    console.log('[ContactsList] Stats source: scan');
+                } catch (_) {
+                    // ignore
+                }
                 let transactions = [];
                 const contactNameMap = new Map(); // name -> contact id
                 (Array.isArray(contacts) ? contacts : []).forEach((c) => {
