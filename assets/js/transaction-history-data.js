@@ -658,6 +658,7 @@
                     <div style="padding:18px 18px 14px;border-bottom:1px solid #e5e7eb;">
                       <div id="${overlayId}Title" style="font-size:16px;font-weight:900;color:#0f172a;"></div>
                       <div id="${overlayId}Meta" style="margin-top:6px;font-size:12px;color:#0f172a;opacity:0.7;line-height:1.4;white-space:pre-line;"></div>
+                      <div id="${overlayId}Brand" style="margin-top:6px;font-size:11px;color:#64748b;line-height:1.4;font-weight:800;"></div>
                       <div id="${overlayId}Hint" style="margin-top:6px;font-size:12px;color:#64748b;line-height:1.5;">Click <strong>Print / Save as PDF</strong>, then choose <strong>Save as PDF</strong> in the print dialog. (Shortcut: <strong>Ctrl+P</strong>)</div>
                       <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
                         <button type="button" id="${overlayId}Print" style="appearance:none;border:1px solid #0f172a;background:#0f172a;color:#fff;border-radius:12px;padding:10px 12px;font-size:12px;font-weight:900;cursor:pointer;">Print / Save as PDF</button>
@@ -713,6 +714,15 @@
             if (metaEl) {
                 metaEl.textContent = meta;
                 metaEl.style.display = meta ? 'block' : 'none';
+            }
+
+            const brandEl = document.getElementById(`${overlayId}Brand`);
+            if (brandEl) {
+                const dt = new Date();
+                const pad2 = (n) => String(n).padStart(2, '0');
+                const stamp = `${dt.getFullYear()}-${pad2(dt.getMonth() + 1)}-${pad2(dt.getDate())} ${pad2(dt.getHours())}:${pad2(dt.getMinutes())}`;
+                brandEl.textContent = `Generated with SpendNote • ${stamp}`;
+                brandEl.style.display = 'block';
             }
 
             const tbodyEl = document.getElementById(`${overlayId}Body`);
