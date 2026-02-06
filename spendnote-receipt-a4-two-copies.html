@@ -226,11 +226,19 @@ body {
   clear: both;
 }
 .cut-band:before {
-  content: none;
+  content: "";
+  position: absolute;
+  left: 8mm;
+  right: 8mm;
+  top: 50%;
+  border-top: 0.25mm dashed #999;
+  z-index: 0;
 }
 .cut-band span {
   background: #fff;
   padding: 0 2mm;
+  position: relative;
+  z-index: 1;
 }
 
 .sn-logo{
