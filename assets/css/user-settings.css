@@ -46,8 +46,9 @@
     width: 96px;
     height: 96px;
     border-radius: 50%;
-    background: #10b981;
-    color: white;
+    background: var(--surface);
+    border: 3px solid var(--border);
+    color: var(--text);
     position: relative;
     overflow: hidden;
     display: flex;

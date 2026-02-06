@@ -74,7 +74,9 @@ const applyAvatar = (fullName) => {
     if (!wrap || !img || !initials) return;
     const stored = readAvatar();
     const color = readAvatarColor();
-    wrap.style.background = color;
+    wrap.style.background = 'var(--surface)';
+    wrap.style.borderColor = color;
+    initials.style.color = color;
     initials.textContent = getInitials(fullName);
     if (stored) {
         wrap.classList.add('has-image');
