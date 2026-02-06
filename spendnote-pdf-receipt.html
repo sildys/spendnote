@@ -537,14 +537,18 @@ async function downloadReceiptPdf() {
     const pageW = pdf.internal.pageSize.getWidth();
     const pageH = pdf.internal.pageSize.getHeight();
 
+    const margin = 10;
+    const targetW = pageW - margin * 2;
+    const targetH = pageH - margin * 2;
+
     const imgW = canvas.width;
     const imgH = canvas.height;
-    const ratio = Math.min(pageW / imgW, pageH / imgH);
+    const ratio = Math.min(targetW / imgW, targetH / imgH);
 
     const renderW = imgW * ratio;
     const renderH = imgH * ratio;
-    const x = (pageW - renderW) / 2;
-    const y = (pageH - renderH) / 2;
+    const x = margin + (targetW - renderW) / 2;
+    const y = margin;
 
     pdf.addImage(imgData, 'PNG', x, y, renderW, renderH, undefined, 'FAST');
 
