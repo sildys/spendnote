@@ -189,9 +189,14 @@
         const id = String(idRaw || '').trim();
         const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
         if (!id || !isUuid) {
+            if (idRaw) {
+                alert('Invalid Transaction ID.');
+            }
             try {
-                console.warn('[TxDetail] Missing/invalid tx id in URL');
-            } catch (_) {}
+                window.location.replace('spendnote-transaction-history.html');
+            } catch (_) {
+                // ignore
+            }
             return;
         }
 
