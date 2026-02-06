@@ -925,6 +925,11 @@
 
                 const slice = all.slice(0, allowedTotal);
 
+                const getCurrencyForTx = (tx) => {
+                    const cb = tx?.cash_box_id ? (cashBoxById.get(String(tx.cash_box_id)) || null) : null;
+                    return safeText(cb?.currency, 'USD');
+                };
+
                 const totalsByCurrency = new Map();
                 slice.forEach((tx) => {
                     const status = safeText(tx?.status, 'active').toLowerCase();
@@ -933,7 +938,7 @@
                     const t = safeText(tx?.type, '').toLowerCase();
                     const amt = Number(tx?.amount);
                     if (!Number.isFinite(amt)) return;
-                    const curr = safeText(tx?.cash_box?.currency, 'USD');
+                    const curr = getCurrencyForTx(tx);
                     const prev = totalsByCurrency.get(curr) || { in: 0, out: 0 };
                     if (t === 'income') prev.in += amt;
                     if (t === 'expense') prev.out += amt;
@@ -958,7 +963,7 @@
                     const t = safeText(tx?.type, '').toLowerCase();
                     const isVoided = safeText(tx?.status, 'active').toLowerCase() === 'voided';
                     const typeLabel = isVoided ? 'VOID' : (t === 'income' ? 'IN' : (t === 'expense' ? 'OUT' : ''));
-                    const currency = safeText(tx?.cash_box?.currency, 'USD');
+                    const currency = getCurrencyForTx(tx);
                     return {
                         type: typeLabel,
                         id: getDisplayId(tx),
