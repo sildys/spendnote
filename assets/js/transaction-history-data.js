@@ -1954,7 +1954,7 @@
                         escapeCsv(String(tx?.amount ?? '')),
                         escapeCsv(safeText(tx?.created_by_user_name, '')),
                         escapeCsv(safeText(tx?.description, '')),
-                        escapeCsv(safeText(tx?.receipt_number, ''))
+                        escapeCsv(getDisplayId(tx))
                     ].join(','));
                 });
 
