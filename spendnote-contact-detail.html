@@ -518,7 +518,7 @@
     <script>
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
-        const contactIdRaw = urlParams.get('id');
+        const contactIdRaw = urlParams.get('id') || urlParams.get('contactId');
         const mode = urlParams.get('mode');
 
         // Initialize page

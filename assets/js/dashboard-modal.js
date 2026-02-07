@@ -828,7 +828,18 @@ function initDashboardModal() {
                 } else {
                     // Normal new transaction mode
                     const preset = {};
-                    if (params.get('cashBoxId')) preset.cashBoxId = params.get('cashBoxId');
+                    const cbRaw = params.get('cashBoxId');
+                    if (cbRaw) {
+                        let ok = false;
+                        try {
+                            ok = Boolean(window.SpendNoteIds && typeof window.SpendNoteIds.isUuid === 'function'
+                                ? window.SpendNoteIds.isUuid(cbRaw)
+                                : /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(cbRaw || '').trim()));
+                        } catch (_) {
+                            ok = false;
+                        }
+                        if (ok) preset.cashBoxId = cbRaw;
+                    }
                     if (params.get('direction') === 'in' || params.get('direction') === 'out') preset.direction = params.get('direction');
                     openModal(preset);
                 }

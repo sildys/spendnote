@@ -944,7 +944,17 @@
                 const cashBoxId = params.get('cashBoxId');
                 const direction = params.get('direction');
                 const preset = {};
-                if (cashBoxId) preset.cashBoxId = cashBoxId;
+                if (cashBoxId) {
+                    let ok = false;
+                    try {
+                        ok = Boolean(window.SpendNoteIds && typeof window.SpendNoteIds.isUuid === 'function'
+                            ? window.SpendNoteIds.isUuid(cashBoxId)
+                            : /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(cashBoxId || '').trim()));
+                    } catch (_) {
+                        ok = false;
+                    }
+                    if (ok) preset.cashBoxId = cashBoxId;
+                }
                 if (direction === 'in' || direction === 'out') preset.direction = direction;
                 return preset;
             };
@@ -1550,8 +1560,8 @@
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=24"></script>
     <script src="assets/js/dashboard-ui.js?v=5"></script>
-    <script src="assets/js/dashboard-modal.js?v=21"></script>
-    <script src="assets/js/dashboard-form.js?v=24"></script>
+    <script src="assets/js/dashboard-modal.js?v=22"></script>
+    <script src="assets/js/dashboard-form.js?v=25"></script>
     <script src="assets/js/dashboard-data.js?v=59"></script>
 
     <!-- Swiper JS -->
@@ -1693,7 +1703,18 @@
         
         // Navigate to the correct slide based on URL parameter (cashbox ID)
         const urlParams = new URLSearchParams(window.location.search);
-        const returnFromCashBoxId = urlParams.get('cashBoxId');
+        const returnFromCashBoxIdRaw = urlParams.get('cashBoxId');
+        let returnFromCashBoxId = '';
+        if (returnFromCashBoxIdRaw) {
+            try {
+                const ok = Boolean(window.SpendNoteIds && typeof window.SpendNoteIds.isUuid === 'function'
+                    ? window.SpendNoteIds.isUuid(returnFromCashBoxIdRaw)
+                    : /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(returnFromCashBoxIdRaw || '').trim()));
+                if (ok) returnFromCashBoxId = String(returnFromCashBoxIdRaw).trim();
+            } catch (_) {
+                returnFromCashBoxId = '';
+            }
+        }
         if (returnFromCashBoxId) {
             // Find the slide index for the cashbox ID
             const allSlides = document.querySelectorAll('.swiper-slide');

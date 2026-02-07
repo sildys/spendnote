@@ -404,8 +404,9 @@ html, body { height: auto !important; overflow: auto !important; }
         const voidNote = document.getElementById('txVoidNote');
 
         if (duplicateBtn) {
-            const id = new URLSearchParams(window.location.search).get('id');
-            duplicateBtn.dataset.txId = id || '';
+            const idRaw = new URLSearchParams(window.location.search).get('id');
+            const id = isUuid(idRaw) ? String(idRaw).trim() : '';
+            duplicateBtn.dataset.txId = id;
             if (!id) duplicateBtn.disabled = true;
         }
 

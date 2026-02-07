@@ -649,7 +649,16 @@ if (footerNote) {
     }
 }
 
-const txIdParam = urlParams.get('txId');
+const txIdParamRaw = urlParams.get('txId');
+const isUuid = (value) => {
+  try {
+    if (window.SpendNoteIds && typeof window.SpendNoteIds.isUuid === 'function') {
+      return window.SpendNoteIds.isUuid(value);
+    }
+  } catch (_) {}
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value || '').trim());
+};
+const txIdParam = (txIdParamRaw && isUuid(txIdParamRaw)) ? String(txIdParamRaw).trim() : '';
 const isDemo = urlParams.get('demo') === '1' && !txIdParam;
 if (isDemo) {
   function safeText(value, fallback) {
@@ -859,7 +868,7 @@ if (urlParams.get('signatures') === '0') {
 
     <script>
       (async function () {
-        const txId = new URLSearchParams(window.location.search).get('txId');
+        const txId = (typeof txIdParam === 'string') ? txIdParam : '';
         if (!txId) return;
 
         const overrideContactAddress = String(new URLSearchParams(window.location.search).get('overrideContactAddress') || '').trim();
