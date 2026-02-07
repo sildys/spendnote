@@ -124,7 +124,7 @@ If a chat thread freezes / context is lost: in the new thread say:
     - Print-friendly (no popup blockers)
   - CSV exports use **only user-facing IDs** (no database UUIDs):
     - Transaction ID: `SN{cash_box_seq}-{tx_seq}` format
-    - Cash Box ID: `CB-{seq}` format or name
+    - Cash Box ID: `SN-{seq}` format or name
     - Contact ID: `CONT-{seq}` format
   - PDF overlay uses brand colors only (green for IN, gray for OUT, black text)
 - **Cash Box pages**

@@ -1382,9 +1382,7 @@
 
                     const seq = Number(cb?.sequence_number);
                     if (Number.isFinite(seq) && seq > 0) {
-                        const cbCode = `cb-${String(seq).padStart(3, '0')}`;
                         const snCode = `sn-${String(seq).padStart(3, '0')}`;
-                        state.cashBoxByQuery.set(cbCode, String(cb.id));
                         state.cashBoxByQuery.set(snCode, String(cb.id));
                     }
                 }

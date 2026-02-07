@@ -260,7 +260,7 @@ Both Transaction History and Cash Box Detail tables include bulk actions:
 
 CSV exports use **only user-facing IDs** (no database UUIDs):
 - Transaction ID: `SN{cash_box_seq}-{tx_seq}` format
-- Cash Box ID: `CB-{seq}` format or name
+- Cash Box ID: `SN-{seq}` format or name
 - Contact ID: `CONT-{seq}` format
 
 PDF overlay design:
