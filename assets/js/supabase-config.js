@@ -36,24 +36,37 @@ var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KE
     }
 });
 
-// Bootstrap helper: save session to localStorage for new tabs (receipt print windows)
 try {
-    supabaseClient.auth.onAuthStateChange((event, session) => {
-        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+    const __spendnoteWriteBootstrapSession = (session) => {
+        try {
             if (session?.access_token && session?.refresh_token) {
-                try {
-                    localStorage.setItem('spendnote.session.bootstrap', JSON.stringify({
-                        access_token: session.access_token,
-                        refresh_token: session.refresh_token
-                    }));
-                } catch (_) {}
+                localStorage.setItem('spendnote.session.bootstrap', JSON.stringify({
+                    access_token: session.access_token,
+                    refresh_token: session.refresh_token
+                }));
             }
-        } else if (event === 'SIGNED_OUT') {
+        } catch (_) {}
+    };
+
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_OUT') {
             try {
                 localStorage.removeItem('spendnote.session.bootstrap');
             } catch (_) {}
+            return;
+        }
+
+        if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+            __spendnoteWriteBootstrapSession(session);
         }
     });
+
+    (async () => {
+        try {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            __spendnoteWriteBootstrapSession(session);
+        } catch (_) {}
+    })();
 } catch (_) {}
 
 let transactionsJoinSupported = true;

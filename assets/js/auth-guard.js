@@ -86,27 +86,61 @@
     let { data: { session }, error } = await getSessionSafe();
 
     if ((!session || error) && isReceiptTemplate && !(hasPublicToken || isDemo)) {
-        // Try to bootstrap session from localStorage temporary key
-        try {
-            const bootstrapKey = 'spendnote.session.bootstrap';
-            const bootstrapData = localStorage.getItem(bootstrapKey);
-            
-            if (bootstrapData) {
-                try {
-                    const parsed = JSON.parse(bootstrapData);
-                    const accessToken = String(parsed.access_token || '').trim();
-                    const refreshToken = String(parsed.refresh_token || '').trim();
-                    
-                    if (accessToken && refreshToken) {
-                        await window.supabaseClient.auth.setSession({
-                            access_token: accessToken,
-                            refresh_token: refreshToken
-                        });
-                        ({ data: { session }, error } = await getSessionSafe());
-                    }
-                } catch (_) {}
+        const wantBootstrapWait = (() => {
+            try {
+                return sp && (sp.get('bootstrap') === '1');
+            } catch (_) {
+                return false;
             }
-        } catch (_) {}
+        })();
+
+        const tryBootstrapFromLocalStorage = async () => {
+            try {
+                const bootstrapKey = 'spendnote.session.bootstrap';
+                const bootstrapData = localStorage.getItem(bootstrapKey);
+                if (!bootstrapData) return false;
+
+                const parsed = JSON.parse(bootstrapData);
+                const accessToken = String(parsed?.access_token || '').trim();
+                const refreshToken = String(parsed?.refresh_token || '').trim();
+                if (!accessToken || !refreshToken) return false;
+
+                await window.supabaseClient.auth.setSession({
+                    access_token: accessToken,
+                    refresh_token: refreshToken
+                });
+                return true;
+            } catch (_) {
+                return false;
+            }
+        };
+
+        const requestSessionFromOpener = async () => {
+            try {
+                if (window.opener && !window.opener.closed) {
+                    window.opener.postMessage({ type: 'SPENDNOTE_REQUEST_SESSION' }, window.location.origin);
+                    return true;
+                }
+            } catch (_) {}
+            return false;
+        };
+
+        await tryBootstrapFromLocalStorage();
+        ({ data: { session }, error } = await getSessionSafe());
+
+        if (!session || error) {
+            await requestSessionFromOpener();
+        }
+
+        if (wantBootstrapWait) {
+            const deadline = Date.now() + 6000;
+            while (Date.now() < deadline) {
+                ({ data: { session }, error } = await getSessionSafe());
+                if (session && !error) break;
+                await new Promise((r) => setTimeout(r, 120));
+                await tryBootstrapFromLocalStorage();
+            }
+        }
     }
     
     if (!session || error) {

@@ -2,7 +2,7 @@
         logo: '1',
         addresses: '1',
         tracking: '1',
-        additional: '1',
+        additional: '0',
         note: '0',
         signatures: '1'
     };
