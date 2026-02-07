@@ -834,12 +834,68 @@ body {
       // #endregion
     </script>
 
-    <!-- Supabase (receipt tab reliability: unpkg) -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260207-2245"></script>
-    <script src="assets/js/auth-guard.js?v=20260207-2310"></script>
-    
-    <script src="assets/js/main.js"></script>
+    <!-- Supabase loader (robust for new tabs) -->
+    <script>
+      // #region agent log
+      (function() {
+        const KEY = 'spendnote.debug.ndjson.v1';
+        const append = (loc, msg, data) => {
+          try {
+            const line = JSON.stringify({ ts: Date.now(), page: String(window.location.pathname || ''), loc, msg, data: data || {} });
+            const prev = localStorage.getItem(KEY) || '';
+            localStorage.setItem(KEY, prev ? (prev + '\n' + line) : line);
+          } catch (_) {}
+        };
+
+        const loadScript = (src) => new Promise((resolve, reject) => {
+          try {
+            const s = document.createElement('script');
+            s.src = src;
+            s.async = false;
+            s.onload = () => resolve(true);
+            s.onerror = () => reject(new Error('Failed to load: ' + src));
+            document.head.appendChild(s);
+          } catch (e) {
+            reject(e);
+          }
+        });
+
+        const boot = async () => {
+          append('receipt-a4:loader', 'boot start', { href: String(window.location.href || '') });
+          const sources = [
+            'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
+            'https://unpkg.com/@supabase/supabase-js@2'
+          ];
+
+          let supaOk = Boolean(window.supabase && window.supabase.createClient);
+          for (const src of sources) {
+            if (supaOk) break;
+            try {
+              await loadScript(src);
+              supaOk = Boolean(window.supabase && window.supabase.createClient);
+              append('receipt-a4:loader', 'supabase-js loaded', { src, supaOk });
+            } catch (e) {
+              append('receipt-a4:loader', 'supabase-js load failed', { src, err: String(e && e.message || e) });
+            }
+          }
+
+          if (!supaOk) {
+            append('receipt-a4:loader', 'FATAL supabase-js missing', {});
+            return;
+          }
+
+          await loadScript('assets/js/supabase-config.js?v=20260207-2245');
+          append('receipt-a4:loader', 'supabase-config loaded', { hasClient: !!window.supabaseClient });
+          await loadScript('assets/js/auth-guard.js?v=20260207-2310');
+          append('receipt-a4:loader', 'auth-guard loaded', { hasClient: !!window.supabaseClient });
+          await loadScript('assets/js/main.js?v=20260207-2310');
+          append('receipt-a4:loader', 'main loaded', {});
+        };
+
+        boot();
+      })();
+      // #endregion
+    </script>
 
     <script>
       (async function () {
