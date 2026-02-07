@@ -917,10 +917,24 @@ if (urlParams.get('signatures') === '0') {
 }
   </script>
   
+  <!-- Early debug marker (runs before Supabase/auth scripts) -->
+  <script>
+    // #region agent log
+    (function() {
+      try {
+        const KEY = 'spendnote.debug.ndjson.v1';
+        const line = JSON.stringify({ ts: Date.now(), page: String(window.location.pathname || ''), loc: 'receipt-pdf:early', msg: 'html loaded', data: { href: String(window.location.href || '') } });
+        const prev = localStorage.getItem(KEY) || '';
+        localStorage.setItem(KEY, prev ? (prev + '\n' + line) : line);
+      } catch (_) {}
+    })();
+    // #endregion
+  </script>
+
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/supabase-config.js?v=20260207-2245"></script>
-  <script src="assets/js/auth-guard.js?v=20260207-2210"></script>
+  <script src="assets/js/auth-guard.js?v=20260207-2310"></script>
   
   <script src="assets/js/main.js"></script>
 
