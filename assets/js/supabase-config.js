@@ -2,8 +2,8 @@
 const SUPABASE_URL = 'https://zrnnharudlgxuvewqryj.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpybm5oYXJ1ZGxneHV2ZXdxcnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyOTkxMDgsImV4cCI6MjA4Mjg3NTEwOH0.kQLRMVrl_uYYzZwX387uFs_BAXc9c5v7EhcvGhPR7v4';
 
-if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260129-1339');
-window.__spendnoteSupabaseConfigBuild = '20260129-1339';
+if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260207-1920');
+window.__spendnoteSupabaseConfigBuild = '20260207-1920';
 
 // If you previously used localStorage persistence, clean it up so tab-close logout works immediately.
 // Supabase stores sessions under a project-specific key like: sb-<project-ref>-auth-token
@@ -35,6 +35,26 @@ var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KE
         detectSessionInUrl: true
     }
 });
+
+// Bootstrap helper: save session to localStorage for new tabs (receipt print windows)
+try {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+            if (session?.access_token && session?.refresh_token) {
+                try {
+                    localStorage.setItem('spendnote.session.bootstrap', JSON.stringify({
+                        access_token: session.access_token,
+                        refresh_token: session.refresh_token
+                    }));
+                } catch (_) {}
+            }
+        } else if (event === 'SIGNED_OUT') {
+            try {
+                localStorage.removeItem('spendnote.session.bootstrap');
+            } catch (_) {}
+        }
+    });
+} catch (_) {}
 
 let transactionsJoinSupported = true;
 

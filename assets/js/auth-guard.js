@@ -86,46 +86,27 @@
     let { data: { session }, error } = await getSessionSafe();
 
     if ((!session || error) && isReceiptTemplate && !(hasPublicToken || isDemo)) {
-        // Try to get session from opener window via postMessage
-        let sessionReceived = false;
-        
-        const sessionPromise = new Promise((resolve) => {
-            const timeout = setTimeout(() => resolve(false), 5000);
-            
-            const handler = async (event) => {
-                try {
-                    if (event.origin !== window.location.origin) return;
-                    if (event.data?.type !== 'SPENDNOTE_SESSION') return;
-                    
-                    const accessToken = String(event.data.access_token || '').trim();
-                    const refreshToken = String(event.data.refresh_token || '').trim();
-                    if (!accessToken || !refreshToken) return;
-                    
-                    await window.supabaseClient.auth.setSession({
-                        access_token: accessToken,
-                        refresh_token: refreshToken
-                    });
-                    
-                    sessionReceived = true;
-                    clearTimeout(timeout);
-                    window.removeEventListener('message', handler);
-                    resolve(true);
-                } catch (_) {}
-            };
-            
-            window.addEventListener('message', handler);
-        });
-        
+        // Try to bootstrap session from localStorage temporary key
         try {
-            if (window.opener && !window.opener.closed) {
-                window.opener.postMessage({ type: 'SPENDNOTE_REQUEST_SESSION' }, window.location.origin);
-                await sessionPromise;
+            const bootstrapKey = 'spendnote.session.bootstrap';
+            const bootstrapData = localStorage.getItem(bootstrapKey);
+            
+            if (bootstrapData) {
+                try {
+                    const parsed = JSON.parse(bootstrapData);
+                    const accessToken = String(parsed.access_token || '').trim();
+                    const refreshToken = String(parsed.refresh_token || '').trim();
+                    
+                    if (accessToken && refreshToken) {
+                        await window.supabaseClient.auth.setSession({
+                            access_token: accessToken,
+                            refresh_token: refreshToken
+                        });
+                        ({ data: { session }, error } = await getSessionSafe());
+                    }
+                } catch (_) {}
             }
         } catch (_) {}
-        
-        if (sessionReceived) {
-            ({ data: { session }, error } = await getSessionSafe());
-        }
     }
     
     if (!session || error) {
