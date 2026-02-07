@@ -1224,8 +1224,21 @@
         }
 
         const urlParams = new URLSearchParams(window.location.search);
+
         const urlCashBoxIdRaw = urlParams.get('cashBoxId') || urlParams.get('id');
         const urlCashBoxId = isUuid(urlCashBoxIdRaw) ? urlCashBoxIdRaw : null;
+
+        const urlDirectionRaw = safeText(urlParams.get('direction'), '').toLowerCase();
+        const urlDirection = (urlDirectionRaw === 'in' || urlDirectionRaw === 'out' || urlDirectionRaw === 'all')
+            ? urlDirectionRaw
+            : '';
+
+        const urlTxIdRaw = safeText(urlParams.get('txId') || urlParams.get('tx'), '');
+        const urlContactRaw = safeText(urlParams.get('contact') || urlParams.get('contactQuery'), '');
+
+        if (urlDirection) {
+            state.direction = urlDirection;
+        }
         // NOTE: Do NOT use localStorage.activeCashBoxId here - it would filter out all transactions
         // that don't belong to the dashboard's active cash box. Only filter by URL param.
 
@@ -1258,6 +1271,16 @@
             if (createdBySelect && createdByGroup) {
                 const real = qsa('option', createdBySelect).filter((o) => safeText(o.value, ''));
                 if (real.length === 1) createdBySelect.value = real[0].value;
+            }
+
+            const txIdInput = qs('#filterTxId');
+            if (txIdInput && urlTxIdRaw && !safeText(txIdInput.value, '')) {
+                txIdInput.value = urlTxIdRaw;
+            }
+
+            const contactInput = qs('#filterContactQuery');
+            if (contactInput && urlContactRaw && !safeText(contactInput.value, '')) {
+                contactInput.value = urlContactRaw;
             }
         };
 
@@ -1381,6 +1404,14 @@
 
         if (debug) console.log('[TxHistory] Setting up event listeners...');
         const tabs = qsa('.filter-tab');
+
+        // Apply initial direction tab from URL (if provided)
+        tabs.forEach((t) => t.classList.remove('active'));
+        const initialTab = tabs.find((t) => safeText(t.dataset.filter, 'all') === state.direction);
+        const allTab = tabs.find((t) => safeText(t.dataset.filter, 'all') === 'all');
+        if (initialTab) initialTab.classList.add('active');
+        else if (allTab) allTab.classList.add('active');
+
         tabs.forEach((tab) => {
             tab.addEventListener('click', (e) => {
                 e.preventDefault();
