@@ -51,7 +51,7 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Contact ID column is intentionally minimal: **shows `—`** when there is no saved contact sequence.
   - Filter mapping:
     - Contact filter accepts `CONT-###` and maps to UUID internally
-    - Cash Box filter accepts `CB-###` / `SN-###` and maps to UUID internally
+    - Cash Box filter accepts `SN-###` and maps to UUID internally
     - Transaction query normalizes `SNx-y` to `SNx-yyy`
   - No UUIDs shown in Cash Box / Contact suggestions.
 - **Transaction Detail + Receipt Preview** ✅
