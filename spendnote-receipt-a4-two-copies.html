@@ -334,32 +334,9 @@ body {
   margin-top: 3.8mm !important;
 }
 
-.back-to-app-btn {
-  display: none;
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
-  padding: 14px 28px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-  background: #059669;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-.back-to-app-btn:hover {
-  background: #047857;
-}
-@media print {
-  .back-to-app-btn { display: none !important; }
-}
 </style></head>
 
 <body>
-<button class="back-to-app-btn" id="backToAppBtn">← Back to App</button>
 <div class="page">
 
   <!-- RECEIPT A -->
@@ -1093,30 +1070,57 @@ body {
           try {
             const params = new URLSearchParams(window.location.search);
             const shouldAutoPrint = params.get('autoPrint') === '1' && params.get('txId');
-            const rawReturnTo = String(params.get('returnTo') || '').trim();
-            const returnToUrl = (() => {
-              if (!rawReturnTo) return 'dashboard.html';
-              try {
-                const u = new URL(rawReturnTo, window.location.origin);
-                if (u.origin !== window.location.origin) return 'dashboard.html';
-                return u.href;
-              } catch (_) {
-                return 'dashboard.html';
-              }
-            })();
-
-            const backBtn = document.getElementById('backToAppBtn');
-            if (backBtn) {
-              backBtn.addEventListener('click', () => {
-                window.location.href = returnToUrl;
-              });
-            }
 
             if (shouldAutoPrint) {
+              const rawReturnTo = String(params.get('returnTo') || '').trim();
+              const returnToUrl = (() => {
+                if (!rawReturnTo) return 'dashboard.html';
+                try {
+                  const u = new URL(rawReturnTo, window.location.origin);
+                  if (u.origin !== window.location.origin) return 'dashboard.html';
+                  return u.href;
+                } catch (_) {
+                  return 'dashboard.html';
+                }
+              })();
+
               setTimeout(() => {
                 try { window.print(); } catch (_) {}
-                if (backBtn) backBtn.style.display = 'block';
               }, 100);
+
+              const handleAfterPrint = () => {
+                try {
+                  if (window.opener && !window.opener.closed) {
+                    window.opener.postMessage({ type: 'RECEIPT_PRINT_DONE', returnTo: returnToUrl }, window.location.origin);
+                    window.opener.focus();
+                  }
+                } catch (_) {}
+                setTimeout(() => {
+                  try { window.close(); } catch (_) {}
+                }, 500);
+              };
+
+              try {
+                window.addEventListener('afterprint', handleAfterPrint, { once: true });
+              } catch (_) {}
+
+              try {
+                window.onafterprint = handleAfterPrint;
+              } catch (_) {}
+
+              try {
+                const mql = window.matchMedia('print');
+                if (mql) {
+                  const handler = (e) => {
+                    if (!e.matches) handleAfterPrint();
+                  };
+                  if (typeof mql.addEventListener === 'function') {
+                    mql.addEventListener('change', handler, { once: true });
+                  }
+                }
+              } catch (_) {}
+
+              setTimeout(handleAfterPrint, 60000);
             }
           } catch (_) {
             // ignore
