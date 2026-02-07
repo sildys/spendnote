@@ -2,16 +2,20 @@
 // This script should be included on all app pages (not on public pages like index, login, signup)
 
 (async function() {
+    let isReceiptTemplate = false;
+    let sp = null;
+    let hasPublicToken = false;
+    let isDemo = false;
     try {
         const path = String(window.location.pathname || '').toLowerCase();
         const file = path.split('/').filter(Boolean).pop() || '';
-        const isReceiptTemplate =
+        isReceiptTemplate =
             file.startsWith('spendnote-') &&
             file.includes('receipt') &&
             (file.includes('pdf') || file.includes('email') || file.includes('a4'));
-        const sp = new URLSearchParams(window.location.search);
-        const hasPublicToken = sp.has('publicToken');
-        const isDemo = sp.get('demo') === '1';
+        sp = new URLSearchParams(window.location.search);
+        hasPublicToken = sp.has('publicToken');
+        isDemo = sp.get('demo') === '1';
         if (isReceiptTemplate && (hasPublicToken || isDemo)) {
             return;
         }
@@ -24,8 +28,71 @@
         return;
     }
 
+    try {
+        if (!window.__spendnoteAuthGuardMessageBound) {
+            window.__spendnoteAuthGuardMessageBound = true;
+            window.addEventListener('message', async (event) => {
+                try {
+                    if (!event || event.origin !== window.location.origin) return;
+                    const data = event.data || {};
+                    const type = data.type;
+                    if (!type) return;
+
+                    if (type === 'SPENDNOTE_REQUEST_SESSION') {
+                        const { data: { session } } = await window.supabaseClient.auth.getSession();
+                        if (!session || !event.source || typeof event.source.postMessage !== 'function') return;
+                        event.source.postMessage({
+                            type: 'SPENDNOTE_SESSION',
+                            access_token: session.access_token,
+                            refresh_token: session.refresh_token
+                        }, event.origin);
+                        return;
+                    }
+
+                    if (type === 'SPENDNOTE_SESSION') {
+                        const accessToken = String(data.access_token || '').trim();
+                        const refreshToken = String(data.refresh_token || '').trim();
+                        if (!accessToken || !refreshToken) return;
+                        await window.supabaseClient.auth.setSession({
+                            access_token: accessToken,
+                            refresh_token: refreshToken
+                        });
+                    }
+                } catch (_) {
+                    // ignore
+                }
+            });
+        }
+    } catch (_) {
+        // ignore
+    }
+
+    const getSessionSafe = async () => {
+        try {
+            return await window.supabaseClient.auth.getSession();
+        } catch (e) {
+            return { data: { session: null }, error: e };
+        }
+    };
+
     // Check if user is authenticated
-    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+    let { data: { session }, error } = await getSessionSafe();
+
+    if ((!session || error) && isReceiptTemplate && !(hasPublicToken || isDemo)) {
+        try {
+            if (window.opener && !window.opener.closed) {
+                window.opener.postMessage({ type: 'SPENDNOTE_REQUEST_SESSION' }, window.location.origin);
+            }
+        } catch (_) {
+            // ignore
+        }
+
+        for (let i = 0; i < 25; i++) {
+            if (session && !error) break;
+            await new Promise((r) => setTimeout(r, 100));
+            ({ data: { session }, error } = await getSessionSafe());
+        }
+    }
     
     if (!session || error) {
         // Not authenticated - redirect to login

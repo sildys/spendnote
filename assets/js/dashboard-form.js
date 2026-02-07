@@ -439,6 +439,7 @@ function initTransactionForm() {
                     const params = new URLSearchParams();
                     params.set('v', 'print-20260207-06');
                     if (createdId) params.set('txId', createdId);
+                    params.set('bootstrap', '1');
 
                     params.set('itemsMode', mode === 'quick' ? 'single' : 'full');
                     params.set('recordedBy', '0');
