@@ -959,6 +959,29 @@ if (urlParams.get('signatures') === '0') {
 
       const boot = async () => {
         append('receipt-pdf:loader', 'boot start', { href: String(window.location.href || '') });
+
+        // Capture runtime errors (including inside loaded scripts)
+        try {
+          window.addEventListener('error', (ev) => {
+            try {
+              append('receipt-pdf:error', 'window error', {
+                message: String(ev?.message || ''),
+                filename: String(ev?.filename || ''),
+                lineno: Number(ev?.lineno) || null,
+                colno: Number(ev?.colno) || null
+              });
+            } catch (_) {}
+          });
+          window.addEventListener('unhandledrejection', (ev) => {
+            try {
+              const reason = ev?.reason;
+              append('receipt-pdf:error', 'unhandledrejection', {
+                message: String(reason?.message || reason || '')
+              });
+            } catch (_) {}
+          });
+        } catch (_) {}
+
         const sources = [
           'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
           'https://unpkg.com/@supabase/supabase-js@2'
@@ -981,8 +1004,10 @@ if (urlParams.get('signatures') === '0') {
           return;
         }
 
+        append('receipt-pdf:loader', 'before supabase-config', {});
         await loadScript('assets/js/supabase-config.js?v=20260207-2245');
         append('receipt-pdf:loader', 'supabase-config loaded', { hasClient: !!window.supabaseClient });
+        append('receipt-pdf:loader', 'before auth-guard', { hasClient: !!window.supabaseClient });
         await loadScript('assets/js/auth-guard.js?v=20260207-2310');
         append('receipt-pdf:loader', 'auth-guard loaded', { hasClient: !!window.supabaseClient });
         await loadScript('assets/js/main.js?v=20260207-2310');
