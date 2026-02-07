@@ -140,7 +140,7 @@ Mode is stored as `data-mode="quick|detailed"` and persisted via `localStorage` 
   - Transaction saving is implemented.
   - Receipt templates are implemented (A4/PDF/Email).
   - Done & Print opens a receipt template in a new tab/window.
-  - **Open issue**: print flow/session bootstrapping for new receipt tabs is being stabilized (avoid login flicker + ensure data loads reliably).
+  - Receipt pages opened in a new tab use a bootstrap mechanism to establish auth (see "Session behavior").
 
 #### Receipt number (display ID)
 
@@ -541,6 +541,11 @@ This repo is designed to work as a static deployment.
   - Check that `SUPABASE_URL` / `SUPABASE_ANON_KEY` are correct.
   - Check that your Supabase Auth settings allow the current site origin.
   - If the issue occurs only when printing/opening receipts in a new tab, check the receipt URL contains `bootstrap=1` and that `localStorage.spendnote.session.bootstrap` is populated.
+
+- **Receipt page shows login flicker / opens Dashboard instead of loading the receipt**
+  - Check the browser console for a `SyntaxError`.
+  - A past root cause was a global function/const name collision in receipt templates (e.g. defining a top-level `isUuid` that collided with `supabase-config.js`).
+  - Avoid defining common globals in templates; prefer unique helper names (e.g. `isUuidParam`).
 - **“No authenticated user” in console**
   - You are not logged in, or session expired (expected when tab/browser closed).
 - **Foreign key / RLS errors on inserts**

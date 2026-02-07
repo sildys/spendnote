@@ -12,7 +12,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
 
-## Current state (last updated: 2026-02-07 21:00)
+## Current state (last updated: 2026-02-07 22:23)
 - **Dashboard** ✅
   - Transaction modal fully wired to Supabase:
     - **Transaction create** via `db.transactions.create()` with full payload
@@ -82,7 +82,11 @@ If a chat thread freezes / context is lost: in the new thread say:
 - **Receipt print flow (new tab)** ✅
   - Print/receipt templates can open in a new tab/window (`bootstrap=1`).
   - Auth/session persistence uses `sessionStorage`, so new tabs may start without a session.
-  - **FIXED (2026-02-07)**: Improved bootstrap mechanism:
+  - **FIXED (2026-02-07)**: Root cause of login flicker/redirect:
+    - Receipt templates defined a global `isUuid` which collided with `supabase-config.js` and caused a `SyntaxError`.
+    - Result: `supabaseClient` was never created, `auth-guard` redirected to login, which bounced back to Dashboard (flicker).
+    - Fix: rename template helper `isUuid` -> `isUuidParam` (A4/PDF/Email).
+  - Follow-up hardening:
     - Exposed `window.writeBootstrapSession()` for on-demand fresh token writing
     - Dashboard modal calls `writeBootstrapSession()` BEFORE opening receipt window
     - Transaction Detail Print/PDF buttons call `writeBootstrapSession()` before opening
