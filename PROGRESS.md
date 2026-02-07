@@ -12,7 +12,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
 
-## Current state (last updated: 2026-02-06 22:54)
+## Current state (last updated: 2026-02-07 19:35)
 - **Dashboard** ✅
   - Transaction modal fully wired to Supabase:
     - **Transaction create** via `db.transactions.create()` with full payload
@@ -78,6 +78,15 @@ If a chat thread freezes / context is lost: in the new thread say:
     - receipt previews include a diagonal grey **VOID** watermark (A4/PDF/Email)
   - Pro badge styling unified across the app (consistent orange badge with crown icon).
   - URL hardening: invalid/missing `txId` redirects to Transaction History.
+
+- **Receipt print flow (new tab) - IN PROGRESS**
+  - Print/receipt templates can open in a new tab/window (`bootstrap=1`).
+  - Auth/session persistence uses `sessionStorage`, so new tabs may start without a session.
+  - A bootstrap mechanism was added:
+    - main app writes tokens to `localStorage` key `spendnote.session.bootstrap`
+    - receipt templates try to set session from that key and wait briefly before redirecting
+    - opener `postMessage` is used as a fallback
+  - Status: being verified end-to-end (target: no login flicker, receipt loads tx data reliably).
 - **Receipt Export (PDF/Print)** ✅
   - **PDF download**: Letter size (8.5" x 11"), white background, receipt at top with 10mm margins.
   - **PDF download flow**: hidden iframe triggers download without visible preview or popup.

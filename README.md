@@ -136,7 +136,11 @@ Mode is stored as `data-mode="quick|detailed"` and persisted via `localStorage` 
 #### Done & Print
 
 - The modal includes a **Done & Print** action.
-- Current status: transaction saving is implemented, but receipt generation/printing is not fully implemented yet.
+- Current status:
+  - Transaction saving is implemented.
+  - Receipt templates are implemented (A4/PDF/Email).
+  - Done & Print opens a receipt template in a new tab/window.
+  - **Open issue**: print flow/session bootstrapping for new receipt tabs is being stabilized (avoid login flicker + ensure data loads reliably).
 
 #### Receipt number (display ID)
 
@@ -460,6 +464,12 @@ It defines:
 
 The Supabase client is configured to use **`sessionStorage`**, so closing the tab/browser drops the session.
 
+Receipt templates may be opened in **new tabs/windows** (e.g. Print). Because `sessionStorage` is per-tab, receipt pages can start without a session.
+To avoid a login redirect/flicker, the app uses a lightweight bootstrap mechanism:
+
+- The main app writes the current session tokens to `localStorage` key `spendnote.session.bootstrap`.
+- Receipt pages opened with `bootstrap=1` attempt to set the session from that key (and may also request it from `window.opener` as a fallback).
+
 ### Important security note
 
 - Browser code must only use the **anon/public key**.
@@ -530,6 +540,7 @@ This repo is designed to work as a static deployment.
 - **Redirect loop to login**
   - Check that `SUPABASE_URL` / `SUPABASE_ANON_KEY` are correct.
   - Check that your Supabase Auth settings allow the current site origin.
+  - If the issue occurs only when printing/opening receipts in a new tab, check the receipt URL contains `bootstrap=1` and that `localStorage.spendnote.session.bootstrap` is populated.
 - **“No authenticated user” in console**
   - You are not logged in, or session expired (expected when tab/browser closed).
 - **Foreign key / RLS errors on inserts**
