@@ -854,15 +854,35 @@ function initDashboardModal() {
                     const preset = {};
                     const cbRaw = params.get('cashBoxId');
                     if (cbRaw) {
-                        let ok = false;
+                        const raw = String(cbRaw || '').trim();
+                        let resolved = '';
                         try {
-                            ok = Boolean(window.SpendNoteIds && typeof window.SpendNoteIds.isUuid === 'function'
-                                ? window.SpendNoteIds.isUuid(cbRaw)
-                                : /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(cbRaw || '').trim()));
+                            const ok = Boolean(window.SpendNoteIds && typeof window.SpendNoteIds.isUuid === 'function'
+                                ? window.SpendNoteIds.isUuid(raw)
+                                : /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(raw));
+                            if (ok) {
+                                resolved = raw;
+                            }
                         } catch (_) {
-                            ok = false;
+                            // ignore
                         }
-                        if (ok) preset.cashBoxId = cbRaw;
+
+                        if (!resolved) {
+                            try {
+                                const seq = (window.SpendNoteIds && typeof window.SpendNoteIds.parseCashBoxDisplayId === 'function')
+                                    ? window.SpendNoteIds.parseCashBoxDisplayId(raw)
+                                    : null;
+                                if (Number.isFinite(seq) && seq > 0) {
+                                    const card = document.querySelector('.register-card[data-sequence-number="' + String(seq) + '"]');
+                                    const uuid = card ? String(card.dataset.id || '').trim() : '';
+                                    if (uuid) resolved = uuid;
+                                }
+                            } catch (_) {
+                                // ignore
+                            }
+                        }
+
+                        if (resolved) preset.cashBoxId = resolved;
                     }
                     if (params.get('direction') === 'in' || params.get('direction') === 'out') preset.direction = params.get('direction');
                     openModal(preset);
