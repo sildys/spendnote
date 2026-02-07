@@ -130,7 +130,7 @@ async function updateUserNav() {
         try {
             profile = await window.db.profiles.getCurrent();
         } catch (error) {
-            console.warn('Unable to load profile for nav:', error);
+            if (window.SpendNoteDebug) console.warn('Unable to load profile for nav:', error);
         }
     }
 

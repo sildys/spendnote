@@ -819,7 +819,7 @@
 
                     try {
                         window.__spendnoteContactsStatsSource = 'rpc';
-                        console.log('[ContactsList] Stats source: rpc', { rows: data.length });
+                        if (window.SpendNoteDebug) console.log('[ContactsList] Stats source: rpc', { rows: data.length });
                     } catch (_) {
                         // ignore
                     }
@@ -860,7 +860,7 @@
             const loadStatsViaScan = async () => {
                 try {
                     window.__spendnoteContactsStatsSource = 'scan';
-                    console.log('[ContactsList] Stats source: scan');
+                    if (window.SpendNoteDebug) console.log('[ContactsList] Stats source: scan');
                 } catch (_) {
                     // ignore
                 }
@@ -1093,14 +1093,12 @@
         document.getElementById('bulkExportCSV').addEventListener('click', () => {
             const checked = document.querySelectorAll('.row-checkbox:checked').length;
             alert(`Export CSV - ${checked} SELECTED CONTACTS\n\nIn production:\n- Generate CSV file with selected contact data\n- Download file: contacts_selected.csv`);
-            console.log('Exporting selected contacts to CSV...');
         });
 
         // Bulk Export PDF
         document.getElementById('bulkExportPDF').addEventListener('click', () => {
             const checked = document.querySelectorAll('.row-checkbox:checked').length;
             alert(`Export PDF - ${checked} SELECTED CONTACTS\n\nIn production:\n- Generate PDF report with selected contact data\n- Download file: contacts_selected.pdf`);
-            console.log('Exporting selected contacts to PDF...');
         });
 
         // Bulk Delete
@@ -1365,6 +1363,6 @@
     <script src="assets/js/auth-guard.js"></script>
     <script src="assets/js/nav-loader.js?v=8"></script>
     <script>loadNav();</script>
-    <script src="assets/js/main.js?v=20"></script>
+    <script src="assets/js/main.js?v=21"></script>
 </body>
 </html>
