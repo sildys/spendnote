@@ -1093,13 +1093,26 @@ body {
                 }
               })();
 
+              // Track when print started - don't allow close until user has had time to interact
+              const printStartTime = Date.now();
+              const MIN_PRINT_TIME_MS = 3000; // Minimum 3 seconds before auto-close allowed
+
               setTimeout(() => {
                 try { window.print(); } catch (_) {}
-              }, 100);
+              }, 150);
 
               let printDone = false;
               const handleAfterPrint = () => {
                 if (printDone) return;
+                
+                // Don't close if print dialog was dismissed too quickly (likely browser quirk)
+                const elapsed = Date.now() - printStartTime;
+                if (elapsed < MIN_PRINT_TIME_MS) {
+                  // Reschedule check - user probably hasn't finished printing yet
+                  setTimeout(handleAfterPrint, MIN_PRINT_TIME_MS - elapsed + 500);
+                  return;
+                }
+                
                 printDone = true;
                 try {
                   if (window.opener && !window.opener.closed) {
@@ -1120,7 +1133,7 @@ body {
                 window.onafterprint = handleAfterPrint;
               } catch (_) {}
 
-              // Fallback timeout only - removed matchMedia which fires too early
+              // Fallback timeout - 2 minutes
               setTimeout(handleAfterPrint, 120000);
             }
           } catch (_) {

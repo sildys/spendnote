@@ -2,8 +2,17 @@
         logo: '1',
         addresses: '1',
         tracking: '1',
-        additional: '0',
+        additional: '1',
         note: '0',
+        signatures: '1'
+    };
+
+    const DETAILED_PRESET = {
+        logo: '1',
+        addresses: '1',
+        tracking: '1',
+        additional: '1',
+        note: '1',
         signatures: '1'
     };
 
@@ -160,16 +169,13 @@
 
         if (m === 'quick') {
             displayOptions = { ...QUICK_PRESET };
-            document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
-                const field = toggle.dataset.field;
-                if (field) toggle.checked = displayOptions[field] === '1';
-            });
         } else {
-            document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
-                const field = toggle.dataset.field;
-                if (field) displayOptions[field] = toggle.checked ? '1' : '0';
-            });
+            displayOptions = { ...DETAILED_PRESET };
         }
+        document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
+            const field = toggle.dataset.field;
+            if (field) toggle.checked = displayOptions[field] === '1';
+        });
         requestReload(0);
     }
 
