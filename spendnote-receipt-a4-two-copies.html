@@ -1097,7 +1097,10 @@ body {
                 try { window.print(); } catch (_) {}
               }, 100);
 
+              let printDone = false;
               const handleAfterPrint = () => {
+                if (printDone) return;
+                printDone = true;
                 try {
                   if (window.opener && !window.opener.closed) {
                     window.opener.postMessage({ type: 'RECEIPT_PRINT_DONE', returnTo: returnToUrl }, window.location.origin);
@@ -1106,7 +1109,7 @@ body {
                 } catch (_) {}
                 setTimeout(() => {
                   try { window.close(); } catch (_) {}
-                }, 500);
+                }, 800);
               };
 
               try {
@@ -1117,19 +1120,8 @@ body {
                 window.onafterprint = handleAfterPrint;
               } catch (_) {}
 
-              try {
-                const mql = window.matchMedia('print');
-                if (mql) {
-                  const handler = (e) => {
-                    if (!e.matches) handleAfterPrint();
-                  };
-                  if (typeof mql.addEventListener === 'function') {
-                    mql.addEventListener('change', handler, { once: true });
-                  }
-                }
-              } catch (_) {}
-
-              setTimeout(handleAfterPrint, 60000);
+              // Fallback timeout only - removed matchMedia which fires too early
+              setTimeout(handleAfterPrint, 120000);
             }
           } catch (_) {
             // ignore

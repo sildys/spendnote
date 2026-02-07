@@ -6,6 +6,12 @@
     let sp = null;
     let hasPublicToken = false;
     let isDemo = false;
+    let isInIframe = false;
+    try {
+        isInIframe = window.self !== window.top;
+    } catch (_) {
+        isInIframe = true;
+    }
     try {
         const path = String(window.location.pathname || '').toLowerCase();
         const file = path.split('/').filter(Boolean).pop() || '';
@@ -16,7 +22,8 @@
         sp = new URLSearchParams(window.location.search);
         hasPublicToken = sp.has('publicToken');
         isDemo = sp.get('demo') === '1';
-        if (isReceiptTemplate && (hasPublicToken || isDemo)) {
+        // Skip auth redirect for receipt templates in iframes, public tokens, or demo mode
+        if (isReceiptTemplate && (hasPublicToken || isDemo || isInIframe)) {
             return;
         }
     } catch (_) {
