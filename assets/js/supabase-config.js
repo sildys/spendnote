@@ -98,8 +98,30 @@ window.writeBootstrapSession = async () => {
 
 try {
     supabaseClient.auth.onAuthStateChange((event, session) => {
+        // #region agent log
+        try {
+            window.SpendNoteDebugLog?.append?.({
+                loc: 'supabase:onAuthStateChange',
+                msg: event,
+                data: {
+                    hasSession: !!session,
+                    hasUserId: !!session?.user?.id,
+                    hasBootstrapKey: !!localStorage.getItem('spendnote.session.bootstrap')
+                }
+            });
+        } catch (_) {}
+        // #endregion
         if (event === 'SIGNED_OUT') {
             try {
+                // #region agent log
+                try {
+                    window.SpendNoteDebugLog?.append?.({
+                        loc: 'supabase:onAuthStateChange',
+                        msg: 'SIGNED_OUT removing bootstrap',
+                        data: { hadBootstrapKey: !!localStorage.getItem('spendnote.session.bootstrap') }
+                    });
+                } catch (_) {}
+                // #endregion
                 localStorage.removeItem('spendnote.session.bootstrap');
             } catch (_) {}
             return;
