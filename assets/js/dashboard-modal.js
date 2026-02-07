@@ -627,6 +627,17 @@ function initContactAutocomplete() {
     }
 
     function select(c) {
+        try {
+            const container = getModalContainer();
+            const mode = container ? String(container.dataset.mode || '').toLowerCase() : '';
+            const hasOtherId = Boolean(String(c && c.phone || '').trim());
+            if (hasOtherId && mode !== 'detailed') {
+                updateModalModeUI('detailed', { persist: false });
+            }
+        } catch (_) {
+            // ignore
+        }
+
         input.value = c.name;
         if (typeof window.__setModalContactAddress === 'function') {
             window.__setModalContactAddress(c.address);
