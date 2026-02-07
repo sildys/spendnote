@@ -88,6 +88,13 @@ function initTransactionForm() {
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
+        // #region agent log
+        console.log('[DEBUG dashboard-form] submit handler', {
+            hasEvent: !!e,
+            hasCurrentTarget: !!(e && e.currentTarget),
+            hasForm: !!form
+        });
+        // #endregion
         
         if (window.isModalSubmitting) return;
         
@@ -230,7 +237,11 @@ function initTransactionForm() {
             });
         }
 
-        const submitButtons = Array.from(e.currentTarget.querySelectorAll('button[type="submit"]'));
+        const submitContainer = (e && e.currentTarget) ? e.currentTarget : form;
+        // #region agent log
+        if (!submitContainer) console.log('[DEBUG dashboard-form] submitContainer is null');
+        // #endregion
+        const submitButtons = submitContainer ? Array.from(submitContainer.querySelectorAll('button[type="submit"]')) : [];
         submitButtons.forEach(function(btn) {
             if (!btn.dataset.originalHtml) btn.dataset.originalHtml = btn.innerHTML;
             btn.disabled = true;

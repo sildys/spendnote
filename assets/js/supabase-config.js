@@ -954,6 +954,9 @@ var db = {
         async getById(id) {
             const txId = String(id || '').trim();
             if (!txId) return null;
+            // #region agent log
+            console.log('[DEBUG db.transactions.getById] start', { txId });
+            // #endregion
 
             if (transactionsJoinSupported) {
                 const attemptJoined = await supabaseClient
@@ -967,10 +970,20 @@ var db = {
                     .single();
 
                 if (!attemptJoined.error && attemptJoined.data) {
+                    // #region agent log
+                    console.log('[DEBUG db.transactions.getById] joined success', { txId });
+                    // #endregion
                     return attemptJoined.data;
                 }
 
                 if (attemptJoined.error) {
+                    // #region agent log
+                    console.log('[DEBUG db.transactions.getById] joined error', {
+                        txId,
+                        message: attemptJoined.error?.message || null,
+                        code: attemptJoined.error?.code || null
+                    });
+                    // #endregion
                     const msg = String(attemptJoined.error?.message || '');
                     const detail = String(attemptJoined.error?.details || '');
                     const isSchemaCacheRelationshipError =
@@ -995,6 +1008,13 @@ var db = {
                 .single();
 
             if (fallback.error) {
+                // #region agent log
+                console.log('[DEBUG db.transactions.getById] fallback error', {
+                    txId,
+                    message: fallback.error?.message || null,
+                    code: fallback.error?.code || null
+                });
+                // #endregion
                 console.error('Error fetching transaction:', fallback.error);
                 return null;
             }
