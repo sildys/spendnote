@@ -59,14 +59,12 @@ function createDashboardTransactionsController(ctx) {
     const debug = Boolean(window.SpendNoteDebug);
 
     const tableWrapper = document.getElementById('tableWrapper');
-    const headerRow = document.getElementById('transactionTableHeader');
 
     const { hexToRgb, formatCurrency, getInitials, normalizeHexColor } = getSpendNoteHelpers();
 
     const cashBoxById = new Map((ctx?.cashBoxes || []).filter(Boolean).map((b) => [String(b.id), b]));
 
     const state = {
-        sort: { key: 'date', direction: 'desc' },
         latestRows: []
     };
 
@@ -107,78 +105,7 @@ function createDashboardTransactionsController(ctx) {
         tableWrapper.appendChild(row);
     };
 
-    const sortRows = (rows, sort) => {
-        const list = Array.isArray(rows) ? [...rows] : [];
-        const dir = sort?.direction === 'asc' ? 1 : -1;
-        const key = String(sort?.key || 'date');
-
-        const getVal = (tx) => {
-            if (key === 'type') return String(tx?.type || '').toLowerCase();
-            if (key === 'date') return Date.parse(tx?.created_at || tx?.transaction_date || '') || 0;
-            if (key === 'amount') return Number(tx?.amount) || 0;
-            if (key === 'cash_box') return String(tx?.cash_box?.name || '').toLowerCase();
-            if (key === 'contact') return String(tx?.contact?.name || tx?.contact_name || '').toLowerCase();
-            if (key === 'created_by') return String(tx?.created_by_user_name || tx?.created_by || '').toLowerCase();
-            return '';
-        };
-
-        list.sort((a, b) => {
-            const av = getVal(a);
-            const bv = getVal(b);
-            if (av < bv) return -1 * dir;
-            if (av > bv) return 1 * dir;
-            return String(a?.id || '').localeCompare(String(b?.id || '')) * dir;
-        });
-
-        return list;
-    };
-
-    const updateSortHeaderClasses = () => {
-        if (!headerRow) return;
-        Array.from(headerRow.querySelectorAll('.sortable')).forEach((el) => {
-            el.classList.remove('asc', 'desc');
-            const key = String(el.getAttribute('data-sort-key') || '').trim();
-            if (key && key === state.sort.key) {
-                el.classList.add(state.sort.direction);
-            }
-        });
-    };
-
     const bindEvents = () => {
-        if (headerRow && headerRow.dataset.dashboardSortBound === '1') return;
-        if (headerRow) headerRow.dataset.dashboardSortBound = '1';
-
-        if (headerRow) {
-            headerRow.addEventListener('click', (e) => {
-                const target = e.target && e.target.closest ? e.target.closest('.sortable[data-sort-key]') : null;
-                if (!target) return;
-                const key = String(target.getAttribute('data-sort-key') || '').trim();
-                if (!key) return;
-
-                if (state.sort.key === key) {
-                    state.sort.direction = state.sort.direction === 'asc' ? 'desc' : 'asc';
-                } else {
-                    state.sort.key = key;
-                    state.sort.direction = 'asc';
-                }
-
-                updateSortHeaderClasses();
-
-                // Sort only within the already-fetched latest 5 rows.
-                renderRows(sortRows(state.latestRows, state.sort));
-            });
-
-            headerRow.addEventListener('keydown', (e) => {
-                const isEnter = e.key === 'Enter';
-                const isSpace = e.key === ' ';
-                if (!isEnter && !isSpace) return;
-                const target = e.target && e.target.closest ? e.target.closest('.sortable[data-sort-key]') : null;
-                if (!target) return;
-                e.preventDefault();
-                target.click();
-            });
-        }
-
         if (tableWrapper && tableWrapper.dataset.dashboardRowNavBound !== '1') {
             tableWrapper.dataset.dashboardRowNavBound = '1';
 
@@ -383,7 +310,6 @@ function createDashboardTransactionsController(ctx) {
 
     async function render() {
         bindEvents();
-        updateSortHeaderClasses();
 
         renderMessageRow('Loading…');
 
@@ -394,7 +320,7 @@ function createDashboardTransactionsController(ctx) {
         }
 
         state.latestRows = Array.isArray(res?.data) ? res.data : [];
-        renderRows(sortRows(state.latestRows, state.sort));
+        renderRows(state.latestRows);
     }
 
     return {
