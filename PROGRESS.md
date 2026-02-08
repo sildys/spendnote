@@ -240,6 +240,13 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Some Supabase projects have `pgcrypto` installed under schema `extensions`, which breaks unqualified calls like `gen_random_bytes(...)` / `digest(text, ...)`.
   - Fixed by enabling `pgcrypto` and adding `public.gen_random_bytes(int)` + `public.digest(text,text)` wrappers.
 
+- **Invite token uniqueness / collision fix** 🟡
+  - Symptom: `duplicate key value violates unique constraint "invites_org_token_unique"`.
+  - Fix approach:
+    - `spendnote_create_invite` must generate **random** tokens.
+    - If a pending invite already exists for the same `org_id + invited_email`, return/update that invite instead of inserting a duplicate.
+    - On the rare case of a token collision, retry token generation.
+
 ## Key decisions / invariants
 - **“Unsaved contact” indicator**: keep it minimal in Transaction History.
   - If there is no saved contact/sequence, show **`—`** (no extra `CONT-*` placeholder marker).

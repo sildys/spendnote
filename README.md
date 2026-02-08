@@ -644,6 +644,87 @@ as $$
 $$;
 ```
 
+- **Invites fail with unique constraint `invites_org_token_unique`**
+  - This means the invite token generator is producing the same token more than once for the same org.
+  - Fix: replace the `spendnote_create_invite` RPC to use randomized tokens and to reuse an existing pending invite for the same email.
+  - Run this in Supabase SQL Editor:
+
+```sql
+create or replace function public.spendnote_create_invite(
+  p_org_id uuid,
+  p_invited_email text,
+  p_role text,
+  p_expires_at timestamptz
+)
+returns public.invites
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_uid uuid;
+  v_member_role text;
+  v_email text;
+  v_role text;
+  v_token text;
+  v_invite public.invites;
+  i int;
+begin
+  v_uid := auth.uid();
+  if v_uid is null then
+    raise exception 'Not authenticated';
+  end if;
+
+  v_email := lower(trim(coalesce(p_invited_email, '')));
+  if v_email = '' then
+    raise exception 'Missing invited email';
+  end if;
+
+  v_role := case when lower(coalesce(p_role, '')) = 'admin' then 'admin' else 'user' end;
+
+  select role into v_member_role
+  from public.org_memberships
+  where org_id = p_org_id and user_id = v_uid
+  limit 1;
+
+  if v_member_role is null or lower(v_member_role) not in ('owner', 'admin') then
+    raise exception 'Not allowed';
+  end if;
+
+  select * into v_invite
+  from public.invites
+  where org_id = p_org_id
+    and invited_email = v_email
+    and status = 'pending'
+  order by created_at desc
+  limit 1;
+
+  if v_invite.id is not null then
+    update public.invites
+      set role = v_role,
+          expires_at = p_expires_at
+      where id = v_invite.id
+      returning * into v_invite;
+    return v_invite;
+  end if;
+
+  for i in 1..5 loop
+    v_token := encode(public.gen_random_bytes(24), 'hex');
+    begin
+      insert into public.invites (org_id, invited_email, role, status, token, expires_at)
+      values (p_org_id, v_email, v_role, 'pending', v_token, p_expires_at)
+      returning * into v_invite;
+      return v_invite;
+    exception when unique_violation then
+      -- try again
+    end;
+  end loop;
+
+  raise exception 'Could not generate unique invite token';
+end;
+$$;
+```
+
 - **Receipt page shows login flicker / opens Dashboard instead of loading the receipt**
   - Check the browser console for a `SyntaxError`.
   - A past root cause was a global function/const name collision in receipt templates (e.g. defining a top-level `isUuid` that collided with `supabase-config.js`).
