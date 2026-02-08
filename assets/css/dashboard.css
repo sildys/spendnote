@@ -868,6 +868,80 @@
             width: 100%;
         }
 
+        #transactionsTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #transactionsTable thead {
+            background: var(--bg);
+        }
+
+        #transactionsTable th,
+        #transactionsTable td {
+            padding: 8px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+        }
+
+        #transactionsTable th {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        #transactionsTable tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        #transactionsTable tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        #transactionsTable tbody tr:hover {
+            background: rgba(var(--cashbox-rgb, 5, 150, 105), 0.06);
+        }
+
+        #transactionsTable tbody tr:focus {
+            background: rgba(var(--cashbox-rgb, 5, 150, 105), 0.10);
+            outline: 2px solid var(--cashbox-color, #059669);
+            outline-offset: -2px;
+            border-radius: 8px;
+        }
+
+        #transactionsTable input[type="checkbox"],
+        #transactionsTable .row-checkbox {
+            accent-color: var(--active);
+        }
+
+        th.col-amount,
+        #transactionsTable td:nth-child(8) {
+            text-align: right;
+        }
+
+        #transactionsTable thead th:nth-child(9),
+        #transactionsTable tbody td:nth-child(9) {
+            text-align: center;
+        }
+
+        th.col-action,
+        #transactionsTable tbody td:last-child {
+            text-align: center;
+        }
+
+        th.col-action { width: 110px; }
+        th.col-checkbox { width: 40px; }
+        th.col-amount { width: 130px; }
+
         .table-grid {
             display: grid;
             grid-template-columns: 72px 150px minmax(130px, 1.1fr) minmax(130px, 1.1fr) minmax(180px, 1.6fr) 140px minmax(150px, 1.2fr) 160px;

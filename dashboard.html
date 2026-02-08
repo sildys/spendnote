@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=12">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=14">
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260208-0502">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260208-0512">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /></head>
 <body>
 <!-- Navigation loaded dynamically by nav-loader.js -->
@@ -99,16 +99,26 @@
                     </div>
                 </div>
 
-                <div class="table-wrapper" id="tableWrapper">
-                    <div class="table-grid table-header" id="transactionTableHeader" style="--cashbox-rgb: 5, 150, 105;">
-                        <div>Type</div>
-                        <div>Date & Time</div>
-                        <div>Cash Box</div>
-                        <div>Contact</div>
-                        <div>Description</div>
-                        <div>Amount</div>
-                        <div>Created by</div>
-                        <div>Action</div>
+                <div class="table-container">
+                    <div class="table-wrapper">
+                        <table id="transactionsTable">
+                            <thead>
+                                <tr>
+                                    <th class="col-checkbox"></th>
+                                    <th>Type</th>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Cash Box</th>
+                                    <th>Contact</th>
+                                    <th>Contact ID</th>
+                                    <th class="col-amount">Amount</th>
+                                    <th>Created by</th>
+                                    <th class="col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 
@@ -1588,7 +1598,7 @@
     <script src="assets/js/dashboard-ui.js?v=8"></script>
     <script src="assets/js/dashboard-modal.js?v=20260208-0502"></script>
     <script src="assets/js/dashboard-form.js?v=20260208-0349"></script>
-    <script src="assets/js/dashboard-data.js?v=64"></script>
+    <script src="assets/js/dashboard-data.js?v=20260208-0512"></script>
 
     <!-- Swiper JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -1682,14 +1692,10 @@
 
         // Update table header color dynamically
         function updateTableHeaderColor(rgb) {
-            const tableHeader = document.getElementById('transactionTableHeader');
-            if (tableHeader) {
-                tableHeader.style.setProperty('--cashbox-rgb', rgb);
-            }
-            const transactionsHeader = document.getElementById('transactionsHeader');
-            if (transactionsHeader) {
-                transactionsHeader.style.setProperty('--cashbox-rgb', rgb);
-            }
+            const txHeader = document.getElementById('transactionsHeader');
+            if (txHeader) txHeader.style.setProperty('--cashbox-rgb', rgb);
+            const txTable = document.getElementById('transactionsTable');
+            if (txTable) txTable.style.setProperty('--cashbox-rgb', rgb);
         }
 
         // ========================================

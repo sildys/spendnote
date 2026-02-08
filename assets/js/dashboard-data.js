@@ -58,7 +58,8 @@ let dashboardTxController = null;
 function createDashboardTransactionsController(ctx) {
     const debug = Boolean(window.SpendNoteDebug);
 
-    const tableWrapper = document.getElementById('tableWrapper');
+    const txTable = document.getElementById('transactionsTable');
+    const txTbody = txTable ? txTable.querySelector('tbody') : null;
 
     const { hexToRgb, formatCurrency, getInitials, normalizeHexColor } = getSpendNoteHelpers();
 
@@ -66,6 +67,39 @@ function createDashboardTransactionsController(ctx) {
 
     const state = {
         latestRows: []
+    };
+
+    const safeText = (value, fallback) => {
+        const s = value === undefined || value === null ? '' : String(value);
+        const trimmed = s.trim();
+        if (trimmed) return trimmed;
+        return fallback === undefined ? '' : String(fallback);
+    };
+
+    const formatDateShort = (value) => {
+        const dt = value ? new Date(value) : null;
+        if (!dt || Number.isNaN(dt.getTime())) return '—';
+        return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    };
+
+    const getDisplayId = (tx) => {
+        const cbSeq = tx?.cash_box_sequence;
+        const txSeq = tx?.tx_sequence_in_box;
+        if (cbSeq && txSeq) {
+            const txSeqStr = String(txSeq).padStart(3, '0');
+            return `SN${cbSeq}-${txSeqStr}`;
+        }
+        const receipt = safeText(tx?.receipt_number, '');
+        if (receipt) return receipt;
+        return '—';
+    };
+
+    const getContactDisplayId = (tx) => {
+        const seq = Number(tx?.contact?.sequence_number);
+        if (Number.isFinite(seq) && seq > 0) {
+            return `CONT-${String(seq).padStart(3, '0')}`;
+        }
+        return '—';
     };
 
     const getCreatedByAvatarUrl = (createdByName) => {
@@ -88,26 +122,22 @@ function createDashboardTransactionsController(ctx) {
         return `data:image/svg+xml,${encodeURIComponent(svg)}`;
     };
 
-    const removeExistingRows = () => {
-        if (!tableWrapper) return;
-        const existingRows = Array.from(tableWrapper.querySelectorAll('.table-grid'))
-            .filter((el) => !el.classList.contains('table-header'));
-        existingRows.forEach((el) => el.remove());
+    const clearTbody = () => {
+        if (!txTbody) return;
+        txTbody.innerHTML = '';
     };
 
     const renderMessageRow = (message) => {
-        if (!tableWrapper) return;
-        removeExistingRows();
-        const row = document.createElement('div');
-        row.className = 'table-grid';
-        row.tabIndex = -1;
-        row.innerHTML = `<div style="grid-column: 1 / -1; padding: 18px 0; text-align: center; color: var(--text-muted); font-weight: 800;">${String(message || '')}</div>`;
-        tableWrapper.appendChild(row);
+        if (!txTbody) return;
+        clearTbody();
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="10" style="padding: 24px 10px; text-align: center; color: var(--text-muted); font-weight: 700;">${safeText(message, '')}</td>`;
+        txTbody.appendChild(tr);
     };
 
     const bindEvents = () => {
-        if (tableWrapper && tableWrapper.dataset.dashboardRowNavBound !== '1') {
-            tableWrapper.dataset.dashboardRowNavBound = '1';
+        if (txTbody && txTbody.dataset.dashboardRowNavBound !== '1') {
+            txTbody.dataset.dashboardRowNavBound = '1';
 
             const shouldIgnoreRowNav = (ev) => {
                 const t = ev?.target;
@@ -115,19 +145,19 @@ function createDashboardTransactionsController(ctx) {
                 return Boolean(t.closest('a, button, input, .tx-action, .tx-actions'));
             };
 
-            tableWrapper.addEventListener('click', (e) => {
+            txTbody.addEventListener('click', (e) => {
                 if (shouldIgnoreRowNav(e)) return;
-                const row = e.target && e.target.closest ? e.target.closest('.table-grid[data-tx-id]') : null;
+                const row = e.target && e.target.closest ? e.target.closest('tr[data-tx-id]') : null;
                 if (!row) return;
                 const txId = String(row.getAttribute('data-tx-id') || '').trim();
                 if (!txId) return;
                 window.location.href = `spendnote-transaction-detail.html?txId=${encodeURIComponent(txId)}`;
             });
 
-            tableWrapper.addEventListener('keydown', (e) => {
+            txTbody.addEventListener('keydown', (e) => {
                 if (e.key !== 'Enter') return;
                 if (shouldIgnoreRowNav(e)) return;
-                const row = e.target && e.target.closest ? e.target.closest('.table-grid[data-tx-id]') : null;
+                const row = e.target && e.target.closest ? e.target.closest('tr[data-tx-id]') : null;
                 if (!row) return;
                 const txId = String(row.getAttribute('data-tx-id') || '').trim();
                 if (!txId) return;
@@ -224,8 +254,8 @@ function createDashboardTransactionsController(ctx) {
     };
 
     const renderRows = (rows) => {
-        if (!tableWrapper) return;
-        removeExistingRows();
+        if (!txTbody) return;
+        clearTbody();
 
         const txs = Array.isArray(rows) ? rows : [];
         if (!txs.length) {
@@ -234,23 +264,15 @@ function createDashboardTransactionsController(ctx) {
         }
 
         txs.forEach((tx) => {
-            const type = String(tx?.type || '').toLowerCase();
+            const type = safeText(tx?.type, '').toLowerCase();
             const isIncome = type === 'income';
-            const isVoided = String(tx?.status || 'active').toLowerCase() === 'voided';
+            const isVoided = safeText(tx?.status, 'active').toLowerCase() === 'voided';
 
             const cashBoxColor = normalizeHexColor(tx?.cash_box?.color || '#10b981');
             const cashBoxRgb = hexToRgb(cashBoxColor);
             const currency = tx?.cash_box?.currency || 'USD';
 
             const formattedAmount = formatCurrency(tx?.amount, currency);
-
-            const dt = new Date(tx?.created_at || tx?.transaction_date);
-            const formattedDate = dt && !Number.isNaN(dt.getTime())
-                ? dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                : '—';
-            const formattedTime = dt && !Number.isNaN(dt.getTime())
-                ? dt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
-                : '';
 
             let createdByName = tx?.created_by_user_name || tx?.created_by || '';
             if (!createdByName || String(createdByName).trim() === '—') {
@@ -263,48 +285,52 @@ function createDashboardTransactionsController(ctx) {
             createdByName = String(createdByName || '').trim() || '—';
             const avatarUrl = getCreatedByAvatarUrl(createdByName);
 
-            const contactName = tx?.contact?.name || tx?.contact_name || '';
+            const displayId = getDisplayId(tx);
+            const contactName = safeText(tx?.contact?.name || tx?.contact_name, '—');
+            const contactDisplayId = getContactDisplayId(tx);
             const contactId = tx?.contact_id || tx?.contact?.id || '';
             const cashBoxId = tx?.cash_box_id || tx?.cash_box?.id || '';
-            const descEnc = encodeURIComponent(String(tx?.description || ''));
-            const contactEnc = encodeURIComponent(String(contactName || ''));
+            const descEnc = encodeURIComponent(safeText(tx?.description, ''));
+            const contactEnc = encodeURIComponent(safeText(contactName, ''));
 
             const pillClass = isVoided ? 'void' : (isIncome ? 'in' : 'out');
             const pillIcon = isVoided ? 'fa-ban' : (isIncome ? 'fa-arrow-down' : 'fa-arrow-up');
             const pillLabel = isVoided ? 'VOID' : (isIncome ? 'IN' : 'OUT');
 
-            const row = document.createElement('div');
-            row.className = 'table-grid';
-            row.tabIndex = 0;
-            row.setAttribute('data-tx-id', String(tx?.id || ''));
-            row.style.setProperty('--cashbox-rgb', cashBoxRgb);
-            row.style.setProperty('--cashbox-color', cashBoxColor);
-            row.innerHTML = `
-                <div class="tx-type-pill ${pillClass}">
-                    <span class="quick-icon"><i class="fas ${pillIcon}"></i></span>
-                    <span class="quick-label">${pillLabel}</span>
-                </div>
-                <div class="tx-datetime">
-                    <span class="date">${formattedDate}</span>
-                    <span class="time">${formattedTime}</span>
-                </div>
-                <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: ${cashBoxColor};">${tx?.cash_box?.name || 'Unknown'}</span></div>
-                <div class="tx-person">${contactName || '—'}</div>
-                <div class="tx-desc">${tx?.description || '—'}</div>
-                <div class="tx-amount ${isIncome ? 'in' : 'out'} ${isVoided ? 'voided' : ''}">${isIncome ? '+' : '-'}${formattedAmount}</div>
-                <div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${createdByName}"></div></div>
-                <div class="tx-actions">
-                    <button type="button" class="tx-action btn-duplicate" data-tx-id="${String(tx?.id || '')}" data-cash-box-id="${String(cashBoxId || '')}" data-direction="${isIncome ? 'in' : 'out'}" data-amount="${String(tx?.amount ?? '')}" data-contact-id="${String(contactId || '')}" data-description="${descEnc}" data-contact-name="${contactEnc}">
-                        <i class="fas fa-copy"></i>
-                        <span>Duplicate</span>
-                    </button>
-                    <a href="spendnote-transaction-detail.html?txId=${encodeURIComponent(String(tx?.id || ''))}" class="tx-action btn-view">
-                        <span>View</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
+            const tr = document.createElement('tr');
+            tr.tabIndex = 0;
+            tr.setAttribute('data-tx-id', safeText(tx?.id, ''));
+            tr.style.setProperty('--cashbox-rgb', cashBoxRgb);
+            tr.style.setProperty('--cashbox-color', cashBoxColor);
+            tr.innerHTML = `
+                <td><input type="checkbox" class="row-checkbox" data-tx-id="${safeText(tx?.id, '')}" disabled></td>
+                <td>
+                    <div class="tx-type-pill ${pillClass}">
+                        <span class="quick-icon"><i class="fas ${pillIcon}"></i></span>
+                        <span class="quick-label">${pillLabel}</span>
+                    </div>
+                </td>
+                <td><span class="tx-id">${safeText(displayId, '—')}</span></td>
+                <td><span class="tx-date">${formatDateShort(tx?.transaction_date || tx?.created_at)}</span></td>
+                <td><span class="cashbox-badge" style="--cb-color: ${cashBoxColor};">${safeText(tx?.cash_box?.name, 'Unknown')}</span></td>
+                <td><span class="tx-contact">${contactName}</span></td>
+                <td><span class="tx-contact-id">${safeText(contactDisplayId, '—')}</span></td>
+                <td><span class="tx-amount ${isIncome ? 'in' : 'out'} ${isVoided ? 'voided' : ''}">${formattedAmount}</span></td>
+                <td><div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${safeText(createdByName, '—')}"></div></div></td>
+                <td>
+                    <div class="tx-actions">
+                        <button type="button" class="tx-action btn-duplicate" data-tx-id="${safeText(tx?.id, '')}" data-cash-box-id="${safeText(cashBoxId, '')}" data-direction="${isIncome ? 'in' : 'out'}" data-amount="${safeText(tx?.amount, '')}" data-contact-id="${safeText(contactId, '')}" data-description="${descEnc}" data-contact-name="${contactEnc}">
+                            <i class="fas fa-copy"></i>
+                            <span>Duplicate</span>
+                        </button>
+                        <a href="spendnote-transaction-detail.html?txId=${encodeURIComponent(safeText(tx?.id, ''))}" class="tx-action btn-view">
+                            <span>View</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </td>
             `;
-            tableWrapper.appendChild(row);
+            txTbody.appendChild(tr);
         });
     };
 
