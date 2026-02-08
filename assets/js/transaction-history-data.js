@@ -669,8 +669,8 @@
             renderLoadingRow(tbody);
         }
 
-        if (tbody && tbody.dataset.twoClickNavBound !== '1') {
-            tbody.dataset.twoClickNavBound = '1';
+        if (document.documentElement && document.documentElement.dataset.txTwoClickNavBound !== '1') {
+            document.documentElement.dataset.txTwoClickNavBound = '1';
 
             let armedTxId = '';
             let armedUntil = 0;
@@ -694,14 +694,14 @@
                 clearArmed();
                 armedRow = row;
                 armedTxId = txId;
-                armedUntil = Date.now() + 1500;
+                armedUntil = Date.now() + 2500;
                 try {
                     row.classList.add('is-armed');
                     if (typeof row.focus === 'function') row.focus({ preventScroll: true });
                 } catch (_) {
                     // ignore
                 }
-                armTimer = setTimeout(clearArmed, 1500);
+                armTimer = setTimeout(clearArmed, 2500);
             };
 
             const shouldIgnoreRowNav = (ev) => {
@@ -713,26 +713,47 @@
                 return false;
             };
 
-            tbody.addEventListener('click', (e) => {
+            const getRowFromEvent = (ev) => {
+                const t = ev?.target;
+                if (!t || !t.closest) return null;
+                const row = t.closest('#transactionsTable tbody tr[data-tx-id]');
+                return row || null;
+            };
+
+            const openTx = (txId) => {
+                window.location.href = `spendnote-transaction-detail.html?txId=${encodeURIComponent(txId)}`;
+            };
+
+            document.addEventListener('click', (e) => {
                 if (shouldIgnoreRowNav(e)) return;
-                const row = e.target && e.target.closest ? e.target.closest('tr[data-tx-id]') : null;
+                const row = getRowFromEvent(e);
                 if (!row) return;
                 const txId = safeText(row.getAttribute('data-tx-id'), '').trim();
                 if (!txId) return;
 
                 if (txId === armedTxId && Date.now() <= armedUntil) {
                     clearArmed();
-                    window.location.href = `spendnote-transaction-detail.html?txId=${encodeURIComponent(txId)}`;
+                    openTx(txId);
                     return;
                 }
 
                 armRow(row, txId);
-            });
+            }, true);
 
-            tbody.addEventListener('keydown', (e) => {
+            document.addEventListener('dblclick', (e) => {
+                if (shouldIgnoreRowNav(e)) return;
+                const row = getRowFromEvent(e);
+                if (!row) return;
+                const txId = safeText(row.getAttribute('data-tx-id'), '').trim();
+                if (!txId) return;
+                clearArmed();
+                openTx(txId);
+            }, true);
+
+            document.addEventListener('keydown', (e) => {
                 if (e.key !== 'Enter') return;
                 if (shouldIgnoreRowNav(e)) return;
-                const row = e.target && e.target.closest ? e.target.closest('tr[data-tx-id]') : null;
+                const row = getRowFromEvent(e);
                 if (!row) return;
                 const txId = safeText(row.getAttribute('data-tx-id'), '').trim();
                 if (!txId) return;
@@ -740,22 +761,22 @@
 
                 if (txId === armedTxId && Date.now() <= armedUntil) {
                     clearArmed();
-                    window.location.href = `spendnote-transaction-detail.html?txId=${encodeURIComponent(txId)}`;
+                    openTx(txId);
                     return;
                 }
 
                 armRow(row, txId);
             }, true);
 
-            tbody.addEventListener('focusin', (e) => {
-                const row = e.target && e.target.closest ? e.target.closest('tr[data-tx-id]') : null;
+            document.addEventListener('focusin', (e) => {
+                const row = getRowFromEvent(e);
                 if (!row) return;
                 const txId = safeText(row.getAttribute('data-tx-id'), '').trim();
                 if (!txId) return;
                 if (txId !== armedTxId) {
                     clearArmed();
                 }
-            });
+            }, true);
         }
         if (!window.db || !window.db.transactions || !window.db.cashBoxes) {
             const tries = (window.__txHistoryInitTries || 0) + 1;
