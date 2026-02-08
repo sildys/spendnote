@@ -12,6 +12,20 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
 
+## Launch roadmap (ordered checklist)
+
+- [ ] **L1** Onboarding UI: registration success state + post-login next steps (Cash Box → Transaction → Receipt), invite explanation, role-based messaging
+- [ ] **L2** Email pack (4 only): define copy + triggers + recipients (Welcome/Account created; Email confirmation; You’ve been invited; Invite accepted/user activated → admin)
+- [ ] **L3** Email delivery implementation: Resend + Edge Functions/hooks + templates
+- [ ] **L4** Role-based Settings UI: Owner/Admin vs User (hide non-owned sections)
+- [ ] **L5** Access control UX: user sees only assigned cash boxes; admin can assign/revoke cash box access in UI
+- [ ] **M1** Mobile strategy + responsive MVP: maximize mobile functionality; tables → cards/collapsible, off-canvas filters (decide exclusions during build)
+- [ ] **S1** Subscription rules spec: trial model (14 days and/or 20 receipts), expiry behavior, receipt/user limits, data handling on user delete (matrix)
+- [ ] **S2** Stripe prep (ready to plug in): subscription state data model + feature flags + UI placeholders + webhook handling plan
+- [ ] **S3** Stripe integration: checkout, customer portal, webhooks, live mode rollout + enforcement activation
+- [ ] **O1** Google OAuth (later): Supabase OAuth + account linking rules + UX
+- [ ] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass
+
 ## Current state (last updated: 2026-02-08 06:00)
 - **Dashboard** ✅
   - Transaction modal fully wired to Supabase:
