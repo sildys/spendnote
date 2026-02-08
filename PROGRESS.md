@@ -12,7 +12,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
 
-## Current state (last updated: 2026-02-07 23:48)
+## Current state (last updated: 2026-02-08 06:00)
 - **Dashboard** ✅
   - Transaction modal fully wired to Supabase:
     - **Transaction create** via `db.transactions.create()` with full payload
@@ -25,6 +25,14 @@ If a chat thread freezes / context is lost: in the new thread say:
     - **Receipt flow** ("Done & Print" opens receipt in selected format)
   - Cash box cards display **`SN-###`** from `cash_boxes.sequence_number` (not derived index).
   - Hash deep-link open supports `cashBoxId=SN-###` and resolves to UUID.
+
+  - Latest Transactions table (dashboard):
+    - Uses unified table-style rendering (consistent with other transaction tables).
+    - Shows newest 5 only (no pagination).
+    - VOID indicator is consistent (pill + struck-through amount).
+    - Hover tooltips for long text (Description / Cash Box / Contact).
+    - Row open UX requires 2 clicks to open detail (armed-row state).
+    - Avoids embedded joins for transactions page fetch to prevent PostgREST schema-cache relationship errors.
 - **Contacts**
   - Contacts list + detail are wired to Supabase.
   - UI shows **Contact ID as `CONT-###`** using `sequence_number`.
@@ -56,6 +64,8 @@ If a chat thread freezes / context is lost: in the new thread say:
     - Cash Box filter accepts `SN-###` and maps to UUID internally
     - Transaction query normalizes `SNx-y` to `SNx-yyy`
   - No UUIDs shown in Cash Box / Contact suggestions.
+
+  - Row open UX requires 2 clicks to open detail (armed-row state).
 - **Transaction Detail + Receipt Preview** ✅
   - Receipt preview iframe now loads real Supabase data (transaction + cash box + profile).
   - All receipt-related UI controls (toggles, Pro text fields) are initialized from `cash_boxes.receipt_*` settings.
@@ -130,6 +140,21 @@ If a chat thread freezes / context is lost: in the new thread say:
     - Cash Box ID: `SN-{seq}` format or name
     - Contact ID: `CONT-{seq}` format
   - PDF overlay uses brand colors only (green for IN, gray for OUT, black text)
+
+- **Canonical URL params (app-wide)** ✅
+  - Cash Box: `cashBoxId`
+  - Contact: `contactId`
+  - Transaction: `txId`
+  - Legacy `id=` fallbacks removed.
+
+- **UUID validation centralization** ✅
+  - UUID validation is centralized via `window.SpendNoteIds.isUuid` (removed scattered regex fallbacks).
+
+- **Cache-busting / immutable deploy hardening** ✅
+  - Critical JS/CSS assets were version-bumped across pages to avoid stale cached builds.
+
+- **Modal UX** ✅
+  - Reduced first modal-open layout shift/flicker via scrollbar compensation.
 - **Cash Box pages**
   - Cash Box Detail: accepts `id`/`cashBoxId` as UUID or `SN-###` and resolves to UUID; displays `SN-###` code.
   - Cash Box Settings: accepts `id`/`cashBoxId` as UUID or `SN-###` and resolves to UUID; displays `SN-###` in subtitle.
@@ -203,6 +228,8 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ## Backlog (UX + bugs)
 - **High**
+- **High (next)**
+  - Contacts list: require 2 clicks to open Contact Detail (match transaction tables).
 - **Medium**
   - Table column widths need adjustment.
   - Navigation underline styling is still inconsistent.

@@ -7,6 +7,23 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
+## Recent engineering updates (2026-02-08)
+
+- Canonical query params are now enforced app-wide:
+  - Cash Box: `cashBoxId`
+  - Contact: `contactId`
+  - Transaction: `txId`
+  - Legacy `id=` fallbacks were removed.
+- UUID validation was centralized to `window.SpendNoteIds.isUuid` (removed scattered regex fallbacks).
+- Cache-busting was standardized across pages for critical JS/CSS assets (immutable deploy caching).
+- Dashboard:
+  - Latest Transactions table was unified to the same table-style rendering as other transaction tables.
+  - VOID is shown consistently (pill + struck-through amount).
+  - Latest Transactions shows the newest 5 only (no pagination), and avoids embedded joins to prevent schema-cache relationship errors.
+  - Hover tooltips added for long text (Description / Cash Box / Contact).
+- Modal: reduced first-open layout shift/flicker via scrollbar compensation.
+- Row open UX: transaction tables require 2 clicks to open detail (with an armed-row state) to prevent accidental navigation.
+
 ## What the app does (product)
 
 - Track multiple **Cash Boxes** (registers) with balances
