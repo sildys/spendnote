@@ -82,10 +82,17 @@ Deno.serve(async (req: Request) => {
 
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
+    // Hash the plaintext token to match token_hash stored in DB
+    const encoder = new TextEncoder();
+    const hashBuffer = await crypto.subtle.digest("SHA-256", encoder.encode(inviteToken));
+    const tokenHash = Array.from(new Uint8Array(hashBuffer))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+
     const { data: inviteRow, error: inviteError } = await supabaseAdmin
       .from("invites")
       .select("id, org_id, invited_email, role, status")
-      .eq("token", inviteToken)
+      .eq("token_hash", tokenHash)
       .single();
 
     if (inviteError || !inviteRow) {
