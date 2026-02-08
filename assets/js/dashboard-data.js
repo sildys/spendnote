@@ -76,6 +76,15 @@ function createDashboardTransactionsController(ctx) {
         return fallback === undefined ? '' : String(fallback);
     };
 
+    const escapeHtml = (value) => {
+        return String(value === undefined || value === null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    };
+
     const formatDateShort = (value) => {
         const dt = value ? new Date(value) : null;
         if (!dt || Number.isNaN(dt.getTime())) return '—';
@@ -246,6 +255,7 @@ function createDashboardTransactionsController(ctx) {
             const descEnc = encodeURIComponent(safeText(tx?.description, ''));
             const contactEnc = encodeURIComponent(safeText(contactName, ''));
             const descriptionText = safeText(tx?.description, '—');
+            const descriptionHtml = escapeHtml(descriptionText);
 
             const pillClass = isVoided ? 'void' : (isIncome ? 'in' : 'out');
             const pillIcon = isVoided ? 'fa-ban' : (isIncome ? 'fa-arrow-down' : 'fa-arrow-up');
@@ -267,7 +277,7 @@ function createDashboardTransactionsController(ctx) {
                 <td><span class="tx-date">${formatDateShort(tx?.transaction_date || tx?.created_at)}</span></td>
                 <td><span class="cashbox-badge" style="--cb-color: ${cashBoxColor};">${safeText(tx?.cash_box?.name, 'Unknown')}</span></td>
                 <td><span class="tx-contact">${contactName}</span></td>
-                <td><span class="tx-desc">${descriptionText}</span></td>
+                <td><span class="tx-desc" title="${descriptionHtml}">${descriptionHtml}</span></td>
                 <td><span class="tx-amount ${isIncome ? 'in' : 'out'} ${isVoided ? 'voided' : ''}">${formattedAmount}</span></td>
                 <td><div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${safeText(createdByName, '—')}"></div></div></td>
                 <td>
