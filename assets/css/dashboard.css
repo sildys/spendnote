@@ -939,6 +939,108 @@
             background: rgba(var(--cashbox-rgb, var(--active-rgb)), 0.03) !important;
         }
 
+        .table-header .sortable {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .table-header .sortable::after {
+            content: '\f0dc';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            opacity: 0.28;
+            font-size: 10px;
+            line-height: 1;
+        }
+
+        .table-header .sortable.asc::after {
+            content: '\f0de';
+            opacity: 1;
+            color: var(--active);
+        }
+
+        .table-header .sortable.desc::after {
+            content: '\f0dd';
+            opacity: 1;
+            color: var(--active);
+        }
+
+        .table-header .sortable:focus {
+            outline: 2px solid rgba(var(--active-rgb), 0.35);
+            outline-offset: 2px;
+            border-radius: 8px;
+        }
+
+        .dashboard-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+        .dashboard-pagination .pagination-info {
+            font-size: 13px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            gap: 10px;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+        }
+
+        #dashboardTxPerPageSelect {
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .dashboard-pagination .pagination-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dashboard-pagination .pagination-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .dashboard-pagination .pagination-btn:hover:not(:disabled) {
+            border-color: var(--active);
+            color: var(--active);
+        }
+
+        .dashboard-pagination .pagination-btn.active {
+            border-color: var(--active);
+            background: var(--active);
+            color: white;
+        }
+
+        .dashboard-pagination .pagination-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
         .row-checkbox {
             width: 18px;
             height: 18px;
@@ -1017,6 +1119,14 @@
             color: var(--quick-accent);
             border-color: rgba(var(--out-rgb), 0.35);
             background: rgba(var(--out-rgb), 0.06);
+        }
+
+        .tx-type-pill.void {
+            --void-slate: 100, 116, 139;
+            --quick-accent: rgba(67, 56, 202, 0.92);
+            color: var(--quick-accent);
+            border-color: rgba(var(--void-slate), 0.28);
+            background: rgba(var(--void-slate), 0.10);
         }
 
         .tx-type-pill .quick-icon {
@@ -1115,6 +1225,13 @@
         }
         .tx-amount.in { color: var(--primary); }
         .tx-amount.out { color: var(--out); }
+
+        .tx-amount.voided {
+            opacity: 0.55;
+            text-decoration: line-through;
+            text-decoration-thickness: 2px;
+            text-decoration-color: rgba(100, 116, 139, 0.55);
+        }
         .tx-datetime {
             font-size: 13px;
             color: var(--text);

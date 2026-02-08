@@ -53,6 +53,432 @@ function getSpendNoteHelpers() {
 
 let dashboardLoadPromise = null;
 
+let dashboardTxController = null;
+
+function createDashboardTransactionsController(ctx) {
+    const debug = Boolean(window.SpendNoteDebug);
+
+    const tableWrapper = document.getElementById('tableWrapper');
+    const headerRow = document.getElementById('transactionTableHeader');
+    const perPageSelect = document.getElementById('dashboardTxPerPageSelect');
+    const paginationText = document.getElementById('dashboardTxPaginationText');
+    const paginationControls = document.getElementById('dashboardTxPaginationControls');
+
+    const { hexToRgb, formatCurrency, getInitials, normalizeHexColor } = getSpendNoteHelpers();
+
+    const cashBoxById = new Map((ctx?.cashBoxes || []).filter(Boolean).map((b) => [String(b.id), b]));
+
+    const state = {
+        sort: { key: 'date', direction: 'desc' },
+        pagination: { page: 1, perPage: 5 },
+        count: 0
+    };
+
+    try {
+        const stored = localStorage.getItem('spendnote.dashboard.tx.perPage.v1');
+        const n = Number(stored);
+        if (Number.isFinite(n) && n > 0) state.pagination.perPage = n;
+    } catch (_) {
+        // ignore
+    }
+
+    if (perPageSelect) {
+        perPageSelect.value = String(state.pagination.perPage);
+    }
+
+    const getCreatedByAvatarUrl = (createdByName) => {
+        try {
+            const storedAvatar = localStorage.getItem('spendnote.user.avatar.v1');
+            if (storedAvatar) return storedAvatar;
+        } catch (_) {
+            // ignore
+        }
+
+        let avatarColor = '#10b981';
+        try {
+            avatarColor = localStorage.getItem('spendnote.user.avatarColor.v1') || '#10b981';
+        } catch (_) {
+            // ignore
+        }
+
+        const initials = getInitials(createdByName === '—' ? '' : createdByName);
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ffffff" stroke="${avatarColor}" stroke-width="4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="800" fill="${avatarColor}">${initials}</text></svg>`;
+        return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+    };
+
+    const removeExistingRows = () => {
+        if (!tableWrapper) return;
+        const existingRows = Array.from(tableWrapper.querySelectorAll('.table-grid'))
+            .filter((el) => !el.classList.contains('table-header'));
+        existingRows.forEach((el) => el.remove());
+    };
+
+    const renderMessageRow = (message) => {
+        if (!tableWrapper) return;
+        removeExistingRows();
+        const row = document.createElement('div');
+        row.className = 'table-grid';
+        row.tabIndex = -1;
+        row.innerHTML = `<div style="grid-column: 1 / -1; padding: 18px 0; text-align: center; color: var(--text-muted); font-weight: 800;">${String(message || '')}</div>`;
+        tableWrapper.appendChild(row);
+    };
+
+    const renderPagination = () => {
+        const totalCount = Number(state.count) || 0;
+        const perPage = Number(state.pagination.perPage) || 5;
+        const page = Number(state.pagination.page) || 1;
+        const from = totalCount === 0 ? 0 : (page - 1) * perPage + 1;
+        const to = Math.min(totalCount, page * perPage);
+        if (paginationText) {
+            paginationText.textContent = `Showing ${from}-${to} of ${totalCount}`;
+        }
+        if (!paginationControls) return;
+        paginationControls.innerHTML = '';
+
+        const totalPages = Math.max(1, Math.ceil(totalCount / perPage));
+        const mkBtn = (label, nextPage, opts) => {
+            const btn = document.createElement('button');
+            btn.className = 'pagination-btn';
+            if (label === '<') {
+                btn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            } else if (label === '>') {
+                btn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            } else {
+                btn.textContent = label;
+            }
+            if (opts?.active) btn.classList.add('active');
+            if (opts?.disabled) btn.disabled = true;
+            btn.addEventListener('click', () => {
+                if (btn.disabled) return;
+                state.pagination.page = nextPage;
+                render();
+            });
+            return btn;
+        };
+
+        paginationControls.appendChild(mkBtn('<', Math.max(1, page - 1), { disabled: page <= 1 }));
+
+        const windowSize = 5;
+        const half = Math.floor(windowSize / 2);
+        let start = Math.max(1, page - half);
+        let end = Math.min(totalPages, start + windowSize - 1);
+        start = Math.max(1, end - windowSize + 1);
+
+        if (start > 1) {
+            paginationControls.appendChild(mkBtn('1', 1, { active: page === 1 }));
+            if (start > 2) {
+                const dots = document.createElement('button');
+                dots.className = 'pagination-btn';
+                dots.textContent = '...';
+                dots.disabled = true;
+                paginationControls.appendChild(dots);
+            }
+        }
+
+        for (let p = start; p <= end; p += 1) {
+            paginationControls.appendChild(mkBtn(String(p), p, { active: page === p }));
+        }
+
+        if (end < totalPages) {
+            if (end < totalPages - 1) {
+                const dots = document.createElement('button');
+                dots.className = 'pagination-btn';
+                dots.textContent = '...';
+                dots.disabled = true;
+                paginationControls.appendChild(dots);
+            }
+            paginationControls.appendChild(mkBtn(String(totalPages), totalPages, { active: page === totalPages }));
+        }
+
+        paginationControls.appendChild(mkBtn('>', Math.min(totalPages, page + 1), { disabled: page >= totalPages }));
+    };
+
+    const updateSortHeaderClasses = () => {
+        if (!headerRow) return;
+        Array.from(headerRow.querySelectorAll('.sortable')).forEach((el) => {
+            el.classList.remove('asc', 'desc');
+            const key = String(el.getAttribute('data-sort-key') || '').trim();
+            if (key && key === state.sort.key) {
+                el.classList.add(state.sort.direction);
+            }
+        });
+    };
+
+    const bindEvents = () => {
+        if (headerRow && headerRow.dataset.dashboardSortBound === '1') return;
+        if (headerRow) headerRow.dataset.dashboardSortBound = '1';
+
+        if (headerRow) {
+            headerRow.addEventListener('click', (e) => {
+                const target = e.target && e.target.closest ? e.target.closest('.sortable[data-sort-key]') : null;
+                if (!target) return;
+                const key = String(target.getAttribute('data-sort-key') || '').trim();
+                if (!key) return;
+
+                if (state.sort.key === key) {
+                    state.sort.direction = state.sort.direction === 'asc' ? 'desc' : 'asc';
+                } else {
+                    state.sort.key = key;
+                    state.sort.direction = 'asc';
+                }
+
+                updateSortHeaderClasses();
+                state.pagination.page = 1;
+                render();
+            });
+
+            headerRow.addEventListener('keydown', (e) => {
+                const isEnter = e.key === 'Enter';
+                const isSpace = e.key === ' ';
+                if (!isEnter && !isSpace) return;
+                const target = e.target && e.target.closest ? e.target.closest('.sortable[data-sort-key]') : null;
+                if (!target) return;
+                e.preventDefault();
+                target.click();
+            });
+        }
+
+        if (perPageSelect && perPageSelect.dataset.dashboardPerPageBound !== '1') {
+            perPageSelect.dataset.dashboardPerPageBound = '1';
+            perPageSelect.addEventListener('change', () => {
+                const next = Number(perPageSelect.value) || 5;
+                state.pagination.perPage = next;
+                state.pagination.page = 1;
+                try {
+                    localStorage.setItem('spendnote.dashboard.tx.perPage.v1', String(next));
+                } catch (_) {
+                    // ignore
+                }
+                render();
+            });
+        }
+
+        if (tableWrapper && tableWrapper.dataset.dashboardRowNavBound !== '1') {
+            tableWrapper.dataset.dashboardRowNavBound = '1';
+
+            const shouldIgnoreRowNav = (ev) => {
+                const t = ev?.target;
+                if (!t || !t.closest) return false;
+                return Boolean(t.closest('a, button, input, .tx-action, .tx-actions'));
+            };
+
+            tableWrapper.addEventListener('click', (e) => {
+                if (shouldIgnoreRowNav(e)) return;
+                const row = e.target && e.target.closest ? e.target.closest('.table-grid[data-tx-id]') : null;
+                if (!row) return;
+                const txId = String(row.getAttribute('data-tx-id') || '').trim();
+                if (!txId) return;
+                window.location.href = `spendnote-transaction-detail.html?txId=${encodeURIComponent(txId)}`;
+            });
+
+            tableWrapper.addEventListener('keydown', (e) => {
+                if (e.key !== 'Enter') return;
+                if (shouldIgnoreRowNav(e)) return;
+                const row = e.target && e.target.closest ? e.target.closest('.table-grid[data-tx-id]') : null;
+                if (!row) return;
+                const txId = String(row.getAttribute('data-tx-id') || '').trim();
+                if (!txId) return;
+                e.preventDefault();
+                window.location.href = `spendnote-transaction-detail.html?txId=${encodeURIComponent(txId)}`;
+            });
+        }
+    };
+
+    const normalizeJoinError = (err) => {
+        const raw = String(err || '');
+        const lower = raw.toLowerCase();
+        if (lower.includes('pgrst200') || lower.includes('relationship') || lower.includes('embedded')) {
+            return true;
+        }
+        return false;
+    };
+
+    const fetchPage = async () => {
+        if (!window.db?.transactions?.getPage) {
+            return { data: [], count: 0, error: 'Transactions API not ready.' };
+        }
+
+        const joinedSelect = [
+            'id',
+            'cash_box_id',
+            'type',
+            'amount',
+            'description',
+            'transaction_date',
+            'created_at',
+            'contact_id',
+            'contact_name',
+            'created_by_user_id',
+            'created_by_user_name',
+            'cash_box_sequence',
+            'tx_sequence_in_box',
+            'status',
+            'voided_at',
+            'cash_box:cash_boxes(id, name, color, currency, icon, sequence_number)',
+            'contact:contacts(id, name, sequence_number)'
+        ].join(', ');
+
+        const plainSelect = [
+            'id',
+            'cash_box_id',
+            'type',
+            'amount',
+            'description',
+            'transaction_date',
+            'created_at',
+            'contact_id',
+            'contact_name',
+            'created_by_user_id',
+            'created_by_user_name',
+            'cash_box_sequence',
+            'tx_sequence_in_box',
+            'status',
+            'voided_at'
+        ].join(', ');
+
+        const baseOpts = {
+            page: state.pagination.page,
+            perPage: state.pagination.perPage,
+            includeSystem: false,
+            sortKey: state.sort.key,
+            sortDir: state.sort.direction
+        };
+
+        const first = await window.db.transactions.getPage({
+            select: joinedSelect,
+            ...baseOpts
+        });
+
+        if (!first?.error) return first;
+        if (!normalizeJoinError(first.error)) return first;
+
+        if (debug) console.warn('[DashboardTx] Join select failed, falling back to plain select:', first.error);
+
+        const fallback = await window.db.transactions.getPage({
+            select: plainSelect,
+            ...baseOpts
+        });
+        if (fallback && Array.isArray(fallback.data)) {
+            fallback.data = fallback.data.map((tx) => {
+                if (tx && !tx.cash_box && tx.cash_box_id) {
+                    tx.cash_box = cashBoxById.get(String(tx.cash_box_id)) || null;
+                }
+                return tx;
+            });
+        }
+        return fallback;
+    };
+
+    const renderRows = (rows) => {
+        if (!tableWrapper) return;
+        removeExistingRows();
+
+        const txs = Array.isArray(rows) ? rows : [];
+        if (!txs.length) {
+            renderMessageRow('No transactions found.');
+            return;
+        }
+
+        txs.forEach((tx) => {
+            const type = String(tx?.type || '').toLowerCase();
+            const isIncome = type === 'income';
+            const isVoided = String(tx?.status || 'active').toLowerCase() === 'voided';
+
+            const cashBoxColor = normalizeHexColor(tx?.cash_box?.color || '#10b981');
+            const cashBoxRgb = hexToRgb(cashBoxColor);
+            const currency = tx?.cash_box?.currency || 'USD';
+
+            const formattedAmount = formatCurrency(tx?.amount, currency);
+
+            const dt = new Date(tx?.created_at || tx?.transaction_date);
+            const formattedDate = dt && !Number.isNaN(dt.getTime())
+                ? dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : '—';
+            const formattedTime = dt && !Number.isNaN(dt.getTime())
+                ? dt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+                : '';
+
+            let createdByName = tx?.created_by_user_name || tx?.created_by || '';
+            if (!createdByName || String(createdByName).trim() === '—') {
+                try {
+                    createdByName = localStorage.getItem('spendnote.user.fullName.v1') || '';
+                } catch (_) {
+                    createdByName = '';
+                }
+            }
+            createdByName = String(createdByName || '').trim() || '—';
+            const avatarUrl = getCreatedByAvatarUrl(createdByName);
+
+            const contactName = tx?.contact?.name || tx?.contact_name || '';
+            const contactId = tx?.contact_id || tx?.contact?.id || '';
+            const cashBoxId = tx?.cash_box_id || tx?.cash_box?.id || '';
+            const descEnc = encodeURIComponent(String(tx?.description || ''));
+            const contactEnc = encodeURIComponent(String(contactName || ''));
+
+            const pillClass = isVoided ? 'void' : (isIncome ? 'in' : 'out');
+            const pillIcon = isVoided ? 'fa-ban' : (isIncome ? 'fa-arrow-down' : 'fa-arrow-up');
+            const pillLabel = isVoided ? 'VOID' : (isIncome ? 'IN' : 'OUT');
+
+            const row = document.createElement('div');
+            row.className = 'table-grid';
+            row.tabIndex = 0;
+            row.setAttribute('data-tx-id', String(tx?.id || ''));
+            row.style.setProperty('--cashbox-rgb', cashBoxRgb);
+            row.style.setProperty('--cashbox-color', cashBoxColor);
+            row.innerHTML = `
+                <div class="tx-type-pill ${pillClass}">
+                    <span class="quick-icon"><i class="fas ${pillIcon}"></i></span>
+                    <span class="quick-label">${pillLabel}</span>
+                </div>
+                <div class="tx-datetime">
+                    <span class="date">${formattedDate}</span>
+                    <span class="time">${formattedTime}</span>
+                </div>
+                <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: ${cashBoxColor};">${tx?.cash_box?.name || 'Unknown'}</span></div>
+                <div class="tx-person">${contactName || '—'}</div>
+                <div class="tx-desc">${tx?.description || '—'}</div>
+                <div class="tx-amount ${isIncome ? 'in' : 'out'} ${isVoided ? 'voided' : ''}">${isIncome ? '+' : '-'}${formattedAmount}</div>
+                <div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${createdByName}"></div></div>
+                <div class="tx-actions">
+                    <button type="button" class="tx-action btn-duplicate" data-tx-id="${String(tx?.id || '')}" data-cash-box-id="${String(cashBoxId || '')}" data-direction="${isIncome ? 'in' : 'out'}" data-amount="${String(tx?.amount ?? '')}" data-contact-id="${String(contactId || '')}" data-description="${descEnc}" data-contact-name="${contactEnc}">
+                        <i class="fas fa-copy"></i>
+                        <span>Duplicate</span>
+                    </button>
+                    <a href="spendnote-transaction-detail.html?txId=${encodeURIComponent(String(tx?.id || ''))}" class="tx-action btn-view">
+                        <span>View</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            `;
+            tableWrapper.appendChild(row);
+        });
+    };
+
+    async function render() {
+        bindEvents();
+        updateSortHeaderClasses();
+
+        renderMessageRow('Loading…');
+
+        const res = await fetchPage();
+        if (res && res.error) {
+            renderMessageRow(String(res.error || 'Failed to load transactions.'));
+            state.count = 0;
+            renderPagination();
+            return;
+        }
+
+        state.count = Number(res?.count) || 0;
+        renderRows(res?.data || []);
+        renderPagination();
+    }
+
+    return {
+        state,
+        render
+    };
+}
+
 async function loadDashboardData() {
     if (dashboardLoadPromise) {
         return await dashboardLoadPromise;
@@ -71,9 +497,7 @@ async function loadDashboardData() {
                 select: 'id, name, color, currency, icon, current_balance, created_at, sort_order, sequence_number'
             });
 
-            const transactionsPromise = db.transactions.getAll({ limit: 5, select: '*' });
-
-            const [cashBoxes, transactions] = await Promise.all([cashBoxesPromise, transactionsPromise]);
+            const [cashBoxes] = await Promise.all([cashBoxesPromise]);
             
             if (cashBoxes && cashBoxes.length > 0) {
                 const savedActiveId = localStorage.getItem('activeCashBoxId');
@@ -239,13 +663,12 @@ async function loadDashboardData() {
                 console.log('ℹ️ No cash boxes found in database');
             }
 
-            const cashBoxById = new Map((cashBoxes || []).map((b) => [b.id, b]));
-            const enrichedTransactions = (transactions || []).map((tx) => {
-                if (tx && tx.cash_box) return tx;
-                const cashBox = tx ? cashBoxById.get(tx.cash_box_id) : null;
-                return { ...tx, cash_box: cashBox || null };
-            });
-            loadRecentTransactionsSync(enrichedTransactions);
+            dashboardTxController = createDashboardTransactionsController({ cashBoxes: cashBoxes || [] });
+            try {
+                await dashboardTxController.render();
+            } catch (e) {
+                if (debug) console.warn('[DashboardTx] Render failed:', e);
+            }
 
             window.__spendnoteDashboardDataLoaded = true;
             document.documentElement.classList.remove('dashboard-loading');
@@ -299,131 +722,6 @@ function updateModalCashBoxDropdown(cashBoxes) {
     
     if (Boolean(window.SpendNoteDebug)) {
         console.log('✅ Modal cash box dropdown updated with', cashBoxes.length, 'cash boxes');
-    }
-}
-
-// Load recent transactions (synchronous version - data already loaded)
-function loadRecentTransactionsSync(transactions) {
-    try {
-        const wrapper = document.getElementById('tableWrapper');
-        if (!wrapper) return;
-
-        const { hexToRgb, formatCurrency, getInitials, normalizeHexColor } = getSpendNoteHelpers();
-
-        const getCreatedByAvatarUrl = (createdByName) => {
-            try {
-                const storedAvatar = localStorage.getItem('spendnote.user.avatar.v1');
-                if (storedAvatar) return storedAvatar;
-            } catch (_) {
-                // ignore
-            }
-
-            let avatarColor = '#10b981';
-            try {
-                avatarColor = localStorage.getItem('spendnote.user.avatarColor.v1') || '#10b981';
-            } catch (_) {
-                // ignore
-            }
-
-            const initials = getInitials(createdByName === '—' ? '' : createdByName);
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ffffff" stroke="${avatarColor}" stroke-width="4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="800" fill="${avatarColor}">${initials}</text></svg>`;
-            return `data:image/svg+xml,${encodeURIComponent(svg)}`;
-        };
-
-        // Remove demo rows (keep header)
-        const existingRows = Array.from(wrapper.querySelectorAll('.table-grid'))
-            .filter((el) => !el.classList.contains('table-header'));
-        existingRows.forEach((el) => el.remove());
-
-        if (transactions && transactions.length > 0) {
-            const parseSortTime = (tx) => {
-                const createdAt = tx?.created_at ? Date.parse(tx.created_at) : NaN;
-                if (Number.isFinite(createdAt)) return createdAt;
-                const transactionDate = tx?.transaction_date ? Date.parse(tx.transaction_date) : NaN;
-                if (Number.isFinite(transactionDate)) return transactionDate;
-                return 0;
-            };
-
-            const sortedTransactions = [...transactions].sort((a, b) => {
-                const bt = parseSortTime(b);
-                const at = parseSortTime(a);
-                if (bt !== at) return bt - at;
-                return String(b?.id || '').localeCompare(String(a?.id || ''));
-            });
-
-            sortedTransactions.forEach(tx => {
-                const isIncome = tx.type === 'income';
-                const cashBoxColor = normalizeHexColor(tx.cash_box?.color || '#10b981');
-                const cashBoxRgb = hexToRgb(cashBoxColor);
-
-                const formattedAmount = formatCurrency(tx.amount, tx.cash_box?.currency || 'USD');
-
-                const dt = new Date(tx.created_at || tx.transaction_date);
-                const formattedDate = dt.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                });
-                const formattedTime = dt.toLocaleTimeString('en-US', {
-                    hour: 'numeric',
-                    minute: '2-digit'
-                });
-
-                let createdByName = tx.created_by_user_name || tx.created_by || '';
-                if (!createdByName || String(createdByName).trim() === '—') {
-                    try {
-                        createdByName = localStorage.getItem('spendnote.user.fullName.v1') || '';
-                    } catch (_) {
-                        createdByName = '';
-                    }
-                }
-                createdByName = String(createdByName || '').trim() || '—';
-                const avatarUrl = getCreatedByAvatarUrl(createdByName);
-
-                const contactName = tx.contact?.name || tx.contact_name || '';
-                const contactId = tx.contact_id || tx.contact?.id || '';
-                const cashBoxId = tx.cash_box_id || tx.cash_box?.id || '';
-                const descEnc = encodeURIComponent(String(tx.description || ''));
-                const contactEnc = encodeURIComponent(String(contactName || ''));
-                const rowHTML = `
-                    <div class="table-grid" tabindex="0" style="--cashbox-rgb: ${cashBoxRgb}; --cashbox-color: ${cashBoxColor};">
-                        <div class="tx-type-pill ${isIncome ? 'in' : 'out'}">
-                            <span class="quick-icon"><i class="fas ${isIncome ? 'fa-arrow-down' : 'fa-arrow-up'}"></i></span>
-                            <span class="quick-label">${isIncome ? 'IN' : 'OUT'}</span>
-                        </div>
-                        <div class="tx-datetime">
-                            <span class="date">${formattedDate}</span>
-                            <span class="time">${formattedTime}</span>
-                        </div>
-                        <div class="tx-cashbox"><span class="cashbox-badge" style="--cb-color: ${cashBoxColor};">${tx.cash_box?.name || 'Unknown'}</span></div>
-                        <div class="tx-person">${contactName || 'N/A'}</div>
-                        <div class="tx-desc">${tx.description || 'No description'}</div>
-                        <div class="tx-amount ${isIncome ? 'in' : 'out'}">${isIncome ? '+' : '-'}${formattedAmount}</div>
-                        <div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${createdByName}"></div></div>
-                        <div class="tx-actions">
-                            <button type="button" class="tx-action btn-duplicate" data-tx-id="${tx.id}" data-cash-box-id="${cashBoxId}" data-direction="${isIncome ? 'in' : 'out'}" data-amount="${String(tx.amount ?? '')}" data-contact-id="${String(contactId || '')}" data-description="${descEnc}" data-contact-name="${contactEnc}">
-                                <i class="fas fa-copy"></i>
-                                <span>Duplicate</span>
-                            </button>
-                            <a href="spendnote-transaction-detail.html?txId=${encodeURIComponent(tx.id)}" class="tx-action btn-view">
-                                <span>View</span>
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                `;
-
-                wrapper.insertAdjacentHTML('beforeend', rowHTML);
-            });
-
-            if (Boolean(window.SpendNoteDebug)) {
-                console.log('✅ Loaded recent transactions:', transactions.length);
-            }
-        } else if (Boolean(window.SpendNoteDebug)) {
-            console.log('ℹ️ No transactions found');
-        }
-    } catch (error) {
-        if (window.SpendNoteDebug) console.error('❌ Error loading transactions:', error);
     }
 }
 
