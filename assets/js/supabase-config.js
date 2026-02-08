@@ -1383,8 +1383,27 @@ var db = {
                 if (token) {
                     const link = `${window.location.origin}/spendnote-signup.html?inviteToken=${encodeURIComponent(token)}`;
                     const sessionRes = await supabaseClient.auth.getSession();
-                    const accessToken = sessionRes?.data?.session?.access_token;
+                    let accessToken = String(sessionRes?.data?.session?.access_token || '');
                     if (!accessToken) throw new Error('Not authenticated');
+
+                    const looksLikeJwt = (v) => {
+                        const s = String(v || '');
+                        return /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(s);
+                    };
+
+                    if (!looksLikeJwt(accessToken)) {
+                        try {
+                            await supabaseClient.auth.refreshSession();
+                            const s2 = await supabaseClient.auth.getSession();
+                            accessToken = String(s2?.data?.session?.access_token || '');
+                        } catch (_) {
+                            // ignore
+                        }
+                    }
+
+                    if (!looksLikeJwt(accessToken)) {
+                        throw new Error('Session is invalid. Please log out and log in again.');
+                    }
 
                     const doRequest = async (jwt) => {
                         return await fetch(`${SUPABASE_URL}/functions/v1/send-invite-email`, {
@@ -1407,11 +1426,18 @@ var db = {
 
                     if (resp.status === 401) {
                         try {
-                            const refreshRes = await supabaseClient.auth.refreshSession();
-                            const nextToken = refreshRes?.data?.session?.access_token;
-                            if (nextToken) {
-                                resp = await doRequest(nextToken);
-                            }
+                            await supabaseClient.auth.refreshSession();
+                            const s2 = await supabaseClient.auth.getSession();
+                            const nextToken = String(s2?.data?.session?.access_token || '');
+                            if (looksLikeJwt(nextToken)) resp = await doRequest(nextToken);
+                        } catch (_) {
+                            // ignore
+                        }
+                    }
+
+                    if (resp.status === 401) {
+                        try {
+                            await supabaseClient.auth.signOut();
                         } catch (_) {
                             // ignore
                         }
@@ -1427,7 +1453,11 @@ var db = {
 
                     if (!resp.ok) {
                         emailSent = false;
-                        emailError = payload?.detail || payload?.error || text || `HTTP ${resp.status}`;
+                        if (resp.status === 401) {
+                            emailError = 'Session expired/invalid. Please log in again.';
+                        } else {
+                            emailError = payload?.detail || payload?.error || text || `HTTP ${resp.status}`;
+                        }
                     } else {
                         emailSent = true;
                     }
