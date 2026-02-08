@@ -219,6 +219,14 @@ async function loadDashboardData() {
                     } catch (_) {
 
                     }
+
+                    try {
+                        if (typeof window.initCashBoxCards === 'function') {
+                            window.initCashBoxCards();
+                        }
+                    } catch (_) {
+
+                    }
                 } else if (debug) {
                     console.log('⚠️ Swiper not initialized yet');
                 }

@@ -252,7 +252,7 @@ function initCashBoxCards() {
         const color = card.dataset.color;
         const rgb = card.dataset.rgb;
 
-        cards.forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.register-card').forEach(c => c.classList.remove('active'));
         card.classList.add('active');
 
         document.documentElement.style.setProperty('--active', color);
@@ -269,6 +269,11 @@ function initCashBoxCards() {
     cards.forEach(card => {
         card.style.setProperty('--card-color', card.dataset.color);
         card.style.setProperty('--card-rgb', card.dataset.rgb);
+
+        if (card.dataset.bound === '1') {
+            return;
+        }
+        card.dataset.bound = '1';
 
         card.querySelectorAll('.register-quick-btn').forEach((btn) => {
             btn.addEventListener('click', (e) => {
