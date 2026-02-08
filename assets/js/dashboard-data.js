@@ -257,6 +257,10 @@ function createDashboardTransactionsController(ctx) {
             const descriptionText = safeText(tx?.description, '—');
             const descriptionHtml = escapeHtml(descriptionText);
 
+            const cashBoxNameText = safeText(tx?.cash_box?.name, 'Unknown');
+            const cashBoxNameHtml = escapeHtml(cashBoxNameText);
+            const contactNameHtml = escapeHtml(contactName);
+
             const pillClass = isVoided ? 'void' : (isIncome ? 'in' : 'out');
             const pillIcon = isVoided ? 'fa-ban' : (isIncome ? 'fa-arrow-down' : 'fa-arrow-up');
             const pillLabel = isVoided ? 'VOID' : (isIncome ? 'IN' : 'OUT');
@@ -275,8 +279,8 @@ function createDashboardTransactionsController(ctx) {
                 </td>
                 <td><span class="tx-id">${safeText(displayId, '—')}</span></td>
                 <td><span class="tx-date">${formatDateShort(tx?.transaction_date || tx?.created_at)}</span></td>
-                <td><span class="cashbox-badge" style="--cb-color: ${cashBoxColor};">${safeText(tx?.cash_box?.name, 'Unknown')}</span></td>
-                <td><span class="tx-contact">${contactName}</span></td>
+                <td><span class="cashbox-badge" title="${cashBoxNameHtml}" style="--cb-color: ${cashBoxColor};">${cashBoxNameHtml}</span></td>
+                <td><span class="tx-contact" title="${contactNameHtml}">${contactNameHtml}</span></td>
                 <td><span class="tx-desc" title="${descriptionHtml}">${descriptionHtml}</span></td>
                 <td><span class="tx-amount ${isIncome ? 'in' : 'out'} ${isVoided ? 'voided' : ''}">${formattedAmount}</span></td>
                 <td><div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${safeText(createdByName, '—')}"></div></div></td>
