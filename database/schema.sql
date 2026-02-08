@@ -14,6 +14,14 @@ AS $$
   SELECT extensions.gen_random_bytes($1);
 $$;
 
+CREATE OR REPLACE FUNCTION public.digest(text, text)
+RETURNS bytea
+LANGUAGE sql
+IMMUTABLE
+AS $$
+  SELECT extensions.digest(convert_to($1, 'utf8'), $2);
+$$;
+
 -- =====================================================
 -- USERS TABLE (extends Supabase Auth)
 -- =====================================================
