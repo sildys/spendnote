@@ -1,5 +1,4 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { SESClient, SendEmailCommand } from "npm:@aws-sdk/client-ses@3";
 
 type InviteEmailBody = {
   invitedEmail: string;
@@ -23,9 +22,7 @@ Deno.serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-    const awsRegion = Deno.env.get("AWS_REGION") || "";
-    const awsAccessKeyId = Deno.env.get("AWS_ACCESS_KEY_ID") || "";
-    const awsSecretAccessKey = Deno.env.get("AWS_SECRET_ACCESS_KEY") || "";
+    const resendApiKey = Deno.env.get("RESEND_API_KEY") || "";
 
     if (!supabaseUrl || !supabaseAnonKey) {
       return new Response(JSON.stringify({ error: "Missing SUPABASE_URL / SUPABASE_ANON_KEY" }), {
@@ -41,15 +38,8 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const missingAws: string[] = [];
-    if (!awsRegion) missingAws.push("AWS_REGION");
-    if (!awsAccessKeyId) missingAws.push("AWS_ACCESS_KEY_ID");
-    if (!awsSecretAccessKey) missingAws.push("AWS_SECRET_ACCESS_KEY");
-
-    if (missingAws.length) {
-      return new Response(JSON.stringify({
-        error: `Missing AWS SES secrets: ${missingAws.join(", ")}`,
-      }), {
+    if (!resendApiKey) {
+      return new Response(JSON.stringify({ error: "Missing RESEND_API_KEY secret" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -144,15 +134,9 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const from = Deno.env.get("SPENDNOTE_EMAIL_FROM") || "no-reply@spendnote.app";
+    const from = Deno.env.get("SPENDNOTE_EMAIL_FROM") || "SpendNote <no-reply@spendnote.app>";
     const appUrl = Deno.env.get("SPENDNOTE_APP_URL") || "";
     const subject = Deno.env.get("SPENDNOTE_INVITE_SUBJECT") || "You have been invited to SpendNote";
-
-    const fromEmail = (() => {
-      const raw = String(from || "").trim();
-      const m = /<([^>]+)>/.exec(raw);
-      return String((m && m[1]) ? m[1] : raw).trim();
-    })();
 
     const safeRole = role === "admin" ? "Admin" : "User";
     const effectiveLink = appUrl ? inviteLink.replace(/^https?:\/\/[^/]+/i, appUrl) : inviteLink;
@@ -167,40 +151,34 @@ Deno.serve(async (req: Request) => {
       </div>
     `;
 
-    const ses = new SESClient({
-      region: awsRegion,
-      credentials: {
-        accessKeyId: awsAccessKeyId,
-        secretAccessKey: awsSecretAccessKey,
+    const resendResp = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        from,
+        to: [invitedEmail],
+        subject,
+        html,
+      }),
     });
 
-    try {
-      const result = await ses.send(new SendEmailCommand({
-        Source: fromEmail,
-        Destination: { ToAddresses: [invitedEmail] },
-        Message: {
-          Subject: { Data: subject, Charset: "UTF-8" },
-          Body: {
-            Html: { Data: html, Charset: "UTF-8" },
-          },
-        },
-      }));
-
-      return new Response(JSON.stringify({ success: true, data: result }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    } catch (sendError) {
-      const detail = sendError instanceof Error ? sendError.message : String(sendError);
-      return new Response(JSON.stringify({
-        error: "Failed to send",
-        detail,
-      }), {
+    if (!resendResp.ok) {
+      const detail = await resendResp.text();
+      return new Response(JSON.stringify({ error: "Failed to send", detail }), {
         status: 502,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    const resendData = await resendResp.json();
+
+    return new Response(JSON.stringify({ success: true, data: resendData }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     return new Response(JSON.stringify({ error: msg || "Unknown error" }), {

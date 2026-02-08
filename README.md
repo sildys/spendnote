@@ -545,9 +545,7 @@ Required GitHub Secrets:
 Required Supabase Edge Functions Secrets (set in Supabase Dashboard):
 
 - `SUPABASE_SERVICE_ROLE_KEY`
-- `AWS_REGION`
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
+- `RESEND_API_KEY`
 - `SPENDNOTE_EMAIL_FROM` (e.g. `SpendNote <no-reply@yourdomain.com>`)
 - `SPENDNOTE_APP_URL` (public app base URL used in invite links)
 - `SPENDNOTE_INVITE_SUBJECT`

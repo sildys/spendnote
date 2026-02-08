@@ -224,15 +224,13 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Edge Function scaffold added: `send-invite-email`.
   - Deployment is handled via GitHub Actions:
     - Workflow: `.github/workflows/deploy-supabase-functions.yml`
-  - Uses AWS SES for delivery.
+  - Uses Resend for delivery.
   - Required GitHub Secrets:
     - `SUPABASE_ACCESS_TOKEN`
     - `SUPABASE_PROJECT_REF`
   - Required Supabase Edge Functions Secrets:
     - `SUPABASE_SERVICE_ROLE_KEY`
-    - `AWS_REGION`
-    - `AWS_ACCESS_KEY_ID`
-    - `AWS_SECRET_ACCESS_KEY`
+    - `RESEND_API_KEY`
     - `SPENDNOTE_EMAIL_FROM`
     - `SPENDNOTE_APP_URL`
     - `SPENDNOTE_INVITE_SUBJECT`
