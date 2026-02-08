@@ -1398,8 +1398,9 @@ var db = {
                         emailSent = true;
                     }
                 }
-            } catch (_) {
+            } catch (err) {
                 emailSent = false;
+                emailError = err?.message || String(err);
             }
 
             return { success: true, data: row, emailSent, emailError };

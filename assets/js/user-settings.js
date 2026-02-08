@@ -497,6 +497,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        if (result?.emailError) {
+            alert(String(result.emailError));
+        }
+
         if (token) {
             const link = `${window.location.origin}/spendnote-signup.html?inviteToken=${encodeURIComponent(token)}`;
             try {
