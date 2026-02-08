@@ -1380,20 +1380,38 @@ var db = {
 
             try {
                 const token = row?.token;
-                if (token && supabaseClient?.functions?.invoke) {
+                if (token) {
                     const link = `${window.location.origin}/spendnote-signup.html?inviteToken=${encodeURIComponent(token)}`;
-                    const invokeRes = await supabaseClient.functions.invoke('send-invite-email', {
-                        body: {
+                    const sessionRes = await supabaseClient.auth.getSession();
+                    const accessToken = sessionRes?.data?.session?.access_token;
+                    if (!accessToken) throw new Error('Not authenticated');
+
+                    const resp = await fetch(`${SUPABASE_URL}/functions/v1/send-invite-email`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${accessToken}`,
+                            'apikey': SUPABASE_ANON_KEY
+                        },
+                        body: JSON.stringify({
                             invitedEmail: email,
                             inviteLink: link,
                             role: row?.role || role || 'user',
                             inviteToken: token
-                        }
+                        })
                     });
 
-                    if (invokeRes?.error) {
+                    const text = await resp.text();
+                    let payload = null;
+                    try {
+                        payload = text ? JSON.parse(text) : null;
+                    } catch (_) {
+                        payload = null;
+                    }
+
+                    if (!resp.ok) {
                         emailSent = false;
-                        emailError = invokeRes.error?.message || invokeRes.error;
+                        emailError = payload?.detail || payload?.error || text || `HTTP ${resp.status}`;
                     } else {
                         emailSent = true;
                     }

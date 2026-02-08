@@ -225,6 +225,7 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Deployment is handled via GitHub Actions:
     - Workflow: `.github/workflows/deploy-supabase-functions.yml`
   - Uses Resend for delivery.
+  - Client now surfaces Edge Function error details (not just generic non-2xx) and falls back to showing the invite link when email delivery fails.
   - Required GitHub Secrets:
     - `SUPABASE_ACCESS_TOKEN`
     - `SUPABASE_PROJECT_REF`
@@ -234,6 +235,10 @@ If a chat thread freezes / context is lost: in the new thread say:
     - `SPENDNOTE_EMAIL_FROM`
     - `SPENDNOTE_APP_URL`
     - `SPENDNOTE_INVITE_SUBJECT`
+
+- **Supabase pgcrypto wrappers for invite tokens** ✅
+  - Some Supabase projects have `pgcrypto` installed under schema `extensions`, which breaks unqualified calls like `gen_random_bytes(...)` / `digest(text, ...)`.
+  - Fixed by enabling `pgcrypto` and adding `public.gen_random_bytes(int)` + `public.digest(text,text)` wrappers.
 
 ## Key decisions / invariants
 - **“Unsaved contact” indicator**: keep it minimal in Transaction History.

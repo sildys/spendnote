@@ -618,6 +618,32 @@ This repo is designed to work as a static deployment.
   - Check that your Supabase Auth settings allow the current site origin.
   - If the issue occurs only when printing/opening receipts in a new tab, check the receipt URL contains `bootstrap=1` and that `localStorage.spendnote.session.bootstrap` is populated.
 
+- **Invites fail with missing `gen_random_bytes()` / `digest()`**
+  - Some Supabase projects install `pgcrypto` under the `extensions` schema. If DB functions call `gen_random_bytes(...)` or `digest(text, ...)` without schema qualification, you may see errors like:
+    - `function gen_random_bytes(integer) does not exist`
+    - `function digest(text, unknown) does not exist`
+  - Run this in Supabase SQL Editor:
+
+```sql
+create extension if not exists "pgcrypto" with schema extensions;
+
+create or replace function public.gen_random_bytes(integer)
+returns bytea
+language sql
+immutable
+as $$
+  select extensions.gen_random_bytes($1);
+$$;
+
+create or replace function public.digest(text, text)
+returns bytea
+language sql
+immutable
+as $$
+  select extensions.digest(convert_to($1, 'utf8'), $2);
+$$;
+```
+
 - **Receipt page shows login flicker / opens Dashboard instead of loading the receipt**
   - Check the browser console for a `SyntaxError`.
   - A past root cause was a global function/const name collision in receipt templates (e.g. defining a top-level `isUuid` that collided with `supabase-config.js`).
