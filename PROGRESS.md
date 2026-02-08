@@ -280,18 +280,20 @@ If a chat thread freezes / context is lost: in the new thread say:
 ## Completed (previously "Next focus")
 - ~~**B)** Stabilize core IDs everywhere~~ ✅ (done: canonical URL params, SN-###/CONT-###/SNx-yyy resolution, UUID validation centralized)
 - ~~**C)** Contacts list: replace remaining placeholder columns~~ ✅ (done: `spendnote_contacts_stats()` RPC populates #, Boxes, Last Tx)
+- ~~**D)** Replace all native `alert()`/`confirm()`/`prompt()` with custom branded modals~~ ✅
+  - Created `assets/js/modal-dialogs.js`: Promise-based `showAlert`, `showConfirm`, `showPrompt`
+  - Added branded dialog CSS to `assets/css/main.css` (section 13)
+  - Replaced ~90+ native dialog calls across 10 JS files + 7 HTML files
+  - `modal-dialogs.js` included in all 11 app HTML pages
+  - Consistent icon types: info, success, warning, error, danger
+  - Destructive confirms use red danger styling; prompts for email, void reason, delete confirmation
 
 ## Next focus (pick one)
-- Replace all native `alert()`/`confirm()`/`prompt()` with custom branded modals
 - Contacts list: 2-click row open (match transaction tables)
 - Invite resend/revoke actions in UI
 
 ## Backlog (UX + bugs)
 - **High**
-  - Replace all native `alert()`/`prompt()`/`confirm()` dialogs with custom branded modals.
-    - Create a reusable Promise-based modal utility (`showAlert`, `showConfirm`, `showPrompt`) matching the app's existing design.
-    - Swap every usage across all JS files.
-    - Estimated ~1–1.5 hours.
   - Optional: add invite resend/revoke actions in UI.
 - **High (next)**
   - Contacts list: require 2 clicks to open Contact Detail (match transaction tables).

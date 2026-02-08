@@ -9,6 +9,10 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 
 ## Recent engineering updates (2026-02-08)
 
+- **Branded modal dialogs** replace all native `alert()`/`confirm()`/`prompt()` calls:
+  - `assets/js/modal-dialogs.js` exposes Promise-based `showAlert`, `showConfirm`, `showPrompt` on `window`.
+  - ~90+ native dialog calls replaced across 10 JS files and 7 HTML files.
+  - Styled with the app's CSS variables; destructive actions use red danger buttons.
 - Canonical query params are now enforced app-wide:
   - Cash Box: `cashBoxId`
   - Contact: `contactId`
