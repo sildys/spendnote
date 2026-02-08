@@ -87,6 +87,12 @@ async function loadDashboardData() {
                 const allSlides = Array.from(swiperWrapper.querySelectorAll('.swiper-slide'));
                 const registerSlides = allSlides.filter(slide => slide.querySelector('.register-card'));
                 registerSlides.forEach(slide => slide.remove());
+
+                // Keep the "Add Cash Box" slide but move it to the end after inserting real cash boxes.
+                const addSlide = allSlides.find(slide => slide.querySelector('.add-cash-box-card')) || null;
+                if (addSlide) {
+                    try { addSlide.remove(); } catch (_) {}
+                }
                 
                 // Generate HTML for all cash boxes
                 let allSlidesHTML = '';
@@ -175,18 +181,14 @@ async function loadDashboardData() {
                 });
                 
                 // Insert all cash boxes before the "Add Cash Box" card
-                if (window.registersSwiper && window.registersSwiper.params && window.registersSwiper.el) {
-                    // Use Swiper's API to add slides
-                    const slides = swiperWrapper.querySelectorAll('.swiper-slide');
-                    const addCardIndex = Array.from(slides).findIndex(slide => slide.querySelector('.add-cash-box-card'));
-                    
-                    if (addCardIndex !== -1) {
-                        // Insert slides before add card
-                        swiperWrapper.insertAdjacentHTML('beforeend', allSlidesHTML);
+                swiperWrapper.insertAdjacentHTML('beforeend', allSlidesHTML);
+
+                if (addSlide) {
+                    try {
+                        swiperWrapper.appendChild(addSlide);
+                    } catch (_) {
+
                     }
-                } else {
-                    // Fallback: direct DOM insertion
-                    swiperWrapper.insertAdjacentHTML('beforeend', allSlidesHTML);
                 }
                 
                 if (debug) console.log('✅ Inserted', cashBoxes.length, 'cash boxes before Add Cash Box card');
@@ -203,6 +205,20 @@ async function loadDashboardData() {
                             card.classList.add('active');
                         }
                     });
+
+                    // Ensure Add Cash Box card matches height of other cards
+                    try {
+                        const addCard = document.querySelector('.add-cash-box-card');
+                        const heights = Array.from(swiperWrapper.querySelectorAll('.register-card'))
+                            .map((el) => el.getBoundingClientRect().height)
+                            .filter((h) => Number.isFinite(h) && h > 0);
+                        const maxHeight = heights.length ? Math.max(...heights) : 0;
+                        if (addCard && maxHeight) {
+                            addCard.style.minHeight = `${Math.ceil(maxHeight)}px`;
+                        }
+                    } catch (_) {
+
+                    }
                 } else if (debug) {
                     console.log('⚠️ Swiper not initialized yet');
                 }
