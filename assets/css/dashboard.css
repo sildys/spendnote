@@ -2189,6 +2189,7 @@ tr:hover [data-category-tag] {
 
  body.modal-open {
      overflow: hidden;
+     padding-right: var(--spendnote-scrollbar-comp, 0px);
  }
 
  body.modal-open > *:not(#createTransactionModal) {

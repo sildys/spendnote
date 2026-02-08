@@ -121,6 +121,20 @@ function setModalBackgroundInert(isInert) {
     });
 }
 
+function setScrollbarCompensation(enabled) {
+    try {
+        if (!enabled) {
+            document.body.style.removeProperty('--spendnote-scrollbar-comp');
+            return;
+        }
+        const w = window.innerWidth - document.documentElement.clientWidth;
+        const px = Number.isFinite(w) && w > 0 ? `${w}px` : '0px';
+        document.body.style.setProperty('--spendnote-scrollbar-comp', px);
+    } catch (_) {
+        // ignore
+    }
+}
+
 function updateModalDirectionUI(direction) {
     const container = getModalContainer();
     if (container) container.dataset.direction = direction === 'out' ? 'out' : 'in';
@@ -341,6 +355,7 @@ function openModal(preset) {
 
     lastModalFocusEl = document.activeElement;
 
+    setScrollbarCompensation(true);
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
@@ -503,6 +518,7 @@ function closeModal() {
     modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
     setModalBackgroundInert(false);
+    setScrollbarCompensation(false);
     document.removeEventListener('keydown', handleModalKeydown, true);
     document.removeEventListener('focusin', handleModalFocusIn, true);
 
