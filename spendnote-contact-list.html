@@ -1117,7 +1117,7 @@
                     const viewLink = row.querySelector('a.btn-view');
                     if (viewLink && viewLink.href) {
                         const url = new URL(viewLink.href);
-                        const id = url.searchParams.get('id');
+                        const id = url.searchParams.get('contactId');
                         if (id) ids.push(id);
                     }
                 }

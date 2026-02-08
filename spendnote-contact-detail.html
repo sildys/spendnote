@@ -518,7 +518,7 @@
     <script>
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
-        const contactIdRaw = urlParams.get('id') || urlParams.get('contactId');
+        const contactIdRaw = urlParams.get('contactId');
         const mode = urlParams.get('mode');
 
         // Initialize page
@@ -859,7 +859,7 @@
                         </span>
                     `;
                     return `
-                        <a class="transaction-item" href="spendnote-transaction-detail.html?id=${encodeURIComponent(safeText(tx?.id, ''))}" style="--cb-color: ${cbColor};">
+                        <a class="transaction-item" href="spendnote-transaction-detail.html?txId=${encodeURIComponent(safeText(tx?.id, ''))}" style="--cb-color: ${cbColor};">
                             <div class="transaction-left">
                                 <div class="transaction-icon ${iconCls}" title="${isIn ? 'Income' : 'Expense'}" aria-label="${isIn ? 'Income' : 'Expense'}">
                                     <i class="fas ${isIn ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>

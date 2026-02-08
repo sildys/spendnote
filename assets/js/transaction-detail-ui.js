@@ -57,7 +57,7 @@ const QUICK_PRESET = {
     }
 
     const spTx = new URLSearchParams(window.location.search);
-    const txIdRaw = spTx.get('id') || spTx.get('txId');
+    const txIdRaw = spTx.get('txId');
     const txId = isUuid(txIdRaw) ? txIdRaw : '';
 
     function buildReceiptUrl(format, extraParams) {

@@ -1312,7 +1312,7 @@
                 return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value || '').trim());
             };
 
-            const cashboxIdRaw = urlParams.get('id') || urlParams.get('cashBoxId');
+            const cashboxIdRaw = urlParams.get('cashBoxId');
             let cashboxId = isUuid(cashboxIdRaw) ? String(cashboxIdRaw).trim() : null;
 
             const resolveCashBoxId = async () => {
@@ -1331,7 +1331,6 @@
                     cashboxId = uuid;
                     try {
                         urlParams.set('cashBoxId', uuid);
-                        urlParams.delete('id');
                         const next = `${window.location.pathname}?${urlParams.toString()}${window.location.hash || ''}`;
                         window.history.replaceState({}, '', next);
                     } catch (_) {}
@@ -1397,7 +1396,7 @@
 
                 const settingsBtn = document.getElementById('detailSettingsBtn');
                 if (settingsBtn) {
-                    settingsBtn.setAttribute('href', `spendnote-cash-box-settings.html?id=${id}`);
+                    settingsBtn.setAttribute('href', `spendnote-cash-box-settings.html?cashBoxId=${encodeURIComponent(id)}`);
                 }
             })().catch(() => {});
 
@@ -1427,6 +1426,6 @@
     <script src="assets/js/nav-loader.js?v=8"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=21"></script>
-    <script src="assets/js/transaction-history-data.js?v=75"></script>
+    <script src="assets/js/transaction-history-data.js?v=76"></script>
 </body>
 </html>

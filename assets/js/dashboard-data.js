@@ -382,7 +382,7 @@ function loadRecentTransactionsSync(transactions) {
                                 <i class="fas fa-copy"></i>
                                 <span>Duplicate</span>
                             </button>
-                            <a href="spendnote-transaction-detail.html?id=${encodeURIComponent(tx.id)}" class="tx-action btn-view">
+                            <a href="spendnote-transaction-detail.html?txId=${encodeURIComponent(tx.id)}" class="tx-action btn-view">
                                 <span>View</span>
                                 <i class="fas fa-arrow-right"></i>
                             </a>

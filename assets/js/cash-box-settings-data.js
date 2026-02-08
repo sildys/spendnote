@@ -280,7 +280,7 @@ async function initCashBoxSettings() {
         hasInitialized = true;
 
         const urlParams = new URLSearchParams(window.location.search);
-        const idRaw = urlParams.get('id') || urlParams.get('cashBoxId');
+        const idRaw = urlParams.get('cashBoxId');
         const raw = String(idRaw || '').trim();
         currentCashBoxId = raw && isUuid(raw) ? raw : null;
 

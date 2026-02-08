@@ -183,7 +183,7 @@
         }
 
         const urlParams = new URLSearchParams(window.location.search);
-        const idRaw = urlParams.get('id') || urlParams.get('txId');
+        const idRaw = urlParams.get('txId');
         const idInput = String(idRaw || '').trim();
 
         const isUuidLocal = (value) => {

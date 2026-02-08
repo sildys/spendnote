@@ -1225,7 +1225,7 @@
 
         const urlParams = new URLSearchParams(window.location.search);
 
-        const urlCashBoxIdRaw = urlParams.get('cashBoxId') || urlParams.get('id');
+        const urlCashBoxIdRaw = urlParams.get('cashBoxId');
         const urlCashBoxId = isUuid(urlCashBoxIdRaw) ? urlCashBoxIdRaw : null;
         const urlCashBoxQuery = (!urlCashBoxId && safeText(urlCashBoxIdRaw, ''))
             ? normalizeCashBoxQuery(String(urlCashBoxIdRaw).trim().toLowerCase())
