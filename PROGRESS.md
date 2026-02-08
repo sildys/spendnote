@@ -283,6 +283,11 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ## Backlog (UX + bugs)
 - **High**
+  - Replace all native `alert()`/`prompt()`/`confirm()` dialogs with custom branded modals.
+    - Create a reusable Promise-based modal utility (`showAlert`, `showConfirm`, `showPrompt`) matching the app's existing design.
+    - Swap every usage across all JS files.
+    - Estimated ~1–1.5 hours.
+  - Optional: add invite resend/revoke actions in UI.
 - **High (next)**
   - Contacts list: require 2 clicks to open Contact Detail (match transaction tables).
 - **High (upcoming)**
