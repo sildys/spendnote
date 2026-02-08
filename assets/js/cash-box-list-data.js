@@ -240,7 +240,7 @@ async function loadCashBoxList() {
                 } catch (error) {
                     console.error('❌ Failed to persist cash box order:', error);
                     setOrderStatus('Could not save');
-                    alert('Could not save cash box order yet. Please make sure the database has a sort_order column.');
+                    showAlert('Could not save cash box order yet. Please make sure the database has a sort_order column.', { iconType: 'error' });
                 } finally {
                     isSavingOrder = false;
                 }

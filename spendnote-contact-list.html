@@ -1092,13 +1092,13 @@
         // Bulk Export CSV
         document.getElementById('bulkExportCSV').addEventListener('click', () => {
             const checked = document.querySelectorAll('.row-checkbox:checked').length;
-            alert(`Export CSV - ${checked} SELECTED CONTACTS\n\nIn production:\n- Generate CSV file with selected contact data\n- Download file: contacts_selected.csv`);
+            showAlert(`Export CSV - ${checked} SELECTED CONTACTS\n\nIn production:\n- Generate CSV file with selected contact data\n- Download file: contacts_selected.csv`, { iconType: 'info' });
         });
 
         // Bulk Export PDF
         document.getElementById('bulkExportPDF').addEventListener('click', () => {
             const checked = document.querySelectorAll('.row-checkbox:checked').length;
-            alert(`Export PDF - ${checked} SELECTED CONTACTS\n\nIn production:\n- Generate PDF report with selected contact data\n- Download file: contacts_selected.pdf`);
+            showAlert(`Export PDF - ${checked} SELECTED CONTACTS\n\nIn production:\n- Generate PDF report with selected contact data\n- Download file: contacts_selected.pdf`, { iconType: 'info' });
         });
 
         // Bulk Delete
@@ -1107,7 +1107,7 @@
             const count = checkedBoxes.length;
             if (count === 0) return;
             
-            if (!confirm(`Are you sure you want to delete ${count} contact(s)? This cannot be undone.`)) return;
+            if (!await showConfirm(`Are you sure you want to delete ${count} contact(s)? This cannot be undone.`, { title: 'Delete Contacts', iconType: 'danger', okLabel: 'Delete', danger: true })) return;
             
             // Get contact IDs from the rows
             const ids = [];
@@ -1124,20 +1124,20 @@
             });
             
             if (ids.length === 0) {
-                alert('Could not find contact IDs to delete.');
+                showAlert('Could not find contact IDs to delete.', { iconType: 'error' });
                 return;
             }
             
             try {
                 const res = await window.db.contacts.bulkDelete(ids);
                 if (!res || !res.success) {
-                    alert(res?.error || 'Failed to delete contacts.');
+                    showAlert(res?.error || 'Failed to delete contacts.', { iconType: 'error' });
                     return;
                 }
                 window.location.reload();
             } catch (err) {
                 console.error('Bulk delete failed:', err);
-                alert(err?.message || 'Failed to delete contacts.');
+                showAlert(err?.message || 'Failed to delete contacts.', { iconType: 'error' });
             }
         });
 
@@ -1361,6 +1361,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260208-1532"></script>
     <script src="assets/js/auth-guard.js"></script>
+    <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=8"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=21"></script>

@@ -1175,7 +1175,7 @@
                 let allowedTotal = total;
 
                 if (total > maxRows) {
-                    const proceed = confirm(`This export matches ${total} transactions.\n\nExporting more than ${maxRows} rows to PDF may be slow.\n\nClick OK to export the first ${maxRows} rows, or Cancel to adjust filters.`);
+                    const proceed = await showConfirm(`This export matches ${total} transactions.\n\nExporting more than ${maxRows} rows to PDF may be slow.\n\nClick OK to export the first ${maxRows} rows, or Cancel to adjust filters.`, { title: 'Large Export', iconType: 'warning', okLabel: 'Export' });
                     if (!proceed) return;
                     allowedTotal = maxRows;
                 }
@@ -1718,12 +1718,12 @@
 
                 if (!selected.length) return;
 
-                const proceed = confirm(`Void ${selected.length} transaction(s)?\n\nThis cannot be undone.`);
+                const proceed = await showConfirm(`Void ${selected.length} transaction(s)?\n\nThis cannot be undone.`, { title: 'Bulk Void', iconType: 'danger', okLabel: 'Void', danger: true });
                 if (!proceed) return;
 
                 let reason = '';
                 try {
-                    reason = String(prompt('Void reason (optional):', '') || '').trim();
+                    reason = String(await showPrompt('Void reason (optional):', { title: 'Void Reason', placeholder: 'e.g. Duplicate entry' }) || '').trim();
                 } catch (_) {
                     reason = '';
                 }
@@ -1735,14 +1735,14 @@
 
                 try {
                     if (!window.db?.transactions?.voidTransaction) {
-                        alert('Void is not available.');
+                        showAlert('Void is not available.', { iconType: 'error' });
                         return;
                     }
 
                     for (const id of selected) {
                         const res = await window.db.transactions.voidTransaction(id, reason || null);
                         if (!res || !res.success) {
-                            alert(String(res?.error || 'Failed to void a transaction.'));
+                            showAlert(String(res?.error || 'Failed to void a transaction.'), { iconType: 'error' });
                             break;
                         }
                     }
@@ -2115,7 +2115,7 @@
                 let allowedTotal = total;
 
                 if (total > maxRows) {
-                    const proceed = confirm(`This export matches ${total} transactions. Exporting more than ${maxRows} rows may be slow.\n\nClick OK to export the first ${maxRows} rows, or Cancel to adjust filters.`);
+                    const proceed = await showConfirm(`This export matches ${total} transactions. Exporting more than ${maxRows} rows may be slow.\n\nClick OK to export the first ${maxRows} rows, or Cancel to adjust filters.`, { title: 'Large Export', iconType: 'warning', okLabel: 'Export' });
                     if (!proceed) return;
                     allowedTotal = maxRows;
                 }

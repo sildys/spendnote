@@ -232,7 +232,7 @@
         const id = await resolveTxId();
         if (!id) {
             if (idRaw) {
-                alert('Invalid Transaction ID.');
+                await showAlert('Invalid Transaction ID.', { iconType: 'error' });
             }
             try {
                 window.location.replace('spendnote-transaction-history.html');

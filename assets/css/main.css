@@ -659,6 +659,142 @@ tr:hover {
     }
 }
 
+/* ========================================
+   13. BRANDED DIALOG MODALS
+   ======================================== */
+.sn-dialog-overlay {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+.sn-dialog-card {
+    background: var(--surface, #fff);
+    border-radius: var(--radius-lg, 16px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    padding: 32px 28px 24px;
+    max-width: 420px;
+    width: calc(100% - 32px);
+    text-align: center;
+    animation: snDialogPop 0.2s ease;
+}
+
+@keyframes snDialogPop {
+    from { transform: scale(0.92) translateY(8px); opacity: 0; }
+    to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.sn-dialog-icon {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+    line-height: 1;
+}
+
+.sn-dialog-title {
+    font-size: var(--font-lg, 1.125rem);
+    font-weight: 800;
+    color: var(--text, #0a0a0a);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+}
+
+.sn-dialog-message {
+    font-size: var(--font-sm, 0.875rem);
+    color: var(--text-muted, #737373);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    word-break: break-word;
+}
+
+.sn-dialog-input {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    font-size: var(--font-base, 0.9375rem);
+    border: 1px solid var(--border, rgba(0,0,0,0.08));
+    border-radius: var(--radius-md, 12px);
+    background: var(--surface, #fff);
+    color: var(--text, #0a0a0a);
+    margin-bottom: 20px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.sn-dialog-input:focus {
+    border-color: var(--active, #059669);
+    box-shadow: 0 0 0 3px rgba(var(--active-rgb, 5, 150, 105), 0.12);
+    outline: none;
+}
+
+.sn-dialog-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.sn-dialog-btn {
+    padding: 10px 22px;
+    border-radius: var(--radius-md, 12px);
+    font-weight: 700;
+    font-size: var(--font-sm, 0.875rem);
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+    min-width: 90px;
+    line-height: 1.4;
+}
+
+.sn-dialog-btn:hover {
+    transform: translateY(-1px);
+}
+
+.sn-dialog-btn:active {
+    transform: translateY(0);
+}
+
+.sn-dialog-btn-primary {
+    background: linear-gradient(135deg, var(--primary, #059669), var(--primary-light, #10b981));
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);
+}
+
+.sn-dialog-btn-primary:hover {
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+}
+
+.sn-dialog-btn-secondary {
+    background: var(--surface, #fff);
+    color: var(--text, #0a0a0a);
+    border: 1.5px solid var(--border, rgba(0,0,0,0.08));
+}
+
+.sn-dialog-btn-secondary:hover {
+    border-color: var(--text-muted, #737373);
+}
+
+.sn-dialog-btn-danger {
+    background: linear-gradient(135deg, #ef4444, #f87171);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+}
+
+.sn-dialog-btn-danger:hover {
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
+@media (max-width: 480px) {
+    .sn-dialog-card {
+        padding: 24px 20px 20px;
+        max-width: 340px;
+    }
+    .sn-dialog-actions {
+        flex-direction: column-reverse;
+    }
+    .sn-dialog-btn {
+        width: 100%;
+    }
+}
+
 @media (max-width: 480px) {
     .site-nav {
         padding: var(--space-sm) 0;

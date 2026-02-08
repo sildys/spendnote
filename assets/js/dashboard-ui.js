@@ -45,7 +45,7 @@ function initKebabMenus() {
     });
 
     document.querySelectorAll('.menu-delete').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', async (e) => {
             e.stopPropagation();
             const card = btn.closest('.register-card');
             const cashBoxId = card?.dataset?.id;
@@ -55,25 +55,20 @@ function initKebabMenus() {
                 return;
             }
 
-            const confirmed = window.confirm(`Delete "${name}"? This will remove the Cash Box and its data.`);
-            if (!confirmed) {
-                closeAllRegisterMenus();
-                return;
-            }
-
-            (async () => {
-                try {
-                    if (window.db?.cashBoxes?.delete) {
-                        const result = await window.db.cashBoxes.delete(cashBoxId);
-                        if (result?.success === false) throw new Error(result.error || 'Delete failed');
-                    }
-                    window.location.reload();
-                } catch (error) {
-                    console.error('Failed to delete cash box:', error);
-                    alert('Could not delete the Cash Box.');
-                }
-            })();
             closeAllRegisterMenus();
+            const confirmed = await showConfirm(`Delete "${name}"? This will remove the Cash Box and its data.`, { title: 'Delete Cash Box', iconType: 'danger', okLabel: 'Delete', danger: true });
+            if (!confirmed) return;
+
+            try {
+                if (window.db?.cashBoxes?.delete) {
+                    const result = await window.db.cashBoxes.delete(cashBoxId);
+                    if (result?.success === false) throw new Error(result.error || 'Delete failed');
+                }
+                window.location.reload();
+            } catch (error) {
+                console.error('Failed to delete cash box:', error);
+                showAlert('Could not delete the Cash Box.', { iconType: 'error' });
+            }
         });
     });
 
@@ -162,10 +157,10 @@ function initBulkSelection() {
         exportBtn.addEventListener('click', () => {
             const rows = document.querySelectorAll('.transactions-table .table-grid:not(.table-header)');
             if (!rows.length) {
-                alert('No transactions to export.');
+                showAlert('No transactions to export.', { iconType: 'info' });
                 return;
             }
-            alert(`Export feature coming soon. ${rows.length} transactions ready.`);
+            showAlert(`Export feature coming soon. ${rows.length} transactions ready.`, { iconType: 'info' });
         });
     }
 }
@@ -317,9 +312,9 @@ function handleAddCashBoxDashboard() {
     const limit = limits[plan] || 1;
 
     if (boxCount >= limit) {
-        alert(plan === 'free' 
+        showAlert(plan === 'free' 
             ? 'You have reached the Free plan limit (1 Cash Box).\n\nUpgrade to Standard to create up to 2 Cash Boxes.'
-            : 'You have reached the Standard plan limit (2 Cash Boxes).\n\nUpgrade to Pro for unlimited Cash Boxes.');
+            : 'You have reached the Standard plan limit (2 Cash Boxes).\n\nUpgrade to Pro for unlimited Cash Boxes.', { iconType: 'warning', title: 'Plan Limit Reached' });
     } else {
         window.location.href = 'spendnote-cash-box-settings.html';
     }

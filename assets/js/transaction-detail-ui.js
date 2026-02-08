@@ -473,7 +473,7 @@ html, body { height: auto !important; overflow: auto !important; }
             } catch (_) {
                 const opened = window.open(url, '_blank');
                 if (!opened) {
-                    alert('Popup blocked. Please allow popups to download PDFs.');
+                    showAlert('Popup blocked. Please allow popups to download PDFs.', { iconType: 'warning' });
                 }
             }
         };
@@ -490,7 +490,7 @@ html, body { height: auto !important; overflow: auto !important; }
                 const url = buildReceiptUrl('a4', { autoPrint: '1' });
                 const opened = window.open(url, '_blank');
                 if (!opened) {
-                    alert('Popup blocked. Please allow popups to print receipts.');
+                    showAlert('Popup blocked. Please allow popups to print receipts.', { iconType: 'warning' });
                 }
             });
         }
@@ -526,17 +526,17 @@ html, body { height: auto !important; overflow: auto !important; }
                     }
                 } catch (_) {}
 
-                const recipientEmail = prompt('Send receipt to email address:', prefillEmail);
+                const recipientEmail = await showPrompt('Send receipt to email address:', { defaultValue: prefillEmail, title: 'Email Receipt', iconType: 'prompt', placeholder: 'email@example.com' });
                 if (recipientEmail === null) return;
                 if (!recipientEmail.trim()) {
-                    alert('Please enter an email address.');
+                    showAlert('Please enter an email address.', { iconType: 'warning' });
                     return;
                 }
                 
                 const email = recipientEmail.trim();
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(email)) {
-                    alert('Please enter a valid email address.');
+                    showAlert('Please enter a valid email address.', { iconType: 'warning' });
                     return;
                 }
 
@@ -583,10 +583,10 @@ html, body { height: auto !important; overflow: auto !important; }
                         throw new Error(msg || 'Failed to send email');
                     }
 
-                    alert('Receipt sent successfully to ' + email);
+                    showAlert('Receipt sent successfully to ' + email, { iconType: 'success' });
                 } catch (err) {
                     console.error('Email send error:', err);
-                    alert('Failed to send email: ' + (err.message || 'Unknown error'));
+                    showAlert('Failed to send email: ' + (err.message || 'Unknown error'), { iconType: 'error' });
                 } finally {
                     emailBtn.disabled = false;
                     emailBtn.innerHTML = originalText;
@@ -866,7 +866,7 @@ html, body { height: auto !important; overflow: auto !important; }
             if (voidBtn) {
                 voidBtn.addEventListener('click', async () => {
                     if (voidBtn.disabled) return;
-                    const ok = confirm('Void this transaction?\n\nThis is irreversible.');
+                    const ok = await showConfirm('Void this transaction?\n\nThis is irreversible.', { title: 'Void Transaction', iconType: 'danger', okLabel: 'Void', danger: true });
                     if (!ok) return;
 
                     const prev = voidBtn.innerHTML;
@@ -878,9 +878,9 @@ html, body { height: auto !important; overflow: auto !important; }
                         if (!res || res.success !== true) {
                             const msg = String(res?.error || 'Failed to void transaction.');
                             if (msg.includes('INSUFFICIENT_BALANCE_FOR_VOID')) {
-                                alert('Cannot void: this would make the cash box balance negative.\n\nDeposit funds first, or create a separate correction (expense) transaction.');
+                                showAlert('Cannot void: this would make the cash box balance negative.\n\nDeposit funds first, or create a separate correction (expense) transaction.', { iconType: 'error' });
                             } else {
-                                alert(msg);
+                                showAlert(msg, { iconType: 'error' });
                             }
                             return;
                         }

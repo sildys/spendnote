@@ -1348,8 +1348,9 @@
             (async () => {
                 const id = await resolveCashBoxId();
                 if (cashboxIdRaw && !id) {
-                    alert('Invalid Cash Box ID.');
-                    window.location.replace('spendnote-cash-box-list.html');
+                    showAlert('Invalid Cash Box ID.', { iconType: 'error' }).then(() => {
+                        window.location.replace('spendnote-cash-box-list.html');
+                    });
                     return;
                 }
 
@@ -1428,6 +1429,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260208-1532"></script>
     <script src="assets/js/auth-guard.js"></script>
+    <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=8"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=21"></script>

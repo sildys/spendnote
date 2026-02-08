@@ -515,6 +515,7 @@
     </div>
 </footer>
 
+    <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script>
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -572,8 +573,9 @@
         })();
 
         if (contactIdRaw && !contactId && mode !== 'new') {
-            alert('Invalid Contact ID.');
-            window.location.replace('spendnote-contact-list.html');
+            showAlert('Invalid Contact ID.', { iconType: 'error' }).then(() => {
+                window.location.replace('spendnote-contact-list.html');
+            });
         }
 
         function safeText(value, fallback = '') {
@@ -640,19 +642,19 @@
             
             if (!isNew) {
                 document.getElementById('deleteContactBtn')?.addEventListener('click', async () => {
-                    if (!confirm('Are you sure you want to delete this contact? This cannot be undone.')) return;
+                    if (!await showConfirm('Are you sure you want to delete this contact? This cannot be undone.', { title: 'Delete Contact', iconType: 'danger', okLabel: 'Delete', danger: true })) return;
                     const id = resolvedContactUuid;
-                    if (!id) { alert('Cannot delete: contact ID not found.'); return; }
+                    if (!id) { showAlert('Cannot delete: contact ID not found.', { iconType: 'error' }); return; }
                     try {
                         const res = await window.db.contacts.delete(id);
                         if (!res || !res.success) {
-                            alert(res?.error || 'Failed to delete contact.');
+                            showAlert(res?.error || 'Failed to delete contact.', { iconType: 'error' });
                             return;
                         }
                         window.location.href = 'spendnote-contact-list.html';
                     } catch (err) {
                         console.error('Delete failed:', err);
-                        alert(err?.message || 'Failed to delete contact.');
+                        showAlert(err?.message || 'Failed to delete contact.', { iconType: 'error' });
                     }
                 });
             }
@@ -697,7 +699,7 @@
             }
 
             if (!resolved) {
-                alert('Contact not found.');
+                await showAlert('Contact not found.', { iconType: 'error' });
                 window.location.href = 'spendnote-contact-list.html';
                 return;
             }
@@ -936,13 +938,13 @@
 
                 const user = await window.auth.getCurrentUser();
                 if (!user) {
-                    alert('You are not logged in.');
+                    showAlert('You are not logged in.', { iconType: 'error' });
                     return;
                 }
 
                 const rawAddress = document.getElementById('contactAddress').value;
                 if (!ensureMaxTwoLines(rawAddress)) {
-                    alert('Address can be max 2 lines (receipt size constraint).');
+                    showAlert('Address can be max 2 lines (receipt size constraint).', { iconType: 'warning' });
                     return;
                 }
 
@@ -955,7 +957,7 @@
                 };
 
                 if (!payload.name) {
-                    alert('Name is required.');
+                    showAlert('Name is required.', { iconType: 'warning' });
                     return;
                 }
 
@@ -963,7 +965,7 @@
                     if (mode === 'new') {
                         const res = await window.db.contacts.create(payload);
                         if (!res || !res.success || !res.data) {
-                            alert(res?.error || 'Failed to create contact.');
+                            showAlert(res?.error || 'Failed to create contact.', { iconType: 'error' });
                             return;
                         }
                         window.location.href = `spendnote-contact-detail.html?contactId=${encodeURIComponent(String(res.data.id))}`;
@@ -972,19 +974,19 @@
 
                     const id = resolvedContactUuid || (isUuid(contactId) ? contactId : null);
                     if (!id) {
-                        alert('Invalid contact id.');
+                        showAlert('Invalid contact id.', { iconType: 'error' });
                         return;
                     }
 
                     const res = await window.db.contacts.update(id, payload);
                     if (!res || !res.success || !res.data) {
-                        alert(res?.error || 'Failed to update contact.');
+                        showAlert(res?.error || 'Failed to update contact.', { iconType: 'error' });
                         return;
                     }
                     window.location.reload();
                 } catch (err) {
                     console.error('Contact save failed:', err);
-                    alert(err?.message || 'Failed to save contact.');
+                    showAlert(err?.message || 'Failed to save contact.', { iconType: 'error' });
                 }
             });
         }, { once: true });

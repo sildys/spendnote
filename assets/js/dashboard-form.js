@@ -269,7 +269,7 @@ function initTransactionForm() {
 
             if (!isUuid(formData.cashBox)) {
                 closeReceiptWindow();
-                alert('Please create and select a Cash Box first.');
+                showAlert('Please create and select a Cash Box first.', { iconType: 'warning' });
                 return;
             }
 
@@ -278,21 +278,21 @@ function initTransactionForm() {
             
             if (!Number.isFinite(amountValue) || amountValue <= 0) {
                 closeReceiptWindow();
-                alert('Please enter a valid amount.');
+                showAlert('Please enter a valid amount.', { iconType: 'warning' });
                 return;
             }
 
             const description = (document.getElementById('modalDescription')?.value || '').trim();
             if (!description) {
                 closeReceiptWindow();
-                alert('Description is required.');
+                showAlert('Description is required.', { iconType: 'warning' });
                 return;
             }
 
             const contactName = String(formData.ContactName || '').trim();
             if (!contactName) {
                 closeReceiptWindow();
-                alert('Contact Name is required.');
+                showAlert('Contact Name is required.', { iconType: 'warning' });
                 return;
             }
             let contactOtherId = String(document.getElementById('modalContactCompanyId')?.value || '').trim() || null;
@@ -386,7 +386,7 @@ function initTransactionForm() {
                 const balance = Number.isFinite(currentBalance) ? currentBalance : 0;
                 if (finalAmount > balance) {
                     closeReceiptWindow();
-                    alert('Not enough funds in this Cash Box.');
+                    showAlert('Not enough funds in this Cash Box.', { iconType: 'error' });
                     return;
                 }
             }
@@ -438,7 +438,7 @@ function initTransactionForm() {
 
             if (shouldSaveContact && ensuredContact && ensuredContact.success === false) {
                 closeReceiptWindow();
-                alert(ensuredContact?.error || 'Could not save contact. Please try again.');
+                showAlert(ensuredContact?.error || 'Could not save contact. Please try again.', { iconType: 'error' });
                 return;
             }
 
@@ -473,7 +473,7 @@ function initTransactionForm() {
                 } else if (lower.includes('jwt') || lower.includes('session')) {
                     msg = 'Your session expired. Please log in again.';
                 }
-                alert(msg);
+                showAlert(msg, { iconType: 'error' });
                 return;
             }
 
@@ -579,7 +579,7 @@ function initTransactionForm() {
                     if (!ok) {
                         const opened = window.open(url, '_blank');
                         if (!opened) {
-                            alert('Popup blocked. Please allow popups to download PDFs.');
+                            showAlert('Popup blocked. Please allow popups to download PDFs.', { iconType: 'warning' });
                         }
                     }
                 } else {
@@ -588,7 +588,7 @@ function initTransactionForm() {
                     } else {
                         const opened = window.open(url, '_blank');
                         if (!opened) {
-                            alert('Popup blocked. Please allow popups to print receipts.');
+                            showAlert('Popup blocked. Please allow popups to print receipts.', { iconType: 'warning' });
                         }
                     }
                 }
@@ -638,7 +638,7 @@ function initTransactionForm() {
             if (typeof window.closeModal === 'function') window.closeModal();
         } catch (error) {
             console.error('Transaction submit failed:', error);
-            alert(error?.message || 'Failed to create transaction.');
+            showAlert(error?.message || 'Failed to create transaction.', { iconType: 'error' });
         } finally {
             submitButtons.forEach(function(btn) {
                 btn.disabled = false;

@@ -361,11 +361,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('avatarFileInput')?.addEventListener('change', (e) => {
         const file = e.target?.files?.[0];
         if (!file) return;
-        if (file.size > 2 * 1024 * 1024) { alert('Max avatar size is 2MB.'); return; }
+        if (file.size > 2 * 1024 * 1024) { showAlert('Max avatar size is 2MB.', { iconType: 'warning' }); return; }
         const reader = new FileReader();
         reader.onload = () => {
             const dataUrl = reader.result;
-            if (!dataUrl?.startsWith('data:image/')) { alert('Invalid image.'); return; }
+            if (!dataUrl?.startsWith('data:image/')) { showAlert('Invalid image.', { iconType: 'error' }); return; }
             writeAvatar(dataUrl);
             applyAvatar(document.getElementById('profileFullName')?.value);
             window.refreshUserNav?.();
@@ -383,13 +383,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('profileForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const fullName = document.getElementById('profileFullName')?.value?.trim();
-        if (!fullName) { alert('Full Name is required.'); return; }
+        if (!fullName) { showAlert('Full Name is required.', { iconType: 'warning' }); return; }
 
         const result = await window.db.profiles.update({ full_name: fullName });
-        if (!result?.success) { alert(result?.error || 'Failed to save.'); return; }
+        if (!result?.success) { showAlert(result?.error || 'Failed to save.', { iconType: 'error' }); return; }
         writeUserFullName(fullName);
         fillProfile(result.data);
-        alert('Profile saved.');
+        showAlert('Profile saved.', { iconType: 'success' });
     });
 
     // Logo upload
@@ -397,11 +397,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('logoFileInput')?.addEventListener('change', (e) => {
         const file = e.target?.files?.[0];
         if (!file) return;
-        if (file.size > 2 * 1024 * 1024) { alert('Max logo size is 2MB.'); return; }
+        if (file.size > 2 * 1024 * 1024) { showAlert('Max logo size is 2MB.', { iconType: 'warning' }); return; }
         const reader = new FileReader();
         reader.onload = () => {
             const dataUrl = reader.result;
-            if (!dataUrl?.startsWith('data:image/')) { alert('Invalid image.'); return; }
+            if (!dataUrl?.startsWith('data:image/')) { showAlert('Invalid image.', { iconType: 'error' }); return; }
             writeLogo(dataUrl);
             applyLogo();
         };
@@ -422,9 +422,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             address: document.getElementById('receiptAddress')?.value?.trim() || null
         };
         const result = await window.db.profiles.update(payload);
-        if (!result?.success) { alert(result?.error || 'Failed to save.'); return; }
+        if (!result?.success) { showAlert(result?.error || 'Failed to save.', { iconType: 'error' }); return; }
         fillProfile(result.data);
-        alert('Receipt identity saved.');
+        showAlert('Receipt identity saved.', { iconType: 'success' });
     });
 
     // Delete Account collapsible toggle
@@ -438,36 +438,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         const pw = document.getElementById('newPassword')?.value;
         const pw2 = document.getElementById('confirmPassword')?.value;
         // Match signup strength expectations: >=8 chars, and at least one number OR symbol
-        if (!pw || pw.length < 8) { alert('Password must be at least 8 characters.'); return; }
+        if (!pw || pw.length < 8) { showAlert('Password must be at least 8 characters.', { iconType: 'warning' }); return; }
         const hasNumber = /\d/.test(pw);
         const hasSymbol = /[^a-zA-Z0-9]/.test(pw);
-        if (!hasNumber && !hasSymbol) { alert('Password must include at least 1 number or symbol.'); return; }
-        if (pw !== pw2) { alert('Passwords do not match.'); return; }
+        if (!hasNumber && !hasSymbol) { showAlert('Password must include at least 1 number or symbol.', { iconType: 'warning' }); return; }
+        if (pw !== pw2) { showAlert('Passwords do not match.', { iconType: 'warning' }); return; }
         try {
             const { error } = await window.supabaseClient.auth.updateUser({ password: pw });
             if (error) throw error;
             document.getElementById('newPassword').value = '';
             document.getElementById('confirmPassword').value = '';
-            alert('Password updated.');
+            showAlert('Password updated.', { iconType: 'success' });
         } catch (err) {
-            alert(err.message || 'Failed to update password.');
+            showAlert(err.message || 'Failed to update password.', { iconType: 'error' });
         }
     });
 
     // Delete account
     document.getElementById('deleteAccountBtn')?.addEventListener('click', () => {
         if (document.getElementById('deleteConfirmInput')?.value !== 'DELETE') {
-            alert('Please type "DELETE" to confirm.');
+            showAlert('Please type "DELETE" to confirm.', { iconType: 'warning' });
             return;
         }
-        alert('Account deletion is not implemented yet. Contact support.');
+        showAlert('Account deletion is not implemented yet. Contact support.', { iconType: 'info' });
     });
 
     // Invite modal
     const inviteModal = document.getElementById('inviteModal');
     document.getElementById('inviteMemberBtn')?.addEventListener('click', () => {
         if (!(currentRole === 'owner' || currentRole === 'admin')) {
-            alert('Only Owner/Admin can invite team members.');
+            showAlert('Only Owner/Admin can invite team members.', { iconType: 'warning' });
             return;
         }
         inviteModal?.classList.add('active');
@@ -476,15 +476,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('inviteModalCancel')?.addEventListener('click', () => inviteModal?.classList.remove('active'));
     document.getElementById('inviteModalSubmit')?.addEventListener('click', async () => {
         if (!(currentRole === 'owner' || currentRole === 'admin')) {
-            alert('Only Owner/Admin can invite team members.');
+            showAlert('Only Owner/Admin can invite team members.', { iconType: 'warning' });
             return;
         }
         const email = document.getElementById('inviteEmail')?.value?.trim();
         const role = document.getElementById('inviteRole')?.value;
-        if (!email) { alert('Email is required.'); return; }
-        if (!window.db?.teamMembers?.invite) { alert('Team feature not available.'); return; }
+        if (!email) { showAlert('Email is required.', { iconType: 'warning' }); return; }
+        if (!window.db?.teamMembers?.invite) { showAlert('Team feature not available.', { iconType: 'error' }); return; }
         const result = await window.db.teamMembers.invite(email, role);
-        if (!result?.success) { alert(result?.error || 'Failed to invite.'); return; }
+        if (!result?.success) { showAlert(result?.error || 'Failed to invite.', { iconType: 'error' }); return; }
         inviteModal?.classList.remove('active');
         document.getElementById('inviteEmail').value = '';
         await loadTeam();
@@ -493,25 +493,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         const emailSent = Boolean(result?.emailSent);
 
         if (emailSent) {
-            alert('Invitation sent.');
+            showAlert('Invitation sent.', { iconType: 'success' });
             return;
         }
 
         if (result?.emailError) {
-            alert(String(result.emailError));
+            showAlert(String(result.emailError), { iconType: 'warning' });
         }
 
         if (token) {
             const link = `${window.location.origin}/spendnote-signup.html?inviteToken=${encodeURIComponent(token)}`;
             try {
-                window.prompt('Copy invite link:', link);
+                await showPrompt('Copy invite link:', { defaultValue: link, title: 'Invite Link' });
             } catch (_) {
-                alert(link);
+                showAlert(link, { iconType: 'info' });
             }
             return;
         }
 
-        alert(result?.emailError || 'Invitation sent.');
+        showAlert(result?.emailError || 'Invitation sent.', { iconType: 'success' });
     });
 
     // Team table actions
@@ -527,10 +527,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (action === 'access') {
             await openAccessModal(id);
         } else if (action === 'remove') {
-            if (!confirm('Remove this team member?')) return;
+            if (!await showConfirm('Remove this team member?', { title: 'Remove Member', iconType: 'danger', okLabel: 'Remove', danger: true })) return;
             if (!window.db?.teamMembers?.remove) return;
             const result = await window.db.teamMembers.remove(id);
-            if (!result?.success) { alert(result?.error || 'Failed to remove.'); return; }
+            if (!result?.success) { showAlert(result?.error || 'Failed to remove.', { iconType: 'error' }); return; }
             await loadTeam();
         }
     });
@@ -552,25 +552,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             if (status === 'pending') {
                 if (!window.db?.teamMembers?.updateInviteRole) {
-                    alert('Invite role update is not available.');
+                    showAlert('Invite role update is not available.', { iconType: 'error' });
                 } else {
                     const result = await window.db.teamMembers.updateInviteRole(id, role);
                     if (!result?.success) {
-                        alert(result?.error || 'Failed to update role.');
+                        showAlert(result?.error || 'Failed to update role.', { iconType: 'error' });
                     }
                 }
             } else {
                 if (!window.db?.teamMembers?.updateRole) {
-                    alert('Role update is not available.');
+                    showAlert('Role update is not available.', { iconType: 'error' });
                 } else {
                     const result = await window.db.teamMembers.updateRole(id, role);
                     if (!result?.success) {
-                        alert(result?.error || 'Failed to update role.');
+                        showAlert(result?.error || 'Failed to update role.', { iconType: 'error' });
                     }
                 }
             }
         } catch (err) {
-            alert(err?.message || 'Failed to update role.');
+            showAlert(err?.message || 'Failed to update role.', { iconType: 'error' });
         } finally {
             sel.disabled = false;
         }
@@ -588,7 +588,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const cbId = btn.dataset.cbId;
         const hasAccess = btn.dataset.hasAccess === 'true';
         const userId = selectedMemberForAccess.member_id || selectedMemberForAccess.member?.id;
-        if (!userId) { alert('Cannot determine member ID.'); return; }
+        if (!userId) { showAlert('Cannot determine member ID.', { iconType: 'error' }); return; }
 
         if (hasAccess) {
             if (!window.db?.cashBoxAccess?.revoke) return;
@@ -607,12 +607,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Billing buttons (placeholders for Stripe integration)
     document.getElementById('cancelSubscriptionBtn')?.addEventListener('click', () => {
-        alert('Cancel Subscription\n\nIn production: Opens Stripe portal to cancel.');
+        showAlert('Cancel Subscription\n\nIn production: Opens Stripe portal to cancel.', { iconType: 'info' });
     });
     document.getElementById('upgradeProBtn')?.addEventListener('click', () => {
-        alert('Upgrade to Pro\n\nIn production: Opens Stripe checkout for Pro plan.');
+        showAlert('Upgrade to Pro\n\nIn production: Opens Stripe checkout for Pro plan.', { iconType: 'info' });
     });
     document.getElementById('manageBillingBtn')?.addEventListener('click', () => {
-        alert('Manage Billing\n\nIn production: Opens Stripe customer portal to manage payment methods and view invoices.');
+        showAlert('Manage Billing\n\nIn production: Opens Stripe customer portal to manage payment methods and view invoices.', { iconType: 'info' });
     });
 });

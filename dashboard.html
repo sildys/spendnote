@@ -447,7 +447,7 @@
         });
 
         document.querySelectorAll('.menu-delete').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
                 const card = btn.closest('.register-card');
                 const cashBoxId = card?.dataset?.id;
@@ -457,27 +457,24 @@
                     return;
                 }
 
-                const confirmed = window.confirm(`Delete "${name}"? This will remove the Cash Box and its data.`);
+                closeAllRegisterMenus();
+                const confirmed = await showConfirm(`Delete "${name}"? This will remove the Cash Box and its data.`, { title: 'Delete Cash Box', iconType: 'danger', okLabel: 'Delete', danger: true });
                 if (!confirmed) {
-                    closeAllRegisterMenus();
                     return;
                 }
 
-                (async () => {
-                    try {
-                        if (window.db && window.db.cashBoxes && typeof window.db.cashBoxes.delete === 'function') {
-                            const result = await window.db.cashBoxes.delete(cashBoxId);
-                            if (result && result.success === false) {
-                                throw new Error(result.error || 'Delete failed');
-                            }
+                try {
+                    if (window.db && window.db.cashBoxes && typeof window.db.cashBoxes.delete === 'function') {
+                        const result = await window.db.cashBoxes.delete(cashBoxId);
+                        if (result && result.success === false) {
+                            throw new Error(result.error || 'Delete failed');
                         }
-                        window.location.reload();
-                    } catch (error) {
-                        console.error('Failed to delete cash box:', error);
-                        alert('Could not delete the Cash Box.');
                     }
-                })();
-                closeAllRegisterMenus();
+                    window.location.reload();
+                } catch (error) {
+                    console.error('Failed to delete cash box:', error);
+                    showAlert('Could not delete the Cash Box.', { iconType: 'error' });
+                }
             });
         });
 
@@ -558,10 +555,10 @@
             exportBtn.addEventListener('click', () => {
                 const rows = document.querySelectorAll('.transactions-table .table-grid:not(.table-header)');
                 if (!rows.length) {
-                    alert('No transactions to export.');
+                    showAlert('No transactions to export.', { iconType: 'info' });
                     return;
                 }
-                alert(`Export feature coming soon. ${rows.length} transactions ready.`);
+                showAlert(`Export feature coming soon. ${rows.length} transactions ready.`, { iconType: 'info' });
             });
         }
 
@@ -861,8 +858,9 @@
             // Initialize cash box carousel from rendered dashboard cards
             initModalCashboxCarousel();
             if (!modalCashBoxes || modalCashBoxes.length === 0) {
-                alert('You need to create a Cash Box before recording transactions.');
-                window.location.href = 'spendnote-cash-box-settings.html';
+                showAlert('You need to create a Cash Box before recording transactions.', { iconType: 'warning' }).then(() => {
+                    window.location.href = 'spendnote-cash-box-settings.html';
+                });
                 return;
             }
 
@@ -1591,6 +1589,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260208-1532"></script>
     <script src="assets/js/auth-guard.js?v=20260207-2310"></script>
+    <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=12"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=20260207-2235"></script>
@@ -1815,9 +1814,9 @@
             if (boxCount >= limit) {
                 // User reached limit - show upgrade message
                 if (plan === 'free') {
-                    alert('You have reached the Free plan limit (1 Cash Box).\n\nUpgrade to Standard to create up to 2 Cash Boxes.');
+                    showAlert('You have reached the Free plan limit (1 Cash Box).\n\nUpgrade to Standard to create up to 2 Cash Boxes.', { iconType: 'warning', title: 'Plan Limit Reached' });
                 } else if (plan === 'standard') {
-                    alert('You have reached the Standard plan limit (2 Cash Boxes).\n\nUpgrade to Pro for unlimited Cash Boxes.');
+                    showAlert('You have reached the Standard plan limit (2 Cash Boxes).\n\nUpgrade to Pro for unlimited Cash Boxes.', { iconType: 'warning', title: 'Plan Limit Reached' });
                 }
             } else {
                 // User can still add more - open create flow

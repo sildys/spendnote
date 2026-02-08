@@ -505,6 +505,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
   <script>
 const urlParams = new URLSearchParams(window.location.search);
 const itemsMode = String(urlParams.get('itemsMode') || '').toLowerCase();
@@ -533,14 +534,14 @@ async function downloadReceiptPdf() {
   if (!receiptEl) return;
 
   if (typeof window.html2canvas !== 'function') {
-    alert('PDF export failed: html2canvas is not available.');
+    showAlert('PDF export failed: html2canvas is not available.', { iconType: 'error' });
     return;
   }
 
   const jspdf = window.jspdf;
   const JsPDF = jspdf && jspdf.jsPDF ? jspdf.jsPDF : null;
   if (!JsPDF) {
-    alert('PDF export failed: jsPDF is not available.');
+    showAlert('PDF export failed: jsPDF is not available.', { iconType: 'error' });
     return;
   }
 
@@ -596,7 +597,7 @@ async function downloadReceiptPdf() {
     pdf.save(fileName);
   } catch (e) {
     console.error(e);
-    alert('Could not generate PDF.');
+    showAlert('Could not generate PDF.', { iconType: 'error' });
   } finally {
     document.body.classList.remove('exporting');
     if (shouldAutoDownload) {

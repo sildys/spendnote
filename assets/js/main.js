@@ -345,8 +345,11 @@ const SpendNote = {
     
     // Show notification
     showNotification: function(message, type = 'info') {
-        // Simple alert for now, can be enhanced later
-        alert(message);
+        if (typeof showAlert === 'function') {
+            showAlert(message, { iconType: type });
+        } else {
+            alert(message);
+        }
     }
 };
 

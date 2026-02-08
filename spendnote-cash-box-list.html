@@ -192,7 +192,7 @@
 
         function confirmDelete() {
             if (currentRegisterToDelete) {
-                alert(`Cash Box "${currentRegisterToDelete.name}" deleted!\n\n${currentRegisterToDelete.txCount} transactions permanently removed.\n\nIn production:\n- Delete from database\n- Remove all transactions\n- Update stats\n- Redirect to Cash Boxes list`);
+                showAlert(`Cash Box "${currentRegisterToDelete.name}" deleted!\n\n${currentRegisterToDelete.txCount} transactions permanently removed.\n\nIn production:\n- Delete from database\n- Remove all transactions\n- Update stats\n- Redirect to Cash Boxes list`, { iconType: 'success' });
                 hideDeleteModal();
                 // In production: actually delete and refresh page
             }
@@ -230,9 +230,9 @@
             if (boxCount >= limit) {
                 // User reached limit - show upgrade message
                 if (plan === 'free') {
-                    alert('You have reached the Free plan limit (1 Cash Box).\n\nUpgrade to Standard to create up to 2 Cash Boxes.');
+                    showAlert('You have reached the Free plan limit (1 Cash Box).\n\nUpgrade to Standard to create up to 2 Cash Boxes.', { iconType: 'warning', title: 'Plan Limit Reached' });
                 } else if (plan === 'standard') {
-                    alert('You have reached the Standard plan limit (2 Cash Boxes).\n\nUpgrade to Pro for unlimited Cash Boxes.');
+                    showAlert('You have reached the Standard plan limit (2 Cash Boxes).\n\nUpgrade to Pro for unlimited Cash Boxes.', { iconType: 'warning', title: 'Plan Limit Reached' });
                 }
             } else {
                 // User can still add more - open create flow
@@ -282,6 +282,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260208-1532"></script>
     <script src="assets/js/auth-guard.js"></script>
+    <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=8"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=21"></script>

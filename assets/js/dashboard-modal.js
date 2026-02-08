@@ -348,8 +348,9 @@ function openModal(preset) {
 
     initModalCashboxCarousel();
     if (!modalCashBoxes || !modalCashBoxes.length) {
-        alert('You need to create a Cash Box before recording transactions.');
-        window.location.href = 'spendnote-cash-box-settings.html';
+        showAlert('You need to create a Cash Box before recording transactions.', { iconType: 'warning' }).then(() => {
+            window.location.href = 'spendnote-cash-box-settings.html';
+        });
         return;
     }
 
@@ -957,7 +958,7 @@ async function duplicateTransaction(txId) {
         const tx = await window.db.transactions.getById(txId);
         if (DEBUG) console.log('[Duplicate] Transaction data:', tx);
         if (!tx) {
-            alert('Transaction not found.');
+            showAlert('Transaction not found.', { iconType: 'error' });
             return;
         }
 
@@ -1001,7 +1002,7 @@ async function duplicateTransaction(txId) {
         openModal(preset);
     } catch (err) {
         console.error('Error duplicating transaction:', err);
-        alert('Failed to duplicate transaction.');
+        showAlert('Failed to duplicate transaction.', { iconType: 'error' });
     }
 }
 

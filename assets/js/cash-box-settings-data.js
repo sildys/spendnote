@@ -114,29 +114,27 @@ function bindCashBoxDeletePanelToggle() {
 async function handleDeleteCashBox() {
     try {
         if (!currentCashBoxId) {
-            alert('You can only delete a Cash Box after it has been created.');
+            showAlert('You can only delete a Cash Box after it has been created.', { iconType: 'warning' });
             return;
         }
 
         const name = document.getElementById('cashBoxNameInput')?.value?.trim() || 'this Cash Box';
         const txCount = await getCashBoxTransactionCount(currentCashBoxId);
 
-        const confirmed = window.confirm(
+        const confirmed = await showConfirm(
             `Delete "${name}"?\n\n` +
-            `This will permanently delete:\n` +
-            `• This Cash Box\n` +
-            `• ${txCount} transaction${txCount === 1 ? '' : 's'}\n\n` +
-            `Before deleting, export your data if you need it.\n` +
-            `This action cannot be undone.`
+            `This will permanently delete:\n• This Cash Box\n• ${txCount} transaction${txCount === 1 ? '' : 's'}\n\n` +
+            `Before deleting, export your data if you need it.\nThis action cannot be undone.`,
+            { title: 'Delete Cash Box', iconType: 'danger', okLabel: 'Continue', danger: true }
         );
         if (!confirmed) return;
 
-        const typed = window.prompt(
-            `Type DELETE to confirm permanent deletion of "${name}".\n\n` +
-            `This will also delete ${txCount} transaction${txCount === 1 ? '' : 's'}.`
+        const typed = await showPrompt(
+            `Type DELETE to confirm permanent deletion of "${name}".\n\nThis will also delete ${txCount} transaction${txCount === 1 ? '' : 's'}.`,
+            { title: 'Confirm Deletion', iconType: 'danger', placeholder: 'DELETE' }
         );
         if (typed !== 'DELETE') {
-            alert('Deletion cancelled.');
+            showAlert('Deletion cancelled.', { iconType: 'info' });
             return;
         }
 
@@ -159,7 +157,7 @@ async function handleDeleteCashBox() {
         window.location.replace('spendnote-cash-box-list.html');
     } catch (error) {
         console.error('Failed to delete cash box:', error);
-        alert('Could not delete the Cash Box.');
+        showAlert('Could not delete the Cash Box.', { iconType: 'error' });
 
         const deleteBtn = document.getElementById('deleteButton');
         if (deleteBtn) {
@@ -309,7 +307,7 @@ async function initCashBoxSettings() {
         }
 
         if (raw && !currentCashBoxId) {
-            alert('Invalid Cash Box ID.');
+            await showAlert('Invalid Cash Box ID.', { iconType: 'error' });
             window.location.replace('spendnote-cash-box-list.html');
             return;
         }
@@ -404,7 +402,7 @@ async function loadCashBoxData(id) {
         const cashBox = await db.cashBoxes.getById(id);
         
         if (!cashBox) {
-            alert('Cash box not found');
+            await showAlert('Cash box not found', { iconType: 'error' });
             window.location.href = 'spendnote-cash-box-list.html';
             return;
         }
@@ -464,7 +462,7 @@ async function loadCashBoxData(id) {
         
     } catch (error) {
         console.error('❌ Error loading cash box data:', error);
-        alert('Error loading cash box data');
+        showAlert('Error loading cash box data', { iconType: 'error' });
     }
 }
 
@@ -479,7 +477,7 @@ async function handleSave(e) {
         
         // Validate
         if (!name) {
-            alert('Please enter a cash box name');
+            showAlert('Please enter a cash box name', { iconType: 'warning' });
             return;
         }
         
@@ -559,14 +557,14 @@ async function handleSave(e) {
 
         const currency = canonicalizeCurrency(currencyInput ? currencyInput.value : 'USD');
         if (!currency) {
-            alert('Currency must be a valid ISO 4217 code (e.g., USD, EUR, HUF).\nTip: you can type "Ft" and it will be saved as HUF.');
+            showAlert('Currency must be a valid ISO 4217 code (e.g., USD, EUR, HUF).\nTip: you can type "Ft" and it will be saved as HUF.', { iconType: 'warning' });
             return;
         }
 
         try {
             new Intl.NumberFormat('en', { style: 'currency', currency }).format(0);
         } catch (err) {
-            alert('Invalid currency code. Please use a valid ISO 4217 code (e.g., USD, EUR, HUF).');
+            showAlert('Invalid currency code. Please use a valid ISO 4217 code (e.g., USD, EUR, HUF).', { iconType: 'warning' });
             return;
         }
 
@@ -632,7 +630,7 @@ async function handleSave(e) {
             }
 
             if (DEBUG) console.log('Cash box updated:', updatePayload.name);
-            alert('Cash box updated successfully!');
+            await showAlert('Cash box updated successfully!', { iconType: 'success' });
         } else {
             // Create new cash box
             const [maxSortOrder, result] = await Promise.all([
@@ -655,7 +653,7 @@ async function handleSave(e) {
             }
             
             if (DEBUG) console.log('Cash box created:', createPayload.name);
-            alert('Cash box created successfully!');
+            await showAlert('Cash box created successfully!', { iconType: 'success' });
         }
         
         // Redirect back to where we came from with hard refresh
@@ -671,7 +669,7 @@ async function handleSave(e) {
         
     } catch (error) {
         console.error('❌ Error saving cash box:', error);
-        alert('Error saving cash box: ' + error.message);
+        showAlert('Error saving cash box: ' + error.message, { iconType: 'error' });
         
         // Restore button state
         const saveBtn = e.target;

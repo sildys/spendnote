@@ -277,9 +277,14 @@ If a chat thread freezes / context is lost: in the new thread say:
 - `5fc9f00` Monogram avatars: outline ring + colored initials
 - `4487807` Dashboard: created-by avatar fallback uses current user name
 
+## Completed (previously "Next focus")
+- ~~**B)** Stabilize core IDs everywhere~~ ✅ (done: canonical URL params, SN-###/CONT-###/SNx-yyy resolution, UUID validation centralized)
+- ~~**C)** Contacts list: replace remaining placeholder columns~~ ✅ (done: `spendnote_contacts_stats()` RPC populates #, Boxes, Last Tx)
+
 ## Next focus (pick one)
-- **B)** Stabilize core IDs everywhere (cash_box_id/contact_id selection + filters + validation)
-- **C)** Contacts list: replace remaining placeholder columns (boxes / #tx / last tx) with real values
+- Replace all native `alert()`/`confirm()`/`prompt()` with custom branded modals
+- Contacts list: 2-click row open (match transaction tables)
+- Invite resend/revoke actions in UI
 
 ## Backlog (UX + bugs)
 - **High**
