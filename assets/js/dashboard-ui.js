@@ -38,7 +38,7 @@ function initKebabMenus() {
             const card = btn.closest('.register-card');
             const cashBoxId = card?.dataset?.id;
             if (cashBoxId) {
-                window.location.href = `spendnote-cash-box-settings.html?id=${encodeURIComponent(cashBoxId)}`;
+                window.location.href = `spendnote-cash-box-settings.html?cashBoxId=${encodeURIComponent(cashBoxId)}`;
             }
             closeAllRegisterMenus();
         });
@@ -286,7 +286,7 @@ function initCashBoxCards() {
 
         card.addEventListener('dblclick', (e) => {
             if (e.target.closest('.register-kebab, .register-menu, .register-quick-actions, .register-icon-link')) return;
-            window.location.href = `spendnote-cash-box-detail.html?id=${card.dataset.id}`;
+            window.location.href = `spendnote-cash-box-detail.html?cashBoxId=${encodeURIComponent(card.dataset.id)}`;
         });
     });
 

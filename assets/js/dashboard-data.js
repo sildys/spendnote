@@ -112,7 +112,7 @@ async function loadDashboardData() {
                              tabindex="0">
                             <div class="register-top">
                                 <div class="register-header-left">
-                                    <a href="spendnote-cash-box-detail.html?id=${box.id}" class="register-icon register-icon-link" aria-label="Cash Box detail">
+                                    <a href="spendnote-cash-box-detail.html?cashBoxId=${box.id}" class="register-icon register-icon-link" aria-label="Cash Box detail">
                                         <i class="fas ${iconClass}"></i>
                                     </a>
                                     <div class="register-info">
@@ -121,7 +121,7 @@ async function loadDashboardData() {
                                     </div>
                                 </div>
                                 <div class="register-actions">
-                                    <a class="register-kebab" href="spendnote-cash-box-settings.html?id=${box.id}" aria-label="Cash Box settings" title="Cash Box settings">
+                                    <a class="register-kebab" href="spendnote-cash-box-settings.html?cashBoxId=${box.id}" aria-label="Cash Box settings" title="Cash Box settings">
                                         <i class="fas fa-ellipsis-v"></i>
                                     </a>
                                 </div>
