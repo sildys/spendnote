@@ -18,6 +18,12 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Signup success: in-page vs new `spendnote-welcome.html`
   - Next steps: success only vs success + dismissable dashboard panel
 - [ ] **DEC-TRIAL** Trial without card upfront: confirm trial model (14 days and/or 20 receipts) + what happens at limit (read-only vs lock)
+- [ ] **P0** Production-ready acceptance criteria (baseline)
+  - [ ] Client error tracking (e.g. Sentry)
+  - [ ] Edge Function logging + surfacing non-2xx errors clearly
+  - [ ] Smoke test checklist: auth, create transaction, receipt email, receipt PDF
+  - [ ] Abuse protection: basic rate limiting on email/invite endpoints
+  - [ ] Cloudflare baseline protection: bot/WAF rules (minimal, safe defaults)
 - [ ] **L1** Onboarding UI: registration success state + post-login next steps (Cash Box → Transaction → Receipt), invite explanation, role-based messaging
 - [ ] **L2** Email pack (4 only): define copy + triggers + recipients (Welcome/Account created; Email confirmation; You’ve been invited; Invite accepted/user activated → admin)
 - [ ] **L3** Email delivery implementation: Resend + Edge Functions/hooks + templates
