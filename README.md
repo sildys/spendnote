@@ -91,6 +91,16 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 
 **Negative keywords (campaign-level starter list):** `free`, `template`, `printable`, `pdf`, `word`, `doc`, `excel`, `spreadsheet`, `download`, `form`, `fillable`, `sample`, `example`, `blank`, `worksheet`, `canva`
 
+### SEO: “Template → Tool” bridge (lead magnet)
+
+- **Goal:** template-search users get the download they want, then a soft bridge to the app (warm user, not a sales CTA)
+- **Minimal page pattern:**
+  - Downloadable PDF / Google Sheet template
+  - 1-line bridge under download (soft link, not a button):
+    - `If you want this automatically generated and stored, this is the tool we use.`
+  - Link to SpendNote with UTM tags (e.g. `utm_source=template&utm_medium=download&utm_campaign=petty_cash_log`)
+  - Optional: 1 screenshot/GIF of the tool right below the bridge + “No card required.”
+
 - Supabase permissions model implemented:
   - Org/team model: `orgs` + `org_memberships` (roles: `owner`/`admin`/`user`).
   - Cash box access: `cash_box_memberships` (enforced by RLS).
