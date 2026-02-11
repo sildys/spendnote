@@ -81,6 +81,7 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Contacts list + detail are wired to Supabase.
   - UI shows **Contact ID as `CONT-###`** using `sequence_number`.
   - Contacts list **View column + bottom pagination** aligned with Transaction History UI.
+  - Contacts list row open UX requires **2 clicks** (armed row) to open Contact Detail (matches transaction tables).
   - Contacts List performance: uses Supabase RPC **`spendnote_contacts_stats()`** to populate:
     - `#` (active tx count)
     - `Boxes` dot list
@@ -373,14 +374,11 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Destructive confirms use red danger styling; prompts for email, void reason, delete confirmation
 
 ## Next focus (pick one)
-- Contacts list: 2-click row open (match transaction tables)
 - Invite resend/revoke actions in UI
 
 ## Backlog (UX + bugs)
 - **High**
   - Optional: add invite resend/revoke actions in UI.
-- **High (next)**
-  - Contacts list: require 2 clicks to open Contact Detail (match transaction tables).
 - **High (upcoming)**
   - Permissions & roles (owner/admin/user) + org/team model:
     - Add `orgs` table (explicit org/team).

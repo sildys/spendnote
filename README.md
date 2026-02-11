@@ -34,6 +34,9 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 - Cache-busting:
   - `supabase-config.js?v=` was bumped across pages multiple times to ensure new auth/team/invite logic is actually loaded after deploy.
 
+- Contacts list UX:
+  - Contacts list row open uses **2 clicks** (armed row) to open Contact Detail (matches transaction tables).
+
 ## Recent engineering updates (2026-02-08)
 
 - **Branded modal dialogs** replace all native `alert()`/`confirm()`/`prompt()` calls:
