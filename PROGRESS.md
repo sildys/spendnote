@@ -52,6 +52,9 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 - **Goal:** Public landing + public signup + usable app in **beta/test mode** on Cloudflare.
 
+- **Open questions (decisions)**
+  - **Q1:** Include **Google OAuth signup/login** in the beta scope? (Yes/No)
+
 - **Week 1 (ship infrastructure + surfaces)**
   - Cloudflare Pages: connect GitHub repo, production deploy on `main`
   - Custom domain: `spendnote.app` (canonical host decision + DNS/SSL)
