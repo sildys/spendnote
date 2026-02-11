@@ -71,6 +71,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 - **Week 2 (beta safety + free beta mode)**
   - Beta disclaimer + acceptance in signup UX (checkbox + link to Terms/Privacy)
+  - Beta communication: **desktop-only** (mobile/responsive not supported during beta) — show on landing + signup
   - Terms/Privacy updated to reflect **beta/test period** (instability, data loss possibility, limitation of liability)
   - Beta entitlements:
     - Free is **unlimited during beta**
