@@ -355,6 +355,25 @@
     text-align: right;
 }
 
+.team-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-danger {
+    background: var(--error, #ef4444);
+    color: #fff !important;
+    border: 2px solid transparent;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+    color: #fff !important;
+}
+
 .team-table tr:last-child td {
     border-bottom: none;
 }

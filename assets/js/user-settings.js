@@ -210,16 +210,24 @@ const renderTeamTable = () => {
             if (!canManageTeam || isOwner) return '<span style="color:var(--text-muted)">—</span>';
             if (status === 'pending') {
                 return `
-                    <button type="button" class="btn btn-secondary btn-small" data-action="resend" data-id="${m.id}"><i class="fas fa-paper-plane"></i> Resend</button>
-                    <button type="button" class="btn btn-secondary btn-small" data-action="remove" data-id="${m.id}" style="color:#dc2626;border-color:rgba(239,68,68,0.3);margin-left:4px;"><i class="fas fa-trash"></i></button>
+                    <div class="team-actions">
+                        <button type="button" class="btn btn-secondary btn-small" data-action="resend" data-id="${m.id}"><i class="fas fa-paper-plane"></i> Resend</button>
+                        <button type="button" class="btn btn-danger btn-small" data-action="revoke" data-id="${m.id}"><i class="fas fa-ban"></i> Revoke</button>
+                    </div>
                 `;
             }
             if (status !== 'active') {
-                return `<button type="button" class="btn btn-secondary btn-small" data-action="remove" data-id="${m.id}" style="color:#dc2626;border-color:rgba(239,68,68,0.3);"><i class="fas fa-trash"></i></button>`;
+                return `
+                    <div class="team-actions">
+                        <button type="button" class="btn btn-danger btn-small" data-action="remove" data-id="${m.id}"><i class="fas fa-trash"></i> Remove</button>
+                    </div>
+                `;
             }
             return `
-                <button type="button" class="btn btn-secondary btn-small" data-action="access" data-id="${m.id}"><i class="fas fa-key"></i> Access</button>
-                <button type="button" class="btn btn-secondary btn-small" data-action="remove" data-id="${m.id}" style="color:#dc2626;border-color:rgba(239,68,68,0.3);margin-left:4px;"><i class="fas fa-trash"></i></button>
+                <div class="team-actions">
+                    <button type="button" class="btn btn-secondary btn-small" data-action="access" data-id="${m.id}"><i class="fas fa-key"></i> Access</button>
+                    <button type="button" class="btn btn-danger btn-small" data-action="remove" data-id="${m.id}"><i class="fas fa-trash"></i> Remove</button>
+                </div>
             `;
         })();
 
@@ -574,6 +582,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             } finally {
                 btn.disabled = false;
             }
+        } else if (action === 'revoke') {
+            const member = teamMembers.find(m => m.id === id);
+            if (!member || member.status !== 'pending') return;
+            if (!await showConfirm('Revoke this invite?', { title: 'Revoke Invite', iconType: 'danger', okLabel: 'Revoke', danger: true })) return;
+            if (!window.db?.teamMembers?.remove) return;
+            const result = await window.db.teamMembers.remove(id);
+            if (!result?.success) { showAlert(result?.error || 'Failed to revoke invite.', { iconType: 'error' }); return; }
+            await loadTeam();
+            showAlert('Invite revoked.', { iconType: 'success' });
         } else if (action === 'remove') {
             const member = teamMembers.find(m => m.id === id);
             const isPending = member?.status === 'pending';
@@ -585,6 +602,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const result = await window.db.teamMembers.remove(id);
             if (!result?.success) { showAlert(result?.error || 'Failed to remove.', { iconType: 'error' }); return; }
             await loadTeam();
+            showAlert(isPending ? 'Invite revoked.' : 'Member removed.', { iconType: 'success' });
         }
     });
 
