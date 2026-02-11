@@ -439,10 +439,75 @@ var db = {
                 ? options.select
                 : '*';
 
+            const ctx = await getMyOrgContext();
+            const orgId = ctx?.orgId || null;
+
+            let myRole = null;
+            if (orgId) {
+                try {
+                    const { data: memRow, error: memErr } = await supabaseClient
+                        .from('org_memberships')
+                        .select('role')
+                        .eq('org_id', orgId)
+                        .eq('user_id', user.id)
+                        .single();
+                    if (!memErr) {
+                        myRole = String(memRow?.role || '').toLowerCase() || null;
+                    }
+                } catch (_) {
+                    // ignore
+                }
+            }
+
+            const isOrgAdminLike = myRole === 'owner' || myRole === 'admin';
+
+            // Users should not see all cash boxes in the org; only those assigned via cash_box_memberships.
+            if (orgId && !isOrgAdminLike) {
+                const { data, error } = await supabaseClient
+                    .from('cash_box_memberships')
+                    .select(`cash_box:cash_boxes!cash_box_id(${select})`)
+                    .eq('user_id', user.id)
+                    .eq('cash_box.org_id', orgId);
+
+                if (error) {
+                    console.error('Error fetching cash boxes for user via memberships:', error);
+                    return [];
+                }
+
+                const rows = Array.isArray(data) ? data : [];
+                const boxes = rows
+                    .map((r) => r?.cash_box)
+                    .filter((b) => b && b.id);
+
+                boxes.sort((a, b) => {
+                    const aSort = a?.sort_order;
+                    const bSort = b?.sort_order;
+                    const aHas = aSort !== null && aSort !== undefined;
+                    const bHas = bSort !== null && bSort !== undefined;
+                    if (aHas && bHas) {
+                        const d = Number(aSort) - Number(bSort);
+                        if (Number.isFinite(d) && d !== 0) return d;
+                    } else if (aHas !== bHas) {
+                        return aHas ? -1 : 1;
+                    }
+
+                    const aTime = a?.created_at ? new Date(a.created_at).getTime() : 0;
+                    const bTime = b?.created_at ? new Date(b.created_at).getTime() : 0;
+                    if (aTime !== bTime) return aTime - bTime;
+                    return String(a?.id || '').localeCompare(String(b?.id || ''));
+                });
+
+                return boxes;
+            }
+
             // Prefer stable user-defined ordering (sort_order), fallback to creation order
-            const primaryQuery = await supabaseClient
+            let q1 = supabaseClient
                 .from('cash_boxes')
-                .select(select)
+                .select(select);
+            if (orgId) {
+                q1 = q1.eq('org_id', orgId);
+            }
+            const primaryQuery = await q1
                 .order('sort_order', { ascending: true, nullsFirst: false })
                 .order('created_at', { ascending: true });
 
@@ -452,9 +517,13 @@ var db = {
 
             console.warn('Cash boxes sort_order query failed, falling back to created_at order:', primaryQuery.error);
 
-            const fallbackQuery = await supabaseClient
+            let q2 = supabaseClient
                 .from('cash_boxes')
-                .select(select)
+                .select(select);
+            if (orgId) {
+                q2 = q2.eq('org_id', orgId);
+            }
+            const fallbackQuery = await q2
                 .order('created_at', { ascending: true });
 
             if (fallbackQuery.error) {
@@ -472,9 +541,16 @@ var db = {
                 return 0;
             }
 
-            const { data, error } = await supabaseClient
+            const ctx = await getMyOrgContext();
+            const orgId = ctx?.orgId || null;
+
+            let q = supabaseClient
                 .from('cash_boxes')
-                .select('sort_order')
+                .select('sort_order');
+            if (orgId) {
+                q = q.eq('org_id', orgId);
+            }
+            const { data, error } = await q
                 .order('sort_order', { ascending: false, nullsFirst: false })
                 .limit(1);
 
@@ -489,11 +565,56 @@ var db = {
         },
 
         async getById(id) {
-            const { data, error } = await supabaseClient
+            const user = await auth.getCurrentUser();
+            if (!user) {
+                console.error('No authenticated user');
+                return null;
+            }
+
+            const ctx = await getMyOrgContext();
+            const orgId = ctx?.orgId || null;
+
+            let myRole = null;
+            if (orgId) {
+                try {
+                    const { data: memRow, error: memErr } = await supabaseClient
+                        .from('org_memberships')
+                        .select('role')
+                        .eq('org_id', orgId)
+                        .eq('user_id', user.id)
+                        .single();
+                    if (!memErr) {
+                        myRole = String(memRow?.role || '').toLowerCase() || null;
+                    }
+                } catch (_) {
+                    // ignore
+                }
+            }
+
+            const isOrgAdminLike = myRole === 'owner' || myRole === 'admin';
+
+            if (orgId && !isOrgAdminLike) {
+                const { data, error } = await supabaseClient
+                    .from('cash_box_memberships')
+                    .select('cash_box:cash_boxes!cash_box_id(*)')
+                    .eq('user_id', user.id)
+                    .eq('cash_box_id', id)
+                    .eq('cash_box.org_id', orgId)
+                    .single();
+                if (error) {
+                    return null;
+                }
+                return data?.cash_box || null;
+            }
+
+            let q = supabaseClient
                 .from('cash_boxes')
                 .select('*')
-                .eq('id', id)
-                .single();
+                .eq('id', id);
+            if (orgId) {
+                q = q.eq('org_id', orgId);
+            }
+            const { data, error } = await q.single();
             if (error) {
                 console.error('Error fetching cash box:', error);
                 return null;
@@ -514,6 +635,42 @@ var db = {
             }
 
             const ctx = await getMyOrgContext();
+
+            let myRole = null;
+            if (ctx?.orgId) {
+                try {
+                    const { data: memRow, error: memErr } = await supabaseClient
+                        .from('org_memberships')
+                        .select('role')
+                        .eq('org_id', ctx.orgId)
+                        .eq('user_id', user.id)
+                        .single();
+                    if (!memErr) {
+                        myRole = String(memRow?.role || '').toLowerCase() || null;
+                    }
+                } catch (_) {
+                    // ignore
+                }
+            }
+
+            const isOrgAdminLike = myRole === 'owner' || myRole === 'admin';
+
+            if (ctx?.orgId && !isOrgAdminLike) {
+                const { data, error } = await supabaseClient
+                    .from('cash_box_memberships')
+                    .select('cash_box:cash_boxes!cash_box_id(*)')
+                    .eq('user_id', user.id)
+                    .eq('cash_box.org_id', ctx.orgId)
+                    .eq('cash_box.sequence_number', seq)
+                    .limit(1);
+
+                if (error) {
+                    return null;
+                }
+
+                const row = Array.isArray(data) ? data[0] : data;
+                return row?.cash_box || null;
+            }
 
             let query = supabaseClient
                 .from('cash_boxes')
