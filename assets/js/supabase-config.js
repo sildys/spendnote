@@ -1779,17 +1779,16 @@ var db = {
                 return { success: true };
             }
 
-            const inviteUpdate = await supabaseClient
+            const inviteDelete = await supabaseClient
                 .from('invites')
-                .update({ status: 'revoked' })
+                .delete()
                 .eq('org_id', ctx.orgId)
                 .eq('id', memberId)
-                .select('id')
-                .single();
+                .select('id');
 
-            if (inviteUpdate.error) {
-                console.error('Error revoking invite:', inviteUpdate.error);
-                return { success: false, error: inviteUpdate.error.message };
+            if (inviteDelete.error) {
+                console.error('Error deleting invite:', inviteDelete.error);
+                return { success: false, error: inviteDelete.error.message };
             }
 
             return { success: true };
