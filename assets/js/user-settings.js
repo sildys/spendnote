@@ -206,6 +206,23 @@ const renderTeamTable = () => {
             );
         const statusClass = status === 'active' ? 'active' : (status === 'pending' ? 'pending' : 'inactive');
 
+        const actionsHtml = (() => {
+            if (!canManageTeam || isOwner) return '<span style="color:var(--text-muted)">—</span>';
+            if (status === 'pending') {
+                return `
+                    <button type="button" class="btn btn-secondary btn-small" data-action="resend" data-id="${m.id}"><i class="fas fa-paper-plane"></i> Resend</button>
+                    <button type="button" class="btn btn-secondary btn-small" data-action="remove" data-id="${m.id}" style="color:#dc2626;border-color:rgba(239,68,68,0.3);margin-left:4px;"><i class="fas fa-trash"></i></button>
+                `;
+            }
+            if (status !== 'active') {
+                return `<button type="button" class="btn btn-secondary btn-small" data-action="remove" data-id="${m.id}" style="color:#dc2626;border-color:rgba(239,68,68,0.3);"><i class="fas fa-trash"></i></button>`;
+            }
+            return `
+                <button type="button" class="btn btn-secondary btn-small" data-action="access" data-id="${m.id}"><i class="fas fa-key"></i> Access</button>
+                <button type="button" class="btn btn-secondary btn-small" data-action="remove" data-id="${m.id}" style="color:#dc2626;border-color:rgba(239,68,68,0.3);margin-left:4px;"><i class="fas fa-trash"></i></button>
+            `;
+        })();
+
         return `
             <tr data-member-id="${m.id || ''}">
                 <td>
@@ -220,17 +237,7 @@ const renderTeamTable = () => {
                 <td>${roleCellHtml}</td>
                 <td><span class="status-badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
                 <td>
-                    ${(!canManageTeam || isOwner)
-                        ? '<span style="color:var(--text-muted)">—</span>'
-                        : (
-                            status !== 'active'
-                                ? `<button type="button" class="btn btn-secondary btn-small" data-action="remove" data-id="${m.id}" style="color:#dc2626;border-color:rgba(239,68,68,0.3);"><i class="fas fa-trash"></i></button>`
-                                : `
-                                    <button type="button" class="btn btn-secondary btn-small" data-action="access" data-id="${m.id}"><i class="fas fa-key"></i> Access</button>
-                                    <button type="button" class="btn btn-secondary btn-small" data-action="remove" data-id="${m.id}" style="color:#dc2626;border-color:rgba(239,68,68,0.3);margin-left:4px;"><i class="fas fa-trash"></i></button>
-                                `
-                        )
-                    }
+                    ${actionsHtml}
                 </td>
             </tr>
         `;
@@ -526,8 +533,54 @@ document.addEventListener('DOMContentLoaded', async () => {
         const id = btn.dataset.id;
         if (action === 'access') {
             await openAccessModal(id);
+        } else if (action === 'resend') {
+            const member = teamMembers.find(m => m.id === id);
+            if (!member || member.status !== 'pending') return;
+            const email = String(member.invited_email || '').trim();
+            const role = String(member.role || 'user').trim();
+            if (!email) { showAlert('Missing invite email.', { iconType: 'error' }); return; }
+            if (!window.db?.teamMembers?.invite) { showAlert('Team feature not available.', { iconType: 'error' }); return; }
+
+            btn.disabled = true;
+            try {
+                const result = await window.db.teamMembers.invite(email, role);
+                if (!result?.success) {
+                    showAlert(result?.error || 'Failed to resend invite.', { iconType: 'error' });
+                    return;
+                }
+                await loadTeam();
+
+                const token = result?.data?.token;
+                const emailSent = Boolean(result?.emailSent);
+
+                if (emailSent) {
+                    showAlert('Invitation resent.', { iconType: 'success' });
+                    return;
+                }
+
+                if (result?.emailError) {
+                    showAlert(String(result.emailError), { iconType: 'warning' });
+                }
+
+                if (token) {
+                    const link = `${window.location.origin}/spendnote-signup.html?inviteToken=${encodeURIComponent(token)}`;
+                    try {
+                        await showPrompt('Copy invite link:', { defaultValue: link, title: 'Invite Link' });
+                    } catch (_) {
+                        showAlert(link, { iconType: 'info' });
+                    }
+                    return;
+                }
+            } finally {
+                btn.disabled = false;
+            }
         } else if (action === 'remove') {
-            if (!await showConfirm('Remove this team member?', { title: 'Remove Member', iconType: 'danger', okLabel: 'Remove', danger: true })) return;
+            const member = teamMembers.find(m => m.id === id);
+            const isPending = member?.status === 'pending';
+            const confirmText = isPending ? 'Revoke this invite?' : 'Remove this team member?';
+            const confirmTitle = isPending ? 'Revoke Invite' : 'Remove Member';
+            const okLabel = isPending ? 'Revoke' : 'Remove';
+            if (!await showConfirm(confirmText, { title: confirmTitle, iconType: 'danger', okLabel, danger: true })) return;
             if (!window.db?.teamMembers?.remove) return;
             const result = await window.db.teamMembers.remove(id);
             if (!result?.success) { showAlert(result?.error || 'Failed to remove.', { iconType: 'error' }); return; }
