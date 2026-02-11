@@ -1527,6 +1527,12 @@ var db = {
                 };
             });
 
+            const memberEmails = new Set(
+                members
+                    .map((m) => String(m?.member?.email || '').trim().toLowerCase())
+                    .filter(Boolean)
+            );
+
             const invites = invitesRes?.error
                 ? []
                 : (invitesRes.data || []).map((i) => {
@@ -1539,6 +1545,10 @@ var db = {
                         member: null,
                         member_id: null
                     };
+                }).filter((i) => {
+                    const email = String(i?.invited_email || '').trim().toLowerCase();
+                    if (!email) return true;
+                    return !memberEmails.has(email);
                 });
 
             return [...members, ...invites];
