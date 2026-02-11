@@ -1791,6 +1791,10 @@ var db = {
                 return { success: false, error: inviteDelete.error.message };
             }
 
+            if (!Array.isArray(inviteDelete.data) || !inviteDelete.data.length) {
+                return { success: false, error: 'Invite was not deleted (not found or not allowed).' };
+            }
+
             return { success: true };
         }
     },
