@@ -7,6 +7,33 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
+## Recent engineering updates (2026-02-11)
+
+- Auth (launch readiness):
+  - Signup now supports email-confirm flows via `auth.signUp(..., { emailRedirectTo })`.
+  - Signup shows a clear **"check your email"** state when Supabase returns no session.
+  - Login detects unconfirmed-email errors and offers **Resend confirmation email**.
+  - New helper: `auth.resendSignupConfirmation(email, { emailRedirectTo })`.
+  - Google OAuth redirects preserve `inviteToken` in the redirect URL.
+  - Supabase Dashboard action (manual): **Confirm sign up / email confirmation was enabled**.
+  - Remaining (manual): configure Supabase **URL Configuration** (Site URL + Additional Redirect URLs).
+
+- Invites / team management:
+  - Added a new invite accept RPC: `spendnote_accept_invite_v2(p_token text)`.
+    - On accept, creates/updates `org_memberships` and assigns default `cash_box_memberships`:
+      - `admin`: all cash boxes in the org
+      - `user`: first cash box in the org
+    - Note: if invite acceptance still stays `pending`, ensure the function is deployed with `SET row_security = off` (RLS-safe).
+  - Pending invite tokens are persisted to localStorage and auto-accepted on the first valid session:
+    - Key: `spendnote.inviteToken.pending`
+    - Auto-retry uses v2 with fallback to v1.
+  - Team Members list dedupes pending invites by email when an active org member exists.
+  - Pending invite revoke was changed to **hard delete** (instead of soft-revoke):
+    - Implemented via `SECURITY DEFINER` RPC `spendnote_delete_invite(p_invite_id uuid)` due to RLS.
+
+- Cache-busting:
+  - `supabase-config.js?v=` was bumped across pages multiple times to ensure new auth/team/invite logic is actually loaded after deploy.
+
 ## Recent engineering updates (2026-02-08)
 
 - **Branded modal dialogs** replace all native `alert()`/`confirm()`/`prompt()` calls:

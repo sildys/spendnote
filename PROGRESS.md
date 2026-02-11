@@ -56,7 +56,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - **Week 4:** Mobile sprint #2 (History + Contacts + filters), start Cloudflare migration work (DEPLOY-1/2/3)
 - **Week 5:** Cloudflare cutover (DEPLOY-4) + Stripe integration (S3) + stabilization + cleanup (CLEAN-1) + polish (P3-1)
 
-## Current state (last updated: 2026-02-08 06:00)
+## Current state (last updated: 2026-02-11)
 - **Dashboard** ✅
   - Transaction modal fully wired to Supabase:
     - **Transaction create** via `db.transactions.create()` with full payload
@@ -249,6 +249,46 @@ If a chat thread freezes / context is lost: in the new thread say:
     - Accept invite via RPC `spendnote_accept_invite`.
     - Frontend accepts `inviteToken` on login/signup and calls accept RPC.
     - User Settings shows pending invites + provides an invite link to copy.
+
+## 2026-02-11 thread summary (canonical)
+
+### Auth (launch readiness) — IN PROGRESS
+- Frontend changes (pushed to GitHub):
+  - `auth.signUp(email, password, fullName, { emailRedirectTo })` implemented.
+  - Signup shows **"check your email"** state when Supabase returns no session.
+  - Login handles unconfirmed email errors and offers **Resend confirmation email**.
+  - New helper: `auth.resendSignupConfirmation(email, { emailRedirectTo })`.
+  - Google OAuth redirects preserve `inviteToken`.
+- Supabase manual action: **Confirm sign up / email confirmation enabled** in Dashboard.
+- Remaining manual actions:
+  - Supabase **URL Configuration**: set Site URL + Additional Redirect URLs for:
+    - `/spendnote-login.html`
+    - `/spendnote-signup.html`
+    - `/dashboard.html`
+    - `/spendnote-user-settings.html`
+
+### Team/invites — PARTIAL
+- Pending invite UI revoke now hard-deletes invites via RPC (RLS-safe):
+  - New `SECURITY DEFINER` function: `public.spendnote_delete_invite(p_invite_id uuid)`
+  - Frontend uses the RPC and falls back to direct delete.
+  - Status: verified working in UI.
+
+- Invite acceptance v2 (default cash box memberships) was implemented:
+  - Migration file: `supabase-migrations/008_accept_invite_v2_default_cashbox_memberships.sql`
+  - RPC: `public.spendnote_accept_invite_v2(p_token text)`
+    - creates/updates `org_memberships`
+    - updates invite status to `active`
+    - assigns default `cash_box_memberships`:
+      - admin -> all org cash boxes
+      - user -> first org cash box
+  - Frontend calls v2 with fallback to v1.
+  - `inviteToken` is persisted to localStorage and auto-accepted on first valid session.
+  - Current issue: invite may still remain `pending`.
+    - Likely cause: function deployed without `SET row_security = off` (RLS blocks the update/insert).
+    - Recommended fix: redeploy `spendnote_accept_invite_v2` with `SET row_security = off` and re-test.
+
+### Cache-busting
+- Multiple pages had `supabase-config.js?v=` bumped to ensure the latest auth/invite logic loads after deploy.
 
 - **Frontend data layer migration** ✅
   - `assets/js/supabase-config.js` updated to rely on RLS (removed client-side `user_id` filtering).
