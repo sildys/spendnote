@@ -48,30 +48,33 @@ If a chat thread freezes / context is lost: in the new thread say:
 - **Mon–Thu:** evenings only (2–3 hours when possible; not every day)
 - **Fri–Sun:** long-form sprint blocks (as much as sustainable)
 
-## This weekend (priority override)
+## Next 2 weeks: Beta ship (priority)
 
-- **P0 (must ship): Cloudflare + public landing + waitlist**
+- **Goal:** Public landing + public signup + usable app in **beta/test mode** on Cloudflare.
+
+- **Week 1 (ship infrastructure + surfaces)**
   - Cloudflare Pages: connect GitHub repo, production deploy on `main`
   - Custom domain: `spendnote.app` (canonical host decision + DNS/SSL)
+  - Supabase Auth URL configuration:
+    - Site URL
+    - Additional Redirect URLs (for login/signup/OAuth)
   - Landing SEO baseline:
     - `robots.txt`
     - `sitemap.xml`
     - Canonical + OG/Twitter meta
-    - Fix pricing copy: **14 days OR 20 transactions** (not "receipts")
-  - Waitlist:
-    - Add subscription CTA + storage (external provider or Cloudflare Worker)
-    - Basic anti-spam (rate limit / Turnstile)
-  - App isolation (recommended): host app under `app.spendnote.app` behind Cloudflare Access
+  - Landing CTA: **Start free beta** → signup
+  - Legal pages wired everywhere:
+    - Terms + Privacy linked from landing/app
 
-- **Only after P0 ships**: continue Week 1 roadmap (L1/L2/start L3/start MKT-1)
+- **Week 2 (beta safety + free beta mode)**
+  - Beta disclaimer + acceptance in signup UX (checkbox + link to Terms/Privacy)
+  - Terms/Privacy updated to reflect **beta/test period** (instability, data loss possibility, limitation of liability)
+  - Beta entitlements:
+    - Free is **unlimited during beta**
+    - Constraints remain: **1 user + 1 cash box**
+  - Smoke test checklist on `spendnote.app` (auth + create transaction + receipt)
 
-## 5-week launch schedule (milestones)
-
-- **Week 1:** **P0 Cloudflare + public landing + waitlist first**, then L1 + L2, start L3 (Resend + skeleton sending), start MKT-1
-- **Week 2:** finish L3, L4, L5, MKT-2 (SEO outlines + keyword landing structure)
-- **Week 3:** S1, S2, Mobile sprint #1 (Create Transaction + Receipt mobile-usable)
-- **Week 4:** Mobile sprint #2 (History + Contacts + filters), start Cloudflare migration work (DEPLOY-1/2/3)
-- **Week 5:** Cloudflare cutover (DEPLOY-4) + Stripe integration (S3) + stabilization + cleanup (CLEAN-1) + polish (P3-1)
+- **Deferred until after beta ship:** team management / invites / role management
 
 ## Current state (last updated: 2026-02-11)
 - **Dashboard** ✅
