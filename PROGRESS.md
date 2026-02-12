@@ -29,6 +29,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **L3** Email delivery implementation: Resend + Edge Functions/hooks + templates
 - [ ] **L4** Role-based Settings UI: Owner/Admin vs User (hide non-owned sections)
 - [ ] **L5** Access control UX: user sees only assigned cash boxes; admin can assign/revoke cash box access in UI
+- [ ] **DB-TEAM-1** Team/org/invite DB versioning alignment: ensure `org_memberships`/`invites`/`cash_box_memberships` tables + RLS policies + `spendnote_create_invite` RPC are all versioned in `supabase-migrations/` (not only README snippets), and align `database/schema.sql` + `database/SCHEMA-DOCUMENTATION.md` with the current org/invite model
 - [ ] **M1** Mobile strategy + responsive MVP: maximize mobile functionality; tables → cards/collapsible, off-canvas filters (decide exclusions during build)
 - [ ] **S1** Subscription rules spec: trial model (14 days and/or 20 receipts), expiry behavior, receipt/user limits, data handling on user delete (matrix)
 - [ ] **S2** Stripe prep (ready to plug in): subscription state data model + feature flags + UI placeholders + webhook handling plan
