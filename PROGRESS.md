@@ -14,6 +14,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ## Launch roadmap (ordered checklist)
 
+- [ ] **REPO-1** Rename GitHub repo: `spendnote-demo` → `spendnote` (then update local `git remote`, verify Vercel still auto-deploys, and confirm GitHub Actions (Supabase functions deploy) still runs)
 - [x] **DEC-L1** Decide onboarding structure (chosen: 1=A, 2=B)
   - Signup success: in-page vs new `spendnote-welcome.html`
   - Next steps: success only vs success + dismissable dashboard panel
