@@ -154,6 +154,7 @@ Deno.serve(async (req: Request) => {
 
       const u = new URL("/spendnote-signup.html", baseOrigin);
       u.searchParams.set("inviteToken", inviteToken);
+      u.searchParams.set("invitedEmail", invitedEmail);
       effectiveLink = u.toString();
     } catch (_) {
       // ignore

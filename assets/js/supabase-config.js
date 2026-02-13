@@ -1896,7 +1896,7 @@ var db = {
             try {
                 const token = row?.token;
                 if (token) {
-                    const link = `${window.location.origin}/spendnote-signup.html?inviteToken=${encodeURIComponent(token)}`;
+                    const link = `${window.location.origin}/spendnote-signup.html?inviteToken=${encodeURIComponent(token)}&invitedEmail=${encodeURIComponent(String(email || '').trim())}`;
                     const sessionRes = await supabaseClient.auth.getSession();
                     let accessToken = String(sessionRes?.data?.session?.access_token || '');
                     if (!accessToken) throw new Error('Not authenticated');

@@ -543,6 +543,18 @@
                     } catch (_) {}
                 });
             } catch (_) {}
+            try {
+                const sp = new URLSearchParams(window.location.search);
+                const inviteToken = String(sp.get('inviteToken') || '').trim();
+                const invitedEmail = String(sp.get('invitedEmail') || '').trim();
+                if (inviteToken && invitedEmail) {
+                    const emailEl = document.getElementById('email');
+                    if (emailEl) {
+                        emailEl.value = invitedEmail;
+                        emailEl.readOnly = true;
+                    }
+                }
+            } catch (_) {}
             // Check if already logged in
             try {
                 await (window.__spendnoteAuthCallbackPromise || Promise.resolve());
@@ -639,7 +651,15 @@
 
             // Get form data
             const fullName = document.getElementById('fullName').value;
-            const email = document.getElementById('email').value;
+            let email = document.getElementById('email').value;
+            try {
+                const sp = new URLSearchParams(window.location.search);
+                const inviteToken = String(sp.get('inviteToken') || '').trim();
+                const invitedEmail = String(sp.get('invitedEmail') || '').trim();
+                if (inviteToken && invitedEmail) {
+                    email = invitedEmail;
+                }
+            } catch (_) {}
             const password = document.getElementById('password').value;
             const terms = document.getElementById('terms').checked;
 

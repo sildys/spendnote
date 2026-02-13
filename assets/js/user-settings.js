@@ -599,7 +599,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (token) {
-            const link = `${window.location.origin}/spendnote-signup.html?inviteToken=${encodeURIComponent(token)}`;
+            const link = `${window.location.origin}/spendnote-signup.html?inviteToken=${encodeURIComponent(token)}&invitedEmail=${encodeURIComponent(String(email || '').trim())}`;
             try {
                 await showPrompt('Copy invite link:', { defaultValue: link, title: 'Invite Link' });
             } catch (_) {
@@ -653,7 +653,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
 
                 if (token) {
-                    const link = `${window.location.origin}/spendnote-signup.html?inviteToken=${encodeURIComponent(token)}`;
+                    const link = `${window.location.origin}/spendnote-signup.html?inviteToken=${encodeURIComponent(token)}&invitedEmail=${encodeURIComponent(String(email || '').trim())}`;
                     try {
                         await showPrompt('Copy invite link:', { defaultValue: link, title: 'Invite Link' });
                     } catch (_) {
