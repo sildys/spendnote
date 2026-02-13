@@ -44,9 +44,12 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 - Landing/public preview:
   - Landing polish before indexing (copy + CTA + preview message + trust/legal links).
   - Add preview/beta disclaimer UX on landing + signup (explicit acceptance on signup).
+  - Build 2 indexable SEO pages:
+    - `petty-cash-log-software` intent page
+    - `cash-handoff-receipt-app` intent page
 - SEO/Indexing rollout:
   - Keep `noindex` while landing is being finalized.
-  - After landing is ready: enable indexing for landing only; internal/app pages remain `noindex`.
+  - After landing is ready: enable indexing for landing + the 2 SEO pages only; internal/app pages remain `noindex`.
 - Analytics:
   - Add GA4 baseline on landing (`page_view` + signup CTA click event).
   - Connect Google Search Console and verify indexing/sitemap flow.

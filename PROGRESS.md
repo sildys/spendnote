@@ -511,7 +511,9 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Landing polish for public preview (copy, CTA, preview messaging, trust/legal links).
 - Preview disclaimer UX on landing + signup (signup explicit acceptance).
 - GA4 baseline on landing (`page_view` + signup CTA click event) + Search Console setup.
-- After landing is ready: enable indexing for landing only; keep internal/app pages `noindex`.
+- Build SEO page #1: `petty-cash-log-software` intent page (copy + layout + meta + canonical + internal links).
+- Build SEO page #2: `cash-handoff-receipt-app` intent page (copy + layout + meta + canonical + internal links).
+- After landing is ready: enable indexing for landing + these 2 SEO pages only; keep internal/app pages `noindex`.
 - Deploy updated `send-invite-email` Edge Function (reply_to + personalized subject), then monitor inbox placement for 48h.
 
 ## Backlog (UX + bugs)
