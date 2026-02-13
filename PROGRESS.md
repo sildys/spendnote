@@ -52,11 +52,25 @@ If a chat thread freezes / context is lost: in the new thread say:
  - GitHub Actions: green ✅
  - Vercel:
    - Project renamed to `spendnote` ✅
-   - Deploy triggers still work from `main` ✅
-   - Verified by a post-rename deploy trigger commit: `91eab90` ✅
  - Cloudflare Pages config committed:
-   - `_redirects` (clean URLs like `/login`, `/signup`) ✅
-   - `_headers` (immutable caching for `/assets/*`) ✅
+   - `_redirects` (clean URLs like `/login`, `/signup`) 
+   - `_headers` (immutable caching for `/assets/*`) 
+
+## If you close the IDE now (folder rename resume)
+
+ - Folder rename target (cosmetic):
+   - from: `c:\SpendNote projekt\spendnote-demo`
+   - to: `c:\SpendNote projekt\spendnote-git`
+ - After rename: open the project from `c:\SpendNote projekt\spendnote-git`.
+ - Sanity checks to run (optional):
+   - `git status`
+   - `git remote -v`
+ - Migration decisions (final domain):
+   - Canonical host: `https://spendnote.app` (apex)
+   - Redirect: `https://www.spendnote.app` → apex
+   - Keep Vercel as fallback for **24–48h** after go-live
+ - Simplified cutover plan file (local): `C:\Users\sild\.windsurf\plans\spendnote-cloudflare-cutover-577247.md`
+ - Next milestone after folder rename: **Cloudflare Pages Phase 1** (deploy to `*.pages.dev`, smoke test `/`, `/login`, `/signup`).
 
 ## Immediate next steps (Cloudflare Pages + spendnote.app)
 
