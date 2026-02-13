@@ -11,6 +11,12 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Prefer implementing fixes over explaining them.
 - Avoid long explanations, hedging, or repetitive confirmations.
 - Be professional and forward-looking (anticipate edge cases, choose robust solutions).
+- Communicate in **Hungarian only**.
+- Aim for the **fastest, most ideal** solution that is still robust.
+- Do **everything you can autonomously** (code changes, refactors, searches, commits) without asking.
+- Ask me only for:
+  - decisions (choice between options)
+  - external configuration steps you cannot access (e.g. Supabase/Cloudflare dashboards)
 
 ## Launch roadmap (ordered checklist)
 
