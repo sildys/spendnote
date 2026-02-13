@@ -33,11 +33,23 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
   - Edge Function `send-invite-email` updated with `reply_to` and personalized subject (deploy pending).
 - SQL migrations added:
   - `014_fix_invites_status_check.sql`
-  - `015_accept_invite_ensure_profile.sql` (recommended)
+  - `015_accept_invite_ensure_profile.sql` (applied + verified)
   - `016_profiles_read_policy.sql` (applied)
 - Follow-ups:
-  - Apply 015 migration (ensure profile on invite accept) and optionally backfill profiles for legacy members.
+  - Optional one-time backfill only if legacy org members without `profiles` rows are found.
   - Deploy updated `send-invite-email`; monitor inbox placement for 48h; trim invite debug logs afterwards.
+
+## Planned for next session (preview prep)
+
+- Landing/public preview:
+  - Landing polish before indexing (copy + CTA + preview message + trust/legal links).
+  - Add preview/beta disclaimer UX on landing + signup (explicit acceptance on signup).
+- SEO/Indexing rollout:
+  - Keep `noindex` while landing is being finalized.
+  - After landing is ready: enable indexing for landing only; internal/app pages remain `noindex`.
+- Analytics:
+  - Add GA4 baseline on landing (`page_view` + signup CTA click event).
+  - Connect Google Search Console and verify indexing/sitemap flow.
 
 ## Recent engineering updates (2026-02-11)
 
@@ -110,10 +122,10 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 - [ ] **M1** Mobile strategy + responsive MVP: maximize mobile functionality; tables → cards/collapsible, off-canvas filters (decide exclusions during build)
 - [ ] **S1** Subscription rules spec: trial model (14 days and/or 20 receipts), expiry behavior, receipt/user limits, data handling on user delete (matrix)
 - [ ] **S2** Stripe prep (ready to plug in): subscription state data model + feature flags + UI placeholders + webhook handling plan
-- [ ] **DEPLOY-1** Migration plan: move from Vercel/demo domain to Cloudflare on `spendnote.app` (hosting target, caching rules)
-- [ ] **DEPLOY-2** Cloudflare DNS + SSL + redirects: decide canonical host (`spendnote.app` vs `www`), configure 301s and safe HSTS
-- [ ] **DEPLOY-3** Supabase for new domain: update Site URL + allowed redirect URLs; test login/signup/invite flows on `spendnote.app`
-- [ ] **DEPLOY-4** Cutover rehearsal + go-live checklist: staging URL, smoke tests, rollback plan
+- [x] **DEPLOY-1** Migration plan: move from Vercel/demo domain to Cloudflare on `spendnote.app` (hosting target, caching rules)
+- [x] **DEPLOY-2** Cloudflare DNS + SSL + redirects: decide canonical host (`spendnote.app` vs `www`), configure 301s and safe HSTS
+- [x] **DEPLOY-3** Supabase for new domain: update Site URL + allowed redirect URLs; test login/signup/invite flows on `spendnote.app`
+- [x] **DEPLOY-4** Cutover rehearsal + go-live checklist: staging URL, smoke tests, rollback plan
 - [ ] **S3** Stripe integration: checkout, customer portal, webhooks, live mode rollout + enforcement activation
 - [ ] **O1** Google OAuth (later): Supabase OAuth + account linking rules + UX
 - [ ] **MKT-1** Market scan + positioning: direct/adjacent alternatives + SpendNote differentiation + keyword list

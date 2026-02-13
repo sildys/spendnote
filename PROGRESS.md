@@ -40,10 +40,10 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **M1** Mobile strategy + responsive MVP: maximize mobile functionality; tables → cards/collapsible, off-canvas filters (decide exclusions during build)
 - [ ] **S1** Subscription rules spec: trial model (14 days and/or 20 receipts), expiry behavior, receipt/user limits, data handling on user delete (matrix)
 - [ ] **S2** Stripe prep (ready to plug in): subscription state data model + feature flags + UI placeholders + webhook handling plan
-- [ ] **DEPLOY-1** Migration plan: move from Vercel/demo domain to Cloudflare on `spendnote.app` (hosting target, caching rules)
-- [ ] **DEPLOY-2** Cloudflare DNS + SSL + redirects: decide canonical host (`spendnote.app` vs `www`), configure 301s and safe HSTS
-- [ ] **DEPLOY-3** Supabase for new domain: update Site URL + allowed redirect URLs; test login/signup/invite flows on `spendnote.app`
-- [ ] **DEPLOY-4** Cutover rehearsal + go-live checklist: staging URL, smoke tests, rollback plan
+- [x] **DEPLOY-1** Migration plan: move from Vercel/demo domain to Cloudflare on `spendnote.app` (hosting target, caching rules)
+- [x] **DEPLOY-2** Cloudflare DNS + SSL + redirects: decide canonical host (`spendnote.app` vs `www`), configure 301s and safe HSTS
+- [x] **DEPLOY-3** Supabase for new domain: update Site URL + allowed redirect URLs; test login/signup/invite flows on `spendnote.app`
+- [x] **DEPLOY-4** Cutover rehearsal + go-live checklist: staging URL, smoke tests, rollback plan
 - [ ] **S3** Stripe integration: checkout, customer portal, webhooks, live mode rollout + enforcement activation
 - [ ] **O1** Google OAuth (later): Supabase OAuth + account linking rules + UX
 - [ ] **MKT-1** Market scan + positioning: direct/adjacent alternatives + SpendNote differentiation + keyword list
@@ -60,7 +60,10 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Auto-accept-by-email fallback implemented (runs when no token or token-RPC fails).
   - Resend domain verified for spendnote.app; Edge Function updated with `reply_to` and personalized subject (deploy pending).
   - Go-live smoke: invite accept → inviter sees Active / no Pending — PASSED.
+  - Migration 015 applied + verified in SQL Editor (`spendnote_accept_invite_v2`, `spendnote_auto_accept_my_invites` present; orphan membership check returned 0 rows).
   - README updated with 2026-02-13 PM hotfixes summary.
+  - SEO safety lock for preview prep: `noindex` enabled across pages (including landing) until landing polish is finished.
+  - Tomorrow plan: landing polish + preview disclaimer UX + GA4 baseline + Google Search Console setup.
  
  - GitHub repo is now: `https://github.com/sildys/spendnote` ✅
  - Local git `origin` points to the new repo ✅
@@ -505,10 +508,11 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Destructive confirms use red danger styling; prompts for email, void reason, delete confirmation
 
 ## Next focus (pick one)
-- Deploy updated `send-invite-email` Edge Function (reply_to + personalized subject) and monitor inbox placement for 48h.
-- Apply migration 015 (ensure profile is created/updated on invite accept + auto-accept).
-- Optional one-time backfill: create/update `profiles` for existing org members missing a row.
-- Trim debug console logs for invite flow after validation.
+- Landing polish for public preview (copy, CTA, preview messaging, trust/legal links).
+- Preview disclaimer UX on landing + signup (signup explicit acceptance).
+- GA4 baseline on landing (`page_view` + signup CTA click event) + Search Console setup.
+- After landing is ready: enable indexing for landing only; keep internal/app pages `noindex`.
+- Deploy updated `send-invite-email` Edge Function (reply_to + personalized subject), then monitor inbox placement for 48h.
 
 ## Backlog (UX + bugs)
 - **High**
