@@ -269,6 +269,29 @@
             display: block;
         }
 
+        .password-field {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 6px;
+            line-height: 1;
+        }
+
+        .password-toggle:hover {
+            color: var(--text);
+        }
+
         /* RESPONSIVE */
         @media (max-width: 640px) {
             .auth-card {
@@ -344,13 +367,18 @@
 
                 <div class="form-group">
                     <label class="form-label" for="password">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        class="form-input" 
-                        placeholder="Enter your password"
-                        required
-                    >
+                    <div class="password-field">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="form-input" 
+                            placeholder="Enter your password"
+                            required
+                        >
+                        <button type="button" class="password-toggle" id="passwordToggle" aria-label="Toggle password visibility">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="checkbox-group">
@@ -438,11 +466,34 @@
                     } catch (_) {
 
                     }
+                    try {
+                        const sp = new URLSearchParams(window.location.search);
+                        if (sp.get('confirmed') === '1') {
+                            window.location.href = 'spendnote-user-settings.html';
+                            return;
+                        }
+                    } catch (_) {}
                     window.location.href = 'dashboard.html';
                 }
             } catch (_) {
 
             }
+        })();
+
+        (function() {
+            try {
+                const pw = document.getElementById('password');
+                const btn = document.getElementById('passwordToggle');
+                if (!pw || !btn) return;
+                btn.addEventListener('click', () => {
+                    const isPw = pw.getAttribute('type') === 'password';
+                    pw.setAttribute('type', isPw ? 'text' : 'password');
+                    const icon = btn.querySelector('i');
+                    if (icon) {
+                        icon.className = isPw ? 'fas fa-eye-slash' : 'fas fa-eye';
+                    }
+                });
+            } catch (_) {}
         })();
 
         const isUnconfirmedEmailError = (msg) => {
@@ -457,9 +508,9 @@
                 try {
                     const sp = new URLSearchParams(window.location.search);
                     const inviteToken = sp.get('inviteToken');
-                    const redirectBase = `${window.location.origin}/spendnote-login.html`;
+                    const redirectBase = `${window.location.origin}/spendnote-login.html?confirmed=1`;
                     const emailRedirectTo = inviteToken
-                        ? `${redirectBase}?inviteToken=${encodeURIComponent(inviteToken)}`
+                        ? `${redirectBase}&inviteToken=${encodeURIComponent(inviteToken)}`
                         : redirectBase;
 
                     const r = await auth.resendSignupConfirmation(email, { emailRedirectTo });

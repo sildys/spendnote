@@ -299,6 +299,29 @@
             display: block;
         }
 
+        .password-field {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 6px;
+            line-height: 1;
+        }
+
+        .password-toggle:hover {
+            color: var(--text);
+        }
+
         /* RESPONSIVE */
         @media (max-width: 640px) {
             .auth-card {
@@ -378,14 +401,19 @@
 
                 <div class="form-group">
                     <label class="form-label" for="password">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        class="form-input" 
-                        placeholder="Use at least 1 number or symbol"
-                        required
-                        minlength="8"
-                    >
+                    <div class="password-field">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="form-input" 
+                            placeholder="Use at least 1 number or symbol"
+                            required
+                            minlength="8"
+                        >
+                        <button type="button" class="password-toggle" id="passwordToggle" aria-label="Toggle password visibility">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                     <div class="password-strength" id="passwordStrength">
                         <div class="strength-bar"></div>
                         <div class="strength-bar"></div>
@@ -481,8 +509,20 @@
 
             // Password strength indicator
         const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('passwordToggle');
         const strengthBars = document.querySelectorAll('.strength-bar');
         const strengthText = document.getElementById('strengthText');
+
+        if (passwordToggle && passwordInput) {
+            passwordToggle.addEventListener('click', () => {
+                const isPw = passwordInput.getAttribute('type') === 'password';
+                passwordInput.setAttribute('type', isPw ? 'text' : 'password');
+                const icon = passwordToggle.querySelector('i');
+                if (icon) {
+                    icon.className = isPw ? 'fas fa-eye-slash' : 'fas fa-eye';
+                }
+            });
+        }
 
         passwordInput.addEventListener('input', function() {
             const password = this.value;
@@ -570,9 +610,9 @@
                 // Sign up with Supabase
                 const sp = new URLSearchParams(window.location.search);
                 const inviteToken = sp.get('inviteToken');
-                const redirectBase = `${window.location.origin}/spendnote-login.html`;
+                const redirectBase = `${window.location.origin}/spendnote-login.html?confirmed=1`;
                 const emailRedirectTo = inviteToken
-                    ? `${redirectBase}?inviteToken=${encodeURIComponent(inviteToken)}`
+                    ? `${redirectBase}&inviteToken=${encodeURIComponent(inviteToken)}`
                     : redirectBase;
 
                 const result = await auth.signUp(email, password, fullName, { emailRedirectTo });
@@ -599,9 +639,9 @@
                             try {
                                 const sp = new URLSearchParams(window.location.search);
                                 const inviteToken = sp.get('inviteToken');
-                                const redirectBase = `${window.location.origin}/spendnote-login.html`;
+                                const redirectBase = `${window.location.origin}/spendnote-login.html?confirmed=1`;
                                 const emailRedirectTo = inviteToken
-                                    ? `${redirectBase}?inviteToken=${encodeURIComponent(inviteToken)}`
+                                    ? `${redirectBase}&inviteToken=${encodeURIComponent(inviteToken)}`
                                     : redirectBase;
                                 const r = await auth.resendSignupConfirmation(emailSafe, { emailRedirectTo });
                                 if (!r?.success) {
