@@ -146,7 +146,18 @@ Deno.serve(async (req: Request) => {
     const subject = Deno.env.get("SPENDNOTE_INVITE_SUBJECT") || "You have been invited to SpendNote";
 
     const safeRole = role === "admin" ? "Admin" : "User";
-    const effectiveLink = appUrl ? inviteLink.replace(/^https?:\/\/[^/]+/i, appUrl) : inviteLink;
+
+    let effectiveLink = inviteLink;
+    try {
+      const normalizedAppUrl = String(appUrl || "").trim().replace(/\/+$/, "");
+      const baseOrigin = normalizedAppUrl ? normalizedAppUrl : new URL(inviteLink).origin;
+
+      const u = new URL("/spendnote-signup.html", baseOrigin);
+      u.searchParams.set("inviteToken", inviteToken);
+      effectiveLink = u.toString();
+    } catch (_) {
+      // ignore
+    }
 
     let inviterName = "";
     let inviterEmail = "";
