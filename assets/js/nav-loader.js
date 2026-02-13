@@ -158,8 +158,17 @@ function initNavEvents() {
         }
 
         e.preventDefault();
+        if (typeof e.stopPropagation === 'function') {
+            e.stopPropagation();
+        }
         if (typeof e.stopImmediatePropagation === 'function') {
             e.stopImmediatePropagation();
+        }
+
+        try {
+            sessionStorage.setItem('spendnote.intent.logout.v1', String(Date.now()));
+        } catch (_) {
+            // ignore
         }
 
         try {
@@ -176,7 +185,7 @@ function initNavEvents() {
             }
             window.location.href = 'index.html';
         }
-    });
+    }, true);
 
     // New Transaction button
     const addTransactionBtn = document.getElementById('addTransactionBtn');

@@ -224,11 +224,11 @@ function bindLogoutLinks() {
         link.addEventListener('click', async (event) => {
             event.preventDefault();
             event.stopPropagation();
-            
+
             // Show visual feedback
             link.style.opacity = '0.5';
             link.style.pointerEvents = 'none';
-            
+
             try {
                 await window.auth.signOut();
                 // Clear any cached data

@@ -7,6 +7,34 @@
     let hasPublicToken = false;
     let isDemo = false;
     let isInIframe = false;
+
+    const redirectToLoginOrLanding = () => {
+        try {
+            const key = 'spendnote.intent.logout.v1';
+            let flag = null;
+            try {
+                flag = sessionStorage.getItem(key);
+            } catch (_) {
+                flag = null;
+            }
+            if (!flag) {
+                try {
+                    flag = localStorage.getItem(key);
+                } catch (_) {
+                    flag = null;
+                }
+            }
+            if (flag) {
+                try { sessionStorage.removeItem(key); } catch (_) {}
+                try { localStorage.removeItem(key); } catch (_) {}
+                window.location.href = '/index.html';
+                return;
+            }
+        } catch (_) {
+            // ignore
+        }
+        window.location.href = '/spendnote-login.html';
+    };
     try {
         isInIframe = window.self !== window.top;
     } catch (_) {
@@ -58,7 +86,7 @@
     }
 
     if (!window.supabaseClient) {
-        window.location.href = '/spendnote-login.html';
+        redirectToLoginOrLanding();
         return;
     }
 
@@ -194,6 +222,6 @@
     
     if (!session || error) {
         // Not authenticated - redirect to login
-        window.location.href = '/spendnote-login.html';
+        redirectToLoginOrLanding();
     }
 })();
