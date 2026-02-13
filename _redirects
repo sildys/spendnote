@@ -3,7 +3,6 @@
 /login /spendnote-login 200
 /signup /spendnote-signup 200
 /settings /spendnote-user-settings 200
-/dashboard /dashboard 200
 /transactions /spendnote-transaction-history 200
 /contacts /spendnote-contact-list 200
 /cash-boxes /spendnote-cash-box-list 200
