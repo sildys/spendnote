@@ -2,6 +2,17 @@
 const SUPABASE_URL = 'https://zrnnharudlgxuvewqryj.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpybm5oYXJ1ZGxneHV2ZXdxcnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyOTkxMDgsImV4cCI6MjA4Mjg3NTEwOH0.kQLRMVrl_uYYzZwX387uFs_BAXc9c5v7EhcvGhPR7v4';
 
+try {
+    const host = String(window.location.hostname || '').toLowerCase();
+    if (host === 'www.spendnote.app') {
+        const u = new URL(String(window.location.href || ''));
+        u.hostname = 'spendnote.app';
+        window.location.replace(u.toString());
+    }
+} catch (_) {
+    // ignore
+}
+
 if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260208-0318');
 window.__spendnoteSupabaseConfigBuild = '20260208-0318';
 
