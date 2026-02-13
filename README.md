@@ -7,6 +7,17 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
+## Recent engineering updates (2026-02-13)
+
+- Cloudflare Pages cutover fixes (production stability):
+  - Fixed `ERR_TOO_MANY_REDIRECTS` on clean routes like `/dashboard` caused by Cloudflare Pages **Clean URLs** interacting with `_redirects`.
+  - Canonical host enforced (`www.spendnote.app` → `spendnote.app`) to avoid Supabase `sessionStorage` origin split during auth flows.
+  - Logout now always returns to the landing page (`index.html`) and is compatible with `auth-guard.js` (guard respects an explicit logout intent).
+  - Caching: `_headers` keeps long-lived caching for `/assets/*`, but excludes critical auth/nav scripts from immutable caching:
+    - `assets/js/nav-loader.js`
+    - `assets/js/auth-guard.js`
+    - `assets/js/supabase-config.js`
+
 ## Recent engineering updates (2026-02-11)
 
 - Auth (launch readiness):
@@ -548,7 +559,7 @@ This section is meant to prevent re-explaining core decisions in new chat thread
 ### Authentication
 
 - Auth uses Supabase Auth.
-- Most app pages include `assets/js/auth-guard.js` which redirects to `spendnote-login.html` when not authenticated.
+- Most app pages include `assets/js/auth-guard.js` which redirects to `spendnote-login.html` when not authenticated (but after an explicit logout, it returns to `index.html`).
 
 ### Receipt templates
 
@@ -739,6 +750,11 @@ This repo is designed to work as a static deployment.
   - Check that `SUPABASE_URL` / `SUPABASE_ANON_KEY` are correct.
   - Check that your Supabase Auth settings allow the current site origin.
   - If the issue occurs only when printing/opening receipts in a new tab, check the receipt URL contains `bootstrap=1` and that `localStorage.spendnote.session.bootstrap` is populated.
+
+- **ERR_TOO_MANY_REDIRECTS on clean routes (Cloudflare Pages)**
+  - Symptom: `https://spendnote.app/dashboard` (or similar clean routes) loops with 308 redirects.
+  - Cause: Cloudflare Pages Clean URLs (`/dashboard.html` → `/dashboard`) can conflict with `_redirects` rules that rewrite clean routes back to `.html`.
+  - Fix: ensure `_redirects` does not rewrite clean routes to `*.html` and avoid self-rewrite rules.
 
 - **Invites fail with missing `gen_random_bytes()` / `digest()`**
   - Some Supabase projects install `pgcrypto` under the `extensions` schema. If DB functions call `gen_random_bytes(...)` or `digest(text, ...)` without schema qualification, you may see errors like:

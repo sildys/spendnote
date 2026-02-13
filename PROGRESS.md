@@ -60,7 +60,14 @@ If a chat thread freezes / context is lost: in the new thread say:
    - Project renamed to `spendnote` ✅
  - Cloudflare Pages config committed:
    - `_redirects` (clean URLs like `/login`, `/signup`) 
-   - `_headers` (immutable caching for `/assets/*`) 
+   - `_headers` (immutable caching for `/assets/*`, but **no-cache** for critical auth/nav scripts)
+     - `assets/js/nav-loader.js`
+     - `assets/js/auth-guard.js`
+     - `assets/js/supabase-config.js`
+ - Cloudflare Pages prod fixes committed:
+   - Fixed `ERR_TOO_MANY_REDIRECTS` on clean routes like `/dashboard` (Clean URLs + `_redirects` interaction)
+   - Enforced canonical host: `www.spendnote.app` → `spendnote.app`
+   - Logout now returns to landing (`index.html`) and is auth-guard compatible
 
 ## If you close the IDE now (folder rename resume)
 
