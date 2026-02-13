@@ -44,6 +44,7 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 - Landing/public preview:
   - Landing polish before indexing (copy + CTA + preview message + trust/legal links).
   - Add preview/beta disclaimer UX on landing + signup (explicit acceptance on signup).
+  - Show contact email on the landing (footer + clear `mailto:` link) for inbound questions.
   - Build 2 indexable SEO pages:
     - `petty-cash-log-software` intent page
     - `cash-handoff-receipt-app` intent page

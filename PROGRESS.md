@@ -509,6 +509,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ## Next focus (pick one)
 - Landing polish for public preview (copy, CTA, preview messaging, trust/legal links).
+- Add visible contact email on landing (footer + clear `mailto:`) for inbound questions.
 - Preview disclaimer UX on landing + signup (signup explicit acceptance).
 - GA4 baseline on landing (`page_view` + signup CTA click event) + Search Console setup.
 - Build SEO page #1: `petty-cash-log-software` intent page (copy + layout + meta + canonical + internal links).
