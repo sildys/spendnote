@@ -466,13 +466,13 @@
 
             <!-- Footer -->
             <div class="auth-footer">
-                Already have an account? <a href="spendnote-login.html">Log in</a>
+                Already have an account? <a id="loginLink" href="spendnote-login.html">Log in</a>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260213-2125"></script>
+    <script src="assets/js/supabase-config.js?v=20260213-2135"></script>
     <script>
         const ensureProfile = async () => {
             try {
@@ -564,6 +564,14 @@
                     if (emailEl) {
                         emailEl.value = invitedEmail;
                         emailEl.readOnly = true;
+                    }
+                }
+                if (inviteToken) {
+                    const loginLink = document.getElementById('loginLink');
+                    if (loginLink) {
+                        let href = 'spendnote-login.html?inviteToken=' + encodeURIComponent(inviteToken);
+                        if (invitedEmail) href += '&invitedEmail=' + encodeURIComponent(invitedEmail);
+                        loginLink.href = href;
                     }
                 }
             } catch (_) {}

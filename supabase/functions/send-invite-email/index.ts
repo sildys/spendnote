@@ -210,9 +210,13 @@ Deno.serve(async (req: Request) => {
       body: JSON.stringify({
         from,
         to: [invitedEmail],
-        subject,
+        reply_to: inviterEmail || undefined,
+        subject: inviterName ? `${inviterName} invited you to SpendNote` : subject,
         html,
         text,
+        headers: {
+          "X-Entity-Ref-ID": inviteRow.id || "",
+        },
       }),
     });
 

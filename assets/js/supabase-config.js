@@ -178,6 +178,24 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
     }
 };
 
+const __spendnoteAutoAcceptMyInvites = async () => {
+    try {
+        console.warn('[invite-auto] Calling spendnote_auto_accept_my_invites...');
+        const r = await supabaseClient.rpc('spendnote_auto_accept_my_invites');
+        console.warn('[invite-auto] result:', JSON.stringify(r?.data || r?.error));
+        if (r?.error) {
+            console.warn('[invite-auto] error:', r.error?.message || r.error);
+        } else if (r?.data?.accepted > 0) {
+            console.warn('[invite-auto] Auto-accepted', r.data.accepted, 'invite(s) for', r.data.email);
+            try { localStorage.removeItem(__spendnoteInviteTokenKey); } catch (_) {}
+        }
+        return r?.data;
+    } catch (e) {
+        console.warn('[invite-auto] exception:', e?.message || e);
+        return null;
+    }
+};
+
 const __spendnoteTryAcceptPendingInviteToken = async () => {
     let token = '';
     try {
@@ -186,7 +204,8 @@ const __spendnoteTryAcceptPendingInviteToken = async () => {
         token = '';
     }
     if (!token) {
-        console.warn('[invite-accept] No invite token in localStorage, skipping.');
+        console.warn('[invite-accept] No invite token in localStorage, trying auto-accept by email...');
+        await __spendnoteAutoAcceptMyInvites();
         return;
     }
     console.warn('[invite-accept] Found token in localStorage, length=' + token.length);
@@ -216,7 +235,9 @@ const __spendnoteTryAcceptPendingInviteToken = async () => {
             try { localStorage.removeItem(__spendnoteInviteTokenKey); } catch (_) {}
             console.warn('[invite-accept] SUCCESS via fallback');
         } catch (e2) {
-            console.error('[invite-accept] BOTH RPCs FAILED. v2:', e1?.message || e1, 'fallback:', e2?.message || e2);
+            console.error('[invite-accept] BOTH token RPCs FAILED. v2:', e1?.message || e1, 'fb:', e2?.message || e2);
+            console.warn('[invite-accept] Trying auto-accept by email as last resort...');
+            await __spendnoteAutoAcceptMyInvites();
         }
     }
 };
