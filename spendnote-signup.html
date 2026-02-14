@@ -436,6 +436,18 @@
                     </label>
                 </div>
 
+                <div class="checkbox-group">
+                    <input
+                        type="checkbox"
+                        id="previewDisclaimer"
+                        class="checkbox-input"
+                        required
+                    >
+                    <label class="checkbox-label" for="previewDisclaimer">
+                        I understand this is a preview release (desktop-only) and features may change without notice.
+                    </label>
+                </div>
+
                 <button type="submit" class="btn btn-primary">
                     Create account
                 </button>
@@ -683,10 +695,16 @@
             } catch (_) {}
             const password = document.getElementById('password').value;
             const terms = document.getElementById('terms').checked;
+            const previewDisclaimer = document.getElementById('previewDisclaimer').checked;
 
             // Validate
             if (!terms) {
                 showError('Please agree to the Terms of Service');
+                return;
+            }
+
+            if (!previewDisclaimer) {
+                showError('Please acknowledge the preview release disclaimer');
                 return;
             }
 
