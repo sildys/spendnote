@@ -399,7 +399,13 @@ async function loadDashboardData() {
             const [cashBoxes] = await Promise.all([cashBoxesPromise]);
             
             if (cashBoxes && cashBoxes.length > 0) {
-                const defaultActiveId = String(cashBoxes[0]?.id || '').trim();
+                const savedActiveId = String(localStorage.getItem('activeCashBoxId') || '').trim();
+                const hasSavedActive = savedActiveId
+                    ? cashBoxes.some((box) => String(box?.id || '').trim() === savedActiveId)
+                    : false;
+                const defaultActiveId = hasSavedActive
+                    ? savedActiveId
+                    : String(cashBoxes[0]?.id || '').trim();
                 
                 // Remove loading indicator
                 const loadingSlide = swiperWrapper.querySelector('.loading-slide');
@@ -597,7 +603,13 @@ function updateModalCashBoxDropdown(cashBoxes) {
 
     const { getIconClass, hexToRgb } = getSpendNoteHelpers();
 
-    const defaultActiveId = String(cashBoxes[0]?.id || '').trim();
+    const savedActiveId = String(localStorage.getItem('activeCashBoxId') || '').trim();
+    const hasSavedActive = savedActiveId
+        ? cashBoxes.some((box) => String(box?.id || '').trim() === savedActiveId)
+        : false;
+    const defaultActiveId = hasSavedActive
+        ? savedActiveId
+        : String(cashBoxes[0]?.id || '').trim();
     
     // Clear existing options
     modalRegisterSelect.innerHTML = '';
