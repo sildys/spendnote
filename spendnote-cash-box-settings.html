@@ -465,15 +465,17 @@ const QUICK_PRESET = {
     signatures: '1'
 };
 
-let receiptMode = 'quick';
-let displayOptions = {
+const DETAILED_PRESET = {
     logo: '1',
     addresses: '1',
-    tracking: '0',
-    additional: '0',
-    note: '0',
+    tracking: '1',
+    additional: '1',
+    note: '1',
     signatures: '1'
 };
+
+let receiptMode = 'quick';
+let displayOptions = { ...QUICK_PRESET };
 
 let currentFormat = 'a4';
 let currentZoom = 0.6;
@@ -551,25 +553,18 @@ function applyReceiptMode(mode) {
     const quickSummary = document.getElementById('receiptQuickSummary');
     const detailedToggles = document.getElementById('receiptDetailedToggles');
     if (quickSummary) quickSummary.style.display = m === 'quick' ? 'block' : 'none';
-    if (detailedToggles) detailedToggles.style.display = m === 'detailed' ? 'flex' : 'none';
+    if (detailedToggles) detailedToggles.style.display = 'flex';
 
     const quickRadio = document.getElementById('receiptModeQuick');
     const detailedRadio = document.getElementById('receiptModeDetailed');
     if (quickRadio) quickRadio.checked = m === 'quick';
     if (detailedRadio) detailedRadio.checked = m === 'detailed';
 
-    if (m === 'quick') {
-        displayOptions = { ...QUICK_PRESET };
-        document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
-            const field = toggle.dataset.field;
-            if (field) toggle.checked = displayOptions[field] === '1';
-        });
-    } else {
-        document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
-            const field = toggle.dataset.field;
-            if (field) displayOptions[field] = toggle.checked ? '1' : '0';
-        });
-    }
+    displayOptions = m === 'quick' ? { ...QUICK_PRESET } : { ...DETAILED_PRESET };
+    document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
+        const field = toggle.dataset.field;
+        if (field) toggle.checked = displayOptions[field] === '1';
+    });
     reloadIframe();
 }
 
@@ -784,6 +779,6 @@ window.addEventListener('DOMContentLoaded', function() {
 <script src="assets/js/nav-loader.js?v=8"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/cash-box-settings-data.js?v=30"></script>
+<script src="assets/js/cash-box-settings-data.js?v=31"></script>
 </body>
 </html>
