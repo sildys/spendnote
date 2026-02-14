@@ -602,6 +602,20 @@ async function handleSave(e) {
             receipt_footer_note: safeText(document.getElementById('footerNote')?.value)
         };
 
+        const stripReceiptLabelFields = (payload) => {
+            const next = { ...payload };
+            delete next.receipt_title;
+            delete next.receipt_total_label;
+            delete next.receipt_from_label;
+            delete next.receipt_to_label;
+            delete next.receipt_description_label;
+            delete next.receipt_amount_label;
+            delete next.receipt_issued_by_label;
+            delete next.receipt_received_by_label;
+            delete next.receipt_footer_note;
+            return next;
+        };
+
         const createPayload = {
             ...updatePayload,
             current_balance: 0,
@@ -618,7 +632,13 @@ async function handleSave(e) {
         
         if (isEditMode) {
             // Update existing cash box
-            const updateResult = await db.cashBoxes.update(currentCashBoxId, updatePayload);
+            let updateResult = await db.cashBoxes.update(currentCashBoxId, updatePayload);
+            if (updateResult && updateResult.success === false) {
+                const msg = String(updateResult.error || '').toLowerCase();
+                if (msg.includes('schema cache') || msg.includes('column') || msg.includes('receipt_')) {
+                    updateResult = await db.cashBoxes.update(currentCashBoxId, stripReceiptLabelFields(updatePayload));
+                }
+            }
             if (DEBUG) console.log('Update result:', updateResult);
             if (updateResult && updateResult.success === false) {
                 throw new Error(updateResult.error || 'Failed to update cash box');
