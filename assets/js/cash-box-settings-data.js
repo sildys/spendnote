@@ -4,6 +4,7 @@ let isEditMode = false;
 let currentCashBoxId = null;
 let currentCashBoxData = null;
 let hasInitialized = false;
+let supportsReceiptLabels = true;
 
 function isUuid(value) {
     try {
@@ -461,6 +462,7 @@ async function loadCashBoxData(id) {
         if (footerNoteEl) footerNoteEl.value = cashBox.receipt_footer_note || '';
 
         currentCashBoxData = cashBox;
+        supportsReceiptLabels = Boolean(cashBox && Object.prototype.hasOwnProperty.call(cashBox, 'receipt_amount_label'));
         updateSummaryCard(cashBox);
         
         if (DEBUG) console.log('Cash box data loaded:', cashBox.name);
@@ -616,8 +618,10 @@ async function handleSave(e) {
             return next;
         };
 
+        const safeUpdatePayload = supportsReceiptLabels ? updatePayload : stripReceiptLabelFields(updatePayload);
+
         const createPayload = {
-            ...updatePayload,
+            ...safeUpdatePayload,
             current_balance: 0,
             user_id: user.id
         };
@@ -632,10 +636,11 @@ async function handleSave(e) {
         
         if (isEditMode) {
             // Update existing cash box
-            let updateResult = await db.cashBoxes.update(currentCashBoxId, updatePayload);
+            let updateResult = await db.cashBoxes.update(currentCashBoxId, safeUpdatePayload);
             if (updateResult && updateResult.success === false) {
                 const msg = String(updateResult.error || '').toLowerCase();
                 if (msg.includes('schema cache') || msg.includes('column') || msg.includes('receipt_')) {
+                    supportsReceiptLabels = false;
                     updateResult = await db.cashBoxes.update(currentCashBoxId, stripReceiptLabelFields(updatePayload));
                 }
             }
