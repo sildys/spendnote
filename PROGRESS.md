@@ -70,6 +70,22 @@ If a chat thread freezes / context is lost: in the new thread say:
   - User Settings page pricing features synchronized with landing/pricing pages
   - Commits: `df73941`, `751d531`, `8eee347`, `b84cad2`, `c7b2c9a`, `450e4ac`, `1596956`, `68a8f51`
 
+- Marketing polish & SEO (late night session):
+  - FAQ Page Redesign:
+    - Modern, card-based grid layout with central search and category tabs
+    - Lightened background gradients (slate/teal) for better readability
+    - Content refined based on user feedback & SEO best practices
+    - Added critical trust/billing questions (downgrade, refund, support)
+    - Implemented `FAQPage` JSON-LD structured data for Google Snippets
+  - UX Improvements:
+    - Auto-create default USD Cash Box for new users (via Supabase trigger)
+    - Updated `handle_new_user` migration
+  - SEO Optimization:
+    - `index.html`: Meta tags, Open Graph, Canonical, `SoftwareApplication` schema
+    - `spendnote-pricing.html`: H1 fix, `Product` schema with pricing offers
+    - `sitemap.xml` generated for public pages
+  - Commits: `93e0c0f`, `517dcff`, `54c2780`, `f28a501`, `01b41fa`
+
 - Invites/Team hotfixes (PM):
   - Fixed DB check constraint so invite acceptance can set status to `active` (`invites_status_check`).
   - RLS policies added on `profiles` so org members can read each other's minimal profile (name/email).

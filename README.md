@@ -7,6 +7,18 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
+## Recent engineering updates (2026-02-15)
+
+- **Marketing polish & SEO:**
+  - **FAQ Page Redesign:** Complete rewrite with modern card-based grid layout, central search, category tabs, and expanded content (downgrade/refund/support questions).
+  - **SEO Optimization:** Added `meta` tags, Open Graph tags, Canonical URLs, and JSON-LD Structured Data (`SoftwareApplication`, `Product`, `FAQPage`) to `index.html`, `spendnote-pricing.html`, and `spendnote-faq.html`.
+  - **Sitemap:** Generated `sitemap.xml` for public pages.
+- **UX / Onboarding:**
+  - **Auto-create Cash Box:** New users now automatically get a default "Main Cash Box" (USD) upon signup via a new database trigger (`018_auto_create_default_cash_box.sql`).
+- **Fixes:**
+  - Corrected `h2` -> `h1` hierarchy on Pricing page.
+  - Updated FAQ content to clearer tax/accounting wording based on feedback.
+
 ## Recent engineering updates (2026-02-13)
 
 - Cloudflare Pages cutover fixes (production stability):
