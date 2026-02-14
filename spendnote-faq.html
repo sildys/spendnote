@@ -629,7 +629,7 @@
                     <i class="fas fa-question-circle"></i>
                 </div>
                 <div class="stat-badge-text">
-                    <span class="stat-badge-number">22</span>
+                    <span class="stat-badge-number">25</span>
                     <span class="stat-badge-label">Questions</span>
                 </div>
             </div>
@@ -680,7 +680,7 @@
             <button class="category-tab" data-category="billing">
                 <span class="category-tab-icon"><i class="fas fa-credit-card"></i></span>
                 <span>Billing</span>
-                <span class="category-tab-count">4</span>
+                <span class="category-tab-count">7</span>
             </button>
             <button class="category-tab" data-category="security">
                 <span class="category-tab-icon"><i class="fas fa-shield-alt"></i></span>
@@ -749,7 +749,8 @@
                     </div>
                     <div class="faq-card-body">
                         <div class="faq-answer">
-                            <strong>No.</strong> SpendNote is specifically designed for <strong>internal cash handoff documentation</strong>, not accounting or tax purposes. The receipts you create are proof of cash transfer between people or departments — they're not invoices and shouldn't be used for tax filing. Every receipt includes a mandatory disclaimer clarifying this. If you need accounting software, consider tools like QuickBooks or Xero.
+                            <strong>No.</strong> SpendNote is designed for <strong>internal cash handoffs and receipt documentation</strong>, not tax reporting or accounting compliance. The receipts you create are proof of cash transfer between people or departments — they're not invoices and shouldn't be used for tax filing.<br><br>
+                            <strong>For tax purposes:</strong> You should export your data (CSV or PDF) and use it with your accountant or accounting software. SpendNote helps you track and document cash movements, but it's not a replacement for proper accounting tools like QuickBooks or Xero.
                         </div>
                     </div>
                 </div>
@@ -1022,7 +1023,7 @@
         <!-- Billing -->
         <div class="category-section" id="billing">
             <div class="category-header">
-                <h2>Billing & Plans</h2>
+                <h2>Billing & Plans <span class="question-count">7 Questions</span></h2>
                 <p>Pricing and payment information</p>
             </div>
             <div class="faq-grid">
@@ -1090,16 +1091,57 @@
 
                 <div class="faq-card">
                     <div class="faq-card-header">
-                        <div class="faq-icon"><i class="fas fa-undo"></i></div>
+                        <div class="faq-icon"><i class="fas fa-level-down-alt"></i></div>
                         <div class="faq-card-title">
-                            <div class="faq-question">Money-back guarantee?</div>
-                            <div class="faq-preview">Yes. We offer a 30-day money-back guarantee on all paid plans...</div>
+                            <div class="faq-question">What happens if I downgrade?</div>
+                            <div class="faq-preview">When you downgrade from Standard/Pro to Free, your data remains intact...</div>
                         </div>
                         <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
                     </div>
                     <div class="faq-card-body">
                         <div class="faq-answer">
-                            <strong>Yes.</strong> We offer a <strong>30-day money-back guarantee</strong> on all paid plans, as long as you've recorded 20 transactions or fewer. If you're not satisfied, contact us within 30 days for a full refund, no questions asked.
+                            When you downgrade from Standard or Pro to Free, <strong>your receipt and transaction history remains intact and accessible</strong>. However, some features will be disabled:
+                            <ul>
+                                <li>Multi-cash boxes (only 1 Cash Box on Free)</li>
+                                <li>Multiple users (team features)</li>
+                                <li>Custom labels and localization</li>
+                                <li>Transaction limit applies (20 transactions on Free)</li>
+                            </ul>
+                            You can export all your data before downgrading, and you can always upgrade again to restore full access.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <div class="faq-card-header">
+                        <div class="faq-icon"><i class="fas fa-undo"></i></div>
+                        <div class="faq-card-title">
+                            <div class="faq-question">Can I cancel and get a refund?</div>
+                            <div class="faq-preview">Yes — you can cancel anytime. For yearly plans, refunds follow our guarantee policy...</div>
+                        </div>
+                        <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-card-body">
+                        <div class="faq-answer">
+                            <strong>Yes</strong> — you can cancel anytime. We offer a <strong>30-day money-back guarantee</strong> on all paid plans, as long as you've recorded 20 transactions or fewer. If you're not satisfied, contact us within 30 days for a full refund, no questions asked.<br><br>
+                            For yearly plans, refunds are prorated based on usage. Monthly plans can be canceled at any time, and you'll retain access until the end of your billing period.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <div class="faq-card-header">
+                        <div class="faq-icon"><i class="fas fa-headset"></i></div>
+                        <div class="faq-card-title">
+                            <div class="faq-question">How can I get help or support?</div>
+                            <div class="faq-preview">You can email support@spendnote.app or use the in-app feedback form...</div>
+                        </div>
+                        <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-card-body">
+                        <div class="faq-answer">
+                            You can email <strong>support@spendnote.app</strong> or use the in-app feedback form (available in User Settings). We typically respond within 24 hours.<br><br>
+                            <strong>Priority support</strong> is available for Pro users, with faster response times and dedicated assistance for team setup and customization.
                         </div>
                     </div>
                 </div>
@@ -1126,10 +1168,10 @@
                         <div class="faq-answer">
                             <strong>Yes.</strong> SpendNote uses industry-standard security practices:
                             <ul>
-                                <li><strong>Encryption:</strong> All data is encrypted in transit (HTTPS) and at rest</li>
-                                <li><strong>Authentication:</strong> Powered by Supabase Auth with secure session management</li>
-                                <li><strong>Access control:</strong> Row-level security (RLS) ensures users only see their own organization's data</li>
-                                <li><strong>Infrastructure:</strong> Hosted on Cloudflare Pages with Supabase backend (both enterprise-grade platforms)</li>
+                                <li><strong>Data is encrypted in transit (HTTPS)</strong> — all communication between your browser and our servers is secure</li>
+                                <li><strong>Stored securely in EU region servers</strong> — your data is hosted on enterprise-grade infrastructure (Supabase + Cloudflare)</li>
+                                <li><strong>Access controlled via authenticated sessions</strong> — row-level security ensures you only see your organization's data</li>
+                                <li><strong>You can download/export anytime</strong> — full data portability in CSV or PDF format</li>
                             </ul>
                         </div>
                     </div>
