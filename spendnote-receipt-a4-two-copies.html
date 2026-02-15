@@ -32,6 +32,7 @@ body {
   padding: 6mm 12mm;
   clear: both;              /* <<< CRITICAL FIX */
   --logo-w: 36mm;
+  --logo-scale: 1;
   --logo-gap: 4mm;
   position: relative;
 }
@@ -57,7 +58,7 @@ body {
 .topbar{
   min-height: 18.5mm;
   display: grid;
-  grid-template-columns: 1fr var(--logo-w);
+  grid-template-columns: 1fr auto;
   column-gap: 4mm;
   align-items: start;
 }
@@ -73,17 +74,16 @@ body {
 }
 
 .logo-box{
-  width: var(--logo-w);
-  min-height: 18.5mm;
+  width: calc(36mm * var(--logo-scale));
+  min-height: calc(18.5mm * var(--logo-scale));
   box-sizing: border-box;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
-  overflow: hidden;
 }
 .logo-img{
-  max-height: 18.5mm;
-  max-width: var(--logo-w);
+  max-height: calc(18.5mm * var(--logo-scale));
+  max-width: calc(36mm * var(--logo-scale));
   object-fit: contain;
 }
 
@@ -772,6 +772,18 @@ body {
         box.appendChild(img);
       });
     }
+
+    // Apply logo scale from URL param or localStorage
+    try {
+      let scaleRaw = urlParams.get('logoScale');
+      if (!scaleRaw) {
+        try { scaleRaw = localStorage.getItem('spendnote.receipt.logoScale.v1'); } catch (_) {}
+      }
+      const s = parseFloat(scaleRaw || '1');
+      if (Number.isFinite(s) && s >= 0.5 && s <= 3.0) {
+        document.querySelectorAll('.receipt').forEach(r => r.style.setProperty('--logo-scale', String(s)));
+      }
+    } catch (_) {}
   }
   
   // Addresses (FROM and TO addresses, but keep names visible)
