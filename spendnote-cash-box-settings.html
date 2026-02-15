@@ -341,6 +341,13 @@
                                 </div>
                             </div>
                             <div class="pro-field">
+                                <label>Logo Size</label>
+                                <div class="pro-range-row">
+                                    <input type="range" id="logoScaleInput" min="70" max="120" step="5">
+                                    <span class="pro-range-value" id="logoScaleValue">100%</span>
+                                </div>
+                            </div>
+                            <div class="pro-field">
                                 <label>Receipt Title</label>
                                 <input type="text" id="receiptTitle" placeholder="Cash Receipt">
                             </div>
@@ -477,6 +484,8 @@ const DETAILED_PRESET = {
 let receiptMode = 'quick';
 let displayOptions = { ...QUICK_PRESET };
 
+const LOGO_SCALE_KEY = 'spendnote.receipt.logoScale.v1';
+
 let currentFormat = 'a4';
 let currentZoom = 0.6;
 
@@ -508,6 +517,13 @@ function buildReceiptUrl(format) {
                 ? 'spendnote.proLogoDataUrl'
                 : 'spendnote.receipt.logo.v1';
             params.append('logoKey', key);
+        }
+    } catch (e) {}
+
+    try {
+        const storedScale = parseFloat(localStorage.getItem(LOGO_SCALE_KEY) || '1');
+        if (Number.isFinite(storedScale) && storedScale > 0) {
+            params.append('logoScale', String(storedScale));
         }
     } catch (e) {}
     
@@ -637,6 +653,20 @@ function zoomIn() { currentZoom = Math.min(currentZoom + 0.1, 1.2); scheduleZoom
 function zoomOut() { currentZoom = Math.max(currentZoom - 0.1, 0.4); scheduleZoomUpdate(); }
 function resetZoom() { currentZoom = 0.6; scheduleZoomUpdate(); }
 
+function clampLogoScale(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return 1;
+    return Math.min(1.2, Math.max(0.7, n));
+}
+
+function applyLogoScaleUi(value) {
+    const v = clampLogoScale(value);
+    const input = document.getElementById('logoScaleInput');
+    const label = document.getElementById('logoScaleValue');
+    if (input) input.value = String(Math.round(v * 100));
+    if (label) label.textContent = `${Math.round(v * 100)}%`;
+}
+
 // ===== COLOR PICKER =====
 document.querySelectorAll('.color-option').forEach(option => {
     option.addEventListener('click', function() {
@@ -680,6 +710,17 @@ document.querySelectorAll('input[name="receiptMode"]').forEach(radio => {
         applyReceiptMode(this.value);
     });
 });
+
+// ===== LOGO SCALE =====
+const logoScaleInput = document.getElementById('logoScaleInput');
+if (logoScaleInput) {
+    logoScaleInput.addEventListener('input', () => {
+        const v = clampLogoScale(Number(logoScaleInput.value) / 100);
+        try { localStorage.setItem(LOGO_SCALE_KEY, String(v)); } catch (e) {}
+        applyLogoScaleUi(v);
+        reloadIframe();
+    });
+}
 
 // ===== TOGGLE SWITCHES =====
 document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
@@ -769,6 +810,16 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     scheduleZoomUpdate();
+
+    try {
+        const savedScale = clampLogoScale(parseFloat(localStorage.getItem(LOGO_SCALE_KEY) || '1'));
+        applyLogoScaleUi(savedScale);
+        if (!localStorage.getItem(LOGO_SCALE_KEY)) {
+            localStorage.setItem(LOGO_SCALE_KEY, String(savedScale));
+        }
+    } catch (e) {
+        applyLogoScaleUi(1);
+    }
     
     // Load saved logo
     try {

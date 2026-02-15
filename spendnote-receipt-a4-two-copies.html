@@ -31,7 +31,8 @@ body {
   box-sizing: border-box;
   padding: 6mm 12mm;
   clear: both;              /* <<< CRITICAL FIX */
-  --logo-w: 34mm;
+  --logo-scale: 1;
+  --logo-w: calc(36mm * var(--logo-scale));
   --logo-gap: 4mm;
   position: relative;
 }
@@ -57,7 +58,7 @@ body {
 .topbar{
   height: 18.5mm;              /* matches previous header+meta stack */
   display: grid;
-  grid-template-columns: 1fr 36mm;
+  grid-template-columns: 1fr var(--logo-w);
   column-gap: 4mm;
   align-items: start;
 }
@@ -73,8 +74,8 @@ body {
 }
 
 .logo-box{
-  height: 18.5mm;
-  width: 36mm;
+  height: calc(18.5mm * var(--logo-scale));
+  width: var(--logo-w);
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -88,8 +89,8 @@ body {
    <img class="logo-img" src="YOUR_LOGO_URL_OR_DATAURI" alt="Company logo">
 */
 .logo-img{
-  height: 18.5mm;
-  width: 36mm;
+  height: calc(18.5mm * var(--logo-scale));
+  width: var(--logo-w);
   object-fit: contain;
 }
 
@@ -783,6 +784,12 @@ body {
         box.appendChild(img);
       });
     }
+    try {
+      const scaleParam = parseFloat(urlParams.get('logoScale') || '1');
+      if (Number.isFinite(scaleParam)) {
+        document.documentElement.style.setProperty('--logo-scale', String(Math.min(1.2, Math.max(0.7, scaleParam))));
+      }
+    } catch (_) {}
   }
   
   // Addresses (FROM and TO addresses, but keep names visible)
