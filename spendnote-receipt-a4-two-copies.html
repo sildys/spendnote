@@ -31,7 +31,7 @@ body {
   box-sizing: border-box;
   padding: 6mm 12mm;
   clear: both;              /* <<< CRITICAL FIX */
-  --logo-w: calc(36mm * var(--logo-scale, 1));
+  --logo-w: 36mm;
   --logo-gap: 4mm;
   position: relative;
 }
@@ -73,7 +73,7 @@ body {
 }
 
 .logo-box{
-  height: calc(18.5mm * var(--logo-scale));
+  height: 18.5mm;
   width: var(--logo-w);
   box-sizing: border-box;
   display: flex;
@@ -83,15 +83,17 @@ body {
   color: #777;
   text-transform: uppercase;
   letter-spacing: 0.6pt;
+  overflow: visible;
 }
 /* If you have a real logo image, replace the div with:
    <img class="logo-img" src="YOUR_LOGO_URL_OR_DATAURI" alt="Company logo">
 */
 .logo-img{
-  height: calc(18.5mm * var(--logo-scale, 1));
+  height: 18.5mm;
   width: var(--logo-w);
   object-fit: contain;
-  transform: translate(var(--logo-x, 0), var(--logo-y, 0));
+  transform: translate(var(--logo-x, 0), var(--logo-y, 0)) scale(var(--logo-scale, 1));
+  transform-origin: center center;
 }
 
 
