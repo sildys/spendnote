@@ -5,6 +5,7 @@ const LogoEditor = (() => {
     const LOGO_KEY = 'spendnote.proLogoDataUrl';
     const LEGACY_LOGO_KEY = 'spendnote.receipt.logo.v1';
     const LOGO_SCALE_KEY = 'spendnote.receipt.logoScale.v1';
+    const LOGO_POSITION_KEY = 'spendnote.receipt.logoPosition.v1';
 
     const MIN_SCALE = 0.5;
     const MAX_SCALE = 3.0;
@@ -14,6 +15,13 @@ const LogoEditor = (() => {
     let image = null;
     let info = null;
     let currentScale = 1.0;
+    let currentX = 0;
+    let currentY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let imgStartX = 0;
+    let imgStartY = 0;
 
     const clampScale = (value) => {
         const n = Number(value);
@@ -55,13 +63,29 @@ const LogoEditor = (() => {
         } catch {}
     };
 
+    const readPosition = () => {
+        try {
+            const s = localStorage.getItem(LOGO_POSITION_KEY);
+            if (s) { const p = JSON.parse(s); return { x: Number(p.x) || 0, y: Number(p.y) || 0 }; }
+        } catch {}
+        return { x: 0, y: 0 };
+    };
+
+    const writePosition = () => {
+        try { localStorage.setItem(LOGO_POSITION_KEY, JSON.stringify({ x: currentX, y: currentY })); } catch {}
+    };
+
+    const applyTransform = () => {
+        if (image) {
+            image.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
+        }
+    };
+
     const updateInfo = () => {
         if (info) {
             info.textContent = `${Math.round(currentScale * 100)}%`;
         }
-        if (image) {
-            image.style.transform = `scale(${currentScale})`;
-        }
+        applyTransform();
     };
 
     const setScale = (value) => {
@@ -78,6 +102,9 @@ const LogoEditor = (() => {
             }
             preview.classList.add('has-logo');
             currentScale = clampScale(readScale());
+            const pos = readPosition();
+            currentX = pos.x;
+            currentY = pos.y;
             updateInfo();
 
             if (image.complete && image.naturalWidth === 0) {
@@ -97,7 +124,10 @@ const LogoEditor = (() => {
         if (preview) preview.classList.remove('has-logo');
         if (image) image.removeAttribute('src');
         currentScale = 1.0;
+        currentX = 0;
+        currentY = 0;
         writeScale(currentScale);
+        writePosition();
         updateInfo();
     };
 
@@ -121,7 +151,10 @@ const LogoEditor = (() => {
             }
             writeLogo(dataUrl);
             currentScale = 1.0;
+            currentX = 0;
+            currentY = 0;
             writeScale(currentScale);
+            writePosition();
             loadLogo();
         };
         reader.readAsDataURL(file);
@@ -133,6 +166,32 @@ const LogoEditor = (() => {
         info = document.getElementById('logoEditorInfo');
 
         if (!preview || !image) return;
+
+        // Drag handlers
+        preview.style.cursor = 'grab';
+        preview.addEventListener('mousedown', (e) => {
+            if (!preview.classList.contains('has-logo')) return;
+            isDragging = true;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            imgStartX = currentX;
+            imgStartY = currentY;
+            preview.style.cursor = 'grabbing';
+            e.preventDefault();
+        });
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            currentX = imgStartX + (e.clientX - dragStartX);
+            currentY = imgStartY + (e.clientY - dragStartY);
+            applyTransform();
+        });
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                preview.style.cursor = 'grab';
+                writePosition();
+            }
+        });
 
         // Zoom +/- buttons
         const zoomIn = document.getElementById('logoZoomIn');
