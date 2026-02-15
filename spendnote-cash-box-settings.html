@@ -502,15 +502,19 @@ function buildReceiptUrl(format) {
     params.append('itemsMode', receiptMode === 'quick' ? 'single' : 'full');
     params.append('recordedBy', '0');
 
+    // Cash box logo takes priority over user settings logo
     try {
-        const storedLogo = localStorage.getItem('spendnote.proLogoDataUrl')
-            || localStorage.getItem('spendnote.receipt.logo.v1')
-            || '';
-        if (storedLogo) {
-            const key = localStorage.getItem('spendnote.proLogoDataUrl')
-                ? 'spendnote.proLogoDataUrl'
-                : 'spendnote.receipt.logo.v1';
-            params.append('logoKey', key);
+        const cbLogo = typeof window.getCashBoxLogo === 'function' ? window.getCashBoxLogo() : '';
+        if (cbLogo) {
+            params.append('logoUrl', cbLogo);
+        } else {
+            // Fallback to user settings (global default) logo
+            const userLogo = localStorage.getItem('spendnote.proLogoDataUrl')
+                || localStorage.getItem('spendnote.receipt.logo.v1')
+                || '';
+            if (userLogo) {
+                params.append('logoKey', 'spendnote.proLogoDataUrl');
+            }
         }
     } catch (e) {}
 
@@ -726,12 +730,28 @@ document.getElementById('zoomOutBtn')?.addEventListener('click', zoomOut);
 document.getElementById('zoomInBtn')?.addEventListener('click', zoomIn);
 document.getElementById('zoomResetBtn')?.addEventListener('click', resetZoom);
 
-// ===== LOGO UPLOAD =====
+// ===== CASH BOX LOGO (Pro Options) =====
+// This logo is cash-box-specific, stored in DB (cash_box_logo_url).
+// User Settings logo (localStorage) is the global default fallback.
+let pendingCashBoxLogo = null; // null = no change, '' = removed, 'data:...' = new logo
+
 const logoInput = document.getElementById('logoInput');
 const uploadLogoBtn = document.getElementById('uploadLogoBtn');
 const removeLogoBtn = document.getElementById('removeLogoBtn');
 const logoPreview = document.getElementById('logoPreview');
 const logoPreviewImg = document.getElementById('logoPreviewImg');
+
+function showCashBoxLogo(dataUrl) {
+    if (dataUrl && logoPreviewImg && logoPreview && removeLogoBtn) {
+        logoPreviewImg.src = dataUrl;
+        logoPreview.classList.add('visible');
+        removeLogoBtn.style.display = 'inline-flex';
+    } else if (logoPreview && removeLogoBtn) {
+        if (logoPreviewImg) logoPreviewImg.src = '';
+        logoPreview.classList.remove('visible');
+        removeLogoBtn.style.display = 'none';
+    }
+}
 
 uploadLogoBtn?.addEventListener('click', () => logoInput?.click());
 
@@ -752,27 +772,17 @@ logoInput?.addEventListener('change', function(e) {
     
     const reader = new FileReader();
     reader.onload = function(event) {
-        logoPreviewImg.src = event.target.result;
-        logoPreview.classList.add('visible');
-        removeLogoBtn.style.display = 'inline-flex';
-        try {
-            localStorage.setItem('spendnote.proLogoDataUrl', event.target.result);
-            localStorage.setItem('spendnote.receipt.logo.v1', event.target.result);
-        } catch (e) {}
+        pendingCashBoxLogo = event.target.result;
+        showCashBoxLogo(pendingCashBoxLogo);
         reloadIframe();
     };
     reader.readAsDataURL(file);
 });
 
 removeLogoBtn?.addEventListener('click', () => {
-    logoPreviewImg.src = '';
-    logoPreview.classList.remove('visible');
-    removeLogoBtn.style.display = 'none';
-    logoInput.value = '';
-    try {
-        localStorage.removeItem('spendnote.proLogoDataUrl');
-        localStorage.removeItem('spendnote.receipt.logo.v1');
-    } catch (e) {}
+    pendingCashBoxLogo = ''; // empty string = explicitly removed
+    showCashBoxLogo(null);
+    if (logoInput) logoInput.value = '';
     reloadIframe();
 });
 
@@ -789,17 +799,21 @@ window.addEventListener('DOMContentLoaded', function() {
 
     scheduleZoomUpdate();
 
-    // Load saved logo
-    try {
-        const savedLogo = localStorage.getItem('spendnote.proLogoDataUrl')
-            || localStorage.getItem('spendnote.receipt.logo.v1');
-        if (savedLogo && logoPreviewImg && logoPreview && removeLogoBtn) {
-            logoPreviewImg.src = savedLogo;
-            logoPreview.classList.add('visible');
-            removeLogoBtn.style.display = 'inline-flex';
-        }
-    } catch (e) {}
+    // Cash box logo is loaded by loadCashBoxData via window.setCashBoxLogo
 });
+
+// Called from cash-box-settings-data.js after loading cash box data
+window.setCashBoxLogo = function(dataUrl) {
+    pendingCashBoxLogo = dataUrl || null;
+    showCashBoxLogo(dataUrl);
+};
+
+// Expose for buildReceiptUrl
+window.getCashBoxLogo = function() {
+    // pendingCashBoxLogo: null=no change (use loaded), ''=removed, 'data:...'=new
+    if (pendingCashBoxLogo !== null) return pendingCashBoxLogo;
+    return currentCashBoxData?.cash_box_logo_url || '';
+};
 </script>
 
 <!-- Supabase -->

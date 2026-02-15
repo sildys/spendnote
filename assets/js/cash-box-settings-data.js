@@ -464,6 +464,11 @@ async function loadCashBoxData(id) {
         currentCashBoxData = cashBox;
         supportsReceiptLabels = Boolean(cashBox && Object.prototype.hasOwnProperty.call(cashBox, 'receipt_amount_label'));
         updateSummaryCard(cashBox);
+
+        // Load cash-box-specific logo into Pro Options preview
+        if (typeof window.setCashBoxLogo === 'function') {
+            window.setCashBoxLogo(cashBox.cash_box_logo_url || '');
+        }
         
         if (DEBUG) console.log('Cash box data loaded:', cashBox.name);
         
@@ -588,11 +593,15 @@ async function handleSave(e) {
             return s ? s : null;
         };
 
+        // Cash box logo from Pro Options
+        const cbLogoValue = typeof window.getCashBoxLogo === 'function' ? window.getCashBoxLogo() : undefined;
+
         const updatePayload = {
             name,
             currency,
             color,
             icon,
+            cash_box_logo_url: cbLogoValue || null,
             receipt_title: safeText(document.getElementById('receiptTitle')?.value),
             receipt_total_label: safeText(document.getElementById('totalLabel')?.value),
             receipt_from_label: safeText(document.getElementById('fromLabel')?.value),

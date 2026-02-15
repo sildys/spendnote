@@ -93,12 +93,15 @@ const QUICK_PRESET = {
             if (v) params.append(key, v);
         }
 
-        let storedLogo = '';
-        try { storedLogo = localStorage.getItem(RECEIPT_LOGO_KEY) || ''; } catch (_) {}
-        if (storedLogo) {
-            params.append('logoKey', RECEIPT_LOGO_KEY);
-        } else if (receiptLogoUrl) {
+        // Cash box logo takes priority over user settings (global default) logo
+        if (receiptLogoUrl) {
             params.append('logoUrl', receiptLogoUrl);
+        } else {
+            let storedLogo = '';
+            try { storedLogo = localStorage.getItem(RECEIPT_LOGO_KEY) || ''; } catch (_) {}
+            if (storedLogo) {
+                params.append('logoKey', RECEIPT_LOGO_KEY);
+            }
         }
 
         try {
