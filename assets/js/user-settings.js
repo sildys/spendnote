@@ -49,29 +49,7 @@ const persistAvatarColor = async (color) => {
     }
 };
 
-// Logo localStorage
-const LOGO_KEY = 'spendnote.proLogoDataUrl';
-const LEGACY_LOGO_KEY = 'spendnote.receipt.logo.v1';
-const LOGO_SCALE_KEY = 'spendnote.receipt.logoScale.v1';
-const LOGO_ALIGN_KEY = 'spendnote.receipt.logoAlign.v1';
-const readLogo = () => {
-    try {
-        return localStorage.getItem(LOGO_KEY) || localStorage.getItem(LEGACY_LOGO_KEY);
-    } catch {
-        return null;
-    }
-};
-const writeLogo = (dataUrl) => {
-    try {
-        if (dataUrl) {
-            localStorage.setItem(LOGO_KEY, dataUrl);
-            localStorage.setItem(LEGACY_LOGO_KEY, dataUrl);
-        } else {
-            localStorage.removeItem(LOGO_KEY);
-            localStorage.removeItem(LEGACY_LOGO_KEY);
-        }
-    } catch {}
-};
+// Logo management moved to logo-editor.js
 
 
 // State
@@ -110,65 +88,7 @@ const applyAvatar = (fullName) => {
     });
 };
 
-const applyLogo = () => {
-    const wrap = document.getElementById('logoPreview');
-    const img = document.getElementById('logoImg');
-    if (!wrap || !img) return;
-    const stored = readLogo();
-    const scale = clampLogoScale(readLogoScale());
-    const align = readLogoAlign();
-    wrap.style.setProperty('--logo-scale', String(scale));
-    wrap.style.setProperty('--logo-justify', align === 'left' ? 'flex-start' : (align === 'right' ? 'flex-end' : 'center'));
-    if (stored) {
-        wrap.classList.add('has-image');
-        img.src = stored;
-    } else {
-        wrap.classList.remove('has-image');
-        img.removeAttribute('src');
-    }
-};
-
-const clampLogoScale = (value) => {
-    const n = Number(value);
-    if (!Number.isFinite(n)) return 1;
-    return Math.min(1.2, Math.max(0.7, n));
-};
-
-const readLogoScale = () => {
-    try { return parseFloat(localStorage.getItem(LOGO_SCALE_KEY) || '1'); } catch { return 1; }
-};
-
-const readLogoAlign = () => {
-    try {
-        const v = String(localStorage.getItem(LOGO_ALIGN_KEY) || '').toLowerCase();
-        if (v === 'left' || v === 'center' || v === 'right') return v;
-    } catch (_) {}
-    return 'center';
-};
-
-const writeLogoScale = (value) => {
-    try { localStorage.setItem(LOGO_SCALE_KEY, String(clampLogoScale(value))); } catch (_) {}
-};
-
-const writeLogoAlign = (value) => {
-    const v = (value === 'left' || value === 'right') ? value : 'center';
-    try { localStorage.setItem(LOGO_ALIGN_KEY, v); } catch (_) {}
-};
-
-const applyLogoControls = () => {
-    const scaleInput = document.getElementById('logoScaleInput');
-    const scaleValue = document.getElementById('logoScaleValue');
-    const alignGroup = document.getElementById('logoAlignGroup');
-    const scale = clampLogoScale(readLogoScale());
-    if (scaleInput) scaleInput.value = String(Math.round(scale * 100));
-    if (scaleValue) scaleValue.textContent = `${Math.round(scale * 100)}%`;
-    if (alignGroup) {
-        const align = readLogoAlign();
-        alignGroup.querySelectorAll('.logo-align-btn').forEach((btn) => {
-            btn.classList.toggle('active', btn.dataset.align === align);
-        });
-    }
-};
+// Logo functions moved to logo-editor.js
 
 const fillProfile = (p) => {
     currentProfile = p ? { ...p } : null;
@@ -186,8 +106,6 @@ const fillProfile = (p) => {
     document.getElementById('receiptAddress').value = String(p?.address || '');
 
     applyAvatar(fullName);
-    applyLogo();
-    applyLogoControls();
 
     window.refreshUserNav?.();
 };
@@ -550,47 +468,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         showAlert('Profile saved.', { iconType: 'success' });
     });
 
-    // Logo upload
-    document.getElementById('logoUploadBtn')?.addEventListener('click', () => document.getElementById('logoFileInput')?.click());
-    document.getElementById('logoFileInput')?.addEventListener('change', (e) => {
-        const file = e.target?.files?.[0];
-        if (!file) return;
-        if (file.size > 2 * 1024 * 1024) { showAlert('Max logo size is 2MB.', { iconType: 'warning' }); return; }
-        const reader = new FileReader();
-        reader.onload = () => {
-            const dataUrl = reader.result;
-            if (!dataUrl?.startsWith('data:image/')) { showAlert('Invalid image.', { iconType: 'error' }); return; }
-            writeLogo(dataUrl);
-            applyLogo();
-        };
-        reader.readAsDataURL(file);
-    });
-    document.getElementById('logoRemoveBtn')?.addEventListener('click', () => {
-        writeLogo(null);
-        applyLogo();
-    });
-
-    const logoScaleInput = document.getElementById('logoScaleInput');
-    if (logoScaleInput) {
-        logoScaleInput.addEventListener('input', () => {
-            const scale = clampLogoScale(Number(logoScaleInput.value) / 100);
-            writeLogoScale(scale);
-            const scaleValue = document.getElementById('logoScaleValue');
-            if (scaleValue) scaleValue.textContent = `${Math.round(scale * 100)}%`;
-            applyLogo();
-        });
-    }
-
-    const logoAlignGroup = document.getElementById('logoAlignGroup');
-    if (logoAlignGroup) {
-        logoAlignGroup.addEventListener('click', (e) => {
-            const btn = e.target?.closest('.logo-align-btn');
-            if (!btn) return;
-            writeLogoAlign(btn.dataset.align);
-            applyLogoControls();
-            applyLogo();
-        });
-    }
+    // Logo editor is handled by logo-editor.js
 
     // Receipt form
     document.getElementById('receiptResetBtn')?.addEventListener('click', () => fillProfile(currentProfile));
