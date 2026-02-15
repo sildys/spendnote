@@ -31,8 +31,7 @@ body {
   box-sizing: border-box;
   padding: 6mm 12mm;
   clear: both;              /* <<< CRITICAL FIX */
-  --logo-scale: 1;
-  --logo-w: calc(36mm * var(--logo-scale));
+  --logo-w: calc(36mm * var(--logo-scale, 1));
   --logo-gap: 4mm;
   position: relative;
 }
@@ -89,7 +88,7 @@ body {
    <img class="logo-img" src="YOUR_LOGO_URL_OR_DATAURI" alt="Company logo">
 */
 .logo-img{
-  height: calc(18.5mm * var(--logo-scale));
+  height: calc(18.5mm * var(--logo-scale, 1));
   width: var(--logo-w);
   object-fit: contain;
   transform: translate(var(--logo-x, 0), var(--logo-y, 0));
