@@ -78,7 +78,7 @@ body {
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  justify-content: var(--logo-justify, center);
+  justify-content: var(--logo-justify, flex-end);
   font-size: 7pt;
   color: #777;
   text-transform: uppercase;
@@ -92,7 +92,7 @@ body {
   height: 18.5mm;
   width: var(--logo-w);
   object-fit: contain;
-  transform: translate(var(--logo-x, 0), var(--logo-y, 0)) scale(var(--logo-scale, 1));
+  transform: scale(var(--logo-scale, 1)) translate(var(--logo-x, 0), var(--logo-y, 0));
   transform-origin: right top;
 }
 
