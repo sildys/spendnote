@@ -908,9 +908,9 @@
 }
 
 .pro-logo-preview {
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
+    width: 120px;
+    height: 60px;
+    border-radius: 6px;
     border: 1px solid var(--border);
     background: white;
     overflow: hidden;
