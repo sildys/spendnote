@@ -152,10 +152,18 @@ const LogoEditor = (() => {
             currentY = pos.y;
             
             if (image.complete) {
-                updateImageTransform();
+                if (image.naturalWidth === 0) {
+                    // Broken image
+                    canvas.classList.remove('has-logo');
+                } else {
+                    updateImageTransform();
+                }
             } else {
                 image.onload = () => {
                     updateImageTransform();
+                };
+                image.onerror = () => {
+                    canvas.classList.remove('has-logo');
                 };
             }
         } else if (canvas) {
