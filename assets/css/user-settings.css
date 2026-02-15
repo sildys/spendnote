@@ -871,13 +871,13 @@
 }
 
 .logo-compact-preview {
-    width: 120px;
-    height: 60px;
+    width: 180px;
+    height: 80px;
     border-radius: 8px;
     background: #f8f9fa;
     border: 1.5px dashed #d1d5db;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -907,6 +907,8 @@
     object-fit: contain;
     display: none;
     user-select: none;
+    transform-origin: center center;
+    transition: transform 0.15s ease;
 }
 
 .logo-compact-preview.has-logo .logo-compact-img {

@@ -59,6 +59,9 @@ const LogoEditor = (() => {
         if (info) {
             info.textContent = `${Math.round(currentScale * 100)}%`;
         }
+        if (image) {
+            image.style.transform = `scale(${currentScale})`;
+        }
     };
 
     const setScale = (value) => {
