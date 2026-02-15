@@ -1,12 +1,6 @@
 // ===== USER SETTINGS PAGE LOGIC =====
 
 const escapeHtml = (str) => String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const getInitials = (name) => {
-    const n = String(name || '').trim();
-    if (!n) return '—';
-    const parts = n.split(/\s+/).filter(Boolean);
-    return ((parts[0]?.[0] || '') + (parts[1]?.[0] || '')).toUpperCase() || n[0]?.toUpperCase() || '—';
-};
 
 const applyRoleBadge = (roleValue) => {
     const roleEl = document.getElementById('profileRole');
