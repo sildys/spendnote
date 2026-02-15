@@ -604,6 +604,9 @@ var auth = {
             if (window.SpendNoteDebug) console.error('Error signing up:', error);
             return { success: false, error: error.message };
         }
+        if (data?.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+            return { success: false, error: 'Email already registered. Please log in instead.' };
+        }
         if (auth.__userCache) {
             auth.__userCache.user = null;
             auth.__userCache.ts = 0;
