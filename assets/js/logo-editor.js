@@ -81,13 +81,13 @@ const LogoEditor = (() => {
         } catch (_) {}
     };
 
-    const renderSnapshot = () => {
+    const renderSnapshot = async () => {
         if (!image || !image.src || !image.complete || image.naturalWidth === 0) return;
         try {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            const w = 360;
-            const h = 160;
+            const w = 540;
+            const h = 270;
             canvas.width = w;
             canvas.height = h;
             ctx.fillStyle = '#ffffff';
@@ -97,17 +97,21 @@ const LogoEditor = (() => {
             const scale = currentScale;
             const scaledW = imgW * scale;
             const scaledH = imgH * scale;
-            const x = (w / 2) - (scaledW / 2) + currentX;
-            const y = (h / 2) - (scaledH / 2) + currentY;
+            const x = (w / 2) - (scaledW / 2) + currentX * 1.5;
+            const y = (h / 2) - (scaledH / 2) + currentY * 1.5;
             ctx.drawImage(image, x, y, scaledW, scaledH);
             const snapshotUrl = canvas.toDataURL('image/png', 0.92);
-            if (window.db?.profiles?.update) {
-                window.db.profiles.update({ account_logo_url: snapshotUrl }).catch(() => {});
-            }
             try {
                 localStorage.setItem(LOGO_KEY, snapshotUrl);
                 localStorage.setItem(LEGACY_LOGO_KEY, snapshotUrl);
             } catch {}
+            if (window.db?.profiles?.update) {
+                try {
+                    await window.db.profiles.update({ account_logo_url: snapshotUrl });
+                } catch (err) {
+                    if (window.SpendNoteDebug) console.warn('Logo snapshot DB update failed:', err);
+                }
+            }
         } catch (_) {}
     };
 
