@@ -55,7 +55,7 @@ body {
 
 /* TOP BAR (Title + Meta left, Logo right) */
 .topbar{
-  height: 18.5mm;              /* matches previous header+meta stack */
+  min-height: 18.5mm;
   display: grid;
   grid-template-columns: 1fr var(--logo-w);
   column-gap: 4mm;
@@ -73,28 +73,18 @@ body {
 }
 
 .logo-box{
-  height: 18.5mm;
   width: var(--logo-w);
+  min-height: 18.5mm;
   box-sizing: border-box;
   display: flex;
   align-items: flex-start;
-  justify-content: var(--logo-justify, flex-end);
-  font-size: 7pt;
-  color: #777;
-  text-transform: uppercase;
-  letter-spacing: 0.6pt;
-  overflow: visible;
-  padding-top: 0.5mm;
+  justify-content: flex-end;
+  overflow: hidden;
 }
-/* If you have a real logo image, replace the div with:
-   <img class="logo-img" src="YOUR_LOGO_URL_OR_DATAURI" alt="Company logo">
-*/
 .logo-img{
-  height: 18.5mm;
-  width: var(--logo-w);
+  max-height: 18.5mm;
+  max-width: var(--logo-w);
   object-fit: contain;
-  transform: translate(var(--logo-x, 0), var(--logo-y, 0)) scale(var(--logo-scale, 1));
-  transform-origin: right top;
 }
 
 
@@ -298,26 +288,21 @@ body {
   align-items:start;
 }
 .right-block{
-  display:grid;
-  grid-template-columns: auto var(--logo-w);
-  column-gap: 4mm;
-  align-items:start;
-  justify-items:end;
+  display:flex;
+  align-items:flex-start;
+  justify-content:flex-end;
+  gap: 4mm;
 }
 .identifiers{
   text-align:right;
   font-size:7.6pt;
   line-height:1.2;
   margin-top:0.5mm;
-  white-space:nowrap;          /* keep each ID line intact */
+  white-space:nowrap;
 }
 .identifiers .register-id,
 .identifiers .receipt-id{
   white-space:nowrap;
-}
-.logo-box{
-  width: var(--logo-w);
-  height: 18.5mm;
 }
 
 
@@ -787,52 +772,6 @@ body {
         box.appendChild(img);
       });
     }
-    try {
-      let scaleRaw = urlParams.get('logoScale');
-      if (!scaleRaw) {
-        try { scaleRaw = localStorage.getItem('spendnote.receipt.logoScale.v1'); } catch (_) {}
-      }
-      const scaleParam = parseFloat(scaleRaw || '1');
-      if (Number.isFinite(scaleParam)) {
-        document.documentElement.style.setProperty('--logo-scale', String(Math.min(3.0, Math.max(0.5, scaleParam))));
-      }
-    } catch (_) {}
-
-    try {
-      let xRaw = urlParams.get('logoX');
-      let yRaw = urlParams.get('logoY');
-      if (!xRaw || !yRaw) {
-        try {
-          const storedPos = localStorage.getItem('spendnote.receipt.logoPosition.v1');
-          if (storedPos) {
-            const p = JSON.parse(storedPos);
-            if (Number.isFinite(p.x)) xRaw = String(p.x);
-            if (Number.isFinite(p.y)) yRaw = String(p.y);
-          }
-        } catch (_) {}
-      }
-      const xP = parseFloat(xRaw || '0');
-      const yP = parseFloat(yRaw || '0');
-      if (Number.isFinite(xP) && Number.isFinite(yP)) {
-        document.documentElement.style.setProperty('--logo-x', xP + 'px');
-        document.documentElement.style.setProperty('--logo-y', yP + 'px');
-      }
-    } catch (_) {}
-
-    /* Legacy align support as fallback? No, simpler to just use X/Y if available. */
-    try {
-      const alignParam = String(urlParams.get('logoAlign') || '').trim().toLowerCase();
-      if (alignParam === 'left') {
-        document.documentElement.style.setProperty('--logo-justify', 'flex-start');
-        document.documentElement.style.setProperty('--logo-position-x', 'left');
-      } else if (alignParam === 'right') {
-        document.documentElement.style.setProperty('--logo-justify', 'flex-end');
-        document.documentElement.style.setProperty('--logo-position-x', 'right');
-      } else if (alignParam === 'center') {
-        document.documentElement.style.setProperty('--logo-justify', 'center');
-        document.documentElement.style.setProperty('--logo-position-x', 'center');
-      }
-    } catch (_) {}
   }
   
   // Addresses (FROM and TO addresses, but keep names visible)
