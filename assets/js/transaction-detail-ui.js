@@ -1,5 +1,5 @@
 const QUICK_PRESET = {
-        logo: '0',
+        logo: '1',
         addresses: '1',
         tracking: '1',
         additional: '0',
