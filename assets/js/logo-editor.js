@@ -80,9 +80,15 @@ const LogoEditor = (() => {
     };
 
     const updateImageTransform = () => {
-        if (!image) return;
+        if (!image || !image.src) return;
         
         const canvasRect = canvas.getBoundingClientRect();
+        // If canvas is hidden or 0 size, try later
+        if (canvasRect.width === 0 || canvasRect.height === 0) {
+            requestAnimationFrame(updateImageTransform);
+            return;
+        }
+
         const naturalWidth = image.naturalWidth || 1;
         const naturalHeight = image.naturalHeight || 1;
         const aspectRatio = naturalWidth / naturalHeight;
@@ -102,8 +108,9 @@ const LogoEditor = (() => {
 
         image.style.width = `${scaledWidth}px`;
         image.style.height = `${scaledHeight}px`;
-        image.style.left = `${canvasRect.width / 2 + currentX}px`;
-        image.style.top = `${canvasRect.height / 2 + currentY}px`;
+        // Center + offset
+        image.style.left = `${(canvasRect.width / 2) + currentX}px`;
+        image.style.top = `${(canvasRect.height / 2) + currentY}px`;
         image.style.transform = 'translate(-50%, -50%)';
 
         if (info) {
@@ -133,18 +140,31 @@ const LogoEditor = (() => {
     const loadLogo = () => {
         const stored = readLogo();
         if (stored && image && canvas) {
-            image.src = stored;
+            // Reset state if needed
+            if (!image.src || image.src !== stored) {
+                image.src = stored;
+            }
+            
             canvas.classList.add('has-logo');
             currentScale = clampScale(readScale());
             const pos = readPosition();
             currentX = pos.x;
             currentY = pos.y;
             
-            image.onload = () => {
+            if (image.complete) {
                 updateImageTransform();
-            };
+            } else {
+                image.onload = () => {
+                    updateImageTransform();
+                };
+            }
         } else if (canvas) {
             canvas.classList.remove('has-logo');
+            if (image) {
+                image.removeAttribute('src');
+                image.style.width = '';
+                image.style.height = '';
+            }
         }
     };
 

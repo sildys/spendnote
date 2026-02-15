@@ -874,12 +874,16 @@
 .logo-editor-canvas {
     width: 100%;
     height: 280px;
+    min-height: 280px;
     border-radius: 12px;
     background: var(--bg);
     border: 2px solid var(--border);
     position: relative;
     overflow: hidden;
     margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .logo-editor-viewport {
@@ -922,8 +926,8 @@
     max-height: none;
     object-fit: contain;
     user-select: none;
-    pointer-events: none;
     display: none;
+    transform-origin: center center;
 }
 
 .logo-editor-canvas.has-logo .logo-editor-placeholder {
