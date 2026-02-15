@@ -479,6 +479,7 @@ let displayOptions = { ...QUICK_PRESET };
 
 const LOGO_SCALE_KEY = 'spendnote.receipt.logoScale.v1';
 const LOGO_ALIGN_KEY = 'spendnote.receipt.logoAlign.v1';
+const LOGO_POSITION_KEY = 'spendnote.receipt.logoPosition.v1';
 
 let currentFormat = 'a4';
 let currentZoom = 0.6;
@@ -531,6 +532,15 @@ function buildReceiptUrl(format) {
         const storedAlign = String(localStorage.getItem(LOGO_ALIGN_KEY) || '').trim().toLowerCase();
         if (storedAlign === 'left' || storedAlign === 'center' || storedAlign === 'right') {
             params.append('logoAlign', storedAlign);
+        }
+    } catch (e) {}
+
+    try {
+        const storedPos = localStorage.getItem(LOGO_POSITION_KEY);
+        if (storedPos) {
+            const p = JSON.parse(storedPos);
+            if (Number.isFinite(p.x)) params.append('logoX', String(p.x));
+            if (Number.isFinite(p.y)) params.append('logoY', String(p.y));
         }
     } catch (e) {}
     
