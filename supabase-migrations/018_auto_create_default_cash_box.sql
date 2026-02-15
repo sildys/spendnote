@@ -7,10 +7,15 @@ RETURNS TRIGGER AS $$
 DECLARE
     v_is_invited boolean := COALESCE((NEW.raw_user_meta_data->>'invited')::boolean, false);
     v_has_invite boolean := false;
+    v_email text := lower(trim(coalesce(NEW.email, '')));
+    v_full_name text := nullif(trim(coalesce(NEW.raw_user_meta_data->>'full_name', '')), '');
 BEGIN
     -- Create profile
     INSERT INTO public.profiles (id, email, full_name)
-    VALUES (NEW.id, NEW.email, NEW.raw_user_meta_data->>'full_name');
+    VALUES (NEW.id, v_email, COALESCE(v_full_name, v_email, 'User'))
+    ON CONFLICT (id) DO UPDATE
+    SET email = EXCLUDED.email,
+        full_name = EXCLUDED.full_name;
 
     IF to_regclass('public.invites') IS NOT NULL THEN
         SELECT EXISTS (
@@ -46,4 +51,6 @@ BEGIN
 
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER
+SET search_path = public
+SET row_security = off;
