@@ -799,8 +799,20 @@ body {
     } catch (_) {}
 
     try {
-      const xP = parseFloat(urlParams.get('logoX') || '0');
-      const yP = parseFloat(urlParams.get('logoY') || '0');
+      let xRaw = urlParams.get('logoX');
+      let yRaw = urlParams.get('logoY');
+      if (!xRaw || !yRaw) {
+        try {
+          const storedPos = localStorage.getItem('spendnote.receipt.logoPosition.v1');
+          if (storedPos) {
+            const p = JSON.parse(storedPos);
+            if (Number.isFinite(p.x)) xRaw = String(p.x);
+            if (Number.isFinite(p.y)) yRaw = String(p.y);
+          }
+        } catch (_) {}
+      }
+      const xP = parseFloat(xRaw || '0');
+      const yP = parseFloat(yRaw || '0');
       if (Number.isFinite(xP) && Number.isFinite(yP)) {
         document.documentElement.style.setProperty('--logo-x', xP + 'px');
         document.documentElement.style.setProperty('--logo-y', yP + 'px');
