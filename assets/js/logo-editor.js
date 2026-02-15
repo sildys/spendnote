@@ -195,11 +195,16 @@ const LogoEditor = (() => {
                 return;
             }
             writeLogo(dataUrl);
+            if (image && preview) {
+                image.src = dataUrl;
+                preview.classList.add('has-logo');
+            }
             currentScale = 1.0;
             currentX = 0;
             currentY = 0;
             writeScale(currentScale);
             writePosition();
+            updateInfo();
             loadLogo();
         };
         reader.readAsDataURL(file);
