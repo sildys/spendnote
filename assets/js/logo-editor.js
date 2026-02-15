@@ -86,8 +86,8 @@ const LogoEditor = (() => {
         try {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            const w = 540;
-            const h = 270;
+            const w = 360;
+            const h = 180;
             canvas.width = w;
             canvas.height = h;
             ctx.fillStyle = '#ffffff';
@@ -97,10 +97,10 @@ const LogoEditor = (() => {
             const scale = currentScale;
             const scaledW = imgW * scale;
             const scaledH = imgH * scale;
-            const x = (w / 2) - (scaledW / 2) + currentX * 1.5;
-            const y = (h / 2) - (scaledH / 2) + currentY * 1.5;
+            const x = (w / 2) - (scaledW / 2) + currentX;
+            const y = (h / 2) - (scaledH / 2) + currentY;
             ctx.drawImage(image, x, y, scaledW, scaledH);
-            const snapshotUrl = canvas.toDataURL('image/png', 0.92);
+            const snapshotUrl = canvas.toDataURL('image/jpeg', 0.75);
             try {
                 localStorage.setItem(LOGO_KEY, snapshotUrl);
                 localStorage.setItem(LEGACY_LOGO_KEY, snapshotUrl);
