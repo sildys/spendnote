@@ -77,13 +77,14 @@ body {
   width: var(--logo-w);
   box-sizing: border-box;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: var(--logo-justify, flex-end);
   font-size: 7pt;
   color: #777;
   text-transform: uppercase;
   letter-spacing: 0.6pt;
   overflow: visible;
+  padding-top: 0.5mm;
 }
 /* If you have a real logo image, replace the div with:
    <img class="logo-img" src="YOUR_LOGO_URL_OR_DATAURI" alt="Company logo">
@@ -292,15 +293,16 @@ body {
 /* v12 header layout: identifiers + logo on the right, single row */
 .topbar{
   display:grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr max-content;
   column-gap: 6mm;
   align-items:start;
 }
 .right-block{
-  display:flex;
-  align-items:flex-start;
-  justify-content:flex-end;
-  gap: 4mm;
+  display:grid;
+  grid-template-columns: auto var(--logo-w);
+  column-gap: 4mm;
+  align-items:start;
+  justify-items:end;
 }
 .identifiers{
   text-align:right;
