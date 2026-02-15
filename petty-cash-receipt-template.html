@@ -397,6 +397,157 @@
             color: var(--text-muted);
         }
 
+        /* FOOTER */
+        .site-footer {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f766e 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 4rem 0 2rem;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .site-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.5), transparent);
+        }
+
+        .footer-container {
+            max-width: var(--max-width-page);
+            margin: 0 auto;
+            padding: 0 var(--page-gutter);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 450px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo svg {
+            width: 36px;
+            height: 36px;
+            filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.3));
+        }
+
+        .footer-logo span {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer-description {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.7;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-column h4 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 2px;
+            transition: color 0.2s;
+        }
+
+        .footer-column a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #10b981;
+            transition: width 0.2s ease;
+        }
+
+        .footer-column a:hover {
+            color: #10b981;
+        }
+
+        .footer-column a:hover::after {
+            width: 100%;
+        }
+
+        .footer-disclaimer {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 999px;
+            font-size: 0.8125rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 auto 2rem;
+            max-width: fit-content;
+            display: flex;
+            font-weight: 600;
+        }
+
+        .footer-disclaimer i {
+            color: #10b981;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            margin: 0;
+        }
+
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .seo-hero {
@@ -418,6 +569,16 @@
             .comparison-table th,
             .comparison-table td {
                 padding: 0.75rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-links {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
             }
         }
     </style>
