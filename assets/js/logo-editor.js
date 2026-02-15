@@ -204,27 +204,19 @@ const LogoEditor = (() => {
             zoomOut.addEventListener('click', () => setScale(currentScale - STEP));
         }
 
-        // Upload/Remove — clone to avoid duplicate listeners
+        // Upload/Remove
         const uploadBtn = document.getElementById('logoUploadBtn');
         const removeBtn = document.getElementById('logoRemoveBtn');
         const fileInput = document.getElementById('logoFileInput');
 
         if (uploadBtn && fileInput) {
-            const newUploadBtn = uploadBtn.cloneNode(true);
-            uploadBtn.parentNode.replaceChild(newUploadBtn, uploadBtn);
-            newUploadBtn.addEventListener('click', () => fileInput.click());
+            uploadBtn.addEventListener('click', () => fileInput.click());
         }
-
         if (removeBtn) {
-            const newRemoveBtn = removeBtn.cloneNode(true);
-            removeBtn.parentNode.replaceChild(newRemoveBtn, removeBtn);
-            newRemoveBtn.addEventListener('click', removeLogo);
+            removeBtn.addEventListener('click', removeLogo);
         }
-
         if (fileInput) {
-            const newFileInput = fileInput.cloneNode(true);
-            fileInput.parentNode.replaceChild(newFileInput, fileInput);
-            newFileInput.addEventListener('change', (e) => {
+            fileInput.addEventListener('change', (e) => {
                 const file = e.target?.files?.[0];
                 if (file) uploadLogo(file);
             });
