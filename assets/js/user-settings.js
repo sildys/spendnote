@@ -413,9 +413,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     await waitForDb();
 
-    // Load data
-    await Promise.all([loadProfile(), loadTeam(), loadCashBoxes()]);
-    await computeAndApplyRole();
+    // Load data (do not block logo editor init if any call fails)
+    try {
+        await Promise.all([loadProfile(), loadTeam(), loadCashBoxes()]);
+        await computeAndApplyRole();
+    } catch (_) {}
     
     // Initialize logo editor
     if (window.LogoEditor) {
