@@ -201,9 +201,10 @@ async function updateUserNav() {
     }
 }
 
+// Helper function for initials
 function getInitials(name) {
     if (!name) return 'U';
-    const parts = name.trim().split(/\s+/).filter(Boolean);
+    const parts = String(name).trim().split(/\s+/).filter(Boolean);
     const initials = parts.slice(0, 2).map((part) => part[0].toUpperCase()).join('');
     return initials || 'U';
 }
