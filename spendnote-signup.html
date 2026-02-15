@@ -1024,6 +1024,14 @@ function togglePreviewDetails() {
             wrap.style.justifyContent = 'center';
             wrap.style.flexWrap = 'wrap';
 
+            const loginBtn = document.createElement('button');
+            loginBtn.type = 'button';
+            loginBtn.className = 'btn btn-primary';
+            loginBtn.textContent = 'Log in';
+            loginBtn.addEventListener('click', () => {
+                window.location.href = 'spendnote-login.html';
+            });
+
             const resetBtn = document.createElement('button');
             resetBtn.type = 'button';
             resetBtn.className = 'btn btn-secondary';
@@ -1042,6 +1050,7 @@ function togglePreviewDetails() {
                 }
             });
 
+            wrap.appendChild(loginBtn);
             wrap.appendChild(resetBtn);
             errorMessage.appendChild(wrap);
 
