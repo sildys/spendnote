@@ -51,7 +51,20 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
 - [ ] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass
 
-## Where we are now (last updated: 2026-02-14 evening)
+## Where we are now (last updated: 2026-02-16 early morning)
+
+- Receipt logo stabilization (today):
+  - `assets/js/logo-editor.js` stabilized for real-world usage:
+    - immediate init support + robust upload flow
+    - delayed profile sync no longer overwrites fresh user edits (`hasUserEdited`)
+    - snapshot writes debounced to avoid rapid DB updates
+    - same-file re-upload works (file input reset)
+  - `assets/js/user-settings.js` updated so `LogoEditor.init()` runs immediately on `DOMContentLoaded` (independent from DB/profile loading).
+  - `spendnote-user-settings.html` cache-bust query params updated for `logo-editor.js` and `user-settings.js`.
+  - Receipt logo sizing by channel:
+    - Print: unchanged (baseline)
+    - PDF: reduced to `160x80` in `spendnote-pdf-receipt.html`
+    - Email: increased to `240x120` in `spendnote-email-receipt.html`
 
 - Marketing polish (evening session):
   - Footer redesigned with dark gradient background (matching early access banner style):

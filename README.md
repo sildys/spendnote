@@ -7,6 +7,19 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
+## Recent engineering updates (2026-02-16)
+
+- **Receipt logo stabilization (User Settings):**
+  - `LogoEditor` now initializes immediately on `DOMContentLoaded` (no DB wait), so upload controls are always usable.
+  - Prevented delayed profile sync from overwriting a freshly uploaded logo (`hasUserEdited` guard).
+  - Added snapshot debounce to reduce rapid DB writes and improve stability.
+  - File input is reset on click/change, so re-uploading the same image works reliably.
+  - Cache-bust versions updated in `spendnote-user-settings.html` for `logo-editor.js` and `user-settings.js`.
+- **Receipt logo size tuning by channel:**
+  - **Print:** unchanged (kept as baseline).
+  - **PDF:** logo reduced to `160x80` for better balance.
+  - **Email:** logo increased to `240x120` for better visibility.
+
 ## Recent engineering updates (2026-02-15)
 
 - **Marketing polish & SEO:**
