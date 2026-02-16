@@ -46,6 +46,7 @@ const QUICK_PRESET = {
     let currentTxIsVoided = false;
     let overrideContactAddress = '';
     let currentCashBoxId = '';
+    let txData = null;
 
     function isUuid(value) {
         try {
@@ -62,6 +63,12 @@ const QUICK_PRESET = {
     const txIdRaw = spTx.get('txId');
     const txId = isUuid(txIdRaw) ? txIdRaw : '';
 
+    function getCurrentTxId() {
+        const fromLoaded = String(txData?.id || '').trim();
+        if (fromLoaded) return fromLoaded;
+        return txId;
+    }
+
     function buildReceiptUrl(format, extraParams) {
         const baseUrls = {
             'a4': 'spendnote-receipt-a4-two-copies.html',
@@ -70,7 +77,8 @@ const QUICK_PRESET = {
         };
         const params = new URLSearchParams();
         params.append('v', 'receipt-20260207-07');
-        if (txId) params.append('txId', txId);
+        const currentTxId = getCurrentTxId();
+        if (currentTxId) params.append('txId', currentTxId);
         params.append('bootstrap', '1');
 
         const addrOverride = String(overrideContactAddress || '').trim();
@@ -380,10 +388,10 @@ const QUICK_PRESET = {
         displayOptions = {
             logo: resolveVisibilityBool('logo', cb.receipt_show_logo, true) ? '1' : '0',
             addresses: resolveVisibilityBool('addresses', cb.receipt_show_addresses, true) ? '1' : '0',
-            tracking: resolveVisibilityBool('tracking', cb.receipt_show_tracking, false) ? '1' : '0',
+            tracking: resolveVisibilityBool('tracking', cb.receipt_show_tracking, true) ? '1' : '0',
             additional: resolveVisibilityBool('additional', cb.receipt_show_additional, false) ? '1' : '0',
             note: resolveVisibilityBool('note', cb.receipt_show_note, false) ? '1' : '0',
-            signatures: resolveVisibilityBool('signatures', cb.receipt_show_signatures, false) ? '1' : '0'
+            signatures: resolveVisibilityBool('signatures', cb.receipt_show_signatures, true) ? '1' : '0'
         };
 
         document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
@@ -393,13 +401,24 @@ const QUICK_PRESET = {
             }
         });
 
-        const storedMode = getStoredReceiptMode();
-        const modeToApply = storedMode || inferReceiptModeFromOptions(displayOptions);
-        applyReceiptMode(modeToApply);
+        const modeToApply = inferReceiptModeFromOptions(displayOptions);
+        receiptMode = modeToApply;
+        try { localStorage.setItem(RECEIPT_MODE_KEY, modeToApply); } catch (_) {}
+
+        const detailedToggles = document.getElementById('receiptDetailedToggles');
+        if (detailedToggles) detailedToggles.style.display = 'block';
+
+        const quickRadio = document.getElementById('receiptModeQuick');
+        const detailedRadio = document.getElementById('receiptModeDetailed');
+        if (quickRadio) quickRadio.checked = modeToApply === 'quick';
+        if (detailedRadio) detailedRadio.checked = modeToApply === 'detailed';
     }
 
     window.onTransactionDetailDataLoaded = ({ tx, cashBox, profile }) => {
         hasInitializedFromTxData = true;
+        txData = (tx && typeof tx === 'object')
+            ? { ...tx, cash_box: cashBox || tx.cash_box || null }
+            : null;
 
         try {
             const duplicateBtn = document.getElementById('txDuplicateBtn');
@@ -598,8 +617,9 @@ html, body { height: auto !important; overflow: auto !important; }
             emailBtn.addEventListener('click', async () => {
                 let prefillEmail = '';
                 try {
-                    if (txId && window.db?.transactions?.getById) {
-                        const tx = await window.db.transactions.getById(txId);
+                    const currentTxId = getCurrentTxId();
+                    if (currentTxId && window.db?.transactions?.getById) {
+                        const tx = await window.db.transactions.getById(currentTxId);
                         prefillEmail = String(tx?.contact_email || tx?.contact?.email || '').trim();
 
                         if (!prefillEmail && tx?.contact_id && window.db?.contacts?.getById) {
@@ -683,9 +703,10 @@ html, body { height: auto !important; overflow: auto !important; }
 
         async function generateEmailHtml() {
             try {
-                if (!txId || !window.db?.transactions?.getById) return null;
+                const currentTxId = getCurrentTxId();
+                if (!currentTxId || !window.db?.transactions?.getById) return null;
                 
-                const tx = await window.db.transactions.getById(txId);
+                const tx = await window.db.transactions.getById(currentTxId);
                 if (!tx) return null;
 
                 let cashBox = tx.cash_box;
@@ -983,7 +1004,13 @@ html, body { height: auto !important; overflow: auto !important; }
                     voidBtn.innerHTML = '<i class="fas fa-ban"></i> Voiding…';
 
                     try {
-                        const res = await window.db?.transactions?.voidTransaction?.(txId, null);
+                        const currentTxId = getCurrentTxId();
+                        if (!currentTxId) {
+                            showAlert('Transaction not loaded yet.', { iconType: 'warning' });
+                            return;
+                        }
+
+                        const res = await window.db?.transactions?.voidTransaction?.(currentTxId, null);
                         if (!res || res.success !== true) {
                             const msg = String(res?.error || 'Failed to void transaction.');
                             if (msg.includes('INSUFFICIENT_BALANCE_FOR_VOID')) {
@@ -1085,7 +1112,8 @@ html, body { height: auto !important; overflow: auto !important; }
         const saveLabelsBtn = document.getElementById('txSaveLabelsBtn');
         if (saveLabelsBtn) {
             saveLabelsBtn.addEventListener('click', async () => {
-                if (!txId || !window.db?.transactions?.update) return;
+                const currentTxId = getCurrentTxId();
+                if (!currentTxId || !window.db?.transactions?.update) return;
 
                 saveLabelsBtn.disabled = true;
                 saveLabelsBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
@@ -1103,7 +1131,7 @@ html, body { height: auto !important; overflow: auto !important; }
                         receipt_footer_note: receiptText.footerNote || null
                     };
 
-                    const result = await window.db.transactions.update(txId, updates);
+                    const result = await window.db.transactions.update(currentTxId, updates);
                     if (result?.success) {
                         saveLabelsBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
                         setTimeout(() => {
