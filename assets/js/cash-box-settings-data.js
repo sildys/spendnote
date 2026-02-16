@@ -26,6 +26,16 @@ function normalizeCashBoxIdPrefix(value) {
     return up;
 }
 
+function setIdentityLockHintsVisible(visible) {
+    const show = Boolean(visible);
+    const ids = ['currencyLockTip', 'idPrefixLockTip'];
+    ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.display = show ? 'inline-flex' : 'none';
+    });
+}
+
 function isUuid(value) {
     try {
         if (window.SpendNoteIds && typeof window.SpendNoteIds.isUuid === 'function') {
@@ -370,6 +380,7 @@ async function initCashBoxSettings() {
         if (currentCashBoxId) {
             // Edit mode - load existing cash box
             isEditMode = true;
+            setIdentityLockHintsVisible(true);
             await loadCashBoxData(currentCashBoxId);
             
             // Update page title
@@ -378,6 +389,7 @@ async function initCashBoxSettings() {
         } else {
             // Create mode
             isEditMode = false;
+            setIdentityLockHintsVisible(false);
             
             // Update page title
             const pageTitle = document.querySelector('.page-title');
@@ -496,7 +508,7 @@ async function loadCashBoxData(id) {
             const lockCurrency = Boolean(isEditMode);
             currencySelect.readOnly = lockCurrency;
             currencySelect.setAttribute('aria-readonly', lockCurrency ? 'true' : 'false');
-            currencySelect.title = lockCurrency ? 'Currency is locked after cash box creation.' : '';
+            currencySelect.title = '';
         }
 
         // Populate ID prefix
@@ -509,7 +521,7 @@ async function loadCashBoxData(id) {
             const lockPrefix = Boolean(isEditMode);
             idPrefixInput.readOnly = lockPrefix;
             idPrefixInput.setAttribute('aria-readonly', lockPrefix ? 'true' : 'false');
-            idPrefixInput.title = lockPrefix ? 'ID Prefix is locked after cash box creation.' : '';
+            idPrefixInput.title = '';
         }
 
         // Populate color selection

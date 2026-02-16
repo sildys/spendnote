@@ -211,35 +211,43 @@
     letter-spacing: 0.03em;
 }
 
-.field-label-inline {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+.locked-field-group {
+    position: relative;
 }
 
-.field-info-tip {
+.field-input-locked {
+    padding-right: 34px;
+}
+
+.field-lock-tip {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
     width: 18px;
     height: 18px;
-    border-radius: 50%;
-    display: inline-flex;
+    border-radius: 999px;
+    display: none;
     align-items: center;
     justify-content: center;
-    color: var(--text-muted);
+    color: #b45309;
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.35);
     cursor: help;
-    transition: color 0.15s ease, background 0.15s ease;
+    z-index: 2;
+    transition: transform 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
 
-.field-info-tip:hover,
-.field-info-tip:focus-visible {
-    color: var(--active);
-    background: rgba(var(--active-rgb), 0.12);
+.field-lock-tip:hover,
+.field-lock-tip:focus-visible {
+    color: #92400e;
+    background: rgba(245, 158, 11, 0.25);
+    transform: scale(1.05);
     outline: none;
 }
 
-.field-info-tip i {
+.field-lock-tip i {
+    font-size: 10px !important;
     color: inherit !important;
-    font-size: 12px !important;
     margin: 0 !important;
 }
 
