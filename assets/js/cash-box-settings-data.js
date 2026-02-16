@@ -448,7 +448,8 @@ async function loadCashBoxData(id) {
         // Populate ID prefix
         const idPrefixInput = document.getElementById('idPrefixInput');
         if (idPrefixInput) {
-            idPrefixInput.value = String(cashBox.id_prefix || idPrefixInput.value || 'SN').trim();
+            const rawPrefix = String(cashBox.id_prefix || idPrefixInput.value || 'SN').trim();
+            idPrefixInput.value = rawPrefix.toUpperCase() === 'REC-' ? 'SN' : rawPrefix;
         }
 
         // Populate color selection
@@ -747,6 +748,48 @@ async function handleSave(e) {
             current_balance: 0,
             user_id: user.id
         };
+
+        const executeWithCompatibility = async (runWithPayload, basePayload) => {
+            let lastResult = { success: false, error: 'Unknown save error' };
+
+            for (let attempt = 0; attempt < 5; attempt++) {
+                const payload = buildCompatiblePayload(basePayload);
+
+                try {
+                    const result = await runWithPayload(payload);
+                    lastResult = (result && typeof result === 'object') ? result : { success: true, data: result };
+                } catch (err) {
+                    lastResult = { success: false, error: String(err?.message || err || 'Save failed') };
+                }
+
+                if (!lastResult || lastResult.success !== false) {
+                    return lastResult;
+                }
+
+                const msg = String(lastResult.error || '').toLowerCase();
+                const isSchemaColumnError = msg.includes('schema cache') || msg.includes('column');
+                let changed = false;
+
+                if (msg.includes('cash_box_logo_url') && supportsCashBoxLogo) {
+                    supportsCashBoxLogo = false;
+                    changed = true;
+                }
+                if (msg.includes('receipt_show_') && supportsReceiptVisibility) {
+                    supportsReceiptVisibility = false;
+                    changed = true;
+                }
+                if (msg.includes('receipt_') && supportsReceiptLabels) {
+                    supportsReceiptLabels = false;
+                    changed = true;
+                }
+
+                if (!isSchemaColumnError || !changed) {
+                    return lastResult;
+                }
+            }
+
+            return lastResult;
+        };
         
         if (DEBUG) console.log('Form data:', isEditMode ? updatePayload : createPayload);
         
@@ -758,22 +801,10 @@ async function handleSave(e) {
         
         if (isEditMode) {
             // Update existing cash box
-            let updateResult = await db.cashBoxes.update(currentCashBoxId, safeUpdatePayload);
-            if (updateResult && updateResult.success === false) {
-                const msg = String(updateResult.error || '').toLowerCase();
-                if (msg.includes('cash_box_logo_url')) {
-                    supportsCashBoxLogo = false;
-                }
-                if (msg.includes('receipt_show_')) {
-                    supportsReceiptVisibility = false;
-                }
-                if (msg.includes('receipt_')) {
-                    supportsReceiptLabels = false;
-                }
-                if (msg.includes('schema cache') || msg.includes('column') || msg.includes('receipt_') || msg.includes('cash_box_logo_url') || msg.includes('receipt_show_')) {
-                    updateResult = await db.cashBoxes.update(currentCashBoxId, buildCompatiblePayload(updatePayload));
-                }
-            }
+            const updateResult = await executeWithCompatibility(
+                (payload) => db.cashBoxes.update(currentCashBoxId, payload),
+                updatePayload
+            );
             if (DEBUG) console.log('Update result:', updateResult);
             if (updateResult && updateResult.success === false) {
                 throw new Error(updateResult.error || 'Failed to update cash box');
@@ -793,30 +824,17 @@ async function handleSave(e) {
             await showAlert('Cash box updated successfully!', { iconType: 'success' });
         } else {
             // Create new cash box
-            let createResult;
             const [maxSortOrder] = await Promise.all([
                 db.cashBoxes.getMaxSortOrder()
             ]);
-            createResult = await db.cashBoxes.create(createPayload);
-            if (createResult && createResult.success === false) {
-                const msg = String(createResult.error || '').toLowerCase();
-                if (msg.includes('cash_box_logo_url')) {
-                    supportsCashBoxLogo = false;
-                }
-                if (msg.includes('receipt_show_')) {
-                    supportsReceiptVisibility = false;
-                }
-                if (msg.includes('receipt_')) {
-                    supportsReceiptLabels = false;
-                }
-                if (msg.includes('schema cache') || msg.includes('column') || msg.includes('receipt_') || msg.includes('cash_box_logo_url') || msg.includes('receipt_show_')) {
-                    createResult = await db.cashBoxes.create({
-                        ...buildCompatiblePayload(updatePayload),
-                        current_balance: 0,
-                        user_id: user.id
-                    });
-                }
-            }
+            const createResult = await executeWithCompatibility(
+                (payload) => db.cashBoxes.create({
+                    ...payload,
+                    current_balance: 0,
+                    user_id: user.id
+                }),
+                updatePayload
+            );
             const result = createResult;
             const nextSortOrder = Number(maxSortOrder || 0) + 1;
             if (DEBUG) console.log('Create result:', result);
