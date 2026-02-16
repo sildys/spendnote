@@ -539,18 +539,92 @@ function initTransactionForm() {
                         cb = null;
                     }
 
+                    const readStoredObject = (key) => {
+                        try {
+                            if (!key) return null;
+                            const raw = localStorage.getItem(key);
+                            if (!raw) return null;
+                            const parsed = JSON.parse(raw);
+                            return parsed && typeof parsed === 'object' ? parsed : null;
+                        } catch (_) {
+                            return null;
+                        }
+                    };
+
+                    const cbIdForDefaults = String(payload.cash_box_id || '').trim();
+                    const storedVisibility = cbIdForDefaults
+                        ? (readStoredObject(`spendnote.cashBox.${cbIdForDefaults}.receiptVisibility.v1`) || {})
+                        : {};
+                    const storedReceiptText = cbIdForDefaults
+                        ? (readStoredObject(`spendnote.cashBox.${cbIdForDefaults}.receiptText.v1`) || {})
+                        : {};
+                    const storedPrefix = (() => {
+                        if (!cbIdForDefaults) return '';
+                        try {
+                            return String(localStorage.getItem(`spendnote.cashBox.${cbIdForDefaults}.idPrefix.v1`) || '').trim().toUpperCase();
+                        } catch (_) {
+                            return '';
+                        }
+                    })();
+
+                    const normalizePrefix = (value) => {
+                        const raw = String(value || '').trim().toUpperCase();
+                        if (!raw) return '';
+                        return raw === 'REC-' ? 'SN' : raw;
+                    };
+
                     const yn = (value, fallback) => {
                         if (value === true) return '1';
                         if (value === false) return '0';
                         return fallback;
                     };
 
-                    params.set('logo', yn(cb?.receipt_show_logo, '1'));
-                    params.set('addresses', yn(cb?.receipt_show_addresses, '1'));
-                    params.set('tracking', yn(cb?.receipt_show_tracking, '1'));
-                    params.set('additional', yn(cb?.receipt_show_additional, '0'));
-                    params.set('note', yn(cb?.receipt_show_note, '0'));
-                    params.set('signatures', yn(cb?.receipt_show_signatures, '1'));
+                    const resolveVisibility = (field, dbValue, fallbackBool) => {
+                        if (typeof dbValue === 'boolean') return dbValue;
+                        const stored = storedVisibility?.[field];
+                        if (typeof stored === 'boolean') return stored;
+                        if (stored === '1' || stored === 1 || String(stored).toLowerCase() === 'true') return true;
+                        if (stored === '0' || stored === 0 || String(stored).toLowerCase() === 'false') return false;
+                        return fallbackBool;
+                    };
+
+                    const resolveText = (dbValue, storageField) => {
+                        const fromDb = String(dbValue || '').trim();
+                        if (fromDb) return fromDb;
+                        return String(storedReceiptText?.[storageField] || '').trim();
+                    };
+
+                    params.set('logo', yn(resolveVisibility('logo', cb?.receipt_show_logo, true), '1'));
+                    params.set('addresses', yn(resolveVisibility('addresses', cb?.receipt_show_addresses, true), '1'));
+                    params.set('tracking', yn(resolveVisibility('tracking', cb?.receipt_show_tracking, true), '1'));
+                    params.set('additional', yn(resolveVisibility('additional', cb?.receipt_show_additional, false), '0'));
+                    params.set('note', yn(resolveVisibility('note', cb?.receipt_show_note, false), '0'));
+                    params.set('signatures', yn(resolveVisibility('signatures', cb?.receipt_show_signatures, true), '1'));
+
+                    const resolvedIdPrefix = normalizePrefix(cb?.id_prefix || storedPrefix || '');
+                    if (resolvedIdPrefix) {
+                        params.set('idPrefix', resolvedIdPrefix);
+                    }
+
+                    const receiptTitle = resolveText(cb?.receipt_title, 'receiptTitle');
+                    const totalLabel = resolveText(cb?.receipt_total_label, 'totalLabel');
+                    const fromLabel = resolveText(cb?.receipt_from_label, 'fromLabel');
+                    const toLabel = resolveText(cb?.receipt_to_label, 'toLabel');
+                    const descriptionLabel = resolveText(cb?.receipt_description_label, 'descriptionLabel');
+                    const amountLabel = resolveText(cb?.receipt_amount_label, 'amountLabel');
+                    const issuedByLabel = resolveText(cb?.receipt_issued_by_label, 'issuedByLabel');
+                    const receivedByLabel = resolveText(cb?.receipt_received_by_label, 'receivedByLabel');
+                    const footerNote = resolveText(cb?.receipt_footer_note, 'footerNote');
+
+                    if (receiptTitle) params.set('receiptTitle', receiptTitle);
+                    if (totalLabel) params.set('totalLabel', totalLabel);
+                    if (fromLabel) params.set('fromLabel', fromLabel);
+                    if (toLabel) params.set('toLabel', toLabel);
+                    if (descriptionLabel) params.set('descriptionLabel', descriptionLabel);
+                    if (amountLabel) params.set('amountLabel', amountLabel);
+                    if (issuedByLabel) params.set('issuedByLabel', issuedByLabel);
+                    if (receivedByLabel) params.set('receivedByLabel', receivedByLabel);
+                    if (footerNote) params.set('footerNote', footerNote);
 
                     try {
                         const storedLogo = localStorage.getItem('spendnote.proLogoDataUrl') || '';

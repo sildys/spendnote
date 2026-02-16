@@ -17,6 +17,17 @@ const RECEIPT_VISIBILITY_COLUMN_BY_FIELD = Object.freeze({
 });
 const RECEIPT_VISIBILITY_FIELDS = Object.keys(RECEIPT_VISIBILITY_COLUMN_BY_FIELD);
 let unsupportedReceiptVisibilityFields = new Set();
+const RECEIPT_TEXT_FIELDS = Object.freeze([
+    'receiptTitle',
+    'totalLabel',
+    'fromLabel',
+    'toLabel',
+    'descriptionLabel',
+    'amountLabel',
+    'issuedByLabel',
+    'receivedByLabel',
+    'footerNote'
+]);
 
 function normalizeCashBoxIdPrefix(value) {
     const raw = String(value || '').trim();
@@ -49,6 +60,18 @@ function getReceiptVisibilityStorageKey(cashBoxId) {
     return `spendnote.cashBox.${id}.receiptVisibility.v1`;
 }
 
+function getReceiptTextStorageKey(cashBoxId) {
+    const id = String(cashBoxId || '').trim();
+    if (!id) return '';
+    return `spendnote.cashBox.${id}.receiptText.v1`;
+}
+
+function getCashBoxIdPrefixStorageKey(cashBoxId) {
+    const id = String(cashBoxId || '').trim();
+    if (!id) return '';
+    return `spendnote.cashBox.${id}.idPrefix.v1`;
+}
+
 function readStoredReceiptVisibility(cashBoxId) {
     try {
         const key = getReceiptVisibilityStorageKey(cashBoxId);
@@ -59,6 +82,55 @@ function readStoredReceiptVisibility(cashBoxId) {
         return parsed && typeof parsed === 'object' ? parsed : null;
     } catch (_) {
         return null;
+    }
+}
+
+function readStoredReceiptText(cashBoxId) {
+    try {
+        const key = getReceiptTextStorageKey(cashBoxId);
+        if (!key) return null;
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === 'object' ? parsed : null;
+    } catch (_) {
+        return null;
+    }
+}
+
+function writeStoredReceiptText(cashBoxId, receiptText) {
+    try {
+        const key = getReceiptTextStorageKey(cashBoxId);
+        if (!key) return;
+        const payload = {};
+        RECEIPT_TEXT_FIELDS.forEach((field) => {
+            const raw = String(receiptText?.[field] || '').trim();
+            payload[field] = raw;
+        });
+        localStorage.setItem(key, JSON.stringify(payload));
+    } catch (_) {
+        // ignore
+    }
+}
+
+function readStoredCashBoxIdPrefix(cashBoxId) {
+    try {
+        const key = getCashBoxIdPrefixStorageKey(cashBoxId);
+        if (!key) return '';
+        return normalizeCashBoxIdPrefix(localStorage.getItem(key) || '');
+    } catch (_) {
+        return '';
+    }
+}
+
+function writeStoredCashBoxIdPrefix(cashBoxId, prefix) {
+    try {
+        const key = getCashBoxIdPrefixStorageKey(cashBoxId);
+        if (!key) return;
+        const normalized = normalizeCashBoxIdPrefix(prefix || '');
+        localStorage.setItem(key, normalized || 'SN');
+    } catch (_) {
+        // ignore
     }
 }
 
@@ -503,9 +575,11 @@ async function loadCashBoxData(id) {
         // Populate ID prefix
         const idPrefixInput = document.getElementById('idPrefixInput');
         if (idPrefixInput) {
-            const normalizedPrefix = normalizeCashBoxIdPrefix(cashBox.id_prefix || idPrefixInput.value || 'SN');
+            const storedPrefix = readStoredCashBoxIdPrefix(id);
+            const normalizedPrefix = normalizeCashBoxIdPrefix(cashBox.id_prefix || storedPrefix || idPrefixInput.value || 'SN');
             idPrefixInput.value = normalizedPrefix;
             idPrefixInput.dataset.originalIdPrefix = normalizedPrefix;
+            writeStoredCashBoxIdPrefix(id, normalizedPrefix);
 
             const lockPrefix = Boolean(isEditMode);
             idPrefixInput.readOnly = lockPrefix;
@@ -540,16 +614,22 @@ async function loadCashBoxData(id) {
         const issuedByLabelEl = document.getElementById('issuedByLabel');
         const receivedByLabelEl = document.getElementById('receivedByLabel');
         const footerNoteEl = document.getElementById('footerNote');
+        const storedReceiptText = readStoredReceiptText(id) || {};
+        const resolveReceiptText = (dbValue, storageField) => {
+            const fromDb = String(dbValue || '').trim();
+            if (fromDb) return fromDb;
+            return String(storedReceiptText?.[storageField] || '').trim();
+        };
 
-        if (receiptTitleEl) receiptTitleEl.value = cashBox.receipt_title || '';
-        if (totalLabelEl) totalLabelEl.value = cashBox.receipt_total_label || '';
-        if (fromLabelEl) fromLabelEl.value = cashBox.receipt_from_label || '';
-        if (toLabelEl) toLabelEl.value = cashBox.receipt_to_label || '';
-        if (descriptionLabelEl) descriptionLabelEl.value = cashBox.receipt_description_label || '';
-        if (amountLabelEl) amountLabelEl.value = cashBox.receipt_amount_label || '';
-        if (issuedByLabelEl) issuedByLabelEl.value = cashBox.receipt_issued_by_label || '';
-        if (receivedByLabelEl) receivedByLabelEl.value = cashBox.receipt_received_by_label || '';
-        if (footerNoteEl) footerNoteEl.value = cashBox.receipt_footer_note || '';
+        if (receiptTitleEl) receiptTitleEl.value = resolveReceiptText(cashBox.receipt_title, 'receiptTitle');
+        if (totalLabelEl) totalLabelEl.value = resolveReceiptText(cashBox.receipt_total_label, 'totalLabel');
+        if (fromLabelEl) fromLabelEl.value = resolveReceiptText(cashBox.receipt_from_label, 'fromLabel');
+        if (toLabelEl) toLabelEl.value = resolveReceiptText(cashBox.receipt_to_label, 'toLabel');
+        if (descriptionLabelEl) descriptionLabelEl.value = resolveReceiptText(cashBox.receipt_description_label, 'descriptionLabel');
+        if (amountLabelEl) amountLabelEl.value = resolveReceiptText(cashBox.receipt_amount_label, 'amountLabel');
+        if (issuedByLabelEl) issuedByLabelEl.value = resolveReceiptText(cashBox.receipt_issued_by_label, 'issuedByLabel');
+        if (receivedByLabelEl) receivedByLabelEl.value = resolveReceiptText(cashBox.receipt_received_by_label, 'receivedByLabel');
+        if (footerNoteEl) footerNoteEl.value = resolveReceiptText(cashBox.receipt_footer_note, 'footerNote');
 
         // Populate receipt field visibility toggles
         const visibilityByField = {
@@ -766,6 +846,18 @@ async function handleSave(e) {
             idPrefixInput.dataset.originalIdPrefix = idPrefix;
         }
 
+        const receiptTextValues = {
+            receiptTitle: String(document.getElementById('receiptTitle')?.value || '').trim(),
+            totalLabel: String(document.getElementById('totalLabel')?.value || '').trim(),
+            fromLabel: String(document.getElementById('fromLabel')?.value || '').trim(),
+            toLabel: String(document.getElementById('toLabel')?.value || '').trim(),
+            descriptionLabel: String(document.getElementById('descriptionLabel')?.value || '').trim(),
+            amountLabel: String(document.getElementById('amountLabel')?.value || '').trim(),
+            issuedByLabel: String(document.getElementById('issuedByLabel')?.value || '').trim(),
+            receivedByLabel: String(document.getElementById('receivedByLabel')?.value || '').trim(),
+            footerNote: String(document.getElementById('footerNote')?.value || '').trim()
+        };
+
         const getToggleBool = (field, fallback) => {
             const el = document.querySelector(`.toggle-list input[type="checkbox"][data-field="${field}"]`);
             if (!el) return fallback;
@@ -799,15 +891,15 @@ async function handleSave(e) {
             receipt_show_additional: receiptVisibilityValues.additional,
             receipt_show_note: receiptVisibilityValues.note,
             receipt_show_signatures: receiptVisibilityValues.signatures,
-            receipt_title: safeText(document.getElementById('receiptTitle')?.value),
-            receipt_total_label: safeText(document.getElementById('totalLabel')?.value),
-            receipt_from_label: safeText(document.getElementById('fromLabel')?.value),
-            receipt_to_label: safeText(document.getElementById('toLabel')?.value),
-            receipt_description_label: safeText(document.getElementById('descriptionLabel')?.value),
-            receipt_amount_label: safeText(document.getElementById('amountLabel')?.value),
-            receipt_issued_by_label: safeText(document.getElementById('issuedByLabel')?.value),
-            receipt_received_by_label: safeText(document.getElementById('receivedByLabel')?.value),
-            receipt_footer_note: safeText(document.getElementById('footerNote')?.value)
+            receipt_title: safeText(receiptTextValues.receiptTitle),
+            receipt_total_label: safeText(receiptTextValues.totalLabel),
+            receipt_from_label: safeText(receiptTextValues.fromLabel),
+            receipt_to_label: safeText(receiptTextValues.toLabel),
+            receipt_description_label: safeText(receiptTextValues.descriptionLabel),
+            receipt_amount_label: safeText(receiptTextValues.amountLabel),
+            receipt_issued_by_label: safeText(receiptTextValues.issuedByLabel),
+            receipt_received_by_label: safeText(receiptTextValues.receivedByLabel),
+            receipt_footer_note: safeText(receiptTextValues.footerNote)
         };
 
         if (cbLogoPending !== null && cbLogoPending !== undefined) {
@@ -954,6 +1046,8 @@ async function handleSave(e) {
                 localStorage.setItem('activeCashBoxRgb', rgb);
             }
 
+            writeStoredCashBoxIdPrefix(currentCashBoxId, idPrefix);
+            writeStoredReceiptText(currentCashBoxId, receiptTextValues);
             writeStoredReceiptVisibility(currentCashBoxId, receiptVisibilityValues);
 
             if (DEBUG) console.log('Cash box updated:', updatePayload.name);
@@ -985,6 +1079,8 @@ async function handleSave(e) {
                 if (orderResult && orderResult.success === false) {
                     console.warn('⚠️ Could not set sort_order for new cash box:', orderResult.error);
                 }
+                writeStoredCashBoxIdPrefix(createdId, idPrefix);
+                writeStoredReceiptText(createdId, receiptTextValues);
                 writeStoredReceiptVisibility(createdId, receiptVisibilityValues);
             }
             

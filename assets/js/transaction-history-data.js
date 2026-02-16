@@ -146,8 +146,13 @@
         const cbSeq = tx?.cash_box_sequence;
         const txSeq = tx?.tx_sequence_in_box;
         if (cbSeq && txSeq) {
-            const prefixRaw = safeText(tx?.cash_box_id_prefix_snapshot || tx?.cash_box?.id_prefix, '').trim().toUpperCase();
-            const prefix = prefixRaw && prefixRaw !== 'REC-' ? prefixRaw : 'SN';
+            const snapshotPrefixRaw = safeText(tx?.cash_box_id_prefix_snapshot, '').trim().toUpperCase();
+            const livePrefixRaw = safeText(tx?.cash_box?.id_prefix, '').trim().toUpperCase();
+            const snapshotPrefix = snapshotPrefixRaw && snapshotPrefixRaw !== 'REC-' ? snapshotPrefixRaw : '';
+            const livePrefix = livePrefixRaw && livePrefixRaw !== 'REC-' ? livePrefixRaw : '';
+            const prefix = (snapshotPrefix && snapshotPrefix !== 'SN')
+                ? snapshotPrefix
+                : (livePrefix || snapshotPrefix || 'SN');
             const txSeqStr = String(txSeq).padStart(3, '0');
             return `${prefix}${cbSeq}-${txSeqStr}`;
         }

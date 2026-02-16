@@ -93,6 +93,30 @@ const QUICK_PRESET = {
             if (v) params.append(key, v);
         }
 
+        const normalizePrefix = (value) => {
+            const raw = String(value || '').trim().toUpperCase();
+            if (!raw) return '';
+            return raw === 'REC-' ? 'SN' : raw;
+        };
+
+        const snapshotPrefix = normalizePrefix(txData?.cash_box_id_prefix_snapshot);
+        const livePrefix = normalizePrefix(txData?.cash_box?.id_prefix);
+        const storedPrefix = (() => {
+            try {
+                const keyId = String(txData?.cash_box?.id || txData?.cash_box_id || currentCashBoxId || '').trim();
+                if (!keyId) return '';
+                return normalizePrefix(localStorage.getItem(`spendnote.cashBox.${keyId}.idPrefix.v1`) || '');
+            } catch (_) {
+                return '';
+            }
+        })();
+        const resolvedPrefix = (snapshotPrefix && snapshotPrefix !== 'SN')
+            ? snapshotPrefix
+            : (livePrefix || storedPrefix || snapshotPrefix || 'SN');
+        if (resolvedPrefix) {
+            params.append('idPrefix', resolvedPrefix);
+        }
+
         // Cash box logo takes priority over user settings (global default) logo
         if (receiptLogoUrl) {
             const cbTempKey = 'spendnote.cbLogo.' + (txData?.cash_box?.id || 'temp');
@@ -227,17 +251,38 @@ const QUICK_PRESET = {
     function initReceiptUiFromCashBox(cashBox, profile, tx) {
         const cb = cashBox || {};
         const t = tx || {};
+        const storedReceiptText = (() => {
+            try {
+                const keyId = String(cb?.id || currentCashBoxId || '').trim();
+                if (!keyId) return null;
+                const raw = localStorage.getItem(`spendnote.cashBox.${keyId}.receiptText.v1`);
+                if (!raw) return null;
+                const parsed = JSON.parse(raw);
+                return parsed && typeof parsed === 'object' ? parsed : null;
+            } catch (_) {
+                return null;
+            }
+        })();
+
+        const resolveReceiptText = (txValue, cbValue, storageField) => {
+            const fromTx = String(txValue || '').trim();
+            if (fromTx) return fromTx;
+            const fromCb = String(cbValue || '').trim();
+            if (fromCb) return fromCb;
+            return String(storedReceiptText?.[storageField] || '').trim();
+        };
+
         // Transaction-specific labels override cash box defaults
-        receiptText.receiptTitle = t.receipt_title || cb.receipt_title || '';
-        receiptText.totalLabel = t.receipt_total_label || cb.receipt_total_label || '';
-        receiptText.fromLabel = t.receipt_from_label || cb.receipt_from_label || '';
-        receiptText.toLabel = t.receipt_to_label || cb.receipt_to_label || '';
-        receiptText.descriptionLabel = t.receipt_description_label || cb.receipt_description_label || '';
-        receiptText.amountLabel = t.receipt_amount_label || cb.receipt_amount_label || '';
-        receiptText.notesLabel = t.receipt_notes_label || cb.receipt_notes_label || '';
-        receiptText.issuedByLabel = t.receipt_issued_by_label || cb.receipt_issued_by_label || '';
-        receiptText.receivedByLabel = t.receipt_received_by_label || cb.receipt_received_by_label || '';
-        receiptText.footerNote = t.receipt_footer_note || cb.receipt_footer_note || '';
+        receiptText.receiptTitle = resolveReceiptText(t.receipt_title, cb.receipt_title, 'receiptTitle');
+        receiptText.totalLabel = resolveReceiptText(t.receipt_total_label, cb.receipt_total_label, 'totalLabel');
+        receiptText.fromLabel = resolveReceiptText(t.receipt_from_label, cb.receipt_from_label, 'fromLabel');
+        receiptText.toLabel = resolveReceiptText(t.receipt_to_label, cb.receipt_to_label, 'toLabel');
+        receiptText.descriptionLabel = resolveReceiptText(t.receipt_description_label, cb.receipt_description_label, 'descriptionLabel');
+        receiptText.amountLabel = resolveReceiptText(t.receipt_amount_label, cb.receipt_amount_label, 'amountLabel');
+        receiptText.notesLabel = resolveReceiptText(t.receipt_notes_label, cb.receipt_notes_label, 'notesLabel');
+        receiptText.issuedByLabel = resolveReceiptText(t.receipt_issued_by_label, cb.receipt_issued_by_label, 'issuedByLabel');
+        receiptText.receivedByLabel = resolveReceiptText(t.receipt_received_by_label, cb.receipt_received_by_label, 'receivedByLabel');
+        receiptText.footerNote = resolveReceiptText(t.receipt_footer_note, cb.receipt_footer_note, 'footerNote');
 
         const titleEl = document.getElementById('txReceiptTitle');
         const totalEl = document.getElementById('txTotalLabel');
@@ -681,8 +726,13 @@ html, body { height: auto !important; overflow: auto !important; }
                 
                 const cbSeq = cashBox?.sequence_number || tx.cash_box_sequence;
                 const txSeq = tx.tx_sequence_in_box;
-                const prefixRaw = safeText(tx?.cash_box_id_prefix_snapshot || cashBox?.id_prefix, '').toUpperCase();
-                const prefix = prefixRaw && prefixRaw !== 'REC-' ? prefixRaw : 'SN';
+                const snapshotPrefixRaw = safeText(tx?.cash_box_id_prefix_snapshot, '').toUpperCase();
+                const livePrefixRaw = safeText(cashBox?.id_prefix, '').toUpperCase();
+                const snapshotPrefix = snapshotPrefixRaw && snapshotPrefixRaw !== 'REC-' ? snapshotPrefixRaw : '';
+                const livePrefix = livePrefixRaw && livePrefixRaw !== 'REC-' ? livePrefixRaw : '';
+                const prefix = (snapshotPrefix && snapshotPrefix !== 'SN')
+                    ? snapshotPrefix
+                    : (livePrefix || snapshotPrefix || 'SN');
                 const receiptId = (cbSeq && txSeq) ? `${prefix}${cbSeq}-${String(txSeq).padStart(3, '0')}` : safeText(tx.receipt_number, '—');
                 const cashBoxCode = cbSeq ? `SN-${String(cbSeq).padStart(3, '0')}` : '—';
 

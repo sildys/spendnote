@@ -748,8 +748,13 @@
             const cbSeq = Number(tx?.cash_box_sequence);
             const txSeq = Number(tx?.tx_sequence_in_box);
             if (Number.isFinite(cbSeq) && cbSeq > 0 && Number.isFinite(txSeq) && txSeq > 0) {
-                const prefixRaw = String(tx?.cash_box_id_prefix_snapshot || tx?.cash_box?.id_prefix || '').trim().toUpperCase();
-                const prefix = prefixRaw && prefixRaw !== 'REC-' ? prefixRaw : 'SN';
+                const snapshotPrefixRaw = String(tx?.cash_box_id_prefix_snapshot || '').trim().toUpperCase();
+                const livePrefixRaw = String(tx?.cash_box?.id_prefix || '').trim().toUpperCase();
+                const snapshotPrefix = snapshotPrefixRaw && snapshotPrefixRaw !== 'REC-' ? snapshotPrefixRaw : '';
+                const livePrefix = livePrefixRaw && livePrefixRaw !== 'REC-' ? livePrefixRaw : '';
+                const prefix = (snapshotPrefix && snapshotPrefix !== 'SN')
+                    ? snapshotPrefix
+                    : (livePrefix || snapshotPrefix || 'SN');
                 return `${prefix}${cbSeq}-${String(txSeq).padStart(3, '0')}`;
             }
             const receiptNumber = String(tx?.receipt_number || '').trim();
@@ -1486,7 +1491,7 @@
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260216-2135"></script>
+    <script src="assets/js/supabase-config.js?v=20260216-2236"></script>
     <script src="assets/js/auth-guard.js"></script>
     <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=8"></script>

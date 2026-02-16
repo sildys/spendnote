@@ -538,6 +538,8 @@ body {
   };
   
   // Custom text replacements
+  const forcedIdPrefixRaw = String(urlParams.get('idPrefix') || '').trim().toUpperCase();
+  const forcedIdPrefix = forcedIdPrefixRaw && forcedIdPrefixRaw !== 'REC-' ? forcedIdPrefixRaw : '';
   const receiptTitle = urlParams.get('receiptTitle');
   const totalLabel = urlParams.get('totalLabel');
   const fromLabel = urlParams.get('fromLabel');
@@ -814,7 +816,7 @@ body {
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260216-2135"></script>
+    <script src="assets/js/supabase-config.js?v=20260216-2236"></script>
     <script src="assets/js/auth-guard.js?v=20260207-2310"></script>
     <script src="assets/js/main.js?v=20260207-2235"></script>
 
@@ -853,8 +855,13 @@ body {
           const cbSeq = tx?.cash_box_sequence;
           const txSeq = tx?.tx_sequence_in_box;
           if (cbSeq && txSeq) {
-            const prefixRaw = safeText(tx?.cash_box_id_prefix_snapshot || tx?.cash_box?.id_prefix, '').trim().toUpperCase();
-            const prefix = prefixRaw && prefixRaw !== 'REC-' ? prefixRaw : 'SN';
+            const snapshotPrefixRaw = safeText(tx?.cash_box_id_prefix_snapshot, '').trim().toUpperCase();
+            const livePrefixRaw = safeText(tx?.cash_box?.id_prefix, '').trim().toUpperCase();
+            const snapshotPrefix = snapshotPrefixRaw && snapshotPrefixRaw !== 'REC-' ? snapshotPrefixRaw : '';
+            const livePrefix = livePrefixRaw && livePrefixRaw !== 'REC-' ? livePrefixRaw : '';
+            const prefix = (snapshotPrefix && snapshotPrefix !== 'SN')
+              ? snapshotPrefix
+              : (livePrefix || forcedIdPrefix || snapshotPrefix || 'SN');
             const txSeqStr = String(txSeq).padStart(3, '0');
             return `${prefix}${cbSeq}-${txSeqStr}`;
           }

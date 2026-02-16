@@ -546,6 +546,66 @@ function normalizeCashBoxIdPrefix(value) {
     return up;
 }
 
+function getCashBoxIdPrefixStorageKey(cashBoxId) {
+    const id = String(cashBoxId || '').trim();
+    if (!id) return '';
+    return `spendnote.cashBox.${id}.idPrefix.v1`;
+}
+
+function readStoredCashBoxIdPrefix(cashBoxId) {
+    try {
+        const key = getCashBoxIdPrefixStorageKey(cashBoxId);
+        if (!key) return '';
+        const raw = localStorage.getItem(key);
+        if (!raw) return '';
+        return normalizeCashBoxIdPrefix(raw);
+    } catch (_) {
+        return '';
+    }
+}
+
+function writeStoredCashBoxIdPrefix(cashBoxId, prefix) {
+    try {
+        const key = getCashBoxIdPrefixStorageKey(cashBoxId);
+        if (!key) return;
+        localStorage.setItem(key, normalizeCashBoxIdPrefix(prefix || 'SN'));
+    } catch (_) {
+        // ignore
+    }
+}
+
+function resolvePreferredCashBoxIdPrefix(snapshotPrefixValue, livePrefixValue, cashBoxId) {
+    const snapshotRaw = String(snapshotPrefixValue || '').trim();
+    const liveRaw = String(livePrefixValue || '').trim();
+    const snapshotPrefix = snapshotRaw ? normalizeCashBoxIdPrefix(snapshotRaw) : '';
+    const livePrefix = liveRaw ? normalizeCashBoxIdPrefix(liveRaw) : '';
+    const storedPrefix = readStoredCashBoxIdPrefix(cashBoxId);
+
+    if (snapshotPrefix && snapshotPrefix !== 'SN') return snapshotPrefix;
+    if (livePrefix && livePrefix !== 'SN') return livePrefix;
+    if (storedPrefix && storedPrefix !== 'SN') return storedPrefix;
+    return snapshotPrefix || livePrefix || storedPrefix || 'SN';
+}
+
+function applyStoredCashBoxIdPrefixFallback(row) {
+    if (!row || typeof row !== 'object') return row;
+    const next = { ...row };
+    const cashBoxId = String(next.id || '').trim();
+    if (!cashBoxId) return next;
+
+    const dbPrefix = String(next.id_prefix || '').trim();
+    const normalizedDbPrefix = dbPrefix ? normalizeCashBoxIdPrefix(dbPrefix) : '';
+    const storedPrefix = readStoredCashBoxIdPrefix(cashBoxId);
+
+    if (storedPrefix && (!normalizedDbPrefix || normalizedDbPrefix === 'SN')) {
+        next.id_prefix = storedPrefix;
+    } else if (normalizedDbPrefix) {
+        next.id_prefix = normalizedDbPrefix;
+    }
+
+    return next;
+}
+
 function normalizeCashBoxCurrency(value) {
     const raw = String(value || '').trim().toUpperCase();
     return /^[A-Z]{3}$/.test(raw) ? raw : '';
@@ -561,6 +621,7 @@ function normalizeCashBoxColor(value) {
 function buildTxCashBoxSnapshot(tx, cashBox) {
     const row = (cashBox && typeof cashBox === 'object') ? cashBox : {};
     const snapshot = {};
+    const cashBoxId = String(tx?.cash_box_id || row?.id || '').trim();
 
     const name = String(tx?.cash_box_name_snapshot || row?.name || '').trim();
     if (name) snapshot.name = name;
@@ -574,7 +635,11 @@ function buildTxCashBoxSnapshot(tx, cashBox) {
     const icon = String(tx?.cash_box_icon_snapshot || row?.icon || '').trim();
     if (icon) snapshot.icon = icon;
 
-    const idPrefix = normalizeCashBoxIdPrefix(tx?.cash_box_id_prefix_snapshot || row?.id_prefix);
+    const idPrefix = resolvePreferredCashBoxIdPrefix(
+        tx?.cash_box_id_prefix_snapshot,
+        row?.id_prefix,
+        cashBoxId
+    );
     if (idPrefix) snapshot.id_prefix = idPrefix;
 
     return snapshot;
@@ -607,7 +672,11 @@ function applyTxCashBoxSnapshotToPayload(payload, cashBox) {
     const icon = String(next.cash_box_icon_snapshot || snapshot.icon || '').trim();
     next.cash_box_icon_snapshot = icon || null;
 
-    const idPrefix = normalizeCashBoxIdPrefix(next.cash_box_id_prefix_snapshot || snapshot.id_prefix);
+    const idPrefix = resolvePreferredCashBoxIdPrefix(
+        next.cash_box_id_prefix_snapshot,
+        snapshot.id_prefix,
+        next.cash_box_id || cashBox?.id
+    );
     next.cash_box_id_prefix_snapshot = idPrefix || 'SN';
 
     return next;
@@ -970,7 +1039,7 @@ var db = {
                     return [];
                 }
 
-                return boxes || [];
+                return (boxes || []).map(applyStoredCashBoxIdPrefixFallback);
             }
 
             // Prefer stable user-defined ordering (sort_order), fallback to creation order
@@ -985,7 +1054,7 @@ var db = {
                 .order('created_at', { ascending: true });
 
             if (!primaryQuery.error) {
-                return primaryQuery.data || [];
+                return (primaryQuery.data || []).map(applyStoredCashBoxIdPrefixFallback);
             }
 
             console.warn('Cash boxes sort_order query failed, falling back to created_at order:', primaryQuery.error);
@@ -1004,7 +1073,7 @@ var db = {
                 return [];
             }
 
-            return fallbackQuery.data || [];
+            return (fallbackQuery.data || []).map(applyStoredCashBoxIdPrefixFallback);
         },
 
         async getMaxSortOrder() {
@@ -1091,7 +1160,7 @@ var db = {
 
                 const { data, error } = await q.single();
                 if (error) return null;
-                return data;
+                return applyStoredCashBoxIdPrefixFallback(data);
             }
 
             let q = supabaseClient
@@ -1106,7 +1175,7 @@ var db = {
                 console.error('Error fetching cash box:', error);
                 return null;
             }
-            return data;
+            return applyStoredCashBoxIdPrefixFallback(data);
         },
 
         async getBySequence(sequenceNumber) {
@@ -1173,7 +1242,7 @@ var db = {
                 }
 
                 const row = Array.isArray(data) ? data[0] : data;
-                return row || null;
+                return row ? applyStoredCashBoxIdPrefixFallback(row) : null;
             }
 
             let query = supabaseClient
@@ -1191,14 +1260,32 @@ var db = {
                 return null;
             }
 
-            return data;
+            return applyStoredCashBoxIdPrefixFallback(data);
         },
 
         async create(cashBox) {
             const ctx = await getMyOrgContext();
             const currentUser = await auth.getCurrentUser();
             const ownerUserId = ctx?.ownerUserId || cashBox.user_id;
+            const orgId = ctx?.orgId || null;
             const normalizedPrefix = normalizeCashBoxIdPrefix(cashBox?.id_prefix || 'SN');
+
+            const extractMissingCashBoxesColumn = (error) => {
+                const text = [error?.message, error?.details, error?.hint].filter(Boolean).join(' ');
+                if (!text) return '';
+                const patterns = [
+                    /column\s+cash_boxes\.([a-zA-Z0-9_]+)\s+does\s+not\s+exist/i,
+                    /column\s+"?([a-zA-Z0-9_]+)"?\s+of\s+relation\s+"?cash_boxes"?\s+does\s+not\s+exist/i,
+                    /could\s+not\s+find\s+the\s+'([a-zA-Z0-9_]+)'\s+column\s+of\s+'cash_boxes'\s+in\s+the\s+schema\s+cache/i,
+                    /could\s+not\s+find\s+the\s+"([a-zA-Z0-9_]+)"\s+column\s+of\s+"cash_boxes"\s+in\s+the\s+schema\s+cache/i,
+                    /column\s+"?([a-zA-Z0-9_]+)"?\s+does\s+not\s+exist/i
+                ];
+                for (const re of patterns) {
+                    const m = re.exec(text);
+                    if (m && m[1]) return String(m[1]).trim().toLowerCase();
+                }
+                return '';
+            };
 
             const makeInsertPayload = (userId) => ({
                 name: cashBox?.name,
@@ -1207,6 +1294,8 @@ var db = {
                 color: cashBox?.color || '#059669',
                 icon: cashBox?.icon || 'building',
                 current_balance: cashBox?.current_balance || 0,
+                initial_balance: cashBox?.current_balance || 0,
+                org_id: orgId,
                 id_prefix: normalizedPrefix || 'SN'
             });
 
@@ -1225,7 +1314,7 @@ var db = {
                 for (let i = 0; i < directInsertUserIds.length; i++) {
                     let payload = makeInsertPayload(directInsertUserIds[i]);
 
-                    for (let attempt = 0; attempt < 2; attempt++) {
+                    for (let attempt = 0; attempt < 6; attempt++) {
                         const { data, error } = await supabaseClient
                             .from('cash_boxes')
                             .insert([payload])
@@ -1233,18 +1322,19 @@ var db = {
                             .single();
 
                         if (!error) {
-                            return { success: true, data };
+                            const resolvedData = applyStoredCashBoxIdPrefixFallback(data);
+                            if (resolvedData?.id) {
+                                writeStoredCashBoxIdPrefix(resolvedData.id, resolvedData.id_prefix || normalizedPrefix || 'SN');
+                            }
+                            return { success: true, data: resolvedData };
                         }
 
                         lastInsertError = error;
 
-                        const missingIdPrefix =
-                            String(error?.code || '') === '42703' ||
-                            /column\s+"?id_prefix"?\s+does\s+not\s+exist/i.test(String(error?.message || ''));
-
-                        if (missingIdPrefix && Object.prototype.hasOwnProperty.call(payload, 'id_prefix')) {
+                        const missingColumn = extractMissingCashBoxesColumn(error);
+                        if (missingColumn && Object.prototype.hasOwnProperty.call(payload, missingColumn)) {
                             const nextPayload = { ...payload };
-                            delete nextPayload.id_prefix;
+                            delete nextPayload[missingColumn];
                             payload = nextPayload;
                             continue;
                         }
@@ -1262,6 +1352,22 @@ var db = {
 
             if (window.SpendNoteDebug) console.log('Creating cash box via RPC fallback:', cashBox);
 
+            const hasPrefixRpcMismatch = (rpcErr, paramName) => {
+                const errText = String(rpcErr?.message || '').toLowerCase();
+                const code = String(rpcErr?.code || '').toUpperCase();
+                return (
+                    errText.includes(String(paramName || '').toLowerCase()) &&
+                    (
+                        errText.includes('does not exist') ||
+                        errText.includes('unexpected') ||
+                        errText.includes('could not find the function') ||
+                        errText.includes('schema cache') ||
+                        code === 'PGRST202' ||
+                        code === '404'
+                    )
+                );
+            };
+
             // Fallback to legacy RPC path.
             let rpcResult = await supabaseClient.rpc('create_cash_box', {
                 p_name: cashBox.name,
@@ -1273,20 +1379,19 @@ var db = {
                 p_id_prefix: normalizedPrefix || 'SN'
             });
 
-            const rpcParamError = String(rpcResult?.error?.message || '').toLowerCase();
-            const rpcParamCode = String(rpcResult?.error?.code || '').toUpperCase();
-            const isUnknownRpcParam =
-                rpcParamError.includes('p_id_prefix') &&
-                (
-                    rpcParamError.includes('does not exist') ||
-                    rpcParamError.includes('unexpected') ||
-                    rpcParamError.includes('could not find the function') ||
-                    rpcParamError.includes('schema cache') ||
-                    rpcParamCode === 'PGRST202' ||
-                    rpcParamCode === '404'
-                );
+            if (rpcResult?.error && hasPrefixRpcMismatch(rpcResult.error, 'p_id_prefix')) {
+                rpcResult = await supabaseClient.rpc('create_cash_box', {
+                    p_name: cashBox.name,
+                    p_user_id: ownerUserId,
+                    p_currency: cashBox.currency || 'USD',
+                    p_color: cashBox.color || '#059669',
+                    p_icon: cashBox.icon || 'building',
+                    p_current_balance: cashBox.current_balance || 0,
+                    p_prefix: normalizedPrefix || 'SN'
+                });
+            }
 
-            if (rpcResult?.error && isUnknownRpcParam) {
+            if (rpcResult?.error && hasPrefixRpcMismatch(rpcResult.error, 'p_prefix')) {
                 rpcResult = await supabaseClient.rpc('create_cash_box', {
                     p_name: cashBox.name,
                     p_user_id: ownerUserId,
@@ -1309,8 +1414,39 @@ var db = {
                 return { success: false, error: 'Cash box created but no id returned.' };
             }
 
+            let persistedPrefix = '';
+            try {
+                const { data: createdRow } = await supabaseClient
+                    .from('cash_boxes')
+                    .select('id, id_prefix')
+                    .eq('id', createdId)
+                    .maybeSingle();
+
+                persistedPrefix = normalizeCashBoxIdPrefix(createdRow?.id_prefix || '');
+
+                if (normalizedPrefix && normalizedPrefix !== 'SN' && (!persistedPrefix || persistedPrefix === 'SN')) {
+                    const prefixUpdate = await supabaseClient
+                        .from('cash_boxes')
+                        .update({ id_prefix: normalizedPrefix })
+                        .eq('id', createdId)
+                        .select('id, id_prefix')
+                        .maybeSingle();
+                    if (!prefixUpdate?.error) {
+                        persistedPrefix = normalizeCashBoxIdPrefix(prefixUpdate?.data?.id_prefix || persistedPrefix);
+                    }
+                }
+            } catch (_) {
+                // ignore prefix verification/update failures
+            }
+
+            const effectivePrefix = resolvePreferredCashBoxIdPrefix('', persistedPrefix, createdId);
+            const finalPrefix = (effectivePrefix === 'SN' && normalizedPrefix && normalizedPrefix !== 'SN')
+                ? normalizedPrefix
+                : (effectivePrefix || normalizedPrefix || 'SN');
+            writeStoredCashBoxIdPrefix(createdId, finalPrefix);
+
             if (window.SpendNoteDebug) console.log('Cash box created with ID:', createdId);
-            return { success: true, data: { ...cashBox, id: createdId, id_prefix: normalizedPrefix || 'SN' } };
+            return { success: true, data: { ...cashBox, id: createdId, id_prefix: finalPrefix } };
         },
 
         async update(id, updates) {
