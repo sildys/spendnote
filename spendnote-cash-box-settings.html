@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=12">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=14">
-    <link rel="stylesheet" href="assets/css/cash-box-settings.css?v=7">
+    <link rel="stylesheet" href="assets/css/cash-box-settings.css?v=8">
 </head>
 <body>
 <div id="nav-container"></div>
@@ -68,7 +68,12 @@
                                 <span class="field-hint">Appears on receipts</span>
                             </div>
                             <div class="field-group">
-                                <label class="field-label"><i class="fas fa-coins"></i> Currency</label>
+                                <label class="field-label field-label-inline">
+                                    <span><i class="fas fa-coins"></i> Currency</span>
+                                    <span class="field-info-tip" title="Locked after cash box creation." aria-label="Currency is locked after cash box creation.">
+                                        <i class="fas fa-circle-info"></i>
+                                    </span>
+                                </label>
                                 <input type="text" class="field-input" id="currencySelect" list="currencyList" value="USD" autocapitalize="characters" autocomplete="off" spellcheck="false">
                                 <datalist id="currencyList">
                                     <option value="USD" label="US Dollar ($)"></option>
@@ -80,13 +85,16 @@
                                     <option value="CAD" label="Canadian Dollar (CA$)"></option>
                                     <option value="AUD" label="Australian Dollar (A$)"></option>
                                 </datalist>
-                                <span class="field-warning"><i class="fas fa-lock"></i> Currency is locked after cash box creation</span>
                             </div>
                             <div class="field-group id-prefix-group">
                                 <span class="pro-badge id-prefix-badge"><i class="fas fa-crown"></i> Pro</span>
-                                <label class="field-label"><i class="fas fa-hashtag"></i> ID Prefix</label>
+                                <label class="field-label field-label-inline">
+                                    <span><i class="fas fa-hashtag"></i> ID Prefix</span>
+                                    <span class="field-info-tip" title="Locked after cash box creation." aria-label="ID Prefix is locked after cash box creation.">
+                                        <i class="fas fa-circle-info"></i>
+                                    </span>
+                                </label>
                                 <input type="text" class="field-input" id="idPrefixInput" value="SN" placeholder="SN" maxlength="10">
-                                <span class="field-hint">Locked after creation for consistent IDs</span>
                             </div>
                         </div>
                     </div>
@@ -853,6 +861,6 @@ window.addEventListener('beforeunload', () => {
 <script src="assets/js/nav-loader.js?v=8"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/cash-box-settings-data.js?v=35"></script>
+<script src="assets/js/cash-box-settings-data.js?v=36"></script>
 </body>
 </html>

@@ -211,6 +211,38 @@
     letter-spacing: 0.03em;
 }
 
+.field-label-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.field-info-tip {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    cursor: help;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.field-info-tip:hover,
+.field-info-tip:focus-visible {
+    color: var(--active);
+    background: rgba(var(--active-rgb), 0.12);
+    outline: none;
+}
+
+.field-info-tip i {
+    color: inherit !important;
+    font-size: 12px !important;
+    margin: 0 !important;
+}
+
 .field-input {
     padding: 10px 12px;
     border: 1px solid var(--border);
