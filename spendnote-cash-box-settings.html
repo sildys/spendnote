@@ -747,6 +747,7 @@ document.getElementById('zoomResetBtn')?.addEventListener('click', resetZoom);
 // This logo is cash-box-specific, stored in DB (cash_box_logo_url).
 // User Settings logo (localStorage) is the global default fallback.
 let pendingCashBoxLogo = null; // null = no change, '' = removed, 'data:...' = new logo
+let loadedCashBoxLogo = '';
 
 const logoInput = document.getElementById('logoInput');
 const uploadLogoBtn = document.getElementById('uploadLogoBtn');
@@ -817,15 +818,21 @@ window.addEventListener('DOMContentLoaded', function() {
 
 // Called from cash-box-settings-data.js after loading cash box data
 window.setCashBoxLogo = function(dataUrl) {
-    pendingCashBoxLogo = dataUrl || null;
-    showCashBoxLogo(dataUrl);
+    loadedCashBoxLogo = dataUrl || '';
+    pendingCashBoxLogo = null;
+    showCashBoxLogo(loadedCashBoxLogo);
 };
 
 // Expose for buildReceiptUrl
 window.getCashBoxLogo = function() {
     // pendingCashBoxLogo: null=no change (use loaded), ''=removed, 'data:...'=new
     if (pendingCashBoxLogo !== null) return pendingCashBoxLogo;
-    return currentCashBoxData?.cash_box_logo_url || '';
+    return loadedCashBoxLogo || currentCashBoxData?.cash_box_logo_url || '';
+};
+
+// Expose for save logic: only persist when user explicitly changed logo in this session
+window.getCashBoxLogoPendingState = function() {
+    return pendingCashBoxLogo;
 };
 
 // Cleanup temp logo keys on page leave

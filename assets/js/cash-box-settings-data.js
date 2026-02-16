@@ -530,6 +530,16 @@ async function loadCashBoxData(id) {
 
         currentCashBoxData = cashBox;
         supportsReceiptLabels = Boolean(cashBox && Object.prototype.hasOwnProperty.call(cashBox, 'receipt_amount_label'));
+        supportsCashBoxLogo = Boolean(cashBox && Object.prototype.hasOwnProperty.call(cashBox, 'cash_box_logo_url'));
+        supportsReceiptVisibility = Boolean(
+            cashBox
+            && Object.prototype.hasOwnProperty.call(cashBox, 'receipt_show_logo')
+            && Object.prototype.hasOwnProperty.call(cashBox, 'receipt_show_addresses')
+            && Object.prototype.hasOwnProperty.call(cashBox, 'receipt_show_tracking')
+            && Object.prototype.hasOwnProperty.call(cashBox, 'receipt_show_additional')
+            && Object.prototype.hasOwnProperty.call(cashBox, 'receipt_show_note')
+            && Object.prototype.hasOwnProperty.call(cashBox, 'receipt_show_signatures')
+        );
         updateSummaryCard(cashBox);
 
         // Load cash-box-specific logo into Pro Options preview
@@ -669,8 +679,11 @@ async function handleSave(e) {
             return Boolean(el.checked);
         };
 
-        // Cash box logo from Pro Options
-        const cbLogoValue = typeof window.getCashBoxLogo === 'function' ? window.getCashBoxLogo() : undefined;
+        // Cash box logo from Pro Options: persist only when explicitly changed.
+        // null = unchanged, '' = removed, data:... = updated logo
+        const cbLogoPending = typeof window.getCashBoxLogoPendingState === 'function'
+            ? window.getCashBoxLogoPendingState()
+            : undefined;
 
         const updatePayload = {
             name,
@@ -684,7 +697,6 @@ async function handleSave(e) {
             receipt_show_additional: getToggleBool('additional', false),
             receipt_show_note: getToggleBool('note', false),
             receipt_show_signatures: getToggleBool('signatures', true),
-            cash_box_logo_url: cbLogoValue || null,
             receipt_title: safeText(document.getElementById('receiptTitle')?.value),
             receipt_total_label: safeText(document.getElementById('totalLabel')?.value),
             receipt_from_label: safeText(document.getElementById('fromLabel')?.value),
@@ -695,6 +707,10 @@ async function handleSave(e) {
             receipt_received_by_label: safeText(document.getElementById('receivedByLabel')?.value),
             receipt_footer_note: safeText(document.getElementById('footerNote')?.value)
         };
+
+        if (cbLogoPending !== null && cbLogoPending !== undefined) {
+            updatePayload.cash_box_logo_url = cbLogoPending || null;
+        }
 
         const stripReceiptLabelFields = (payload) => {
             const next = { ...payload };
