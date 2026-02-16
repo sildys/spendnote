@@ -491,6 +491,7 @@ body {
 
 <script>
   const urlParams = new URLSearchParams(window.location.search);
+  const shouldShowAddresses = urlParams.get('addresses') !== '0';
   const itemsMode = String(urlParams.get('itemsMode') || '').toLowerCase();
   const isItemsSingle = itemsMode === 'single';
   const initialVoid = urlParams.get('void') === '1';
@@ -789,7 +790,7 @@ body {
   }
   
   // Addresses (FROM and TO addresses, but keep names visible)
-  if (urlParams.get('addresses') === '0') {
+  if (!shouldShowAddresses) {
     document.querySelectorAll('.from-address, .to-address, .party-address, .company-address, .contact-address').forEach(el => el.style.display = 'none');
   }
   
@@ -1050,7 +1051,7 @@ body {
           setTextAll('.company-name', companyName);
           if (companyAddress) {
             setHtmlAll('.company-address', addressToHtml(companyAddress));
-            document.querySelectorAll('.company-address').forEach((el) => (el.style.display = ''));
+            document.querySelectorAll('.company-address').forEach((el) => (el.style.display = shouldShowAddresses ? '' : 'none'));
           } else {
             setHtmlAll('.company-address', '');
             document.querySelectorAll('.company-address').forEach((el) => (el.style.display = 'none'));
@@ -1081,7 +1082,7 @@ body {
           setTextAll('.contact-name', contactName || '—');
           if (contactAddress) {
             setHtmlAll('.contact-address', addressToHtml(contactAddress));
-            document.querySelectorAll('.contact-address').forEach((el) => (el.style.display = ''));
+            document.querySelectorAll('.contact-address').forEach((el) => (el.style.display = shouldShowAddresses ? '' : 'none'));
           } else {
             setHtmlAll('.contact-address', '');
             document.querySelectorAll('.contact-address').forEach((el) => (el.style.display = 'none'));

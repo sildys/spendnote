@@ -147,7 +147,7 @@ function initTransactionForm() {
                 if (cbId) {
                     const key = `spendnote.cashBox.${cbId}.defaultReceiptFormat.v1`;
                     const stored = String(localStorage.getItem(key) || '').trim().toLowerCase();
-                    if (stored === 'a4' || stored === 'pdf' || stored === 'email') {
+                    if (stored === 'a4' || stored === 'pdf') {
                         intendedFormat = stored;
                     }
                 }
@@ -496,7 +496,7 @@ function initTransactionForm() {
                     };
 
                     const params = new URLSearchParams();
-                    params.set('v', 'print-20260207-07');
+                    params.set('v', 'print-20260216-2248');
                     if (createdId) params.set('txId', createdId);
                     params.set('bootstrap', '1');
 
@@ -509,7 +509,7 @@ function initTransactionForm() {
                         if (cbId) {
                             const key = `spendnote.cashBox.${cbId}.defaultReceiptFormat.v1`;
                             const stored = String(localStorage.getItem(key) || '').trim().toLowerCase();
-                            if (stored === 'a4' || stored === 'pdf' || stored === 'email') {
+                            if (stored === 'a4' || stored === 'pdf') {
                                 format = stored;
                             }
                         }
