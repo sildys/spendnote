@@ -211,44 +211,20 @@
     letter-spacing: 0.03em;
 }
 
-.locked-field-group {
-    position: relative;
-}
-
 .field-input-locked {
-    padding-right: 34px;
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--surface) !important;
+    transition: opacity 0.2s ease;
 }
 
-.field-lock-tip {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    width: 18px;
-    height: 18px;
-    border-radius: 999px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    color: #b45309;
-    background: rgba(245, 158, 11, 0.15);
-    border: 1px solid rgba(245, 158, 11, 0.35);
-    cursor: help;
-    z-index: 2;
-    transition: transform 0.15s ease, color 0.15s ease, background 0.15s ease;
+.field-input-locked:hover {
+    opacity: 0.7;
 }
 
-.field-lock-tip:hover,
-.field-lock-tip:focus-visible {
-    color: #92400e;
-    background: rgba(245, 158, 11, 0.25);
-    transform: scale(1.05);
-    outline: none;
-}
-
-.field-lock-tip i {
-    font-size: 10px !important;
-    color: inherit !important;
-    margin: 0 !important;
+.field-input-locked:focus {
+    opacity: 0.75;
+    box-shadow: none !important;
 }
 
 .field-input {
