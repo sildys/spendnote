@@ -1196,48 +1196,68 @@ var db = {
 
         async create(cashBox) {
             const ctx = await getMyOrgContext();
+            const currentUser = await auth.getCurrentUser();
             const ownerUserId = ctx?.ownerUserId || cashBox.user_id;
             const normalizedPrefix = normalizeCashBoxIdPrefix(cashBox?.id_prefix || 'SN');
 
-            const baseInsertPayload = {
+            const makeInsertPayload = (userId) => ({
                 name: cashBox?.name,
-                user_id: ownerUserId,
+                user_id: userId,
                 currency: cashBox?.currency || 'USD',
                 color: cashBox?.color || '#059669',
                 icon: cashBox?.icon || 'building',
                 current_balance: cashBox?.current_balance || 0,
                 id_prefix: normalizedPrefix || 'SN'
-            };
+            });
+
+            const directInsertUserIds = [];
+            const primaryInsertUserId = String(ownerUserId || '').trim();
+            const currentInsertUserId = String(currentUser?.id || '').trim();
+            if (primaryInsertUserId) directInsertUserIds.push(primaryInsertUserId);
+            if (currentInsertUserId && currentInsertUserId !== primaryInsertUserId) {
+                directInsertUserIds.push(currentInsertUserId);
+            }
+
+            let lastInsertError = null;
 
             // Prefer direct insert so id_prefix is persisted at creation time.
             try {
-                let payload = { ...baseInsertPayload };
-                for (let attempt = 0; attempt < 2; attempt++) {
-                    const { data, error } = await supabaseClient
-                        .from('cash_boxes')
-                        .insert([payload])
-                        .select('*')
-                        .single();
+                for (let i = 0; i < directInsertUserIds.length; i++) {
+                    let payload = makeInsertPayload(directInsertUserIds[i]);
 
-                    if (!error) {
-                        return { success: true, data };
+                    for (let attempt = 0; attempt < 2; attempt++) {
+                        const { data, error } = await supabaseClient
+                            .from('cash_boxes')
+                            .insert([payload])
+                            .select('*')
+                            .single();
+
+                        if (!error) {
+                            return { success: true, data };
+                        }
+
+                        lastInsertError = error;
+
+                        const missingIdPrefix =
+                            String(error?.code || '') === '42703' ||
+                            /column\s+"?id_prefix"?\s+does\s+not\s+exist/i.test(String(error?.message || ''));
+
+                        if (missingIdPrefix && Object.prototype.hasOwnProperty.call(payload, 'id_prefix')) {
+                            const nextPayload = { ...payload };
+                            delete nextPayload.id_prefix;
+                            payload = nextPayload;
+                            continue;
+                        }
+
+                        break;
                     }
-
-                    const missingIdPrefix =
-                        String(error?.code || '') === '42703' ||
-                        /column\s+"?id_prefix"?\s+does\s+not\s+exist/i.test(String(error?.message || ''));
-
-                    if (missingIdPrefix && Object.prototype.hasOwnProperty.call(payload, 'id_prefix')) {
-                        const nextPayload = { ...payload };
-                        delete nextPayload.id_prefix;
-                        payload = nextPayload;
-                        continue;
-                    }
-
-                    break;
                 }
             } catch (_) {
                 // ignore and fallback to RPC
+            }
+
+            if (window.SpendNoteDebug && lastInsertError) {
+                console.log('Direct cash box insert fallback to RPC due error:', lastInsertError);
             }
 
             if (window.SpendNoteDebug) console.log('Creating cash box via RPC fallback:', cashBox);
@@ -1254,9 +1274,17 @@ var db = {
             });
 
             const rpcParamError = String(rpcResult?.error?.message || '').toLowerCase();
+            const rpcParamCode = String(rpcResult?.error?.code || '').toUpperCase();
             const isUnknownRpcParam =
                 rpcParamError.includes('p_id_prefix') &&
-                (rpcParamError.includes('does not exist') || rpcParamError.includes('unexpected'));
+                (
+                    rpcParamError.includes('does not exist') ||
+                    rpcParamError.includes('unexpected') ||
+                    rpcParamError.includes('could not find the function') ||
+                    rpcParamError.includes('schema cache') ||
+                    rpcParamCode === 'PGRST202' ||
+                    rpcParamCode === '404'
+                );
 
             if (rpcResult?.error && isUnknownRpcParam) {
                 rpcResult = await supabaseClient.rpc('create_cash_box', {
