@@ -142,12 +142,14 @@
     }
 
     function getDisplayId(tx) {
-        // Use Supabase sequence numbers if available (SN{cash_box_seq}-{tx_seq})
+        // Use Supabase sequence numbers if available ({prefix}{cash_box_seq}-{tx_seq})
         const cbSeq = tx?.cash_box_sequence;
         const txSeq = tx?.tx_sequence_in_box;
         if (cbSeq && txSeq) {
+            const prefixRaw = safeText(tx?.cash_box_id_prefix_snapshot || tx?.cash_box?.id_prefix, '').trim().toUpperCase();
+            const prefix = prefixRaw && prefixRaw !== 'REC-' ? prefixRaw : 'SN';
             const txSeqStr = String(txSeq).padStart(3, '0');
-            return `SN${cbSeq}-${txSeqStr}`;
+            return `${prefix}${cbSeq}-${txSeqStr}`;
         }
         // Fallback to receipt_number
         const receipt = safeText(tx?.receipt_number, '');

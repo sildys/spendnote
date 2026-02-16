@@ -601,7 +601,9 @@
             const cbSeq = Number(tx?.cash_box_sequence);
             const txSeq = Number(tx?.tx_sequence_in_box);
             if (Number.isFinite(cbSeq) && cbSeq > 0 && Number.isFinite(txSeq) && txSeq > 0) {
-                return `SN${cbSeq}-${String(txSeq).padStart(3, '0')}`;
+                const prefixRaw = safeText(tx?.cash_box_id_prefix_snapshot || tx?.cash_box?.id_prefix, '').toUpperCase();
+                const prefix = prefixRaw && prefixRaw !== 'REC-' ? prefixRaw : 'SN';
+                return `${prefix}${cbSeq}-${String(txSeq).padStart(3, '0')}`;
             }
             const receiptNumber = safeText(tx?.receipt_number, '');
             if (receiptNumber) return receiptNumber;
@@ -629,6 +631,11 @@
             const snapshotIcon = safeText(tx?.cash_box_icon_snapshot, '').trim();
             if (snapshotIcon) {
                 base.icon = snapshotIcon;
+            }
+
+            const snapshotPrefixRaw = safeText(tx?.cash_box_id_prefix_snapshot, '').trim().toUpperCase();
+            if (snapshotPrefixRaw) {
+                base.id_prefix = snapshotPrefixRaw === 'REC-' ? 'SN' : snapshotPrefixRaw;
             }
 
             return base;
@@ -807,7 +814,7 @@
                 if (cbIds.length > 0) {
                     const { data: cbData } = await window.supabaseClient
                         .from('cash_boxes')
-                        .select('id,name,color,currency,sequence_number')
+                        .select('id,name,color,currency,sequence_number,id_prefix')
                         .in('id', cbIds);
                     (cbData || []).forEach(cb => { cbMap[cb.id] = cb; });
                 }

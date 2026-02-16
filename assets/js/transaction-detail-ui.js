@@ -681,7 +681,9 @@ html, body { height: auto !important; overflow: auto !important; }
                 
                 const cbSeq = cashBox?.sequence_number || tx.cash_box_sequence;
                 const txSeq = tx.tx_sequence_in_box;
-                const receiptId = (cbSeq && txSeq) ? `SN${cbSeq}-${String(txSeq).padStart(3, '0')}` : safeText(tx.receipt_number, '—');
+                const prefixRaw = safeText(tx?.cash_box_id_prefix_snapshot || cashBox?.id_prefix, '').toUpperCase();
+                const prefix = prefixRaw && prefixRaw !== 'REC-' ? prefixRaw : 'SN';
+                const receiptId = (cbSeq && txSeq) ? `${prefix}${cbSeq}-${String(txSeq).padStart(3, '0')}` : safeText(tx.receipt_number, '—');
                 const cashBoxCode = cbSeq ? `SN-${String(cbSeq).padStart(3, '0')}` : '—';
 
                 const txDate = tx.transaction_date || tx.created_at;
