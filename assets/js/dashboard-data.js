@@ -69,11 +69,51 @@ function createDashboardTransactionsController(ctx) {
         latestRows: []
     };
 
+    const viewerAvatar = {
+        userId: '',
+        displayName: '',
+        avatarUrl: '',
+        avatarColor: '#10b981',
+        avatarSettings: { scale: 1, x: 0, y: 0 }
+    };
+
+    const AVATAR_SCOPE_USER_KEY = 'spendnote.user.avatar.activeUserId.v1';
+    const AVATAR_KEY_PREFIX = 'spendnote.user.avatar.v2';
+    const AVATAR_COLOR_KEY_PREFIX = 'spendnote.user.avatarColor.v2';
+    const AVATAR_SETTINGS_KEY_PREFIX = 'spendnote.user.avatarSettings.v2';
+    const AVATAR_BASE_SIZE = 96;
+    const AVATAR_MIN_SCALE = 0.5;
+    const AVATAR_MAX_SCALE = 3;
+
     const safeText = (value, fallback) => {
         const s = value === undefined || value === null ? '' : String(value);
         const trimmed = s.trim();
         if (trimmed) return trimmed;
         return fallback === undefined ? '' : String(fallback);
+    };
+
+    const normalizeAvatarSettings = (raw) => {
+        const src = raw && typeof raw === 'object' ? raw : {};
+        const scaleNum = Number(src.scale);
+        const scale = Number.isFinite(scaleNum)
+            ? Math.max(AVATAR_MIN_SCALE, Math.min(AVATAR_MAX_SCALE, scaleNum))
+            : 1;
+        const xNum = Number(src.x);
+        const yNum = Number(src.y);
+        return {
+            scale: Math.round(scale * 100) / 100,
+            x: Number.isFinite(xNum) ? xNum : 0,
+            y: Number.isFinite(yNum) ? yNum : 0
+        };
+    };
+
+    const buildAvatarTransform = (rawSettings, slotSizePx) => {
+        const settings = normalizeAvatarSettings(rawSettings);
+        const slot = Number(slotSizePx);
+        const ratio = Number.isFinite(slot) && slot > 0 ? (slot / AVATAR_BASE_SIZE) : 1;
+        const x = Math.round(settings.x * ratio * 100) / 100;
+        const y = Math.round(settings.y * ratio * 100) / 100;
+        return `translate(${x}px, ${y}px) scale(${settings.scale})`;
     };
 
     const escapeHtml = (value) => {
@@ -141,33 +181,108 @@ function createDashboardTransactionsController(ctx) {
         return base;
     };
 
-    const getCreatedByAvatarUrl = (createdByName) => {
-        let activeUserId = '';
+    const hydrateViewerAvatarContext = async () => {
+        let user = null;
         try {
-            activeUserId = String(localStorage.getItem('spendnote.user.avatar.activeUserId.v1') || '').trim();
+            user = await window.auth?.getCurrentUser?.();
         } catch (_) {
-            activeUserId = '';
+            user = null;
         }
 
+        let userId = safeText(user?.id, '');
+        if (!userId) {
+            try {
+                userId = safeText(localStorage.getItem(AVATAR_SCOPE_USER_KEY), '');
+            } catch (_) {
+                userId = '';
+            }
+        }
+        viewerAvatar.userId = userId;
+
+        let profile = null;
         try {
-            const scopedAvatarKey = activeUserId ? `spendnote.user.avatar.v2.${activeUserId}` : '';
-            const storedAvatar = scopedAvatarKey ? localStorage.getItem(scopedAvatarKey) : '';
-            if (storedAvatar) return storedAvatar;
+            profile = await window.db?.profiles?.getCurrent?.();
+        } catch (_) {
+            profile = null;
+        }
+
+        const scopedAvatarKey = userId ? `${AVATAR_KEY_PREFIX}.${userId}` : '';
+        const scopedColorKey = userId ? `${AVATAR_COLOR_KEY_PREFIX}.${userId}` : '';
+        const scopedSettingsKey = userId ? `${AVATAR_SETTINGS_KEY_PREFIX}.${userId}` : '';
+
+        let avatarUrl = safeText(profile?.avatar_url || user?.user_metadata?.avatar_url, '');
+        let avatarColor = safeText(profile?.avatar_color || user?.user_metadata?.avatar_color, '');
+        let avatarSettings = profile?.avatar_settings || user?.user_metadata?.avatar_settings || null;
+
+        try {
+            if (!avatarUrl && scopedAvatarKey) {
+                avatarUrl = safeText(localStorage.getItem(scopedAvatarKey), '');
+            }
+            if (!avatarColor && scopedColorKey) {
+                avatarColor = safeText(localStorage.getItem(scopedColorKey), '');
+            }
+            if (!avatarSettings && scopedSettingsKey) {
+                const rawSettings = localStorage.getItem(scopedSettingsKey);
+                avatarSettings = rawSettings ? JSON.parse(rawSettings) : null;
+            }
         } catch (_) {
             // ignore
         }
 
-        let avatarColor = '#10b981';
+        viewerAvatar.avatarUrl = avatarUrl;
+        viewerAvatar.avatarColor = avatarColor || '#10b981';
+        viewerAvatar.avatarSettings = normalizeAvatarSettings(avatarSettings);
+        viewerAvatar.displayName = safeText(
+            profile?.full_name || user?.user_metadata?.full_name || user?.email,
+            ''
+        ).toLowerCase();
+
         try {
-            const scopedColorKey = activeUserId ? `spendnote.user.avatarColor.v2.${activeUserId}` : '';
-            avatarColor = (scopedColorKey ? localStorage.getItem(scopedColorKey) : '') || '#10b981';
+            if (userId) {
+                localStorage.setItem(AVATAR_SCOPE_USER_KEY, userId);
+                if (scopedAvatarKey && avatarUrl) {
+                    localStorage.setItem(scopedAvatarKey, avatarUrl);
+                }
+                if (scopedColorKey && viewerAvatar.avatarColor) {
+                    localStorage.setItem(scopedColorKey, viewerAvatar.avatarColor);
+                }
+                if (scopedSettingsKey) {
+                    localStorage.setItem(scopedSettingsKey, JSON.stringify(viewerAvatar.avatarSettings));
+                }
+            }
         } catch (_) {
             // ignore
         }
+    };
 
+    const getCreatedByAvatarData = (createdByName, tx) => {
+        const createdByUserId = safeText(tx?.created_by_user_id, '');
+        const createdByNameNorm = safeText(createdByName, '').toLowerCase();
+        const isCurrentUserRow = (
+            viewerAvatar.userId
+            && createdByUserId
+            && createdByUserId === viewerAvatar.userId
+        ) || (
+            !createdByUserId
+            && viewerAvatar.displayName
+            && createdByNameNorm
+            && createdByNameNorm === viewerAvatar.displayName
+        );
+
+        if (isCurrentUserRow && viewerAvatar.avatarUrl) {
+            return {
+                url: viewerAvatar.avatarUrl,
+                transform: buildAvatarTransform(viewerAvatar.avatarSettings, 32)
+            };
+        }
+
+        const avatarColor = isCurrentUserRow ? viewerAvatar.avatarColor : '#10b981';
         const initials = getInitials(createdByName === '—' ? '' : createdByName);
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ffffff" stroke="${avatarColor}" stroke-width="4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="800" fill="${avatarColor}">${initials}</text></svg>`;
-        return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+        return {
+            url: `data:image/svg+xml,${encodeURIComponent(svg)}`,
+            transform: ''
+        };
     };
 
     const clearTbody = () => {
@@ -353,7 +468,10 @@ function createDashboardTransactionsController(ctx) {
                 }
             }
             createdByName = String(createdByName || '').trim() || '—';
-            const avatarUrl = getCreatedByAvatarUrl(createdByName);
+            const avatarData = getCreatedByAvatarData(createdByName, tx);
+            const avatarStyle = avatarData.transform
+                ? ` style="transform: ${avatarData.transform}; transform-origin: 50% 50%;"`
+                : '';
 
             const displayId = getDisplayId(tx);
             const contactName = safeText(tx?.contact?.name || tx?.contact_name, '—');
@@ -390,7 +508,7 @@ function createDashboardTransactionsController(ctx) {
                 <td><span class="tx-contact" title="${contactNameHtml}">${contactNameHtml}</span></td>
                 <td><span class="tx-desc" title="${descriptionHtml}">${descriptionHtml}</span></td>
                 <td><span class="tx-amount ${isIncome ? 'in' : 'out'} ${isVoided ? 'voided' : ''}">${formattedAmount}</span></td>
-                <td><div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarUrl}" alt="${safeText(createdByName, '—')}"></div></div></td>
+                <td><div class="tx-createdby"><div class="user-avatar user-avatar-small"><img src="${avatarData.url}" alt="${safeText(createdByName, '—')}"${avatarStyle}></div></div></td>
                 <td>
                     <div class="tx-actions">
                         <button type="button" class="tx-action btn-duplicate" data-tx-id="${safeText(tx?.id, '')}" data-cash-box-id="${safeText(cashBoxId, '')}" data-direction="${isIncome ? 'in' : 'out'}" data-amount="${safeText(tx?.amount, '')}" data-contact-id="${safeText(contactId, '')}" data-description="${descEnc}" data-contact-name="${contactEnc}">
@@ -410,6 +528,8 @@ function createDashboardTransactionsController(ctx) {
 
     async function render() {
         bindEvents();
+
+        await hydrateViewerAvatarContext();
 
         renderMessageRow('Loading…');
 

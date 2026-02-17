@@ -137,13 +137,42 @@ if (document.readyState === 'loading') {
 const MAIN_AVATAR_SCOPE_USER_KEY = 'spendnote.user.avatar.activeUserId.v1';
 const MAIN_AVATAR_KEY_PREFIX = 'spendnote.user.avatar.v2';
 const MAIN_AVATAR_COLOR_KEY_PREFIX = 'spendnote.user.avatarColor.v2';
+const MAIN_AVATAR_SETTINGS_KEY_PREFIX = 'spendnote.user.avatarSettings.v2';
 const MAIN_LEGACY_AVATAR_KEY = 'spendnote.user.avatar.v1';
 const MAIN_LEGACY_AVATAR_COLOR_KEY = 'spendnote.user.avatarColor.v1';
 const MAIN_LEGACY_AVATAR_SETTINGS_KEY = 'spendnote.user.avatarSettings.v1';
+const MAIN_AVATAR_BASE_SIZE = 96;
+const MAIN_AVATAR_MIN_SCALE = 0.5;
+const MAIN_AVATAR_MAX_SCALE = 3;
+
+function normalizeMainAvatarSettings(raw) {
+    const src = raw && typeof raw === 'object' ? raw : {};
+    const scaleNum = Number(src.scale);
+    const scale = Number.isFinite(scaleNum)
+        ? Math.max(MAIN_AVATAR_MIN_SCALE, Math.min(MAIN_AVATAR_MAX_SCALE, scaleNum))
+        : 1;
+    const xNum = Number(src.x);
+    const yNum = Number(src.y);
+    return {
+        scale: Math.round(scale * 100) / 100,
+        x: Number.isFinite(xNum) ? xNum : 0,
+        y: Number.isFinite(yNum) ? yNum : 0
+    };
+}
+
+function buildMainAvatarTransform(rawSettings, slotSizePx) {
+    const settings = normalizeMainAvatarSettings(rawSettings);
+    const slot = Number(slotSizePx);
+    const ratio = Number.isFinite(slot) && slot > 0 ? (slot / MAIN_AVATAR_BASE_SIZE) : 1;
+    const x = Math.round(settings.x * ratio * 100) / 100;
+    const y = Math.round(settings.y * ratio * 100) / 100;
+    return `translate(${x}px, ${y}px) scale(${settings.scale})`;
+}
 
 async function updateUserNav() {
     const nameEls = document.querySelectorAll('.user-name');
-    const avatarImgs = document.querySelectorAll('.user-avatar img');
+    const navAvatarImg = document.querySelector('#userAvatarBtn .user-avatar img');
+    const avatarImgs = navAvatarImg ? [navAvatarImg] : [];
 
     if (!nameEls.length && !avatarImgs.length) {
         return;
@@ -169,8 +198,20 @@ async function updateUserNav() {
     const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.email || 'Account';
     const avatarUrl = String(profile?.avatar_url || user?.user_metadata?.avatar_url || '').trim();
     const avatarColorFromDb = String(profile?.avatar_color || user?.user_metadata?.avatar_color || '').trim();
+    const avatarSettingsFromDb = profile?.avatar_settings || user?.user_metadata?.avatar_settings || null;
     const scopedAvatarKey = userId ? `${MAIN_AVATAR_KEY_PREFIX}.${userId}` : '';
     const scopedAvatarColorKey = userId ? `${MAIN_AVATAR_COLOR_KEY_PREFIX}.${userId}` : '';
+    const scopedAvatarSettingsKey = userId ? `${MAIN_AVATAR_SETTINGS_KEY_PREFIX}.${userId}` : '';
+
+    let avatarSettings = avatarSettingsFromDb;
+    if (!avatarSettings && scopedAvatarSettingsKey) {
+        try {
+            const rawSettings = localStorage.getItem(scopedAvatarSettingsKey);
+            avatarSettings = rawSettings ? JSON.parse(rawSettings) : null;
+        } catch (_) {
+            avatarSettings = null;
+        }
+    }
 
     try {
         if (userId) {
@@ -178,6 +219,9 @@ async function updateUserNav() {
             localStorage.removeItem(MAIN_LEGACY_AVATAR_KEY);
             localStorage.removeItem(MAIN_LEGACY_AVATAR_COLOR_KEY);
             localStorage.removeItem(MAIN_LEGACY_AVATAR_SETTINGS_KEY);
+            if (avatarSettingsFromDb && scopedAvatarSettingsKey) {
+                localStorage.setItem(scopedAvatarSettingsKey, JSON.stringify(normalizeMainAvatarSettings(avatarSettingsFromDb)));
+            }
         } else {
             localStorage.removeItem(MAIN_AVATAR_SCOPE_USER_KEY);
         }
@@ -206,6 +250,9 @@ async function updateUserNav() {
             avatarImgs.forEach((img) => {
                 img.src = customAvatar;
                 img.alt = displayName;
+                const slotSize = Number(img?.clientWidth || img?.getBoundingClientRect?.().width || 40);
+                img.style.transformOrigin = '50% 50%';
+                img.style.transform = buildMainAvatarTransform(avatarSettings, slotSize);
             });
         } else {
             let avatarColor = '#10b981';
@@ -225,6 +272,8 @@ async function updateUserNav() {
             avatarImgs.forEach((img) => {
                 img.src = dataUrl;
                 img.alt = displayName;
+                img.style.transform = '';
+                img.style.transformOrigin = '';
             });
         }
     }
@@ -244,7 +293,7 @@ window.updateUserNav = updateUserNav;
 async function waitForUserNavReady(maxMs = 4000) {
     const start = Date.now();
     while ((Date.now() - start) < maxMs) {
-        const hasAvatarSlot = Boolean(document.querySelector('.user-avatar img'));
+        const hasAvatarSlot = Boolean(document.querySelector('#userAvatarBtn .user-avatar img'));
         if (!hasAvatarSlot) {
             await new Promise(r => setTimeout(r, 60));
             continue;
