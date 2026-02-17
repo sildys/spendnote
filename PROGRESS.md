@@ -51,7 +51,24 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
 - [ ] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass
 
-## Where we are now (last updated: 2026-02-16 early morning)
+## Where we are now (last updated: 2026-02-18 late night)
+
+- 2026-02-18 thread summary (cash box + receipt fixes):
+  - Cash Box Settings logo persistence is now schema-compatible:
+    - Save no longer hard-fails when `cash_box_logo_url` column is missing.
+    - Local fallback logo storage per cash box: `spendnote.cashBox.{id}.logo.v1`.
+    - Cash Box Settings logo load now resolves DB logo first, then local fallback.
+    - Compatibility handling downgrades missing `cash_box_logo_url` to non-fatal capability fallback.
+  - Production hotfix:
+    - Fixed `ReferenceError: cashBoxId is not defined` in Cash Box Settings loader (`loadCashBoxData`).
+  - Receipts date format normalized to US (`MM/DD/YYYY`):
+    - Updated A4/PDF/Email receipt templates date formatter.
+    - Updated transaction-detail demo receipt date formatting.
+    - Bumped receipt cache params / asset versions to force online refresh.
+  - Cash Box Settings UI cleanup:
+    - Removed "Quick preset: Logo, addresses, line items, total, signatures" block.
+  - Commits in this thread:
+    - `92e9e01`, `ae8c41d`, `fa68a3d`, `38bebed`
 
 - Receipt logo stabilization (today):
   - `assets/js/logo-editor.js` stabilized for real-world usage:

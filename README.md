@@ -7,6 +7,26 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
+## Recent engineering updates (2026-02-18)
+
+- **Cash Box Settings logo persistence compatibility (schema-safe):**
+  - Fixed save flow so Cash Box Settings no longer fails when DB schema is missing `cash_box_logo_url`.
+  - Added local fallback logo persistence key per cash box: `spendnote.cashBox.{id}.logo.v1`.
+  - On load, logo preview now resolves from DB logo first, then local fallback.
+  - Compatibility retry now treats missing `cash_box_logo_url` as a non-fatal schema capability downgrade (instead of hard error).
+- **Production hotfix:**
+  - Fixed `ReferenceError: cashBoxId is not defined` in Cash Box Settings loader by using the function argument `id` consistently.
+- **Receipt date format normalization (US):**
+  - Unified receipt date display to US format (`MM/DD/YYYY`) across A4, PDF, Email templates and related demo/preview paths.
+  - Updated receipt cache-busting params in receipt URL builders to ensure latest templates are loaded immediately online.
+- **Cash Box Settings UI cleanup:**
+  - Removed the "Quick preset: Logo, addresses, line items, total, signatures" helper block from Cash Box Settings page.
+- **Commits (this thread):**
+  - `92e9e01` Fix cash box logo save compatibility fallback
+  - `ae8c41d` Fix cash box settings load ReferenceError
+  - `fa68a3d` Use US date format on receipt templates
+  - `38bebed` Remove quick preset summary from cash box settings
+
 ## Recent engineering updates (2026-02-16)
 
 - **Receipt logo stabilization (User Settings):**
