@@ -384,16 +384,43 @@ const fillProfile = (p) => {
 };
 
 const loadProfile = async () => {
-    if (!window.db?.profiles?.getCurrent) return;
-    const p = await window.db.profiles.getCurrent();
+    let authUser = null;
+    try {
+        authUser = await window.auth?.getCurrentUser?.({ force: true });
+        setAvatarStorageUserId(authUser?.id || '');
+    } catch (_) {
+        authUser = null;
+        setAvatarStorageUserId('');
+    }
+
+    let p = null;
+    if (authUser?.id && window.supabaseClient) {
+        try {
+            const { data, error } = await window.supabaseClient
+                .from('profiles')
+                .select('*')
+                .eq('id', authUser.id)
+                .single();
+            if (!error) p = data || null;
+        } catch (_) {
+            p = null;
+        }
+    }
+    if (!p && window.db?.profiles?.getCurrent) {
+        try {
+            p = await window.db.profiles.getCurrent();
+        } catch (_) {
+            p = null;
+        }
+    }
+
     if (profileObjectHasAvatarColumns(p)) {
         avatarProfileColumnsSupported = true;
     }
     let mergedProfile = p ? { ...p } : null;
-    let authUser = null;
 
     try {
-        authUser = await window.auth?.getCurrentUser?.({ force: true });
+        authUser = authUser || await window.auth?.getCurrentUser?.({ force: true });
         setAvatarStorageUserId(authUser?.id || '');
         const meta = (authUser?.user_metadata && typeof authUser.user_metadata === 'object') ? authUser.user_metadata : null;
         if (meta) {
@@ -758,7 +785,28 @@ const initUserSettingsPage = async () => {
         const check = () => window.db?.profiles ? resolve() : setTimeout(check, 50);
         check();
     });
+    const waitForAuthUser = () => new Promise(resolve => {
+        const startedAt = Date.now();
+        const tick = async () => {
+            try {
+                const user = await window.auth?.getCurrentUser?.({ force: true });
+                if (user) {
+                    resolve(user);
+                    return;
+                }
+            } catch (_) {
+                // ignore
+            }
+            if (Date.now() - startedAt > 5000) {
+                resolve(null);
+                return;
+            }
+            setTimeout(tick, 120);
+        };
+        tick();
+    });
     await waitForDb();
+    await waitForAuthUser();
 
     // Load data (do not block logo editor init if any call fails)
     try {

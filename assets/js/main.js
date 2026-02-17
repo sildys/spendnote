@@ -180,7 +180,7 @@ async function updateUserNav() {
 
     let user = null;
     try {
-        user = await window.auth.getCurrentUser();
+        user = await window.auth.getCurrentUser({ force: true });
     } catch (_) {
         user = null;
     }
