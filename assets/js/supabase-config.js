@@ -1450,14 +1450,21 @@ var db = {
         },
 
         async update(id, updates) {
-            const { error } = await supabaseClient
+            const { data, error } = await supabaseClient
                 .from('cash_boxes')
                 .update(updates)
-                .eq('id', id);
+                .eq('id', id)
+                .select('id')
+                .limit(1);
             if (error) {
                 console.error('Error updating cash box:', error);
                 return { success: false, error: error.message };
             }
+
+            if (!Array.isArray(data) || data.length === 0) {
+                return { success: false, error: 'Cash box update was not applied (permission denied or row not found).' };
+            }
+
             return { success: true };
         },
 

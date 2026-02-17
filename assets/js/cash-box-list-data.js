@@ -40,9 +40,40 @@ async function loadCashBoxList() {
         });
         
         if (cashBoxes && cashBoxes.length > 0) {
+            let viewerUserId = '';
+            const getStoredOrderKey = (userId) => {
+                const uid = String(userId || '').trim();
+                if (!uid) return '';
+                return `spendnote.cashBoxOrder.${uid}.v1`;
+            };
+            const readStoredOrder = (userId) => {
+                try {
+                    const key = getStoredOrderKey(userId);
+                    if (!key) return [];
+                    const raw = localStorage.getItem(key);
+                    const parsed = raw ? JSON.parse(raw) : [];
+                    return Array.isArray(parsed) ? parsed.map((id) => String(id || '')).filter(Boolean) : [];
+                } catch (_) {
+                    return [];
+                }
+            };
+            const writeStoredOrder = (userId, orderedIds) => {
+                try {
+                    const key = getStoredOrderKey(userId);
+                    if (!key) return;
+                    const normalized = Array.isArray(orderedIds)
+                        ? orderedIds.map((id) => String(id || '')).filter(Boolean)
+                        : [];
+                    localStorage.setItem(key, JSON.stringify(normalized));
+                } catch (_) {
+                    // ignore local persistence failures
+                }
+            };
+
             const txCountByCashBoxId = new Map();
             try {
                 const user = await window.auth?.getCurrentUser?.();
+                viewerUserId = String(user?.id || '').trim();
                 const client = window.supabaseClient;
                 if (user && client) {
                     await Promise.all(
@@ -72,6 +103,29 @@ async function loadCashBoxList() {
                 }
             } catch (_) {
                 // ignore tx count failures
+            }
+
+            const storedOrderIds = readStoredOrder(viewerUserId);
+            if (storedOrderIds.length > 0) {
+                const rank = new Map(storedOrderIds.map((id, idx) => [id, idx]));
+                cashBoxes.sort((a, b) => {
+                    const aId = String(a?.id || '');
+                    const bId = String(b?.id || '');
+                    const aRank = rank.has(aId) ? rank.get(aId) : Number.MAX_SAFE_INTEGER;
+                    const bRank = rank.has(bId) ? rank.get(bId) : Number.MAX_SAFE_INTEGER;
+                    if (aRank !== bRank) return aRank - bRank;
+
+                    const aSort = Number(a?.sort_order);
+                    const bSort = Number(b?.sort_order);
+                    const aSortRank = Number.isFinite(aSort) ? aSort : Number.MAX_SAFE_INTEGER;
+                    const bSortRank = Number.isFinite(bSort) ? bSort : Number.MAX_SAFE_INTEGER;
+                    if (aSortRank !== bSortRank) return aSortRank - bSortRank;
+
+                    const aTime = a?.created_at ? new Date(a.created_at).getTime() : 0;
+                    const bTime = b?.created_at ? new Date(b.created_at).getTime() : 0;
+                    if (aTime !== bTime) return aTime - bTime;
+                    return aId.localeCompare(bId);
+                });
             }
 
             // Get the list container
@@ -209,11 +263,20 @@ async function loadCashBoxList() {
 
             let draggedCard = null;
             let isSavingOrder = false;
+            let dragStartOrderSignature = '';
+            let dropPersistTriggered = false;
 
             const orderStatusEl = document.getElementById('orderStatus');
             const setOrderStatus = (text) => {
                 if (!orderStatusEl) return;
                 orderStatusEl.textContent = text || '';
+            };
+
+            const getOrderSignature = () => {
+                return Array.from(grid.querySelectorAll('.register-row'))
+                    .map(card => card.dataset.id || '')
+                    .filter(Boolean)
+                    .join('|');
             };
 
             const persistOrder = async () => {
@@ -222,10 +285,11 @@ async function loadCashBoxList() {
 
                 try {
                     const orderedCards = Array.from(grid.querySelectorAll('.register-row'));
-
-                    const updates = orderedCards
+                    const orderedIds = orderedCards
                         .map(card => card.dataset.id)
-                        .filter(Boolean)
+                        .filter(Boolean);
+
+                    const updates = orderedIds
                         .map((id, idx) => db.cashBoxes.update(id, { sort_order: idx + 1 }));
 
                     setOrderStatus('Saving...');
@@ -236,9 +300,14 @@ async function loadCashBoxList() {
                     }
 
                     setOrderStatus('Saved');
+                    writeStoredOrder(viewerUserId, orderedIds);
                     setTimeout(() => setOrderStatus(''), 1200);
                 } catch (error) {
                     console.error('❌ Failed to persist cash box order:', error);
+                    const fallbackIds = Array.from(grid.querySelectorAll('.register-row'))
+                        .map(card => card.dataset.id)
+                        .filter(Boolean);
+                    writeStoredOrder(viewerUserId, fallbackIds);
                     setOrderStatus('Could not save');
                     showAlert('Could not save cash box order yet. Please make sure the database has a sort_order column.', { iconType: 'error' });
                 } finally {
@@ -270,6 +339,8 @@ async function loadCashBoxList() {
                         return;
                     }
                     draggedCard = card;
+                    dragStartOrderSignature = getOrderSignature();
+                    dropPersistTriggered = false;
                     draggedCard.classList.add('dragging');
                     if (event.dataTransfer) {
                         event.dataTransfer.effectAllowed = 'move';
@@ -289,14 +360,25 @@ async function loadCashBoxList() {
                     }
                 });
 
-                grid.addEventListener('dragend', () => {
+                grid.addEventListener('dragend', async () => {
                     if (draggedCard) {
                         draggedCard.classList.remove('dragging');
                     }
                     // Remove all placeholder classes
                     const allCards = Array.from(grid.querySelectorAll('.register-row'));
                     allCards.forEach(c => c.classList.remove('drag-placeholder'));
+
+                    const fallbackPersistNeeded = Boolean(dragStartOrderSignature)
+                        && !dropPersistTriggered
+                        && getOrderSignature() !== dragStartOrderSignature;
+
                     draggedCard = null;
+                    dragStartOrderSignature = '';
+                    dropPersistTriggered = false;
+
+                    if (fallbackPersistNeeded) {
+                        await persistOrder();
+                    }
                 });
 
                 grid.addEventListener('dragover', (event) => {
@@ -323,6 +405,7 @@ async function loadCashBoxList() {
                 grid.addEventListener('drop', async (event) => {
                     if (!draggedCard) return;
                     event.preventDefault();
+                    dropPersistTriggered = true;
                     await persistOrder();
                 });
             };
