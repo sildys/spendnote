@@ -479,70 +479,20 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        .placeholder-slide {
+        .screenshot-slide {
             width: 100%;
             aspect-ratio: 16/10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem;
+            overflow: hidden;
             position: relative;
+            background: #f8fafc;
         }
 
-        .carousel-slide:nth-child(1) .placeholder-slide {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-        }
-
-        .carousel-slide:nth-child(2) .placeholder-slide {
-            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
-        }
-
-        .carousel-slide:nth-child(3) .placeholder-slide {
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-        }
-
-        .placeholder-content {
-            text-align: center;
-            max-width: 500px;
-        }
-
-        .placeholder-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2.5rem;
-            color: white;
-            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
-        }
-
-        .carousel-slide:nth-child(1) .placeholder-icon {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-        }
-
-        .carousel-slide:nth-child(2) .placeholder-icon {
-            background: linear-gradient(135deg, var(--orange), #fbbf24);
-        }
-
-        .carousel-slide:nth-child(3) .placeholder-icon {
-            background: linear-gradient(135deg, var(--blue), #60a5fa);
-        }
-
-        .placeholder-content h3 {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--text);
-            margin-bottom: 1rem;
-        }
-
-        .placeholder-content p {
-            font-size: 1.05rem;
-            color: #000000;
-            line-height: 1.6;
+        .screenshot-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            display: block;
         }
 
         .slide-caption {
@@ -1402,51 +1352,33 @@ function togglePreviewDetails() {
 
     <!-- ANIMATED CAROUSEL -->
     <div class="hero-carousel">
-        <!-- Slide 1 -->
+        <!-- Slide 1: Dashboard modal -->
         <div class="carousel-slide active">
-            <div class="placeholder-slide">
-                <div class="placeholder-content">
-                    <div class="placeholder-icon">
-                        <i class="fas fa-edit"></i>
-                    </div>
-                    <h3>Add cash movement</h3>
-                    <p>Your team records it from anywhere.</p>
-                </div>
+            <div class="screenshot-slide">
+                <img src="assets/images/spendnote-dashboard modal.png" alt="Create transaction modal" loading="lazy">
             </div>
             <div class="slide-caption">
                 <i class="fas fa-edit"></i> Add cash movement
             </div>
         </div>
 
-        <!-- Slide 2 -->
+        <!-- Slide 2: Receipt -->
         <div class="carousel-slide">
-            <div class="placeholder-slide">
-                <div class="placeholder-content">
-                    <div class="placeholder-icon">
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <h3>Receipt created</h3>
-                    <p>Record saved automatically.</p>
-                </div>
+            <div class="screenshot-slide">
+                <img src="assets/images/spendnote-receipt.png" alt="Cash receipt" loading="lazy" style="object-fit: contain; background: #fff;">
             </div>
             <div class="slide-caption">
-                <i class="fas fa-file-pdf"></i> Receipt created
+                <i class="fas fa-file-pdf"></i> Receipt created instantly
             </div>
         </div>
 
-        <!-- Slide 3 -->
+        <!-- Slide 3: Transaction History -->
         <div class="carousel-slide">
-            <div class="placeholder-slide">
-                <div class="placeholder-content">
-                    <div class="placeholder-icon">
-                        <i class="fas fa-paper-plane"></i>
-                    </div>
-                    <h3>Everyone sees it</h3>
-                    <p>You stay in control &mdash; without asking.</p>
-                </div>
+            <div class="screenshot-slide">
+                <img src="assets/images/spendnote-transaction history.png" alt="Transaction history" loading="lazy">
             </div>
             <div class="slide-caption">
-                <i class="fas fa-paper-plane"></i> Everyone sees it
+                <i class="fas fa-history"></i> Full history, always searchable
             </div>
         </div>
 
