@@ -448,50 +448,62 @@
         /* CAROUSEL */
         .hero-carousel {
             position: relative;
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 40px rgba(0,0,0,0.10);
+            border: 1px solid #e2e8f0;
             background: #ffffff;
         }
 
+        .carousel-track {
+            position: relative;
+            overflow: hidden;
+        }
 
         .carousel-slide {
-            display: none;
-            position: relative;
-            animation: fadeIn 0.6s ease;
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            pointer-events: none;
             z-index: 1;
         }
 
         .carousel-slide.active {
-            display: block;
+            position: relative;
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 2;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+        .carousel-slide.active .screenshot-slide img {
+            animation: subtleZoom 7s ease-out forwards;
+        }
+
+        @keyframes subtleZoom {
+            from { transform: scale(1.03); }
+            to   { transform: scale(1); }
         }
 
         .screenshot-slide {
             width: 100%;
             overflow: hidden;
             position: relative;
-            background: #f8fafc;
+            background: #ffffff;
         }
 
         .screenshot-slide img {
             width: 100%;
             height: auto;
             display: block;
-            object-position: top center;
-            position: relative;
-            z-index: 1;
+            transform-origin: top center;
         }
 
         .slide-caption-bar {
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 0.6rem 1rem;
+            justify-content: space-between;
+            padding: 0.6rem 1.25rem;
             background: #f8fafc;
             border-top: 1px solid #e2e8f0;
         }
@@ -513,20 +525,19 @@
 
         .carousel-dots {
             display: flex;
-            justify-content: center;
-            gap: 7px;
-            padding: 0.5rem 0 0.65rem;
-            background: #f8fafc;
+            align-items: center;
+            gap: 6px;
         }
 
         .dot {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: #cbd5e1;
             cursor: pointer;
             transition: all 0.3s;
             border: none;
+            flex-shrink: 0;
         }
 
         .dot:hover {
@@ -535,8 +546,8 @@
 
         .dot.active {
             background: var(--primary);
-            width: 20px;
-            border-radius: 4px;
+            width: 18px;
+            border-radius: 3px;
         }
 
         /* FEATURES SECTION */
@@ -1340,41 +1351,37 @@ function togglePreviewDetails() {
 
     <!-- ANIMATED CAROUSEL -->
     <div class="hero-carousel">
-        <!-- Slide 1: Dashboard -->
-        <div class="carousel-slide active">
-            <div class="screenshot-slide">
-                <img src="assets/images/spendnote-dashboard.png" alt="SpendNote dashboard" loading="lazy">
+        <div class="carousel-track">
+            <!-- Slide 1: Dashboard -->
+            <div class="carousel-slide active">
+                <div class="screenshot-slide">
+                    <img src="assets/images/spendnote-dashboard.png" alt="SpendNote dashboard" loading="lazy">
+                </div>
             </div>
-            <div class="slide-caption-bar">
-                <span class="slide-caption"><i class="fas fa-th-large"></i> Dashboard overview</span>
+
+            <!-- Slide 2: Transaction History -->
+            <div class="carousel-slide">
+                <div class="screenshot-slide">
+                    <img src="assets/images/spendnote-transaction history.png" alt="Transaction history" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Slide 3: Receipt -->
+            <div class="carousel-slide">
+                <div class="screenshot-slide">
+                    <img src="assets/images/spendnote-receipt.png" alt="Cash receipt" loading="lazy">
+                </div>
             </div>
         </div>
 
-        <!-- Slide 2: Transaction History -->
-        <div class="carousel-slide">
-            <div class="screenshot-slide">
-                <img src="assets/images/spendnote-transaction history.png" alt="Transaction history" loading="lazy">
+        <!-- Caption bar with dots on right -->
+        <div class="slide-caption-bar">
+            <span class="slide-caption" id="carouselCaption"><i class="fas fa-th-large"></i> Dashboard overview</span>
+            <div class="carousel-dots">
+                <span class="dot active" data-slide="0"></span>
+                <span class="dot" data-slide="1"></span>
+                <span class="dot" data-slide="2"></span>
             </div>
-            <div class="slide-caption-bar">
-                <span class="slide-caption"><i class="fas fa-history"></i> Full history, always searchable</span>
-            </div>
-        </div>
-
-        <!-- Slide 3: Receipt -->
-        <div class="carousel-slide">
-            <div class="screenshot-slide">
-                <img src="assets/images/spendnote-receipt.png" alt="Cash receipt" loading="lazy">
-            </div>
-            <div class="slide-caption-bar">
-                <span class="slide-caption"><i class="fas fa-file-pdf"></i> Receipt created instantly</span>
-            </div>
-        </div>
-
-        <!-- Dots -->
-        <div class="carousel-dots">
-            <span class="dot active" data-slide="0"></span>
-            <span class="dot" data-slide="1"></span>
-            <span class="dot" data-slide="2"></span>
         </div>
     </div>
 </section>
@@ -1691,14 +1698,22 @@ function togglePreviewDetails() {
     const dots = document.querySelectorAll('.dot');
     let autoplayInterval;
 
+    const captions = [
+        '<i class="fas fa-th-large"></i> Dashboard overview',
+        '<i class="fas fa-history"></i> Full transaction history',
+        '<i class="fas fa-file-pdf"></i> Receipt in seconds'
+    ];
+    const captionEl = document.getElementById('carouselCaption');
+
     function showSlide(n) {
         slides.forEach(s => s.classList.remove('active'));
         dots.forEach(d => d.classList.remove('active'));
-        
+
         currentSlide = (n + slides.length) % slides.length;
-        
+
         slides[currentSlide].classList.add('active');
         dots[currentSlide].classList.add('active');
+        if (captionEl) captionEl.innerHTML = captions[currentSlide];
     }
 
     function nextSlide() {
@@ -1706,7 +1721,7 @@ function togglePreviewDetails() {
     }
 
     function startAutoplay() {
-        autoplayInterval = setInterval(nextSlide, 4000);
+        autoplayInterval = setInterval(nextSlide, 7000);
     }
 
     function stopAutoplay() {
