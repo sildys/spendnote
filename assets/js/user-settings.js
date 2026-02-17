@@ -32,6 +32,7 @@ const USER_FULLNAME_KEY = 'spendnote.user.fullName.v1';
 let avatarPersistTimer = null;
 let avatarProfileColumnsSupported = null;
 let avatarStorageUserId = '';
+let authAvatarMetaSanitized = false;
 let avatarDragActive = false;
 let avatarDragStartX = 0;
 let avatarDragStartY = 0;
@@ -168,17 +169,37 @@ const profileObjectHasAvatarColumns = (profile) => {
         || Object.prototype.hasOwnProperty.call(profile, 'avatar_color');
 };
 
+const isHttpAvatarUrl = (value) => /^https?:\/\//i.test(String(value || '').trim());
+const isDataAvatarUrl = (value) => /^data:/i.test(String(value || '').trim());
+
 const updateAuthAvatarMetadata = async (payload) => {
     if (!window.supabaseClient?.auth?.updateUser) return false;
     try {
-        const user = await window.auth?.getCurrentUser?.({ force: true });
+        let user = null;
+        try {
+            user = await window.auth?.getCurrentUser?.();
+        } catch (_) {
+            user = null;
+        }
+        if (!user) {
+            try {
+                const { data: { session } } = await window.supabaseClient.auth.getSession();
+                user = session?.user || null;
+            } catch (_) {
+                user = null;
+            }
+        }
+        if (!user) return false;
+
         const currentMeta = (user?.user_metadata && typeof user.user_metadata === 'object')
             ? user.user_metadata
             : {};
         const nextMeta = { ...currentMeta };
 
         if (Object.prototype.hasOwnProperty.call(payload, 'avatar_url')) {
-            nextMeta.avatar_url = payload.avatar_url || null;
+            const rawAvatarUrl = String(payload.avatar_url || '').trim();
+            // Never persist data URLs into auth metadata (can bloat JWT/session and break API requests).
+            nextMeta.avatar_url = isHttpAvatarUrl(rawAvatarUrl) ? rawAvatarUrl : null;
         }
         if (Object.prototype.hasOwnProperty.call(payload, 'avatar_settings')) {
             nextMeta.avatar_settings = payload.avatar_settings || null;
@@ -204,6 +225,35 @@ const updateAuthAvatarMetadata = async (payload) => {
     }
 };
 
+const sanitizeLegacyAuthAvatarMetadata = async () => {
+    if (authAvatarMetaSanitized) return false;
+
+    let user = null;
+    try {
+        user = await window.auth?.getCurrentUser?.();
+    } catch (_) {
+        user = null;
+    }
+    if (!user) {
+        try {
+            const { data: { session } } = await window.supabaseClient?.auth?.getSession();
+            user = session?.user || null;
+        } catch (_) {
+            user = null;
+        }
+    }
+
+    const metaAvatarUrl = String(user?.user_metadata?.avatar_url || '').trim();
+    if (!metaAvatarUrl || !isDataAvatarUrl(metaAvatarUrl)) {
+        authAvatarMetaSanitized = true;
+        return false;
+    }
+
+    const ok = await updateAuthAvatarMetadata({ avatar_url: null });
+    if (ok) authAvatarMetaSanitized = true;
+    return ok;
+};
+
 const persistAvatarPayload = async (payload) => {
     let savedProfileRow = false;
 
@@ -226,7 +276,15 @@ const persistAvatarPayload = async (payload) => {
         }
     }
 
-    const savedMetadata = await updateAuthAvatarMetadata(payload);
+    let savedMetadata = false;
+    const useMetadataFallback = avatarProfileColumnsSupported === false;
+    if (useMetadataFallback) {
+        savedMetadata = await updateAuthAvatarMetadata(payload);
+    } else {
+        // Best-effort cleanup for old sessions that still carry data-URL avatar_url in auth metadata.
+        sanitizeLegacyAuthAvatarMetadata().catch(() => {});
+    }
+
     return savedProfileRow || savedMetadata;
 };
 
@@ -454,6 +512,9 @@ const loadProfile = async () => {
     if (!authUser) {
         setAvatarStorageUserId('');
     }
+
+    // One-time cleanup for legacy oversized avatar metadata (best effort).
+    sanitizeLegacyAuthAvatarMetadata().catch(() => {});
 
     fillProfile(mergedProfile);
     // Sync DB logo to localStorage so it works on all devices
