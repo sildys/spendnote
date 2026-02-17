@@ -58,12 +58,29 @@ let dashboardTxController = null;
 async function waitForDashboardAuthUser(maxMs = 3200) {
     const start = Date.now();
     while ((Date.now() - start) < maxMs) {
+        let user = null;
         try {
-            const user = await window.auth?.getCurrentUser?.({ force: true });
-            if (user) return user;
+            user = await window.auth?.getCurrentUser?.();
         } catch (_) {
-            // ignore
+            user = null;
         }
+
+        if (!user) {
+            try {
+                const { data: { session } } = await window.supabaseClient?.auth?.getSession();
+                user = session?.user || null;
+                if (user && window.auth?.__userCache) {
+                    window.auth.__userCache.user = user;
+                    window.auth.__userCache.ts = Date.now();
+                    window.auth.__userCache.promise = null;
+                }
+            } catch (_) {
+                user = null;
+            }
+        }
+
+        if (user) return user;
+
         await new Promise((resolve) => setTimeout(resolve, 120));
     }
     return null;

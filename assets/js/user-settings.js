@@ -386,12 +386,26 @@ const fillProfile = (p) => {
 const loadProfile = async () => {
     let authUser = null;
     try {
-        authUser = await window.auth?.getCurrentUser?.({ force: true });
-        setAvatarStorageUserId(authUser?.id || '');
+        authUser = await window.auth?.getCurrentUser?.();
     } catch (_) {
-        authUser = null;
-        setAvatarStorageUserId('');
+        // ignore
     }
+
+    if (!authUser) {
+        try {
+            const { data: { session } } = await window.supabaseClient?.auth?.getSession();
+            authUser = session?.user || null;
+            if (authUser && window.auth?.__userCache) {
+                window.auth.__userCache.user = authUser;
+                window.auth.__userCache.ts = Date.now();
+                window.auth.__userCache.promise = null;
+            }
+        } catch (_) {
+            authUser = null;
+        }
+    }
+
+    setAvatarStorageUserId(authUser?.id || '');
 
     let p = null;
     if (authUser?.id && window.supabaseClient) {
@@ -420,8 +434,6 @@ const loadProfile = async () => {
     let mergedProfile = p ? { ...p } : null;
 
     try {
-        authUser = authUser || await window.auth?.getCurrentUser?.({ force: true });
-        setAvatarStorageUserId(authUser?.id || '');
         const meta = (authUser?.user_metadata && typeof authUser.user_metadata === 'object') ? authUser.user_metadata : null;
         if (meta) {
             if (!mergedProfile) mergedProfile = {};
@@ -785,28 +797,7 @@ const initUserSettingsPage = async () => {
         const check = () => window.db?.profiles ? resolve() : setTimeout(check, 50);
         check();
     });
-    const waitForAuthUser = () => new Promise(resolve => {
-        const startedAt = Date.now();
-        const tick = async () => {
-            try {
-                const user = await window.auth?.getCurrentUser?.({ force: true });
-                if (user) {
-                    resolve(user);
-                    return;
-                }
-            } catch (_) {
-                // ignore
-            }
-            if (Date.now() - startedAt > 5000) {
-                resolve(null);
-                return;
-            }
-            setTimeout(tick, 120);
-        };
-        tick();
-    });
     await waitForDb();
-    await waitForAuthUser();
 
     // Load data (do not block logo editor init if any call fails)
     try {
