@@ -125,7 +125,7 @@ const QUICK_PRESET = {
             'email': 'spendnote-email-receipt.html'
         };
         const params = new URLSearchParams();
-        params.append('v', 'receipt-20260217-0122');
+        params.append('v', 'receipt-20260218-0015');
         const currentTxId = getCurrentTxId();
         if (currentTxId) params.append('txId', currentTxId);
         params.append('bootstrap', '1');
@@ -791,7 +791,7 @@ html, body { height: auto !important; overflow: auto !important; }
                 const cashBoxCode = cbSeq ? `SN-${String(cbSeq).padStart(3, '0')}` : '—';
 
                 const txDate = tx.transaction_date || tx.created_at;
-                const dateStr = txDate ? new Date(txDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+                const dateStr = txDate ? new Date(txDate).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : '—';
 
                 const companyName = safeText(profile?.company_name || profile?.full_name || cashBox?.name, '—');
                 const companyAddress = safeText(profile?.address, '');
@@ -809,7 +809,7 @@ html, body { height: auto !important; overflow: auto !important; }
                 const notesHtml = notesText ? `<div style="background:#f0f9ff;border-left:4px solid #059669;padding:16px;border-radius:4px;margin-bottom:20px;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#666;margin-bottom:8px;">Notes</div><div style="font-size:13px;color:#333;line-height:1.6;">${notesText}</div></div>` : '';
 
                 const pdfParams = new URLSearchParams();
-                pdfParams.set('v', 'receipt-20260206-23');
+                pdfParams.set('v', 'receipt-20260218-0015');
                 pdfParams.set('demo', '1');
                 pdfParams.set('download', '1');
                 pdfParams.set('preview', '0');
