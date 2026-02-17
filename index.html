@@ -461,23 +461,21 @@
         }
 
         .carousel-slide {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-            pointer-events: none;
-            z-index: 1;
+            display: none;
         }
 
         .carousel-slide.active {
-            position: relative;
-            opacity: 1;
-            pointer-events: auto;
-            z-index: 2;
+            display: block;
+            animation: slideIn 0.5s ease;
         }
 
         .carousel-slide.active .screenshot-slide img {
             animation: subtleZoom 7s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
         }
 
         @keyframes subtleZoom {
