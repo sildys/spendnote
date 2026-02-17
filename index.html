@@ -488,27 +488,31 @@
             z-index: 1;
         }
 
-        .slide-caption {
-            position: relative;
-            color: white;
-            padding: 0.75rem 1.25rem;
-            font-weight: 700;
-            font-size: 0.95rem;
+        .slide-caption-bar {
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding: 0.65rem 1rem;
+            background: #0f172a;
+        }
+
+        .slide-caption {
+            display: inline-flex;
+            align-items: center;
             gap: 0.5rem;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 999px;
+            padding: 0.35rem 1rem;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.2px;
         }
 
-        .carousel-slide:nth-child(1) .slide-caption {
-            background: rgba(5, 150, 105, 0.95);
-        }
-
-        .carousel-slide:nth-child(2) .slide-caption {
-            background: rgba(245, 158, 11, 0.95);
-        }
-
-        .carousel-slide:nth-child(3) .slide-caption {
-            background: rgba(59, 130, 246, 0.95);
+        .slide-caption i {
+            font-size: 0.75rem;
+            opacity: 0.7;
         }
 
         .carousel-dots {
@@ -516,7 +520,7 @@
             justify-content: center;
             gap: 8px;
             padding: 0.5rem 0 0.75rem;
-            background: inherit;
+            background: #0f172a;
         }
 
         .dot {
@@ -1340,23 +1344,23 @@ function togglePreviewDetails() {
 
     <!-- ANIMATED CAROUSEL -->
     <div class="hero-carousel">
-        <!-- Slide 1: Transaction History -->
+        <!-- Slide 1: Dashboard -->
         <div class="carousel-slide active">
-            <div class="screenshot-slide">
-                <img src="assets/images/spendnote-transaction history.png" alt="Transaction history" loading="lazy">
-            </div>
-            <div class="slide-caption">
-                <i class="fas fa-history"></i> Full history, always searchable
-            </div>
-        </div>
-
-        <!-- Slide 2: Dashboard -->
-        <div class="carousel-slide">
             <div class="screenshot-slide">
                 <img src="assets/images/spendnote-dashboard.png" alt="SpendNote dashboard" loading="lazy">
             </div>
-            <div class="slide-caption">
-                <i class="fas fa-edit"></i> Add cash movement in seconds
+            <div class="slide-caption-bar">
+                <span class="slide-caption"><i class="fas fa-th-large"></i> Dashboard overview</span>
+            </div>
+        </div>
+
+        <!-- Slide 2: Transaction History -->
+        <div class="carousel-slide">
+            <div class="screenshot-slide">
+                <img src="assets/images/spendnote-transaction history.png" alt="Transaction history" loading="lazy">
+            </div>
+            <div class="slide-caption-bar">
+                <span class="slide-caption"><i class="fas fa-history"></i> Full history, always searchable</span>
             </div>
         </div>
 
@@ -1365,8 +1369,8 @@ function togglePreviewDetails() {
             <div class="screenshot-slide">
                 <img src="assets/images/spendnote-receipt.png" alt="Cash receipt" loading="lazy">
             </div>
-            <div class="slide-caption">
-                <i class="fas fa-file-pdf"></i> Receipt created instantly
+            <div class="slide-caption-bar">
+                <span class="slide-caption"><i class="fas fa-file-pdf"></i> Receipt created instantly</span>
             </div>
         </div>
 
