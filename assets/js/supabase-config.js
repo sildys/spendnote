@@ -286,9 +286,13 @@ const __spendnoteTryAcceptPendingInviteToken = async () => {
         } catch (e2) {
             if (__spendnoteInviteDebug) {
                 console.error('[invite-accept] BOTH token RPCs FAILED. v2:', e1?.message || e1, 'fb:', e2?.message || e2);
-                console.warn('[invite-accept] Trying auto-accept by email as last resort...');
+                console.warn('[invite-accept] Clearing stale invite token to prevent repeated retries.');
             }
-            await __spendnoteAutoAcceptMyInvites();
+            try {
+                localStorage.removeItem(__spendnoteInviteTokenKey);
+            } catch (_) {
+                // ignore
+            }
         }
     }
 };
