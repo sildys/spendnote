@@ -137,6 +137,62 @@
             color: var(--text-muted);
         }
 
+        /* MOBILE CONTACT CARDS */
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            text-decoration: none;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .contact-card:last-child {
+            border-bottom: none;
+        }
+
+        .contact-card:active {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .contact-card-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--active, #059669), #10b981);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            flex-shrink: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .contact-card-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .contact-card-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .contact-card-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
         /* TABLE */
         .table-container {
             background: var(--surface);
@@ -549,7 +605,7 @@
                 gap: 12px;
             }
 
-            /* Tablet: hide checkbox (1), ID (2), Contact/Address (4), Boxes (5), Last Tx (7) */
+            /* Tablet: hide less-important columns */
             .Contacts-table thead th:nth-child(1),
             .Contacts-table tbody td:nth-child(1),
             .Contacts-table thead th:nth-child(2),
@@ -561,18 +617,6 @@
             .Contacts-table thead th:nth-child(7),
             .Contacts-table tbody td:nth-child(7) {
                 display: none;
-            }
-
-            /* Action column: icon-only */
-            .Contacts-table .tx-action span {
-                display: none;
-            }
-
-            .Contacts-table .tx-action {
-                padding: 6px 9px;
-                min-width: 32px;
-                justify-content: center;
-                gap: 0;
             }
 
             .Contacts-table {
@@ -585,23 +629,13 @@
                 padding: 8px 12px;
             }
 
-            /* Mobile: strict 3-col - Name (3), # (6), Action (8) */
-            /* Hide: checkbox (1), ID (2), Contact (4), Boxes (5), Last Tx (7) */
-            .Contacts-table thead th:nth-child(1),
-            .Contacts-table tbody td:nth-child(1),
-            .Contacts-table thead th:nth-child(2),
-            .Contacts-table tbody td:nth-child(2),
-            .Contacts-table thead th:nth-child(4),
-            .Contacts-table tbody td:nth-child(4),
-            .Contacts-table thead th:nth-child(5),
-            .Contacts-table tbody td:nth-child(5),
-            .Contacts-table thead th:nth-child(7),
-            .Contacts-table tbody td:nth-child(7) {
+            /* Mobile: hide table, show card list */
+            .table-wrapper {
                 display: none;
             }
 
-            .Contacts-table {
-                min-width: 0;
+            .contact-card-list {
+                display: flex;
             }
         }
     </style></head>
@@ -692,6 +726,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- Mobile card list — shown instead of table on small screens -->
+        <div id="contactCardList" class="tx-card-list contact-card-list" aria-label="Contacts"></div>
 
         <div class="table-wrapper">
             <table class="Contacts-table">
@@ -1045,6 +1082,8 @@
             }
 
             tableBody.innerHTML = '';
+            const contactCardList = document.getElementById('contactCardList');
+            if (contactCardList) contactCardList.innerHTML = '';
 
             (Array.isArray(contacts) ? contacts : []).forEach((c) => {
                 const displayId = formatContactDisplayId(c?.sequence_number);
@@ -1142,7 +1181,29 @@
                         </td>
                 `;
                 tableBody.appendChild(tr);
+
+                // ── Mobile: contact card ──
+                if (contactCardList) {
+                    const initials = name ? name.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2) : '?';
+                    const card = document.createElement('a');
+                    card.className = 'contact-card';
+                    card.href = href;
+                    card.innerHTML = `
+                        <div class="contact-card-avatar">${escapeHtml(initials)}</div>
+                        <div class="contact-card-body">
+                            <div class="contact-card-name">${escapeHtml(name || '—')}</div>
+                            <div class="contact-card-meta">${txCount ? txCount + ' transactions' : 'No transactions'}</div>
+                        </div>
+                        <div class="tx-card-right"><i class="fas fa-chevron-right"></i></div>
+                    `;
+                    contactCardList.appendChild(card);
+                }
             });
+
+            // Clear card list if no contacts
+            if (contactCardList && !contacts.length) {
+                contactCardList.innerHTML = '<div class="tx-card-empty">No contacts found.</div>';
+            }
         }
 
         // Add Contact button
