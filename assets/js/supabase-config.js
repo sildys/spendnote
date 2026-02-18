@@ -2073,17 +2073,31 @@ var db = {
                     // #endregion
                     const msg = String(attemptJoined.error?.message || '');
                     const detail = String(attemptJoined.error?.details || '');
+                    const code = String(attemptJoined.error?.code || '');
+                    const status = Number(attemptJoined.error?.status || attemptJoined.status || 0);
                     const isSchemaCacheRelationshipError =
                         msg.includes('Could not find a relationship') ||
                         msg.includes('schema cache') ||
                         detail.includes('Could not find a relationship') ||
                         detail.includes('schema cache') ||
-                        String(attemptJoined.error?.code || '') === 'PGRST200';
+                        code === 'PGRST200';
 
-                    if (isSchemaCacheRelationshipError) {
+                    // Older/partial schemas can also fail joined selects with 400 (e.g. missing joined columns).
+                    const isJoinedStructureError =
+                        isSchemaCacheRelationshipError ||
+                        status === 400 ||
+                        code === 'PGRST100' ||
+                        code === '42703' ||
+                        code === '42P01' ||
+                        msg.includes('does not exist') ||
+                        detail.includes('does not exist');
+
+                    if (isJoinedStructureError) {
                         transactionsJoinSupported = false;
                     } else {
-                        console.warn('Joined transaction fetch failed, falling back to plain select:', attemptJoined.error);
+                        if (window.SpendNoteDebug) {
+                            console.warn('Joined transaction fetch failed, falling back to plain select:', attemptJoined.error);
+                        }
                     }
                 }
             }
