@@ -776,6 +776,7 @@
             }
         }
 
+        /* 768px - tablet: hide Contact ID, Created By */
         @media (max-width: 768px) {
             .page-header {
                 flex-direction: column;
@@ -788,15 +789,64 @@
             }
 
             .stats-bar {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
 
             table {
-                font-size: 13px;
+                font-size: 12px;
             }
 
             th, td {
-                padding: 8px 10px;
+                padding: 7px 8px;
+            }
+
+            /* Hide: Contact ID (col 7), Created By (col 9) */
+            #transactionsTable thead th:nth-child(7),
+            #transactionsTable tbody td:nth-child(7),
+            #transactionsTable thead th:nth-child(9),
+            #transactionsTable tbody td:nth-child(9) {
+                display: none;
+            }
+        }
+
+        /* 375px - mobile: also hide Cash Box (col 5), Contact (col 6) */
+        @media (max-width: 480px) {
+            .stats-bar {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .app-container {
+                padding: 12px;
+            }
+
+            /* Hide: Cash Box (col 5), Contact (col 6), Contact ID (col 7), Created By (col 9) */
+            #transactionsTable thead th:nth-child(5),
+            #transactionsTable tbody td:nth-child(5),
+            #transactionsTable thead th:nth-child(6),
+            #transactionsTable tbody td:nth-child(6),
+            #transactionsTable thead th:nth-child(7),
+            #transactionsTable tbody td:nth-child(7),
+            #transactionsTable thead th:nth-child(9),
+            #transactionsTable tbody td:nth-child(9) {
+                display: none;
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .pagination-controls {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .filter-section {
+                display: none;
+            }
+
+            .filter-toggle-btn {
+                display: flex;
             }
         }
     </style>

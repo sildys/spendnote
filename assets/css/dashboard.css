@@ -4114,3 +4114,96 @@ tr:hover [data-category-tag] {
     font-style: italic;
 }
 
+/* ============================================
+   RESPONSIVE - Dashboard
+   ============================================ */
+
+/* 1280px - large desktop: no changes needed */
+
+/* 768px - tablet */
+@media (max-width: 768px) {
+    .app-container {
+        padding: 12px 16px;
+    }
+
+    .main-content {
+        gap: 12px;
+    }
+
+    /* Cash box cards: 2 columns */
+    .cash-boxes-grid,
+    .swiper-slide {
+        min-width: 0;
+    }
+
+    /* Latest transactions table: hide Created By, Description */
+    #latestTransactionsTable thead th:nth-child(6),
+    #latestTransactionsTable tbody td:nth-child(6),
+    #latestTransactionsTable thead th:nth-child(7),
+    #latestTransactionsTable tbody td:nth-child(7) {
+        display: none;
+    }
+
+    /* Modal: full width */
+    .modal-content,
+    #createTransactionModal .modal-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        border-radius: 16px 16px 0 0 !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: auto !important;
+        max-height: 92vh;
+        overflow-y: auto;
+    }
+
+    .modal-overlay,
+    #createTransactionModal {
+        align-items: flex-end !important;
+    }
+}
+
+/* 480px - mobile */
+@media (max-width: 480px) {
+    .app-container {
+        padding: 8px 12px;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    /* Latest transactions: hide Cash Box, Contact, Description, Created By */
+    #latestTransactionsTable thead th:nth-child(4),
+    #latestTransactionsTable tbody td:nth-child(4),
+    #latestTransactionsTable thead th:nth-child(5),
+    #latestTransactionsTable tbody td:nth-child(5),
+    #latestTransactionsTable thead th:nth-child(6),
+    #latestTransactionsTable tbody td:nth-child(6),
+    #latestTransactionsTable thead th:nth-child(7),
+    #latestTransactionsTable tbody td:nth-child(7) {
+        display: none;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Stats bar: 2x2 grid */
+    .stats-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Invite banner: stack */
+    .invite-banner-compact {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
+

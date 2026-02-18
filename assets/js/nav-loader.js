@@ -23,12 +23,15 @@ const NAV_HTML = `
             </svg>
             <span>SpendNote</span>
         </a>
-        <ul class="nav-links">
+        <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
             <li><a href="dashboard.html" class="nav-cash-item" data-page="dashboard">Dashboard</a></li>
             <li><a href="spendnote-cash-box-list.html" class="nav-cash-item" data-page="cash-boxes">Cash Boxes</a></li>
             <li><a href="spendnote-transaction-history.html" id="navTransactions" class="nav-cash-item" data-page="transactions">Transactions</a></li>
             <li><a href="spendnote-contact-list.html" class="nav-cash-item" data-page="contacts">Contacts</a></li>
-            <li>
+            <li class="nav-mobile-new-tx">
                 <button class="btn btn-primary nav-new-transaction-btn" id="addTransactionBtn">
                     <i class="fas fa-plus"></i>
                     <span class="btn-text">New Transaction</span>
@@ -98,6 +101,37 @@ function initNavEvents() {
         return;
     }
     window.__spendnoteNavEventsBound = true;
+
+    // Hamburger menu toggle
+    const hamburger = document.getElementById('navHamburger');
+    const navLinks = document.getElementById('navLinks');
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = navLinks.classList.toggle('nav-open');
+            hamburger.classList.toggle('nav-hamburger--open', isOpen);
+            hamburger.setAttribute('aria-expanded', String(isOpen));
+            document.body.classList.toggle('nav-mobile-open', isOpen);
+        });
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.site-nav') && navLinks.classList.contains('nav-open')) {
+                navLinks.classList.remove('nav-open');
+                hamburger.classList.remove('nav-hamburger--open');
+                hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('nav-mobile-open');
+            }
+        });
+        // Close on nav link click (mobile)
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('nav-open');
+                hamburger.classList.remove('nav-hamburger--open');
+                hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('nav-mobile-open');
+            });
+        });
+    }
 
     // User avatar dropdown (delegated)
     document.addEventListener('click', (e) => {
