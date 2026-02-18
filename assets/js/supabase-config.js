@@ -2187,19 +2187,78 @@ var db = {
     // Profiles
     profiles: {
         async getCurrent() {
-            const user = await auth.getCurrentUser();
-            if (!user) return null;
+            let user = null;
+            try {
+                user = await auth.getCurrentUser();
+            } catch (_) {
+                user = null;
+            }
+            const userId = String(user?.id || '').trim();
+            if (!userId) return null;
+            try {
+                if (typeof isUuid === 'function' && !isUuid(userId)) {
+                    return null;
+                }
+            } catch (_) {
+                // ignore
+            }
 
-            const { data, error } = await supabaseClient
-                .from('profiles')
-                .select('*')
-                .eq('id', user.id)
-                .single();
-            if (error) {
-                console.error('Error fetching profile:', error);
+            const trySelect = async () => {
+                const res = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', userId)
+                    .maybeSingle();
+                return res;
+            };
+
+            try {
+                let { data, error, status } = await trySelect();
+
+                // Missing profile is OK; avoid noisy errors.
+                if (error) {
+                    const code = String(error?.code || '');
+                    if (status === 406 || code === 'PGRST116') {
+                        error = null;
+                        data = null;
+                    }
+                }
+
+                if (!error && data) {
+                    return data;
+                }
+
+                // If profile is missing, try to auto-create once.
+                if (!error && !data) {
+                    const email = String(user?.email || '').trim();
+                    const fullNameRaw = String(user?.user_metadata?.full_name || '').trim();
+                    const fullName = fullNameRaw || (email ? email.split('@')[0] : 'User');
+
+                    if (email) {
+                        try {
+                            await supabaseClient
+                                .from('profiles')
+                                .upsert([{ id: userId, email, full_name: fullName }], { onConflict: 'id' });
+                        } catch (_) {
+                            // ignore
+                        }
+                        ({ data, error } = await trySelect());
+                        if (!error && data) {
+                            return data;
+                        }
+                    }
+                }
+
+                if (window.SpendNoteDebug && error) {
+                    console.warn('Error fetching profile:', error);
+                }
+                return null;
+            } catch (e) {
+                if (window.SpendNoteDebug) {
+                    console.warn('Error fetching profile:', e);
+                }
                 return null;
             }
-            return data;
         },
 
         async update(updates) {
