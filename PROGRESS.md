@@ -147,6 +147,13 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Landing: hero stack, browser mockup, features/pricing/footer mobile
   - All existing responsive CSS verified and extended
   - Breakpoints: 375px / 768px / 1280px
+- Transaction Detail console error storm fix (2026-02-18 session):
+  - Root cause: invite acceptance flow in `supabase-config.js` kept calling invite RPCs on normal app pages when stale invite token state was present.
+  - Reduced error noise: invite logs gated behind `window.SpendNoteDebug`.
+  - Safety guard: invite accept flow now skips all RPC calls when no explicit invite token exists.
+  - Retry storm prevention: stale invite token is cleared after dual invite RPC failure.
+  - Profile fetch stabilization: `db.profiles.getCurrent()` validates user id and handles missing rows quietly.
+  - Cache-bust: transaction detail now loads `supabase-config.js` with updated query version to ensure fix rollout.
 - Landing carousel polish (2026-02-18 session):
   - Real screenshots added: dashboard, transaction history, receipt
   - Browser mockup frame (macOS traffic lights + URL bar that updates per slide)
