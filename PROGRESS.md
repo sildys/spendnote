@@ -138,6 +138,15 @@ If a chat thread freezes / context is lost: in the new thread say:
     - After signup/first valid session, auto-create a default USD Cash Box (starting balance: 0).
     - Goal: first receipt can be created in ~30 seconds with a ready-to-use USD cash box.
   - Tomorrow plan: landing polish + preview disclaimer UX + GA4 baseline + Google Search Console setup.
+- Responsive implementation (2026-02-18 session):
+  - Hamburger menu: nav-loader.js + main.css + app-layout.css (375/768px)
+  - Transaction History: column hiding at 768px (Contact ID, Created By) and 480px (+ Cash Box, Contact)
+  - Dashboard: table column hiding, modal bottom-sheet on mobile
+  - Contact List: column hiding at 768px and 480px
+  - Cash Box List/Settings: mobile layout fixes
+  - Landing: hero stack, browser mockup, features/pricing/footer mobile
+  - All existing responsive CSS verified and extended
+  - Breakpoints: 375px / 768px / 1280px
 - Landing carousel polish (2026-02-18 session):
   - Real screenshots added: dashboard, transaction history, receipt
   - Browser mockup frame (macOS traffic lights + URL bar that updates per slide)
