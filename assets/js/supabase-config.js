@@ -483,7 +483,9 @@ try {
     })();
 } catch (_) {}
 
-let transactionsJoinSupported = true;
+// Default off: some deployments return 400 on joined transaction select.
+// Plain fetch + enrich path is stable across schemas.
+let transactionsJoinSupported = false;
 
 function isUuid(value) {
     const v = String(value || '').trim();
