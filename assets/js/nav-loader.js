@@ -1,6 +1,30 @@
 // Nav Loader - Loads shared navigation HTML into all pages
 // This eliminates duplicate nav HTML across 10+ files
 
+const BOTTOM_NAV_HTML = `
+<nav class="bottom-nav" id="bottomNav" aria-label="Main navigation">
+    <a href="dashboard.html" class="bottom-nav-item" data-page="dashboard">
+        <span class="bottom-nav-icon"><i class="fas fa-home"></i></span>
+        <span class="bottom-nav-label">Home</span>
+    </a>
+    <a href="spendnote-transaction-history.html" class="bottom-nav-item" data-page="transactions">
+        <span class="bottom-nav-icon"><i class="fas fa-exchange-alt"></i></span>
+        <span class="bottom-nav-label">Transactions</span>
+    </a>
+    <a href="dashboard.html#new-transaction" class="bottom-nav-item bottom-nav-fab" id="bottomNavFab" data-action="new-tx">
+        <span class="bottom-nav-icon"><i class="fas fa-plus"></i></span>
+    </a>
+    <a href="spendnote-contact-list.html" class="bottom-nav-item" data-page="contacts">
+        <span class="bottom-nav-icon"><i class="fas fa-users"></i></span>
+        <span class="bottom-nav-label">Contacts</span>
+    </a>
+    <a href="spendnote-cash-box-list.html" class="bottom-nav-item" data-page="cash-boxes">
+        <span class="bottom-nav-icon"><i class="fas fa-box"></i></span>
+        <span class="bottom-nav-label">Cash Boxes</span>
+    </a>
+</nav>
+`;
+
 const NAV_HTML = `
 <nav class="site-nav">
     <div class="nav-container">
@@ -64,6 +88,12 @@ function loadNav(containerId = 'nav-container') {
     const container = document.getElementById(containerId);
     if (container) {
         container.innerHTML = NAV_HTML;
+        // Inject bottom nav once
+        if (!document.getElementById('bottomNav')) {
+            const bnEl = document.createElement('div');
+            bnEl.innerHTML = BOTTOM_NAV_HTML;
+            document.body.appendChild(bnEl.firstElementChild);
+        }
         highlightCurrentPage();
         initNavEvents();
 
@@ -197,7 +227,7 @@ function initNavEvents() {
         }
     }, true);
 
-    // New Transaction button
+    // New Transaction button (top nav)
     const addTransactionBtn = document.getElementById('addTransactionBtn');
     const hasModal = Boolean(document.getElementById('createTransactionModal'));
     const canOpenModal = typeof window.openModal === 'function';
@@ -218,6 +248,22 @@ function initNavEvents() {
                 window.location.href = 'dashboard.html#new-transaction';
             });
         }
+    }
+
+    // Bottom nav FAB button
+    const bottomFab = document.getElementById('bottomNavFab');
+    if (bottomFab && !bottomFab.dataset.navBound) {
+        bottomFab.dataset.navBound = '1';
+        bottomFab.addEventListener('click', (event) => {
+            event.preventDefault();
+            const hasModalNow = Boolean(document.getElementById('createTransactionModal'));
+            const canOpenNow = typeof window.openModal === 'function';
+            if (hasModalNow && canOpenNow) {
+                window.openModal(event);
+            } else {
+                window.location.href = 'dashboard.html#new-transaction';
+            }
+        });
     }
 
     // Update user info if available
@@ -274,6 +320,15 @@ function highlightCurrentPage() {
             }
         });
     }
+
+    // Bottom nav active state
+    const bottomLinks = Array.from(document.querySelectorAll('.bottom-nav-item[data-page]'));
+    bottomLinks.forEach((link) => link.classList.remove('active'));
+    bottomLinks.forEach((link) => {
+        const page = link.dataset.page;
+        const isActive = pageMap[page]?.some((file) => currentFile === String(file).toLowerCase());
+        if (isActive) link.classList.add('active');
+    });
 }
 
 // Export
