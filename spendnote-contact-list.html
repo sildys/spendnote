@@ -549,12 +549,34 @@
                 gap: 12px;
             }
 
-            /* Hide: Contact (col 4), Boxes (col 5) */
+            /* Tablet: hide checkbox (1), ID (2), Contact/Address (4), Boxes (5), Last Tx (7) */
+            .Contacts-table thead th:nth-child(1),
+            .Contacts-table tbody td:nth-child(1),
+            .Contacts-table thead th:nth-child(2),
+            .Contacts-table tbody td:nth-child(2),
             .Contacts-table thead th:nth-child(4),
             .Contacts-table tbody td:nth-child(4),
             .Contacts-table thead th:nth-child(5),
-            .Contacts-table tbody td:nth-child(5) {
+            .Contacts-table tbody td:nth-child(5),
+            .Contacts-table thead th:nth-child(7),
+            .Contacts-table tbody td:nth-child(7) {
                 display: none;
+            }
+
+            /* Action column: icon-only */
+            .Contacts-table .tx-action span {
+                display: none;
+            }
+
+            .Contacts-table .tx-action {
+                padding: 6px 9px;
+                min-width: 32px;
+                justify-content: center;
+                gap: 0;
+            }
+
+            .Contacts-table {
+                min-width: 0;
             }
         }
 
@@ -563,7 +585,12 @@
                 padding: 8px 12px;
             }
 
-            /* Hide: Contact (col 4), Boxes (col 5), Last Tx (col 7) */
+            /* Mobile: strict 3-col - Name (3), # (6), Action (8) */
+            /* Hide: checkbox (1), ID (2), Contact (4), Boxes (5), Last Tx (7) */
+            .Contacts-table thead th:nth-child(1),
+            .Contacts-table tbody td:nth-child(1),
+            .Contacts-table thead th:nth-child(2),
+            .Contacts-table tbody td:nth-child(2),
             .Contacts-table thead th:nth-child(4),
             .Contacts-table tbody td:nth-child(4),
             .Contacts-table thead th:nth-child(5),

@@ -4136,12 +4136,39 @@ tr:hover [data-category-tag] {
         min-width: 0;
     }
 
-    /* Latest transactions table: hide Created By, Description */
-    #latestTransactionsTable thead th:nth-child(6),
-    #latestTransactionsTable tbody td:nth-child(6),
-    #latestTransactionsTable thead th:nth-child(7),
-    #latestTransactionsTable tbody td:nth-child(7) {
+    /* Latest transactions: tablet - hide ID(2), Date(3), Cash Box(4), Contact(5), Description(6), Created By(8) */
+    /* Keep: Type(1), Amount(7), Action(9) */
+    #transactionsTable thead th:nth-child(2),
+    #transactionsTable tbody td:nth-child(2),
+    #transactionsTable thead th:nth-child(3),
+    #transactionsTable tbody td:nth-child(3),
+    #transactionsTable thead th:nth-child(4),
+    #transactionsTable tbody td:nth-child(4),
+    #transactionsTable thead th:nth-child(5),
+    #transactionsTable tbody td:nth-child(5),
+    #transactionsTable thead th:nth-child(6),
+    #transactionsTable tbody td:nth-child(6),
+    #transactionsTable thead th:nth-child(8),
+    #transactionsTable tbody td:nth-child(8) {
         display: none;
+    }
+
+    /* Action column: icon-only buttons */
+    #transactionsTable .tx-actions .tx-action span {
+        display: none;
+    }
+
+    #transactionsTable .tx-actions .tx-action {
+        padding: 6px 9px;
+        min-width: 32px;
+        justify-content: center;
+        gap: 0;
+    }
+
+    /* Amount: right-align, bold */
+    #transactionsTable td:nth-child(7) {
+        font-weight: 700;
+        text-align: right;
     }
 
     /* Modal: full width */
@@ -4176,18 +4203,6 @@ tr:hover [data-category-tag] {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
-    }
-
-    /* Latest transactions: hide Cash Box, Contact, Description, Created By */
-    #latestTransactionsTable thead th:nth-child(4),
-    #latestTransactionsTable tbody td:nth-child(4),
-    #latestTransactionsTable thead th:nth-child(5),
-    #latestTransactionsTable tbody td:nth-child(5),
-    #latestTransactionsTable thead th:nth-child(6),
-    #latestTransactionsTable tbody td:nth-child(6),
-    #latestTransactionsTable thead th:nth-child(7),
-    #latestTransactionsTable tbody td:nth-child(7) {
-        display: none;
     }
 
     .table-wrapper {
