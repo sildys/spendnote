@@ -29,9 +29,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
         /* Modal header alignment fix */
-        .modal-header { padding-top: 10px !important; padding-bottom: 10px !important; align-items: center !important; }
-        .direction-primary-btn { height: 52px !important; min-height: 0 !important; max-height: 52px !important; box-sizing: border-box !important; padding-top: 0 !important; padding-bottom: 0 !important; flex-shrink: 0 !important; align-self: center !important; }
-        .cashbox-display { height: 52px !important; min-height: 0 !important; max-height: 52px !important; box-sizing: border-box !important; padding-top: 0 !important; padding-bottom: 0 !important; flex: 0 1 auto !important; align-self: center !important; overflow: hidden !important; }
+        .modal-header { display: flex !important; flex-direction: row !important; align-items: center !important; padding: 10px 24px !important; box-sizing: border-box !important; }
+        .modal-header-left { display: contents !important; }
+        .modal-header-right { display: contents !important; }
+        .modal-direction-primary { display: flex !important; gap: 8px !important; align-items: center !important; margin-right: auto !important; }
+        .direction-primary-btn { height: 52px !important; box-sizing: border-box !important; }
+        .cashbox-display { height: 52px !important; box-sizing: border-box !important; flex-shrink: 0 !important; }
     </style>
 </head>
 <body>
