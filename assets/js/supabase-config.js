@@ -1238,7 +1238,21 @@ var db = {
             }
             const { data, error } = await q.single();
             if (error) {
-                console.error('Error fetching cash box:', error);
+                const isNoRows = error?.code === 'PGRST116' || error?.status === 406 || error?.message?.includes('0 rows');
+                if (orgId && isNoRows) {
+                    // Retry without org_id filter (cash box may predate org or have null org_id)
+                    const { data: data2, error: error2 } = await supabaseClient
+                        .from('cash_boxes')
+                        .select('*')
+                        .eq('id', id)
+                        .single();
+                    if (error2) {
+                        if (window.SpendNoteDebug) console.warn('Error fetching cash box:', error2);
+                        return null;
+                    }
+                    return applyStoredCashBoxIdPrefixFallback(data2);
+                }
+                if (window.SpendNoteDebug) console.warn('Error fetching cash box:', error);
                 return null;
             }
             return applyStoredCashBoxIdPrefixFallback(data);
