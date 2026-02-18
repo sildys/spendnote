@@ -281,6 +281,21 @@
             50% { transform: translate(30px, 40px) scale(1.1); }
         }
 
+        .hero-content {
+            animation: heroTextIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes heroTextIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px) translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) translateY(0);
+            }
+        }
+
         .hero-content h1 {
             font-weight: 900;
             line-height: 1.1;
@@ -453,6 +468,19 @@
             border: 1px solid #d1d5db;
             background: #ffffff;
             width: 100%;
+            margin-top: 2.5rem;
+            animation: mockupSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes mockupSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(40px) translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) translateY(0);
+            }
         }
 
         .browser-bar {
