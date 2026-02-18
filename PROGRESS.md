@@ -43,6 +43,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [x] **DEPLOY-1** Migration plan: move from Vercel/demo domain to Cloudflare on `spendnote.app` (hosting target, caching rules)
 - [x] **DEPLOY-2** Cloudflare DNS + SSL + redirects: decide canonical host (`spendnote.app` vs `www`), configure 301s and safe HSTS
 - [x] **DEPLOY-3** Supabase for new domain: update Site URL + allowed redirect URLs; test login/signup/invite flows on `spendnote.app`
+- [x] **M1** Mobile redesign complete: bottom nav bar, card lists, modal bottom sheet, tx detail 2×2 grid (2026-02-18)
 - [x] **DEPLOY-4** Cutover rehearsal + go-live checklist: staging URL, smoke tests, rollback plan
 - [ ] **S3** Stripe integration: checkout, customer portal, webhooks, live mode rollout + enforcement activation
 - [ ] **O1** Google OAuth (later): Supabase OAuth + account linking rules + UX
@@ -51,7 +52,72 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
 - [ ] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass
 
-## Where we are now (last updated: 2026-02-18 late night / session 2)
+## Where we are now (last updated: 2026-02-18 late night / session 3 — mobile redesign)
+
+### Mobile redesign — COMPLETE (2026-02-18 session 3)
+
+Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten, nem CSS-only hack.
+
+**Változtatások:**
+
+1. **Bottom navigation bar** (`nav-loader.js` + `app-layout.css`)
+   - 5 elem: Home, Transactions, + FAB (zöld kör), Contacts, Cash Boxes
+   - Frosted glass háttér, safe-area padding (notch-os telefonok)
+   - Aktív tab: zöld ikon + kis dot indicator
+   - FAB: kiemelkedő zöld kör, press animáció
+   - Hamburger menu + top nav linkek rejtve mobilon — bottom nav veszi át
+   - User avatar dropdown: fixed pozíció a bottom nav fölé igazítva
+   - Minden oldalon egyszerre hat (nav-loader.js-ben injektálva)
+
+2. **Dashboard tx kártya-lista** (`dashboard-data.js` + `dashboard.css`)
+   - `renderRows()` most mindkét nézetet generálja: `<tr>` a táblázatba + `.tx-card` a `#txCardList`-be
+   - Mobilon: táblázat rejtve (`display:none`), kártyalista látható (`display:flex`)
+   - Kártya: ikon pill (IN/OUT/VOID), összeg jobbra, contact/description subline, dátum, chevron
+   - CSS: `@media (max-width: 768px)` vált
+
+3. **Modal bottom sheet** (`dashboard.css`)
+   - `modal-container`: `border-radius: 20px 20px 0 0`, `max-height: 92dvh`, flex column
+   - `modal-header`: sticky top, `z-index: 10`
+   - `modal-body`: `overflow-y: auto`, `-webkit-overflow-scrolling: touch`
+   - `modal-footer`: sticky bottom, `padding-bottom: env(safe-area-inset-bottom)`
+   - Inputok: `font-size: 16px !important` (iOS zoom megelőzés), `min-height: 44px`
+
+4. **Transaction History kártya-lista** (`transaction-history-data.js` + HTML)
+   - `renderTableRows()` kiterjesztve: kártyák generálása `#txCardList`-be
+   - `@media (max-width: 480px)`: táblázat rejtve, kártyalista látható
+   - Régi column-hiding CSS hack-ek eltávolítva
+
+5. **Contact lista kártya-lista** (`spendnote-contact-list.html`)
+   - Avatar initials generálás (2 betű, zöld gradient kör)
+   - `contactCardList` div a table-wrapper mellett
+   - `@media (max-width: 480px)`: táblázat rejtve, kártyalista látható
+   - Régi column-hiding CSS hack-ek eltávolítva
+
+6. **Transaction Detail mobilnézet** (`transaction-detail.css`)
+   - Összeg: `position: static`, `font-size: 36px`, középre igazítva (hero display)
+   - Action gombok: `display: grid; grid-template-columns: 1fr 1fr` (2×2 rács)
+   - Pro Options: `collapsible-content:not(.open) { display: none }` — mobilon alapból összecsukva
+   - Inputok: `font-size: 16px !important`
+
+7. **Shared tx-card CSS** (`app-layout.css`)
+   - `.tx-card-list`, `.tx-card`, `.tx-card-pill`, `.tx-card-body` stb. áthelyezve `dashboard.css`-ből `app-layout.css`-be
+   - Így tx-history és contact-list is örökli (mindkét oldal betölti az `app-layout.css`-t)
+   - `app-layout.css` cache-bust: `v14` → `v15` minden oldalon
+
+**Commitok:**
+- `2ee902e` — bottom navigation bar
+- `3b072d6` — dashboard card list + modal bottom sheet
+- `b7818bb` — transaction history card list
+- `ae03f59` — contact list card view + avatar initials
+- `48c8310` — transaction detail 2×2 grid + hero amount
+- `1651f59` — shared tx-card CSS refactor to app-layout.css
+- `f2e6f11` — cache-bust app-layout.css v15
+
+**Következő lépések (mobil):**
+- Cash box list mobilnézet (alacsony prioritás)
+- Tesztelés valódi eszközön (iOS Safari, Android Chrome)
+
+---
 
 - 2026-02-18 thread summary (cash box + receipt fixes):
   - Cash Box Settings logo persistence is now schema-compatible:

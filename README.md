@@ -7,7 +7,23 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
-## Recent engineering updates (2026-02-18)
+## Recent engineering updates (2026-02-18 — mobile redesign)
+
+- **Full mobile redesign ("profi app" feel):**
+  - **Bottom navigation bar** — replaces hamburger menu on mobile; 5 tabs: Home, Transactions, + FAB, Contacts, Cash Boxes. Frosted glass, safe-area padding, active dot indicator. Injected via `nav-loader.js` so it appears on every app page automatically.
+  - **Transaction card list** — dashboard and transaction history now render a `.tx-card` list alongside the table; on mobile the table is hidden and cards are shown. JS renderers (`dashboard-data.js`, `transaction-history-data.js`) generate both views simultaneously.
+  - **Contact card list** — contact list shows avatar initials (green gradient circle) + name + tx count on mobile instead of the table.
+  - **Modal bottom sheet** — create transaction modal slides up from the bottom on mobile; sticky header + scrollable body + sticky footer with save button; inputs forced to `font-size: 16px` to prevent iOS zoom.
+  - **Transaction detail** — amount displayed as large hero number (36px, centered); action buttons in 2×2 grid; Pro Options collapsed by default on mobile.
+  - **Shared card CSS** — `.tx-card-*` styles moved from `dashboard.css` to `app-layout.css` so all pages inherit them. `app-layout.css` bumped to `v15` across all HTML files.
+  - **Commits:** `2ee902e`, `3b072d6`, `b7818bb`, `ae03f59`, `48c8310`, `1651f59`, `f2e6f11`
+
+- **Transaction Detail 400 error fix:**
+  - `transactionsJoinSupported` defaulted to `false` — plain fetch + enrich path used always, avoiding joined query 400 errors.
+  - `supabase-config.js` broadened error detection for joined select failures.
+  - Cache-bust on `spendnote-transaction-detail.html` to force latest JS.
+
+## Recent engineering updates (2026-02-18 — cash box & receipt fixes)
 
 - **Cash Box Settings logo persistence compatibility (schema-safe):**
   - Fixed save flow so Cash Box Settings no longer fails when DB schema is missing `cash_box_logo_url`.
