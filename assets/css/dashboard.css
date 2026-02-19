@@ -2633,6 +2633,10 @@ tr:hover [data-category-tag] {
     padding: 0 22px !important;
 }
 
+#createTransactionModalContainer[data-mode="quick"] .modal-watermark {
+    display: none;
+}
+
 #createTransactionModalContainer[data-mode="quick"] .modal-body {
     padding: 12px 18px !important;
 }
