@@ -4182,10 +4182,10 @@ tr:hover [data-category-tag] {
         margin-left: auto;
     }
 
-    /* Row 2: cashbox full width */
+    /* Row 2: cashbox + watermark side by side */
     .cashbox-display {
         order: 3;
-        flex-basis: 100%;
+        flex: 1 1 0;
         min-width: 0 !important;
         max-width: none !important;
     }
@@ -4225,16 +4225,13 @@ tr:hover [data-category-tag] {
         justify-content: center;
     }
 
-    /* Watermark: visible on mobile — shows IN/OUT direction, smaller size */
+    /* Watermark: same row as cashbox, desktop size */
     .modal-watermark {
         display: block;
         order: 4;
-        flex-basis: 100%;
-        font-size: 28px;
+        flex: 0 0 auto;
+        font-size: 64px;
         line-height: 1;
-        text-align: right;
-        margin-top: -4px;
-        margin-bottom: 2px;
         pointer-events: none;
     }
 
