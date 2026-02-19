@@ -722,7 +722,7 @@ tr:hover {
     transform: translateY(-7px) rotate(-45deg);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px), (max-width: 1180px) and (pointer: coarse) {
     .nav-hamburger {
         display: flex;
     }
@@ -801,7 +801,7 @@ tr:hover {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px), (max-width: 1180px) and (pointer: coarse) {
     .site-nav .nav-links {
         gap: var(--space-md);
     }
