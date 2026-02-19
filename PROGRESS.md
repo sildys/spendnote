@@ -54,6 +54,33 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ## Where we are now (last updated: 2026-02-19 — modal header alignment fix)
 
+### Feltárt hiányosságlista (a reszponzivitás + email confirmation témán túl)
+
+> Cél: stabil beta kiadás minimális scope-pal.
+
+#### P0 — Beta előtt kötelező
+
+- [ ] **Client error tracking** bekötése (Sentry vagy ekvivalens), hogy a production JS hibák visszakövethetők legyenek.
+- [ ] **Edge Function hibamonitoring**: non-2xx hibák látható logolása + gyors hibakeresési útvonal.
+- [ ] **Formális smoke checklist** és futtatás minden release előtt: auth, create transaction, receipt preview/PDF/email.
+- [ ] **Abuse protection minimum**: rate limit email/invite endpointokra.
+- [ ] **Cloudflare baseline védelem**: minimális, biztonságos WAF/bot szabályok.
+- [ ] **Beta enforcement**: preview/free limitek tényleges enforce-ja (ne csak UI szöveg).
+
+#### P1 — Erősen ajánlott a beta stabilitáshoz
+
+- [ ] **Desktop-only kommunikáció** landing + signup felületen (amíg mobil UX teljesen stabil).
+- [ ] **Terms/Privacy beta nyelvezet** ellenőrzés/frissítés (preview státusz, korlátozások).
+- [ ] **Safari/cross-browser auth regresszió kör** (normál + private mód) release előtt.
+- [ ] **SEO/indexing hygiene**: `robots.txt`, fake `aggregateRating` eltávolítás, csak landing + 2 SEO oldal indexelhető.
+- [ ] **GA4 baseline + Search Console** alapbeállítás és mérés ellenőrzés.
+
+#### P2 — Beta után (de már látható hiány)
+
+- [ ] **Role-based settings UI** teljesítése (Owner/Admin/User differenciált felület).
+- [ ] **Cash box hozzáférés-kezelés UX** (assign/revoke) teljes körűen.
+- [ ] **Stripe/billing stack** (checkout, portal, webhook, enforcement) — beta során de-scope-olható.
+
 ### Modal header alignment fix — COMPLETE (2026-02-19)
 
 A create transaction modal fejlécében az IN/OUT gombok és a cash box selector 4px-el el voltak tolva egymáshoz képest.

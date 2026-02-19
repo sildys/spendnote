@@ -589,15 +589,30 @@ Verification note: the Contacts List stores the stats source in `window.__spendn
 
 ### Current gaps / not implemented yet
 
-- Contacts cash box filtering / cash box ID handling is not finished yet.
-- Team features (members/roles/cash box access) are not finished yet.
+This is the consolidated missing-items list that was identified (beyond responsiveness + email confirmation), grouped for beta execution.
 
-Additional UX/bug backlog:
+#### P0 — Must-have before beta
 
-- Dashboard modal: cash box selection does not propagate correctly.
-- Table column widths need adjustment.
-- "Save to Contacts" checkbox: add a short inline hint ("so you can reuse it later").
-- Footer redesign.
+- [ ] Client error tracking (Sentry or equivalent) for production JS/runtime failures.
+- [ ] Edge Function error visibility: non-2xx logging + clear debugging path.
+- [ ] Formal smoke checklist + run before each release (auth, create transaction, receipt preview/PDF/email).
+- [ ] Abuse protection baseline: rate limiting on invite/email endpoints.
+- [ ] Cloudflare baseline security: minimal WAF/bot protection rules.
+- [ ] Beta entitlement enforcement (preview/free limits enforced in code, not only UI text).
+
+#### P1 — Strongly recommended for beta stability
+
+- [ ] Desktop-only communication on landing + signup until mobile is fully stable.
+- [ ] Terms/Privacy beta wording pass (preview status + limitations).
+- [ ] Safari/cross-browser auth regression round before each release.
+- [ ] SEO/indexing hygiene: `robots.txt`, remove fake `aggregateRating`, only landing + 2 SEO pages indexable in beta.
+- [ ] GA4 baseline + Search Console setup verification.
+
+#### P2 — Post-beta (already visible gaps)
+
+- [ ] Role-based settings UI completion (Owner/Admin/User).
+- [ ] Cash box access assignment/revocation UX completion.
+- [ ] Stripe/billing stack completion (checkout, portal, webhook, enforcement).
 
 Recent UX fixes:
 
