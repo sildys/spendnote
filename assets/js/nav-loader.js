@@ -251,11 +251,17 @@ function initNavEvents() {
     }
 
     // Bottom nav FAB button
+    // On mobile (≤768px): always go to dedicated new-transaction page
+    // On desktop: open modal if available, else navigate to dashboard
     const bottomFab = document.getElementById('bottomNavFab');
     if (bottomFab && !bottomFab.dataset.navBound) {
         bottomFab.dataset.navBound = '1';
         bottomFab.addEventListener('click', (event) => {
             event.preventDefault();
+            if (window.innerWidth <= 768) {
+                window.location.href = 'spendnote-new-transaction.html';
+                return;
+            }
             const hasModalNow = Boolean(document.getElementById('createTransactionModal'));
             const canOpenNow = typeof window.openModal === 'function';
             if (hasModalNow && canOpenNow) {

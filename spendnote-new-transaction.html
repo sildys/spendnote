@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>New Transaction — SpendNote</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=12">
+    <link rel="stylesheet" href="assets/css/app-layout.css?v=15">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260219-0340">
+    <style>
+        /* =============================================
+           NEW TRANSACTION PAGE — full-screen mobile form
+           ============================================= */
+        body {
+            background: var(--bg, #f1f5f9);
+            min-height: 100dvh;
+        }
+
+        .nt-page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100dvh;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* Top bar: back button + title + date */
+        .nt-topbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: white;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .nt-back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border, #e2e8f0);
+            background: white;
+            color: var(--text, #1e293b);
+            font-size: 16px;
+            cursor: pointer;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+
+        .nt-back-btn:hover {
+            background: var(--bg, #f1f5f9);
+        }
+
+        .nt-topbar-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text, #1e293b);
+            flex: 1;
+        }
+
+        .nt-topbar-date {
+            font-size: 12px;
+            color: var(--text-muted, #64748b);
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        /* Direction header: IN/OUT + watermark */
+        .nt-direction-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px 10px;
+            background: white;
+            border-bottom: 3px solid rgba(var(--modal-dir-rgb, 5,150,105), 0.5);
+            position: sticky;
+            top: 65px;
+            z-index: 19;
+            overflow: hidden;
+        }
+
+        .nt-direction-header .modal-direction-primary {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .nt-direction-header .modal-watermark {
+            margin-left: auto;
+            font-size: 64px;
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Cashbox selector row */
+        .nt-cashbox-row {
+            padding: 10px 16px;
+            background: white;
+            border-bottom: 1px solid var(--border, #e2e8f0);
+        }
+
+        .nt-cashbox-row .cashbox-display {
+            width: 100%;
+        }
+
+        /* Scrollable form body */
+        .nt-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 16px;
+            padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Sticky footer with save buttons */
+        .nt-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--border, #e2e8f0);
+            padding: 12px 16px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+
+        .nt-footer .btn {
+            flex: 1;
+        }
+
+        /* Loading / error states */
+        .nt-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 40px 16px;
+            color: var(--text-muted, #64748b);
+            font-size: 14px;
+        }
+
+        .nt-error {
+            margin: 16px;
+            padding: 16px;
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            border-radius: 12px;
+            color: #dc2626;
+            font-size: 14px;
+        }
+
+        /* Mode toggle row */
+        .nt-mode-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nt-mode-row .modal-mode-toggle {
+            flex: 1;
+        }
+
+        /* On desktop (≥769px): redirect to dashboard */
+        @media (min-width: 769px) {
+            .nt-desktop-notice {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 16px;
+                padding: 60px 24px;
+                text-align: center;
+            }
+            .nt-desktop-notice p {
+                color: var(--text-muted, #64748b);
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="nav-container"></div>
+
+<div class="nt-page" id="ntPage">
+
+    <!-- Top bar -->
+    <div class="nt-topbar">
+        <a href="dashboard.html" class="nt-back-btn" aria-label="Back to dashboard">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <span class="nt-topbar-title">New Transaction</span>
+        <span class="nt-topbar-date" id="ntTopbarDate"></span>
+    </div>
+
+    <!-- Loading state -->
+    <div class="nt-loading" id="ntLoading">
+        <i class="fas fa-spinner fa-spin"></i>
+        Loading cash boxes...
+    </div>
+
+    <!-- Error state -->
+    <div class="nt-error" id="ntError" style="display:none;"></div>
+
+    <!-- Main content (hidden until loaded) -->
+    <div id="ntContent" style="display:none;">
+
+        <!-- Direction header: IN/OUT + watermark -->
+        <div class="nt-direction-header" id="createTransactionModalContainer" data-direction="in" data-mode="quick">
+            <div class="modal-direction-primary">
+                <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
+                <label for="modalDirectionIn" class="direction-primary-btn in" tabindex="0">
+                    <span class="quick-icon"><i class="fas fa-arrow-down"></i></span>
+                    <span>IN</span>
+                </label>
+                <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
+                <label for="modalDirectionOut" class="direction-primary-btn out" tabindex="0">
+                    <span class="quick-icon"><i class="fas fa-arrow-up"></i></span>
+                    <span>OUT</span>
+                </label>
+            </div>
+            <div class="modal-watermark" aria-hidden="true"></div>
+        </div>
+
+        <!-- Cashbox selector -->
+        <div class="nt-cashbox-row">
+            <div class="cashbox-display" id="modalCashboxDisplay">
+                <div class="cashbox-icon" id="modalCashboxIcon"></div>
+                <div class="cashbox-info">
+                    <div class="cashbox-name">
+                        <span class="cashbox-id" id="modalCashboxIdDisplay"></span>
+                        <span id="modalCashboxName">Loading...</span>
+                    </div>
+                    <div class="cashbox-balance" id="modalCashboxBalance"></div>
+                </div>
+                <div class="cashbox-arrows">
+                    <button type="button" class="cashbox-arrow" id="modalCashboxPrev" title="Previous">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    <button type="button" class="cashbox-arrow" id="modalCashboxNext" title="Next">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <input type="hidden" id="modalCashBoxId" value="">
+            </div>
+        </div>
+
+        <!-- Scrollable form body -->
+        <div class="nt-body">
+            <form id="modalTransactionForm" autocomplete="off" style="display: flex; flex-direction: column; gap: 12px;">
+                <input type="text" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
+                <input type="password" name="password" autocomplete="new-password" tabindex="-1" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
+
+                <!-- Contact Section -->
+                <div class="modal-section" style="padding: 16px;">
+                    <!-- Mode toggle + Date -->
+                    <div class="modal-mode-row nt-mode-row" style="margin-bottom: 12px;">
+                        <div class="modal-mode-toggle" id="modalModeToggle">
+                            <input type="radio" name="modalMode" id="modalModeQuick" value="quick" checked>
+                            <label for="modalModeQuick">Quick</label>
+                            <input type="radio" name="modalMode" id="modalModeDetailed" value="detailed">
+                            <label for="modalModeDetailed">Detailed</label>
+                        </div>
+                        <input type="text" id="modalDateField" class="form-control" readonly
+                            style="width:120px; flex-shrink:0; background:rgba(255,255,255,0.7); cursor:default; color:var(--text-muted); text-align:center; font-size:12px; min-height:36px; padding:4px 8px;">
+                    </div>
+
+                    <input type="hidden" id="modalDate">
+
+                    <div class="modal-contact-grid" style="display:grid; gap:12px;">
+                        <div class="form-group modal-contact-name">
+                            <label for="modalContactName">Name <span class="required">*</span></label>
+                            <input type="text" id="modalContactName" name="modalContactName"
+                                class="form-control" placeholder="Contact name"
+                                autocomplete="new-password" spellcheck="false"
+                                autocapitalize="off" autocorrect="off">
+                            <div id="ContactAutocomplete" class="autocomplete-dropdown"></div>
+                            <label for="modalSaveContact" style="display:inline-flex; align-items:center; gap:8px; margin-top:8px; font-size:12px; font-weight:600; color:var(--text-muted);">
+                                <input type="checkbox" id="modalSaveContact" style="width:14px; height:14px; accent-color:var(--active);">
+                                Save to Contacts
+                            </label>
+                        </div>
+                        <div class="form-group modal-contact-address">
+                            <label for="modalContactAddress">Address <span style="font-size:11px; color:var(--text-muted); font-weight:500;">(optional)</span></label>
+                            <textarea id="modalContactAddress" name="modalContactAddress"
+                                autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off"
+                                class="form-control modal-address-textarea"
+                                placeholder="Street (press Enter for line 2)" rows="1"></textarea>
+                        </div>
+                        <div class="form-group modal-detailed-only modal-contact-company" id="modalContactDetails">
+                            <label for="modalContactCompanyId">Other ID</label>
+                            <input type="text" id="modalContactCompanyId" class="form-control" placeholder="Other ID">
+                        </div>
+                    </div>
+                    <input type="hidden" id="modalContactId">
+                </div>
+
+                <!-- Items Section -->
+                <div class="modal-section" style="padding: 12px;">
+                    <div class="modal-section-title" id="modalItemsSectionTitle">Items</div>
+
+                    <div class="receipt-items-header" style="border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 8px;">
+                        <div id="modalItemsDescriptionHeader">Description <span class="required">*</span></div>
+                        <div>Amount <span class="required">*</span></div>
+                    </div>
+
+                    <div class="form-row-line-item" style="margin-bottom: 10px;">
+                        <div class="form-group">
+                            <div class="autocomplete-wrapper">
+                                <input type="text" class="form-input" id="modalDescription"
+                                    placeholder="Item description" autocomplete="off" required>
+                                <div class="autocomplete-dropdown" id="descriptionAutocomplete"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-with-prefix">
+                                <span class="input-prefix">$</span>
+                                <input type="number" class="form-input" id="modalAmount"
+                                    placeholder="0.00" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="add-line-item-btn modal-detailed-only" id="modalExpandItemsBtn" style="width:100%; margin-bottom:10px;">
+                        <i class="fas fa-plus-circle"></i> Add more items
+                    </button>
+
+                    <div class="line-items-container modal-detailed-only" id="modalLineItemsContainer" style="display:none;"></div>
+
+                    <div id="lineItemsTotal" style="display:flex; padding:12px 16px; background:white; border:2px solid var(--border); border-radius:10px; font-weight:800; font-size:15px; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <span style="color:var(--text);">Total</span>
+                        <span id="lineItemsTotalAmount" style="color:var(--text); font-size:18px; letter-spacing:-0.02em;">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Note Section -->
+                <details class="modal-collapsible modal-detailed-only" id="modalNoteSection" style="padding: 10px 12px;">
+                    <summary>
+                        <span class="summary-icon"><i class="fas fa-sticky-note"></i> Add note</span>
+                    </summary>
+                    <div class="modal-collapsible-content">
+                        <textarea class="form-textarea" id="modalNote"
+                            placeholder="Add any additional notes or comments" rows="2"></textarea>
+                    </div>
+                </details>
+
+                <!-- Hidden fields -->
+                <input type="hidden" id="modalTransactionId">
+
+                <!-- Add another checkbox -->
+                <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-muted); font-weight:600; cursor:pointer; user-select:none; padding: 0 4px;">
+                    <input type="checkbox" id="modalAddAnother" style="width:16px; height:16px;">
+                    <span>Add another after saving</span>
+                </label>
+            </form>
+        </div>
+
+        <!-- Sticky footer buttons -->
+        <div class="nt-footer">
+            <button type="submit" form="modalTransactionForm" class="btn btn-primary" name="action" value="done">
+                <i class="fas fa-check"></i> Save
+            </button>
+            <button type="submit" form="modalTransactionForm" class="btn btn-blue" name="action" value="done-receipt">
+                <i class="fas fa-print"></i> Save & Print
+            </button>
+        </div>
+
+    </div><!-- /ntContent -->
+</div><!-- /nt-page -->
+
+<!-- Supabase + core scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase-config.js?v=20260216-2236"></script>
+<script src="assets/js/auth-guard.js?v=20260213-1658"></script>
+<script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
+<script src="assets/js/nav-loader.js?v=20260217-0200"></script>
+<script>loadNav();</script>
+<script src="assets/js/main.js?v=20260217-2001"></script>
+<script src="assets/js/dashboard-modal.js?v=20260219-0230"></script>
+<script src="assets/js/dashboard-form.js?v=20260218-0015"></script>
+
+<script>
+(function () {
+    // =============================================
+    // NEW TRANSACTION PAGE INIT
+    // =============================================
+
+    // On desktop: redirect to dashboard (modal handles it there)
+    if (window.innerWidth >= 769) {
+        window.location.replace('dashboard.html#new-transaction');
+        return;
+    }
+
+    // Set date display
+    (function setDate() {
+        const now = new Date();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const yyyy = now.getFullYear();
+        const dateEl = document.getElementById('ntTopbarDate');
+        if (dateEl) dateEl.textContent = mm + '/' + dd + '/' + yyyy;
+        const dateField = document.getElementById('modalDateField');
+        if (dateField) {
+            dateField.value = mm + '/' + dd + '/' + yyyy;
+            dateField.dataset.fullDate = now.toISOString();
+        }
+        const dateHidden = document.getElementById('modalDate');
+        if (dateHidden) dateHidden.value = yyyy + '-' + mm + '-' + dd;
+    })();
+
+    // Build synthetic .register-card elements from cashbox data
+    // so dashboard-modal.js initModalCashboxCarousel() can find them
+    function buildRegisterCards(cashBoxes) {
+        let container = document.getElementById('ntRegisterCards');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'ntRegisterCards';
+            container.style.display = 'none';
+            document.body.appendChild(container);
+        }
+        container.innerHTML = '';
+
+        cashBoxes.forEach(function (cb) {
+            const card = document.createElement('div');
+            card.className = 'register-card';
+            card.dataset.id = cb.id;
+            card.dataset.color = cb.color || '#059669';
+            card.dataset.rgb = cb.rgb || '5, 150, 105';
+            card.dataset.displayCode = cb.display_code || cb.id_prefix || 'SN';
+            card.dataset.sequenceNumber = cb.sequence_number || '';
+            card.dataset.icon = cb.icon || 'fa-cash-register';
+            card.innerHTML =
+                '<span class="register-id">' + (cb.display_code || '') + '</span>' +
+                '<span class="register-name">' + (cb.name || 'Cash Box') + '</span>' +
+                '<span class="register-balance">' + formatBalance(cb.current_balance, cb.currency) + '</span>' +
+                '<i class="fas ' + (cb.icon || 'fa-cash-register') + '"></i>';
+            container.appendChild(card);
+        });
+
+        // Mark preferred cashbox as active
+        try {
+            const preferred = localStorage.getItem('activeCashBoxId');
+            if (preferred) {
+                const activeCard = container.querySelector('.register-card[data-id="' + preferred + '"]');
+                if (activeCard) activeCard.classList.add('active');
+            }
+        } catch (_) {}
+    }
+
+    function formatBalance(balance, currency) {
+        const n = parseFloat(balance);
+        if (!Number.isFinite(n)) return '';
+        const sym = currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : '$';
+        return sym + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    // Direction UI update (mirrors dashboard-modal.js)
+    function updateDirectionUI(direction) {
+        const container = document.getElementById('createTransactionModalContainer');
+        if (container) container.dataset.direction = direction === 'out' ? 'out' : 'in';
+    }
+
+    // Wire direction radio buttons
+    function wireDirectionButtons() {
+        document.querySelectorAll('input[name="modalDirection"]').forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                updateDirectionUI(radio.value);
+            });
+        });
+    }
+
+    // Wire cashbox prev/next
+    function wireCashboxArrows() {
+        const prevBtn = document.getElementById('modalCashboxPrev');
+        const nextBtn = document.getElementById('modalCashboxNext');
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function () {
+                if (window.modalCashBoxes && window.modalCashBoxes.length > 1) {
+                    window.modalCashBoxIndex = (window.modalCashBoxIndex - 1 + window.modalCashBoxes.length) % window.modalCashBoxes.length;
+                    if (typeof window.updateModalCashboxDisplay === 'function') window.updateModalCashboxDisplay();
+                    else if (typeof initModalCashboxCarousel === 'function') initModalCashboxCarousel();
+                }
+            });
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function () {
+                if (window.modalCashBoxes && window.modalCashBoxes.length > 1) {
+                    window.modalCashBoxIndex = (window.modalCashBoxIndex + 1) % window.modalCashBoxes.length;
+                    if (typeof window.updateModalCashboxDisplay === 'function') window.updateModalCashboxDisplay();
+                    else if (typeof initModalCashboxCarousel === 'function') initModalCashboxCarousel();
+                }
+            });
+        }
+    }
+
+    // Wire mode toggle
+    function wireModeToggle() {
+        document.querySelectorAll('input[name="modalMode"]').forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                if (typeof window.updateModalModeUI === 'function') {
+                    window.updateModalModeUI(radio.value);
+                }
+            });
+        });
+    }
+
+    // Override closeModal / loadDashboardData for page context
+    window.closeModal = function () {
+        window.location.href = 'dashboard.html';
+    };
+
+    // After successful save: navigate back (or reload for "add another")
+    const _origLoadDashboardData = window.loadDashboardData;
+    window.loadDashboardData = function () {
+        // Check "add another" checkbox
+        const addAnother = Boolean(document.getElementById('modalAddAnother')?.checked);
+        if (addAnother) {
+            window.location.reload();
+        } else {
+            window.location.href = 'dashboard.html';
+        }
+        return Promise.resolve();
+    };
+
+    // Main init: load cashboxes then init form
+    async function init() {
+        const loadingEl = document.getElementById('ntLoading');
+        const errorEl = document.getElementById('ntError');
+        const contentEl = document.getElementById('ntContent');
+
+        try {
+            // Wait for auth + db
+            let tries = 0;
+            while ((!window.auth || !window.db) && tries < 50) {
+                await new Promise(r => setTimeout(r, 100));
+                tries++;
+            }
+
+            if (!window.auth || !window.db) {
+                throw new Error('Authentication not available. Please refresh.');
+            }
+
+            const user = await window.auth.getCurrentUser();
+            if (!user) {
+                window.location.href = 'spendnote-login.html';
+                return;
+            }
+
+            // Load cashboxes
+            const result = await window.db.cashBoxes.getAll();
+            const cashBoxes = Array.isArray(result) ? result : (result?.data || []);
+
+            if (!cashBoxes.length) {
+                if (loadingEl) loadingEl.style.display = 'none';
+                if (errorEl) {
+                    errorEl.style.display = '';
+                    errorEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> You need to create a Cash Box first. <a href="spendnote-cash-box-settings.html" style="color:inherit; font-weight:700;">Create one →</a>';
+                }
+                return;
+            }
+
+            // Build synthetic register cards for dashboard-modal.js
+            buildRegisterCards(cashBoxes);
+
+            // Show content
+            if (loadingEl) loadingEl.style.display = 'none';
+            if (contentEl) contentEl.style.display = '';
+
+            // Init modal carousel (reads .register-card elements)
+            if (typeof window.openModal === 'function') {
+                // Use openModal internals by calling initModalCashboxCarousel via openModal
+                // We can't call openModal directly (it shows overlay), so init manually
+            }
+
+            // Init cashbox carousel directly
+            const cards = document.querySelectorAll('.register-card');
+            window.modalCashBoxes = [];
+            cards.forEach(function (card) {
+                if (!card.dataset.id) return;
+                const iconClass = card.dataset.icon || 'fa-cash-register';
+                let displayId = String(card.dataset.displayCode || '').trim();
+                if (!displayId) {
+                    const seq = Number(card.dataset.sequenceNumber || '');
+                    if (Number.isFinite(seq) && seq > 0) displayId = 'SN-' + String(seq).padStart(3, '0');
+                }
+                window.modalCashBoxes.push({
+                    id: card.dataset.id,
+                    name: card.querySelector('.register-name') ? card.querySelector('.register-name').textContent : 'Cash Box',
+                    displayId: displayId,
+                    color: card.dataset.color || '#059669',
+                    rgb: card.dataset.rgb || '5, 150, 105',
+                    icon: iconClass
+                });
+            });
+
+            // Set preferred cashbox index
+            let preferredId = '';
+            try { preferredId = String(localStorage.getItem('activeCashBoxId') || '').trim(); } catch (_) {}
+            const preferredIdx = preferredId
+                ? window.modalCashBoxes.findIndex(function (cb) { return String(cb.id) === preferredId; })
+                : -1;
+            window.modalCashBoxIndex = preferredIdx >= 0 ? preferredIdx : 0;
+
+            // Expose updateModalCashboxDisplay globally (from dashboard-modal.js scope)
+            // Trigger display update via the existing function
+            if (typeof window.updateModalCashboxDisplay === 'function') {
+                window.updateModalCashboxDisplay();
+            }
+
+            // Init mode from localStorage
+            if (typeof window.updateModalModeUI === 'function') {
+                const storedMode = (() => {
+                    try { return localStorage.getItem('spendnote.modalMode') === 'detailed' ? 'detailed' : 'quick'; }
+                    catch (_) { return 'quick'; }
+                })();
+                window.updateModalModeUI(storedMode, { persist: false });
+            }
+
+            // Wire events
+            wireDirectionButtons();
+            wireCashboxArrows();
+            wireModeToggle();
+
+            // Init form submit
+            if (typeof initTransactionForm === 'function') {
+                initTransactionForm();
+            }
+
+            // Focus first direction button
+            const firstBtn = document.querySelector('.direction-primary-btn');
+            if (firstBtn) firstBtn.focus();
+
+        } catch (err) {
+            if (loadingEl) loadingEl.style.display = 'none';
+            if (errorEl) {
+                errorEl.style.display = '';
+                errorEl.textContent = err.message || 'Failed to load. Please refresh.';
+            }
+        }
+    }
+
+    // Start after DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+</script>
+</body>
+</html>
