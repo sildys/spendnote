@@ -4163,6 +4163,44 @@ tr:hover [data-category-tag] {
         z-index: 10;
         background: var(--surface);
         border-radius: 20px 20px 0 0;
+        /* Two-row layout: wrap direction+close on row 1, cashbox on row 2 */
+        flex-wrap: wrap;
+        height: auto !important;
+        padding: 12px 16px !important;
+        gap: 8px;
+    }
+
+    /* Row 1: direction buttons (left) + close button (right) */
+    .modal-direction-primary {
+        order: 1;
+        margin-right: 0;
+        flex: 1 1 auto;
+    }
+
+    .modal-close {
+        order: 2;
+        margin-left: auto;
+    }
+
+    /* Row 2: cashbox full width */
+    .cashbox-display {
+        order: 3;
+        flex-basis: 100%;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    /* Direction buttons: flexible width on mobile */
+    .direction-primary-btn {
+        width: auto;
+        flex: 1;
+        min-width: 0;
+        justify-content: center;
+    }
+
+    /* Watermark: hidden on mobile (decorative, takes space) */
+    .modal-watermark {
+        display: none;
     }
 
     .modal-body {
