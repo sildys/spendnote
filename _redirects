@@ -1,5 +1,7 @@
 /favicon.ico /favicon.svg 200
 
+/app /dashboard 302
+/app/ /dashboard 302
 /login /spendnote-login 200
 /signup /spendnote-signup 200
 /settings /spendnote-user-settings 200

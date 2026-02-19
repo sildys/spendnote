@@ -309,7 +309,7 @@
         <div class="auth-card">
             <!-- Logo -->
             <div class="auth-logo">
-                <a href="dashboard.html" class="logo-mark">
+                <a href="/" class="logo-mark">
                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#logo-gradient)"/>
                         <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
@@ -492,6 +492,28 @@
         const resendBtn = document.getElementById('resendBtn');
 
         let lastAttemptEmail = '';
+        const DEFAULT_POST_LOGIN_PATH = '/app';
+
+        const getSafeReturnTo = () => {
+            try {
+                const sp = new URLSearchParams(window.location.search);
+                const raw = String(sp.get('returnTo') || '').trim();
+                if (!raw) return DEFAULT_POST_LOGIN_PATH;
+                if (!raw.startsWith('/') || raw.startsWith('//')) return DEFAULT_POST_LOGIN_PATH;
+
+                const lowered = raw.toLowerCase();
+                if (lowered === '/' || lowered.startsWith('/login') || lowered.startsWith('/spendnote-login')) {
+                    return DEFAULT_POST_LOGIN_PATH;
+                }
+                return raw;
+            } catch (_) {
+                return DEFAULT_POST_LOGIN_PATH;
+            }
+        };
+
+        const redirectAfterLogin = () => {
+            window.location.href = getSafeReturnTo();
+        };
 
         (async () => {
             try {
@@ -523,7 +545,7 @@
                             return;
                         }
                     } catch (_) {}
-                    window.location.href = 'dashboard.html';
+                    redirectAfterLogin();
                 }
             } catch (_) {
 
@@ -558,10 +580,13 @@
                 try {
                     const sp = new URLSearchParams(window.location.search);
                     const inviteToken = sp.get('inviteToken');
-                    const redirectBase = `${window.location.origin}/spendnote-login.html?confirmed=1`;
-                    const emailRedirectTo = inviteToken
-                        ? `${redirectBase}&inviteToken=${encodeURIComponent(inviteToken)}`
-                        : redirectBase;
+                    const redirectUrl = new URL(`${window.location.origin}/spendnote-login.html`);
+                    redirectUrl.searchParams.set('confirmed', '1');
+                    redirectUrl.searchParams.set('returnTo', getSafeReturnTo());
+                    if (inviteToken) {
+                        redirectUrl.searchParams.set('inviteToken', inviteToken);
+                    }
+                    const emailRedirectTo = redirectUrl.toString();
 
                     const r = await auth.resendSignupConfirmation(email, { emailRedirectTo });
                     if (!r?.success) {
@@ -610,10 +635,10 @@
 
                     // Success
                     successMessage.classList.add('show');
-                    successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Logged in! Redirecting to dashboard...';
+                    successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Logged in! Redirecting...';
                     
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        redirectAfterLogin();
                     }, 1000);
                 } else {
                     // Error
@@ -644,9 +669,12 @@
             try {
                 const sp = new URLSearchParams(window.location.search);
                 const inviteToken = sp.get('inviteToken');
-                const redirectTo = inviteToken
-                    ? `${window.location.origin}/dashboard.html?inviteToken=${encodeURIComponent(inviteToken)}`
-                    : `${window.location.origin}/dashboard.html`;
+                const redirectUrl = new URL(`${window.location.origin}/spendnote-login.html`);
+                redirectUrl.searchParams.set('returnTo', getSafeReturnTo());
+                if (inviteToken) {
+                    redirectUrl.searchParams.set('inviteToken', inviteToken);
+                }
+                const redirectTo = redirectUrl.toString();
                 const { data, error } = await window.supabaseClient.auth.signInWithOAuth({
                     provider: 'google',
                     options: {

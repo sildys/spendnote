@@ -33,7 +33,19 @@
         } catch (_) {
             // ignore
         }
-        window.location.href = '/spendnote-login.html';
+        let returnTo = '/app';
+        try {
+            const path = String(window.location.pathname || '/').trim() || '/';
+            const search = String(window.location.search || '');
+            const hash = String(window.location.hash || '');
+            const candidate = `${path}${search}${hash}`;
+            if (candidate.startsWith('/') && !candidate.startsWith('//')) {
+                returnTo = candidate;
+            }
+        } catch (_) {
+            returnTo = '/app';
+        }
+        window.location.href = `/login?returnTo=${encodeURIComponent(returnTo)}`;
     };
     try {
         isInIframe = window.self !== window.top;

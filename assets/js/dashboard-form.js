@@ -243,7 +243,7 @@ function initTransactionForm() {
         try {
             if (!window.auth || !window.db || !window.supabaseClient) {
                 closeReceiptWindow();
-                window.location.href = '/spendnote-login.html';
+                window.location.href = '/login';
                 return;
             }
 
@@ -252,7 +252,7 @@ function initTransactionForm() {
             const user = await window.auth.getCurrentUser();
             if (!user) {
                 closeReceiptWindow();
-                window.location.href = '/spendnote-login.html';
+                window.location.href = '/login';
                 return;
             }
 

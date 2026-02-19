@@ -908,7 +908,7 @@ var auth = {
     // Reset password
     async resetPassword(email) {
         const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-            redirectTo: `${window.location.origin}/spendnote-login.html`
+            redirectTo: `${window.location.origin}/login`
         });
         if (error) {
             if (window.SpendNoteDebug) console.error('Error resetting password:', error);
@@ -949,7 +949,19 @@ var auth = {
     async requireAuth() {
         const isAuth = await this.isAuthenticated();
         if (!isAuth) {
-            window.location.href = '/spendnote-login.html';
+            let returnTo = '/app';
+            try {
+                const path = String(window.location.pathname || '/').trim() || '/';
+                const search = String(window.location.search || '');
+                const hash = String(window.location.hash || '');
+                const candidate = `${path}${search}${hash}`;
+                if (candidate.startsWith('/') && !candidate.startsWith('//')) {
+                    returnTo = candidate;
+                }
+            } catch (_) {
+                returnTo = '/app';
+            }
+            window.location.href = `/login?returnTo=${encodeURIComponent(returnTo)}`;
             return false;
         }
         return true;
