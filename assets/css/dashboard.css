@@ -1497,6 +1497,97 @@
             box-shadow: 0 8px 24px rgba(5, 150, 105, 0.12);
         }
 
+        /* Laptop-height compact mode (e.g. MacBook Safari viewport) */
+        @media (min-width: 1025px) and (max-height: 900px) {
+            .app-container {
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+
+            .main-content {
+                padding-top: 8px;
+                gap: 8px;
+            }
+
+            .page-header {
+                margin-bottom: 6px;
+            }
+
+            .page-title-group h1 {
+                font-size: 22px !important;
+            }
+
+            .page-subtitle {
+                font-size: 13px !important;
+                line-height: 1.3;
+            }
+
+            .registers-carousel-section {
+                margin-bottom: 14px;
+                padding-top: 4px;
+            }
+
+            .registers-swiper {
+                padding: 4px 0 24px 0;
+            }
+
+            .register-card,
+            .add-cash-box-card {
+                padding: 10px;
+                border-radius: 16px;
+            }
+
+            .register-top {
+                margin-bottom: 10px;
+            }
+
+            .register-icon {
+                width: 54px !important;
+                height: 54px !important;
+                border-radius: 14px !important;
+                font-size: 24px !important;
+                border-width: 2px;
+            }
+
+            .register-card .register-name {
+                font-size: 20px !important;
+            }
+
+            .register-balance {
+                font-size: 28px;
+                margin-bottom: 10px;
+            }
+
+            .register-quick-actions {
+                margin-top: 8px;
+                gap: 8px;
+            }
+
+            .register-quick-btn {
+                width: 88px;
+                padding: 8px 10px;
+                font-size: 12px;
+                border-radius: 10px;
+                gap: 6px;
+            }
+
+            .register-quick-btn .quick-icon {
+                width: 18px;
+                height: 18px;
+            }
+
+            .invite-banner-compact {
+                padding: 10px 12px;
+                border-radius: 10px;
+            }
+
+            .card-header,
+            .card-body {
+                padding-top: 16px;
+                padding-bottom: 16px;
+            }
+        }
+
         .add-cash-box-card.disabled {
             cursor: not-allowed;
             opacity: 0.6;
