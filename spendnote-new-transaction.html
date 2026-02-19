@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=12">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=15">
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260219-2115">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260219-2232">
     <style>
         /* =============================================
            NEW TRANSACTION PAGE — full-screen mobile form
@@ -235,6 +235,90 @@
             #createTransactionModalContainer #modalDateField {
                 width: 92px !important;
                 font-size: 11px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nt-page {
+                max-width: none;
+            }
+
+            .nt-topbar {
+                padding: 10px 12px;
+            }
+
+            .nt-topbar-title {
+                font-size: 16px;
+            }
+
+            .nt-direction-header {
+                top: 60px;
+                padding: 10px 12px;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
+            .nt-direction-header .modal-direction-primary {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .nt-direction-header .direction-primary-btn {
+                width: 100%;
+                height: 42px;
+                padding: 0 10px;
+                justify-content: center;
+            }
+
+            .nt-direction-header .modal-watermark {
+                font-size: 34px;
+                margin-left: 0;
+                align-self: flex-end;
+            }
+
+            .nt-cashbox-row {
+                padding: 8px 12px;
+            }
+
+            .nt-body {
+                padding: 10px 12px;
+                padding-bottom: calc(112px + env(safe-area-inset-bottom));
+            }
+
+            .nt-footer {
+                padding: 10px 12px;
+                padding-bottom: calc(10px + env(safe-area-inset-bottom));
+            }
+
+            .nt-footer .btn {
+                min-height: 44px;
+                font-size: 13px;
+                padding: 10px 8px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .nt-topbar-date {
+                display: none;
+            }
+
+            .nt-mode-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #createTransactionModalContainer #modalDateField {
+                width: 100% !important;
+            }
+
+            .nt-footer {
+                gap: 8px;
+            }
+
+            .nt-footer .btn i {
+                display: none;
             }
         }
     </style>

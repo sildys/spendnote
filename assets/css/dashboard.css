@@ -4277,4 +4277,99 @@ tr:hover [data-category-tag] {
     }
 }
 
+/* Mobile hardening: create-transaction modal must stay usable on narrow screens */
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 8px;
+        align-items: flex-start;
+    }
+
+    .modal-container {
+        max-height: calc(100dvh - 16px);
+        border-radius: 12px;
+        margin: 8px auto;
+    }
+
+    .modal-header,
+    #createTransactionModalContainer[data-mode="quick"] .modal-header {
+        height: auto;
+        min-height: 64px;
+        padding: 10px 12px !important;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .modal-direction-primary {
+        order: 1;
+        width: 100%;
+        margin-right: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .direction-primary-btn {
+        width: 100% !important;
+        min-width: 0;
+        height: 44px;
+        padding: 0 10px;
+        justify-content: center;
+    }
+
+    .cashbox-display,
+    #createTransactionModalContainer[data-mode="quick"] .cashbox-display {
+        order: 2;
+        flex: 1 1 100%;
+        width: 100%;
+        min-width: 0 !important;
+        max-width: none !important;
+        height: auto;
+        min-height: 46px;
+        padding: 8px 10px;
+    }
+
+    .cashbox-display .cashbox-name {
+        gap: 6px;
+        font-size: 12px;
+        overflow: hidden;
+    }
+
+    .modal-watermark {
+        order: 3;
+        font-size: 36px;
+        margin-left: 0;
+        opacity: 0.7;
+    }
+
+    .modal-close {
+        order: 4;
+        margin-left: auto;
+    }
+
+    #createTransactionModalContainer .receipt-items-header,
+    #createTransactionModalContainer .form-row-line-item,
+    #createTransactionModalContainer[data-mode="quick"] .receipt-items-header,
+    #createTransactionModalContainer[data-mode="quick"] .form-row-line-item {
+        grid-template-columns: minmax(0, 1fr) 112px !important;
+    }
+
+    #createTransactionModalContainer .optional-buttons-row .add-section-btn {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-watermark {
+        font-size: 26px;
+    }
+
+    #createTransactionModalContainer .receipt-items-header,
+    #createTransactionModalContainer .form-row-line-item,
+    #createTransactionModalContainer[data-mode="quick"] .receipt-items-header,
+    #createTransactionModalContainer[data-mode="quick"] .form-row-line-item {
+        grid-template-columns: minmax(0, 1fr) 96px !important;
+    }
+}
+
 
