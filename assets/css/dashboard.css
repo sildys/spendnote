@@ -4190,6 +4190,33 @@ tr:hover [data-category-tag] {
         max-width: none !important;
     }
 
+    /* Mode toggle + date row: stack vertically on narrow screens */
+    #createTransactionModalContainer .modal-mode-row {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* Date field: full width when wrapped */
+    #createTransactionModalContainer .modal-mode-row .form-group {
+        width: auto !important;
+        flex: 1 1 100%;
+    }
+
+    /* Contact grid: stack Name + Address vertically on mobile */
+    #createTransactionModalContainer .modal-contact-grid,
+    #createTransactionModalContainer[data-mode="quick"] .modal-contact-grid,
+    #createTransactionModalContainer[data-mode="detailed"] .modal-contact-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Description/Amount: description wider, amount compact */
+    #createTransactionModalContainer .receipt-items-header,
+    #createTransactionModalContainer .form-row-line-item,
+    #createTransactionModalContainer[data-mode="quick"] .receipt-items-header,
+    #createTransactionModalContainer[data-mode="quick"] .form-row-line-item {
+        grid-template-columns: minmax(0, 1fr) 110px !important;
+    }
+
     /* Direction buttons: flexible width on mobile */
     .direction-primary-btn {
         width: auto;
@@ -4198,9 +4225,17 @@ tr:hover [data-category-tag] {
         justify-content: center;
     }
 
-    /* Watermark: hidden on mobile (decorative, takes space) */
+    /* Watermark: visible on mobile — shows IN/OUT direction, smaller size */
     .modal-watermark {
-        display: none;
+        display: block;
+        order: 4;
+        flex-basis: 100%;
+        font-size: 28px;
+        line-height: 1;
+        text-align: right;
+        margin-top: -4px;
+        margin-bottom: 2px;
+        pointer-events: none;
     }
 
     .modal-body {
