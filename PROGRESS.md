@@ -52,7 +52,32 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
 - [ ] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass
 
-## Where we are now (last updated: 2026-02-18 late night / session 3 — mobile redesign)
+## Where we are now (last updated: 2026-02-19 — modal header alignment fix)
+
+### Modal header alignment fix — COMPLETE (2026-02-19)
+
+A create transaction modal fejlécében az IN/OUT gombok és a cash box selector 4px-el el voltak tolva egymáshoz képest.
+
+**Root cause:** `.modal-header` `display: grid`-et használt két wrapper div-vel (`.modal-header-left`, `.modal-header-right`), amelyek eltérő vertikális centering kontextust hoztak létre.
+
+**Fix:**
+- `.modal-header`: `display: grid` → `display: flex; align-items: center; height: 72px; gap: 12px`
+- Wrapper div-ek (`modal-header-left`, `modal-header-right`) eltávolítva a HTML-ből
+- Minden elem (direction buttons, cashbox, watermark, close) közvetlen flex child
+- `margin-right: auto` a `.modal-direction-primary`-ra a bal/jobb elválasztáshoz
+- Watermark megmaradt és helyesen pozícionált
+
+**Cleanup (104 sor törölve):**
+- `!important` override blokk törölve a `dashboard.css` végéről
+- Inline `<style>` blokk törölve a `dashboard.html` `<head>`-ből
+- Inline `style` attribútumok törölve a modal header elemekről
+- `.modal-header-left` / `.modal-header-right` CSS szabályok törölve
+
+**JS safety net:** `dashboard-modal.js`-ben `requestAnimationFrame` + `translateY` korrekció megtartva (>0.5px eltérés esetén aktiválódik — jelenleg inaktív, CSS fix elegendő).
+
+**Commitok:** `50dd264`, `2b9c085`, `e33a9b7`, `f053d9d`, `fd994ef`, `5fbae35`, `4026544`
+
+---
 
 ### Mobile redesign — COMPLETE (2026-02-18 session 3)
 

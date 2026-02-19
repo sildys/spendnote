@@ -7,6 +7,22 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
+## Recent engineering updates (2026-02-19 — modal header alignment fix)
+
+- **Modal header alignment fix (CSS root cause + cleanup):**
+  - Fixed 4px vertical misalignment between IN/OUT direction buttons and cash box selector in the create transaction modal.
+  - **Root cause:** `.modal-header` used `display: grid` with two wrapper divs (`.modal-header-left`, `.modal-header-right`) that created different vertical centering contexts for each side.
+  - **Fix:** Changed `.modal-header` to `display: flex; align-items: center; height: 72px; gap: 12px`. Removed wrapper divs from HTML — all items (direction buttons, cashbox, watermark, close) are now direct flex children.
+  - **Cleanup (104 lines removed):**
+    - Removed `!important` override block at end of `dashboard.css`
+    - Removed inline `<style>` block from `dashboard.html` `<head>`
+    - Removed inline `style` attributes from modal header elements
+    - Removed unused `.modal-header-left` / `.modal-header-right` CSS rules
+    - Added `margin-right: auto` to `.modal-direction-primary` for left/right separation
+  - JS safety net retained in `dashboard-modal.js` (`requestAnimationFrame` + `translateY` correction if >0.5px offset detected — currently inactive since CSS fix is sufficient).
+  - Watermark remains visible and correctly positioned.
+  - **Commits:** `50dd264`, `2b9c085`, `e33a9b7`, `f053d9d`, `fd994ef`, `5fbae35`, `4026544`
+
 ## Recent engineering updates (2026-02-18 — mobile redesign)
 
 - **Full mobile redesign ("profi app" feel):**
