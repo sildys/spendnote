@@ -142,24 +142,21 @@
     <!-- CREATE TRANSACTION MODAL v20260128a - cashbox right + icon fix -->
     <div class="modal-overlay" id="createTransactionModal" aria-hidden="true">
         <div class="modal-container" id="createTransactionModalContainer" data-direction="in" data-mode="quick" role="dialog" aria-modal="true" aria-label="Create transaction" tabindex="-1">
-            <div class="modal-header">
-                <div class="modal-header-left">
+            <div class="modal-header" style="display:flex!important;flex-direction:row!important;align-items:center!important;height:72px!important;padding:0 24px!important;box-sizing:border-box!important;">
                     <!-- Direction buttons -->
-                    <div class="modal-direction-primary">
-                        <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked>
+                    <div class="modal-direction-primary" style="display:flex;align-items:center;gap:8px;margin-right:auto;height:52px;">
+                        <input type="radio" name="modalDirection" id="modalDirectionIn" value="in" checked style="display:none;">
                         <label for="modalDirectionIn" class="direction-primary-btn in" tabindex="0" style="height:52px;box-sizing:border-box;">
                             <span class="quick-icon"><i class="fas fa-arrow-down"></i></span>
                             <span>IN</span>
                         </label>
-                        <input type="radio" name="modalDirection" id="modalDirectionOut" value="out">
+                        <input type="radio" name="modalDirection" id="modalDirectionOut" value="out" style="display:none;">
                         <label for="modalDirectionOut" class="direction-primary-btn out" tabindex="0" style="height:52px;box-sizing:border-box;">
                             <span class="quick-icon"><i class="fas fa-arrow-up"></i></span>
                             <span>OUT</span>
                         </label>
                     </div>
-                </div>
 
-                <div class="modal-header-right">
                     <!-- Cashbox selector -->
                     <div class="cashbox-display" id="modalCashboxDisplay" style="height:52px;box-sizing:border-box;">
                         <div class="cashbox-icon" id="modalCashboxIcon"></div>
@@ -184,7 +181,6 @@
                     <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close modal">
                         <i class="fas fa-times"></i>
                     </button>
-                </div>
             </div>
             <div class="modal-body" style="padding: 16px 24px;">
                 <form id="modalTransactionForm" autocomplete="off" style="display: flex; flex-direction: column; gap: 12px;">
