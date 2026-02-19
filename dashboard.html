@@ -27,6 +27,17 @@
     <link rel="stylesheet" href="assets/css/app-layout.css?v=15">
     <link rel="stylesheet" href="assets/css/dashboard.css?v=20260219-0126">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        /* Modal header alignment — inline to bypass CDN cache */
+        #createTransactionModalContainer .modal-header{display:flex!important;flex-direction:row!important;align-items:center!important;height:72px!important;padding:0 24px!important;box-sizing:border-box!important}
+        #createTransactionModalContainer .modal-header-left,#createTransactionModalContainer .modal-header-right{display:contents!important}
+        #createTransactionModalContainer .modal-direction-primary{display:flex!important;align-items:center!important;gap:8px!important;margin-right:auto!important;height:52px!important;box-sizing:border-box!important}
+        #createTransactionModalContainer .modal-direction-primary>input[type="radio"]{position:absolute!important;width:0!important;height:0!important;margin:0!important;padding:0!important;opacity:0!important;pointer-events:none!important}
+        #createTransactionModalContainer .direction-primary-btn{height:52px!important;box-sizing:border-box!important}
+        #createTransactionModalContainer .cashbox-display{height:52px!important;box-sizing:border-box!important;flex-shrink:0!important;margin-left:12px!important}
+        #createTransactionModalContainer .modal-watermark{flex-shrink:0!important;margin-left:8px!important}
+        #createTransactionModalContainer .modal-close{flex-shrink:0!important;margin-left:8px!important}
+    </style>
 </head>
 <body>
 <!-- Navigation loaded dynamically by nav-loader.js -->
