@@ -497,7 +497,9 @@ const QUICK_PRESET = {
                 if (voidBtn) voidBtn.disabled = true;
                 if (voidNote) {
                     const when = tx?.voided_at ? new Date(tx.voided_at) : null;
-                    const whenText = when && !Number.isNaN(when.getTime()) ? when.toLocaleString() : '';
+                    const whenText = when && !Number.isNaN(when.getTime())
+                        ? when.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+                        : '';
                     const who = String(tx?.voided_by_user_name || '').trim();
                     voidNote.textContent = who && whenText ? `Voided by ${who} on ${whenText}` : (whenText ? `Voided on ${whenText}` : 'Voided');
                 }

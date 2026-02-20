@@ -88,20 +88,20 @@
     function formatDateLong(value) {
         const dt = value ? new Date(value) : null;
         if (!dt || Number.isNaN(dt.getTime())) return '—';
-        return dt.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+        return dt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
     function formatDateShort(value) {
         const dt = value ? new Date(value) : null;
         if (!dt || Number.isNaN(dt.getTime())) return '—';
-        return dt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+        return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
 
     function formatDateTimeShort(value) {
         const dt = value ? new Date(value) : null;
         if (!dt || Number.isNaN(dt.getTime())) return '—';
-        const date = dt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-        const time = dt.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+        const date = dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const time = dt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
         return `${date} - ${time}`;
     }
 
@@ -390,7 +390,9 @@
         if (voidMeta) {
             if (isVoided) {
                 const when = tx?.voided_at ? new Date(tx.voided_at) : null;
-                const whenText = when && !Number.isNaN(when.getTime()) ? when.toLocaleString() : '';
+                const whenText = when && !Number.isNaN(when.getTime())
+                    ? when.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+                    : '';
                 const who = safeText(tx?.voided_by_user_name, '');
                 const text = who && whenText ? `Voided by ${who} on ${whenText}` : (whenText ? `Voided on ${whenText}` : (who ? `Voided by ${who}` : ''));
                 voidMeta.textContent = text;
