@@ -472,7 +472,7 @@ function initTransactionForm() {
                     };
 
                     const params = new URLSearchParams();
-                    params.set('v', 'print-20260220-1627');
+                    params.set('v', 'print-20260220-2000');
                     if (createdId) params.set('txId', createdId);
                     params.set('bootstrap', '1');
 

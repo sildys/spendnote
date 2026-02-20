@@ -177,14 +177,25 @@
     
     /* PARTIES */
     .parties {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      display: table;
+      width: 100%;
+      table-layout: fixed;
       margin-bottom: 20px;
     }
     
     .party {
+      display: table-cell;
+      width: 50%;
+      vertical-align: top;
       font-size: 13px;
+    }
+
+    .party:first-child {
+      padding-right: 12px;
+    }
+
+    .party:last-child {
+      padding-left: 12px;
     }
     
     .party-label {
@@ -408,10 +419,8 @@
         margin-top: 12px;
       }
       
-      .parties {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
+      .party:first-child { padding-right: 8px; }
+      .party:last-child { padding-left: 8px; }
       
       .footer {
         padding: 24px;
