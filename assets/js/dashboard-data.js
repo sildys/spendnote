@@ -599,11 +599,25 @@ async function loadDashboardData() {
             const swiperWrapper = document.querySelector('.registers-swiper .swiper-wrapper');
             if (!swiperWrapper) return;
 
+            const waitForDbApi = async () => {
+                for (let i = 0; i < 120; i++) {
+                    const api = window.db;
+                    if (api?.cashBoxes?.getAll) return api;
+                    await new Promise((resolve) => setTimeout(resolve, 50));
+                }
+                return null;
+            };
+
+            const dbApi = await waitForDbApi();
+            if (!dbApi) {
+                throw new Error('Dashboard DB API not ready');
+            }
+
             const debug = Boolean(window.SpendNoteDebug);
 
             const { hexToRgb, getIconClass, formatCurrency } = getSpendNoteHelpers();
 
-            const cashBoxesPromise = db.cashBoxes.getAll({
+            const cashBoxesPromise = dbApi.cashBoxes.getAll({
                 select: 'id, name, color, currency, icon, current_balance, created_at, sort_order, sequence_number'
             });
 
