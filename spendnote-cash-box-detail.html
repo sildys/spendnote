@@ -1040,6 +1040,31 @@
             }
 
             .filter-grid { grid-template-columns: 1fr; }
+
+            #transactionsTable thead th:nth-child(7),
+            #transactionsTable tbody td:nth-child(7),
+            #transactionsTable thead th:nth-child(9),
+            #transactionsTable tbody td:nth-child(9) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-container {
+                padding: 12px;
+            }
+
+            .table-wrapper {
+                display: none;
+            }
+
+            .tx-card-list {
+                display: flex;
+            }
+
+            .filter-section {
+                display: none;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -1211,6 +1236,8 @@
 
         <!-- TABLE -->
         <div class="table-container">
+            <!-- Mobile card list — shown instead of table on small screens -->
+            <div id="txCardList" class="tx-card-list" aria-label="Transactions"></div>
             <div class="table-wrapper">
                 <table id="transactionsTable">
                     <thead>
@@ -1433,7 +1460,7 @@
     <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=20260220-2115"></script>
     <script>loadNav();</script>
-    <script src="assets/js/main.js?v=21"></script>
+    <script src="assets/js/main.js?v=23"></script>
     <script src="assets/js/transaction-history-data.js?v=82"></script>
 </body>
 </html>

@@ -512,6 +512,17 @@ document.addEventListener('click', function(e) {
         transactionId: ''
     };
 
+    const shouldUseStandaloneNewTransaction = () => {
+        try {
+            const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+            const hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+            const mobileViewport = window.matchMedia('(max-width: 1024px)').matches;
+            return mobileViewport || coarsePointer || hasTouch;
+        } catch (_) {
+            return false;
+        }
+    };
+
     // If on dashboard and duplicateTransaction is available, use it to fetch full data
     if (typeof window.duplicateTransaction === 'function' && document.getElementById('createTransactionModal')) {
         window.duplicateTransaction(txId);
@@ -520,7 +531,7 @@ document.addEventListener('click', function(e) {
     if (typeof window.duplicateTransaction === 'function') {
         window.duplicateTransaction(txId);
     } else {
-        // Navigate to dashboard with duplicate parameter and prefill fields
+        // Navigate to dashboard (desktop) or standalone page (mobile) with duplicate parameter
         const params = new URLSearchParams();
         params.set('duplicate', txId);
         if (preset.cashBoxId) params.set('cashBoxId', preset.cashBoxId);
@@ -529,6 +540,10 @@ document.addEventListener('click', function(e) {
         if (preset.contactId) params.set('contactId', String(preset.contactId));
         if (preset.contactName) params.set('contactName', String(preset.contactName));
         if (preset.description) params.set('description', String(preset.description));
-        window.location.href = 'dashboard.html?' + params.toString() + '#new-transaction';
+        if (shouldUseStandaloneNewTransaction()) {
+            window.location.href = 'spendnote-new-transaction.html?' + params.toString() + '#new-transaction';
+        } else {
+            window.location.href = 'dashboard.html?' + params.toString() + '#new-transaction';
+        }
     }
 });
