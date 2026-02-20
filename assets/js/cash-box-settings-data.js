@@ -177,17 +177,23 @@ function writeStoredReceiptVisibility(cashBoxId, visibility) {
 
 function applyReceiptFormatUi(format) {
     const f = String(format || '').trim().toLowerCase();
-    if (f !== 'a4' && f !== 'pdf' && f !== 'email') return;
+    const normalized = (f && f !== 'receipt-print-two-copies' && f !== 'pdf' && f !== 'email')
+        ? 'receipt-print-two-copies'
+        : f;
+    if (normalized !== 'receipt-print-two-copies' && normalized !== 'pdf' && normalized !== 'email') return;
     document.querySelectorAll('.format-btn').forEach((btn) => {
-        btn.classList.toggle('active', String(btn?.dataset?.format || '').toLowerCase() === f);
+        btn.classList.toggle('active', String(btn?.dataset?.format || '').toLowerCase() === normalized);
     });
 }
 
 function bindReceiptFormatButtons() {
     document.querySelectorAll('.format-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
-            const format = String(btn?.dataset?.format || '').trim().toLowerCase();
-            if (format !== 'a4' && format !== 'pdf' && format !== 'email') return;
+            const rawFormat = String(btn?.dataset?.format || '').trim().toLowerCase();
+            const format = (rawFormat && rawFormat !== 'receipt-print-two-copies' && rawFormat !== 'pdf' && rawFormat !== 'email')
+                ? 'receipt-print-two-copies'
+                : rawFormat;
+            if (format !== 'receipt-print-two-copies' && format !== 'pdf' && format !== 'email') return;
             applyReceiptFormatUi(format);
             if (!currentCashBoxId) return;
             const key = getReceiptFormatStorageKey(currentCashBoxId);

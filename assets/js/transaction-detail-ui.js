@@ -18,7 +18,7 @@ const QUICK_PRESET = {
 
     let receiptMode = 'quick';
     let displayOptions = { ...QUICK_PRESET };
-    let currentFormat = 'a4';
+    let currentFormat = 'receipt-print-two-copies';
     let currentZoom = 0.6;
 
     let receiptText = {
@@ -120,12 +120,12 @@ const QUICK_PRESET = {
 
     function buildReceiptUrl(format, extraParams) {
         const baseUrls = {
-            'a4': 'spendnote-receipt-a4-two-copies.html',
+            'receipt-print-two-copies': 'spendnote-receipt-print-two-copies.html',
             'pdf': 'spendnote-pdf-receipt.html',
             'email': 'spendnote-email-receipt.html'
         };
         const params = new URLSearchParams();
-        params.append('v', 'receipt-20260220-1603');
+        params.append('v', 'receipt-20260220-1626');
         const currentTxId = getCurrentTxId();
         if (currentTxId) params.append('txId', currentTxId);
         params.append('bootstrap', '1');
@@ -209,7 +209,7 @@ const QUICK_PRESET = {
             }
         }
 
-        if (format === 'a4' && extraParams && String(extraParams.autoPrint || '') === '1') {
+        if (format === 'receipt-print-two-copies' && extraParams && String(extraParams.autoPrint || '') === '1') {
             try {
                 params.append('returnTo', window.location.href);
             } catch (_) {
@@ -226,8 +226,12 @@ const QUICK_PRESET = {
         try {
             const key = `spendnote.cashBox.${cbId}.defaultReceiptFormat.v1`;
             const stored = String(localStorage.getItem(key) || '').trim().toLowerCase();
-            if (stored === 'a4' || stored === 'pdf' || stored === 'email') {
+            if (stored === 'receipt-print-two-copies' || stored === 'pdf' || stored === 'email') {
                 return stored;
+            }
+            if (stored) {
+                try { localStorage.setItem(key, 'receipt-print-two-copies'); } catch (_) {}
+                return 'receipt-print-two-copies';
             }
         } catch (_) {
             return '';
@@ -563,7 +567,7 @@ html, body { height: auto !important; overflow: auto !important; }
 
     function setFormat(format) {
         const f = String(format || '').toLowerCase();
-        if (f !== 'a4' && f !== 'pdf' && f !== 'email') return;
+        if (f !== 'receipt-print-two-copies' && f !== 'pdf' && f !== 'email') return;
         document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
         const btn = document.querySelector(`.format-btn[data-format="${f}"]`);
         if (btn) btn.classList.add('active');
@@ -657,7 +661,7 @@ html, body { height: auto !important; overflow: auto !important; }
                     }
                 } catch (_) {}
 
-                const url = buildReceiptUrl('a4', { autoPrint: '1' });
+                const url = buildReceiptUrl('receipt-print-two-copies', { autoPrint: '1' });
                 try {
                     opened.location.href = url;
                 } catch (_) {

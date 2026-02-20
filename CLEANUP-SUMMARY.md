@@ -68,7 +68,7 @@
 - 404.html
 - spendnote-email-receipt.html (email template)
 - spendnote-pdf-receipt.html (print template)
-- spendnote-receipt-a4-two-copies.html (print template)
+- spendnote-receipt-print-two-copies.html (print template)
 
 ## 📋 Elvégzett Módosítások Mintája
 

@@ -143,18 +143,21 @@ function initTransactionForm() {
                 }
             } catch (_) {}
 
-            let intendedFormat = 'a4';
+            let intendedFormat = 'receipt-print-two-copies';
             try {
                 const cbId = String(document.getElementById('modalCashBoxId')?.value || '').trim();
                 if (cbId) {
                     const key = `spendnote.cashBox.${cbId}.defaultReceiptFormat.v1`;
                     const stored = String(localStorage.getItem(key) || '').trim().toLowerCase();
-                    if (stored === 'a4' || stored === 'pdf') {
+                    if (stored === 'receipt-print-two-copies' || stored === 'pdf') {
                         intendedFormat = stored;
+                    } else if (stored) {
+                        intendedFormat = 'receipt-print-two-copies';
+                        localStorage.setItem(key, 'receipt-print-two-copies');
                     }
                 }
             } catch (_) {
-                intendedFormat = 'a4';
+                intendedFormat = 'receipt-print-two-copies';
             }
         }
 
@@ -463,34 +466,37 @@ function initTransactionForm() {
             if (action === 'done-receipt') {
                 const buildReceiptUrl = async () => {
                     const baseUrls = {
-                        a4: 'spendnote-receipt-a4-two-copies.html',
+                        'receipt-print-two-copies': 'spendnote-receipt-print-two-copies.html',
                         pdf: 'spendnote-pdf-receipt.html',
                         email: 'spendnote-email-receipt.html'
                     };
 
                     const params = new URLSearchParams();
-                    params.set('v', 'print-20260220-1603');
+                    params.set('v', 'print-20260220-1626');
                     if (createdId) params.set('txId', createdId);
                     params.set('bootstrap', '1');
 
                     params.set('itemsMode', mode === 'quick' ? 'single' : 'full');
                     params.set('recordedBy', '0');
 
-                    let format = 'a4';
+                    let format = 'receipt-print-two-copies';
                     try {
                         const cbId = String(payload.cash_box_id || '').trim();
                         if (cbId) {
                             const key = `spendnote.cashBox.${cbId}.defaultReceiptFormat.v1`;
                             const stored = String(localStorage.getItem(key) || '').trim().toLowerCase();
-                            if (stored === 'a4' || stored === 'pdf') {
+                            if (stored === 'receipt-print-two-copies' || stored === 'pdf') {
                                 format = stored;
+                            } else if (stored) {
+                                format = 'receipt-print-two-copies';
+                                localStorage.setItem(key, 'receipt-print-two-copies');
                             }
                         }
                     } catch (_) {
-                        format = 'a4';
+                        format = 'receipt-print-two-copies';
                     }
 
-                    if (format === 'a4') {
+                    if (format === 'receipt-print-two-copies') {
                         params.set('autoPrint', '1');
                         try {
                             params.set('returnTo', window.location.href);
@@ -669,7 +675,7 @@ function initTransactionForm() {
                         }
                     } catch (_) {}
 
-                    const baseUrl = baseUrls[format] || baseUrls.a4;
+                    const baseUrl = baseUrls[format] || baseUrls['receipt-print-two-copies'];
                     return {
                         url: `${baseUrl}?${params.toString()}`,
                         format
@@ -678,7 +684,7 @@ function initTransactionForm() {
 
                 const receipt = await buildReceiptUrl();
                 const url = receipt?.url;
-                const finalFormat = receipt?.format || 'a4';
+                const finalFormat = receipt?.format || 'receipt-print-two-copies';
 
                 if (finalFormat === 'pdf') {
                     if (preopenedReceiptWindow && !preopenedReceiptWindow.closed) {

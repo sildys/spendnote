@@ -218,7 +218,7 @@
                             <div>
                                 <div class="control-group-label">Default Format</div>
                                 <div class="format-buttons">
-                                    <button class="format-btn active" data-format="a4">
+                                    <button class="format-btn active" data-format="receipt-print-two-copies">
                                         <i class="fas fa-copy"></i>
                                         Print
                                     </button>
@@ -554,18 +554,18 @@ function writeStoredCashBoxLogoSettings(cashBoxId, settings) {
     } catch (_) {}
 }
 
-let currentFormat = 'a4';
+let currentFormat = 'receipt-print-two-copies';
 let currentZoom = 0.6;
 
 function buildReceiptUrl(format) {
     const baseUrls = {
-        'a4': 'spendnote-receipt-a4-two-copies.html',
+        'receipt-print-two-copies': 'spendnote-receipt-print-two-copies.html',
         'pdf': 'spendnote-pdf-receipt.html',
         'email': 'spendnote-email-receipt.html'
     };
     
     const params = new URLSearchParams();
-    params.append('v', 'settings-preview-06');
+    params.append('v', 'settings-preview-07');
     params.append('demo', '1');
     
     // Display options
@@ -1058,6 +1058,6 @@ window.addEventListener('beforeunload', () => {
 <script src="assets/js/nav-loader.js?v=8"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=21"></script>
-<script src="assets/js/cash-box-settings-data.js?v=44"></script>
+<script src="assets/js/cash-box-settings-data.js?v=45"></script>
 </body>
 </html>

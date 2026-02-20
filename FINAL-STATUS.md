@@ -112,7 +112,7 @@ Alkalmazás-specifikus közös CSS-ek:
 - ✅ 404.html (jól strukturált)
 - ✅ spendnote-email-receipt.html (email template - külön CSS kell)
 - ✅ spendnote-pdf-receipt.html (print template - külön CSS kell)
-- ✅ spendnote-receipt-a4-two-copies.html (print template - külön CSS kell)
+- ✅ spendnote-receipt-print-two-copies.html (print template - külön CSS kell)
 
 ---
 

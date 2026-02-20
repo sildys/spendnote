@@ -58,7 +58,7 @@
         isReceiptTemplate =
             file.startsWith('spendnote-') &&
             file.includes('receipt') &&
-            (file.includes('pdf') || file.includes('email') || file.includes('a4'));
+            (file.includes('pdf') || file.includes('email') || file.includes('print-two-copies'));
         sp = new URLSearchParams(window.location.search);
         hasPublicToken = sp.has('publicToken');
         isDemo = sp.get('demo') === '1';

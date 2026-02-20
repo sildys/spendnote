@@ -436,7 +436,7 @@ Mode is stored as `data-mode="quick|detailed"` and persisted via `localStorage` 
 - The modal includes a **Done & Print** action.
 - Current status:
   - Transaction saving is implemented.
-  - Receipt templates are implemented (A4/PDF/Email).
+  - Receipt templates are implemented (Print-2-copies/PDF/Email).
   - Done & Print opens a receipt template in a new tab/window.
   - Receipt pages opened in a new tab use a bootstrap mechanism to establish auth (see "Session behavior").
 
@@ -463,7 +463,7 @@ The storage part is in place (transactions persist receipt-relevant snapshot fie
 
 #### Receipt formats / templates
 
-- Print (A4, 2 copies): `spendnote-receipt-a4-two-copies.html`
+- Print (Letter, 2 copies): `spendnote-receipt-print-two-copies.html`
 - PDF: `spendnote-pdf-receipt.html`
 - Email: `spendnote-email-receipt.html`
 
@@ -529,7 +529,7 @@ Quick defaults:
   - Uses html2canvas + jsPDF
   - Hidden iframe download (no visible preview or popup)
   - File name format: `SpendNote_<ReceiptID>.pdf` (example: `SpendNote_SN7-007.pdf`)
-- **Print (A4)**:
+- **Print (2 copies)**:
   - Opens in normal window with auto-print
   - Two copies per page
 - **Line items**: no artificial limits; all transaction items displayed
@@ -705,7 +705,7 @@ This section is meant to prevent re-explaining core decisions in new chat thread
 - Receipt templates are fully wired to load transaction data from Supabase:
   - `spendnote-pdf-receipt.html`
   - `spendnote-email-receipt.html`
-  - `spendnote-receipt-a4-two-copies.html`
+  - `spendnote-receipt-print-two-copies.html`
 - Templates are populated from the transaction record so the same receipt can be printed/emailed/downloaded again at any time.
 - Each template:
   - Waits for `window.db` to be ready

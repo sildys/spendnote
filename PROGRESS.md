@@ -180,7 +180,7 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
   - Production hotfix:
     - Fixed `ReferenceError: cashBoxId is not defined` in Cash Box Settings loader (`loadCashBoxData`).
   - Receipts date format normalized to US (`MM/DD/YYYY`):
-    - Updated A4/PDF/Email receipt templates date formatter.
+    - Updated Print-2-copies/PDF/Email receipt templates date formatter.
     - Updated transaction-detail demo receipt date formatting.
     - Bumped receipt cache params / asset versions to force online refresh.
   - Cash Box Settings UI cleanup:
@@ -468,7 +468,7 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
     - `itemsMode=single|full` controls quick vs detailed line item rendering.
     - In `itemsMode=single`, exactly one row is filled and its amount equals the Total (grid still shows 5 rows).
     - `recordedBy=0` hides the recorded-by line.
-  - Receipt templates (A4/PDF/Email) fully populate from transaction data:
+  - Receipt templates (Print-2-copies/PDF/Email) fully populate from transaction data:
     - Company name/address from profile
     - Contact name/address from transaction snapshot fields
     - Line items table + total from `tx.line_items` / `tx.amount`
@@ -476,11 +476,11 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
     - **Cash Box ID: `SN-###`** (from `cash_boxes.sequence_number`)
     - **Receipt ID: `SN{cash_box_sequence}-{tx_sequence_in_box}`**
     - **Other ID: from `contact_custom_field_1`** (not cash box code)
-  - **Print/A4 receipt**: date displays correctly, "Recorded by" line removed.
+  - **Print (2 copies) receipt**: date displays correctly, "Recorded by" line removed.
   - Void feedback:
     - amount is dimmed + struck-through
     - shows **Voided by + date**
-    - receipt previews include a diagonal grey **VOID** watermark (A4/PDF/Email)
+    - receipt previews include a diagonal grey **VOID** watermark (Print-2-copies/PDF/Email)
   - Pro badge styling unified across the app (consistent orange badge with crown icon).
   - URL hardening: invalid/missing `txId` redirects to Transaction History.
   - Duplicate button works even when opened via `SNx-yyy` (uses loaded transaction UUID).
@@ -491,7 +491,7 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
   - **FIXED (2026-02-07)**: Root cause of login flicker/redirect:
     - Receipt templates defined a global `isUuid` which collided with `supabase-config.js` and caused a `SyntaxError`.
     - Result: `supabaseClient` was never created, `auth-guard` redirected to login, which bounced back to Dashboard (flicker).
-    - Fix: rename template helper `isUuid` -> `isUuidParam` (A4/PDF/Email).
+    - Fix: rename template helper `isUuid` -> `isUuidParam` (Print-2-copies/PDF/Email).
   - Follow-up hardening:
     - Exposed `window.writeBootstrapSession()` for on-demand fresh token writing
     - Dashboard modal calls `writeBootstrapSession()` BEFORE opening receipt window
@@ -505,8 +505,8 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
   - **PDF download**: Letter size (8.5" x 11"), white background, receipt at top with 10mm margins.
   - **PDF download flow**: hidden iframe triggers download without visible preview or popup.
   - **PDF file name**: `SpendNote_<ReceiptID>.pdf`.
-  - **Print (A4)**: opens normal window with auto-print; no more tiny offscreen popup.
-  - **Line items**: no 4-item limit; all items display on both A4 and PDF receipts.
+  - **Print (2 copies)**: opens normal window with auto-print; no more tiny offscreen popup.
+  - **Line items**: no 4-item limit; all items display on both Print-2-copies and PDF receipts.
   - **Cache-busting**: receipt URLs use versioned `v` param to force reload after updates.
 
 - **Email Receipts (server-sent)** ✅
@@ -551,7 +551,7 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
 - **Cash Box pages**
   - Cash Box Detail: accepts `id`/`cashBoxId` as UUID or `SN-###` and resolves to UUID; displays `SN-###` code.
   - Cash Box Settings: accepts `id`/`cashBoxId` as UUID or `SN-###` and resolves to UUID; displays `SN-###` in subtitle.
-  - Cash Box Settings: receipt preview uses demo data (A4/PDF/Email) and respects quick/detailed + toggles.
+  - Cash Box Settings: receipt preview uses demo data (Print-2-copies/PDF/Email) and respects quick/detailed + toggles.
   - Cash Box Settings: receipt preview layout/height + zoom behavior matches Transaction Detail.
   - Cash Box Settings: removed inline `onclick` handlers (bindings live in JS).
   - Cash Box Settings: Danger Zone hard delete implemented (shows transaction count, requires typing `DELETE`, deletes cash box + cascaded transactions).
@@ -698,8 +698,8 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
   - `SESSION-NOTES-2026-01-30.md`
 
 ## Recent commits (high level)
-- `e00a7ec` Fix A4 receipt: remove 4-item limit in transaction loading section
-- `261a67d` Remove 4-item limit on A4 print receipt - show all line items
+- `e00a7ec` Fix print receipt: remove 4-item limit in transaction loading section
+- `261a67d` Remove 4-item limit on print 2-copies receipt - show all line items
 - `7338406` Change PDF format from Legal to Letter
 - `3ebee71` Fix PDF: place receipt at top of page, not centered vertically
 - `cdf64b3` Add white background to PDF page and center receipt with margins
