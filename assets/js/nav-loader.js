@@ -22,6 +22,10 @@ const BOTTOM_NAV_HTML = `
         <span class="bottom-nav-icon"><i class="fas fa-box"></i></span>
         <span class="bottom-nav-label">Cash Boxes</span>
     </a>
+    <a href="#" class="bottom-nav-item" data-action="logout">
+        <span class="bottom-nav-icon"><i class="fas fa-sign-out-alt"></i></span>
+        <span class="bottom-nav-label">Logout</span>
+    </a>
 </nav>
 `;
 
