@@ -672,7 +672,10 @@ function applyReceiptMode(mode) {
     const quickSummary = document.getElementById('receiptQuickSummary');
     const detailedToggles = document.getElementById('receiptDetailedToggles') || document.getElementById('receiptToggleList');
     if (quickSummary) quickSummary.style.display = m === 'quick' ? 'block' : 'none';
-    if (detailedToggles) detailedToggles.style.display = m === 'detailed' ? 'flex' : 'none';
+    if (detailedToggles) {
+        const keepVisibleWithoutQuickSummary = !quickSummary;
+        detailedToggles.style.display = (m === 'detailed' || keepVisibleWithoutQuickSummary) ? 'flex' : 'none';
+    }
 
     const quickRadio = document.getElementById('receiptModeQuick');
     const detailedRadio = document.getElementById('receiptModeDetailed');
