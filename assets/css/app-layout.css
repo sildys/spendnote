@@ -658,9 +658,22 @@ body {
         color: #fff;
     }
 
-    /* Hide top nav on mobile — bottom nav replaces it */
+    /* Mobile top-right avatar menu: keep only avatar visible in top nav */
     .site-nav .nav-links {
+        display: flex !important;
+        margin-left: auto;
+        gap: 0;
+    }
+
+    .site-nav .nav-links > li:not(.user-avatar-wrapper) {
         display: none !important;
+    }
+
+    .site-nav .nav-links > .user-avatar-wrapper {
+        display: flex !important;
+        padding: 4px 0 4px 8px;
+        margin-left: 8px;
+        background: transparent;
     }
 
     .nav-hamburger {
@@ -685,19 +698,19 @@ body {
         padding: 0.75rem 0;
     }
 
-    /* User avatar dropdown: keep accessible on mobile */
+    /* User avatar dropdown: anchor to top-right avatar on mobile */
     .user-dropdown {
-        position: fixed;
-        bottom: calc(72px + env(safe-area-inset-bottom));
-        right: 12px;
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
         left: auto;
-        top: auto;
+        bottom: auto;
         box-shadow: 0 8px 32px rgba(0,0,0,0.14);
         border: 1px solid var(--border);
         border-radius: 14px;
         opacity: 0;
         visibility: hidden;
-        transform: translateY(8px);
+        transform: translateY(-8px);
         transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
         min-width: 180px;
         z-index: 1200;

@@ -22,10 +22,6 @@ const BOTTOM_NAV_HTML = `
         <span class="bottom-nav-icon"><i class="fas fa-box"></i></span>
         <span class="bottom-nav-label">Cash Boxes</span>
     </a>
-    <a href="#" class="bottom-nav-item" data-action="logout">
-        <span class="bottom-nav-icon"><i class="fas fa-sign-out-alt"></i></span>
-        <span class="bottom-nav-label">Logout</span>
-    </a>
 </nav>
 `;
 
@@ -102,11 +98,14 @@ function loadNav(containerId = 'nav-container') {
         initNavEvents();
 
         try {
-            const avatarImg = container.querySelector('.user-avatar img');
-            if (avatarImg) {
+            const avatarImgs = container.querySelectorAll('.user-avatar img');
+            if (avatarImgs && avatarImgs.length) {
                 const placeholderColor = '#94a3b8';
                 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ffffff" stroke="${placeholderColor}" stroke-width="4"/><circle cx="32" cy="26" r="9" fill="${placeholderColor}"/><path d="M18 50c0-7.7 6.3-14 14-14s14 6.3 14 14" fill="${placeholderColor}"/></svg>`;
-                avatarImg.src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+                const src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+                avatarImgs.forEach((img) => {
+                    if (img) img.src = src;
+                });
             }
         } catch (_) {
             // ignore
@@ -171,22 +170,37 @@ function initNavEvents() {
     document.addEventListener('click', (e) => {
         const userAvatarBtn = document.getElementById('userAvatarBtn');
         const userDropdown = document.getElementById('userDropdown');
+        const mobileAvatarBtn = document.getElementById('mobileUserAvatarBtn');
+        const mobileDropdown = document.getElementById('mobileUserDropdown');
 
-        if (!userAvatarBtn || !userDropdown) {
+        if ((!userAvatarBtn || !userDropdown) && (!mobileAvatarBtn || !mobileDropdown)) {
             return;
         }
 
         const clickedAvatar = e.target && (e.target.closest ? e.target.closest('#userAvatarBtn') : null);
         const clickedDropdown = e.target && (e.target.closest ? e.target.closest('#userDropdown') : null);
+        const clickedMobileAvatar = e.target && (e.target.closest ? e.target.closest('#mobileUserAvatarBtn') : null);
+        const clickedMobileDropdown = e.target && (e.target.closest ? e.target.closest('#mobileUserDropdown') : null);
 
-        if (clickedAvatar) {
+        if (clickedAvatar && userDropdown) {
             e.preventDefault();
             userDropdown.classList.toggle('show');
+            if (mobileDropdown) mobileDropdown.classList.remove('show');
             return;
         }
 
-        if (!clickedDropdown) {
+        if (clickedMobileAvatar && mobileDropdown) {
+            e.preventDefault();
+            mobileDropdown.classList.toggle('show');
+            if (userDropdown) userDropdown.classList.remove('show');
+            return;
+        }
+
+        if (!clickedDropdown && userDropdown) {
             userDropdown.classList.remove('show');
+        }
+        if (!clickedMobileDropdown && mobileDropdown) {
+            mobileDropdown.classList.remove('show');
         }
     });
 
