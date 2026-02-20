@@ -1071,3 +1071,117 @@
     display: block;
     padding-top: 20px;
 }
+
+@media (max-width: 768px) {
+    .settings-layout {
+        gap: 16px;
+    }
+
+    .settings-card {
+        padding: 18px;
+        border-radius: 14px;
+        margin-bottom: 16px;
+    }
+
+    .profile-avatar-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 18px;
+        padding-bottom: 18px;
+    }
+
+    .avatar-upload-row {
+        flex-wrap: wrap;
+    }
+
+    .avatar-upload-row .btn {
+        flex: 1 1 180px;
+    }
+
+    .form-actions {
+        flex-wrap: wrap;
+        justify-content: stretch;
+    }
+
+    .form-actions .btn {
+        flex: 1 1 180px;
+        justify-content: center;
+    }
+
+    .billing-info-left {
+        align-items: flex-start;
+    }
+
+    .billing-toggle {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .plan-card {
+        padding: 18px;
+    }
+
+    .plan-price {
+        font-size: 28px;
+    }
+
+    .logo-compact-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .logo-compact-preview {
+        width: 100%;
+        max-width: 320px;
+        height: 92px;
+    }
+
+    .logo-compact-actions {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .settings-layout {
+        gap: 12px;
+    }
+
+    .settings-card {
+        padding: 14px;
+        border-radius: 12px;
+    }
+
+    .settings-card-header {
+        margin-bottom: 14px;
+    }
+
+    .team-table-wrap {
+        margin: 0 -14px;
+        padding: 0 14px;
+    }
+
+    .team-table {
+        min-width: 420px;
+    }
+
+    .avatar-upload-row .btn,
+    .form-actions .btn,
+    .logo-compact-actions .btn {
+        width: 100%;
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+
+    .collapsible-header {
+        padding: 16px 14px;
+    }
+
+    .collapsible-content {
+        padding: 0 14px 14px 14px;
+    }
+
+    .collapsible-card.open .collapsible-content {
+        padding-top: 14px;
+    }
+}
