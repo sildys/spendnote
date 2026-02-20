@@ -66,7 +66,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/main.css?v=18">
+    <link rel="stylesheet" href="assets/css/main.css?v=19">
+    <script>
+    (function () {
+        try {
+            var ua = String(navigator.userAgent || '');
+            if (/YaBrowser/i.test(ua)) {
+                document.documentElement.classList.add('is-yandex');
+            }
+        } catch (_) {}
+    })();
+    </script>
     <style>
         /* ===================================
            LANDING PAGE SPECIFIC STYLES
@@ -100,6 +110,53 @@
             color: #0a0a0a !important;
             border: 2px solid rgba(0, 0, 0, 0.08);
         }
+
+        /* Yandex-specific hard fallback mode */
+        .is-yandex .hero::before,
+        .is-yandex .hero::after {
+            display: none;
+        }
+
+        .is-yandex .btn-primary {
+            background: #047857 !important;
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(4, 120, 87, 0.25) !important;
+        }
+
+        .is-yandex .btn-secondary {
+            background: #f8fafc !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        .is-yandex .feature-item:hover {
+            transform: none;
+        }
+
+        .is-yandex .fas,
+        .is-yandex .fa-solid,
+        .is-yandex .far {
+            font-family: inherit !important;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        .is-yandex .fa-check-circle::before { content: '✓'; }
+        .is-yandex .fa-times-circle::before { content: '✕'; }
+        .is-yandex .fa-shield-halved::before { content: '🛡'; }
+        .is-yandex .fa-users::before { content: '👥'; }
+        .is-yandex .fa-cloud::before { content: '☁'; }
+        .is-yandex .fa-bolt::before { content: '⚡'; }
+        .is-yandex .fa-boxes::before { content: '▦'; }
+        .is-yandex .fa-language::before { content: '文'; }
+        .is-yandex .fa-history::before { content: '⟳'; }
+        .is-yandex .fa-lock::before { content: '🔒'; }
+        .is-yandex .fa-envelope::before { content: '✉'; }
+        .is-yandex .fa-receipt::before { content: '🧾'; }
+        .is-yandex .fa-user-lock::before { content: '👤'; }
+        .is-yandex .fa-edit::before { content: '✎'; }
+        .is-yandex .fa-check::before { content: '✓'; }
 
         body::before {
             content: '';
