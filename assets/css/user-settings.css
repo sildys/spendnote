@@ -1,5 +1,17 @@
 /* ===== USER SETTINGS PAGE STYLES ===== */
 
+html,
+body {
+    overflow-x: hidden;
+}
+
+.app-container,
+.main-content {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
 .settings-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -43,6 +55,7 @@
 .profile-avatar-section {
     display: flex;
     align-items: flex-start;
+    flex-wrap: wrap;
     gap: 24px;
     margin-bottom: 24px;
     padding-bottom: 24px;
@@ -160,12 +173,15 @@
 .avatar-color-row {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 100%;
 }
 
 .avatar-color-swatches {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    width: 100%;
     max-width: 100%;
     overflow: hidden;
 }
