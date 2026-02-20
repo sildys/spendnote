@@ -804,6 +804,17 @@ document.querySelectorAll('input[name="receiptMode"]').forEach(radio => {
     });
 });
 
+document.querySelectorAll('.mode-toggle label').forEach(label => {
+    label.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('for');
+        const targetInput = targetId ? document.getElementById(targetId) : null;
+        const requestedMode = (targetInput && targetInput.value === 'detailed') ? 'detailed' : 'quick';
+        if (targetInput) targetInput.checked = true;
+        applyReceiptMode(requestedMode);
+    });
+});
+
 
 // ===== TOGGLE SWITCHES =====
 document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
@@ -985,6 +996,20 @@ document.addEventListener('mouseup', () => {
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded', function() {
     applyReceiptMode('quick');
+
+    // Safety fallback: if mode radios fail to toggle in some browsers, keep controls visible.
+    const detailedToggles = document.getElementById('receiptToggleList');
+    if (detailedToggles) {
+        setTimeout(() => {
+            try {
+                if (window.getComputedStyle(detailedToggles).display === 'none') {
+                    detailedToggles.style.display = 'flex';
+                }
+            } catch (_) {
+                detailedToggles.style.display = 'flex';
+            }
+        }, 0);
+    }
 
     const receiptFrame = document.getElementById('receiptFrame');
     if (receiptFrame) {
