@@ -140,6 +140,10 @@ function fitNumericTextElement(el) {
     }
     el.style.maxWidth = '100%';
     el.style.whiteSpace = 'nowrap';
+    el.style.textOverflow = 'clip';
+    el.style.overflow = 'hidden';
+    el.style.transform = 'none';
+    el.style.transformOrigin = '';
 
     const availableWidth = el.clientWidth || (el.parentElement ? el.parentElement.clientWidth : 0);
     if (!availableWidth || availableWidth <= 0) return;
@@ -147,7 +151,7 @@ function fitNumericTextElement(el) {
     el.style.fontSize = `${baseFont}px`;
     if (el.scrollWidth <= availableWidth + 0.5) return;
 
-    const minFont = Math.max(8, Math.floor(baseFont * 0.4));
+    const minFont = Math.max(6, Math.floor(baseFont * 0.3));
     let low = minFont;
     let high = baseFont;
     let best = minFont;
@@ -164,6 +168,16 @@ function fitNumericTextElement(el) {
     }
 
     el.style.fontSize = `${best}px`;
+
+    const overflowRatio = el.scrollWidth > 0 ? (availableWidth / el.scrollWidth) : 1;
+    if (overflowRatio < 0.995) {
+        const clampedRatio = Math.max(0.65, Math.min(1, overflowRatio));
+        if (clampedRatio < 1) {
+            const isRightAligned = computed.textAlign === 'right' || computed.justifyContent === 'flex-end';
+            el.style.transformOrigin = isRightAligned ? 'right center' : 'left center';
+            el.style.transform = `scaleX(${clampedRatio})`;
+        }
+    }
 }
 
 function fitNumericInputElement(input) {
