@@ -105,6 +105,135 @@ function initSpendNoteNav() {
     highlightMarketingNav();
 }
 
+const SN_NUMBER_FIT_TEXT_SELECTOR = [
+    '.register-balance',
+    '.tx-card-amount',
+    '.tx-amount',
+    '.stat-value',
+    '#txHeaderAmount .value',
+    '#txAmountValue',
+    '[data-number-autofit]'
+].join(',');
+
+const SN_NUMBER_FIT_INPUT_SELECTOR = [
+    'input[type="number"]',
+    'input[inputmode="numeric"]',
+    'input[inputmode="decimal"]',
+    'input[id*="amount" i]',
+    'input[name*="amount" i]'
+].join(',');
+
+function fitNumericTextElement(el) {
+    if (!(el instanceof HTMLElement)) return;
+    const text = String(el.textContent || '').trim();
+    if (!text || !/\d/.test(text)) return;
+
+    const computed = window.getComputedStyle(el);
+    const storedBase = Number(el.dataset.snFitBaseFont || 0);
+    const baseFont = Number.isFinite(storedBase) && storedBase > 0
+        ? storedBase
+        : parseFloat(computed.fontSize) || 16;
+    el.dataset.snFitBaseFont = String(baseFont);
+
+    if (computed.display === 'inline') {
+        el.style.display = 'inline-block';
+    }
+    el.style.maxWidth = '100%';
+    el.style.whiteSpace = 'nowrap';
+
+    const availableWidth = el.clientWidth || (el.parentElement ? el.parentElement.clientWidth : 0);
+    if (!availableWidth || availableWidth <= 0) return;
+
+    el.style.fontSize = `${baseFont}px`;
+    if (el.scrollWidth <= availableWidth + 0.5) return;
+
+    const minFont = Math.max(8, Math.floor(baseFont * 0.4));
+    let low = minFont;
+    let high = baseFont;
+    let best = minFont;
+
+    for (let i = 0; i < 10; i += 1) {
+        const mid = (low + high) / 2;
+        el.style.fontSize = `${mid}px`;
+        if (el.scrollWidth <= availableWidth + 0.5) {
+            best = mid;
+            low = mid;
+        } else {
+            high = mid;
+        }
+    }
+
+    el.style.fontSize = `${best}px`;
+}
+
+function fitNumericInputElement(input) {
+    if (!(input instanceof HTMLInputElement)) return;
+    const value = String(input.value || '').trim();
+
+    const computed = window.getComputedStyle(input);
+    const storedBase = Number(input.dataset.snFitBaseFont || 0);
+    const baseFont = Number.isFinite(storedBase) && storedBase > 0
+        ? storedBase
+        : parseFloat(computed.fontSize) || 16;
+    input.dataset.snFitBaseFont = String(baseFont);
+
+    if (!value) {
+        input.style.fontSize = `${baseFont}px`;
+        return;
+    }
+
+    const charCount = value.replace(/\s+/g, '').length;
+    if (charCount <= 10) {
+        input.style.fontSize = `${baseFont}px`;
+        return;
+    }
+
+    const minFont = Math.max(10, Math.floor(baseFont * 0.55));
+    const reduced = baseFont - (charCount - 10) * 0.55;
+    input.style.fontSize = `${Math.max(minFont, reduced)}px`;
+}
+
+function fitAllNumericElements(root = document) {
+    const textNodes = root.querySelectorAll(SN_NUMBER_FIT_TEXT_SELECTOR);
+    textNodes.forEach((el) => fitNumericTextElement(el));
+
+    const inputs = root.querySelectorAll(SN_NUMBER_FIT_INPUT_SELECTOR);
+    inputs.forEach((input) => {
+        fitNumericInputElement(input);
+        if (input.dataset.snFitInputBound === '1') return;
+        input.dataset.snFitInputBound = '1';
+        input.addEventListener('input', () => fitNumericInputElement(input));
+        input.addEventListener('change', () => fitNumericInputElement(input));
+    });
+}
+
+function initGlobalNumberAutoFit() {
+    if (window.__snNumberAutoFitInitDone) return;
+    window.__snNumberAutoFitInitDone = true;
+
+    let framePending = false;
+    const scheduleFit = () => {
+        if (framePending) return;
+        framePending = true;
+        window.requestAnimationFrame(() => {
+            framePending = false;
+            fitAllNumericElements(document);
+        });
+    };
+
+    scheduleFit();
+    window.addEventListener('load', scheduleFit);
+    window.addEventListener('resize', scheduleFit);
+    window.addEventListener('orientationchange', scheduleFit);
+
+    const observer = new MutationObserver(scheduleFit);
+    observer.observe(document.body, {
+        subtree: true,
+        childList: true,
+        characterData: true
+    });
+}
+
 function highlightMarketingNav() {
     const links = Array.from(document.querySelectorAll('.nav-links a'));
     if (!links.length) return;
@@ -130,8 +259,10 @@ function highlightMarketingNav() {
 // Navigation menu functionality
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initSpendNoteNav);
+    document.addEventListener('DOMContentLoaded', initGlobalNumberAutoFit);
 } else {
     initSpendNoteNav();
+    initGlobalNumberAutoFit();
 }
 
 const MAIN_AVATAR_SCOPE_USER_KEY = 'spendnote.user.avatar.activeUserId.v1';
