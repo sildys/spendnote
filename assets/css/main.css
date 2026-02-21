@@ -504,14 +504,15 @@ label {
     display: flex;
     flex-direction: column;
     gap: var(--space-lg);
-    align-items: flex-start;
-    text-align: left;
+    align-items: flex-end;
+    text-align: right;
 }
 
 .app-footer-links-simple {
     display: flex;
     gap: var(--space-lg);
-    align-items: flex-start;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .app-footer-links-simple a {
@@ -837,6 +838,11 @@ tr:hover {
     
     .app-footer-top {
         flex-direction: column;
+    }
+
+    .app-footer-right {
+        align-items: flex-start;
+        text-align: left;
     }
     
     .app-footer-links-simple {
