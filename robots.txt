@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# App/internal routes should not be crawled
+Disallow: /dashboard
+Disallow: /transactions
+Disallow: /cash-boxes
+Disallow: /contacts
+Disallow: /settings
+Disallow: /login
+Disallow: /signup
+
+Sitemap: https://spendnote.app/sitemap.xml

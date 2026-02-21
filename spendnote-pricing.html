@@ -73,7 +73,7 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/main.css?v=17">
+    <link rel="stylesheet" href="assets/css/main.css?v=21">
     <style>
         /* ===== PRICING PAGE SPECIFIC STYLES ===== */
 
@@ -709,6 +709,41 @@
                 padding: 40px 1rem;
             }
         }
+
+        @media (max-width: 480px) {
+            .section-header h2 {
+                font-size: clamp(1.8rem, 9vw, 2.3rem);
+            }
+
+            .section-header p {
+                font-size: 1rem;
+            }
+
+            .pricing-toggle {
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+            }
+
+            .save-badge {
+                margin-left: 0;
+                margin-top: 0.35rem;
+                display: inline-flex;
+            }
+
+            .pricing-card {
+                padding: 2rem 1.25rem;
+                border-radius: 18px;
+            }
+
+            .pricing-card .price {
+                font-size: 40px;
+            }
+
+            .pricing-reassurance-item {
+                padding: 0.9rem;
+            }
+        }
     </style></head>
 <body>
 <div class="preview-banner" role="status" aria-live="polite">
@@ -791,7 +826,7 @@ function togglePreviewDetails() {
                 <li><a href="index.html">Home</a></li>
                 <li><a href="spendnote-pricing.html" class="active">Pricing</a></li>
                 <li><a href="spendnote-faq.html">FAQ</a></li>
-                <li><a href="/login" class="btn btn-secondary">Log in</a></li>
+                <li><a href="spendnote-login.html" class="btn btn-secondary">Log in</a></li>
                 <li><a href="spendnote-signup.html" class="btn btn-primary">Sign up</a></li>
             </ul>
         </div>

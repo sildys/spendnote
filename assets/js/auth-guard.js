@@ -45,7 +45,7 @@
         } catch (_) {
             returnTo = '/app';
         }
-        window.location.href = `/login?returnTo=${encodeURIComponent(returnTo)}`;
+        window.location.href = `/spendnote-login.html?returnTo=${encodeURIComponent(returnTo)}`;
     };
     try {
         isInIframe = window.self !== window.top;

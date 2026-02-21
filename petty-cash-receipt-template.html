@@ -52,7 +52,7 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/main.css?v=18">
+    <link rel="stylesheet" href="assets/css/main.css?v=21">
     <style>
         body {
             background: var(--bg);
@@ -599,6 +599,30 @@
                 gap: 1.5rem;
             }
         }
+
+        @media (max-width: 480px) {
+            .seo-hero {
+                padding: 2rem 0;
+            }
+
+            .seo-hero h1 {
+                font-size: clamp(1.9rem, 9vw, 2.4rem);
+            }
+
+            .seo-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .cta-box {
+                padding: 1.25rem 1rem;
+            }
+
+            .cta-box .btn,
+            .hero-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -679,7 +703,7 @@ function togglePreviewDetails() {
                 <li><a href="index.html">Home</a></li>
                 <li><a href="spendnote-pricing.html">Pricing</a></li>
                 <li><a href="spendnote-faq.html">FAQ</a></li>
-                <li><a href="/login" class="btn btn-secondary">Log in</a></li>
+                <li><a href="spendnote-login.html" class="btn btn-secondary">Log in</a></li>
                 <li><a href="spendnote-signup.html" class="btn btn-primary">Sign up</a></li>
             </ul>
         </div>

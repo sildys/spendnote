@@ -10,7 +10,7 @@
     <title>Sign Up - SpendNote</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/main.css?v=12">
+    <link rel="stylesheet" href="assets/css/main.css?v=22">
     <style>
         /* ===== SIGNUP PAGE SPECIFIC STYLES ===== */
         
@@ -674,7 +674,7 @@ function togglePreviewDetails() {
 
             <!-- Footer -->
             <div class="auth-footer">
-                Already have an account? <a id="loginLink" href="/login">Log in</a>
+                Already have an account? <a id="loginLink" href="spendnote-login.html">Log in</a>
             </div>
         </div>
     </div>
@@ -777,7 +777,7 @@ function togglePreviewDetails() {
                 if (inviteToken) {
                     const loginLink = document.getElementById('loginLink');
                     if (loginLink) {
-                        let href = '/login?inviteToken=' + encodeURIComponent(inviteToken);
+                        let href = 'spendnote-login.html?inviteToken=' + encodeURIComponent(inviteToken);
                         if (invitedEmail) href += '&invitedEmail=' + encodeURIComponent(invitedEmail);
                         loginLink.href = href;
                     }
@@ -917,7 +917,7 @@ function togglePreviewDetails() {
                 // Sign up with Supabase
                 const sp = new URLSearchParams(window.location.search);
                 const inviteToken = sp.get('inviteToken');
-                const redirectBase = `${window.location.origin}/login?confirmed=1`;
+                const redirectBase = `${window.location.origin}/spendnote-login.html?confirmed=1`;
                 const emailRedirectTo = inviteToken
                     ? `${redirectBase}&inviteToken=${encodeURIComponent(inviteToken)}`
                     : redirectBase;
@@ -951,7 +951,7 @@ function togglePreviewDetails() {
                             try {
                                 const sp = new URLSearchParams(window.location.search);
                                 const inviteToken = sp.get('inviteToken');
-                                const redirectBase = `${window.location.origin}/login?confirmed=1`;
+                                const redirectBase = `${window.location.origin}/spendnote-login.html?confirmed=1`;
                                 const emailRedirectTo = inviteToken
                                     ? `${redirectBase}&inviteToken=${encodeURIComponent(inviteToken)}`
                                     : redirectBase;
@@ -1029,7 +1029,7 @@ function togglePreviewDetails() {
             loginBtn.className = 'btn btn-primary';
             loginBtn.textContent = 'Log in';
             loginBtn.addEventListener('click', () => {
-                window.location.href = '/login';
+                window.location.href = 'spendnote-login.html';
             });
 
             const resetBtn = document.createElement('button');

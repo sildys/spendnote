@@ -52,7 +52,74 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
 - [ ] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass
 
-## Where we are now (last updated: 2026-02-19 — modal header alignment fix)
+## Where we are now (last updated: 2026-02-21 — cash box detail mobile cards + duplicate routing)
+
+### 2026-02-21 frissítés — mobil reszponzivitás + onboarding irány
+
+**Ma lezárt technikai javítások:**
+
+- **Cash Box Detail mobil kártyanézet bekapcsolva** (`spendnote-cash-box-detail.html`)
+  - `#txCardList` konténer hozzáadva a table wrapper mellé.
+  - `@media (max-width: 480px)`: táblázat rejtve, kártyalista látható.
+  - `@media (max-width: 768px)`: szűk nézetben fallback oszlopcsökkentés.
+- **Duplicate gomb mobil route javítás** (`assets/js/main.js`)
+  - Mobil/touch/coarse pointer környezetben duplicate már a standalone oldalra visz:
+    - `spendnote-new-transaction.html?...#new-transaction`
+  - Desktopon marad a dashboard/modal útvonal.
+- **Cache-bust**
+  - `main.js?v=23` frissítve:
+    - `spendnote-cash-box-detail.html`
+    - `spendnote-transaction-history.html`
+
+**Mai termék/onboarding irány (dokumentált döntési javaslat):**
+
+- Alapállapot marad: signup után automatikus default **USD cash box**.
+- Megerősítve: új regisztrálóknál a default cash box létrehozás/megnyitás már működik.
+- Új irány: első belépésnél **first-run setup modal** kérje be a receipten kötelezően megjelenő identitás mező(ke)t (pl. receipt display name).
+- A **Settings** maradjon a kanonikus szerkesztési hely, de ne legyen kötelező első navigációs lépés a legelső receipt előtt.
+- Team Management ismert hiány: userenként több cash box jogosultság kezelésének logikája jelenleg nem megfelelő; ezt **post-preview** javítjuk.
+
+**Mai commit (kész):** `0a2319e`
+
+### Preview sprint terv (7-8 nap, scope lock)
+
+**Cél:** preview indulás minimál kockázattal, SEO/indexelés elindítása mellett.
+
+1. **Nap 1-2:** landing + SEO oldalak mobil audit és javítás
+   - Érintett oldalak: `index.html`, `spendnote-pricing.html`, `spendnote-faq.html`, `spendnote-terms.html`, `spendnote-privacy.html` + 2 SEO oldal
+   - Breakpointok: 430 / 390 / 375 px
+   - Fókusz: overflow, hero/CTA, footer/legal blokkok
+2. **Nap 3:** vizuális konzisztencia és konverziós tisztítás marketing oldalakon
+3. **Nap 4:** SEO release minimum
+   - Csak landing + 2 SEO oldal legyen indexelhető
+   - sitemap/robots ellenőrzés
+   - GSC URL beküldés előkészítés
+4. **Nap 5:** regresszió kör (marketing felületek)
+5. **Nap 6:** preview deploy + utóellenőrzés
+6. **Nap 7-8:** buffer (csak blocker hibák)
+
+**Kifejezetten post-preview:**
+- Team multi-cash-box jogosultság logika javítás
+- Email templatek (L2/L3)
+- Nem kritikus app-belső fejlesztések
+
+### Preview sprint — Day 1 státusz (kész)
+
+- Marketing oldalak mobil audit + kritikus javítások lezárva:
+  - `index.html`, `spendnote-pricing.html`, `spendnote-faq.html`, `spendnote-terms.html`, `spendnote-privacy.html`
+  - SEO oldalakból javítva: `cash-handoff-receipt.html`, `petty-cash-receipt-template.html`
+- Közös mobil hardening (`assets/css/main.css`):
+  - preview banner elemek és footer disclaimer (`<=480px`) overflow-biztosítása.
+- FAQ:
+  - `faq-grid` min-width csökkentés (`380/320` -> `300/280`), plusz `<=480px` spacing fixek.
+- Pricing:
+  - `<=480px` tipográfia/toggle/card spacing szűkítés.
+- Terms/Privacy:
+  - `<=768px` és `<=480px` paddings csökkentve, TOC link wrap javítva.
+  - Privacy data table mobilon horizontálisan görgethető.
+- SEO readiness baseline:
+  - gyökér `robots.txt` létrehozva,
+  - `sitemap.xml` ellenőrizve.
 
 ### Feltárt hiányosságlista (a reszponzivitás + email confirmation témán túl)
 
@@ -727,6 +794,9 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
   - Destructive confirms use red danger styling; prompts for email, void reason, delete confirmation
 
 ## Next focus (pick one)
+- **Marketing oldalak mobil optimalizálása (következő session első feladat):** `index.html`, `spendnote-pricing.html`, `spendnote-faq.html`, `spendnote-terms.html`, `spendnote-privacy.html` — 430/390/375px töréspontok, overflow, hero/CTA/footer/legal blokkok.
+- **Preview scope lock (7-8 nap):** onboardingban csak a kötelező receipt identity first-run modal készül el; az email templatek (L2/L3) post-preview feladatok.
+- **Preview scope lock (kiegészítés):** a Team multi-cash-box assignment/logika javítás **nem preview blocker**, külön post-preview workstream.
 - Landing polish for public preview (copy, CTA, preview messaging, trust/legal links).
 - Add visible contact email on landing (footer + clear `mailto:`) for inbound questions.
 - Preview disclaimer UX on landing + signup (signup explicit acceptance).

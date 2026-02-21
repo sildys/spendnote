@@ -10,7 +10,7 @@
     <title>Log In - SpendNote</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/main.css?v=12">
+    <link rel="stylesheet" href="assets/css/main.css?v=22">
     <style>
         /* ===== LOGIN PAGE SPECIFIC STYLES ===== */
         
@@ -580,7 +580,7 @@
                 try {
                     const sp = new URLSearchParams(window.location.search);
                     const inviteToken = sp.get('inviteToken');
-                    const redirectUrl = new URL(`${window.location.origin}/login`);
+                    const redirectUrl = new URL(`${window.location.origin}/spendnote-login.html`);
                     redirectUrl.searchParams.set('confirmed', '1');
                     redirectUrl.searchParams.set('returnTo', getSafeReturnTo());
                     if (inviteToken) {
@@ -665,11 +665,11 @@
         }
 
         // Google login
-        document.getElementById('googleBtn').addEventListener('click', async function() {
+        document.getElementById('googleBtn').addEventListener('click', async () => {
             try {
                 const sp = new URLSearchParams(window.location.search);
                 const inviteToken = sp.get('inviteToken');
-                const redirectUrl = new URL(`${window.location.origin}/login`);
+                const redirectUrl = new URL(`${window.location.origin}/spendnote-login.html`);
                 redirectUrl.searchParams.set('returnTo', getSafeReturnTo());
                 if (inviteToken) {
                     redirectUrl.searchParams.set('inviteToken', inviteToken);

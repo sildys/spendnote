@@ -8,7 +8,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/main.css?v=12">
+    <link rel="stylesheet" href="assets/css/main.css?v=22">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=18">
     <link rel="stylesheet" href="assets/css/dashboard.css?v=20260220-1548">
     <style>
@@ -866,7 +866,7 @@
             if (!window.auth || !window.db) throw new Error('Auth not available — please refresh.');
 
             const user = await window.auth.getCurrentUser();
-            if (!user) { window.location.href = '/login'; return; }
+            if (!user) { window.location.href = 'spendnote-login.html'; return; }
 
             // Load cashboxes with all fields needed
             const cashBoxes = await window.db.cashBoxes.getAll({
