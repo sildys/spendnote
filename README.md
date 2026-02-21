@@ -34,6 +34,7 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 - Dashboard and mobile view are **UI-complete**.
 - Core functional flows are **stable** in continuous manual testing.
 - App is in a **go-live capable** state.
+- Preview usage cap is now **technically enforced** at 200 receipts during preview.
 
 ### Remaining backlog (non-blocking)
 
@@ -49,6 +50,10 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
   - domain property active,
   - sitemap submitted successfully,
   - indexing requests sent for `/` and `/faq`.
+- Preview receipt cap enforcement configured:
+  - create-time check blocks new transactions after 200 active receipts,
+  - clear UI message shown on limit reached,
+  - cache-busted script references for `supabase-config.js` and `dashboard-form.js` on main create flows.
 
 ## Near-term rollout plan (next session)
 

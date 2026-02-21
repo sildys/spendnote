@@ -90,6 +90,10 @@ If a chat thread freezes / context is lost: in the new thread say:
 - **Landing image SEO jelölések (KÉSZ)**
   - részletesebb `alt` + `title` attribútumok,
   - `ImageObject` JSON-LD hozzáadva.
+- **Preview limit enforcement (KÉSZ)**
+  - tényleges create-time ellenőrzés bekötve: **200 aktív receipt** limiten a tranzakció mentése blokkol,
+  - egységes hibaüzenet megjelenik a UI-ban: `Preview limit reached (200 receipts)...`,
+  - cache-bust frissítve: `supabase-config.js` + `dashboard-form.js` betöltések (`dashboard.html`, `spendnote-new-transaction.html`).
 
 **Állapot:**
 
@@ -97,6 +101,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Funkcionális core flow-k (felhasználói teszt alapján): **működnek**.
 - Jelen állapotban a rendszer **élőbe rakható**.
 - Monitoring + SEO minimum baseline: **bekonfigurálva**.
+- Preview számláló limit (200 receipt) enforcement: **bekonfigurálva**.
 
 **Maradék backlog (nem blocker):**
 
