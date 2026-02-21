@@ -4,6 +4,10 @@
 /app/ /dashboard 302
 /login /spendnote-login.html 200
 /signup /spendnote-signup.html 200
+/pricing /spendnote-pricing.html 200
+/pricing/ /spendnote-pricing.html 200
+/faq /spendnote-faq.html 200
+/faq/ /spendnote-faq.html 200
 /settings /spendnote-user-settings.html 200
 /transactions /spendnote-transaction-history.html 200
 /contacts /spendnote-contact-list.html 200
