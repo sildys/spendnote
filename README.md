@@ -7,7 +7,7 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
-## Current status (2026-02-21 — release-ready UI/UX)
+## Current status (2026-02-21 — live baseline complete, full polish scope expanded)
 
 ### Completed in the latest release-polish cycle
 
@@ -36,11 +36,19 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 - App is in a **go-live capable** state.
 - Preview usage cap is now **technically enforced** at 200 receipts during preview.
 
-### Remaining backlog (non-blocking)
+### Next major scope (deep round, estimate: ~6-8 weeks)
 
-- User Settings: finalize Team management.
-- Finalize subscription/billing integration.
-- Marketing page copy refinements.
+- Deep SEO + FAQ overhaul
+  - intent-focused content quality, structural cleanup, stronger internal linking, schema quality pass.
+- Onboarding redesign + implementation
+  - guided post-signup flow, role-based paths, completion-state UX.
+- Registration wizard (multi-step signup)
+  - progress states, better validation UX, clearer error handling.
+- Confirmation/transactional email system
+  - trigger matrix, templates, delivery logic, and delivery validation.
+- Full Team management redesign
+  - role model, invite lifecycle, cash-box access model, and edge-case handling.
+- Billing/subscription alignment with the new team + onboarding model.
 
 ### Completed operational baseline
 
@@ -55,17 +63,17 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
   - clear UI message shown on limit reached,
   - cache-busted script references for `supabase-config.js` and `dashboard-form.js` on main create flows.
 
-## Near-term rollout plan (next session)
+## Near-term execution plan (next sessions)
 
-1. Weekly post-go-live operational checklist (5 minutes):
-   - review new Sentry issues,
-   - check Search Console indexing status (`/`, `/faq`),
-   - verify Cloudflare analytics + alerts,
-   - run core smoke (login + new transaction + receipt).
-2. Continue non-blocking backlog:
-   - Team management finalization,
-   - subscription/billing integration,
-   - marketing copy refinements.
+1. SEO/FAQ deep audit and rewrite plan.
+2. Onboarding + registration wizard specification.
+3. Team management redesign specification.
+4. Implementation waves (wizard, onboarding, team, email flows, billing alignment).
+5. Keep weekly 5-minute operational checks running:
+   - Sentry issues,
+   - Search Console indexing status (`/`, `/faq`),
+   - Cloudflare analytics + alerts,
+   - core smoke (login + new transaction + receipt).
 
 ## Recent engineering updates (2026-02-19 — modal header alignment fix)
 

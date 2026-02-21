@@ -52,7 +52,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
 - [ ] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass
 
-## Where we are now (last updated: 2026-02-21 — live operations + SEO baseline configured)
+## Where we are now (last updated: 2026-02-21 — live baseline done, full polish scope expanded)
 
 ### 2026-02-21 esti zárás — release polish (KÉSZ)
 
@@ -103,11 +103,19 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Monitoring + SEO minimum baseline: **bekonfigurálva**.
 - Preview számláló limit (200 receipt) enforcement: **bekonfigurálva**.
 
-**Maradék backlog (nem blocker):**
+**Következő fő scope (alapos kör, becslés: ~6-8 hét):**
 
-- User Settings: Team kezelés véglegesítése.
-- Előfizetés/billing bekötés véglegesítése.
-- Marketing oldalak copy/szövegjavítások.
+- SEO oldalak + FAQ mély overhaul
+  - intent-alapú tartalomfinomítás, strukturális javítások, internal linking, schema minőség.
+- Onboarding flow újratervezés + implementáció
+  - signup utáni vezetett lépések, role-based útvonalak, completion state.
+- Regisztrációs varázsló (multi-step signup)
+  - validációs UX, hibakezelés, progress és completion logika.
+- Visszaigazoló/email flow teljes kör
+  - trigger mátrix, sablonok, küldési logika, kézbesítés-ellenőrzés.
+- Team management teljes újragondolás
+  - szerepkörök, invite lifecycle, cash-box access modell, edge case-ek.
+- Billing/subscription igazítás az új team + onboarding modellhez.
 
 **Következő operatív lépés (rutin):**
 
