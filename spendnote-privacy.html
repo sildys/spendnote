@@ -196,6 +196,19 @@
             color: var(--text-muted);
         }
 
+        /* Keep footer consistent with shared app footer across pages */
+        .app-footer {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f766e 100%) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+            padding: 4rem 0 2rem !important;
+        }
+
+        .app-footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--page-gutter);
+        }
+
         @media (max-width: 768px) {
             .legal-hero-content {
                 padding: 0 1.25rem;
@@ -214,6 +227,21 @@
             }
 
             .nav-links { display: none; }
+
+            .app-footer-top {
+                flex-direction: column;
+            }
+
+            .app-footer-right {
+                align-items: flex-start;
+                text-align: left;
+            }
+
+            .app-footer-links-simple {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
             .data-table {
                 width: 100%;
                 table-layout: fixed;
