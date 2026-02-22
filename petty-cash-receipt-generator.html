@@ -345,6 +345,9 @@
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             overflow: hidden;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .output-showcase img {
@@ -352,6 +355,8 @@
             width: 100%;
             height: auto;
             background: #f8fafc;
+            max-height: 520px;
+            object-fit: contain;
         }
 
         .output-showcase figcaption {
@@ -576,6 +581,14 @@
 
             .feature-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .output-showcase figure {
+                max-width: 100%;
+            }
+
+            .output-showcase img {
+                max-height: 420px;
             }
 
             .cta-box {
