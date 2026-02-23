@@ -450,7 +450,7 @@
                 try {
                     await window.supabaseClient
                         .from('profiles')
-                        .insert([{ id: user.id, email, full_name: fullName }]);
+                        .insert([{ id: user.id, email, full_name: fullName, subscription_tier: 'pro' }]);
                 } catch (_) {}
             } catch (_) {}
         };

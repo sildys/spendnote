@@ -307,7 +307,7 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
         try {
             await supabaseClient
                 .from('profiles')
-                .insert([{ id: userId, email, full_name: fullName }]);
+                .insert([{ id: userId, email, full_name: fullName, subscription_tier: 'pro' }]);
         } catch (_) {
             // ignore
         }
