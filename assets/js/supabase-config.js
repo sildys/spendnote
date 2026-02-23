@@ -2783,9 +2783,10 @@ var db = {
                     .from('orgs')
                     .select('name')
                     .eq('id', ctx.orgId)
-                    .single();
+                    .maybeSingle();
                 if (error) return '';
-                return String(data?.name || '').trim();
+                const row = Array.isArray(data) ? (data[0] || null) : data;
+                return String(row?.name || '').trim();
             } catch (_) {
                 return '';
             }
@@ -2805,10 +2806,11 @@ var db = {
                     .from('orgs')
                     .update({ name: nextName })
                     .eq('id', orgId)
-                    .select('id,name')
-                    .single();
+                    .select('id,name');
                 if (error) return { success: false, error: error.message || 'Failed to update organization name.' };
-                return { success: true, data };
+                const row = Array.isArray(data) ? (data[0] || null) : data;
+                if (!row?.id) return { success: false, error: 'Organization update returned no rows.' };
+                return { success: true, data: row };
             } catch (err) {
                 return { success: false, error: String(err?.message || err || 'Failed to update organization name.') };
             }
