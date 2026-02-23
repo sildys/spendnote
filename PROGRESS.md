@@ -28,7 +28,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **P0** Production-ready acceptance criteria (baseline)
   - [ ] Client error tracking (e.g. Sentry)
   - [ ] Edge Function logging + surfacing non-2xx errors clearly
-  - [ ] Smoke test checklist: auth, create transaction, receipt email, receipt PDF
+  - [x] Smoke test checklist documented (`SMOKE_CHECKLIST.md`: auth, create transaction, receipt print/PDF/email, invite)
   - [ ] Abuse protection: basic rate limiting on email/invite endpoints
   - [ ] Cloudflare baseline protection: bot/WAF rules (minimal, safe defaults)
 - [ ] **L1** Onboarding UI: registration success state + post-login next steps (Cash Box → Transaction → Receipt), invite explanation, role-based messaging
@@ -70,6 +70,8 @@ If a chat thread freezes / context is lost: in the new thread say:
   - `transaction-detail-ui.js` `send-receipt-email` hívás átállítva az egységes backend error pipeline-ra.
 - Cache-bust frissítés:
   - `spendnote-transaction-detail.html` `transaction-detail-ui.js?v=46`.
+- P0/2 formalizálás:
+  - release smoke checklist dokumentálva: `SMOKE_CHECKLIST.md`.
 
 ### 2026-02-23 zárás — SEO/copy finomítás + indexelési follow-up (KÉSZ)
 
@@ -92,7 +94,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 **Mostani fókusz (aktív):**
 
-- P0 baseline hardening (hátralévő): abuse/WAF minimum + formális smoke checklist leírás.
+- P0 baseline hardening (hátralévő): abuse/WAF minimum.
 - Onboarding + registration wizard előkészítés.
 - Team/org/invite modell és szerepkörös settings terv (DB-TEAM-1, L4/L5).
 
@@ -275,7 +277,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 - [ ] **Client error tracking** bekötése (Sentry vagy ekvivalens), hogy a production JS hibák visszakövethetők legyenek.
 - [ ] **Edge Function hibamonitoring**: non-2xx hibák látható logolása + gyors hibakeresési útvonal.
-- [ ] **Formális smoke checklist** és futtatás minden release előtt: auth, create transaction, receipt preview/PDF/email.
+- [x] **Formális smoke checklist** dokumentálva (`SMOKE_CHECKLIST.md`) és release-rutinra kijelölve.
 - [ ] **Abuse protection minimum**: rate limit email/invite endpointokra.
 - [ ] **Cloudflare baseline védelem**: minimális, biztonságos WAF/bot szabályok.
 - [ ] **Beta enforcement**: preview/free limitek tényleges enforce-ja (ne csak UI szöveg).

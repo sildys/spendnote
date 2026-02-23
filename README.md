@@ -50,6 +50,9 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
   - Team invite flow now logs RPC and Edge email send errors with context and reference IDs.
   - Transaction Detail receipt email send now uses the same shared error pipeline.
   - Transaction Detail JS cache-bust bumped so clients load latest error handling immediately.
+- **P0/2 formal smoke checklist documented**:
+  - new release checklist file: `SMOKE_CHECKLIST.md`,
+  - includes pass/fail checks for auth, create transaction, print/PDF/email receipt, and invite flow.
 
 ### Latest SEO/copy follow-up (2026-02-23)
 
@@ -106,7 +109,6 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 ## Near-term execution plan (next sessions)
 
 1. P0 production baseline hardening:
-   - formal smoke checklist documentation,
    - minimum abuse/WAF protections.
 2. Onboarding + registration wizard specification and implementation prep.
 3. Team/org/invite model alignment (DB-TEAM-1) and role-based settings plan.
