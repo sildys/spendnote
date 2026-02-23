@@ -44,9 +44,21 @@ async function updateOrgContextIndicator() {
         const shortOrg = orgId.slice(0, 8);
         const orgName = String(state?.orgName || '').trim();
         const identityLabel = orgName || `Workspace ${shortOrg}`;
+        let userLabel = '';
+        try {
+            if (window.db?.profiles?.getCurrent) {
+                const p = await window.db.profiles.getCurrent();
+                const fullName = String(p?.full_name || '').trim();
+                const email = String(p?.email || '').trim();
+                userLabel = fullName || email;
+            }
+        } catch (_) {
+            // ignore
+        }
+        if (!userLabel) userLabel = roleLabel;
 
         if (dropInfo) {
-            dropInfo.innerHTML = `<span class="org-context-dropdown-role">${roleLabel}</span><span class="org-context-dropdown-org">${identityLabel}</span>`;
+            dropInfo.innerHTML = `<span class="org-context-dropdown-user">${userLabel}</span><span class="org-context-dropdown-role">${roleLabel}</span><span class="org-context-dropdown-org">Team: ${identityLabel}</span>`;
             dropInfo.style.display = 'flex';
         }
 
