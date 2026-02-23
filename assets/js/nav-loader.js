@@ -62,12 +62,12 @@ const NAV_HTML = `
                 </button>
             </li>
             <li class="user-avatar-wrapper" id="userAvatarBtn">
-                <span id="orgContextNavLabel" class="org-context-nav-label" style="display:none;"></span>
                 <div class="user-avatar">
                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="User">
                 </div>
                 <div class="user-dropdown" id="userDropdown">
                     <div class="user-dropdown-menu">
+                        <div id="orgContextDropdownInfo" class="org-context-dropdown-info" style="display:none;"></div>
                         <a href="spendnote-user-settings.html" class="user-dropdown-item">
                             <i class="fas fa-cog"></i>
                             Settings

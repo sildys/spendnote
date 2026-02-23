@@ -395,38 +395,44 @@ body {
 }
 
 /* ============================================
-   ORG CONTEXT NAV LABEL (Pro, beside avatar)
+   ORG CONTEXT DROPDOWN INFO (Pro, top of avatar menu)
    ============================================ */
 
-.org-context-nav-label {
-    display: inline-flex;
+.org-context-dropdown-info {
+    display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #065f46;
-    white-space: normal;
-    max-width: 120px;
-    line-height: 1.35;
+    gap: 10px;
+    padding: 10px 16px 8px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--border);
     cursor: default;
     user-select: none;
-    opacity: 0.85;
 }
 
-.org-context-nav-label::before {
-    content: '';
+.org-context-dropdown-dot {
     display: inline-block;
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: #10b981;
     flex-shrink: 0;
 }
 
-@media (max-width: 900px) {
-    .org-context-nav-label {
-        display: none !important;
-    }
+.org-context-dropdown-role {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.org-context-dropdown-org {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted, #64748b);
+    line-height: 1.2;
+    font-family: monospace;
 }
 
 /* ============================================
