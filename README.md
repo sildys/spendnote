@@ -37,6 +37,19 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 - Preview usage cap is now **technically enforced** at 200 receipts during preview.
 - Public SEO copy is now **aligned and consistent** on billing/refund wording and key landing/SEO trust lines.
 - SEO go-live + copy follow-up is **fully closed** in this cycle.
+- P0 backend/Edge error visibility first pass is **implemented** for critical invite + receipt-email flows.
+
+### Latest app-internal hardening update (2026-02-23)
+
+- **P0/1 backend error visibility delivered** (invite + receipt email paths):
+  - Added shared backend error helpers in `supabase-config.js`:
+    - response/request reference extraction (`x-request-id` / `x-supabase-request-id` / `cf-ray`),
+    - normalized fetch error parsing,
+    - standardized user message builder,
+    - structured backend logging + Sentry capture.
+  - Team invite flow now logs RPC and Edge email send errors with context and reference IDs.
+  - Transaction Detail receipt email send now uses the same shared error pipeline.
+  - Transaction Detail JS cache-bust bumped so clients load latest error handling immediately.
 
 ### Latest SEO/copy follow-up (2026-02-23)
 
@@ -93,7 +106,6 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 ## Near-term execution plan (next sessions)
 
 1. P0 production baseline hardening:
-   - edge function error visibility,
    - formal smoke checklist documentation,
    - minimum abuse/WAF protections.
 2. Onboarding + registration wizard specification and implementation prep.

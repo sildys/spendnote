@@ -54,6 +54,23 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ## Where we are now (last updated: 2026-02-23 — SEO szakasz lezárva, app fókusz aktív)
 
+### 2026-02-23 frissítés — P0/1 backend hibaláthatóság első kör (KÉSZ)
+
+**Lezárt és pusholt javítások (mai kör):**
+
+- Közös backend hiba pipeline bevezetve (`assets/js/supabase-config.js`):
+  - request reference kinyerés (`x-request-id` / `x-supabase-request-id` / `cf-ray`),
+  - egységes fetch error parse,
+  - egységes user message builder,
+  - strukturált backend log + Sentry capture.
+- Team invite kritikus útvonal javítva:
+  - RPC (`spendnote_create_invite`) hibák részletesebb logolása kontextussal,
+  - `send-invite-email` Edge hívás hibáinak egységes parse + log + felhasználói hibaüzenet (Ref azonosítóval).
+- Receipt email kritikus útvonal javítva:
+  - `transaction-detail-ui.js` `send-receipt-email` hívás átállítva az egységes backend error pipeline-ra.
+- Cache-bust frissítés:
+  - `spendnote-transaction-detail.html` `transaction-detail-ui.js?v=46`.
+
 ### 2026-02-23 zárás — SEO/copy finomítás + indexelési follow-up (KÉSZ)
 
 **Lezárt és pusholt javítások (mai kör):**
@@ -75,7 +92,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 **Mostani fókusz (aktív):**
 
-- P0 baseline hardening (edge function hibaláthatóság, abuse/WAF minimum, formális smoke checklist leírás).
+- P0 baseline hardening (hátralévő): abuse/WAF minimum + formális smoke checklist leírás.
 - Onboarding + registration wizard előkészítés.
 - Team/org/invite modell és szerepkörös settings terv (DB-TEAM-1, L4/L5).
 
