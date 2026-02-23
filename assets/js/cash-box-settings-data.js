@@ -245,6 +245,88 @@ function togglePanelDisplay(panelEl, displayWhenVisible) {
     panelEl.style.display = isHidden ? (displayWhenVisible || 'block') : 'none';
 }
 
+const TEAM_MEMBER_COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#14b8a6'];
+const teamMemberColor = (idx) => TEAM_MEMBER_COLORS[idx % TEAM_MEMBER_COLORS.length];
+const esc = (v) => String(v ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+const initials = (name) => {
+    const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    return String(name || '?').slice(0, 2).toUpperCase();
+};
+
+async function renderCashBoxTeamMembersAccess() {
+    const list = document.getElementById('cashBoxTeamMembersList');
+    if (!list) return;
+
+    if (!isEditMode || !currentCashBoxId) {
+        list.innerHTML = '<div class="team-member-row" style="justify-content:center;color:var(--text-muted);">Save this Cash Box first to manage Team Access.</div>';
+        return;
+    }
+
+    if (!window.db?.teamMembers?.getAll || !window.db?.cashBoxAccess?.getForCashBox) {
+        list.innerHTML = '<div class="team-member-row" style="justify-content:center;color:var(--text-muted);">Team Access is not available.</div>';
+        return;
+    }
+
+    list.innerHTML = '<div class="team-member-row" style="justify-content:center;color:var(--text-muted);"><i class="fas fa-spinner fa-spin"></i>&nbsp;Loading team access...</div>';
+
+    try {
+        const [teamMembers, accessRows] = await Promise.all([
+            window.db.teamMembers.getAll(),
+            window.db.cashBoxAccess.getForCashBox(currentCashBoxId)
+        ]);
+
+        const accessSet = new Set((accessRows || []).map((row) => String(row?.user_id || '').trim()).filter(Boolean));
+        const activeMembers = (teamMembers || []).filter((m) => String(m?.status || '').toLowerCase() === 'active');
+
+        if (!activeMembers.length) {
+            list.innerHTML = '<div class="team-member-row" style="justify-content:center;color:var(--text-muted);">No active team members found.</div>';
+            return;
+        }
+
+        const rank = { owner: 0, admin: 1, user: 2 };
+        activeMembers.sort((a, b) => {
+            const ra = rank[String(a?.role || '').toLowerCase()] ?? 99;
+            const rb = rank[String(b?.role || '').toLowerCase()] ?? 99;
+            if (ra !== rb) return ra - rb;
+            const na = String(a?.member?.full_name || a?.member?.email || a?.invited_email || '').toLowerCase();
+            const nb = String(b?.member?.full_name || b?.member?.email || b?.invited_email || '').toLowerCase();
+            return na.localeCompare(nb);
+        });
+
+        list.innerHTML = activeMembers.map((m, idx) => {
+            const name = m?.member?.full_name || m?.member?.email || m?.invited_email || 'Unknown member';
+            const email = m?.member?.email || m?.invited_email || '';
+            const role = String(m?.role || 'user').toLowerCase();
+            const memberId = String(m?.member_id || m?.member?.id || '').trim();
+            const isOwnerOrAdmin = role === 'owner' || role === 'admin';
+            const hasAccess = isOwnerOrAdmin ? true : accessSet.has(memberId);
+            const roleLabel = role === 'owner' ? 'Owner' : (role === 'admin' ? 'Admin' : 'User');
+            const accessLabel = hasAccess ? 'Has access' : 'No access';
+            const accessColor = hasAccess ? '#10b981' : '#6b7280';
+
+            return `<div class="team-member-row">
+                <div class="team-avatar" style="background:${teamMemberColor(idx)};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;">${esc(initials(name))}</div>
+                <div class="team-member-info" style="min-width:0;flex:1;">
+                    <div class="team-member-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(name)}</div>
+                    <div class="team-member-role" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                        <span>${esc(roleLabel)}</span>
+                        ${email ? `<span style="opacity:.75;">${esc(email)}</span>` : ''}
+                    </div>
+                </div>
+                <div style="font-size:11px;font-weight:700;color:${accessColor};white-space:nowrap;">${accessLabel}</div>
+            </div>`;
+        }).join('');
+    } catch (err) {
+        console.error('Failed to load Team Access members:', err);
+        list.innerHTML = '<div class="team-member-row" style="justify-content:center;color:var(--text-muted);">Could not load Team Access.</div>';
+    }
+}
+
 function bindTeamAccessToggle() {
     const content = document.getElementById('teamContent');
     if (!content) return;
@@ -257,6 +339,11 @@ function bindTeamAccessToggle() {
         const isHidden = content.style.display === 'none' || !content.style.display;
         content.style.display = isHidden ? 'block' : 'none';
         if (icon) icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        if (isHidden) {
+            renderCashBoxTeamMembersAccess().catch((e) => {
+                console.error('Failed to render Team Access panel:', e);
+            });
+        }
     });
 }
 
@@ -736,6 +823,8 @@ async function loadCashBoxData(id) {
         }
         
         if (DEBUG) console.log('Cash box data loaded:', cashBox.name);
+
+        await renderCashBoxTeamMembersAccess();
         
     } catch (error) {
         console.error('❌ Error loading cash box data:', error);

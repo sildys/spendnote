@@ -173,30 +173,12 @@
                 <i class="fas fa-chevron-down" id="teamToggleIcon" style="transition: transform 0.3s; color: var(--text-muted); font-size: 12px;"></i>
             </div>
             <div class="collapsible-content" id="teamContent" style="display: none;">
-                <div class="team-members-list">
-                    <div class="team-member-row">
-                        <img src="https://i.pravatar.cc/150?img=12" alt="John Doe" class="team-avatar">
-                        <div class="team-member-info">
-                            <div class="team-member-name">John Doe</div>
-                            <div class="team-member-role">Owner</div>
-                        </div>
-                    </div>
-                    <div class="team-member-row">
-                        <img src="https://i.pravatar.cc/150?img=5" alt="Jane Smith" class="team-avatar">
-                        <div class="team-member-info">
-                            <div class="team-member-name">Jane Smith</div>
-                            <div class="team-member-role">Admin</div>
-                        </div>
-                    </div>
-                    <div class="team-member-row">
-                        <img src="https://i.pravatar.cc/150?img=8" alt="Mike Johnson" class="team-avatar">
-                        <div class="team-member-info">
-                            <div class="team-member-name">Mike Johnson</div>
-                            <div class="team-member-role">Viewer</div>
-                        </div>
+                <div class="team-members-list" id="cashBoxTeamMembersList">
+                    <div class="team-member-row" style="justify-content:center;color:var(--text-muted);">
+                        <i class="fas fa-spinner fa-spin"></i>&nbsp;Loading team access...
                     </div>
                 </div>
-                <a href="spendnote-user-settings.html?tab=team" class="team-manage-link"><i class="fas fa-cog"></i> Manage in Settings</a>
+                <a href="spendnote-team.html" class="team-manage-link"><i class="fas fa-cog"></i> Manage Team Access</a>
             </div>
         </div>
 
@@ -1086,6 +1068,6 @@ window.addEventListener('beforeunload', () => {
 <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=26"></script>
-<script src="assets/js/cash-box-settings-data.js?v=45"></script>
+<script src="assets/js/cash-box-settings-data.js?v=46"></script>
 </body>
 </html>
