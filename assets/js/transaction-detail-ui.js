@@ -1156,7 +1156,6 @@ html, body { height: auto !important; overflow: auto !important; }
 
         document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
             toggle.addEventListener('change', function() {
-                if (receiptMode !== 'detailed') return;
                 const field = this.dataset.field;
                 if (field) {
                     displayOptions[field] = this.checked ? '1' : '0';
