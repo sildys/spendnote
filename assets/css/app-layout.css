@@ -402,8 +402,7 @@ body {
     width: 100%;
     background: linear-gradient(90deg, rgba(16, 185, 129, 0.07) 0%, rgba(5, 150, 105, 0.05) 100%);
     border-bottom: 1px solid rgba(16, 185, 129, 0.18);
-    padding: 5px 0;
-    text-align: center;
+    padding: 4px 0;
     position: sticky;
     top: 64px;
     z-index: 990;
@@ -411,9 +410,13 @@ body {
 }
 
 .org-context-bar__inner {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: flex-end;
+    gap: 8px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
     font-size: 11.5px;
     font-weight: 700;
     color: #065f46;
@@ -433,10 +436,11 @@ body {
 @media (max-width: 768px) {
     .org-context-bar {
         top: 56px;
-        padding: 4px 0;
+        padding: 3px 0;
     }
     .org-context-bar__inner {
         font-size: 11px;
+        padding: 0 16px;
     }
 }
 
