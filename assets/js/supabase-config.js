@@ -2820,13 +2820,13 @@ var db = {
                     .maybeSingle();
 
                 if (verify.error) {
-                    return { success: false, error: verify.error.message || 'Updated, but could not verify organization name in DB.' };
+                    return { success: false, error: verify.error.message || 'No read access to organization row. Check orgs SELECT policy.' };
                 }
 
                 const row = Array.isArray(verify.data) ? (verify.data[0] || null) : verify.data;
                 const persisted = String(row?.name || '').trim();
                 if (!row?.id || persisted !== nextName) {
-                    return { success: false, error: 'Organization name was not persisted in database.' };
+                    return { success: false, error: 'Team name not readable after save. Check orgs SELECT/UPDATE policies.' };
                 }
 
                 return { success: true, data: row };
