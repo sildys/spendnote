@@ -205,21 +205,15 @@ const initTeamPage = async () => {
 
     const waitForDb = () => new Promise(resolve => {
         const check = () => {
-            if (window.db?.profiles && window.db?.teamMembers && window.auth?.getCurrentUser) {
-                resolve();
-            } else {
-                setTimeout(check, 80);
-            }
+            if (window.db?.teamMembers?.getAll) resolve();
+            else setTimeout(check, 80);
         };
         check();
     });
     await waitForDb();
 
-    // Determine role and Pro status
+    // Get role
     try {
-        const user = await window.auth?.getCurrentUser?.();
-        if (!user) return;
-
         if (window.db?.orgMemberships?.getMyRole) {
             const dbRole = await window.db.orgMemberships.getMyRole();
             const normalized = String(dbRole || '').toLowerCase();
@@ -227,41 +221,7 @@ const initTeamPage = async () => {
         }
     } catch (_) {}
 
-    // Check Pro tier — try multiple sources
-    let isPro = false;
-    try {
-        if (window.db?.profiles?.getCurrent) {
-            const profile = await window.db.profiles.getCurrent();
-            const tier = String(profile?.subscription_tier || '').toLowerCase();
-            isPro = tier === 'pro';
-        }
-    } catch (_) {}
-
-    if (!isPro) {
-        try {
-            if (window.SpendNoteOrgContext?.getSelectionState) {
-                const state = await window.SpendNoteOrgContext.getSelectionState();
-                isPro = Boolean(state?.isPro);
-            }
-        } catch (_) {}
-    }
-
-    // Fallback: if user has org memberships, treat as Pro for team page access
-    if (!isPro) {
-        try {
-            if (window.db?.teamMembers?.getAll) {
-                const members = await window.db.teamMembers.getAll();
-                if (Array.isArray(members) && members.length > 0) isPro = true;
-            }
-        } catch (_) {}
-    }
-
-    if (!isPro) {
-        if (proGate) proGate.style.display = '';
-        if (teamContent) teamContent.style.display = 'none';
-        return;
-    }
-
+    // Show content immediately — auth-guard already ensures the user is logged in
     if (proGate) proGate.style.display = 'none';
     if (teamContent) teamContent.style.display = '';
 
