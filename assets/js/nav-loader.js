@@ -69,13 +69,13 @@ const NAV_HTML = `
                 <div class="user-dropdown" id="userDropdown">
                     <div class="user-dropdown-menu">
                         <div id="orgContextDropdownInfo" class="org-context-dropdown-info" style="display:none;"></div>
-                        <a href="spendnote-user-settings.html" class="user-dropdown-item">
-                            <i class="fas fa-cog"></i>
-                            Settings
-                        </a>
                         <a href="spendnote-team.html" class="user-dropdown-item" id="dropdownTeamLink">
                             <i class="fas fa-users"></i>
                             Team
+                        </a>
+                        <a href="spendnote-user-settings.html" class="user-dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            Settings
                         </a>
                         <div class="user-dropdown-divider"></div>
                         <a href="#" class="user-dropdown-item" data-action="logout">

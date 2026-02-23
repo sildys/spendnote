@@ -204,7 +204,13 @@ const initTeamPage = async () => {
     const teamContent = document.getElementById('teamContent');
 
     const waitForDb = () => new Promise(resolve => {
-        const check = () => window.db?.profiles ? resolve() : setTimeout(check, 50);
+        const check = () => {
+            if (window.db?.profiles && window.db?.teamMembers && window.auth?.getCurrentUser) {
+                resolve();
+            } else {
+                setTimeout(check, 80);
+            }
+        };
         check();
     });
     await waitForDb();
