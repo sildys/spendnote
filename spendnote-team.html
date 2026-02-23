@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="assets/css/main.css?v=23">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=19">
     <link rel="stylesheet" href="assets/css/user-settings.css?v=20260223-2100">
+    <link rel="stylesheet" href="assets/css/team-page.css?v=20260223-2135">
 </head>
 <body>
 <div id="nav-container"></div>
@@ -22,67 +23,87 @@
         <div class="page-header">
             <div class="page-title-group">
                 <h1 class="page-title">Team Management <span class="badge badge-warning" style="font-size:13px;vertical-align:middle;">PRO</span></h1>
-                <p class="page-subtitle">Manage your team members, roles, and Cash Box access.</p>
+                <p class="page-subtitle">Manage who can access your Cash Boxes.</p>
             </div>
-            <div class="page-header-actions" id="teamHeaderActions">
-                <button type="button" class="btn btn-secondary" id="manageAccessBtn"><i class="fas fa-key"></i> Cash Box Access</button>
+            <div class="page-header-actions" id="teamHeaderActions" style="display:none;">
                 <button type="button" class="btn btn-primary" id="inviteMemberBtn"><i class="fas fa-user-plus"></i> Invite Member</button>
             </div>
         </div>
 
-        <!-- PRO GATE -->
-        <div id="teamProGate" class="settings-card" style="display:none;text-align:center;padding:48px 24px;">
-            <i class="fas fa-users" style="font-size:40px;color:var(--text-muted);margin-bottom:16px;display:block;"></i>
-            <div style="font-size:18px;font-weight:700;margin-bottom:8px;">Team Management is a Pro feature</div>
-            <div style="color:var(--text-muted);margin-bottom:24px;">Upgrade to Pro to invite team members, assign roles, and manage Cash Box access.</div>
-            <a href="spendnote-user-settings.html" class="btn btn-primary"><i class="fas fa-arrow-up"></i> Upgrade to Pro</a>
+        <!-- LOADING STATE -->
+        <div id="teamLoading" style="text-align:center;padding:60px 24px;color:var(--text-muted);">
+            <i class="fas fa-spinner fa-spin" style="font-size:24px;margin-bottom:12px;display:block;"></i>
+            Loading team data...
         </div>
 
-        <!-- TEAM CONTENT -->
-        <div id="teamContent">
+        <!-- ERROR STATE -->
+        <div id="teamError" style="display:none;text-align:center;padding:48px 24px;" class="settings-card">
+            <i class="fas fa-exclamation-triangle" style="font-size:32px;color:#f59e0b;margin-bottom:12px;display:block;"></i>
+            <div style="font-size:16px;font-weight:600;margin-bottom:8px;">Could not load team data</div>
+            <div style="color:var(--text-muted);margin-bottom:16px;" id="teamErrorMsg">Please check your connection and try again.</div>
+            <button type="button" class="btn btn-secondary" onclick="location.reload()"><i class="fas fa-redo"></i> Retry</button>
+        </div>
+
+        <!-- MAIN CONTENT (hidden until loaded) -->
+        <div id="teamContent" style="display:none;">
+
             <!-- STATS -->
             <div class="stats-row" style="margin-bottom:24px;">
                 <div class="stat-box">
-                    <div class="stat-label">Total Members</div>
-                    <div class="stat-value" id="statTotalMembers">—</div>
-                    <div class="stat-note" id="statMembersNote">of plan limit</div>
+                    <div class="stat-label">Team Members</div>
+                    <div class="stat-value" id="statTotalMembers">0</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Active</div>
-                    <div class="stat-value" id="statActiveMembers">—</div>
-                    <div class="stat-note">Members active</div>
+                    <div class="stat-label">Cash Boxes</div>
+                    <div class="stat-value" id="statCashBoxes">0</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Pending</div>
-                    <div class="stat-value" id="statPendingMembers">—</div>
-                    <div class="stat-note">Awaiting acceptance</div>
+                    <div class="stat-label">Pending Invites</div>
+                    <div class="stat-value" id="statPendingMembers">0</div>
                 </div>
             </div>
 
-            <!-- TEAM TABLE -->
+            <!-- CASH BOX ACCESS GRID -->
+            <div class="settings-card" style="margin-bottom:24px;">
+                <div class="settings-card-header">
+                    <div>
+                        <div class="settings-card-title">Cash Box Access</div>
+                        <div class="settings-card-subtitle">See and manage who has access to each Cash Box</div>
+                    </div>
+                </div>
+                <div id="cashBoxGrid" class="team-cb-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- ALL MEMBERS TABLE -->
             <div class="settings-card">
+                <div class="settings-card-header">
+                    <div>
+                        <div class="settings-card-title">All Team Members</div>
+                        <div class="settings-card-subtitle">Everyone in your organization</div>
+                    </div>
+                </div>
                 <div class="team-table-wrap">
                     <table class="team-table">
                         <thead>
                             <tr>
                                 <th>Member</th>
                                 <th>Role</th>
+                                <th>Cash Boxes</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="teamTableBody">
-                            <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:32px;"><i class="fas fa-spinner fa-spin"></i> Loading team...</td></tr>
-                        </tbody>
+                        <tbody id="teamTableBody"></tbody>
                     </table>
                 </div>
-                <div style="margin-top:16px;font-size:12px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> Admins can access all Cash Boxes. Configure per-cash-box access for Users via "Cash Box Access".</div>
             </div>
         </div>
     </main>
 </div>
 
-<!-- MODAL: Invite Member -->
+<!-- MODAL: Invite Member (with Cash Box selection) -->
 <div class="modal-backdrop" id="inviteModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -94,12 +115,19 @@
                 <label for="inviteEmail">Email Address</label>
                 <input type="email" id="inviteEmail" required placeholder="colleague@example.com">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:16px;">
                 <label for="inviteRole">Role</label>
                 <select id="inviteRole">
-                    <option value="member">Member — Can record transactions</option>
-                    <option value="admin">Admin — Full access to assigned Cash Boxes</option>
+                    <option value="user">User — Can record transactions in assigned Cash Boxes</option>
+                    <option value="admin">Admin — Full access to all Cash Boxes</option>
                 </select>
+            </div>
+            <div class="form-group" id="inviteCashBoxGroup">
+                <label>Cash Box Access</label>
+                <div class="invite-cb-hint" style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Select which Cash Boxes this member can use. Admins get access to all.</div>
+                <div id="inviteCashBoxList" class="invite-cb-list">
+                    <!-- Populated by JS -->
+                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -109,29 +137,19 @@
     </div>
 </div>
 
-<!-- MODAL: Cash Box Access -->
+<!-- MODAL: Manage Access for a Cash Box -->
 <div class="modal-backdrop" id="accessModal">
     <div class="modal-content">
         <div class="modal-header">
-            <div class="modal-title">Manage Cash Box Access</div>
+            <div class="modal-title" id="accessModalTitle">Manage Access</div>
             <button type="button" class="modal-close" id="accessModalClose">&times;</button>
         </div>
         <div class="modal-body">
-            <div id="accessMemberPickerWrap" style="display:none;margin-bottom:14px;">
-                <label for="accessMemberSelect" style="display:block;font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;">Member</label>
-                <select id="accessMemberSelect" class="team-role-select" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);"></select>
-            </div>
-            <div style="margin-bottom:16px;">
-                <strong id="accessMemberName">—</strong>
-                <div style="font-size:13px;color:var(--text-muted);" id="accessMemberEmail">—</div>
-            </div>
-            <div style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Select which Cash Boxes this member can access:</div>
-            <div class="access-list" id="accessCashBoxList">
-                <div style="text-align:center;color:var(--text-muted);padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
-            </div>
+            <div style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Toggle access for team members:</div>
+            <div id="accessMemberList" class="access-list"></div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" id="accessModalClose2">Close</button>
+            <button type="button" class="btn btn-secondary" id="accessModalDone">Done</button>
         </div>
     </div>
 </div>
@@ -168,6 +186,6 @@
 <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=26"></script>
-<script src="assets/js/team-page.js?v=20260223-2104"></script>
+<script src="assets/js/team-page.js?v=20260223-2135"></script>
 </body>
 </html>
