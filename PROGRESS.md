@@ -54,6 +54,21 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ## Where we are now (last updated: 2026-02-23 — SEO szakasz lezárva, app fókusz aktív)
 
+### 2026-02-23 frissítés — P0/3 abuse/WAF baseline audit (RÉSZBEN KÉSZ)
+
+**Cloudflare audit eredmény (képernyőképes validáció):**
+
+- WAF managed ruleset: **ON** (Always active).
+- Security Events: **van blokkolási esemény** (managed rules -> Block), tehát edge védelem aktív.
+- Challenge passage: **30 perc** konfigurálva.
+- Bot Fight Mode: **OFF** (csak JS Detections ON).
+- Rate limiting rules: **nincs** (0 szabály).
+
+**Hátralévő P0/3 teendő (konkrét):**
+
+- Bot Fight Mode bekapcsolása baseline szinten.
+- Rate limit szabályok létrehozása legalább invite/email/auth kritikus útvonalakra.
+
 ### 2026-02-23 frissítés — P0/1 backend hibaláthatóság első kör (KÉSZ)
 
 **Lezárt és pusholt javítások (mai kör):**
@@ -95,7 +110,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 **Mostani fókusz (aktív):**
 
-- P0 baseline hardening (hátralévő): abuse/WAF minimum.
+- P0 baseline hardening (hátralévő): Bot Fight Mode ON + rate limit szabályok beállítása.
 - Onboarding + registration wizard előkészítés.
 - Team/org/invite modell és szerepkörös settings terv (DB-TEAM-1, L4/L5).
 
