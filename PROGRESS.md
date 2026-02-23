@@ -267,7 +267,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **Desktop-only kommunikáció** landing + signup felületen (amíg mobil UX teljesen stabil).
 - [ ] **Terms/Privacy beta nyelvezet** ellenőrzés/frissítés (preview státusz, korlátozások).
 - [ ] **Safari/cross-browser auth regresszió kör** (normál + private mód) release előtt.
-- [ ] **SEO/indexing hygiene**: `robots.txt`, fake `aggregateRating` eltávolítás, csak landing + 2 SEO oldal indexelhető.
+- [x] **SEO/indexing hygiene (baseline kész)**: `robots.txt` él, fake `aggregateRating` eltávolítva, indexelhető készlet 4 oldalra rögzítve (`/`, `/faq`, `/petty-cash-receipt-generator`, `/cash-handoff-receipt`).
 - [ ] **GA4 baseline + Search Console** alapbeállítás és mérés ellenőrzés.
 
 #### P2 — Beta után (de már látható hiány)
@@ -475,7 +475,7 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
   - Black border cropped from screenshot images (PowerShell)
 - ✅ Auto-create default Cash Box on signup: migration verified and working
 - ✅ fake `aggregateRating` eltávolítva a publikus SEO oldalakról.
-- TODO: add `robots.txt` to repo root.
+- ✅ `robots.txt` hozzáadva a repo rootba.
 - ✅ Contact emails live and working:
   - `feedback@spendnote.app` → preview banner
   - `support@spendnote.app` → FAQ page
@@ -571,9 +571,9 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
   - [x] Cloudflare Pages deploy from `main` is green
   - [x] Custom domain is live with SSL, canonical host decided and working
   - [x] Supabase Auth URL Configuration updated for the final domain (Site URL + Redirect URLs)
-  - [ ] Landing is public + indexable, and links to Terms + Privacy ← `noindex` still on, fake aggregateRating to remove
+  - [x] Landing is public + indexable, and links to Terms + Privacy
   - [x] Signup/login works on production domain (email-confirm flow included)
-  - [ ] Beta disclaimer is visible and is **explicitly accepted** during signup ← preview banner exists on landing, but no checkbox on signup yet
+  - [x] Beta disclaimer is visible and is **explicitly accepted** during signup
   - [ ] Beta is clearly communicated as **desktop-only** on landing + signup ← missing
   - [ ] Free beta mode active (unlimited during beta; 1 user + 1 cash box) ← preview banner mentions 100 tx, but no enforcement yet
   - [ ] Minimal client error logging is live (JS errors captured for signed-in users) ← not done
@@ -584,7 +584,7 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
   - [x] Custom domain: `spendnote.app` (canonical host decision + DNS/SSL)
   - [x] Supabase Auth URL configuration: Site URL + Additional Redirect URLs
   - Landing SEO baseline:
-    - [ ] `robots.txt` ← missing
+    - [x] `robots.txt`
     - [x] `sitemap.xml` ← generated
     - [x] Canonical + OG/Twitter meta ← done on index.html, pricing, faq
   - [x] Landing CTA: **Start free beta** → signup ← "Start Free - No Card Required" button present
