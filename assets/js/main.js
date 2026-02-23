@@ -22,43 +22,16 @@ function updateMenuColors(color) {
 
 async function updateOrgContextIndicator() {
     const dashboardEl = document.getElementById('dashboardOrgContext');
+    const bar = document.getElementById('orgContextBar');
+    const barInner = document.getElementById('orgContextBarInner');
 
-    const ensureDropdownOrgItem = () => {
-        const existing = document.getElementById('userOrgContextItem');
-        if (existing) return existing;
-
-        const menu = document.querySelector('#userDropdown .user-dropdown-menu');
-        if (!menu) return null;
-
-        const item = document.createElement('div');
-        item.id = 'userOrgContextItem';
-        item.className = 'user-dropdown-item';
-        item.style.cursor = 'default';
-        item.style.pointerEvents = 'none';
-        item.style.opacity = '0.9';
-        item.style.fontWeight = '700';
-        item.style.fontSize = '12px';
-        item.style.lineHeight = '1.3';
-        item.style.whiteSpace = 'normal';
-
-        const divider = menu.querySelector('.user-dropdown-divider');
-        if (divider && divider.parentElement === menu) {
-            menu.insertBefore(item, divider);
-        } else {
-            menu.prepend(item);
-        }
-
-        return item;
+    const hide = () => {
+        if (dashboardEl) dashboardEl.style.display = 'none';
+        if (bar) { bar.style.display = 'none'; bar.setAttribute('aria-hidden', 'true'); }
     };
 
-    const dropdownEl = ensureDropdownOrgItem();
-
     try {
-        if (!window.SpendNoteOrgContext?.getSelectionState) {
-            if (dashboardEl) dashboardEl.style.display = 'none';
-            if (dropdownEl) dropdownEl.style.display = 'none';
-            return;
-        }
+        if (!window.SpendNoteOrgContext?.getSelectionState) { hide(); return; }
 
         const state = await window.SpendNoteOrgContext.getSelectionState();
         const memberships = Array.isArray(state?.memberships) ? state.memberships : [];
@@ -66,27 +39,24 @@ async function updateOrgContextIndicator() {
         const orgId = String(state?.orgId || state?.selectedOrgId || '').trim();
         const role = String(state?.role || state?.selectedRole || '').trim().toLowerCase();
 
-        if (!isPro || !orgId) {
-            if (dashboardEl) dashboardEl.style.display = 'none';
-            if (dropdownEl) dropdownEl.style.display = 'none';
-            return;
-        }
+        if (!isPro || !orgId) { hide(); return; }
 
         const roleLabel = role === 'owner' ? 'Owner' : (role === 'admin' ? 'Admin' : 'User');
         const shortOrg = orgId.slice(0, 8);
+        const label = `Org: ${shortOrg}\u2002•\u2002${roleLabel}`;
+
+        if (bar && barInner) {
+            barInner.textContent = label;
+            bar.style.display = 'block';
+            bar.setAttribute('aria-hidden', 'false');
+        }
 
         if (dashboardEl) {
-            dashboardEl.textContent = `Org ${shortOrg} • ${roleLabel} • Switch org via Log out -> Log in`;
+            dashboardEl.textContent = `${label}\u2002•\u2002Switch org via Log out → Log in`;
             dashboardEl.style.display = memberships.length > 1 ? 'inline-flex' : 'none';
         }
-
-        if (dropdownEl) {
-            dropdownEl.textContent = `Current org: ${shortOrg} • ${roleLabel}`;
-            dropdownEl.style.display = 'flex';
-        }
     } catch (_) {
-        if (dashboardEl) dashboardEl.style.display = 'none';
-        if (dropdownEl) dropdownEl.style.display = 'none';
+        hide();
     }
 }
 

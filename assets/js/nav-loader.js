@@ -88,6 +88,12 @@ function loadNav(containerId = 'nav-container') {
     const container = document.getElementById(containerId);
     if (container) {
         container.innerHTML = NAV_HTML;
+        // Inject orgContextBar outside nav-container so it spans full width
+        if (!document.getElementById('orgContextBar')) {
+            const barEl = document.createElement('div');
+            barEl.innerHTML = '<div id="orgContextBar" class="org-context-bar" style="display:none;" aria-hidden="true"><span id="orgContextBarInner" class="org-context-bar__inner"></span></div>';
+            container.after(barEl.firstElementChild);
+        }
         // Inject bottom nav once
         if (!document.getElementById('bottomNav')) {
             const bnEl = document.createElement('div');
