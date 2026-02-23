@@ -13,6 +13,10 @@ const corsHeaders: Record<string, string> = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+const INVITE_RATE_LIMIT_WINDOW_SECONDS = 600;
+const INVITE_RATE_LIMIT_PER_TARGET = 3;
+const INVITE_RATE_LIMIT_PER_CALLER = 12;
+
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -138,6 +142,67 @@ Deno.serve(async (req: Request) => {
       return new Response(JSON.stringify({ error: "Not allowed" }), {
         status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const consumeRateLimit = async (key: string, limit: number) => {
+      const res = await supabaseAdmin.rpc("spendnote_consume_rate_limit", {
+        p_key: key,
+        p_limit: limit,
+        p_window_seconds: INVITE_RATE_LIMIT_WINDOW_SECONDS,
+      });
+
+      if (res.error) {
+        const msg = String(res.error.message || "").toLowerCase();
+        const missing = msg.includes("does not exist") || String(res.error.code || "") === "42883";
+        if (!missing) {
+          console.error("send-invite-email rate-limit RPC error:", res.error);
+        }
+        // Compatibility: if migration is not deployed yet, do not block invite sending.
+        return { allowed: true, retry_after_seconds: 0, remaining: null };
+      }
+
+      const payload = Array.isArray(res.data) ? res.data[0] : res.data;
+      return {
+        allowed: Boolean(payload?.allowed),
+        retry_after_seconds: Math.max(Number(payload?.retry_after_seconds) || 0, 0),
+        remaining: Number.isFinite(Number(payload?.remaining)) ? Number(payload?.remaining) : null,
+      };
+    };
+
+    const callerKey = `invite-email:caller:${orgId}:${user.id}`;
+    const callerBucket = await consumeRateLimit(callerKey, INVITE_RATE_LIMIT_PER_CALLER);
+    if (!callerBucket.allowed) {
+      const retryAfter = Math.max(callerBucket.retry_after_seconds || 0, 1);
+      return new Response(JSON.stringify({
+        error: "Rate limit exceeded",
+        detail: "Too many invite email requests. Please retry later.",
+        retry_after_seconds: retryAfter,
+      }), {
+        status: 429,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+          "Retry-After": String(retryAfter),
+        },
+      });
+    }
+
+    const targetKey = `invite-email:target:${orgId}:${user.id}:${invitedEmail}`;
+    const targetBucket = await consumeRateLimit(targetKey, INVITE_RATE_LIMIT_PER_TARGET);
+    if (!targetBucket.allowed) {
+      const retryAfter = Math.max(targetBucket.retry_after_seconds || 0, 1);
+      return new Response(JSON.stringify({
+        error: "Rate limit exceeded",
+        detail: "Too many invite retries for this email. Please retry later.",
+        retry_after_seconds: retryAfter,
+      }), {
+        status: 429,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+          "Retry-After": String(retryAfter),
+        },
       });
     }
 

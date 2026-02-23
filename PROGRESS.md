@@ -54,6 +54,20 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ## Where we are now (last updated: 2026-02-23 — SEO szakasz lezárva, app fókusz aktív)
 
+### 2026-02-23 frissítés — P0+ backend throttling (invite edge) (KÉSZ)
+
+**Lezárt és pushra kész változtatások:**
+
+- Új migráció: `supabase-migrations/022_edge_function_rate_limit.sql`
+  - `edge_rate_limits` tábla,
+  - `spendnote_consume_rate_limit(p_key, p_limit, p_window_seconds)` RPC.
+- `send-invite-email` edge function frissítve:
+  - per-caller limit (org + user),
+  - per-target email limit,
+  - limit túllépésnél `429` + `Retry-After` + részletes hiba payload.
+- Kompatibilitási viselkedés:
+  - ha a migráció még nincs deployolva, a function nem blockol (backward compatible fallback).
+
 ### 2026-02-23 frissítés — P0/3 abuse/WAF baseline (KÉSZ a jelenlegi Free plan kereten)
 
 **Cloudflare audit eredmény (képernyőképes validáció):**
@@ -111,6 +125,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 **Mostani fókusz (aktív):**
 
 - P0 baseline hardening (Cloudflare minimum): kész a jelenlegi plan kereten.
+- P0 baseline hardening (backend): invite throttling kész; további edge endpointokra ugyanennek a mintának az átvitele opcionális.
 - Onboarding + registration wizard előkészítés.
 - Team/org/invite modell és szerepkörös settings terv (DB-TEAM-1, L4/L5).
 

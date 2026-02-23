@@ -60,6 +60,10 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
   - Bot Fight Mode is ON,
   - one active rate-limit rule is in place (`RL-HighRisk-Paths`, Block),
   - note: additional endpoint-specific rate-limit rules are constrained by current Free-plan rule limits.
+- **P0+ backend throttling hardening (invite path) delivered**:
+  - new migration: `supabase-migrations/022_edge_function_rate_limit.sql`,
+  - added DB-backed rate-limit primitive `spendnote_consume_rate_limit(...)`,
+  - `send-invite-email` edge function now enforces per-caller and per-target limits and returns `429` + `Retry-After`.
 
 ### Latest SEO/copy follow-up (2026-02-23)
 
@@ -117,7 +121,8 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 
 1. P0 production baseline hardening:
    - Cloudflare minimum baseline complete on current plan,
-   - optional next step: endpoint-specific throttling at backend/edge level (or Cloudflare plan upgrade).
+   - invite backend throttling complete,
+   - optional next step: apply same backend-side throttling pattern to other edge endpoints (e.g. receipt email) where source/deploy flow is available.
 2. Onboarding + registration wizard specification and implementation prep.
 3. Team/org/invite model alignment (DB-TEAM-1) and role-based settings plan.
 4. Billing/subscription + Stripe prep alignment with the team/onboarding model.
