@@ -427,7 +427,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260216-2236"></script>
+    <script src="assets/js/supabase-config.js?v=20260223-1949"></script>
     <script>
         const ensureProfile = async () => {
             try {
@@ -511,7 +511,61 @@
             }
         };
 
-        const redirectAfterLogin = () => {
+        const ensureLoginOrgSelection = async () => {
+            try {
+                if (!window.SpendNoteOrgContext?.getSelectionState) return true;
+                const state = await window.SpendNoteOrgContext.getSelectionState();
+                if (!state?.required) return true;
+
+                const memberships = Array.isArray(state.memberships) ? state.memberships : [];
+                if (!memberships.length) return false;
+
+                const options = memberships.map((m, idx) => {
+                    const role = String(m?.role || 'user').trim().toLowerCase();
+                    const roleLabel = role === 'owner' ? 'Owner' : (role === 'admin' ? 'Admin' : 'User');
+                    const orgId = String(m?.org_id || '').trim();
+                    const shortOrg = orgId ? orgId.slice(0, 8) : 'unknown';
+                    return `${idx + 1}. Org ${shortOrg} (${roleLabel})`;
+                });
+
+                const message = [
+                    'Choose organization for this login session:',
+                    '',
+                    ...options,
+                    '',
+                    'Type the number and press OK.'
+                ].join('\n');
+
+                for (let attempt = 0; attempt < 5; attempt++) {
+                    const raw = window.prompt(message, '1');
+                    if (raw === null) {
+                        showError('Organization selection is required to continue.');
+                        return false;
+                    }
+
+                    const idx = Number.parseInt(String(raw).trim(), 10) - 1;
+                    const pick = memberships[idx] || null;
+                    const orgId = String(pick?.org_id || '').trim();
+                    if (!orgId) {
+                        showError('Invalid selection. Please choose a valid organization number.');
+                        continue;
+                    }
+
+                    const ok = await window.SpendNoteOrgContext.setSelectedOrgId(orgId);
+                    if (ok) return true;
+
+                    showError('Failed to set organization context. Please try again.');
+                }
+
+                return false;
+            } catch (_) {
+                return true;
+            }
+        };
+
+        const redirectAfterLogin = async () => {
+            const selected = await ensureLoginOrgSelection();
+            if (!selected) return;
             window.location.href = getSafeReturnTo();
         };
 
@@ -545,7 +599,7 @@
                             return;
                         }
                     } catch (_) {}
-                    redirectAfterLogin();
+                    await redirectAfterLogin();
                 }
             } catch (_) {
 
@@ -637,8 +691,8 @@
                     successMessage.classList.add('show');
                     successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Logged in! Redirecting...';
                     
-                    setTimeout(() => {
-                        redirectAfterLogin();
+                    setTimeout(async () => {
+                        await redirectAfterLogin();
                     }, 1000);
                 } else {
                     // Error

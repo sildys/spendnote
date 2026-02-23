@@ -64,6 +64,15 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
   - new migration: `supabase-migrations/022_edge_function_rate_limit.sql`,
   - added DB-backed rate-limit primitive `spendnote_consume_rate_limit(...)`,
   - `send-invite-email` edge function now enforces per-caller and per-target limits and returns `429` + `Retry-After`.
+- **Team/org context hardening delivered (Pro multi-org safety)**:
+  - selected org context introduced in `supabase-config.js` (`SpendNoteOrgContext`),
+  - Pro users with multiple org memberships must choose org at login when no selected org is set,
+  - app pages redirect back to login when org selection is required,
+  - org switch is intentionally disabled inside app (switch via Log out -> Log in only),
+  - dashboard now shows active org+role informational indicator for Pro multi-org context.
+- **Invite role safety hardening delivered**:
+  - new migration: `supabase-migrations/023_prevent_role_downgrade_on_invite_accept.sql`,
+  - invite accept flows now prevent owner/admin role downgrade when lower-role invite is accepted in the same org.
 
 ### Latest SEO/copy follow-up (2026-02-23)
 
@@ -122,6 +131,7 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 1. P0 production baseline hardening:
    - Cloudflare minimum baseline complete on current plan,
    - invite backend throttling complete,
+   - org context safety complete for Pro multi-org login flow (no in-app switching),
    - optional next step: apply same backend-side throttling pattern to other edge endpoints (e.g. receipt email) where source/deploy flow is available.
 2. Onboarding + registration wizard specification and implementation prep.
 3. Team/org/invite model alignment (DB-TEAM-1) and role-based settings plan.

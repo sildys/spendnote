@@ -232,6 +232,32 @@
         }
     }
     
+    if (session && !error) {
+        try {
+            if (window.SpendNoteOrgContext?.getSelectionState) {
+                const state = await window.SpendNoteOrgContext.getSelectionState();
+                if (state?.required) {
+                    let returnTo = '/app';
+                    try {
+                        const path = String(window.location.pathname || '/').trim() || '/';
+                        const search = String(window.location.search || '');
+                        const hash = String(window.location.hash || '');
+                        const candidate = `${path}${search}${hash}`;
+                        if (candidate.startsWith('/') && !candidate.startsWith('//')) {
+                            returnTo = candidate;
+                        }
+                    } catch (_) {
+                        returnTo = '/app';
+                    }
+                    window.location.href = `/spendnote-login.html?orgPick=1&returnTo=${encodeURIComponent(returnTo)}`;
+                    return;
+                }
+            }
+        } catch (_) {
+            // ignore, let app continue with existing behavior
+        }
+    }
+
     if (!session || error) {
         // Not authenticated - redirect to login
         redirectToLoginOrLanding();

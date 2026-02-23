@@ -20,6 +20,36 @@ function updateMenuColors(color) {
     }
 }
 
+async function updateOrgContextIndicator() {
+    const el = document.getElementById('dashboardOrgContext');
+    if (!el) return;
+
+    try {
+        if (!window.SpendNoteOrgContext?.getSelectionState) {
+            el.style.display = 'none';
+            return;
+        }
+
+        const state = await window.SpendNoteOrgContext.getSelectionState();
+        const memberships = Array.isArray(state?.memberships) ? state.memberships : [];
+        const isPro = Boolean(state?.isPro);
+        const orgId = String(state?.orgId || state?.selectedOrgId || '').trim();
+        const role = String(state?.role || state?.selectedRole || '').trim().toLowerCase();
+
+        if (!isPro || memberships.length <= 1 || !orgId) {
+            el.style.display = 'none';
+            return;
+        }
+
+        const roleLabel = role === 'owner' ? 'Owner' : (role === 'admin' ? 'Admin' : 'User');
+        const shortOrg = orgId.slice(0, 8);
+        el.textContent = `Org ${shortOrg} • ${roleLabel} • Switch org via Log out -> Log in`;
+        el.style.display = 'inline-flex';
+    } catch (_) {
+        el.style.display = 'none';
+    }
+}
+
 window.updateMenuColors = updateMenuColors;
 
 function initSentryMonitoring() {
@@ -221,6 +251,7 @@ function fitNumericTextElement(el) {
             el.style.transform = `scaleX(${clampedRatio})`;
         }
     }
+
 }
 
 function fitNumericInputElement(input) {
@@ -489,6 +520,8 @@ async function updateUserNav() {
             });
         }
     }
+
+    await updateOrgContextIndicator();
 }
 
 // Helper function for initials

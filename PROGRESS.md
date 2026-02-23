@@ -54,6 +54,27 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ## Where we are now (last updated: 2026-02-23 — SEO szakasz lezárva, app fókusz aktív)
 
+### 2026-02-23 frissítés — org context safety + role downgrade guard (KÉSZ)
+
+**Lezárt és pushra kész változtatások:**
+
+- Pro multi-org org-context kezelés szigorítva:
+  - `supabase-config.js`: bevezetve `SpendNoteOrgContext` (selected org tárolás user szinten),
+  - `getMyOrgContext()` most a kiválasztott orgot használja,
+  - Pro + 2+ org esetén org választás kötelező, ha nincs selected org.
+- Login flow frissítve (`spendnote-login.html`):
+  - belépés után kötelező org választás prompt, ha Pro multi-org és hiányzik selected org.
+- Auth guard frissítve (`assets/js/auth-guard.js`):
+  - ha org választás kell, app oldalról visszairányít loginra (`returnTo` megtartva).
+- UX policy implementálva:
+  - appon belüli org váltás nincs,
+  - org váltás kizárólag `Log out -> Log in` útvonalon.
+- Dashboard jelzés:
+  - megjelenik az aktív org+role információs chip Pro multi-org kontextusban.
+- Role safety migration:
+  - új: `supabase-migrations/023_prevent_role_downgrade_on_invite_accept.sql`,
+  - invite elfogadáskor same-org owner/admin role nem downgrade-elhető userre.
+
 ### 2026-02-23 frissítés — P0+ backend throttling (invite edge) (KÉSZ)
 
 **Lezárt és pushra kész változtatások:**
@@ -126,7 +147,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 - P0 baseline hardening (Cloudflare minimum): kész a jelenlegi plan kereten.
 - P0 baseline hardening (backend): invite throttling kész; további edge endpointokra ugyanennek a mintának az átvitele opcionális.
-- Onboarding + registration wizard előkészítés.
+- Onboarding + registration wizard előkészítés (Pro org-step kötelező meghatározással).
 - Team/org/invite modell és szerepkörös settings terv (DB-TEAM-1, L4/L5).
 
 ### 2026-02-22 zárás — SEO go-live stabilizáció (KÉSZ)

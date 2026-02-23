@@ -1019,6 +1019,19 @@ var auth = {
 
     // Sign out user
     async signOut() {
+        try {
+            const cachedUserId = String(auth?.__userCache?.user?.id || '').trim();
+            if (cachedUserId) {
+                __spendnoteClearSelectedOrgForUser(cachedUserId);
+            } else {
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                const uid = String(user?.id || '').trim();
+                if (uid) __spendnoteClearSelectedOrgForUser(uid);
+            }
+        } catch (_) {
+            // ignore
+        }
+
         const { error } = await supabaseClient.auth.signOut();
         if (error) {
             if (window.SpendNoteDebug) console.error('Error signing out:', error);
@@ -1107,6 +1120,10 @@ try {
         if (__orgContextCache) {
             __orgContextCache.orgId = null;
             __orgContextCache.ownerUserId = null;
+            __orgContextCache.role = null;
+            __orgContextCache.selectionRequired = false;
+            __orgContextCache.isPro = false;
+            __orgContextCache.membershipCount = 0;
             __orgContextCache.ts = 0;
             __orgContextCache.promise = null;
         }
@@ -1115,15 +1132,188 @@ try {
 
 }
 
-var __orgContextCache = { orgId: null, ownerUserId: null, ts: 0, promise: null };
+const ORG_SELECTION_KEY_PREFIX = 'spendnote.selectedOrgByUser.v1';
+
+var __orgContextCache = {
+    orgId: null,
+    ownerUserId: null,
+    role: null,
+    selectionRequired: false,
+    isPro: false,
+    membershipCount: 0,
+    ts: 0,
+    promise: null
+};
+
+function __spendnoteOrgSelectionStorageKey(userId) {
+    const uid = String(userId || '').trim();
+    return uid ? `${ORG_SELECTION_KEY_PREFIX}.${uid}` : '';
+}
+
+function __spendnoteReadSelectedOrgForUser(userId) {
+    const key = __spendnoteOrgSelectionStorageKey(userId);
+    if (!key) return '';
+    try {
+        return String(localStorage.getItem(key) || '').trim();
+    } catch (_) {
+        return '';
+    }
+}
+
+function __spendnoteWriteSelectedOrgForUser(userId, orgId) {
+    const key = __spendnoteOrgSelectionStorageKey(userId);
+    const oid = String(orgId || '').trim();
+    if (!key) return false;
+    try {
+        if (oid) localStorage.setItem(key, oid);
+        else localStorage.removeItem(key);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+function __spendnoteClearSelectedOrgForUser(userId) {
+    const key = __spendnoteOrgSelectionStorageKey(userId);
+    if (!key) return false;
+    try {
+        localStorage.removeItem(key);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+function __spendnoteNormalizeMemberships(rows) {
+    const list = Array.isArray(rows) ? rows : [];
+    const byOrg = new Map();
+    const score = (role) => {
+        const r = String(role || '').toLowerCase();
+        if (r === 'owner') return 3;
+        if (r === 'admin') return 2;
+        return 1;
+    };
+
+    for (const row of list) {
+        const orgId = String(row?.org_id || '').trim();
+        if (!orgId) continue;
+        const role = String(row?.role || 'user').trim().toLowerCase();
+        const createdAt = String(row?.created_at || '').trim();
+        const next = { org_id: orgId, role, created_at: createdAt };
+        const prev = byOrg.get(orgId);
+        if (!prev || score(next.role) > score(prev.role)) {
+            byOrg.set(orgId, next);
+        }
+    }
+
+    return Array.from(byOrg.values());
+}
+
+function __spendnotePickPreferredMembership(list) {
+    const rows = Array.isArray(list) ? list : [];
+    const pick = (role) => rows.find((m) => String(m?.role || '').toLowerCase() === role);
+    return pick('owner') || pick('admin') || rows[0] || null;
+}
+
+async function __spendnoteGetUserSubscriptionTier(userId) {
+    const uid = String(userId || '').trim();
+    if (!uid) return '';
+    try {
+        const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('subscription_tier')
+            .eq('id', uid)
+            .single();
+        if (error) return '';
+        return String(data?.subscription_tier || '').trim().toLowerCase();
+    } catch (_) {
+        return '';
+    }
+}
+
+async function __spendnoteGetOrgSelectionState(userId) {
+    const uid = String(userId || '').trim();
+    if (!uid) {
+        return {
+            required: false,
+            isPro: false,
+            memberships: [],
+            selectedOrgId: '',
+            selectedRole: '',
+            orgId: '',
+            role: ''
+        };
+    }
+
+    const { data: memberships, error: memError } = await supabaseClient
+        .from('org_memberships')
+        .select('org_id,role,created_at')
+        .eq('user_id', uid)
+        .order('created_at', { ascending: true });
+
+    if (memError) {
+        return {
+            required: false,
+            isPro: false,
+            memberships: [],
+            selectedOrgId: '',
+            selectedRole: '',
+            orgId: '',
+            role: ''
+        };
+    }
+
+    const normalized = __spendnoteNormalizeMemberships(memberships);
+    const tier = await __spendnoteGetUserSubscriptionTier(uid);
+    const isPro = tier === 'pro';
+    const selected = __spendnoteReadSelectedOrgForUser(uid);
+    const selectedMembership = normalized.find((m) => String(m?.org_id || '') === selected) || null;
+
+    if (isPro && normalized.length > 1 && !selectedMembership) {
+        return {
+            required: true,
+            isPro,
+            memberships: normalized,
+            selectedOrgId: '',
+            selectedRole: '',
+            orgId: '',
+            role: ''
+        };
+    }
+
+    const chosen = selectedMembership || __spendnotePickPreferredMembership(normalized);
+    const chosenOrgId = String(chosen?.org_id || '').trim();
+    const chosenRole = String(chosen?.role || '').trim().toLowerCase();
+
+    if (chosenOrgId) {
+        __spendnoteWriteSelectedOrgForUser(uid, chosenOrgId);
+    }
+
+    return {
+        required: false,
+        isPro,
+        memberships: normalized,
+        selectedOrgId: chosenOrgId,
+        selectedRole: chosenRole,
+        orgId: chosenOrgId,
+        role: chosenRole
+    };
+}
 
 async function getMyOrgContext() {
     const user = await auth.getCurrentUser();
-    if (!user) return { orgId: null, ownerUserId: null };
+    if (!user) return { orgId: null, ownerUserId: null, role: null, selectionRequired: false, isPro: false, membershipCount: 0 };
 
     const now = Date.now();
-    if (__orgContextCache.orgId && (now - (__orgContextCache.ts || 0)) < 30_000) {
-        return { orgId: __orgContextCache.orgId, ownerUserId: __orgContextCache.ownerUserId };
+    if ((__orgContextCache.orgId || __orgContextCache.selectionRequired) && (now - (__orgContextCache.ts || 0)) < 30_000) {
+        return {
+            orgId: __orgContextCache.orgId,
+            ownerUserId: __orgContextCache.ownerUserId,
+            role: __orgContextCache.role,
+            selectionRequired: Boolean(__orgContextCache.selectionRequired),
+            isPro: Boolean(__orgContextCache.isPro),
+            membershipCount: Number(__orgContextCache.membershipCount || 0)
+        };
     }
 
     if (__orgContextCache.promise) {
@@ -1131,46 +1321,89 @@ async function getMyOrgContext() {
     }
 
     __orgContextCache.promise = (async () => {
-        const { data: memberships, error: memError } = await supabaseClient
-            .from('org_memberships')
-            .select('org_id,role,created_at')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: true });
-
-        if (memError) {
-            __orgContextCache.orgId = null;
-            __orgContextCache.ownerUserId = null;
-            __orgContextCache.ts = Date.now();
-            __orgContextCache.promise = null;
-            return { orgId: null, ownerUserId: null };
-        }
-
-        const list = Array.isArray(memberships) ? memberships : [];
-        const pick = (role) => list.find((m) => String(m?.role || '').toLowerCase() === role);
-        const chosen = pick('owner') || pick('admin') || list[0] || null;
-        const orgId = chosen?.org_id || null;
+        const state = await __spendnoteGetOrgSelectionState(user.id);
+        const orgId = String(state?.orgId || '').trim() || null;
+        const role = String(state?.role || '').trim().toLowerCase() || null;
+        const selectionRequired = Boolean(state?.required);
+        const isPro = Boolean(state?.isPro);
+        const membershipCount = Array.isArray(state?.memberships) ? state.memberships.length : 0;
         let ownerUserId = null;
 
         if (orgId) {
-            const { data: orgRow, error: orgError } = await supabaseClient
-                .from('orgs')
-                .select('owner_user_id')
-                .eq('id', orgId)
-                .single();
-            if (!orgError) {
-                ownerUserId = orgRow?.owner_user_id || null;
+            try {
+                const { data: orgRow, error: orgError } = await supabaseClient
+                    .from('orgs')
+                    .select('owner_user_id')
+                    .eq('id', orgId)
+                    .single();
+                if (!orgError) {
+                    ownerUserId = orgRow?.owner_user_id || null;
+                }
+            } catch (_) {
+                ownerUserId = null;
             }
         }
 
         __orgContextCache.orgId = orgId;
         __orgContextCache.ownerUserId = ownerUserId;
+        __orgContextCache.role = role;
+        __orgContextCache.selectionRequired = selectionRequired;
+        __orgContextCache.isPro = isPro;
+        __orgContextCache.membershipCount = membershipCount;
         __orgContextCache.ts = Date.now();
         __orgContextCache.promise = null;
-        return { orgId, ownerUserId };
+
+        return { orgId, ownerUserId, role, selectionRequired, isPro, membershipCount };
     })();
 
     return await __orgContextCache.promise;
 }
+
+window.SpendNoteOrgContext = {
+    async getSelectionState() {
+        const user = await auth.getCurrentUser();
+        if (!user) {
+            return { required: false, isPro: false, memberships: [], selectedOrgId: '', selectedRole: '', orgId: '', role: '' };
+        }
+        return await __spendnoteGetOrgSelectionState(user.id);
+    },
+    async setSelectedOrgId(orgId) {
+        const user = await auth.getCurrentUser();
+        const uid = String(user?.id || '').trim();
+        const oid = String(orgId || '').trim();
+        if (!uid || !oid) return false;
+
+        const state = await __spendnoteGetOrgSelectionState(uid);
+        const exists = (state.memberships || []).some((m) => String(m?.org_id || '') === oid);
+        if (!exists) return false;
+
+        const ok = __spendnoteWriteSelectedOrgForUser(uid, oid);
+        __orgContextCache.orgId = null;
+        __orgContextCache.ownerUserId = null;
+        __orgContextCache.role = null;
+        __orgContextCache.selectionRequired = false;
+        __orgContextCache.isPro = false;
+        __orgContextCache.membershipCount = 0;
+        __orgContextCache.ts = 0;
+        __orgContextCache.promise = null;
+        return ok;
+    },
+    async clearSelectedOrg() {
+        const user = await auth.getCurrentUser();
+        const uid = String(user?.id || '').trim();
+        if (!uid) return false;
+        const ok = __spendnoteClearSelectedOrgForUser(uid);
+        __orgContextCache.orgId = null;
+        __orgContextCache.ownerUserId = null;
+        __orgContextCache.role = null;
+        __orgContextCache.selectionRequired = false;
+        __orgContextCache.isPro = false;
+        __orgContextCache.membershipCount = 0;
+        __orgContextCache.ts = 0;
+        __orgContextCache.promise = null;
+        return ok;
+    }
+};
 
 // Database helper functions
 var db = {
