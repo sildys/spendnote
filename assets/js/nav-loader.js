@@ -73,6 +73,10 @@ const NAV_HTML = `
                             <i class="fas fa-cog"></i>
                             Settings
                         </a>
+                        <a href="spendnote-team.html" class="user-dropdown-item" id="dropdownTeamLink">
+                            <i class="fas fa-users"></i>
+                            Team
+                        </a>
                         <div class="user-dropdown-divider"></div>
                         <a href="#" class="user-dropdown-item" data-action="logout">
                             <i class="fas fa-sign-out-alt"></i>

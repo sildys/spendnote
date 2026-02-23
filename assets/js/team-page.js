@@ -221,17 +221,34 @@ const initTeamPage = async () => {
         }
     } catch (_) {}
 
-    // Check Pro tier
+    // Check Pro tier — try multiple sources
     let isPro = false;
     try {
-        if (window.SpendNoteOrgContext?.getSelectionState) {
-            const state = await window.SpendNoteOrgContext.getSelectionState();
-            isPro = Boolean(state?.isPro);
-        } else if (window.db?.profiles?.getCurrent) {
+        if (window.db?.profiles?.getCurrent) {
             const profile = await window.db.profiles.getCurrent();
-            isPro = String(profile?.subscription_tier || '').toLowerCase() === 'pro';
+            const tier = String(profile?.subscription_tier || '').toLowerCase();
+            isPro = tier === 'pro';
         }
     } catch (_) {}
+
+    if (!isPro) {
+        try {
+            if (window.SpendNoteOrgContext?.getSelectionState) {
+                const state = await window.SpendNoteOrgContext.getSelectionState();
+                isPro = Boolean(state?.isPro);
+            }
+        } catch (_) {}
+    }
+
+    // Fallback: if user has org memberships, treat as Pro for team page access
+    if (!isPro) {
+        try {
+            if (window.db?.teamMembers?.getAll) {
+                const members = await window.db.teamMembers.getAll();
+                if (Array.isArray(members) && members.length > 0) isPro = true;
+            }
+        } catch (_) {}
+    }
 
     if (!isPro) {
         if (proGate) proGate.style.display = '';
