@@ -108,14 +108,36 @@ const renderTeamTable = () => {
 };
 
 const loadTeam = async () => {
-    if (!window.db?.teamMembers?.getAll) { teamMembers = []; renderTeamTable(); return; }
-    teamMembers = await window.db.teamMembers.getAll() || [];
-    renderTeamTable();
+    try {
+        if (!window.db?.teamMembers?.getAll) {
+            teamMembers = [];
+            renderTeamTable();
+            return;
+        }
+        teamMembers = await window.db.teamMembers.getAll() || [];
+        renderTeamTable();
+    } catch (err) {
+        console.error('[team-page] loadTeam failed:', err);
+        teamMembers = [];
+        renderTeamTable();
+        const tbody = document.getElementById('teamTableBody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:32px;">Unable to load team right now. Please refresh.</td></tr>';
+        }
+    }
 };
 
 const loadCashBoxes = async () => {
-    if (!window.db?.cashBoxes?.getAll) return;
-    cashBoxes = await window.db.cashBoxes.getAll() || [];
+    try {
+        if (!window.db?.cashBoxes?.getAll) {
+            cashBoxes = [];
+            return;
+        }
+        cashBoxes = await window.db.cashBoxes.getAll() || [];
+    } catch (err) {
+        console.error('[team-page] loadCashBoxes failed:', err);
+        cashBoxes = [];
+    }
 };
 
 const openAccessModal = async (memberId, options = {}) => {
