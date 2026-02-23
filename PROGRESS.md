@@ -37,7 +37,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **L4** Role-based Settings UI: Owner/Admin vs User (hide non-owned sections)
 - [ ] **L5** Access control UX: user sees only assigned cash boxes; admin can assign/revoke cash box access in UI
 - [ ] **DB-TEAM-1** Team/org/invite DB versioning alignment: ensure `org_memberships`/`invites`/`cash_box_memberships` tables + RLS policies + `spendnote_create_invite` RPC are all versioned in `supabase-migrations/` (not only README snippets), and align `database/schema.sql` + `database/SCHEMA-DOCUMENTATION.md` with the current org/invite model
-- [ ] **M1** Mobile strategy + responsive MVP: maximize mobile functionality; tables → cards/collapsible, off-canvas filters (decide exclusions during build)
+- [x] **M1** Mobile strategy + responsive MVP completed (2026-02-18)
 - [ ] **S1** Subscription rules spec: trial model (14 days and/or 20 receipts), expiry behavior, receipt/user limits, data handling on user delete (matrix)
 - [ ] **S2** Stripe prep (ready to plug in): subscription state data model + feature flags + UI placeholders + webhook handling plan
 - [x] **DEPLOY-1** Migration plan: move from Vercel/demo domain to Cloudflare on `spendnote.app` (hosting target, caching rules)
@@ -52,7 +52,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
 - [ ] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass
 
-## Where we are now (last updated: 2026-02-23 — SEO copy refinement + reindex follow-up)
+## Where we are now (last updated: 2026-02-23 — SEO szakasz lezárva, app fókusz aktív)
 
 ### 2026-02-23 zárás — SEO/copy finomítás + indexelési follow-up (KÉSZ)
 
@@ -73,10 +73,11 @@ If a chat thread freezes / context is lost: in the new thread say:
 - **Search Console operatív lépés lezárva**:
   - módosított indexelhető oldalakra új indexelési kérés beküldve.
 
-**Mostani fókusz:**
+**Mostani fókusz (aktív):**
 
-- 48-72 órás GSC monitorozás az újraküldött URL-ekre.
-- Csak hiba/beragadás esetén célzott újrakérés vagy technikai beavatkozás.
+- P0 baseline hardening (edge function hibaláthatóság, abuse/WAF minimum, formális smoke checklist leírás).
+- Onboarding + registration wizard előkészítés.
+- Team/org/invite modell és szerepkörös settings terv (DB-TEAM-1, L4/L5).
 
 ### 2026-02-22 zárás — SEO go-live stabilizáció (KÉSZ)
 

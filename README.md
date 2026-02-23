@@ -7,7 +7,7 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
-## Current status (2026-02-23 — SEO copy refinement + reindex follow-up completed)
+## Current status (2026-02-23 — SEO phase closed, app-internal focus active)
 
 ### Completed in the latest release-polish cycle
 
@@ -36,7 +36,7 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 - App is in a **go-live capable** state.
 - Preview usage cap is now **technically enforced** at 200 receipts during preview.
 - Public SEO copy is now **aligned and consistent** on billing/refund wording and key landing/SEO trust lines.
-- Updated public URLs were **re-submitted for indexing** in Google Search Console.
+- SEO go-live + copy follow-up is **fully closed** in this cycle.
 
 ### Latest SEO/copy follow-up (2026-02-23)
 
@@ -50,8 +50,7 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 - **Cash handoff SEO hero copy softened**:
   - "Clear accountability for every handoff." → "Clear record for every handoff."
 - **Search Console follow-up completed**:
-  - modified indexable pages re-submitted for indexing,
-  - next step is 48-72h status monitoring.
+  - modified indexable pages re-submitted for indexing.
 
 ### Next major scope (deep round, estimate: ~6-8 weeks)
 
@@ -93,10 +92,13 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 
 ## Near-term execution plan (next sessions)
 
-1. SEO/FAQ deep audit and rewrite plan.
-2. Onboarding + registration wizard specification.
-3. Team management redesign specification.
-4. Implementation waves (wizard, onboarding, team, email flows, billing alignment).
+1. P0 production baseline hardening:
+   - edge function error visibility,
+   - formal smoke checklist documentation,
+   - minimum abuse/WAF protections.
+2. Onboarding + registration wizard specification and implementation prep.
+3. Team/org/invite model alignment (DB-TEAM-1) and role-based settings plan.
+4. Billing/subscription + Stripe prep alignment with the team/onboarding model.
 5. Keep weekly 5-minute operational checks running:
    - Sentry issues,
    - Search Console indexing status (`/`, `/faq`, `/petty-cash-receipt-generator`, `/cash-handoff-receipt`),
