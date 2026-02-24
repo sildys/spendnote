@@ -224,69 +224,12 @@
                         <div class="billing-info-left">
                             <i class="fas fa-calendar-check"></i>
                             <div class="billing-info-text">
-                                <span>You're on <strong id="currentPlanName">Standard (Yearly)</strong></span>
-                                <div id="nextBillingInfo">Next billing: Feb 1, 2026 • $190.00</div>
+                                <span>You're on <strong id="currentPlanName">—</strong></span>
+                                <div id="nextBillingInfo" style="font-size:12px;color:var(--text-muted);margin-top:2px;"></div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-secondary btn-small" id="cancelSubscriptionBtn"><i class="fas fa-times"></i> Cancel</button>
                     </div>
-                    <div class="billing-toggle">
-                        <span class="billing-toggle-label" id="monthlyLabel">Monthly</span>
-                        <div class="toggle-switch yearly" id="billingToggle"><div class="toggle-switch-slider"></div></div>
-                        <span class="billing-toggle-label active" id="yearlyLabel">Yearly <span class="badge badge-warning" style="font-size:10px;">SAVE 20%</span></span>
-                    </div>
-                    <div class="plan-cards">
-                        <div class="plan-card">
-                            <div class="plan-name">Free Trial</div>
-                            <div class="plan-desc">14 days or 20 receipts</div>
-                            <div class="plan-price">$0</div>
-                            <div class="plan-period">Try it out</div>
-                            <ul class="plan-features">
-                                <li><i class="fas fa-check"></i> 1 Cash Box</li>
-                                <li><i class="fas fa-check"></i> 1 user</li>
-                                <li><i class="fas fa-check"></i> 20 receipts</li>
-                                <li><i class="fas fa-check"></i> Basic templates</li>
-                            </ul>
-                            <button class="btn btn-secondary btn-small" style="width:100%;opacity:0.5;cursor:not-allowed;" disabled>Trial Expired</button>
-                        </div>
-                        <div class="plan-card current">
-                            <div class="plan-badge current">Current Plan</div>
-                            <div class="plan-name">Standard</div>
-                            <div class="plan-desc">Solo users & small teams</div>
-                            <div class="plan-price" id="standardPrice">$190</div>
-                            <div class="plan-period" id="standardPeriod">per year</div>
-                            <div class="plan-savings" id="standardSavings">Save $38 vs monthly</div>
-                            <ul class="plan-features">
-                                <li><i class="fas fa-check"></i> 2 Cash Boxes</li>
-                                <li><i class="fas fa-check"></i> 1 user</li>
-                                <li><i class="fas fa-check"></i> Unlimited transactions</li>
-                                <li><i class="fas fa-check"></i> Custom logo upload</li>
-                                <li><i class="fas fa-check"></i> Customizable receipt layouts</li>
-                                <li><i class="fas fa-check"></i> PDF & CSV export</li>
-                            </ul>
-                            <button class="btn btn-secondary btn-small" style="width:100%;opacity:0.5;cursor:not-allowed;" disabled>Current Plan</button>
-                        </div>
-                        <div class="plan-card popular">
-                            <div class="plan-badge popular">Most Popular</div>
-                            <div class="plan-name">Pro</div>
-                            <div class="plan-desc">Growing teams</div>
-                            <div class="plan-price" id="proPrice">$290</div>
-                            <div class="plan-period" id="proPeriod">per year</div>
-                            <div class="plan-savings" id="proSavings">Save $58 vs monthly</div>
-                            <ul class="plan-features">
-                                <li><i class="fas fa-check"></i> Customizable text & labels (localization)</li>
-                                <li><i class="fas fa-check"></i> 3 users included</li>
-                                <li><i class="fas fa-check"></i> +$5/mo per extra user</li>
-                                <li><i class="fas fa-check"></i> Unlimited Cash Boxes</li>
-                                <li><i class="fas fa-check"></i> Unlimited transactions</li>
-                                <li><i class="fas fa-check"></i> Email receipts directly</li>
-                                <li><i class="fas fa-check"></i> Role-based permissions</li>
-                                <li><i class="fas fa-check"></i> All Standard features</li>
-                            </ul>
-                            <button class="btn btn-primary btn-small" style="width:100%;background:var(--orange);" id="upgradeProBtn">Upgrade to Pro</button>
-                        </div>
-                    </div>
-                    <div style="text-align:center;margin-top:20px;">
+                    <div style="margin-top:16px;">
                         <button type="button" class="btn btn-secondary" id="manageBillingBtn"><i class="fas fa-credit-card"></i> Manage Billing & Invoices</button>
                     </div>
                 </div>
