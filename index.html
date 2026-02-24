@@ -29,6 +29,9 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
     <title>SpendNote - Petty Cash Management & Receipt Generator for Teams</title>
+    <style>
+        .sn-auth-nav-pending .site-nav { visibility: hidden; }
+    </style>
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -1529,6 +1532,18 @@
     </style>
 </head>
 <body>
+<script>
+    (function () {
+        try {
+            document.documentElement.classList.add('sn-auth-nav-pending');
+            setTimeout(function () {
+                document.documentElement.classList.remove('sn-auth-nav-pending');
+            }, 1500);
+        } catch (_) {
+            // ignore
+        }
+    })();
+</script>
 <div class="preview-banner" role="status" aria-live="polite">
     <div class="preview-banner-inner">
         <span class="preview-banner-title"><i class="fas fa-flag"></i> Preview</span>
@@ -1976,6 +1991,12 @@ function togglePreviewDetails() {
             await window.ensureAuthenticatedNavOnPublicPage?.({ containerId: 'nav-container' });
         } catch (_) {
             // ignore
+        } finally {
+            try {
+                document.documentElement.classList.remove('sn-auth-nav-pending');
+            } catch (_) {
+                // ignore
+            }
         }
     })();
 </script>

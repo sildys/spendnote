@@ -75,6 +75,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=24">
     <style>
+        .sn-auth-nav-pending .site-nav { visibility: hidden; }
+
         /* ===== PRICING PAGE SPECIFIC STYLES ===== */
 
         /* PREVIEW BANNER */
@@ -739,13 +741,25 @@
             .pricing-card .price {
                 font-size: 40px;
             }
-
             .pricing-reassurance-item {
                 padding: 0.9rem;
             }
         }
-    </style></head>
+        </style>
+</head>
 <body>
+<script>
+    (function () {
+        try {
+            document.documentElement.classList.add('sn-auth-nav-pending');
+            setTimeout(function () {
+                document.documentElement.classList.remove('sn-auth-nav-pending');
+            }, 1500);
+        } catch (_) {
+            // ignore
+        }
+    })();
+</script>
 <div class="preview-banner" role="status" aria-live="polite">
     <div class="preview-banner-inner">
         <span class="preview-banner-title"><i class="fas fa-flag"></i> Preview</span>
@@ -1181,6 +1195,12 @@ function togglePreviewDetails() {
                 await window.ensureAuthenticatedNavOnPublicPage?.({ containerId: 'nav-container' });
             } catch (_) {
                 // ignore
+            } finally {
+                try {
+                    document.documentElement.classList.remove('sn-auth-nav-pending');
+                } catch (_) {
+                    // ignore
+                }
             }
         })();
     </script>
