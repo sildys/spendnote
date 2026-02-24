@@ -14,18 +14,124 @@
     <link rel="stylesheet" href="assets/css/app-layout.css?v=21">
     <link rel="stylesheet" href="assets/css/user-settings.css?v=20260223-2200">
     <style>
-        /* ===== Team page polish overrides ===== */
+        /* ===== Team page layout ===== */
         .main-content {
-            max-width: 1100px;
+            max-width: var(--max-width-page, 1400px);
             margin: 0 auto;
-            padding: 20px 16px 28px;
+            padding: 20px var(--page-gutter) 28px;
         }
 
-        #teamContent .settings-card {
-            border-radius: 20px;
+        /* Two-column layout: left sidebar + right main */
+        .team-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        /* LEFT COLUMN cards */
+        .team-sidebar-card {
+            background: var(--surface);
             border: 1px solid var(--border);
-            box-shadow: 0 8px 24px var(--shadow);
-            padding: 22px;
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .team-sidebar-card + .team-sidebar-card {
+            margin-top: 16px;
+        }
+
+        .sidebar-card-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        /* Team Name input */
+        .org-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .org-name-row input {
+            flex: 1;
+            min-width: 0;
+            height: 36px;
+        }
+
+        .org-name-row #orgNameSaveBtn {
+            height: 36px;
+            padding: 0 14px;
+            flex-shrink: 0;
+        }
+
+        .org-name-note {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Stats grid */
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .stat-box {
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-box-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(var(--active-rgb, 5,150,105), 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .stat-box-text {
+            min-width: 0;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 900;
+            line-height: 1;
+            color: var(--text);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* RIGHT COLUMN — main card */
+        #teamContent .settings-card {
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px var(--shadow);
+            padding: 0;
+            overflow: hidden;
         }
 
         .settings-card-header {
@@ -34,10 +140,12 @@
             justify-content: space-between;
             gap: 12px;
             flex-wrap: wrap;
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border);
         }
 
         .settings-card-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
             color: var(--text);
         }
@@ -45,67 +153,7 @@
         .settings-card-subtitle {
             font-size: 12px;
             color: var(--text-muted);
-        }
-
-        .stats-row {
-            margin-top: 10px;
-            margin-bottom: 16px;
-            display: grid;
-            grid-template-columns: minmax(240px, 1.25fr) repeat(3, minmax(0, 1fr));
-            gap: 10px;
-            align-items: stretch;
-        }
-
-        .stat-box {
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            padding: 9px 10px;
-            min-height: 84px;
-        }
-
-        .stat-value {
-            font-size: 18px;
-            line-height: 1.1;
-        }
-
-        .org-name-panel {
-            margin: 0;
-            padding: 9px 10px;
-            border-radius: 14px;
-            min-height: 84px;
-        }
-
-        .org-name-title {
-            margin-bottom: 6px;
-            font-size: 11px;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-        }
-
-        .org-name-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .org-name-row input {
-            flex: 0 1 220px;
-            width: 220px;
-            max-width: 100%;
-            height: 32px;
-        }
-
-        .org-name-row #orgNameSaveBtn {
-            height: 32px;
-            padding: 0 12px;
-            flex-shrink: 0;
-        }
-
-        .org-name-note {
-            margin-top: 6px;
-            font-size: 10px;
+            margin-top: 2px;
         }
 
         .team-header-actions {
@@ -113,17 +161,12 @@
         }
 
         .team-table-wrap {
-            margin: 0;
-            padding: 0;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            overflow: hidden;
-            background: var(--surface);
+            overflow-x: auto;
         }
 
         .team-table {
             width: 100%;
-            min-width: 860px;
+            min-width: 520px;
             border-collapse: collapse;
         }
 
@@ -134,18 +177,22 @@
             text-transform: uppercase;
             background: var(--bg);
             border-bottom: 1px solid var(--border);
-            padding: 10px 12px;
+            padding: 10px 16px;
         }
 
         .team-table td {
-            padding: 11px 12px;
+            padding: 12px 16px;
             font-size: 13px;
             border-bottom: 1px solid var(--border);
             vertical-align: middle;
         }
 
+        .team-table tr:last-child td {
+            border-bottom: none;
+        }
+
         .team-table tr:hover td {
-            background: rgba(var(--active-rgb, 99, 102, 241), 0.04);
+            background: rgba(var(--active-rgb, 5,150,105), 0.04);
         }
 
         .member-cell {
@@ -192,9 +239,15 @@
             padding: 0 10px;
         }
 
+        .team-footer-note {
+            padding: 12px 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+        }
+
+        /* Org name panel hidden by default, shown by JS */
         .org-name-panel {
-            border: 1px solid var(--border);
-            background: var(--bg);
             display: none;
         }
 
@@ -240,103 +293,38 @@
             font-weight: 600;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
+            .team-layout {
+                grid-template-columns: 260px 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .team-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
             .team-header-actions {
                 width: 100%;
             }
 
             .team-header-actions .btn {
-                flex: 1 1 calc(50% - 4px);
+                flex: 1;
                 justify-content: center;
-            }
-
-            .stats-row {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-
-            .org-name-row input {
-                flex-basis: 100%;
-                width: 100%;
             }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 480px) {
             .main-content {
                 padding: 14px 10px 22px;
             }
 
-            #teamContent .settings-card {
-                border-radius: 14px;
-                padding: 14px;
-            }
-
             .stats-row {
                 grid-template-columns: 1fr;
-            }
-
-            .team-table {
-                min-width: 100%;
-            }
-
-            .team-table thead {
-                display: none;
-            }
-
-            .team-table,
-            .team-table tbody,
-            .team-table tr,
-            .team-table td {
-                display: block;
-                width: 100%;
-            }
-
-            .team-table tr {
-                border-bottom: 1px solid var(--border);
-                padding: 10px;
-                background: var(--surface);
-            }
-
-            .team-table tr:last-child {
-                border-bottom: none;
-            }
-
-            .team-table td {
-                border-bottom: none;
-                padding: 5px 0;
-                text-align: left !important;
-            }
-
-            .team-table td::before {
-                display: block;
-                font-size: 10px;
-                color: var(--text-muted);
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-                margin-bottom: 4px;
-                font-weight: 700;
-            }
-
-            .team-table td:nth-child(2)::before { content: 'Role'; }
-            .team-table td:nth-child(3)::before { content: 'Status'; }
-            .team-table td:nth-child(4)::before { content: 'Actions'; }
-
-            .team-table td:first-child::before {
-                content: '';
-                display: none;
-            }
-
-            .team-actions {
-                justify-content: flex-start;
-                width: 100%;
-            }
-
-            .team-actions .btn {
-                height: 32px;
-            }
-
-            .org-name-row {
-                flex-direction: column;
-                align-items: stretch;
             }
 
             .modal-content {
@@ -372,62 +360,84 @@
             <button type="button" class="btn btn-secondary" onclick="location.reload()"><i class="fas fa-redo"></i> Retry</button>
         </div>
 
-        <!-- MAIN CONTENT (original settings-style layout) -->
+        <!-- MAIN CONTENT -->
         <div id="teamContent" style="display:none;">
-            <div class="settings-card">
-                <div class="settings-card-header">
-                    <div>
-                        <div class="settings-card-title">Team Management</div>
-                        <div class="settings-card-subtitle">Manage members and their permissions</div>
-                    </div>
-                    <div class="team-header-actions" id="teamHeaderActions" style="display:none;">
-                        <button type="button" class="btn btn-secondary btn-small" id="manageAccessBtn"><i class="fas fa-key"></i> Cash Box Access</button>
-                        <button type="button" class="btn btn-primary btn-small" id="inviteMemberBtn"><i class="fas fa-user-plus"></i> Invite</button>
-                    </div>
-                </div>
+            <div class="team-layout">
 
-                <div class="stats-row">
-                    <div class="org-name-panel stat-box" id="orgNamePanel">
-                        <div class="org-name-title">Team name</div>
+                <!-- LEFT: Team name + stats -->
+                <div class="team-sidebar">
+
+                    <!-- Team Name (owner/admin only, shown by JS) -->
+                    <div class="team-sidebar-card org-name-panel" id="orgNamePanel">
+                        <div class="sidebar-card-title">Team name</div>
                         <div class="org-name-row">
                             <input type="text" id="orgNameInput" placeholder="e.g. Acme Finance Team">
                             <button type="button" class="btn btn-primary btn-small" id="orgNameSaveBtn">Save</button>
                         </div>
                         <div class="org-name-note" id="orgNameNote">Team members will see this when selecting a team at sign in.</div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Total Members</div>
-                        <div class="stat-value" id="statTotalMembers">—</div>
-                        <div class="stat-note" id="statMembersNote">of plan limit</div>
+
+                    <!-- Member stats -->
+                    <div class="team-sidebar-card">
+                        <div class="sidebar-card-title">Overview</div>
+                        <div class="stats-row">
+                            <div class="stat-box">
+                                <div class="stat-box-icon"><i class="fas fa-users"></i></div>
+                                <div class="stat-box-text">
+                                    <div class="stat-value" id="statTotalMembers">—</div>
+                                    <div class="stat-label">Total members</div>
+                                </div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-box-icon" style="background:rgba(16,185,129,0.1);color:#10b981"><i class="fas fa-check-circle"></i></div>
+                                <div class="stat-box-text">
+                                    <div class="stat-value" id="statActiveMembers">—</div>
+                                    <div class="stat-label">Active</div>
+                                </div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-box-icon" style="background:rgba(245,158,11,0.1);color:#f59e0b"><i class="fas fa-clock"></i></div>
+                                <div class="stat-box-text">
+                                    <div class="stat-value" id="statPendingMembers">—</div>
+                                    <div class="stat-label">Pending invites</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Active</div>
-                        <div class="stat-value" id="statActiveMembers">—</div>
-                        <div class="stat-note">Members active</div>
+
+                </div><!-- /.team-sidebar -->
+
+                <!-- RIGHT: Members table -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div>
+                            <div class="settings-card-title">Members</div>
+                            <div class="settings-card-subtitle">Manage members and their permissions</div>
+                        </div>
+                        <div class="team-header-actions" id="teamHeaderActions" style="display:none;">
+                            <button type="button" class="btn btn-secondary btn-small" id="manageAccessBtn"><i class="fas fa-key"></i> Cash Box Access</button>
+                            <button type="button" class="btn btn-primary btn-small" id="inviteMemberBtn"><i class="fas fa-user-plus"></i> Invite</button>
+                        </div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Pending</div>
-                        <div class="stat-value" id="statPendingMembers">—</div>
-                        <div class="stat-note">Awaiting acceptance</div>
+                    <div class="team-table-wrap">
+                        <table class="team-table">
+                            <thead>
+                                <tr>
+                                    <th>Member</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teamTableBody">
+                                <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px;"><i class="fas fa-spinner fa-spin"></i> Loading team...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-                <div class="team-table-wrap">
-                    <table class="team-table">
-                        <thead>
-                            <tr>
-                                <th>Member</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="teamTableBody">
-                            <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px;"><i class="fas fa-spinner fa-spin"></i> Loading team...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style="margin-top:16px;font-size:12px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> Admins can access all Cash Boxes. Configure per-cash-box access for Users via "Cash Box Access".</div>
-            </div>
+                    <div class="team-footer-note"><i class="fas fa-info-circle"></i> Admins can access all Cash Boxes. Configure per-cash-box access for Users via "Cash Box Access".</div>
+                </div><!-- /.settings-card -->
+
+            </div><!-- /.team-layout -->
         </div>
     </main>
 </div>
