@@ -208,6 +208,7 @@ window.SpendNoteConsent = window.SpendNoteConsent || {
 async function updateOrgContextIndicator() {
     const dashboardEl = document.getElementById('dashboardOrgContext');
     const dropInfo = document.getElementById('orgContextDropdownInfo');
+    const teamLink = document.getElementById('dropdownTeamLink');
 
     const hide = () => {
         if (dashboardEl) dashboardEl.style.display = 'none';
@@ -219,11 +220,15 @@ async function updateOrgContextIndicator() {
 
         const state = await window.SpendNoteOrgContext.getSelectionState();
         const memberships = Array.isArray(state?.memberships) ? state.memberships : [];
-        const isPro = Boolean(state?.isPro);
         const orgId = String(state?.orgId || state?.selectedOrgId || '').trim();
         const role = String(state?.role || state?.selectedRole || '').trim().toLowerCase();
 
-        if (!isPro || !orgId) { hide(); return; }
+        if (teamLink) {
+            const canManageTeam = role === 'owner' || role === 'admin';
+            teamLink.style.display = canManageTeam ? '' : 'none';
+        }
+
+        if (!orgId) { hide(); return; }
 
         const roleLabel = role === 'owner' ? 'Owner' : (role === 'admin' ? 'Admin' : 'User');
         const shortOrg = orgId.slice(0, 8);
