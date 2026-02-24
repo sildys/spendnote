@@ -75,6 +75,28 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Role-based Settings oldalak teljesítése (admin/user külön kezelés)
   - Team management végleges lezárása csak ezek után
 
+### 2026-02-24 frissítés — Landing mobil teljesítmény optimalizálás (KÉSZ első kör + KÉSZ második kör)
+
+**Lezárt és pusholt változtatások (mai kör):**
+
+- Landing `index.html` mobil LCP/CLS fókuszú hardening:
+  - Google Fonts + Font Awesome async/deferred preload minta,
+  - hero screenshot helyfoglalás stabilizálás (`aspect-ratio`) + explicit méret attribútumok,
+  - első hero screenshot magas prioritású betöltés (`fetchpriority="high"`, preload),
+  - tömörített reszponzív hero képvariánsok (`960w`/`1280w`) + `srcset`.
+
+**Mért eredmény (mobil Lighthouse):**
+
+- Performance: **55 -> 77**
+- LCP: **~6.0s -> ~4.1s**
+- CLS: **~0.329 -> ~0.067**
+
+**Nyitott következő kör (opcionális további javuláshoz):**
+
+- render-blocking további csökkentés,
+- unused CSS/JS további vágása,
+- kontraszt (a11y) hibák javítása pricing blokkokban.
+
 ### 2026-02-23 frissítés — org context safety + role downgrade guard (KÉSZ)
 
 **Lezárt és pushra kész változtatások:**

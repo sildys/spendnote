@@ -25,6 +25,23 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
   - Role-based Settings completion for admin/user separation
   - Final end-to-end team flow closure after these are implemented
 
+### Latest landing performance progress (2026-02-24, mobile Lighthouse)
+
+- Landing page mobile performance optimization started with an LCP/CLS-focused pass.
+- Implemented:
+  - async/deferred loading pattern for Google Fonts and Font Awesome,
+  - hero screenshot layout reservation (`aspect-ratio`) + explicit image dimensions,
+  - high-priority loading for the first hero screenshot,
+  - responsive compressed hero image variants (`960w`/`1280w`) and `srcset` delivery.
+- Measured mobile Lighthouse improvement after rollout:
+  - Performance: **55 -> 77**
+  - LCP: **~6.0s -> ~4.1s**
+  - CLS stabilized around **0.067**
+- Remaining known work for further gains:
+  - additional render-blocking reduction,
+  - unused CSS/JS trimming,
+  - contrast/accessibility fixes on pricing CTA blocks.
+
 ### Completed in the latest release-polish cycle
 
 - **Standalone New Transaction duplicate prefill fixed (mobile page):**
