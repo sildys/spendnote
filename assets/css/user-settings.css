@@ -191,19 +191,32 @@ body {
     height: 32px;
     border-radius: 50%;
     border: 2px solid rgba(0,0,0,0.08);
+    -webkit-appearance: none;
+    appearance: none;
     cursor: pointer;
     padding: 0;
-    transition: all 0.2s;
+    transform: scale(1);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
 .avatar-color-swatch:hover {
-    transform: scale(1.1);
+    transform: scale(1.06);
 }
 
 .avatar-color-swatch.active {
-    outline: 3px solid rgba(0,0,0,0.15);
-    border-color: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transform: scale(1.08);
+    border-color: #ffffff;
+    box-shadow:
+        0 0 0 2px rgba(15, 23, 42, 0.22),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.92),
+        0 3px 8px rgba(15, 23, 42, 0.18);
+}
+
+.avatar-color-swatch:focus-visible {
+    outline: none;
+    box-shadow:
+        0 0 0 2px rgba(15, 23, 42, 0.18),
+        0 0 0 4px rgba(5, 150, 105, 0.32);
 }
 
 .settings-card-title {
