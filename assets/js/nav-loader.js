@@ -89,48 +89,84 @@ const NAV_HTML = `
 </nav>
 `;
 
+function renderAppNav(container, options = {}) {
+    if (!container) return;
+
+    const includeBottomNav = options.includeBottomNav !== false;
+
+    container.innerHTML = NAV_HTML;
+
+    // Inject bottom nav once (app pages)
+    if (includeBottomNav && !document.getElementById('bottomNav')) {
+        const bnEl = document.createElement('div');
+        bnEl.innerHTML = BOTTOM_NAV_HTML;
+        document.body.appendChild(bnEl.firstElementChild);
+    }
+
+    highlightCurrentPage();
+    initNavEvents();
+
+    try {
+        const avatarImgs = container.querySelectorAll('.user-avatar img');
+        if (avatarImgs && avatarImgs.length) {
+            const placeholderColor = '#94a3b8';
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ffffff" stroke="${placeholderColor}" stroke-width="4"/><circle cx="32" cy="26" r="9" fill="${placeholderColor}"/><path d="M18 50c0-7.7 6.3-14 14-14s14 6.3 14 14" fill="${placeholderColor}"/></svg>`;
+            const src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+            avatarImgs.forEach((img) => {
+                if (img) img.src = src;
+            });
+        }
+    } catch (_) {
+        // ignore
+    }
+
+    // Ensure avatar/identity gets refreshed even if main.js loads after nav.
+    (function scheduleIdentityRefresh() {
+        let tries = 0;
+        const tick = () => {
+            tries += 1;
+            if (typeof window.refreshUserNav === 'function') {
+                window.refreshUserNav();
+                return;
+            }
+            if (tries < 40) {
+                setTimeout(tick, 100);
+            }
+        };
+        setTimeout(tick, 0);
+    })();
+}
+
 function loadNav(containerId = 'nav-container') {
     const container = document.getElementById(containerId);
     if (container) {
-        container.innerHTML = NAV_HTML;
-        // Inject bottom nav once
-        if (!document.getElementById('bottomNav')) {
-            const bnEl = document.createElement('div');
-            bnEl.innerHTML = BOTTOM_NAV_HTML;
-            document.body.appendChild(bnEl.firstElementChild);
-        }
-        highlightCurrentPage();
-        initNavEvents();
+        renderAppNav(container, { includeBottomNav: true });
+    }
+}
 
-        try {
-            const avatarImgs = container.querySelectorAll('.user-avatar img');
-            if (avatarImgs && avatarImgs.length) {
-                const placeholderColor = '#94a3b8';
-                const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ffffff" stroke="${placeholderColor}" stroke-width="4"/><circle cx="32" cy="26" r="9" fill="${placeholderColor}"/><path d="M18 50c0-7.7 6.3-14 14-14s14 6.3 14 14" fill="${placeholderColor}"/></svg>`;
-                const src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
-                avatarImgs.forEach((img) => {
-                    if (img) img.src = src;
-                });
-            }
-        } catch (_) {
-            // ignore
+async function ensureAuthenticatedNavOnPublicPage(options = {}) {
+    const containerId = options.containerId || 'nav-container';
+    const includeBottomNav = options.includeBottomNav === true;
+
+    try {
+        if (!window.supabaseClient?.auth?.getSession) return false;
+        const { data } = await window.supabaseClient.auth.getSession();
+        const session = data?.session || null;
+        if (!session) return false;
+
+        let container = document.getElementById(containerId);
+        if (!container) {
+            const existingNav = document.querySelector('nav.site-nav');
+            if (!existingNav) return false;
+            container = document.createElement('div');
+            container.id = containerId;
+            existingNav.replaceWith(container);
         }
 
-        // Ensure avatar/identity gets refreshed even if main.js loads after nav.
-        (function scheduleIdentityRefresh() {
-            let tries = 0;
-            const tick = () => {
-                tries += 1;
-                if (typeof window.refreshUserNav === 'function') {
-                    window.refreshUserNav();
-                    return;
-                }
-                if (tries < 40) {
-                    setTimeout(tick, 100);
-                }
-            };
-            setTimeout(tick, 0);
-        })();
+        renderAppNav(container, { includeBottomNav });
+        return true;
+    } catch (_) {
+        return false;
     }
 }
 
@@ -363,3 +399,4 @@ function highlightCurrentPage() {
 // Export
 window.loadNav = loadNav;
 window.NAV_HTML = NAV_HTML;
+window.ensureAuthenticatedNavOnPublicPage = ensureAuthenticatedNavOnPublicPage;
