@@ -20,6 +20,191 @@ function updateMenuColors(color) {
     }
 }
 
+const SN_CONSENT_STORAGE_KEY = 'spendnote.cookieConsent.v1';
+const SN_STRICT_CONSENT_COUNTRIES = new Set([
+    'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR',
+    'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK',
+    'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'CH', 'GB'
+]);
+
+function readConsentState() {
+    try {
+        const raw = localStorage.getItem(SN_CONSENT_STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object') return null;
+        return {
+            analytics: parsed.analytics === true,
+            regionMode: parsed.regionMode === 'strict' ? 'strict' : 'open',
+            country: String(parsed.country || '').trim().toUpperCase(),
+            savedAt: Number(parsed.savedAt || 0)
+        };
+    } catch (_) {
+        return null;
+    }
+}
+
+function writeConsentState(nextState) {
+    try {
+        localStorage.setItem(SN_CONSENT_STORAGE_KEY, JSON.stringify({
+            analytics: nextState.analytics === true,
+            regionMode: nextState.regionMode === 'strict' ? 'strict' : 'open',
+            country: String(nextState.country || '').trim().toUpperCase(),
+            savedAt: Date.now()
+        }));
+    } catch (_) {
+        // ignore
+    }
+}
+
+function detectCountryCode() {
+    const timeout = (ms) => new Promise((resolve) => {
+        setTimeout(() => resolve(''), ms);
+    });
+    const readTrace = fetch('/cdn-cgi/trace', { credentials: 'same-origin', cache: 'no-store' })
+        .then((resp) => (resp.ok ? resp.text() : ''))
+        .then((body) => {
+            const match = String(body || '').match(/(?:^|\n)loc=([A-Z]{2})(?:\n|$)/);
+            return match ? String(match[1] || '').trim().toUpperCase() : '';
+        })
+        .catch(() => '');
+    return Promise.race([readTrace, timeout(1600)]);
+}
+
+function ensureConsentStyles() {
+    if (document.getElementById('snConsentStyles')) return;
+    const style = document.createElement('style');
+    style.id = 'snConsentStyles';
+    style.textContent = `
+        .sn-consent-banner {
+            position: fixed;
+            left: 16px;
+            right: 16px;
+            bottom: 16px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+            color: #0f172a;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+        .sn-consent-banner strong { font-size: 14px; }
+        .sn-consent-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .sn-consent-btn {
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #0f172a;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .sn-consent-btn.sn-consent-accept {
+            background: #059669;
+            border-color: #059669;
+            color: #ffffff;
+        }
+        @media (max-width: 640px) {
+            .sn-consent-banner { left: 10px; right: 10px; bottom: 10px; }
+            .sn-consent-btn { width: 100%; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function renderStrictConsentBanner(onDecision) {
+    const existing = document.getElementById('snConsentBanner');
+    if (existing) existing.remove();
+    ensureConsentStyles();
+
+    const banner = document.createElement('div');
+    banner.id = 'snConsentBanner';
+    banner.className = 'sn-consent-banner';
+    banner.innerHTML = `
+        <div>
+            <strong>Cookie beállítások</strong><br>
+            Csak a működéshez szükséges sütik aktívak alapból. Az analitikai mérésekhez engedélyezés szükséges.
+        </div>
+        <div class="sn-consent-actions">
+            <button type="button" class="sn-consent-btn" data-consent="necessary">Csak szükséges</button>
+            <button type="button" class="sn-consent-btn sn-consent-accept" data-consent="all">Összes elfogadása</button>
+        </div>
+    `;
+    banner.querySelectorAll('button[data-consent]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const all = btn.getAttribute('data-consent') === 'all';
+            banner.remove();
+            onDecision(all);
+        });
+    });
+    document.body.appendChild(banner);
+}
+
+window.SpendNoteConsent = window.SpendNoteConsent || {
+    _initPromise: null,
+    _state: null,
+
+    async init() {
+        if (this._initPromise) return this._initPromise;
+
+        this._initPromise = (async () => {
+            const stored = readConsentState();
+            const country = String((stored && stored.country) || (await detectCountryCode()) || '').trim().toUpperCase();
+            const isStrict = SN_STRICT_CONSENT_COUNTRIES.has(country);
+
+            if (!isStrict) {
+                if (!stored || stored.regionMode !== 'open') {
+                    this._state = { analytics: true, regionMode: 'open', country };
+                    writeConsentState(this._state);
+                } else {
+                    this._state = { ...stored, country: country || stored.country };
+                }
+                return this._state;
+            }
+
+            if (stored && stored.regionMode === 'strict') {
+                this._state = { ...stored, country: country || stored.country, regionMode: 'strict' };
+                return this._state;
+            }
+
+            this._state = { analytics: false, regionMode: 'strict', country };
+
+            await new Promise((resolve) => {
+                const start = () => {
+                    renderStrictConsentBanner((allowAnalytics) => {
+                        this._state = { analytics: allowAnalytics, regionMode: 'strict', country };
+                        writeConsentState(this._state);
+                        resolve();
+                    });
+                };
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', start, { once: true });
+                } else {
+                    start();
+                }
+            });
+
+            return this._state;
+        })();
+
+        return this._initPromise;
+    },
+
+    canLoadAnalytics() {
+        return Boolean(this._state?.analytics === true);
+    }
+};
+
 async function updateOrgContextIndicator() {
     const dashboardEl = document.getElementById('dashboardOrgContext');
     const dropInfo = document.getElementById('orgContextDropdownInfo');
@@ -80,6 +265,7 @@ function initSentryMonitoring() {
     const host = String(window.location && window.location.hostname || '').toLowerCase();
     if (host === 'localhost' || host === '127.0.0.1') return;
 
+    if (!window.SpendNoteConsent?.canLoadAnalytics?.()) return;
     if (document.querySelector('script[data-spendnote-sentry="1"]')) return;
 
     const s = document.createElement('script');
@@ -119,7 +305,9 @@ function initSpendNoteNav() {
     }
     window.__spendnoteNavInitDone = true;
 
-    initSentryMonitoring();
+    window.SpendNoteConsent?.init?.().finally(() => {
+        initSentryMonitoring();
+    });
 
     // Mobile menu toggle (if needed in future)
     const menuToggle = document.querySelector('.menu-toggle');
