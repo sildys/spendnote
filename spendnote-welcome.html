@@ -20,7 +20,7 @@
             min-height: 100dvh;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             padding: 24px 16px; color: var(--text);
-            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 40%, #a7f3d0 100%);
+            background: #f8fafc;
             position: relative; overflow-x: hidden;
         }
         /* Decorative blobs */
@@ -28,21 +28,21 @@
             content: ''; position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
         }
         body::before {
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(16,185,129,0.18) 0%, transparent 70%);
-            top: -120px; right: -120px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(16,185,129,0.07) 0%, transparent 70%);
+            top: -150px; right: -150px;
         }
         body::after {
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(5,150,105,0.12) 0%, transparent 70%);
-            bottom: -100px; left: -80px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(5,150,105,0.05) 0%, transparent 70%);
+            bottom: -120px; left: -100px;
         }
 
         /* ── Logo ── */
         .wizard-logo {
             display: flex; align-items: center; gap: 10px;
             margin-bottom: 28px; font-size: 22px; font-weight: 900;
-            color: var(--primary-dark); letter-spacing: -0.5px;
+            color: #0f172a; letter-spacing: -0.5px;
             position: relative; z-index: 1;
         }
         .wizard-logo svg { width: 32px; height: 32px; filter: drop-shadow(0 2px 6px rgba(5,150,105,0.3)); }
