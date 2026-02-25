@@ -441,6 +441,53 @@ const computeAndApplyRole = async () => {
 
         currentRole = role;
         applyRoleBadge(currentRole);
+
+        // Role-based settings behavior:
+        // - user: Receipt Identity visible but read-only, Billing hidden
+        // - owner/admin: full edit access + Billing visible
+        try {
+            const isUserRole = currentRole === 'user';
+
+            const billingCard = document.getElementById('billingSettingsCard');
+            if (billingCard) {
+                billingCard.style.display = isUserRole ? 'none' : '';
+            }
+
+            const readOnlyNote = document.getElementById('receiptIdentityReadOnlyNote');
+            if (readOnlyNote) {
+                readOnlyNote.style.display = isUserRole ? 'block' : 'none';
+            }
+
+            const receiptDisplayName = document.getElementById('receiptDisplayName');
+            const receiptOtherId = document.getElementById('receiptOtherId');
+            const receiptAddress = document.getElementById('receiptAddress');
+            if (receiptDisplayName) receiptDisplayName.readOnly = isUserRole;
+            if (receiptOtherId) receiptOtherId.readOnly = isUserRole;
+            if (receiptAddress) receiptAddress.readOnly = isUserRole;
+
+            const receiptResetBtn = document.getElementById('receiptResetBtn');
+            const receiptSaveBtn = document.querySelector('#receiptForm button[type="submit"]');
+            if (receiptResetBtn) receiptResetBtn.disabled = isUserRole;
+            if (receiptSaveBtn) receiptSaveBtn.disabled = isUserRole;
+
+            const logoCanvas = document.getElementById('logoEditorCanvas');
+            const logoFileInput = document.getElementById('logoFileInput');
+            const logoZoomOut = document.getElementById('logoZoomOut');
+            const logoZoomIn = document.getElementById('logoZoomIn');
+            const logoUploadBtn = document.getElementById('logoUploadBtn');
+            const logoRemoveBtn = document.getElementById('logoRemoveBtn');
+
+            if (logoCanvas) {
+                logoCanvas.style.pointerEvents = isUserRole ? 'none' : '';
+                logoCanvas.style.opacity = isUserRole ? '0.85' : '';
+            }
+            if (logoFileInput) logoFileInput.disabled = isUserRole;
+            if (logoZoomOut) logoZoomOut.disabled = isUserRole;
+            if (logoZoomIn) logoZoomIn.disabled = isUserRole;
+            if (logoUploadBtn) logoUploadBtn.disabled = isUserRole;
+            if (logoRemoveBtn) logoRemoveBtn.disabled = isUserRole;
+        } catch (_) {}
+
         try {
             const manageAccessBtn = document.getElementById('manageAccessBtn');
             if (manageAccessBtn) {
@@ -917,6 +964,10 @@ const initUserSettingsPage = async () => {
     document.getElementById('receiptResetBtn')?.addEventListener('click', () => fillProfile(currentProfile));
     document.getElementById('receiptForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (currentRole === 'user') {
+            showAlert('Receipt Identity is read-only for User role.', { iconType: 'info' });
+            return;
+        }
         const payload = {
             company_name: document.getElementById('receiptDisplayName')?.value?.trim() || null,
             phone: document.getElementById('receiptOtherId')?.value?.trim() || null,
