@@ -2,11 +2,6 @@
 // Simple +/- zoom controls for logo size on receipts
 
 const LogoEditor = (() => {
-    const LOGO_KEY = 'spendnote.proLogoDataUrl';
-    const LEGACY_LOGO_KEY = 'spendnote.receipt.logo.v1';
-    const LOGO_SCALE_KEY = 'spendnote.receipt.logoScale.v1';
-    const LOGO_POSITION_KEY = 'spendnote.receipt.logoPosition.v1';
-
     const MIN_SCALE = 0.5;
     const MAX_SCALE = 3.0;
     const STEP = 0.1;
@@ -17,6 +12,7 @@ const LogoEditor = (() => {
     let currentScale = 1.0;
     let currentX = 0;
     let currentY = 0;
+    let _logoDataUrl = null;
     let isDragging = false;
     let dragStartX = 0;
     let dragStartY = 0;
@@ -31,25 +27,10 @@ const LogoEditor = (() => {
         return Math.round(Math.min(MAX_SCALE, Math.max(MIN_SCALE, n)) * 100) / 100;
     };
 
-    const readLogo = () => {
-        try {
-            return localStorage.getItem(LOGO_KEY) || localStorage.getItem(LEGACY_LOGO_KEY);
-        } catch {
-            return null;
-        }
-    };
+    const readLogo = () => _logoDataUrl;
 
     const writeLogo = (dataUrl) => {
-        try {
-            if (dataUrl) {
-                localStorage.setItem(LOGO_KEY, dataUrl);
-                localStorage.setItem(LEGACY_LOGO_KEY, dataUrl);
-            } else {
-                localStorage.removeItem(LOGO_KEY);
-                localStorage.removeItem(LEGACY_LOGO_KEY);
-            }
-        } catch {}
-        // Persist to DB
+        _logoDataUrl = dataUrl || null;
         try {
             if (window.db?.profiles?.update) {
                 window.db.profiles.update({ account_logo_url: dataUrl || null }).catch(() => {});
@@ -60,24 +41,14 @@ const LogoEditor = (() => {
     const scheduleSnapshot = () => {
         try {
             if (snapshotTimer) clearTimeout(snapshotTimer);
-            snapshotTimer = setTimeout(() => {
-                renderSnapshot();
-            }, 160);
+            snapshotTimer = setTimeout(() => { renderSnapshot(); }, 160);
         } catch (_) {}
     };
 
-    const readScale = () => {
-        try {
-            return parseFloat(localStorage.getItem(LOGO_SCALE_KEY) || '1');
-        } catch {
-            return 1;
-        }
-    };
+    const readScale = () => currentScale;
 
     const writeScale = (value) => {
-        try {
-            localStorage.setItem(LOGO_SCALE_KEY, String(clampScale(value)));
-        } catch {}
+        currentScale = clampScale(value);
         persistLogoSettings();
         scheduleSnapshot();
     };
@@ -120,10 +91,7 @@ const LogoEditor = (() => {
             
             ctx.drawImage(image, x, y, displayW * canvasScale, displayH * canvasScale);
             const snapshotUrl = canvas.toDataURL('image/jpeg', 0.75);
-            try {
-                localStorage.setItem(LOGO_KEY, snapshotUrl);
-                localStorage.setItem(LEGACY_LOGO_KEY, snapshotUrl);
-            } catch {}
+            _logoDataUrl = snapshotUrl;
             if (window.db?.profiles?.update) {
                 try {
                     await window.db.profiles.update({ account_logo_url: snapshotUrl });
@@ -138,35 +106,19 @@ const LogoEditor = (() => {
         if (!profile) return;
         if (hasUserEdited) return;
         const dbLogo = profile.account_logo_url || '';
-        if (dbLogo) {
-            try {
-                localStorage.setItem(LOGO_KEY, dbLogo);
-                localStorage.setItem(LEGACY_LOGO_KEY, dbLogo);
-            } catch {}
-        }
-        // Sync scale/position from DB
+        if (dbLogo) _logoDataUrl = dbLogo;
         const ls = profile.logo_settings;
         if (ls && typeof ls === 'object') {
-            if (ls.scale != null) {
-                try { localStorage.setItem(LOGO_SCALE_KEY, String(clampScale(ls.scale))); } catch {}
-            }
-            if (ls.x != null || ls.y != null) {
-                try { localStorage.setItem(LOGO_POSITION_KEY, JSON.stringify({ x: Number(ls.x) || 0, y: Number(ls.y) || 0 })); } catch {}
-            }
+            if (ls.scale != null) currentScale = clampScale(ls.scale);
+            if (ls.x != null) currentX = Number(ls.x) || 0;
+            if (ls.y != null) currentY = Number(ls.y) || 0;
         }
         loadLogo();
     };
 
-    const readPosition = () => {
-        try {
-            const s = localStorage.getItem(LOGO_POSITION_KEY);
-            if (s) { const p = JSON.parse(s); return { x: Number(p.x) || 0, y: Number(p.y) || 0 }; }
-        } catch {}
-        return { x: 0, y: 0 };
-    };
+    const readPosition = () => ({ x: currentX, y: currentY });
 
     const writePosition = () => {
-        try { localStorage.setItem(LOGO_POSITION_KEY, JSON.stringify({ x: currentX, y: currentY })); } catch {}
         persistLogoSettings();
         scheduleSnapshot();
     };

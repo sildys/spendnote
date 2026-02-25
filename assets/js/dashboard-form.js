@@ -143,22 +143,7 @@ function initTransactionForm() {
                 }
             } catch (_) {}
 
-            let intendedFormat = 'receipt-print-two-copies';
-            try {
-                const cbId = String(document.getElementById('modalCashBoxId')?.value || '').trim();
-                if (cbId) {
-                    const key = `spendnote.cashBox.${cbId}.defaultReceiptFormat.v1`;
-                    const stored = String(localStorage.getItem(key) || '').trim().toLowerCase();
-                    if (stored === 'receipt-print-two-copies' || stored === 'pdf') {
-                        intendedFormat = stored;
-                    } else if (stored) {
-                        intendedFormat = 'receipt-print-two-copies';
-                        localStorage.setItem(key, 'receipt-print-two-copies');
-                    }
-                }
-            } catch (_) {
-                intendedFormat = 'receipt-print-two-copies';
-            }
+            const intendedFormat = 'receipt-print-two-copies';
         }
 
         const closeReceiptWindow = () => {
@@ -482,22 +467,7 @@ function initTransactionForm() {
                     params.set('itemsMode', mode === 'quick' ? 'single' : 'full');
                     params.set('recordedBy', '0');
 
-                    let format = 'receipt-print-two-copies';
-                    try {
-                        const cbId = String(payload.cash_box_id || '').trim();
-                        if (cbId) {
-                            const key = `spendnote.cashBox.${cbId}.defaultReceiptFormat.v1`;
-                            const stored = String(localStorage.getItem(key) || '').trim().toLowerCase();
-                            if (stored === 'receipt-print-two-copies' || stored === 'pdf') {
-                                format = stored;
-                            } else if (stored) {
-                                format = 'receipt-print-two-copies';
-                                localStorage.setItem(key, 'receipt-print-two-copies');
-                            }
-                        }
-                    } catch (_) {
-                        format = 'receipt-print-two-copies';
-                    }
+                    const format = 'receipt-print-two-copies';
 
                     if (format === 'receipt-print-two-copies') {
                         params.set('autoPrint', '1');
@@ -526,36 +496,9 @@ function initTransactionForm() {
                         cb = null;
                     }
 
-                    const readStoredObject = (key) => {
-                        try {
-                            if (!key) return null;
-                            const raw = localStorage.getItem(key);
-                            if (!raw) return null;
-                            const parsed = JSON.parse(raw);
-                            return parsed && typeof parsed === 'object' ? parsed : null;
-                        } catch (_) {
-                            return null;
-                        }
-                    };
-
                     const cbIdForDefaults = String(payload.cash_box_id || '').trim();
-                    const storedVisibility = cbIdForDefaults
-                        ? (readStoredObject(`spendnote.cashBox.${cbIdForDefaults}.receiptVisibility.v1`) || {})
-                        : {};
-                    const storedReceiptText = cbIdForDefaults
-                        ? (readStoredObject(`spendnote.cashBox.${cbIdForDefaults}.receiptText.v1`) || {})
-                        : {};
-                    const storedLogoSettings = cbIdForDefaults
-                        ? (readStoredObject(`spendnote.cashBox.${cbIdForDefaults}.logoSettings.v1`) || null)
-                        : null;
-                    const storedPrefix = (() => {
-                        if (!cbIdForDefaults) return '';
-                        try {
-                            return String(localStorage.getItem(`spendnote.cashBox.${cbIdForDefaults}.idPrefix.v1`) || '').trim().toUpperCase();
-                        } catch (_) {
-                            return '';
-                        }
-                    })();
+                    const storedVisibility = {};
+                    const storedReceiptText = {};
 
                     const normalizePrefix = (value) => {
                         const raw = String(value || '').trim().toUpperCase();
@@ -571,18 +514,10 @@ function initTransactionForm() {
 
                     const resolveVisibility = (field, dbValue, fallbackBool) => {
                         if (typeof dbValue === 'boolean') return dbValue;
-                        const stored = storedVisibility?.[field];
-                        if (typeof stored === 'boolean') return stored;
-                        if (stored === '1' || stored === 1 || String(stored).toLowerCase() === 'true') return true;
-                        if (stored === '0' || stored === 0 || String(stored).toLowerCase() === 'false') return false;
                         return fallbackBool;
                     };
 
-                    const resolveText = (dbValue, storageField) => {
-                        const fromDb = String(dbValue || '').trim();
-                        if (fromDb) return fromDb;
-                        return String(storedReceiptText?.[storageField] || '').trim();
-                    };
+                    const resolveText = (dbValue) => String(dbValue || '').trim();
 
                     params.set('logo', yn(resolveVisibility('logo', cb?.receipt_show_logo, true), '1'));
                     params.set('addresses', yn(resolveVisibility('addresses', cb?.receipt_show_addresses, true), '1'));
@@ -591,20 +526,20 @@ function initTransactionForm() {
                     params.set('note', yn(resolveVisibility('note', cb?.receipt_show_note, false), '0'));
                     params.set('signatures', yn(resolveVisibility('signatures', cb?.receipt_show_signatures, true), '1'));
 
-                    const resolvedIdPrefix = normalizePrefix(cb?.id_prefix || storedPrefix || '');
+                    const resolvedIdPrefix = normalizePrefix(cb?.id_prefix || '');
                     if (resolvedIdPrefix) {
                         params.set('idPrefix', resolvedIdPrefix);
                     }
 
-                    const receiptTitle = resolveText(cb?.receipt_title, 'receiptTitle');
-                    const totalLabel = resolveText(cb?.receipt_total_label, 'totalLabel');
-                    const fromLabel = resolveText(cb?.receipt_from_label, 'fromLabel');
-                    const toLabel = resolveText(cb?.receipt_to_label, 'toLabel');
-                    const descriptionLabel = resolveText(cb?.receipt_description_label, 'descriptionLabel');
-                    const amountLabel = resolveText(cb?.receipt_amount_label, 'amountLabel');
-                    const issuedByLabel = resolveText(cb?.receipt_issued_by_label, 'issuedByLabel');
-                    const receivedByLabel = resolveText(cb?.receipt_received_by_label, 'receivedByLabel');
-                    const footerNote = resolveText(cb?.receipt_footer_note, 'footerNote');
+                    const receiptTitle = resolveText(cb?.receipt_title);
+                    const totalLabel = resolveText(cb?.receipt_total_label);
+                    const fromLabel = resolveText(cb?.receipt_from_label);
+                    const toLabel = resolveText(cb?.receipt_to_label);
+                    const descriptionLabel = resolveText(cb?.receipt_description_label);
+                    const amountLabel = resolveText(cb?.receipt_amount_label);
+                    const issuedByLabel = resolveText(cb?.receipt_issued_by_label);
+                    const receivedByLabel = resolveText(cb?.receipt_received_by_label);
+                    const footerNote = resolveText(cb?.receipt_footer_note);
 
                     if (receiptTitle) params.set('receiptTitle', receiptTitle);
                     if (totalLabel) params.set('totalLabel', totalLabel);
@@ -618,69 +553,16 @@ function initTransactionForm() {
 
                     try {
                         const cbLogo = String(cb?.cash_box_logo_url || '').trim();
-                        if (cbLogo) {
-                            const cbKey = `spendnote.cbLogo.${cbIdForDefaults || 'temp'}`;
-                            try { localStorage.setItem(cbKey, cbLogo); } catch (_) {}
-                            params.set('logoKey', cbKey);
-                        } else {
-                            const storedLogo = localStorage.getItem('spendnote.proLogoDataUrl') || '';
-                            if (storedLogo) {
-                                params.set('logoKey', 'spendnote.proLogoDataUrl');
-                            }
-                        }
-                    } catch (_) {
-                        // ignore
-                    }
+                        if (cbLogo) params.set('logoUrl', cbLogo);
 
-                    try {
-                        const parseFinite = (value) => {
-                            const n = Number(value);
-                            return Number.isFinite(n) ? n : null;
-                        };
-
-                        const cbScale = parseFinite(storedLogoSettings?.scale);
-                        const cbX = parseFinite(storedLogoSettings?.x);
-                        const cbY = parseFinite(storedLogoSettings?.y);
-
-                        if (cbScale !== null && cbScale > 0) {
-                            params.set('logoScale', String(cbScale));
-                        } else {
-                            const storedScale = parseFloat(localStorage.getItem('spendnote.receipt.logoScale.v1') || '1');
-                            if (Number.isFinite(storedScale) && storedScale > 0) {
-                                params.set('logoScale', String(storedScale));
-                            }
-                        }
-
-                        if (cbX !== null) {
-                            params.set('logoX', String(cbX));
-                        }
-                        if (cbY !== null) {
-                            params.set('logoY', String(cbY));
-                        }
-
-                        if (cbX === null || cbY === null) {
-                            try {
-                                const storedPosRaw = localStorage.getItem('spendnote.receipt.logoPosition.v1');
-                                if (storedPosRaw) {
-                                    const p = JSON.parse(storedPosRaw);
-                                    if (cbX === null && Number.isFinite(Number(p?.x))) {
-                                        params.set('logoX', String(Number(p.x)));
-                                    }
-                                    if (cbY === null && Number.isFinite(Number(p?.y))) {
-                                        params.set('logoY', String(Number(p.y)));
-                                    }
-                                }
-                            } catch (_) {
-                                // ignore
-                            }
-                        }
-                    } catch (_) {}
-
-                    try {
-                        const storedAlign = String(localStorage.getItem('spendnote.receipt.logoAlign.v1') || '').trim().toLowerCase();
-                        if (storedAlign === 'left' || storedAlign === 'center' || storedAlign === 'right') {
-                            params.set('logoAlign', storedAlign);
-                        }
+                        const parseFinite = (v) => { const n = Number(v); return Number.isFinite(n) ? n : null; };
+                        const ls = cb?.logo_settings || null;
+                        const cbScale = parseFinite(ls?.scale);
+                        const cbX = parseFinite(ls?.x);
+                        const cbY = parseFinite(ls?.y);
+                        if (cbScale !== null && cbScale > 0) params.set('logoScale', String(cbScale));
+                        if (cbX !== null) params.set('logoX', String(cbX));
+                        if (cbY !== null) params.set('logoY', String(cbY));
                     } catch (_) {}
 
                     const baseUrl = baseUrls[format] || baseUrls['receipt-print-two-copies'];

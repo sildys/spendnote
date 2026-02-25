@@ -122,29 +122,7 @@
     }
 
     function getCreatedByAvatarUrl(createdByName) {
-        let activeUserId = '';
-        try {
-            activeUserId = String(localStorage.getItem('spendnote.user.avatar.activeUserId.v1') || '').trim();
-        } catch (_) {
-            activeUserId = '';
-        }
-
-        try {
-            const scopedAvatarKey = activeUserId ? `spendnote.user.avatar.v2.${activeUserId}` : '';
-            const storedAvatar = scopedAvatarKey ? localStorage.getItem(scopedAvatarKey) : '';
-            if (storedAvatar) return storedAvatar;
-        } catch (_) {
-            // ignore
-        }
-
-        let avatarColor = '#10b981';
-        try {
-            const scopedColorKey = activeUserId ? `spendnote.user.avatarColor.v2.${activeUserId}` : '';
-            avatarColor = (scopedColorKey ? localStorage.getItem(scopedColorKey) : '') || '#10b981';
-        } catch (_) {
-            // ignore
-        }
-
+        const avatarColor = '#10b981';
         const initials = getInitials(createdByName === '—' ? '' : createdByName);
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ffffff" stroke="${avatarColor}" stroke-width="4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="800" fill="${avatarColor}">${initials}</text></svg>`;
         return `data:image/svg+xml,${encodeURIComponent(svg)}`;

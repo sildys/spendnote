@@ -303,10 +303,6 @@ function initNavEvents() {
                 localStorage.removeItem('activeCashBoxColor');
                 localStorage.removeItem('activeCashBoxRgb');
                 localStorage.removeItem('activeCashBoxId');
-                localStorage.removeItem('spendnote.user.avatar.activeUserId.v1');
-                localStorage.removeItem('spendnote.user.avatar.v1');
-                localStorage.removeItem('spendnote.user.avatarColor.v1');
-                localStorage.removeItem('spendnote.user.avatarSettings.v1');
             } catch (_) {
                 // ignore
             }

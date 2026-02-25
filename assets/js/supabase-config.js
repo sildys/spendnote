@@ -507,13 +507,6 @@ try {
                         __spendnoteWriteBootstrapSession(session);
                     } catch (_) {}
                     try {
-                        const u = session?.user || null;
-                        const displayName = String(u?.user_metadata?.full_name || u?.email || '').trim();
-                        if (displayName) {
-                            localStorage.setItem('spendnote.user.fullName.v1', displayName);
-                        }
-                    } catch (_) {}
-                    try {
                         await __spendnoteTryAcceptPendingInviteToken();
                     } catch (_) {}
                 };
@@ -579,20 +572,12 @@ try {
         if (event === 'SIGNED_OUT') {
             try {
                 localStorage.removeItem('spendnote.session.bootstrap');
-                localStorage.removeItem('spendnote.user.fullName.v1');
             } catch (_) {}
             return;
         }
 
         if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
             __spendnoteWriteBootstrapSession(session);
-            try {
-                const u = session?.user || null;
-                const displayName = String(u?.user_metadata?.full_name || u?.email || '').trim();
-                if (displayName) {
-                    localStorage.setItem('spendnote.user.fullName.v1', displayName);
-                }
-            } catch (_) {}
             try {
                 __spendnoteTryAcceptPendingInviteToken();
             } catch (_) {}
@@ -739,45 +724,15 @@ function normalizeCashBoxIdPrefix(value) {
     return up;
 }
 
-function getCashBoxIdPrefixStorageKey(cashBoxId) {
-    const id = String(cashBoxId || '').trim();
-    if (!id) return '';
-    return `spendnote.cashBox.${id}.idPrefix.v1`;
-}
+function readStoredCashBoxIdPrefix(_cashBoxId) { return ''; }
+function writeStoredCashBoxIdPrefix(_cashBoxId, _prefix) {}
 
-function readStoredCashBoxIdPrefix(cashBoxId) {
-    try {
-        const key = getCashBoxIdPrefixStorageKey(cashBoxId);
-        if (!key) return '';
-        const raw = localStorage.getItem(key);
-        if (!raw) return '';
-        return normalizeCashBoxIdPrefix(raw);
-    } catch (_) {
-        return '';
-    }
-}
-
-function writeStoredCashBoxIdPrefix(cashBoxId, prefix) {
-    try {
-        const key = getCashBoxIdPrefixStorageKey(cashBoxId);
-        if (!key) return;
-        localStorage.setItem(key, normalizeCashBoxIdPrefix(prefix || 'SN'));
-    } catch (_) {
-        // ignore
-    }
-}
-
-function resolvePreferredCashBoxIdPrefix(snapshotPrefixValue, livePrefixValue, cashBoxId) {
-    const snapshotRaw = String(snapshotPrefixValue || '').trim();
-    const liveRaw = String(livePrefixValue || '').trim();
-    const snapshotPrefix = snapshotRaw ? normalizeCashBoxIdPrefix(snapshotRaw) : '';
-    const livePrefix = liveRaw ? normalizeCashBoxIdPrefix(liveRaw) : '';
-    const storedPrefix = readStoredCashBoxIdPrefix(cashBoxId);
-
+function resolvePreferredCashBoxIdPrefix(snapshotPrefixValue, livePrefixValue) {
+    const snapshotPrefix = snapshotPrefixValue ? normalizeCashBoxIdPrefix(String(snapshotPrefixValue)) : '';
+    const livePrefix = livePrefixValue ? normalizeCashBoxIdPrefix(String(livePrefixValue)) : '';
     if (snapshotPrefix && snapshotPrefix !== 'SN') return snapshotPrefix;
     if (livePrefix && livePrefix !== 'SN') return livePrefix;
-    if (storedPrefix && storedPrefix !== 'SN') return storedPrefix;
-    return snapshotPrefix || livePrefix || storedPrefix || 'SN';
+    return snapshotPrefix || livePrefix || 'SN';
 }
 
 function applyStoredCashBoxIdPrefixFallback(row) {

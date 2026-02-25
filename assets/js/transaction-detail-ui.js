@@ -35,9 +35,6 @@ const QUICK_PRESET = {
     };
 
     let receiptLogoUrl = '';
-    const RECEIPT_LOGO_KEY = 'spendnote.proLogoDataUrl';
-    const LOGO_SCALE_KEY = 'spendnote.receipt.logoScale.v1';
-    const LOGO_POSITION_KEY = 'spendnote.receipt.logoPosition.v1';
     const RECEIPT_MODE_KEY = 'spendnote.receiptMode';
 
     let lastReceiptUrl = '';
@@ -69,52 +66,13 @@ const QUICK_PRESET = {
         return txId;
     }
 
-    function readStoredCashBoxLogoSettings(cashBoxId) {
-        const keyId = String(cashBoxId || '').trim();
-        if (!keyId) return null;
-        try {
-            const raw = localStorage.getItem(`spendnote.cashBox.${keyId}.logoSettings.v1`);
-            if (!raw) return null;
-            const parsed = JSON.parse(raw);
-            return parsed && typeof parsed === 'object' ? parsed : null;
-        } catch (_) {
-            return null;
-        }
-    }
-
-    function resolveLogoRenderSettings(cashBoxId) {
-        const parseFinite = (value) => {
-            const n = Number(value);
-            return Number.isFinite(n) ? n : null;
-        };
-
-        const fromCashBox = readStoredCashBoxLogoSettings(cashBoxId) || null;
-        const scale = parseFinite(fromCashBox?.scale);
-        const x = parseFinite(fromCashBox?.x);
-        const y = parseFinite(fromCashBox?.y);
-
-        let fallbackScale = null;
-        let fallbackX = null;
-        let fallbackY = null;
-
-        try {
-            const s = parseFloat(localStorage.getItem(LOGO_SCALE_KEY) || '1');
-            fallbackScale = Number.isFinite(s) ? s : null;
-        } catch (_) {}
-
-        try {
-            const raw = localStorage.getItem(LOGO_POSITION_KEY);
-            if (raw) {
-                const p = JSON.parse(raw);
-                fallbackX = parseFinite(p?.x);
-                fallbackY = parseFinite(p?.y);
-            }
-        } catch (_) {}
-
+    function resolveLogoRenderSettings(cb) {
+        const ls = cb?.logo_settings || null;
+        const parseFinite = (v) => { const n = Number(v); return Number.isFinite(n) ? n : null; };
         return {
-            scale: (scale !== null && scale > 0) ? scale : fallbackScale,
-            x: x !== null ? x : fallbackX,
-            y: y !== null ? y : fallbackY
+            scale: parseFinite(ls?.scale),
+            x: parseFinite(ls?.x),
+            y: parseFinite(ls?.y)
         };
     }
 
@@ -158,39 +116,19 @@ const QUICK_PRESET = {
 
         const snapshotPrefix = normalizePrefix(txData?.cash_box_id_prefix_snapshot);
         const livePrefix = normalizePrefix(txData?.cash_box?.id_prefix);
-        const storedPrefix = (() => {
-            try {
-                const keyId = String(txData?.cash_box?.id || txData?.cash_box_id || currentCashBoxId || '').trim();
-                if (!keyId) return '';
-                return normalizePrefix(localStorage.getItem(`spendnote.cashBox.${keyId}.idPrefix.v1`) || '');
-            } catch (_) {
-                return '';
-            }
-        })();
         const resolvedPrefix = (snapshotPrefix && snapshotPrefix !== 'SN')
             ? snapshotPrefix
-            : (livePrefix || storedPrefix || snapshotPrefix || 'SN');
+            : (livePrefix || snapshotPrefix || 'SN');
         if (resolvedPrefix) {
             params.append('idPrefix', resolvedPrefix);
         }
 
-        // Cash box logo takes priority over user settings (global default) logo
         if (receiptLogoUrl) {
-            const cbTempKey = 'spendnote.cbLogo.' + (txData?.cash_box?.id || 'temp');
-            try { localStorage.setItem(cbTempKey, receiptLogoUrl); } catch (_) {}
-            params.append('logoKey', cbTempKey);
-        } else {
-            let storedLogo = '';
-            try { storedLogo = localStorage.getItem(RECEIPT_LOGO_KEY) || ''; } catch (_) {}
-            if (storedLogo) {
-                params.append('logoKey', RECEIPT_LOGO_KEY);
-            }
+            params.append('logoUrl', receiptLogoUrl);
         }
 
         try {
-            const keyId = String(txData?.cash_box?.id || txData?.cash_box_id || currentCashBoxId || '').trim();
-            const logoSettings = resolveLogoRenderSettings(keyId);
-
+            const logoSettings = resolveLogoRenderSettings(txData?.cash_box);
             if (Number.isFinite(Number(logoSettings.scale)) && Number(logoSettings.scale) > 0) {
                 params.append('logoScale', String(Number(logoSettings.scale)));
             }
@@ -229,21 +167,6 @@ const QUICK_PRESET = {
     }
 
     function getCashBoxDefaultReceiptFormat() {
-        const cbId = String(currentCashBoxId || '').trim();
-        if (!cbId) return '';
-        try {
-            const key = `spendnote.cashBox.${cbId}.defaultReceiptFormat.v1`;
-            const stored = String(localStorage.getItem(key) || '').trim().toLowerCase();
-            if (stored === 'receipt-print-two-copies' || stored === 'pdf' || stored === 'email') {
-                return stored;
-            }
-            if (stored) {
-                try { localStorage.setItem(key, 'receipt-print-two-copies'); } catch (_) {}
-                return 'receipt-print-two-copies';
-            }
-        } catch (_) {
-            return '';
-        }
         return '';
     }
 
@@ -278,7 +201,6 @@ const QUICK_PRESET = {
     function applyReceiptMode(mode) {
         const m = mode === 'detailed' ? 'detailed' : 'quick';
         receiptMode = m;
-        try { localStorage.setItem(RECEIPT_MODE_KEY, m); } catch (e) {}
 
         // Always show toggles in both modes - just with different default values
         const detailedToggles = document.getElementById('receiptDetailedToggles');
@@ -299,15 +221,7 @@ const QUICK_PRESET = {
         requestReload(0);
     }
 
-    function getStoredReceiptMode() {
-        try {
-            const v = String(localStorage.getItem(RECEIPT_MODE_KEY) || '').toLowerCase();
-            if (v === 'quick' || v === 'detailed') return v;
-            return '';
-        } catch (_) {
-            return '';
-        }
-    }
+    function getStoredReceiptMode() { return ''; }
 
     function inferReceiptModeFromOptions(options) {
         const o = options || {};
@@ -319,38 +233,23 @@ const QUICK_PRESET = {
     function initReceiptUiFromCashBox(cashBox, profile, tx) {
         const cb = cashBox || {};
         const t = tx || {};
-        const storedReceiptText = (() => {
-            try {
-                const keyId = String(cb?.id || currentCashBoxId || '').trim();
-                if (!keyId) return null;
-                const raw = localStorage.getItem(`spendnote.cashBox.${keyId}.receiptText.v1`);
-                if (!raw) return null;
-                const parsed = JSON.parse(raw);
-                return parsed && typeof parsed === 'object' ? parsed : null;
-            } catch (_) {
-                return null;
-            }
-        })();
-
-        const resolveReceiptText = (txValue, cbValue, storageField) => {
+        const resolveReceiptText = (txValue, cbValue) => {
             const fromTx = String(txValue || '').trim();
             if (fromTx) return fromTx;
-            const fromCb = String(cbValue || '').trim();
-            if (fromCb) return fromCb;
-            return String(storedReceiptText?.[storageField] || '').trim();
+            return String(cbValue || '').trim();
         };
 
         // Transaction-specific labels override cash box defaults
-        receiptText.receiptTitle = resolveReceiptText(t.receipt_title, cb.receipt_title, 'receiptTitle');
-        receiptText.totalLabel = resolveReceiptText(t.receipt_total_label, cb.receipt_total_label, 'totalLabel');
-        receiptText.fromLabel = resolveReceiptText(t.receipt_from_label, cb.receipt_from_label, 'fromLabel');
-        receiptText.toLabel = resolveReceiptText(t.receipt_to_label, cb.receipt_to_label, 'toLabel');
-        receiptText.descriptionLabel = resolveReceiptText(t.receipt_description_label, cb.receipt_description_label, 'descriptionLabel');
-        receiptText.amountLabel = resolveReceiptText(t.receipt_amount_label, cb.receipt_amount_label, 'amountLabel');
-        receiptText.notesLabel = resolveReceiptText(t.receipt_notes_label, cb.receipt_notes_label, 'notesLabel');
-        receiptText.issuedByLabel = resolveReceiptText(t.receipt_issued_by_label, cb.receipt_issued_by_label, 'issuedByLabel');
-        receiptText.receivedByLabel = resolveReceiptText(t.receipt_received_by_label, cb.receipt_received_by_label, 'receivedByLabel');
-        receiptText.footerNote = resolveReceiptText(t.receipt_footer_note, cb.receipt_footer_note, 'footerNote');
+        receiptText.receiptTitle = resolveReceiptText(t.receipt_title, cb.receipt_title);
+        receiptText.totalLabel = resolveReceiptText(t.receipt_total_label, cb.receipt_total_label);
+        receiptText.fromLabel = resolveReceiptText(t.receipt_from_label, cb.receipt_from_label);
+        receiptText.toLabel = resolveReceiptText(t.receipt_to_label, cb.receipt_to_label);
+        receiptText.descriptionLabel = resolveReceiptText(t.receipt_description_label, cb.receipt_description_label);
+        receiptText.amountLabel = resolveReceiptText(t.receipt_amount_label, cb.receipt_amount_label);
+        receiptText.notesLabel = resolveReceiptText(t.receipt_notes_label, cb.receipt_notes_label);
+        receiptText.issuedByLabel = resolveReceiptText(t.receipt_issued_by_label, cb.receipt_issued_by_label);
+        receiptText.receivedByLabel = resolveReceiptText(t.receipt_received_by_label, cb.receipt_received_by_label);
+        receiptText.footerNote = resolveReceiptText(t.receipt_footer_note, cb.receipt_footer_note);
 
         const titleEl = document.getElementById('txReceiptTitle');
         const totalEl = document.getElementById('txTotalLabel');
@@ -411,32 +310,19 @@ const QUICK_PRESET = {
             return fallback;
         };
 
-        const storedVisibility = (() => {
-            try {
-                const keyId = String(cb?.id || currentCashBoxId || '').trim();
-                if (!keyId) return null;
-                const raw = localStorage.getItem(`spendnote.cashBox.${keyId}.receiptVisibility.v1`);
-                if (!raw) return null;
-                const parsed = JSON.parse(raw);
-                return parsed && typeof parsed === 'object' ? parsed : null;
-            } catch (_) {
-                return null;
-            }
-        })();
-
-        const resolveVisibilityBool = (field, dbValue, fallback) => {
+        const resolveVisibilityBool = (dbValue, fallback) => {
             const fromDb = mapBool(dbValue, null);
             if (fromDb !== null) return fromDb;
-            return mapBool(storedVisibility?.[field], fallback);
+            return fallback;
         };
 
         displayOptions = {
-            logo: resolveVisibilityBool('logo', cb.receipt_show_logo, true) ? '1' : '0',
-            addresses: resolveVisibilityBool('addresses', cb.receipt_show_addresses, true) ? '1' : '0',
-            tracking: resolveVisibilityBool('tracking', cb.receipt_show_tracking, true) ? '1' : '0',
-            additional: resolveVisibilityBool('additional', cb.receipt_show_additional, false) ? '1' : '0',
-            note: resolveVisibilityBool('note', cb.receipt_show_note, false) ? '1' : '0',
-            signatures: resolveVisibilityBool('signatures', cb.receipt_show_signatures, true) ? '1' : '0'
+            logo: resolveVisibilityBool(cb.receipt_show_logo, true) ? '1' : '0',
+            addresses: resolveVisibilityBool(cb.receipt_show_addresses, true) ? '1' : '0',
+            tracking: resolveVisibilityBool(cb.receipt_show_tracking, true) ? '1' : '0',
+            additional: resolveVisibilityBool(cb.receipt_show_additional, false) ? '1' : '0',
+            note: resolveVisibilityBool(cb.receipt_show_note, false) ? '1' : '0',
+            signatures: resolveVisibilityBool(cb.receipt_show_signatures, true) ? '1' : '0'
         };
 
         document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
@@ -448,7 +334,6 @@ const QUICK_PRESET = {
 
         const modeToApply = inferReceiptModeFromOptions(displayOptions);
         receiptMode = modeToApply;
-        try { localStorage.setItem(RECEIPT_MODE_KEY, modeToApply); } catch (_) {}
 
         const detailedToggles = document.getElementById('receiptDetailedToggles');
         if (detailedToggles) detailedToggles.style.display = 'block';
@@ -825,21 +710,6 @@ html, body { height: auto !important; overflow: auto !important; }
                 let profile = null;
                 try {
                     profile = window.db?.profiles?.getCurrent ? await window.db.profiles.getCurrent() : null;
-                    // Sync DB logo + settings to localStorage for receipt preview
-                    if (profile) {
-                        const LOGO_K = 'spendnote.proLogoDataUrl';
-                        const LEGACY_K = 'spendnote.receipt.logo.v1';
-                        const SCALE_K = 'spendnote.receipt.logoScale.v1';
-                        const POS_K = 'spendnote.receipt.logoPosition.v1';
-                        if (profile.account_logo_url) {
-                            try { localStorage.setItem(LOGO_K, profile.account_logo_url); localStorage.setItem(LEGACY_K, profile.account_logo_url); } catch (_) {}
-                        }
-                        const ls = profile.logo_settings;
-                        if (ls && typeof ls === 'object') {
-                            if (ls.scale != null) try { localStorage.setItem(SCALE_K, String(ls.scale)); } catch (_) {}
-                            if (ls.x != null || ls.y != null) try { localStorage.setItem(POS_K, JSON.stringify({ x: Number(ls.x) || 0, y: Number(ls.y) || 0 })); } catch (_) {}
-                        }
-                    }
                 } catch (_) {}
 
                 const currency = cashBox?.currency || 'USD';
@@ -922,12 +792,6 @@ html, body { height: auto !important; overflow: auto !important; }
 
                 if (receiptLogoUrl) {
                     pdfParams.set('logoUrl', receiptLogoUrl);
-                } else {
-                    let storedLogo = '';
-                    try { storedLogo = localStorage.getItem(RECEIPT_LOGO_KEY) || ''; } catch (_) {}
-                    if (storedLogo) {
-                        pdfParams.set('logoKey', RECEIPT_LOGO_KEY);
-                    }
                 }
                 if (currentTxIsVoided) pdfParams.set('void', '1');
 

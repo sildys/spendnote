@@ -209,21 +209,9 @@
         const snapshotPrefix = snapshotPrefixRaw && snapshotPrefixRaw !== 'REC-' ? snapshotPrefixRaw : '';
         const livePrefixRaw = safeText(base?.id_prefix, '').trim().toUpperCase();
         const livePrefix = livePrefixRaw && livePrefixRaw !== 'REC-' ? livePrefixRaw : '';
-        const storedPrefix = (() => {
-            try {
-                const keyId = String(base?.id || tx?.cash_box_id || '').trim();
-                if (!keyId) return '';
-                const raw = String(localStorage.getItem(`spendnote.cashBox.${keyId}.idPrefix.v1`) || '').trim().toUpperCase();
-                if (!raw) return '';
-                return raw === 'REC-' ? 'SN' : raw;
-            } catch (_) {
-                return '';
-            }
-        })();
-
         const resolvedPrefix = (snapshotPrefix && snapshotPrefix !== 'SN')
             ? snapshotPrefix
-            : (livePrefix || storedPrefix || snapshotPrefix || 'SN');
+            : (livePrefix || snapshotPrefix || 'SN');
         base.id_prefix = resolvedPrefix;
 
         return base;

@@ -567,13 +567,6 @@ if (document.readyState === 'loading') {
     initGlobalNumberAutoFit();
 }
 
-const MAIN_AVATAR_SCOPE_USER_KEY = 'spendnote.user.avatar.activeUserId.v1';
-const MAIN_AVATAR_KEY_PREFIX = 'spendnote.user.avatar.v2';
-const MAIN_AVATAR_COLOR_KEY_PREFIX = 'spendnote.user.avatarColor.v2';
-const MAIN_AVATAR_SETTINGS_KEY_PREFIX = 'spendnote.user.avatarSettings.v2';
-const MAIN_LEGACY_AVATAR_KEY = 'spendnote.user.avatar.v1';
-const MAIN_LEGACY_AVATAR_COLOR_KEY = 'spendnote.user.avatarColor.v1';
-const MAIN_LEGACY_AVATAR_SETTINGS_KEY = 'spendnote.user.avatarSettings.v1';
 const MAIN_AVATAR_BASE_SIZE = 96;
 const MAIN_AVATAR_MIN_SCALE = 0.5;
 const MAIN_AVATAR_MAX_SCALE = 3;
@@ -634,61 +627,17 @@ async function updateUserNav() {
         }
     }
 
-    const userId = String(user?.id || '').trim();
     const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.email || 'Account';
     const avatarUrl = String(profile?.avatar_url || user?.user_metadata?.avatar_url || '').trim();
     const avatarColorFromDb = String(profile?.avatar_color || user?.user_metadata?.avatar_color || '').trim();
-    const avatarSettingsFromDb = profile?.avatar_settings || user?.user_metadata?.avatar_settings || null;
-    const scopedAvatarKey = userId ? `${MAIN_AVATAR_KEY_PREFIX}.${userId}` : '';
-    const scopedAvatarColorKey = userId ? `${MAIN_AVATAR_COLOR_KEY_PREFIX}.${userId}` : '';
-    const scopedAvatarSettingsKey = userId ? `${MAIN_AVATAR_SETTINGS_KEY_PREFIX}.${userId}` : '';
-
-    let avatarSettings = avatarSettingsFromDb;
-    if (!avatarSettings && scopedAvatarSettingsKey) {
-        try {
-            const rawSettings = localStorage.getItem(scopedAvatarSettingsKey);
-            avatarSettings = rawSettings ? JSON.parse(rawSettings) : null;
-        } catch (_) {
-            avatarSettings = null;
-        }
-    }
-
-    try {
-        if (userId) {
-            localStorage.setItem(MAIN_AVATAR_SCOPE_USER_KEY, userId);
-            localStorage.removeItem(MAIN_LEGACY_AVATAR_KEY);
-            localStorage.removeItem(MAIN_LEGACY_AVATAR_COLOR_KEY);
-            localStorage.removeItem(MAIN_LEGACY_AVATAR_SETTINGS_KEY);
-            if (avatarSettingsFromDb && scopedAvatarSettingsKey) {
-                localStorage.setItem(scopedAvatarSettingsKey, JSON.stringify(normalizeMainAvatarSettings(avatarSettingsFromDb)));
-            }
-        } else {
-            localStorage.removeItem(MAIN_AVATAR_SCOPE_USER_KEY);
-        }
-    } catch (_) {}
+    const avatarSettings = profile?.avatar_settings || user?.user_metadata?.avatar_settings || null;
 
     nameEls.forEach((el) => {
         el.textContent = displayName;
     });
 
     if (avatarImgs.length) {
-        let customAvatar = '';
-        try {
-            if (scopedAvatarKey) {
-                customAvatar = String(localStorage.getItem(scopedAvatarKey) || '').trim();
-                if (customAvatar && !isValidAvatarSource(customAvatar)) {
-                    customAvatar = '';
-                    localStorage.removeItem(scopedAvatarKey);
-                }
-            }
-        } catch (_) {}
-
-        if (!customAvatar && avatarUrl && isValidAvatarSource(avatarUrl)) {
-            customAvatar = avatarUrl;
-            try {
-                if (scopedAvatarKey) localStorage.setItem(scopedAvatarKey, customAvatar);
-            } catch (_) {}
-        }
+        const customAvatar = avatarUrl && isValidAvatarSource(avatarUrl) ? avatarUrl : '';
 
         if (customAvatar) {
             avatarImgs.forEach((img) => {
@@ -699,20 +648,10 @@ async function updateUserNav() {
                 img.style.transform = buildMainAvatarTransform(avatarSettings, slotSize);
             });
         } else {
-            let avatarColor = '#10b981';
-            try {
-                if (avatarColorFromDb) {
-                    avatarColor = avatarColorFromDb;
-                    if (scopedAvatarColorKey) localStorage.setItem(scopedAvatarColorKey, avatarColor);
-                } else if (scopedAvatarColorKey) {
-                    avatarColor = localStorage.getItem(scopedAvatarColorKey) || '#10b981';
-                }
-            } catch (_) {}
-
+            const avatarColor = avatarColorFromDb || '#10b981';
             const initials = getInitials(displayName);
             const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ffffff" stroke="${avatarColor}" stroke-width="4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="800" fill="${avatarColor}">${initials}</text></svg>`;
             const dataUrl = `data:image/svg+xml,${encodeURIComponent(svg)}`;
-
             avatarImgs.forEach((img) => {
                 img.src = dataUrl;
                 img.alt = displayName;

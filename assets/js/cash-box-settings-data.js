@@ -1,4 +1,4 @@
-// Cash Box Settings Data Handler - Create/Update cash boxes
+a // Cash Box Settings Data Handler - Create/Update cash boxes
 const DEBUG = window.SpendNoteDebug || false;
 let isEditMode = false;
 let currentCashBoxId = null;
@@ -37,30 +37,8 @@ function normalizeCashBoxIdPrefix(value) {
     return up;
 }
 
-function readStoredCashBoxLogo(cashBoxId) {
-    try {
-        const key = getCashBoxLogoStorageKey(cashBoxId);
-        if (!key) return '';
-        return String(localStorage.getItem(key) || '').trim();
-    } catch (_) {
-        return '';
-    }
-}
-
-function writeStoredCashBoxLogo(cashBoxId, logoDataUrl) {
-    try {
-        const key = getCashBoxLogoStorageKey(cashBoxId);
-        if (!key) return;
-        const value = String(logoDataUrl || '').trim();
-        if (!value) {
-            localStorage.removeItem(key);
-            return;
-        }
-        localStorage.setItem(key, value);
-    } catch (_) {
-        // ignore
-    }
-}
+function readStoredCashBoxLogo(_cashBoxId) { return ''; }
+function writeStoredCashBoxLogo(_cashBoxId, _logoDataUrl) {}
 
 function isUuid(value) {
     try {
@@ -73,107 +51,13 @@ function isUuid(value) {
     return false;
 }
 
-function getReceiptFormatStorageKey(cashBoxId) {
-    const id = String(cashBoxId || '').trim();
-    if (!id) return '';
-    return `spendnote.cashBox.${id}.defaultReceiptFormat.v1`;
-}
-
-function getReceiptVisibilityStorageKey(cashBoxId) {
-    const id = String(cashBoxId || '').trim();
-    if (!id) return '';
-    return `spendnote.cashBox.${id}.receiptVisibility.v1`;
-}
-
-function getReceiptTextStorageKey(cashBoxId) {
-    const id = String(cashBoxId || '').trim();
-    if (!id) return '';
-    return `spendnote.cashBox.${id}.receiptText.v1`;
-}
-
-function getCashBoxIdPrefixStorageKey(cashBoxId) {
-    const id = String(cashBoxId || '').trim();
-    if (!id) return '';
-    return `spendnote.cashBox.${id}.idPrefix.v1`;
-}
-
-function getCashBoxLogoStorageKey(cashBoxId) {
-    const id = String(cashBoxId || '').trim();
-    if (!id) return '';
-    return `spendnote.cashBox.${id}.logo.v1`;
-}
-
-function readStoredReceiptVisibility(cashBoxId) {
-    try {
-        const key = getReceiptVisibilityStorageKey(cashBoxId);
-        if (!key) return null;
-        const raw = localStorage.getItem(key);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        return parsed && typeof parsed === 'object' ? parsed : null;
-    } catch (_) {
-        return null;
-    }
-}
-
-function readStoredReceiptText(cashBoxId) {
-    try {
-        const key = getReceiptTextStorageKey(cashBoxId);
-        if (!key) return null;
-        const raw = localStorage.getItem(key);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        return parsed && typeof parsed === 'object' ? parsed : null;
-    } catch (_) {
-        return null;
-    }
-}
-
-function writeStoredReceiptText(cashBoxId, receiptText) {
-    try {
-        const key = getReceiptTextStorageKey(cashBoxId);
-        if (!key) return;
-        const payload = {};
-        RECEIPT_TEXT_FIELDS.forEach((field) => {
-            const raw = String(receiptText?.[field] || '').trim();
-            payload[field] = raw;
-        });
-        localStorage.setItem(key, JSON.stringify(payload));
-    } catch (_) {
-        // ignore
-    }
-}
-
-function readStoredCashBoxIdPrefix(cashBoxId) {
-    try {
-        const key = getCashBoxIdPrefixStorageKey(cashBoxId);
-        if (!key) return '';
-        return normalizeCashBoxIdPrefix(localStorage.getItem(key) || '');
-    } catch (_) {
-        return '';
-    }
-}
-
-function writeStoredCashBoxIdPrefix(cashBoxId, prefix) {
-    try {
-        const key = getCashBoxIdPrefixStorageKey(cashBoxId);
-        if (!key) return;
-        const normalized = normalizeCashBoxIdPrefix(prefix || '');
-        localStorage.setItem(key, normalized || 'SN');
-    } catch (_) {
-        // ignore
-    }
-}
-
-function writeStoredReceiptVisibility(cashBoxId, visibility) {
-    try {
-        const key = getReceiptVisibilityStorageKey(cashBoxId);
-        if (!key) return;
-        localStorage.setItem(key, JSON.stringify(visibility || {}));
-    } catch (_) {
-        // ignore
-    }
-}
+function getReceiptFormatStorageKey(_cashBoxId) { return ''; }
+function readStoredReceiptVisibility(_cashBoxId) { return null; }
+function readStoredReceiptText(_cashBoxId) { return null; }
+function writeStoredReceiptText(_cashBoxId, _receiptText) {}
+function readStoredCashBoxIdPrefix(_cashBoxId) { return ''; }
+function writeStoredCashBoxIdPrefix(_cashBoxId, _prefix) {}
+function writeStoredReceiptVisibility(_cashBoxId, _visibility) {}
 
 function applyReceiptFormatUi(format) {
     const f = String(format || '').trim().toLowerCase();
@@ -196,13 +80,6 @@ function bindReceiptFormatButtons() {
             if (format !== 'receipt-print-two-copies' && format !== 'pdf' && format !== 'email') return;
             applyReceiptFormatUi(format);
             if (!currentCashBoxId) return;
-            const key = getReceiptFormatStorageKey(currentCashBoxId);
-            if (!key) return;
-            try {
-                localStorage.setItem(key, format);
-            } catch (_) {
-                // ignore
-            }
         });
     });
 }
@@ -228,16 +105,7 @@ async function getCashBoxTransactionCount(cashBoxId) {
     }
 }
 
-function clearActiveCashBoxIfMatches(cashBoxId) {
-    try {
-        const activeId = localStorage.getItem('activeCashBoxId');
-        if (activeId && cashBoxId && String(activeId) === String(cashBoxId)) {
-            localStorage.removeItem('activeCashBoxId');
-            localStorage.removeItem('activeCashBoxColor');
-            localStorage.removeItem('activeCashBoxRgb');
-        }
-    } catch (e) {}
-}
+function clearActiveCashBoxIfMatches(_cashBoxId) {}
 
 function togglePanelDisplay(panelEl, displayWhenVisible) {
     if (!panelEl) return;
@@ -596,21 +464,13 @@ async function initCashBoxSettings() {
             if (deletePanel) deletePanel.style.display = 'none';
         }
         
-        // Sync profile logo from DB to localStorage for receipt preview
         try {
             const profile = window.db?.profiles?.getCurrent ? await window.db.profiles.getCurrent() : null;
             if (profile) {
                 const LOGO_K = 'spendnote.proLogoDataUrl';
                 const LEGACY_K = 'spendnote.receipt.logo.v1';
-                const SCALE_K = 'spendnote.receipt.logoScale.v1';
-                const POS_K = 'spendnote.receipt.logoPosition.v1';
-                if (profile.account_logo_url) {
-                    try { localStorage.setItem(LOGO_K, profile.account_logo_url); localStorage.setItem(LEGACY_K, profile.account_logo_url); } catch (_) {}
-                }
-                const ls = profile.logo_settings;
-                if (ls && typeof ls === 'object') {
-                    if (ls.scale != null) try { localStorage.setItem(SCALE_K, String(ls.scale)); } catch (_) {}
-                    if (ls.x != null || ls.y != null) try { localStorage.setItem(POS_K, JSON.stringify({ x: Number(ls.x) || 0, y: Number(ls.y) || 0 })); } catch (_) {}
+                if (profile && window.LogoEditor?.loadFromProfile) {
+                    window.LogoEditor.loadFromProfile(profile);
                 }
             }
         } catch (_) {}
@@ -648,11 +508,9 @@ async function initCashBoxSettings() {
 
         bindReceiptFormatButtons();
 
-        // Apply persisted Default Format (localStorage) so the UI matches what Done & Print will use.
         if (currentCashBoxId) {
             try {
-                const key = getReceiptFormatStorageKey(currentCashBoxId);
-                const stored = key ? String(localStorage.getItem(key) || '').trim().toLowerCase() : '';
+                const stored = '';
                 if (stored) {
                     const btn = document.querySelector(`.format-btn[data-format="${stored}"]`);
                     if (btn && typeof btn.click === 'function') {
@@ -1236,15 +1094,6 @@ async function handleSave(e) {
             }
 
             // If the edited cash box is currently selected, update saved theme
-            if (localStorage.getItem('activeCashBoxId') === currentCashBoxId) {
-                const rgb = (() => {
-                    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
-                    return m ? `${parseInt(m[1], 16)}, ${parseInt(m[2], 16)}, ${parseInt(m[3], 16)}` : '5, 150, 105';
-                })();
-                localStorage.setItem('activeCashBoxColor', color);
-                localStorage.setItem('activeCashBoxRgb', rgb);
-            }
-
             writeStoredCashBoxIdPrefix(currentCashBoxId, idPrefix);
             writeStoredReceiptText(currentCashBoxId, receiptTextValues);
             writeStoredReceiptVisibility(currentCashBoxId, receiptVisibilityValues);

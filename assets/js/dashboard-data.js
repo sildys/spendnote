@@ -189,15 +189,7 @@ function createDashboardTransactionsController(ctx) {
             user = null;
         }
 
-        let userId = safeText(user?.id, '');
-        if (!userId) {
-            try {
-                userId = safeText(localStorage.getItem(AVATAR_SCOPE_USER_KEY), '');
-            } catch (_) {
-                userId = '';
-            }
-        }
-        viewerAvatar.userId = userId;
+        viewerAvatar.userId = safeText(user?.id, '');
 
         let profile = null;
         try {
@@ -206,53 +198,13 @@ function createDashboardTransactionsController(ctx) {
             profile = null;
         }
 
-        const scopedAvatarKey = userId ? `${AVATAR_KEY_PREFIX}.${userId}` : '';
-        const scopedColorKey = userId ? `${AVATAR_COLOR_KEY_PREFIX}.${userId}` : '';
-        const scopedSettingsKey = userId ? `${AVATAR_SETTINGS_KEY_PREFIX}.${userId}` : '';
-
-        let avatarUrl = safeText(profile?.avatar_url || user?.user_metadata?.avatar_url, '');
-        let avatarColor = safeText(profile?.avatar_color || user?.user_metadata?.avatar_color, '');
-        let avatarSettings = profile?.avatar_settings || user?.user_metadata?.avatar_settings || null;
-
-        try {
-            if (!avatarUrl && scopedAvatarKey) {
-                avatarUrl = safeText(localStorage.getItem(scopedAvatarKey), '');
-            }
-            if (!avatarColor && scopedColorKey) {
-                avatarColor = safeText(localStorage.getItem(scopedColorKey), '');
-            }
-            if (!avatarSettings && scopedSettingsKey) {
-                const rawSettings = localStorage.getItem(scopedSettingsKey);
-                avatarSettings = rawSettings ? JSON.parse(rawSettings) : null;
-            }
-        } catch (_) {
-            // ignore
-        }
-
-        viewerAvatar.avatarUrl = avatarUrl;
-        viewerAvatar.avatarColor = avatarColor || '#10b981';
-        viewerAvatar.avatarSettings = normalizeAvatarSettings(avatarSettings);
+        viewerAvatar.avatarUrl = safeText(profile?.avatar_url || user?.user_metadata?.avatar_url, '');
+        viewerAvatar.avatarColor = safeText(profile?.avatar_color || user?.user_metadata?.avatar_color, '') || '#10b981';
+        viewerAvatar.avatarSettings = normalizeAvatarSettings(profile?.avatar_settings || user?.user_metadata?.avatar_settings || null);
         viewerAvatar.displayName = safeText(
             profile?.full_name || user?.user_metadata?.full_name || user?.email,
             ''
         ).toLowerCase();
-
-        try {
-            if (userId) {
-                localStorage.setItem(AVATAR_SCOPE_USER_KEY, userId);
-                if (scopedAvatarKey && avatarUrl) {
-                    localStorage.setItem(scopedAvatarKey, avatarUrl);
-                }
-                if (scopedColorKey && viewerAvatar.avatarColor) {
-                    localStorage.setItem(scopedColorKey, viewerAvatar.avatarColor);
-                }
-                if (scopedSettingsKey) {
-                    localStorage.setItem(scopedSettingsKey, JSON.stringify(viewerAvatar.avatarSettings));
-                }
-            }
-        } catch (_) {
-            // ignore
-        }
     };
 
     const getCreatedByAvatarData = (createdByName, tx) => {
@@ -466,11 +418,7 @@ function createDashboardTransactionsController(ctx) {
 
             let createdByName = tx?.created_by_user_name || tx?.created_by || '';
             if (!createdByName || String(createdByName).trim() === '—') {
-                try {
-                    createdByName = localStorage.getItem('spendnote.user.fullName.v1') || '';
-                } catch (_) {
-                    createdByName = '';
-                }
+                createdByName = safeText(viewerAvatar.displayName, '');
             }
             createdByName = String(createdByName || '').trim() || '—';
             const avatarData = getCreatedByAvatarData(createdByName, tx);

@@ -15,23 +15,17 @@ const applyRoleBadge = (roleValue) => {
     roleEl.classList.add(normalized === 'owner' ? 'owner' : (normalized === 'admin' ? 'admin' : 'member'));
 };
 
-// Avatar localStorage + editor state (scoped per authenticated user)
-const AVATAR_SCOPE_USER_KEY = 'spendnote.user.avatar.activeUserId.v1';
-const AVATAR_KEY_PREFIX = 'spendnote.user.avatar.v2';
-const AVATAR_COLOR_KEY_PREFIX = 'spendnote.user.avatarColor.v2';
-const AVATAR_SETTINGS_KEY_PREFIX = 'spendnote.user.avatarSettings.v2';
-const LEGACY_AVATAR_KEY = 'spendnote.user.avatar.v1';
-const LEGACY_AVATAR_COLOR_KEY = 'spendnote.user.avatarColor.v1';
-const LEGACY_AVATAR_SETTINGS_KEY = 'spendnote.user.avatarSettings.v1';
+// Avatar in-memory state (DB is source of truth, no localStorage)
 const AVATAR_SCALE_STEP = 0.1;
 const AVATAR_MIN_SCALE = 0.5;
 const AVATAR_MAX_SCALE = 3;
 const DEFAULT_AVATAR_SETTINGS = Object.freeze({ scale: 1, x: 0, y: 0 });
-const USER_FULLNAME_KEY = 'spendnote.user.fullName.v1';
 
 let avatarPersistTimer = null;
 let avatarProfileColumnsSupported = null;
-let avatarStorageUserId = '';
+let _avatarUrl = null;
+let _avatarSettings = null;
+let _avatarColor = '#10b981';
 let avatarDragActive = false;
 let avatarDragStartX = 0;
 let avatarDragStartY = 0;
@@ -54,104 +48,13 @@ const normalizeAvatarSettings = (settings) => {
     };
 };
 
-const getAvatarStorageUserId = () => {
-    const direct = String(avatarStorageUserId || '').trim();
-    if (direct) return direct;
-    try {
-        return String(localStorage.getItem(AVATAR_SCOPE_USER_KEY) || '').trim();
-    } catch {
-        return '';
-    }
-};
-
-const setAvatarStorageUserId = (userId) => {
-    avatarStorageUserId = String(userId || '').trim();
-    try {
-        if (avatarStorageUserId) {
-            localStorage.setItem(AVATAR_SCOPE_USER_KEY, avatarStorageUserId);
-        } else {
-            localStorage.removeItem(AVATAR_SCOPE_USER_KEY);
-        }
-    } catch (_) {}
-};
-
-const getScopedAvatarKey = (prefix) => {
-    const userId = getAvatarStorageUserId();
-    return userId ? `${prefix}.${userId}` : '';
-};
-
-const clearLegacyAvatarKeys = () => {
-    try {
-        localStorage.removeItem(LEGACY_AVATAR_KEY);
-        localStorage.removeItem(LEGACY_AVATAR_COLOR_KEY);
-        localStorage.removeItem(LEGACY_AVATAR_SETTINGS_KEY);
-    } catch (_) {}
-};
-
-const readAvatar = () => {
-    const key = getScopedAvatarKey(AVATAR_KEY_PREFIX);
-    if (!key) return null;
-    try {
-        return localStorage.getItem(key);
-    } catch {
-        return null;
-    }
-};
-
-const writeAvatar = (dataUrl) => {
-    const key = getScopedAvatarKey(AVATAR_KEY_PREFIX);
-    if (!key) return;
-    try {
-        if (dataUrl) localStorage.setItem(key, dataUrl);
-        else localStorage.removeItem(key);
-    } catch (_) {}
-    clearLegacyAvatarKeys();
-};
-
-const readAvatarSettings = () => {
-    const key = getScopedAvatarKey(AVATAR_SETTINGS_KEY_PREFIX);
-    if (!key) return normalizeAvatarSettings(DEFAULT_AVATAR_SETTINGS);
-    try {
-        const raw = localStorage.getItem(key);
-        if (!raw) return normalizeAvatarSettings(DEFAULT_AVATAR_SETTINGS);
-        return normalizeAvatarSettings(JSON.parse(raw));
-    } catch {
-        return normalizeAvatarSettings(DEFAULT_AVATAR_SETTINGS);
-    }
-};
-const writeAvatarSettings = (settings) => {
-    const normalized = normalizeAvatarSettings(settings);
-    const key = getScopedAvatarKey(AVATAR_SETTINGS_KEY_PREFIX);
-    if (!key) return normalized;
-    try { localStorage.setItem(key, JSON.stringify(normalized)); } catch {}
-    clearLegacyAvatarKeys();
-    return normalized;
-};
-const readAvatarColor = () => {
-    const key = getScopedAvatarKey(AVATAR_COLOR_KEY_PREFIX);
-    if (!key) return '#10b981';
-    try {
-        return localStorage.getItem(key) || '#10b981';
-    } catch {
-        return '#10b981';
-    }
-};
-const writeAvatarColor = (color) => {
-    const key = getScopedAvatarKey(AVATAR_COLOR_KEY_PREFIX);
-    if (!key) return;
-    try {
-        if (color) localStorage.setItem(key, color);
-        else localStorage.removeItem(key);
-    } catch (_) {}
-    clearLegacyAvatarKeys();
-};
-const writeUserFullName = (name) => {
-    try {
-        const v = String(name || '').trim();
-        if (v) localStorage.setItem(USER_FULLNAME_KEY, v);
-        else localStorage.removeItem(USER_FULLNAME_KEY);
-    } catch (_) {}
-};
+const readAvatar = () => _avatarUrl;
+const writeAvatar = (dataUrl) => { _avatarUrl = dataUrl ? String(dataUrl).trim() || null : null; };
+const readAvatarSettings = () => normalizeAvatarSettings(_avatarSettings);
+const writeAvatarSettings = (settings) => { _avatarSettings = normalizeAvatarSettings(settings); return _avatarSettings; };
+const readAvatarColor = () => _avatarColor || '#10b981';
+const writeAvatarColor = (color) => { _avatarColor = String(color || '').trim() || '#10b981'; };
+const writeUserFullName = (_name) => {}; // no-op: full_name comes from DB only
 
 const isMissingAvatarColumnError = (message) => {
     const msg = String(message || '').toLowerCase();
@@ -335,27 +238,14 @@ const applyAvatar = (fullName) => {
 
 const syncAvatarFromProfile = (profile) => {
     if (!profile || typeof profile !== 'object') return;
-
     if (Object.prototype.hasOwnProperty.call(profile, 'avatar_url')) {
-        const dbAvatar = String(profile.avatar_url || '').trim();
-        writeAvatar(dbAvatar || null);
+        writeAvatar(String(profile.avatar_url || '').trim() || null);
     }
-
     if (Object.prototype.hasOwnProperty.call(profile, 'avatar_settings')) {
         writeAvatarSettings(profile.avatar_settings || null);
     }
-
     if (Object.prototype.hasOwnProperty.call(profile, 'avatar_color')) {
-        const dbColor = String(profile.avatar_color || '').trim();
-        if (dbColor) {
-            writeAvatarColor(dbColor);
-        } else {
-            const colorKey = getScopedAvatarKey(AVATAR_COLOR_KEY_PREFIX);
-            try {
-                if (colorKey) localStorage.removeItem(colorKey);
-            } catch (_) {}
-            clearLegacyAvatarKeys();
-        }
+        writeAvatarColor(String(profile.avatar_color || '').trim() || '#10b981');
     }
 };
 
