@@ -276,8 +276,10 @@ const fillProfile = (p) => {
 };
 
 const loadProfile = async () => {
+    console.log('[UserSettings] loadProfile start, db.profiles.getCurrent exists:', Boolean(window.db?.profiles?.getCurrent));
     if (!window.db?.profiles?.getCurrent) return;
     const p = await window.db.profiles.getCurrent();
+    console.log('[UserSettings] profile loaded:', p ? Object.keys(p) : null, 'logo:', Boolean(p?.account_logo_url), 'company:', p?.company_name);
     if (profileObjectHasAvatarColumns(p)) {
         avatarProfileColumnsSupported = true;
     }
