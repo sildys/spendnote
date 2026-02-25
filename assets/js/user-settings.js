@@ -258,16 +258,21 @@ const fillProfile = (p) => {
     }
     const fullName = String(p?.full_name || '').trim();
     writeUserFullName(fullName);
-    document.getElementById('profileFullName').value = fullName;
-    document.getElementById('profileEmail').value = String(p?.email || '');
+    const elName = document.getElementById('profileFullName');
+    const elEmail = document.getElementById('profileEmail');
+    const elDisplayName = document.getElementById('receiptDisplayName');
+    const elAddress = document.getElementById('receiptAddress');
+    const elOtherId = document.getElementById('receiptOtherId');
+    console.log('[UserSettings] fillProfile elements:', Boolean(elName), Boolean(elEmail), Boolean(elDisplayName), Boolean(elAddress));
+    if (elName) elName.value = fullName;
+    if (elEmail) elEmail.value = String(p?.email || '');
 
     applyRoleBadge(currentRole);
 
-    document.getElementById('receiptDisplayName').value = String(p?.company_name || '');
+    if (elDisplayName) elDisplayName.value = String(p?.company_name || '');
     // Reuse profiles.phone as Receipt Identity "Other ID"
-    const otherIdEl = document.getElementById('receiptOtherId');
-    if (otherIdEl) otherIdEl.value = String(p?.phone || '');
-    document.getElementById('receiptAddress').value = String(p?.address || '');
+    if (elOtherId) elOtherId.value = String(p?.phone || '');
+    if (elAddress) elAddress.value = String(p?.address || '');
 
     syncAvatarFromProfile(p);
     applyAvatar(fullName);
