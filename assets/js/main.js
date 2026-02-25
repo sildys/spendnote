@@ -614,6 +614,7 @@ async function updateUserNav() {
     const avatarImgs = navAvatarImg ? [navAvatarImg] : [];
 
     if (!nameEls.length && !avatarImgs.length) {
+        await updateOrgContextIndicator();
         return;
     }
 
