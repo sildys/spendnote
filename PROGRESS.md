@@ -77,9 +77,9 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [x] **AUDIT-M3** ~~Tranzakció törlés~~ — **by design: nincs.** Kizárólag void használható, törlés nem lehetséges.
 - [x] **AUDIT-M4** Tranzakció export (CSV/PDF) a history nézetből — **már implementálva.**
 - [x] **AUDIT-M5** Kontakt kereső/szűrő hozzáadása contact list oldalon — **már implementálva.**
-- [ ] **AUDIT-M6** Receipt limit szerver oldali enforce (ne csak kliens/localStorage szint).
+- [x] **AUDIT-M6** ~~Receipt limit szerver oldali enforce~~ — **beolvad a subscription/billing implementációba (S1–S3).** Preview limit kliens oldalon marad.
 - [x] **AUDIT-M7** ~~Cash box archiválás~~ — **elvetve.** Nem lesz archiválás, cash box törölhető vagy aktív.
-- [ ] **AUDIT-M8** Email change flow hozzáadása (`auth.updateUser()` + verify flow).
+- [x] **AUDIT-M8** ~~Email change flow~~ — **elvetve.** Nem szükséges; account törlés + újraregisztráció elérhető.
 - [ ] **AUDIT-M9** 2FA/MFA opció értékelése és roadmap döntés.
 - [x] **AUDIT-M10** Legacy táblák (`team_members`, `cash_box_access`) deprecate + schema cleanup terv.
 

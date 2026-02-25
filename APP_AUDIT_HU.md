@@ -220,13 +220,14 @@ CSV + PDF export elérhető a transaction history-ban (kijelölt + szűrt).
 **M5 — ~~Nincs keresés a kapcsolattartó oldalon~~ — MÁR IMPLEMENTÁLVA**  
 Kereső + cash box szűrő + A–Z betűszűrő működik a contact list oldalon.
 
-**M6 — Bizonylat limit nincs szerver oldalon kényszerítve**  
-200 bizonylatos limit csak kliens oldalon van, localStorage-ból felülírható.
+**M6 — ~~Bizonylat limit nincs szerver oldalon kényszerítve~~ — BEOLVAD S1–S3-BA**  
+Preview kliens oldali limit marad; szerver oldali enforce a subscription/billing rendszer részeként jön.
 
 **M7 — ~~Nincs pénztárgép archiválás~~ — ELVETVE**  
 Nem lesz archiválás. Pénztárgépek aktívak vagy törölhetők. `is_active` oszlop eltávolítva.
 
-**M8 — Email-cím nem módosítható regisztráció után**
+**M8 — ~~Email-cím nem módosítható regisztráció után~~ — ELVETVE**  
+Nem szükséges; account törlés + újraregisztráció elérhető.
 
 **M9 — Nincs kétfaktoros hitelesítés (2FA/MFA)**
 
