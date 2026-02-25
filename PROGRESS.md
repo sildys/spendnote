@@ -52,6 +52,47 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
 - [ ] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass
 
+## App audit alapján megoldandó feladatok (2026-02-25)
+
+### Kritikus (kötelező)
+
+- [ ] **AUDIT-C1** Org-aware RLS bevezetése `cash_boxes` táblára (`org_memberships` alapú hozzáférés, ne csak `user_id = auth.uid()`).
+- [ ] **AUDIT-C2** Org-aware RLS bevezetése `contacts` táblára (`org_memberships` alapú hozzáférés, ne csak `user_id = auth.uid()`).
+- [ ] **AUDIT-C3** Org-aware RLS bevezetése `transactions` táblára (`org_memberships` alapú hozzáférés, ne csak `user_id = auth.uid()`).
+- [ ] **AUDIT-C4** `orgs` RLS és policy-k visszaemelése a kanonikus `database/schema.sql` fájlba (migrációval szinkronban).
+
+### Magas prioritás
+
+- [ ] **AUDIT-H1** Email megerősítés enforce ellenőrzése és UI visszajelzés megerősítetlen accountokra.
+- [ ] **AUDIT-H2** Jelszó erősség validáció (signup + password change) minimum policy-val.
+- [ ] **AUDIT-H3** Cash box törlés áthelyezése atomi szerver oldali RPC-be (kliens oldali többlépcsős delete helyett).
+- [ ] **AUDIT-H4** Audit log bevezetése kritikus eseményekre (role change, member remove, cash box update, void).
+- [ ] **AUDIT-H5** Void tranzakció role-korlát szigorítása (legalább Owner/Admin), vagy kötelező részletes naplózás.
+- [ ] **AUDIT-H6** Contact CRUD konzisztencia javítása User role esetben (owner-id mismatch + RLS következmények rendezése).
+
+### Közepes prioritás
+
+- [ ] **AUDIT-M1** Onboarding/empty-state flow első belépésre (első cash box → első tranzakció → első receipt).
+- [ ] **AUDIT-M2** Tranzakció szerkesztés döntés: implementáció vagy explicit "by design" dokumentáció.
+- [ ] **AUDIT-M3** Tranzakció törlés útvonal egységesítése (UI kitárolás vagy API metódus eltávolítás).
+- [ ] **AUDIT-M4** Tranzakció export (CSV/PDF) a history nézetből.
+- [ ] **AUDIT-M5** Kontakt kereső/szűrő hozzáadása contact list oldalon.
+- [ ] **AUDIT-M6** Receipt limit szerver oldali enforce (ne csak kliens/localStorage szint).
+- [ ] **AUDIT-M7** Cash box archiválás bevezetése az `is_active` mező tényleges használatával.
+- [ ] **AUDIT-M8** Email change flow hozzáadása (`auth.updateUser()` + verify flow).
+- [ ] **AUDIT-M9** 2FA/MFA opció értékelése és roadmap döntés.
+- [ ] **AUDIT-M10** Legacy táblák (`team_members`, `cash_box_access`) deprecate + schema cleanup terv.
+
+### Alacsony prioritás
+
+- [ ] **AUDIT-L1** Dark mode támogatás (design token/CSS variable alap).
+- [ ] **AUDIT-L2** i18n előkészítés (szövegek kivezetése forrásfájlba).
+- [ ] **AUDIT-L3** Offline read-only baseline (service worker) felmérés.
+- [ ] **AUDIT-L4** In-app notification center igény és minimum scope definiálás.
+- [ ] **AUDIT-L5** `spendnote-faq-old.html` kivezetés (törlés vagy redirect).
+- [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
+- [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
+
 ## Where we are now (last updated: 2026-02-25 — auth/account lifecycle hardening kör lezárva)
 
 ### 2026-02-25 frissítés — Password reset + dropdown context + account deletion (KÉSZ)
