@@ -443,6 +443,19 @@ const DUMMY_PROFILE = {
     address: '123 Main St, Springfield, IL 62701'
 };
 
+async function loadLiveProfileIntoDummy() {
+    try {
+        const profile = await window.db?.profiles?.getCurrent?.();
+        if (profile) {
+            if (profile.company_name || profile.full_name) {
+                DUMMY_PROFILE.company_name = profile.company_name || profile.full_name || DUMMY_PROFILE.company_name;
+                DUMMY_PROFILE.full_name = profile.full_name || profile.company_name || DUMMY_PROFILE.full_name;
+            }
+            DUMMY_PROFILE.address = profile.address || '';
+        }
+    } catch (_) {}
+}
+
 // ===== RECEIPT PREVIEW =====
 const QUICK_PRESET = {
     logo: '1',
@@ -979,7 +992,8 @@ document.addEventListener('mouseup', () => {
 });
 
 // ===== INIT =====
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', async function() {
+    await loadLiveProfileIntoDummy();
     applyReceiptMode('quick');
 
     // Safety fallback: if mode radios fail to toggle in some browsers, keep controls visible.
@@ -1068,6 +1082,6 @@ window.addEventListener('beforeunload', () => {
 <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=33"></script>
-<script src="assets/js/cash-box-settings-data.js?v=47"></script>
+<script src="assets/js/cash-box-settings-data.js?v=48"></script>
 </body>
 </html>
