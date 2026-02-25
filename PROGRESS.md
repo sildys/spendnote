@@ -89,7 +89,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L2** i18n előkészítés (szövegek kivezetése forrásfájlba).
 - [ ] **AUDIT-L3** Offline read-only baseline (service worker) felmérés.
 - [ ] **AUDIT-L4** In-app notification center igény és minimum scope definiálás.
-- [ ] **AUDIT-L5** `spendnote-faq-old.html` kivezetés (törlés vagy redirect).
+- [x] **AUDIT-L5** `spendnote-faq-old.html` kivezetés (törlés vagy redirect).
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
@@ -111,6 +111,13 @@ If a chat thread freezes / context is lost: in the new thread say:
   - contact create/getOrCreate `user_id` most a bejelentkezett felhasználóra áll.
 - Kanonikus schema szinkron:
   - `database/schema.sql` frissítve org táblákkal, `org_id` oszlopokkal és org-aware policy-kkel.
+
+### 2026-02-25 frissítés — Legacy FAQ cleanup (KÉSZ)
+
+- `spendnote-faq-old.html` törölve a repóból.
+- `_redirects` frissítve 301 átirányítással:
+  - `/spendnote-faq-old` -> `/spendnote-faq.html`
+  - `/spendnote-faq-old.html` -> `/spendnote-faq.html`
 
 ### 2026-02-25 frissítés — Password reset + dropdown context + account deletion (KÉSZ)
 
