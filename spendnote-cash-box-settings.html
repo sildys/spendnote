@@ -876,7 +876,7 @@ function applyCashBoxLogoTransform() {
         cbLogoInfo.textContent = `${Math.round(settings.scale * 100)}%`;
     }
     if (cbLogoImage) {
-        cbLogoImage.style.transform = `translate(calc(-50% + ${settings.x}px), calc(-50% + ${settings.y}px)) scale(${settings.scale})`;
+        cbLogoImage.style.transform = `translate(${settings.x}px, ${settings.y}px) scale(${settings.scale})`;
     }
 }
 
