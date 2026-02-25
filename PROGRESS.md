@@ -75,8 +75,8 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-M1** Onboarding/empty-state flow első belépésre (első cash box → első tranzakció → első receipt).
 - [x] **AUDIT-M2** ~~Tranzakció szerkesztés~~ — **by design: nincs.** Tranzakciók immutábilisak, kizárólag void lehetséges.
 - [x] **AUDIT-M3** ~~Tranzakció törlés~~ — **by design: nincs.** Kizárólag void használható, törlés nem lehetséges.
-- [ ] **AUDIT-M4** Tranzakció export (CSV/PDF) a history nézetből.
-- [ ] **AUDIT-M5** Kontakt kereső/szűrő hozzáadása contact list oldalon.
+- [x] **AUDIT-M4** Tranzakció export (CSV/PDF) a history nézetből — **már implementálva.**
+- [x] **AUDIT-M5** Kontakt kereső/szűrő hozzáadása contact list oldalon — **már implementálva.**
 - [ ] **AUDIT-M6** Receipt limit szerver oldali enforce (ne csak kliens/localStorage szint).
 - [x] **AUDIT-M7** ~~Cash box archiválás~~ — **elvetve.** Nem lesz archiválás, cash box törölhető vagy aktív.
 - [ ] **AUDIT-M8** Email change flow hozzáadása (`auth.updateUser()` + verify flow).

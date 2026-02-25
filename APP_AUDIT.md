@@ -312,8 +312,8 @@ These support `?publicToken=`, `?demo=1`, and `?bootstrap=1` for iframe/tab sess
 | M1 | **No onboarding flow** | New user lands on empty dashboard with no guidance | Add first-run wizard or empty-state CTAs |
 | M2 | ~~No transaction edit~~ | **By design.** Transactions are immutable; only void is allowed. | RESOLVED — no action needed |
 | M3 | ~~No transaction delete~~ | **By design.** Only void is allowed. Dead `transactions.delete()` API method removed. | RESOLVED — dead code removed |
-| M4 | **No export/download** | Transaction history has no CSV/PDF export | Add export functionality |
-| M5 | **No search on contacts page** | Contact list loads all contacts with no search/filter | Add search input |
+| M4 | ~~No export/download~~ | **Already implemented.** CSV + PDF export available in transaction history (selected + filtered). | RESOLVED |
+| M5 | ~~No search on contacts page~~ | **Already implemented.** Search input + cash box filter + A–Z letter filter on contact list. | RESOLVED |
 | M6 | **Receipt limit hardcoded to 200** | `PREVIEW_RECEIPT_LIMIT = 200` with localStorage override — no server enforcement | Enforce limit server-side via RPC or RLS |
 | M7 | ~~No cash box archive~~ | **Rejected.** No archiving; cash boxes are active or deleted. `is_active` column dropped. | RESOLVED — column removed |
 | M8 | **Profile email is read-only** | No way to change email address after signup | Add email change flow via Supabase `updateUser()` |

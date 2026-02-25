@@ -214,11 +214,11 @@ Tranzakciók immutábilisak, kizárólag void lehetséges. Tudatos döntés.
 **M3 — ~~Tranzakció törlés~~ — BY DESIGN**  
 Kizárólag void használható, törlés nem lehetséges. Halott `transactions.delete()` API metódus eltávolítva.
 
-**M4 — Nincs export/letöltés**  
-A tranzakciótörténetnek nincs CSV vagy PDF exportja.
+**M4 — ~~Nincs export/letöltés~~ — MÁR IMPLEMENTÁLVA**  
+CSV + PDF export elérhető a transaction history-ban (kijelölt + szűrt).
 
-**M5 — Nincs keresés a kapcsolattartó oldalon**  
-Az összes kontakt egyszerre töltődik, szűrő/keresőmező nélkül.
+**M5 — ~~Nincs keresés a kapcsolattartó oldalon~~ — MÁR IMPLEMENTÁLVA**  
+Kereső + cash box szűrő + A–Z betűszűrő működik a contact list oldalon.
 
 **M6 — Bizonylat limit nincs szerver oldalon kényszerítve**  
 200 bizonylatos limit csak kliens oldalon van, localStorage-ból felülírható.
