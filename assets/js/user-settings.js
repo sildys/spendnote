@@ -447,6 +447,30 @@ const computeAndApplyRole = async () => {
                 manageAccessBtn.style.display = (currentRole === 'owner' || currentRole === 'admin') ? '' : 'none';
             }
         } catch (_) {}
+
+        // Update delete account warning based on role
+        try {
+            const dangerWarningText = document.querySelector('#deleteAccountContent .danger-warning-text');
+            if (dangerWarningText) {
+                if (currentRole === 'owner') {
+                    dangerWarningText.innerHTML = `<strong>Warning: This action cannot be undone</strong>
+                        <ul>
+                            <li>Your entire organization will be permanently deleted</li>
+                            <li>All Cash Boxes, transactions, and receipts will be lost</li>
+                            <li>All team members will lose access immediately</li>
+                            <li>Your subscription will be cancelled</li>
+                        </ul>`;
+                } else {
+                    dangerWarningText.innerHTML = `<strong>Warning: This action cannot be undone</strong>
+                        <ul>
+                            <li>Your account and personal data will be permanently deleted</li>
+                            <li>You will be removed from the team</li>
+                            <li>The organization's data will not be affected</li>
+                        </ul>`;
+                }
+            }
+        } catch (_) {}
+
         renderTeamTable();
     } catch (_) {
         // ignore
@@ -931,13 +955,56 @@ const initUserSettingsPage = async () => {
         }
     });
 
-    // Delete account
-    document.getElementById('deleteAccountBtn')?.addEventListener('click', () => {
-        if (document.getElementById('deleteConfirmInput')?.value !== 'DELETE') {
+    // Delete account — 5-second countdown then real deletion via Edge Function
+    const deleteBtn = document.getElementById('deleteAccountBtn');
+    let deleteCountdownTimer = null;
+
+    deleteBtn?.addEventListener('click', () => {
+        const confirmInput = document.getElementById('deleteConfirmInput');
+        if (String(confirmInput?.value || '').trim() !== 'DELETE') {
             showAlert('Please type "DELETE" to confirm.', { iconType: 'warning' });
             return;
         }
-        showAlert('Account deletion is not implemented yet. Contact support.', { iconType: 'info' });
+
+        // Prevent double-click while countdown is running
+        if (deleteCountdownTimer) return;
+
+        let remaining = 5;
+        deleteBtn.disabled = true;
+        deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Deleting in ${remaining}...`;
+
+        deleteCountdownTimer = setInterval(async () => {
+            remaining--;
+            if (remaining > 0) {
+                deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Deleting in ${remaining}...`;
+                return;
+            }
+
+            clearInterval(deleteCountdownTimer);
+            deleteCountdownTimer = null;
+            deleteBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Deleting...`;
+
+            try {
+                const result = await window.auth.deleteAccount();
+                if (!result?.success) {
+                    deleteBtn.disabled = false;
+                    deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Delete Account`;
+                    showAlert(result?.error || 'Account deletion failed.', { iconType: 'error' });
+                    return;
+                }
+
+                // Clear all local data
+                try { localStorage.clear(); } catch (_) {}
+                try { sessionStorage.clear(); } catch (_) {}
+
+                // Redirect to landing page
+                window.location.href = '/index.html';
+            } catch (e) {
+                deleteBtn.disabled = false;
+                deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Delete Account`;
+                showAlert(String(e?.message || 'Account deletion failed.'), { iconType: 'error' });
+            }
+        }, 1000);
     });
 
     // Invite modal

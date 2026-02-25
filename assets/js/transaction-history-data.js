@@ -445,7 +445,8 @@
 
             if (filters.createdById) {
                 const rawId = safeText(tx.created_by_user_id || tx.created_by, '');
-                if (String(rawId) !== String(filters.createdById)) return false;
+                const rawName = safeText(tx.created_by_user_name || tx.created_by, '');
+                if (String(rawId) !== String(filters.createdById) && String(rawName) !== String(filters.createdById)) return false;
             }
 
             if (filters.dateFrom || filters.dateTo) {

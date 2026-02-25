@@ -1067,6 +1067,33 @@ var auth = {
         return { success: true, data };
     },
 
+    async deleteAccount() {
+        try {
+            const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
+            if (sessErr || !session?.access_token) {
+                return { success: false, error: 'Not authenticated.' };
+            }
+            const resp = await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.access_token}`,
+                    'apikey': SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify({})
+            });
+            if (!resp.ok) {
+                const parsed = await __spendnoteParseFetchError(resp, { defaultMessage: 'Account deletion failed.' });
+                return { success: false, error: parsed.message };
+            }
+            return { success: true };
+        } catch (e) {
+            const msg = String(e?.message || 'Account deletion failed.');
+            if (window.SpendNoteDebug) console.error('deleteAccount error:', e);
+            return { success: false, error: msg };
+        }
+    },
+
     async resendSignupConfirmation(email, options = {}) {
         const emailRedirectTo = options?.emailRedirectTo ? String(options.emailRedirectTo) : null;
         try {
