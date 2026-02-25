@@ -296,6 +296,10 @@
             <input type="text" id="receiptName" placeholder="e.g. Acme Corp or Jane Smith">
         </div>
         <div class="form-group">
+            <label for="receiptOtherId">Other ID <span class="opt">(optional)</span></label>
+            <input type="text" id="receiptOtherId" placeholder="e.g. registration number, reference ID">
+        </div>
+        <div class="form-group">
             <label for="receiptAddress">Address <span class="opt">(optional)</span></label>
             <textarea id="receiptAddress" rows="2" placeholder="Street, City, State, ZIP"></textarea>
         </div>
@@ -490,12 +494,13 @@ async function saveStep1() {
 async function saveStep2() {
     showError(2, '');
     const name    = document.getElementById('receiptName').value.trim();
+    const otherId = document.getElementById('receiptOtherId').value.trim();
     const address = document.getElementById('receiptAddress').value.trim();
     if (!name) { showError(2, 'Please enter a display name for your receipts.'); return; }
     setBusy(2, true);
     try {
         await waitForDb();
-        const result = await window.db.profiles.update({ company_name: name || null, address: address || null });
+        const result = await window.db.profiles.update({ company_name: name || null, phone: otherId || null, address: address || null });
         if (!result?.success) throw new Error(result?.error || 'Failed to save receipt identity.');
         setStep(3);
     } catch (e) {
