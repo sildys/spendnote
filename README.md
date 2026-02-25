@@ -7,7 +7,37 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
-## Current status (2026-02-24 — SEO phase closed, app-internal focus active)
+## Current status (2026-02-25 — auth/account lifecycle hardening shipped)
+
+### Latest auth + account lifecycle progress (2026-02-25)
+
+- **Password reset flow is now fully operational end-to-end:**
+  - `spendnote-forgot-password.html` sends real Supabase reset emails,
+  - `spendnote-reset-password.html` handles setting the new password,
+  - login callback handling redirects recovery flows to the reset-password page,
+  - Supabase email template placeholder issue was identified/fixed (`{{ .ConfirmationURL }}`), restoring clickable reset links.
+- **User dropdown org-context reliability + UX polish shipped:**
+  - fixed early-return path so org/team context is refreshed even when identity nodes are temporarily absent,
+  - compact dropdown context layout now uses clearer visual hierarchy:
+    - user name (strong),
+    - role + team on one muted line (`Role · Team`).
+- **Account deletion feature shipped (frontend + backend + deploy):**
+  - new Edge Function: `supabase/functions/delete-account/index.ts`,
+  - new frontend API wrapper: `auth.deleteAccount()` in `assets/js/supabase-config.js`,
+  - Settings page delete flow now supports:
+    - `DELETE` confirmation,
+    - 5-second destructive countdown,
+    - role-aware warning text (Owner vs Admin/User behavior),
+    - post-delete local/session storage cleanup and redirect.
+  - transaction history created-by filter now supports deleted users via `created_by_user_name` fallback when `created_by_user_id` is null.
+- **Deployed to Supabase:**
+  - Edge Function `delete-account` deployed on project `zrnnharudlgxuvewqryj`.
+
+### Recent commits (2026-02-25)
+
+- `e6891da` - always refresh dropdown org context when nav identity nodes are absent
+- `e8393c6` - compact dropdown context design (`name + role·team`)
+- `3dfc68b` - account deletion feature set (Edge Function, countdown UX, deleted-user filter fix)
 
 ### Latest team/org context progress (2026-02-24)
 

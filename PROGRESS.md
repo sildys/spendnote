@@ -52,7 +52,38 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
 - [ ] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass
 
-## Where we are now (last updated: 2026-02-24 — team/org context kör lezárva, team management scope még nyitott)
+## Where we are now (last updated: 2026-02-25 — auth/account lifecycle hardening kör lezárva)
+
+### 2026-02-25 frissítés — Password reset + dropdown context + account deletion (KÉSZ)
+
+**Lezárt és pusholt változtatások (mai kör):**
+
+- **Password reset flow end-to-end javítva:**
+  - `spendnote-forgot-password.html` valós Supabase reset küldés,
+  - `spendnote-reset-password.html` új jelszó beállító oldal,
+  - recovery callback átirányítás login oldalról reset-password oldalra,
+  - Supabase template placeholder hiba azonosítva/javítva (`{{ .ConfirmationURL }}`), kattintható reset link helyreállítva.
+- **Dropdown org-context megbízhatóság + vizuális finomhangolás:**
+  - `updateUserNav()` early-return ágon is lefut az org/team context frissítés,
+  - dropdown kontextus UI tömörítve: név hangsúlyos, meta sorban `Role · Team`.
+- **Fióktörlés funkció implementálva (frontend + backend):**
+  - új Supabase Edge Function: `supabase/functions/delete-account/index.ts`,
+  - új frontend wrapper: `window.auth.deleteAccount()` (`assets/js/supabase-config.js`),
+  - Settings oldalon működő törlési flow:
+    - `DELETE` szöveg megerősítés,
+    - 5 másodperces visszaszámlálás,
+    - role-függő warning (Owner: teljes org törlés; Admin/User: saját fiók törlés),
+    - sikeres törlés után local/session storage tisztítás + redirect.
+- **Tranzakció szűrő edge-case javítás:**
+  - `created_by_user_id = NULL` (törölt user) esetben a `created_by_user_name` fallback alapján is működik a Created By szűrés.
+- **Deploy lezárás:**
+  - `delete-account` Edge Function deployolva a Supabase projektre (`zrnnharudlgxuvewqryj`).
+
+**Mai commitok:**
+
+- `e6891da` — dropdown org-context refresh fix
+- `e8393c6` — dropdown context UI compact redesign
+- `3dfc68b` — account deletion feature set + deleted-user filter fix
 
 ### 2026-02-24 frissítés — Team Name + org context UI/DB hardening (RÉSZBEN KÉSZ)
 
