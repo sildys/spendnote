@@ -11,421 +11,359 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
             --primary: #10b981; --primary-dark: #059669;
-            --surface: #fff; --border: #e2e8f0;
-            --text: #0f172a; --text-muted: #64748b;
-            --radius: 16px; --shadow: 0 20px 60px rgba(15,23,42,0.13);
+            --border: #e2e8f0; --text: #0f172a; --text-muted: #64748b;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            min-height: 100dvh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 24px 16px; color: var(--text);
-            background: #f8fafc;
-            position: relative; overflow-x: hidden;
-        }
-        /* Decorative blobs */
-        body::before, body::after {
-            content: ''; position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
-        }
-        body::before {
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(16,185,129,0.07) 0%, transparent 70%);
-            top: -150px; right: -150px;
-        }
-        body::after {
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(5,150,105,0.05) 0%, transparent 70%);
-            bottom: -120px; left: -100px;
+            background: #f8fafc; min-height: 100dvh; color: var(--text);
+            display: flex; flex-direction: column;
         }
 
-        /* ── Logo ── */
-        .wizard-logo {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 28px; font-size: 22px; font-weight: 900;
-            color: #0f172a; letter-spacing: -0.5px;
-            position: relative; z-index: 1;
+        /* ── Top nav ── */
+        .top-nav {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 32px; border-bottom: 1px solid var(--border);
+            background: #fff;
         }
-        .wizard-logo svg { width: 32px; height: 32px; filter: drop-shadow(0 2px 6px rgba(5,150,105,0.3)); }
+        .nav-logo { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 900; color: var(--text); text-decoration: none; }
+        .nav-logo svg { width: 26px; height: 26px; }
+        .nav-skip { font-size: 13px; color: var(--text-muted); text-decoration: none; }
+        .nav-skip:hover { color: var(--text); }
 
-        /* ── Progress ── */
-        .wizard-progress-wrap { width: 100%; max-width: 520px; margin-bottom: 16px; position: relative; z-index: 1; }
-        .wizard-progress { display: flex; align-items: center; }
-        .wizard-step-dot {
-            width: 34px; height: 34px; border-radius: 50%;
-            background: rgba(255,255,255,0.6); color: var(--text-muted);
-            font-size: 13px; font-weight: 800;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; transition: all 0.25s; position: relative;
-            border: 2px solid rgba(255,255,255,0.8);
-            backdrop-filter: blur(4px);
+        /* ── Layout ── */
+        .page-body {
+            flex: 1; display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 1100px; width: 100%;
+            margin: 0 auto; padding: 56px 32px;
+            gap: 64px; align-items: start;
         }
-        .wizard-step-dot.active {
-            background: var(--primary); color: #fff;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 5px rgba(16,185,129,0.2), 0 4px 12px rgba(16,185,129,0.4);
-        }
-        .wizard-step-dot.done { background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
-        .wizard-step-dot.done .dot-num { display: none; }
-        .wizard-step-dot.done::after { content: ''; display: block; width: 9px; height: 5px; border-left: 2.5px solid #fff; border-bottom: 2.5px solid #fff; transform: rotate(-45deg) translate(1px,-1px); }
-        .wizard-step-line { flex: 1; height: 3px; background: rgba(255,255,255,0.5); border-radius: 2px; transition: background 0.4s; }
-        .wizard-step-line.done { background: var(--primary-dark); }
-        .wizard-labels { display: flex; justify-content: space-between; margin-top: 10px; }
-        .wizard-label-item { font-size: 11px; font-weight: 700; color: rgba(5,150,105,0.55); text-align: center; flex: 1; transition: color 0.2s; letter-spacing: 0.02em; }
-        .wizard-label-item.active { color: var(--primary-dark); }
-        .wizard-label-item.done { color: var(--primary-dark); opacity: 0.7; }
-
-        /* ── Card ── */
-        .wizard-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(12px);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            width: 100%; max-width: 520px;
-            border: 1px solid rgba(255,255,255,0.9);
-            overflow: hidden;
-            position: relative; z-index: 1;
+        @media (max-width: 768px) {
+            .page-body { grid-template-columns: 1fr; padding: 32px 20px; gap: 40px; }
+            .right-panel { display: none; }
         }
 
-        /* Card top accent bar */
-        .card-accent {
-            height: 5px;
-            background: linear-gradient(90deg, #059669, #10b981, #34d399);
-        }
-        .card-body { padding: 36px 36px 30px; }
-        @media (max-width: 540px) { .card-body { padding: 28px 22px 24px; } }
-
-        .step-panel { display: none; }
-        .step-panel.active { display: block; }
-
-        /* Step header */
-        .step-header { margin-bottom: 28px; }
-        .step-badge {
+        /* ── Left: form ── */
+        .welcome-tag {
             display: inline-flex; align-items: center; gap: 6px;
             background: #ecfdf5; color: var(--primary-dark);
-            font-size: 11px; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 0.1em; padding: 4px 10px; border-radius: 20px;
-            margin-bottom: 12px; border: 1px solid #a7f3d0;
+            font-size: 12px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; padding: 5px 12px; border-radius: 20px;
+            border: 1px solid #a7f3d0; margin-bottom: 20px;
         }
-        .step-title { font-size: 24px; font-weight: 900; line-height: 1.15; margin-bottom: 8px; letter-spacing: -0.3px; }
-        .step-subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+        .welcome-title {
+            font-size: 32px; font-weight: 900; line-height: 1.15;
+            letter-spacing: -0.5px; margin-bottom: 10px;
+        }
+        .welcome-title span { color: var(--primary-dark); }
+        .welcome-sub {
+            font-size: 15px; color: var(--text-muted); line-height: 1.6;
+            margin-bottom: 36px; max-width: 400px;
+        }
 
-        /* ── Form ── */
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 7px; color: #374151; }
-        .form-group label .opt { font-weight: 400; color: var(--text-muted); font-size: 12px; }
-        .form-group input, .form-group textarea {
-            width: 100%; border: 1.5px solid var(--border);
-            border-radius: 10px; padding: 11px 14px;
-            font-size: 14px; font-family: inherit; color: var(--text);
-            background: #f8fafc; outline: none; transition: all 0.15s;
+        /* ── Form card ── */
+        .form-card {
+            background: #fff; border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 24px rgba(15,23,42,0.07);
+            overflow: hidden;
         }
-        .form-group input:focus, .form-group textarea:focus {
+        .form-card-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            background: linear-gradient(135deg, #f0fdf4, #f8fafc);
+        }
+        .form-card-header h3 {
+            font-size: 15px; font-weight: 800; margin-bottom: 3px;
+        }
+        .form-card-header p { font-size: 13px; color: var(--text-muted); }
+        .form-card-body { padding: 24px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group:last-of-type { margin-bottom: 0; }
+        .form-group label {
+            display: block; font-size: 13px; font-weight: 700;
+            margin-bottom: 7px; color: #374151;
+        }
+        .form-group label .opt { font-weight: 400; color: var(--text-muted); }
+        .form-group input {
+            width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+            padding: 11px 14px; font-size: 14px; font-family: inherit;
+            color: var(--text); background: #f8fafc; outline: none; transition: all 0.15s;
+        }
+        .form-group input:focus {
             border-color: var(--primary); background: #fff;
             box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
         }
-        .form-group textarea { resize: vertical; min-height: 72px; }
+        .field-hint { font-size: 12px; color: var(--text-muted); margin-top: 5px; line-height: 1.4; }
 
-        /* ── Color swatches ── */
-        .color-swatches { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-        .color-swatch {
-            width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+        /* ── Avatar color ── */
+        .color-row { display: flex; align-items: center; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+        .color-dot {
+            width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
             border: 3px solid transparent; outline: 3px solid transparent;
-            transition: transform 0.15s, outline-color 0.15s;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: transform 0.12s, outline-color 0.12s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.12);
         }
-        .color-swatch:hover { transform: scale(1.15); }
-        .color-swatch.active { outline-color: #0f172a; outline-offset: 2px; }
+        .color-dot:hover { transform: scale(1.15); }
+        .color-dot.active { outline-color: #0f172a; outline-offset: 2px; }
 
-        /* ── Avatar preview ── */
-        .avatar-preview-wrap {
-            display: flex; align-items: center; gap: 18px;
-            background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
-            border: 1px solid #a7f3d0; border-radius: 12px;
-            padding: 16px 20px; margin-bottom: 22px;
+        /* ── Avatar preview inline ── */
+        .avatar-inline {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+            padding: 14px 16px; border-radius: 10px;
+            background: #f0fdf4; border: 1px solid #a7f3d0;
         }
-        .avatar-preview {
-            width: 68px; height: 68px; border-radius: 50%;
-            border: 3px solid var(--primary);
-            background: #fff; display: flex; align-items: center; justify-content: center;
-            font-size: 24px; font-weight: 900; color: var(--primary);
-            overflow: hidden; flex-shrink: 0;
+        .avatar-circle {
+            width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+            border: 3px solid var(--primary); background: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 900; color: var(--primary);
             transition: border-color 0.2s, color 0.2s;
-            box-shadow: 0 4px 14px rgba(16,185,129,0.25);
         }
-        .avatar-label { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
-        .avatar-label strong { display: block; font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+        .avatar-inline-text { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+        .avatar-inline-text strong { display: block; font-size: 14px; color: var(--text); margin-bottom: 2px; }
 
-        /* ── Icon grid ── */
-        .icon-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-        .icon-btn {
-            width: 42px; height: 42px; border-radius: 10px;
-            border: 2px solid var(--border); background: #f8fafc;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 17px; color: var(--text-muted);
-            transition: all 0.15s;
+        /* ── Submit ── */
+        .form-footer {
+            padding: 20px 24px; border-top: 1px solid #f1f5f9;
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
         }
-        .icon-btn:hover { border-color: var(--primary); color: var(--primary); background: #f0fdf4; transform: translateY(-1px); }
-        .icon-btn.active { border-color: var(--primary); background: linear-gradient(135deg, #059669, #10b981); color: #fff; box-shadow: 0 3px 10px rgba(16,185,129,0.35); }
-
-        /* ── Actions ── */
-        .wizard-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 30px; gap: 12px; padding-top: 20px; border-top: 1px solid #f1f5f9; }
-        .btn {
-            display: inline-flex; align-items: center; gap: 7px;
-            padding: 12px 24px; border-radius: 10px;
-            font-size: 14px; font-weight: 800; border: none; cursor: pointer;
-            transition: all 0.15s; text-decoration: none; letter-spacing: 0.01em;
-        }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 13px 28px; border-radius: 10px; border: none; cursor: pointer;
+            font-size: 15px; font-weight: 800; font-family: inherit;
             background: linear-gradient(135deg, #059669, #10b981);
-            color: #fff;
-            box-shadow: 0 4px 14px rgba(16,185,129,0.35);
+            color: #fff; box-shadow: 0 4px 14px rgba(16,185,129,0.35);
+            transition: all 0.15s;
         }
         .btn-primary:hover:not(:disabled) {
             background: linear-gradient(135deg, #047857, #059669);
-            box-shadow: 0 6px 20px rgba(16,185,129,0.45);
-            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(16,185,129,0.45); transform: translateY(-1px);
         }
-        .btn-ghost { background: transparent; color: var(--text-muted); padding-left: 4px; font-weight: 600; }
-        .btn-ghost:hover { color: var(--text); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-skip { font-size: 13px; color: var(--text-muted); background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; }
+        .btn-skip:hover { color: var(--text); }
         .saving-spinner { display: none; }
         .saving-spinner.show { display: inline-block; }
 
-        /* ── Done ── */
-        .done-screen { text-align: center; padding: 16px 0 8px; }
-        .done-icon {
-            width: 80px; height: 80px; border-radius: 50%;
-            background: linear-gradient(135deg, #059669, #10b981);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 34px; color: #fff;
-            margin: 0 auto 24px;
-            box-shadow: 0 8px 28px rgba(16,185,129,0.4);
+        .error-msg {
+            margin: 0 24px 16px; font-size: 13px; color: #dc2626;
+            background: #fef2f2; border: 1px solid #fecaca;
+            border-radius: 8px; padding: 10px 14px; display: none;
         }
-        .done-title { font-size: 26px; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.3px; }
-        .done-subtitle { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; }
-        .done-screen .btn { width: 100%; justify-content: center; font-size: 15px; padding: 15px; }
-
-        .error-msg { font-size: 13px; color: #dc2626; margin-top: 14px; display: none; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; }
         .error-msg.show { display: block; }
+
+        /* ── Right: visual panel ── */
+        .right-panel { padding-top: 8px; }
+        .receipt-preview-label {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 12px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .receipt-mock {
+            background: #fff; border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px rgba(15,23,42,0.10);
+            padding: 24px; font-size: 12px; color: #374151;
+            max-width: 340px;
+        }
+        .receipt-mock-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 16px; padding-bottom: 14px;
+            border-bottom: 2px solid #000;
+        }
+        .receipt-mock-title { font-size: 16px; font-weight: 900; margin-bottom: 2px; }
+        .receipt-mock-ids { font-size: 10px; color: #666; line-height: 1.6; text-align: right; }
+        .receipt-mock-logo {
+            width: 48px; height: 28px; border-radius: 4px;
+            background: #f0fdf4; border: 1px dashed #a7f3d0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px; color: #a7f3d0; font-weight: 700;
+        }
+        .receipt-mock-company { font-weight: 800; font-size: 13px; margin-bottom: 2px; }
+        .receipt-mock-addr { font-size: 11px; color: #666; line-height: 1.5; }
+        .receipt-mock-divider { height: 1px; background: #e5e7eb; margin: 14px 0; }
+        .receipt-mock-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 11px; }
+        .receipt-mock-row.total { font-weight: 800; font-size: 13px; padding-top: 8px; border-top: 1px solid #000; }
+        .receipt-mock-disclaimer {
+            font-size: 9px; color: #9ca3af; text-align: center;
+            margin-top: 14px; padding-top: 10px; border-top: 1px solid #f1f5f9;
+            line-height: 1.5;
+        }
+        .receipt-mock-highlight {
+            background: #ecfdf5; border-radius: 6px; padding: 8px 10px;
+            margin-bottom: 14px;
+        }
+        .mock-label { font-size: 9px; text-transform: uppercase; font-weight: 700; color: #6b7280; letter-spacing: 0.05em; }
+        .mock-value { font-weight: 700; color: var(--text); font-size: 12px; }
+        .mock-value.placeholder { color: #d1d5db; font-style: italic; font-weight: 400; }
+
+        .tip-list { margin-top: 28px; }
+        .tip-item {
+            display: flex; gap: 12px; align-items: flex-start;
+            margin-bottom: 14px;
+        }
+        .tip-icon {
+            width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+            background: #f0fdf4; border: 1px solid #a7f3d0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; color: var(--primary-dark);
+        }
+        .tip-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; padding-top: 6px; }
+        .tip-text strong { color: var(--text); }
     </style>
 </head>
 <body>
 
-<div class="wizard-logo">
-    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#wg)"/>
-        <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
-        <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="14" y1="20" x2="34" y2="20" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="14" y1="26" x2="28" y2="26" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <defs><linearGradient id="wg" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs>
-    </svg>
-    SpendNote
-</div>
+<!-- Nav -->
+<nav class="top-nav">
+    <a href="dashboard.html" class="nav-logo">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#ng)"/>
+            <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+            <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="14" y1="20" x2="34" y2="20" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="14" y1="26" x2="28" y2="26" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs><linearGradient id="ng" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs>
+        </svg>
+        SpendNote
+    </a>
+    <a href="dashboard.html" class="nav-skip">Skip setup <i class="fas fa-arrow-right"></i></a>
+</nav>
 
-<div class="wizard-progress-wrap">
-    <div class="wizard-progress">
-        <div class="wizard-step-dot active" id="dot1"><span class="dot-num">1</span></div>
-        <div class="wizard-step-line" id="line1"></div>
-        <div class="wizard-step-dot" id="dot2"><span class="dot-num">2</span></div>
-        <div class="wizard-step-line" id="line2"></div>
-        <div class="wizard-step-dot" id="dot3"><span class="dot-num">3</span></div>
-    </div>
-    <div class="wizard-labels">
-        <div class="wizard-label-item active" id="lbl1">Profile</div>
-        <div class="wizard-label-item" id="lbl2">Receipt Identity</div>
-        <div class="wizard-label-item" id="lbl3">Cash Box</div>
-    </div>
-</div>
+<!-- Body -->
+<div class="page-body">
 
-<div class="wizard-card">
-<div class="card-accent"></div>
-<div class="card-body">
+    <!-- LEFT: Form -->
+    <div class="left-panel">
+        <div class="welcome-tag"><i class="fas fa-hand-wave"></i> Welcome aboard</div>
+        <h1 class="welcome-title">Let's get you<br>set up in <span>60 seconds</span></h1>
+        <p class="welcome-sub">Just two things — your name and how you want to appear on receipts. Everything else is already ready to go.</p>
 
-    <!-- STEP 1: Profile -->
-    <div class="step-panel active" id="step1">
-        <div class="step-header">
-            <div class="step-badge"><i class="fas fa-user"></i> Step 1 of 3</div>
-            <div class="step-title">Set up your profile</div>
-            <div class="step-subtitle">Your name and avatar color appear across the app and on receipts.</div>
-        </div>
-        <div class="avatar-preview-wrap">
-            <div class="avatar-preview" id="avatarPreview"><span id="avatarInitials">?</span></div>
-            <div class="avatar-label">
-                <strong id="avatarPreviewName">Your name</strong>
-                Pick a color below
+        <div class="form-card">
+            <div class="form-card-header">
+                <h3><i class="fas fa-user-circle" style="color:var(--primary);margin-right:6px;"></i> Your details</h3>
+                <p>This info appears in the app and on your cash receipts.</p>
+            </div>
+            <div class="form-card-body">
+
+                <div class="avatar-inline">
+                    <div class="avatar-circle" id="avatarCircle"><span id="avatarInitials">?</span></div>
+                    <div class="avatar-inline-text">
+                        <strong id="avatarName">Your name</strong>
+                        Pick a color for your avatar
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="profileName">Your Full Name</label>
+                    <input type="text" id="profileName" placeholder="e.g. Jane Smith" autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label>Avatar Color</label>
+                    <div class="color-row" id="colorRow">
+                        <div class="color-dot active" data-color="#10b981" style="background:#10b981;"></div>
+                        <div class="color-dot" data-color="#3b82f6" style="background:#3b82f6;"></div>
+                        <div class="color-dot" data-color="#8b5cf6" style="background:#8b5cf6;"></div>
+                        <div class="color-dot" data-color="#ec4899" style="background:#ec4899;"></div>
+                        <div class="color-dot" data-color="#f59e0b" style="background:#f59e0b;"></div>
+                        <div class="color-dot" data-color="#ef4444" style="background:#ef4444;"></div>
+                        <div class="color-dot" data-color="#06b6d4" style="background:#06b6d4;"></div>
+                        <div class="color-dot" data-color="#64748b" style="background:#64748b;"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="receiptName">Receipt Display Name</label>
+                    <input type="text" id="receiptName" placeholder="e.g. Acme Corp or Jane Smith">
+                    <div class="field-hint">This is the name that appears on every receipt you generate.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="receiptAddress">Address <span class="opt">(optional)</span></label>
+                    <input type="text" id="receiptAddress" placeholder="e.g. 123 Main St, New York">
+                    <div class="field-hint">Shown on receipts under your display name.</div>
+                </div>
+
+            </div>
+            <div class="error-msg" id="errMsg"></div>
+            <div class="form-footer">
+                <button class="btn-skip" onclick="window.location.href='dashboard.html'">Skip for now</button>
+                <button class="btn-primary" id="saveBtn" onclick="saveSetup()">
+                    <span class="saving-spinner" id="spin"><i class="fas fa-circle-notch fa-spin"></i></span>
+                    Go to Dashboard <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
-        <div class="form-group">
-            <label for="profileName">Full Name</label>
-            <input type="text" id="profileName" placeholder="Jane Smith" autocomplete="name">
-        </div>
-        <div class="form-group">
-            <label>Avatar Color <span class="opt">(optional)</span></label>
-            <div class="color-swatches" id="avatarColorSwatches">
-                <div class="color-swatch active" data-color="#10b981" style="background:#10b981;"></div>
-                <div class="color-swatch" data-color="#3b82f6" style="background:#3b82f6;"></div>
-                <div class="color-swatch" data-color="#8b5cf6" style="background:#8b5cf6;"></div>
-                <div class="color-swatch" data-color="#ec4899" style="background:#ec4899;"></div>
-                <div class="color-swatch" data-color="#f59e0b" style="background:#f59e0b;"></div>
-                <div class="color-swatch" data-color="#ef4444" style="background:#ef4444;"></div>
-                <div class="color-swatch" data-color="#06b6d4" style="background:#06b6d4;"></div>
-                <div class="color-swatch" data-color="#64748b" style="background:#64748b;"></div>
+    </div>
+
+    <!-- RIGHT: Visual -->
+    <div class="right-panel">
+        <div class="receipt-preview-label"><i class="fas fa-receipt"></i> Receipt preview</div>
+        <div class="receipt-mock">
+            <div class="receipt-mock-header">
+                <div>
+                    <div class="receipt-mock-title">Cash Receipt</div>
+                    <div style="font-size:10px;color:#666;">Proof of cash handoff</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="receipt-mock-ids">Cash Box ID: SN-001<br>Receipt ID: SN1-001<br>02/25/2026</div>
+                </div>
+            </div>
+
+            <div class="receipt-mock-highlight">
+                <div class="mock-label">From (your organization)</div>
+                <div class="mock-value" id="mockCompany" style="color:#d1d5db;font-style:italic;font-weight:400;">Your display name</div>
+                <div style="font-size:11px;color:#9ca3af;margin-top:2px;" id="mockAddress"></div>
+            </div>
+
+            <div class="receipt-mock-highlight">
+                <div class="mock-label">To (contact)</div>
+                <div class="mock-value">John Doe</div>
+                <div style="font-size:11px;color:#6b7280;margin-top:2px;">456 Oak Ave, Chicago</div>
+            </div>
+
+            <div class="receipt-mock-row">
+                <span>Office supplies</span><span>$45.00</span>
+            </div>
+            <div class="receipt-mock-row">
+                <span>Taxi fare</span><span>$23.50</span>
+            </div>
+            <div class="receipt-mock-row total">
+                <span>Total</span><span>$68.50</span>
+            </div>
+
+            <div class="receipt-mock-disclaimer">
+                Proof of cash handoff. Not a tax document.<br>
+                © SpendNote • spendnote.app
             </div>
         </div>
-        <div class="error-msg" id="err1"></div>
-        <div class="wizard-actions">
-            <button class="btn btn-ghost" onclick="skipStep(1)">Skip for now</button>
-            <button class="btn btn-primary" id="btn1" onclick="saveStep1()">
-                <span class="saving-spinner" id="spin1"><i class="fas fa-circle-notch fa-spin"></i></span>
-                Continue <i class="fas fa-arrow-right"></i>
-            </button>
-        </div>
-    </div>
 
-    <!-- STEP 2: Receipt Identity -->
-    <div class="step-panel" id="step2">
-        <div class="step-header">
-            <div class="step-badge"><i class="fas fa-file-invoice"></i> Step 2 of 3</div>
-            <div class="step-title">Receipt Identity</div>
-            <div class="step-subtitle">This info appears on every receipt — your business or personal name and address.</div>
-        </div>
-        <div class="form-group">
-            <label for="receiptName">Display Name</label>
-            <input type="text" id="receiptName" placeholder="e.g. Acme Corp or Jane Smith">
-        </div>
-        <div class="form-group">
-            <label for="receiptOtherId">Other ID <span class="opt">(optional)</span></label>
-            <input type="text" id="receiptOtherId" placeholder="e.g. registration number, reference ID">
-        </div>
-        <div class="form-group">
-            <label for="receiptAddress">Address <span class="opt">(optional)</span></label>
-            <textarea id="receiptAddress" rows="2" placeholder="Street, City, State, ZIP"></textarea>
-        </div>
-        <div class="error-msg" id="err2"></div>
-        <div class="wizard-actions">
-            <button class="btn btn-ghost" onclick="skipStep(2)">Skip for now</button>
-            <button class="btn btn-primary" id="btn2" onclick="saveStep2()">
-                <span class="saving-spinner" id="spin2"><i class="fas fa-circle-notch fa-spin"></i></span>
-                Continue <i class="fas fa-arrow-right"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- STEP 3: Cash Box -->
-    <div class="step-panel" id="step3">
-        <div class="step-header">
-            <div class="step-badge"><i class="fas fa-box"></i> Step 3 of 3</div>
-            <div class="step-title">Create your first Cash Box</div>
-            <div class="step-subtitle">A Cash Box groups your cash transactions. You can always create more later.</div>
-        </div>
-        <div class="form-group">
-            <label for="cbName">Cash Box Name</label>
-            <input type="text" id="cbName" placeholder="e.g. Main Office, Petty Cash">
-        </div>
-        <div class="form-group">
-            <label>Color</label>
-            <div class="color-swatches" id="cbColorSwatches">
-                <div class="color-swatch active" data-color="#10b981" style="background:#10b981;"></div>
-                <div class="color-swatch" data-color="#3b82f6" style="background:#3b82f6;"></div>
-                <div class="color-swatch" data-color="#8b5cf6" style="background:#8b5cf6;"></div>
-                <div class="color-swatch" data-color="#ec4899" style="background:#ec4899;"></div>
-                <div class="color-swatch" data-color="#f59e0b" style="background:#f59e0b;"></div>
-                <div class="color-swatch" data-color="#ef4444" style="background:#ef4444;"></div>
-                <div class="color-swatch" data-color="#06b6d4" style="background:#06b6d4;"></div>
-                <div class="color-swatch" data-color="#0f172a" style="background:#0f172a;"></div>
+        <div class="tip-list">
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-box"></i></div>
+                <div class="tip-text"><strong>Cash Box ready.</strong> We've already set one up for you — start recording transactions right away.</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-print"></i></div>
+                <div class="tip-text"><strong>Instant receipts.</strong> Print, PDF or email receipts for every transaction, no extra setup needed.</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-cog"></i></div>
+                <div class="tip-text"><strong>More settings later.</strong> Logo, colors and team members can all be configured in Settings.</div>
             </div>
         </div>
-        <div class="form-group">
-            <label>Icon <span class="opt">(optional)</span></label>
-            <div class="icon-grid" id="cbIconGrid">
-                <button type="button" class="icon-btn active" data-icon="building"><i class="fas fa-building"></i></button>
-                <button type="button" class="icon-btn" data-icon="store"><i class="fas fa-store"></i></button>
-                <button type="button" class="icon-btn" data-icon="briefcase"><i class="fas fa-briefcase"></i></button>
-                <button type="button" class="icon-btn" data-icon="cash-register"><i class="fas fa-cash-register"></i></button>
-                <button type="button" class="icon-btn" data-icon="wallet"><i class="fas fa-wallet"></i></button>
-                <button type="button" class="icon-btn" data-icon="box"><i class="fas fa-box"></i></button>
-                <button type="button" class="icon-btn" data-icon="landmark"><i class="fas fa-landmark"></i></button>
-                <button type="button" class="icon-btn" data-icon="truck"><i class="fas fa-truck"></i></button>
-            </div>
-        </div>
-        <div class="error-msg" id="err3"></div>
-        <div class="wizard-actions">
-            <button class="btn btn-ghost" onclick="skipStep(3)">Skip for now</button>
-            <button class="btn btn-primary" id="btn3" onclick="saveStep3()">
-                <span class="saving-spinner" id="spin3"><i class="fas fa-circle-notch fa-spin"></i></span>
-                Create &amp; Continue <i class="fas fa-arrow-right"></i>
-            </button>
-        </div>
     </div>
 
-    <!-- DONE -->
-    <div class="step-panel" id="stepDone">
-        <div class="done-screen">
-            <div class="done-icon"><i class="fas fa-check"></i></div>
-            <div class="done-title">You're all set! 🎉</div>
-            <div class="done-subtitle">Your account is ready. Head to your dashboard to start recording cash transactions.</div>
-            <a href="dashboard.html" class="btn btn-primary">Go to Dashboard <i class="fas fa-arrow-right"></i></a>
-        </div>
-    </div>
-
-</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/supabase-config.js?v=20260225-2000"></script>
 <script>
-let selectedAvatarColor = '#10b981';
-let selectedCbColor = '#10b981';
-let selectedCbIcon = 'building';
-
-function setStep(n) {
-    for (let i = 1; i <= 3; i++) {
-        const panel = document.getElementById('step' + i);
-        const dot   = document.getElementById('dot' + i);
-        const lbl   = document.getElementById('lbl' + i);
-        if (!panel) continue;
-        panel.classList.toggle('active', i === n);
-        dot.classList.toggle('active', i === n);
-        dot.classList.toggle('done', i < n);
-        lbl.classList.toggle('active', i === n);
-        lbl.classList.toggle('done', i < n);
-        if (i < 3) {
-            document.getElementById('line' + i).classList.toggle('done', i < n);
-        }
-    }
-    if (n > 3) {
-        document.getElementById('step3').classList.remove('active');
-        document.getElementById('stepDone').classList.add('active');
-        ['dot1','dot2','dot3'].forEach(id => {
-            const d = document.getElementById(id);
-            d.classList.remove('active');
-            d.classList.add('done');
-        });
-        document.getElementById('line1').classList.add('done');
-        document.getElementById('line2').classList.add('done');
-        ['lbl1','lbl2','lbl3'].forEach(id => {
-            const l = document.getElementById(id);
-            l.classList.remove('active');
-            l.classList.add('done');
-        });
-    }
-}
-
-function showError(n, msg) {
-    const el = document.getElementById('err' + n);
-    if (!el) return;
-    el.textContent = msg;
-    el.classList.toggle('show', Boolean(msg));
-}
-
-function setBusy(n, busy) {
-    const btn  = document.getElementById('btn' + n);
-    const spin = document.getElementById('spin' + n);
-    if (btn)  btn.disabled = busy;
-    if (spin) spin.classList.toggle('show', busy);
-}
+let selectedColor = '#10b981';
 
 function getInitials(name) {
     const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
@@ -433,38 +371,50 @@ function getInitials(name) {
     return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
 }
 
-function updateAvatarPreview() {
+function updatePreview() {
     const name = document.getElementById('profileName').value;
-    const preview = document.getElementById('avatarPreview');
+    const rName = document.getElementById('receiptName').value;
+    const addr = document.getElementById('receiptAddress').value;
+
     document.getElementById('avatarInitials').textContent = getInitials(name);
-    document.getElementById('avatarPreviewName').textContent = name.trim() || 'Your name';
-    preview.style.borderColor = selectedAvatarColor;
-    preview.style.color = selectedAvatarColor;
+    document.getElementById('avatarName').textContent = name.trim() || 'Your name';
+    document.getElementById('avatarCircle').style.borderColor = selectedColor;
+    document.getElementById('avatarCircle').style.color = selectedColor;
+
+    const mockCompany = document.getElementById('mockCompany');
+    if (rName.trim()) {
+        mockCompany.textContent = rName.trim();
+        mockCompany.style.cssText = 'font-weight:700;color:#0f172a;font-style:normal;';
+    } else {
+        mockCompany.textContent = 'Your display name';
+        mockCompany.style.cssText = 'color:#d1d5db;font-style:italic;font-weight:400;';
+    }
+    document.getElementById('mockAddress').textContent = addr.trim();
 }
 
-document.getElementById('profileName').addEventListener('input', updateAvatarPreview);
+document.getElementById('profileName').addEventListener('input', updatePreview);
+document.getElementById('receiptName').addEventListener('input', updatePreview);
+document.getElementById('receiptAddress').addEventListener('input', updatePreview);
 
-function initSwatches(containerId, onSelect) {
-    document.getElementById(containerId).querySelectorAll('.color-swatch').forEach(sw => {
-        sw.addEventListener('click', () => {
-            document.getElementById(containerId).querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-            sw.classList.add('active');
-            onSelect(sw.dataset.color);
-        });
-    });
-}
-initSwatches('avatarColorSwatches', color => { selectedAvatarColor = color; updateAvatarPreview(); });
-initSwatches('cbColorSwatches', color => { selectedCbColor = color; });
-
-document.getElementById('cbIconGrid').querySelectorAll('.icon-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.getElementById('cbIconGrid').querySelectorAll('.icon-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedCbIcon = btn.dataset.icon;
+document.getElementById('colorRow').querySelectorAll('.color-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+        document.getElementById('colorRow').querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+        selectedColor = dot.dataset.color;
+        updatePreview();
     });
 });
 
-function skipStep(n) { setStep(n >= 3 ? 4 : n + 1); }
+function showError(msg) {
+    const el = document.getElementById('errMsg');
+    el.textContent = msg;
+    el.classList.toggle('show', Boolean(msg));
+}
+
+function setBusy(busy) {
+    document.getElementById('saveBtn').disabled = busy;
+    document.getElementById('spin').classList.toggle('show', busy);
+}
 
 function waitForDb() {
     return new Promise(resolve => {
@@ -473,61 +423,34 @@ function waitForDb() {
     });
 }
 
-async function saveStep1() {
-    showError(1, '');
-    const name = document.getElementById('profileName').value.trim();
-    if (!name) { showError(1, 'Please enter your full name.'); return; }
-    setBusy(1, true);
-    try {
-        await waitForDb();
-        const result = await window.db.profiles.update({ full_name: name, avatar_color: selectedAvatarColor });
-        if (!result?.success) throw new Error(result?.error || 'Failed to save profile.');
-        try { await window.supabaseClient.auth.updateUser({ data: { full_name: name, avatar_color: selectedAvatarColor } }); } catch (_) {}
-        setStep(2);
-    } catch (e) {
-        showError(1, String(e?.message || 'Something went wrong. Please try again.'));
-    } finally {
-        setBusy(1, false);
-    }
-}
-
-async function saveStep2() {
-    showError(2, '');
-    const name    = document.getElementById('receiptName').value.trim();
-    const otherId = document.getElementById('receiptOtherId').value.trim();
+async function saveSetup() {
+    showError('');
+    const name    = document.getElementById('profileName').value.trim();
+    const rName   = document.getElementById('receiptName').value.trim();
     const address = document.getElementById('receiptAddress').value.trim();
-    if (!name) { showError(2, 'Please enter a display name for your receipts.'); return; }
-    setBusy(2, true);
+
+    if (!name) { showError('Please enter your full name.'); return; }
+    if (!rName) { showError('Please enter a receipt display name.'); return; }
+
+    setBusy(true);
     try {
         await waitForDb();
-        const result = await window.db.profiles.update({ company_name: name || null, phone: otherId || null, address: address || null });
-        if (!result?.success) throw new Error(result?.error || 'Failed to save receipt identity.');
-        setStep(3);
+        const result = await window.db.profiles.update({
+            full_name: name,
+            avatar_color: selectedColor,
+            company_name: rName,
+            address: address || null
+        });
+        if (!result?.success) throw new Error(result?.error || 'Failed to save.');
+        try { await window.supabaseClient.auth.updateUser({ data: { full_name: name, avatar_color: selectedColor } }); } catch (_) {}
+        window.location.href = 'dashboard.html';
     } catch (e) {
-        showError(2, String(e?.message || 'Something went wrong. Please try again.'));
-    } finally {
-        setBusy(2, false);
+        showError(String(e?.message || 'Something went wrong. Please try again.'));
+        setBusy(false);
     }
 }
 
-async function saveStep3() {
-    showError(3, '');
-    const name = document.getElementById('cbName').value.trim();
-    if (!name) { showError(3, 'Please enter a name for your Cash Box.'); return; }
-    setBusy(3, true);
-    try {
-        await waitForDb();
-        const result = await window.db.cashBoxes.create({ name, color: selectedCbColor, icon: selectedCbIcon, currency: 'USD' });
-        if (!result) throw new Error('Failed to create Cash Box.');
-        setStep(4);
-    } catch (e) {
-        showError(3, String(e?.message || 'Something went wrong. Please try again.'));
-    } finally {
-        setBusy(3, false);
-    }
-}
-
-// Pre-fill name from auth on load
+// Pre-fill from auth on load
 (async () => {
     try {
         await waitForDb();
@@ -536,23 +459,23 @@ async function saveStep3() {
         const name = String(user.user_metadata?.full_name || '').trim();
         if (name) {
             document.getElementById('profileName').value = name;
-            updateAvatarPreview();
+            document.getElementById('receiptName').value = name;
+            updatePreview();
         }
-        // Pre-fill receipt name from profile
         try {
             const profile = await window.db.profiles.getCurrent();
+            if (profile?.full_name) document.getElementById('profileName').value = profile.full_name;
             if (profile?.company_name) document.getElementById('receiptName').value = profile.company_name;
-            if (profile?.phone) document.getElementById('receiptOtherId').value = profile.phone;
             if (profile?.address) document.getElementById('receiptAddress').value = profile.address;
             if (profile?.avatar_color) {
-                selectedAvatarColor = profile.avatar_color;
-                const match = document.querySelector(`#avatarColorSwatches .color-swatch[data-color="${profile.avatar_color}"]`);
+                selectedColor = profile.avatar_color;
+                const match = document.querySelector(`#colorRow .color-dot[data-color="${profile.avatar_color}"]`);
                 if (match) {
-                    document.querySelectorAll('#avatarColorSwatches .color-swatch').forEach(s => s.classList.remove('active'));
+                    document.querySelectorAll('#colorRow .color-dot').forEach(d => d.classList.remove('active'));
                     match.classList.add('active');
                 }
-                updateAvatarPreview();
             }
+            updatePreview();
         } catch (_) {}
     } catch (_) {}
 })();
