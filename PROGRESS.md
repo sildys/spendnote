@@ -41,14 +41,14 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [x] **M1** Mobile strategy + responsive MVP completed (2026-02-18)
 - [x] **S1** Subscription rules spec — **kész** (`S1-SPEC.md`): trial modell, csomag limitek, feature flag kulcsok, downgrade/törlés viselkedés dokumentálva.
 - [x] **S2** Stripe prep (ready to plug in): subscription state data model + feature flags + UI placeholders + webhook handling plan — **kész** (`031_profiles_billing_state_and_preview_tier.sql`, `SpendNoteBilling`, User Settings billing summary placeholder)
-- [ ] **L1b** Onboarding UI (tier-specifikus): Free/Standard/Pro variánsok, lock/upgrade CTA-k és limit üzenetek az S1/S2 döntések alapján
+- [x] **L1b** Onboarding UI (tier-specifikus): Free/Standard/Pro variánsok + **meghívott user** welcome ág implementálva (`spendnote-welcome.html`, 2026-02-26)
 - [x] **DEPLOY-1** Migration plan: move from Vercel/demo domain to Cloudflare on `spendnote.app` (hosting target, caching rules)
 - [x] **DEPLOY-2** Cloudflare DNS + SSL + redirects: decide canonical host (`spendnote.app` vs `www`), configure 301s and safe HSTS
 - [x] **DEPLOY-3** Supabase for new domain: update Site URL + allowed redirect URLs; test login/signup/invite flows on `spendnote.app`
 - [x] **M1** Mobile redesign complete: bottom nav bar, card lists, modal bottom sheet, tx detail 2×2 grid (2026-02-18)
 - [x] **DEPLOY-4** Cutover rehearsal + go-live checklist: staging URL, smoke tests, rollback plan
 - [ ] **S3** Stripe integration: checkout, customer portal, webhooks, live mode rollout + enforcement activation — **skeleton in place** (`create-checkout-session`, `create-portal-session`, `stripe-webhook`), production secrets/live test pending
-- [ ] **O1** Google OAuth: signup/login UI flow wired (Google buttons + Supabase OAuth redirect), pending provider credentials + redirect whitelist + account-linking policy
+- [x] **O1** Google OAuth: signup/login UI flow + provider/dashboard whitelist + account-linking policy validálva/lezárva (2026-02-26)
 - [ ] **MKT-1** Market scan + positioning: direct/adjacent alternatives + SpendNote differentiation + keyword list
 - [ ] **MKT-2** SEO content plan: 3 landing pages (petty cash misspellings/alternatives) + “cash handoff receipt” positioning + CTA alignment to onboarding (L1/L2)
 - [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
@@ -95,7 +95,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-02-26 late evening — logo baseline + mobile currency fix validated)
+## Where we are now (last updated: 2026-02-26 late night — OAuth zárás + 4-way welcome variánsok)
 
 ### 2026-02-26 késő esti frissítés — User Settings logo + mobil pénznem regressziók (KÉSZ)
 
@@ -109,6 +109,10 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Supabase provider + URL Configuration és Google Cloud callback URI ellenőrzés megtörtént.
   - Account-linking policy döntés rögzítve: egyező, verified email esetén auto-link ugyanarra az account identity-re.
   - `GOOGLE-OAUTH-PROD-CHECKLIST.md` lezárva.
+- **L1b onboarding welcome variánsok lezárva (KÉSZ):**
+  - `spendnote-welcome.html` most 4 ágat kezel: Free / Standard / Pro / Invited user.
+  - Variáns-választás: org role + subscription tier alapján történik.
+  - Meghívott user ágban a Receipt Identity blokk rejtve van, és mentéskor csak profil mezők frissülnek.
 - **Mobil new transaction pénznem kijelzés regresszió lezárva:**
   - `assets/js/dashboard-modal.js`: `applyModalCurrencyUi` export `window` alá a standalone oldal számára.
   - `spendnote-new-transaction.html`: cash box váltásnál és preset line-item injektálás után explicit currency UI refresh.

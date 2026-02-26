@@ -7,7 +7,7 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
-## Current status (2026-02-26 late evening — logo baseline + OAuth + mobile currency fixes validated)
+## Current status (2026-02-26 late night — OAuth closed + onboarding variants shipped)
 
 ### User Settings logo + mobile transaction currency fixes (2026-02-26)
 
@@ -20,6 +20,10 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
   - Login flow now also explicitly requests account chooser (`prompt=select_account`) for safer account selection consistency.
   - Supabase provider + URL configuration and Google Cloud callback URI were verified.
   - Account-linking policy was explicitly selected: auto-link same verified email to one identity.
+- **Tiered onboarding welcome variants shipped (L1b):**
+  - `spendnote-welcome.html` now renders 4 welcome variants: **Free**, **Standard**, **Pro**, and **Invited user**.
+  - Variant selection uses org role + subscription tier (`role=user` -> invited flow; otherwise tier-based free/standard/pro copy).
+  - Invited-user flow hides receipt-identity setup and only saves personal profile fields to avoid overriding org-managed identity fields.
 - **Mobile new-transaction currency symbol regression fixed:**
   - `assets/js/dashboard-modal.js`: `applyModalCurrencyUi` exposed on `window` for standalone mobile page reuse.
   - `spendnote-new-transaction.html`: explicit currency UI refresh runs on cash box change and after preset line-item injection.
