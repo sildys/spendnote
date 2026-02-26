@@ -95,6 +95,22 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
+## Where we are now (last updated: 2026-02-26 late evening — logo baseline + mobile currency fix validated)
+
+### 2026-02-26 késő esti frissítés — User Settings logo + mobil pénznem regressziók (KÉSZ)
+
+- **Receipt logo baseline persistence hiba lezárva (User Settings):**
+  - `assets/js/logo-editor.js`: baseline kezelés megerősítve; mentett állapot reload után az új 100% alapállapot.
+  - `assets/js/user-settings.js`: load/save után baseline UI visszaállítás enforce, régi localStorage zoom/pozíció felülírás semlegesítve.
+  - Eredmény: megszűnt a mentés utáni visszaugrás (pl. 280% állapot), preview stabil.
+- **Google OAuth flow runtime validálás:**
+  - Felhasználói visszajelzés alapján a Google belépés/regisztráció működik production környezetben.
+  - Nyitott pont: operatív checklist zárás (provider dashboard redirect whitelist + account-linking policy végső átnézés).
+- **Mobil new transaction pénznem kijelzés regresszió lezárva:**
+  - `assets/js/dashboard-modal.js`: `applyModalCurrencyUi` export `window` alá a standalone oldal számára.
+  - `spendnote-new-transaction.html`: cash box váltásnál és preset line-item injektálás után explicit currency UI refresh.
+  - Eredmény: fő összeg prefix, line item prefixek és total a kiválasztott cash box pénznemét követik (nem fix `$`).
+
 ## Where we are now (last updated: 2026-02-26 — Stripe S3 skeleton + server-side preview guard)
 
 ### 2026-02-26 frissítés — Billing/Stripe előkészítés + guard hardening (RÉSZBEN VALIDÁLVA)

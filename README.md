@@ -7,6 +7,22 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is meant to be deployable as a static site (e.g. Vercel).
 
+## Current status (2026-02-26 late evening — logo baseline + OAuth + mobile currency fixes validated)
+
+### User Settings logo + mobile transaction currency fixes (2026-02-26)
+
+- **Receipt logo baseline persistence fixed (User Settings):**
+  - `assets/js/logo-editor.js`: baseline lifecycle hardened so saved logo appearance becomes the new 100% baseline on reload.
+  - `assets/js/user-settings.js`: baseline UI reset enforced after load/save, with stale localStorage transform overrides neutralized.
+  - Result: no post-save jump back to old zoom state (e.g. 280%); persisted logo appears consistently in receipt previews.
+- **Google OAuth flow validated in production usage:**
+  - Login/signup Google flow is functioning correctly with redirect handling and invite-token handoff path.
+  - Current remaining work is checklist-level operational verification only (provider dashboard consistency + account-linking policy confirmation).
+- **Mobile new-transaction currency symbol regression fixed:**
+  - `assets/js/dashboard-modal.js`: `applyModalCurrencyUi` exposed on `window` for standalone mobile page reuse.
+  - `spendnote-new-transaction.html`: explicit currency UI refresh runs on cash box change and after preset line-item injection.
+  - Result: main amount prefix, line items, and total now follow the selected cash box currency (e.g. Ft / € / $) instead of sticking to `$`.
+
 ## Current status (2026-02-25 evening — receipt FROM/TO fix + Account Settings regression fixed)
 
 ### Receipt FROM/TO swap + Account Settings fix (2026-02-25 evening)
