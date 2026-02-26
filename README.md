@@ -15,11 +15,11 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
   - `assets/js/logo-editor.js`: baseline lifecycle hardened so saved logo appearance becomes the new 100% baseline on reload.
   - `assets/js/user-settings.js`: baseline UI reset enforced after load/save, with stale localStorage transform overrides neutralized.
   - Result: no post-save jump back to old zoom state (e.g. 280%); persisted logo appears consistently in receipt previews.
-- **Google OAuth flow validated in production usage:**
+- **Google OAuth production checks closed:**
   - Login/signup Google flow is functioning correctly with redirect handling and invite-token handoff path.
   - Login flow now also explicitly requests account chooser (`prompt=select_account`) for safer account selection consistency.
-  - Added `GOOGLE-OAUTH-PROD-CHECKLIST.md` to close remaining provider/dashboard-side production checks.
-  - Current remaining work is checklist-level operational verification only (provider dashboard consistency + account-linking policy confirmation).
+  - Supabase provider + URL configuration and Google Cloud callback URI were verified.
+  - Account-linking policy was explicitly selected: auto-link same verified email to one identity.
 - **Mobile new-transaction currency symbol regression fixed:**
   - `assets/js/dashboard-modal.js`: `applyModalCurrencyUi` exposed on `window` for standalone mobile page reuse.
   - `spendnote-new-transaction.html`: explicit currency UI refresh runs on cash box change and after preset line-item injection.

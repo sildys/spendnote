@@ -59,14 +59,13 @@ If `www` is still reachable in production, add these too:
 
 ## 5) Account-linking policy decision (manual)
 
-Decide and enforce one explicit policy for "same email already exists":
+Selected production policy:
 
-1. **Strict single identity per email** (recommended now)
-   - Keep default secure behavior, do not auto-link multiple identities silently.
-2. **Allow linking multiple identities**
-   - Requires explicit in-app UX and stricter messaging.
+1. **Auto-link to the same account when email matches and is verified**
+   - Goal: avoid duplicate accounts and reduce login friction.
+   - Guardrail: keep clear error messaging for conflicts or unverified email edge cases.
 
-Current recommendation: keep option (1) until a dedicated account-linking UX is implemented.
+Policy decision status: **chosen (2026-02-26)**.
 
 ## 6) Code references (for audit)
 

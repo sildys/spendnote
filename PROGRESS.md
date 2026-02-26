@@ -103,10 +103,12 @@ If a chat thread freezes / context is lost: in the new thread say:
   - `assets/js/logo-editor.js`: baseline kezelés megerősítve; mentett állapot reload után az új 100% alapállapot.
   - `assets/js/user-settings.js`: load/save után baseline UI visszaállítás enforce, régi localStorage zoom/pozíció felülírás semlegesítve.
   - Eredmény: megszűnt a mentés utáni visszaugrás (pl. 280% állapot), preview stabil.
-- **Google OAuth flow runtime validálás:**
+- **Google OAuth production zárás (KÉSZ):**
   - Felhasználói visszajelzés alapján a Google belépés/regisztráció működik production környezetben.
   - Login oldalon is egységesítve a Google account chooser kérés (`prompt=select_account`), így login/signup viselkedés konzisztens.
-  - Új dokumentum: `GOOGLE-OAUTH-PROD-CHECKLIST.md` (Supabase + Google Console + runtime + account-linking policy zárási lista).
+  - Supabase provider + URL Configuration és Google Cloud callback URI ellenőrzés megtörtént.
+  - Account-linking policy döntés rögzítve: egyező, verified email esetén auto-link ugyanarra az account identity-re.
+  - `GOOGLE-OAUTH-PROD-CHECKLIST.md` lezárva.
 - **Mobil new transaction pénznem kijelzés regresszió lezárva:**
   - `assets/js/dashboard-modal.js`: `applyModalCurrencyUi` export `window` alá a standalone oldal számára.
   - `spendnote-new-transaction.html`: cash box váltásnál és preset line-item injektálás után explicit currency UI refresh.
