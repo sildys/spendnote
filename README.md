@@ -17,6 +17,8 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
   - Result: no post-save jump back to old zoom state (e.g. 280%); persisted logo appears consistently in receipt previews.
 - **Google OAuth flow validated in production usage:**
   - Login/signup Google flow is functioning correctly with redirect handling and invite-token handoff path.
+  - Login flow now also explicitly requests account chooser (`prompt=select_account`) for safer account selection consistency.
+  - Added `GOOGLE-OAUTH-PROD-CHECKLIST.md` to close remaining provider/dashboard-side production checks.
   - Current remaining work is checklist-level operational verification only (provider dashboard consistency + account-linking policy confirmation).
 - **Mobile new-transaction currency symbol regression fixed:**
   - `assets/js/dashboard-modal.js`: `applyModalCurrencyUi` exposed on `window` for standalone mobile page reuse.
