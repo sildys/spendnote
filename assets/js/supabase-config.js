@@ -116,6 +116,7 @@ window.SpendNoteBackendErrors = {
 const PREVIEW_RECEIPT_LIMIT = 200;
 const PREVIEW_RECEIPT_LIMIT_ERROR = 'PREVIEW_RECEIPT_LIMIT_REACHED';
 const PREVIEW_RECEIPT_LIMIT_OVERRIDE_KEY = 'spendnote.preview.receiptLimit.enabled.v1';
+const PREVIEW_SUBSCRIPTION_TIER = 'preview';
 
 const isPreviewReceiptLimitEnabled = () => {
     try {
@@ -307,7 +308,7 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
         try {
             await supabaseClient
                 .from('profiles')
-                .insert([{ id: userId, email, full_name: fullName, subscription_tier: 'pro' }]);
+                .insert([{ id: userId, email, full_name: fullName, subscription_tier: PREVIEW_SUBSCRIPTION_TIER }]);
         } catch (_) {
             // ignore
         }
@@ -900,6 +901,7 @@ window.SpendNoteFeatures = {
     _tier: null,
 
     _FLAGS: {
+        preview:  { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: true,  can_upload_logo: true,  can_customize_labels: true,  can_invite_members: true,  can_add_cash_box: true,   max_cash_boxes: Infinity, max_users: Infinity },
         free:     { can_create_transaction: true,  can_export_csv: false, can_export_pdf: false, can_send_email_receipt: false, can_upload_logo: false, can_customize_labels: false, can_invite_members: false, can_add_cash_box: false,  max_cash_boxes: 1,  max_users: 1 },
         standard: { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: false, can_upload_logo: true,  can_customize_labels: false, can_invite_members: false, can_add_cash_box: true,   max_cash_boxes: 2,  max_users: 1 },
         pro:      { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: true,  can_upload_logo: true,  can_customize_labels: true,  can_invite_members: true,  can_add_cash_box: true,   max_cash_boxes: Infinity, max_users: Infinity }
@@ -911,7 +913,8 @@ window.SpendNoteFeatures = {
             const { data: { user } } = await supabaseClient.auth.getUser();
             if (!user) { this._tier = 'free'; return 'free'; }
             const { data } = await supabaseClient.from('profiles').select('subscription_tier').eq('id', user.id).single();
-            this._tier = String(data?.subscription_tier || 'free').toLowerCase();
+            const rawTier = String(data?.subscription_tier || 'free').toLowerCase();
+            this._tier = Object.prototype.hasOwnProperty.call(this._FLAGS, rawTier) ? rawTier : 'free';
         } catch (_) {
             this._tier = 'free';
         }
@@ -931,7 +934,7 @@ window.SpendNoteFeatures = {
     },
 
     async isAtLeast(minTier) {
-        const order = { free: 0, standard: 1, pro: 2 };
+        const order = { free: 0, standard: 1, pro: 2, preview: 3 };
         const tier = await this.getTier();
         return (order[tier] ?? 0) >= (order[minTier] ?? 0);
     }
@@ -1353,7 +1356,7 @@ async function __spendnoteGetOrgSelectionState(userId) {
         };
     });
     const tier = await __spendnoteGetUserSubscriptionTier(uid);
-    const isPro = tier === 'pro';
+    const isPro = tier === 'pro' || tier === PREVIEW_SUBSCRIPTION_TIER;
     const selected = __spendnoteReadSelectedOrgForUser(uid);
     const selectedMembership = normalizedWithNames.find((m) => String(m?.org_id || '') === selected) || null;
 
@@ -2625,7 +2628,17 @@ var db = {
         },
 
         async create(transaction) {
+            let enforcePreviewLimit = false;
             if (isPreviewReceiptLimitEnabled()) {
+                try {
+                    const tier = await window.SpendNoteFeatures?.getTier?.();
+                    enforcePreviewLimit = String(tier || '').toLowerCase() === PREVIEW_SUBSCRIPTION_TIER;
+                } catch (_) {
+                    enforcePreviewLimit = false;
+                }
+            }
+
+            if (enforcePreviewLimit) {
                 try {
                     const usage = await getActiveTransactionCount();
                     if (usage.success && usage.count >= PREVIEW_RECEIPT_LIMIT) {

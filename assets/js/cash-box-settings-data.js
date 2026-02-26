@@ -738,7 +738,7 @@ async function handleSave(e) {
                     id: user.id,
                     email: user.email,
                     full_name: user.email.split('@')[0],
-                    subscription_tier: 'pro'
+                    subscription_tier: 'preview'
                 }])
                 .select()
                 .single();

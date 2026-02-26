@@ -117,6 +117,10 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Preview box mostantól mindig `scale(1)`-en mutatja a logót (nem overflowl ki a dobozból).
   - A zoom % kijelző továbbra is mutatja a valódi értéket.
   - A zoom/drag beállítások csak a receipten érvényesülnek.
+- **Preview entitlement policy (implementálva):**
+  - Új / fallback profile létrehozáskor `profiles.subscription_tier = preview`.
+  - Preview felhasználók minden feature-höz hozzáférnek (`SpendNoteFeatures.preview` = full access).
+  - Egyetlen enforce limit: max **200 aktív tranzakció** létrehozás (create-time check), utána csak read-only.
 - **Commitok:** `f77f6e3`, `366642b`, `df45b99`, `9008084`, `6c03a40`, `4725ca4`, `e2d7229`, `068ff7a`, `c608ef6`, `0b97055`, `7a744dd`
 
 ## Where we are now (last updated: 2026-02-25 — összes magas prioritású audit feladat lezárva)

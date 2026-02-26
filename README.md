@@ -140,7 +140,7 @@ This repository is meant to be deployable as a static site (e.g. Vercel).
 - Dashboard and mobile view are **UI-complete**.
 - Core functional flows are **stable** in continuous manual testing.
 - App is in a **go-live capable** state.
-- Preview usage cap is now **technically enforced** at 200 receipts during preview.
+- Preview usage cap is now **technically enforced** at 200 transactions during preview.
 - Public SEO copy is now **aligned and consistent** on billing/refund wording and key landing/SEO trust lines.
 - SEO go-live + copy follow-up is **fully closed** in this cycle.
 - P0 backend/Edge error visibility first pass is **implemented** for critical invite + receipt-email flows.

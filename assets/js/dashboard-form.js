@@ -275,7 +275,7 @@ function initTransactionForm() {
                 const fallbackName = user.user_metadata?.full_name || user.email || 'User';
                 const { data: createdProfile, error: profileError } = await window.supabaseClient
                     .from('profiles')
-                    .insert([{ id: user.id, email: user.email, full_name: fallbackName, subscription_tier: 'pro' }])
+                    .insert([{ id: user.id, email: user.email, full_name: fallbackName, subscription_tier: 'preview' }])
                     .select()
                     .single();
                 if (!profileError) profile = createdProfile;
@@ -428,7 +428,7 @@ function initTransactionForm() {
                     msg = 'Not enough funds in this Cash Box.';
                 } else
                 if (raw === 'PREVIEW_RECEIPT_LIMIT_REACHED' || lower.includes('preview_receipt_limit_reached')) {
-                    msg = 'Preview limit reached (200 receipts). Upgrade when plans go live to keep creating new receipts.';
+                    msg = 'Preview limit reached (200 transactions). You can view existing data, but cannot create more transactions.';
                 } else
                 if (lower.includes('permission denied') || lower.includes('row level security') || lower.includes('rls')) {
                     msg = 'Permission denied (RLS). Please log out and log in again. If the problem persists, your profile row may be missing.';
