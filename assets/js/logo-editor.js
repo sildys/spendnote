@@ -5,6 +5,10 @@ const LogoEditor = (() => {
     const MIN_SCALE = 0.5;
     const MAX_SCALE = 3.0;
     const STEP = 0.1;
+    const LEGACY_LOGO_KEY = 'spendnote.proLogoDataUrl';
+    const LEGACY_LOGO_KEY_V1 = 'spendnote.receipt.logo.v1';
+    const LEGACY_LOGO_SCALE_KEY = 'spendnote.receipt.logoScale.v1';
+    const LEGACY_LOGO_POSITION_KEY = 'spendnote.receipt.logoPosition.v1';
 
     let preview = null;
     let image = null;
@@ -29,8 +33,29 @@ const LogoEditor = (() => {
 
     const readLogo = () => _logoDataUrl;
 
+    const persistLogoUrlToLocalStorage = (dataUrl) => {
+        try {
+            const value = String(dataUrl || '').trim();
+            if (!value) {
+                localStorage.removeItem(LEGACY_LOGO_KEY);
+                localStorage.removeItem(LEGACY_LOGO_KEY_V1);
+                return;
+            }
+            localStorage.setItem(LEGACY_LOGO_KEY, value);
+            localStorage.setItem(LEGACY_LOGO_KEY_V1, value);
+        } catch (_) {}
+    };
+
+    const persistLogoSettingsToLocalStorage = () => {
+        try {
+            localStorage.setItem(LEGACY_LOGO_SCALE_KEY, String(clampScale(currentScale)));
+            localStorage.setItem(LEGACY_LOGO_POSITION_KEY, JSON.stringify({ x: currentX, y: currentY }));
+        } catch (_) {}
+    };
+
     const writeLogo = (dataUrl) => {
         _logoDataUrl = dataUrl || null;
+        persistLogoUrlToLocalStorage(_logoDataUrl);
         try {
             if (window.db?.profiles?.update) {
                 window.db.profiles.update({ account_logo_url: dataUrl || null }).catch(() => {});
@@ -54,6 +79,7 @@ const LogoEditor = (() => {
     };
 
     const persistLogoSettings = () => {
+        persistLogoSettingsToLocalStorage();
         try {
             if (window.db?.profiles?.update) {
                 window.db.profiles.update({
@@ -92,6 +118,7 @@ const LogoEditor = (() => {
             ctx.drawImage(image, x, y, displayW * canvasScale, displayH * canvasScale);
             const snapshotUrl = canvas.toDataURL('image/jpeg', 0.75);
             _logoDataUrl = snapshotUrl;
+            persistLogoUrlToLocalStorage(snapshotUrl);
             if (window.db?.profiles?.update) {
                 try {
                     await window.db.profiles.update({ account_logo_url: snapshotUrl });
@@ -114,6 +141,8 @@ const LogoEditor = (() => {
             if (ls.x != null) currentX = Number(ls.x) || 0;
             if (ls.y != null) currentY = Number(ls.y) || 0;
         }
+        persistLogoUrlToLocalStorage(_logoDataUrl);
+        persistLogoSettingsToLocalStorage();
         loadLogo();
     };
 
@@ -126,9 +155,8 @@ const LogoEditor = (() => {
 
     const applyTransform = () => {
         if (image) {
-            // Preview always shows logo at natural fit (scale 1, centered).
-            // The zoom/drag settings only affect the receipt render.
-            image.style.transform = '';
+            image.style.transformOrigin = '50% 50%';
+            image.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
         }
     };
 
