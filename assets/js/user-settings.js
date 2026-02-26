@@ -1038,18 +1038,24 @@ const initUserSettingsPage = async () => {
             return;
         }
 
+        let logoBaselineDataUrl = null;
         if (window.LogoEditor?.commitBaseline) {
             const logoCommit = await window.LogoEditor.commitBaseline();
             if (logoCommit && logoCommit.success === false) {
                 showAlert(logoCommit.error || 'Failed to save receipt logo.', { iconType: 'error' });
                 return;
             }
+            logoBaselineDataUrl = Object.prototype.hasOwnProperty.call(logoCommit || {}, 'dataUrl')
+                ? (logoCommit.dataUrl || null)
+                : null;
         }
 
         const payload = {
             company_name: document.getElementById('receiptDisplayName')?.value?.trim() || null,
             phone: document.getElementById('receiptOtherId')?.value?.trim() || null,
-            address: document.getElementById('receiptAddress')?.value?.trim() || null
+            address: document.getElementById('receiptAddress')?.value?.trim() || null,
+            account_logo_url: logoBaselineDataUrl,
+            logo_settings: { scale: 1, x: 0, y: 0 }
         };
         const result = await window.db.profiles.update(payload);
         if (!result?.success) { showAlert(result?.error || 'Failed to save.', { iconType: 'error' }); return; }

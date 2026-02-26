@@ -132,7 +132,16 @@ const LogoEditor = (() => {
     const commitBaseline = async () => {
         try {
             const hasLogo = String(_logoDataUrl || image?.src || '').trim();
-            if (!hasLogo) return { success: true };
+            if (!hasLogo) {
+                currentScale = 1.0;
+                currentX = 0;
+                currentY = 0;
+                hasUserEdited = false;
+                persistLogoUrlToLocalStorage(null);
+                persistLogoSettingsToLocalStorage();
+                updateInfo();
+                return { success: true, dataUrl: null };
+            }
 
             const snapshotUrl = await renderSnapshot();
             if (!snapshotUrl) return { success: false, error: 'Could not build logo snapshot.' };
@@ -154,17 +163,7 @@ const LogoEditor = (() => {
             }
             updateInfo();
 
-            if (window.db?.profiles?.update) {
-                const result = await window.db.profiles.update({
-                    account_logo_url: snapshotUrl,
-                    logo_settings: { scale: 1, x: 0, y: 0 }
-                });
-                if (result?.success === false) {
-                    return { success: false, error: result.error || 'Failed to save logo.' };
-                }
-            }
-
-            return { success: true };
+            return { success: true, dataUrl: snapshotUrl };
         } catch (err) {
             return { success: false, error: String(err?.message || err || 'Failed to save logo.') };
         }
