@@ -582,10 +582,12 @@ function buildReceiptUrl(format) {
             const cbId = currentCashBoxData?.id || 'temp';
             const tempKey = 'spendnote.cbLogo.' + cbId;
             try { localStorage.setItem(tempKey, cbLogo); } catch (_) {}
+            params.delete('logo');
             params.append('logoKey', tempKey);
         } else {
             try { localStorage.removeItem('spendnote.proLogoDataUrl'); } catch (_) {}
-            params.append('logo', '0');
+            params.delete('logoKey');
+            params.set('logo', '0');
         }
     } catch (e) {}
 
