@@ -1089,12 +1089,56 @@ function togglePreviewDetails() {
         function getButtonHTML(planKey) {
             if (planKey === 'free') {
                 return '<a href="spendnote-signup.html" class="btn btn-start-free">Start Free</a>';
-            } else if (planKey === 'standard') {
-                return '<a href="spendnote-signup.html" class="btn btn-get-started">Get Started</a>';
-            } else if (planKey === 'pro') {
-                return '<a href="spendnote-signup.html" class="btn btn-get-started">Get Started</a>';
             }
-            return '<a href="spendnote-signup.html" class="btn btn-get-started">Get Started</a>';
+            return `<button type="button" class="btn btn-get-started" onclick="startPlanCheckout('${planKey}')">Get Started</button>`;
+        }
+
+        function showBillingAlert(message, iconType = 'info') {
+            if (typeof window.showAlert === 'function') {
+                window.showAlert(message, { iconType });
+                return;
+            }
+            window.alert(message);
+        }
+
+        async function startPlanCheckout(planKey) {
+            const plan = String(planKey || '').trim().toLowerCase();
+            if (plan !== 'standard' && plan !== 'pro') {
+                window.location.href = 'spendnote-signup.html';
+                return;
+            }
+
+            const user = await window.auth?.getCurrentUser?.();
+            if (!user) {
+                window.location.href = `spendnote-login.html?returnTo=${encodeURIComponent('/spendnote-pricing.html')}`;
+                return;
+            }
+
+            if (!window.SpendNoteStripe?.createCheckoutSession) {
+                showBillingAlert('Billing endpoint is not available yet.', 'info');
+                return;
+            }
+
+            const cycle = isYearly ? 'yearly' : 'monthly';
+            const result = await window.SpendNoteStripe.createCheckoutSession({
+                plan,
+                billingCycle: cycle,
+                successUrl: `${window.location.origin}/spendnote-user-settings.html?billing=success`,
+                cancelUrl: `${window.location.origin}/spendnote-pricing.html?billing=cancel`
+            });
+
+            if (!result?.success) {
+                showBillingAlert(result?.error || 'Could not start checkout.', 'error');
+                return;
+            }
+
+            const url = String(result?.data?.url || '').trim();
+            if (!url) {
+                showBillingAlert('Checkout URL was not returned by backend.', 'error');
+                return;
+            }
+
+            window.location.href = url;
         }
 
         function getBadgeHTML(planKey, data) {
@@ -1187,7 +1231,7 @@ function togglePreviewDetails() {
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260225-2000"></script>
+    <script src="assets/js/supabase-config.js?v=20260226-1810"></script>
     <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
     <script>
         (async () => {

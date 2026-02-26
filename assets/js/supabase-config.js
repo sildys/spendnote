@@ -13,8 +13,8 @@ try {
     // ignore
 }
 
-if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260216-2135');
-window.__spendnoteSupabaseConfigBuild = '20260216-2135';
+if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260226-1810');
+window.__spendnoteSupabaseConfigBuild = '20260226-1810';
 
 const __spendnoteGetResponseRequestId = (resp) => {
     try {
@@ -219,6 +219,61 @@ window.SpendNoteBackendErrors = {
     parseFetchError: __spendnoteParseFetchError,
     buildUserMessage: __spendnoteBuildUserMessage,
     logBackendError: __spendnoteLogBackendError
+};
+
+window.SpendNoteStripe = {
+    async _invoke(functionName, payload, defaultMessage) {
+        try {
+            const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
+            if (sessErr || !session?.access_token) {
+                return { success: false, error: 'Not authenticated.' };
+            }
+
+            const resp = await fetch(`${SUPABASE_URL}/functions/v1/${functionName}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.access_token}`,
+                    'apikey': SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify(payload || {})
+            });
+
+            if (!resp.ok) {
+                const parsed = await __spendnoteParseFetchError(resp, { defaultMessage: defaultMessage || 'Billing request failed.' });
+                return { success: false, error: __spendnoteBuildUserMessage(defaultMessage || 'Billing request failed', parsed) };
+            }
+
+            let data = null;
+            try {
+                data = await resp.json();
+            } catch (_) {
+                data = null;
+            }
+
+            return { success: true, data };
+        } catch (e) {
+            return { success: false, error: String(e?.message || defaultMessage || 'Billing request failed.') };
+        }
+    },
+
+    async createCheckoutSession(options = {}) {
+        const payload = {
+            plan: String(options?.plan || '').trim().toLowerCase(),
+            billingCycle: String(options?.billingCycle || '').trim().toLowerCase(),
+            successUrl: String(options?.successUrl || `${window.location.origin}/spendnote-user-settings.html?billing=success`),
+            cancelUrl: String(options?.cancelUrl || `${window.location.origin}/spendnote-pricing.html?billing=cancel`),
+            quantity: Number(options?.quantity) || 1
+        };
+        return await this._invoke('create-checkout-session', payload, 'Could not start checkout');
+    },
+
+    async createPortalSession(options = {}) {
+        const payload = {
+            returnUrl: String(options?.returnUrl || `${window.location.origin}/spendnote-user-settings.html?billing=portal`)
+        };
+        return await this._invoke('create-portal-session', payload, 'Could not open billing portal');
+    }
 };
 
 const PREVIEW_RECEIPT_LIMIT = 200;

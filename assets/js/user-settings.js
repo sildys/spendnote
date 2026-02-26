@@ -749,6 +749,72 @@ const openAccessModal = async (memberId, options = {}) => {
 // ===== BILLING =====
 let isYearly = true;
 
+const withButtonLoading = async (btn, fn) => {
+    if (!btn) return await fn();
+    const oldHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Please wait...';
+    try {
+        return await fn();
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = oldHtml;
+    }
+};
+
+const startCheckoutForPlan = async (plan) => {
+    const normalizedPlan = String(plan || '').trim().toLowerCase();
+    if (!window.SpendNoteStripe?.createCheckoutSession) {
+        showAlert('Stripe checkout endpoint is not available yet.', { iconType: 'info' });
+        return;
+    }
+
+    const cycle = isYearly ? 'yearly' : 'monthly';
+    const result = await window.SpendNoteStripe.createCheckoutSession({
+        plan: normalizedPlan,
+        billingCycle: cycle,
+        successUrl: `${window.location.origin}/spendnote-user-settings.html?billing=success`,
+        cancelUrl: `${window.location.origin}/spendnote-user-settings.html?billing=cancel`
+    });
+
+    if (!result?.success) {
+        showAlert(result?.error || 'Could not start checkout.', { iconType: 'error' });
+        return;
+    }
+
+    const url = String(result?.data?.url || '').trim();
+    if (!url) {
+        showAlert('Checkout URL was not returned by backend.', { iconType: 'error' });
+        return;
+    }
+
+    window.location.href = url;
+};
+
+const openBillingPortal = async () => {
+    if (!window.SpendNoteStripe?.createPortalSession) {
+        showAlert('Stripe portal endpoint is not available yet.', { iconType: 'info' });
+        return;
+    }
+
+    const result = await window.SpendNoteStripe.createPortalSession({
+        returnUrl: `${window.location.origin}/spendnote-user-settings.html?billing=portal`
+    });
+
+    if (!result?.success) {
+        showAlert(result?.error || 'Could not open billing portal.', { iconType: 'error' });
+        return;
+    }
+
+    const url = String(result?.data?.url || '').trim();
+    if (!url) {
+        showAlert('Portal URL was not returned by backend.', { iconType: 'error' });
+        return;
+    }
+
+    window.location.href = url;
+};
+
 const updatePricing = () => {
     const monthlyLabel = document.getElementById('monthlyLabel');
     const yearlyLabel = document.getElementById('yearlyLabel');
@@ -1269,15 +1335,24 @@ const initUserSettingsPage = async () => {
     document.getElementById('monthlyLabel')?.addEventListener('click', () => { isYearly = false; updatePricing(); });
     document.getElementById('yearlyLabel')?.addEventListener('click', () => { isYearly = true; updatePricing(); });
 
-    // Billing buttons (placeholders for Stripe integration)
-    document.getElementById('cancelSubscriptionBtn')?.addEventListener('click', () => {
-        showAlert('Cancel Subscription\n\nIn production: Opens Stripe portal to cancel.', { iconType: 'info' });
+    // Billing buttons (S3 skeleton)
+    document.getElementById('cancelSubscriptionBtn')?.addEventListener('click', async (e) => {
+        const btn = e.currentTarget;
+        await withButtonLoading(btn, async () => {
+            await openBillingPortal();
+        });
     });
-    document.getElementById('upgradeProBtn')?.addEventListener('click', () => {
-        showAlert('Upgrade to Pro\n\nIn production: Opens Stripe checkout for Pro plan.', { iconType: 'info' });
+    document.getElementById('upgradeProBtn')?.addEventListener('click', async (e) => {
+        const btn = e.currentTarget;
+        await withButtonLoading(btn, async () => {
+            await startCheckoutForPlan('pro');
+        });
     });
-    document.getElementById('manageBillingBtn')?.addEventListener('click', () => {
-        showAlert('Manage Billing\n\nIn production: Opens Stripe customer portal to manage payment methods and view invoices.', { iconType: 'info' });
+    document.getElementById('manageBillingBtn')?.addEventListener('click', async (e) => {
+        const btn = e.currentTarget;
+        await withButtonLoading(btn, async () => {
+            await openBillingPortal();
+        });
     });
 };
 

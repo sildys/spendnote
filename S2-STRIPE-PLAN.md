@@ -118,12 +118,12 @@ Webhook handler: new Supabase Edge Function `stripe-webhook/index.ts`
 
 - [ ] Create Products + Prices in Stripe Dashboard
 - [ ] Set env vars in Supabase project secrets
-- [ ] Implement `create-checkout-session` Edge Function
-- [ ] Implement `create-portal-session` Edge Function
-- [ ] Implement `stripe-webhook` Edge Function
-- [ ] Wire up "Upgrade" buttons on pricing page → checkout
-- [ ] Wire up "Manage Subscription" in User Settings
+- [x] Implement `create-checkout-session` Edge Function (skeleton)
+- [x] Implement `create-portal-session` Edge Function (skeleton)
+- [x] Implement `stripe-webhook` Edge Function (skeleton)
+- [x] Wire up "Upgrade" buttons on pricing page → checkout (skeleton call)
+- [x] Wire up "Manage Subscription" in User Settings (skeleton call)
 - [ ] Connect lock overlay "View Plans" → checkout flow (optional: direct to checkout)
 - [ ] Enforce `can_create_transaction` server-side in `spendnote_create_transaction` RPC
-- [ ] Test full checkout → webhook → tier update → feature unlock flow
+- [ ] Test full checkout → webhook → tier update → feature unlock flow (with real Stripe keys)
 - [ ] Live mode rollout + smoke test

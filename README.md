@@ -1037,8 +1037,10 @@ This repo deploys Supabase Edge Functions via GitHub Actions on push to `main` (
 - Workflow: `.github/workflows/deploy-supabase-functions.yml`
 - Current functions:
   - `send-invite-email` — team invite email delivery (deployed with `--no-verify-jwt`; auth handled internally)
-  - `send-receipt-email` — receipt email delivery
-- Both use Resend API with the verified `spendnote.app` domain.
+  - `create-checkout-session` — Stripe Checkout session creation (authenticated)
+  - `create-portal-session` — Stripe Customer Portal session creation (authenticated)
+  - `stripe-webhook` — Stripe webhook event handler (`--no-verify-jwt`, signature-verified)
+- Invite emails use Resend (`spendnote.app` verified domain); Stripe functions use Stripe API secrets.
 
 Required GitHub Secrets:
 
@@ -1052,6 +1054,13 @@ Required Supabase Edge Functions Secrets (set in Supabase Dashboard):
 - `SPENDNOTE_EMAIL_FROM` (e.g. `invite@spendnote.app` — domain must be verified in Resend)
 - `SPENDNOTE_APP_URL` (public app base URL used in invite links)
 - `SPENDNOTE_INVITE_SUBJECT`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `STRIPE_STANDARD_MONTHLY_PRICE_ID`
+- `STRIPE_STANDARD_YEARLY_PRICE_ID`
+- `STRIPE_PRO_MONTHLY_PRICE_ID`
+- `STRIPE_PRO_YEARLY_PRICE_ID`
+- `APP_BASE_URL` (e.g. `https://spendnote.app`, used for Stripe return URLs)
 
 ### Invite token security
 
