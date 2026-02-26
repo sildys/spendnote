@@ -57,6 +57,18 @@
             font-size: 15px; color: var(--text-muted); line-height: 1.6;
             margin-bottom: 32px;
         }
+        .variant-callout {
+            margin: -10px 0 22px;
+            border-radius: 10px;
+            border: 1px solid #bae6fd;
+            background: #f0f9ff;
+            color: #0f172a;
+            font-size: 13px;
+            line-height: 1.5;
+            padding: 10px 14px;
+            display: none;
+        }
+        .variant-callout strong { color: #0c4a6e; }
 
         /* ── Section cards ── */
         .section-card {
@@ -267,9 +279,10 @@
 <!-- Body -->
 <div class="page-wrap">
 
-    <div class="welcome-tag"><i class="fas fa-hand-wave"></i> Welcome aboard</div>
-    <h1 class="welcome-title">Set up your receipt identity <span>in 60 seconds</span></h1>
-    <p class="welcome-sub">Two quick things — then your dashboard is ready to go.</p>
+    <div class="welcome-tag" id="welcomeTag"><i class="fas fa-hand-wave"></i> Welcome aboard</div>
+    <h1 class="welcome-title" id="welcomeTitle">Set up your receipt identity <span>in 60 seconds</span></h1>
+    <p class="welcome-sub" id="welcomeSub">Two quick things — then your dashboard is ready to go.</p>
+    <div class="variant-callout" id="variantCallout"></div>
 
     <!-- BLOCK 1: Profile -->
     <div class="section-card">
@@ -316,12 +329,12 @@
     </div>
 
     <!-- BLOCK 2: Receipt Identity + preview -->
-    <div class="section-card primary">
+    <div class="section-card primary" id="receiptIdentityCard">
         <div class="section-card-header">
             <div class="section-num">2</div>
             <div>
                 <div class="section-title">Receipt Identity</div>
-                <div class="section-desc">How your organization appears on every receipt.</div>
+                <div class="section-desc" id="receiptIdentityDesc">How your organization appears on every receipt.</div>
             </div>
         </div>
         <div class="section-body receipt-section-body">
@@ -364,10 +377,10 @@
 
     <!-- Submit -->
     <div class="submit-row">
-        <button class="btn-skip" onclick="window.location.href='dashboard.html'">Skip for now</button>
+        <button class="btn-skip" id="skipBtn" onclick="window.location.href='dashboard.html'">Skip for now</button>
         <button class="btn-primary" id="saveBtn" onclick="saveSetup()">
             <span class="saving-spinner" id="spin"><i class="fas fa-circle-notch fa-spin"></i></span>
-            Start Creating Receipts <i class="fas fa-arrow-right"></i>
+            <span id="saveBtnLabel">Start Creating Receipts</span> <i class="fas fa-arrow-right"></i>
         </button>
     </div>
 
@@ -377,6 +390,80 @@
 <script src="assets/js/supabase-config.js?v=20260226-1935"></script>
 <script>
 let selectedColor = '#10b981';
+let currentWelcomeVariant = 'free';
+let isInvitedFlow = false;
+
+function normalizeTier(value) {
+    const tier = String(value || '').trim().toLowerCase();
+    if (tier === 'standard' || tier === 'pro' || tier === 'free') return tier;
+    return 'free';
+}
+
+function applyWelcomeVariant(variant) {
+    currentWelcomeVariant = variant;
+    isInvitedFlow = variant === 'invited';
+
+    const variants = {
+        free: {
+            tag: '<i class="fas fa-flag"></i> Free plan setup',
+            title: 'Set up your receipt identity <span>and start on Free</span>',
+            sub: 'Quick profile + receipt identity setup, then you can start creating receipts right away.',
+            callout: '<strong>Free:</strong> single-user, single cash box baseline. You can upgrade later without losing data.',
+            receiptDesc: 'How your sender identity appears on every receipt.',
+            save: 'Start Creating Receipts',
+            skip: 'Skip for now'
+        },
+        standard: {
+            tag: '<i class="fas fa-gem"></i> Standard plan setup',
+            title: 'Set up your workspace <span>for Standard</span>',
+            sub: 'Define your receipt identity now so exports and day-to-day operations are consistent from the first transaction.',
+            callout: '<strong>Standard:</strong> optimized for solo usage with richer reporting and export flow.',
+            receiptDesc: 'How your organization appears on every receipt and export context.',
+            save: 'Finish Standard Setup',
+            skip: 'Skip setup'
+        },
+        pro: {
+            tag: '<i class="fas fa-crown"></i> Pro workspace setup',
+            title: 'Prepare your Pro workspace <span>for team usage</span>',
+            sub: 'Set your sender identity before teammates start issuing receipts, so everyone works with the same baseline.',
+            callout: '<strong>Pro:</strong> team-ready mode. Branding and receipt identity should be finalized before invite rollout.',
+            receiptDesc: 'Organization-level identity used across team-issued receipts.',
+            save: 'Save Pro Workspace Setup',
+            skip: 'Skip to dashboard'
+        },
+        invited: {
+            tag: '<i class="fas fa-user-check"></i> Team member onboarding',
+            title: 'Finish your profile <span>and join your team</span>',
+            sub: 'Your organization receipt identity is managed by your owner/admin. You only need your personal profile here.',
+            callout: '<strong>Invited user:</strong> receipt identity and billing are controlled by your team owner/admin role.',
+            receiptDesc: 'Managed by your organization owner/admin.',
+            save: 'Continue to Dashboard',
+            skip: 'Go to dashboard'
+        }
+    };
+
+    const ui = variants[variant] || variants.free;
+    const tagEl = document.getElementById('welcomeTag');
+    const titleEl = document.getElementById('welcomeTitle');
+    const subEl = document.getElementById('welcomeSub');
+    const calloutEl = document.getElementById('variantCallout');
+    const descEl = document.getElementById('receiptIdentityDesc');
+    const saveLabelEl = document.getElementById('saveBtnLabel');
+    const skipBtnEl = document.getElementById('skipBtn');
+    const receiptCardEl = document.getElementById('receiptIdentityCard');
+
+    if (tagEl) tagEl.innerHTML = ui.tag;
+    if (titleEl) titleEl.innerHTML = ui.title;
+    if (subEl) subEl.textContent = ui.sub;
+    if (calloutEl) {
+        calloutEl.innerHTML = ui.callout;
+        calloutEl.style.display = 'block';
+    }
+    if (descEl) descEl.textContent = ui.receiptDesc;
+    if (saveLabelEl) saveLabelEl.textContent = ui.save;
+    if (skipBtnEl) skipBtnEl.textContent = ui.skip;
+    if (receiptCardEl) receiptCardEl.style.display = isInvitedFlow ? 'none' : '';
+}
 
 function getInitials(name) {
     const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
@@ -447,18 +534,22 @@ async function saveSetup() {
     const address = document.getElementById('receiptAddress').value.trim();
 
     if (!name) { showError('Please enter your name.'); return; }
-    if (!rName) { showError('Please enter a receipt display name.'); return; }
+    if (!isInvitedFlow && !rName) { showError('Please enter a receipt display name.'); return; }
 
     setBusy(true);
     try {
         await waitForDb();
-        const result = await window.db.profiles.update({
+        const payload = {
             full_name: name,
-            avatar_color: selectedColor,
-            company_name: rName,
-            phone: otherId || null,
-            address: address || null
-        });
+            avatar_color: selectedColor
+        };
+        if (!isInvitedFlow) {
+            payload.company_name = rName;
+            payload.phone = otherId || null;
+            payload.address = address || null;
+        }
+
+        const result = await window.db.profiles.update(payload);
         if (!result?.success) throw new Error(result?.error || 'Failed to save.');
         try { await window.supabaseClient.auth.updateUser({ data: { full_name: name, avatar_color: selectedColor } }); } catch (_) {}
         window.location.href = 'dashboard.html';
@@ -474,27 +565,47 @@ async function saveSetup() {
         await waitForDb();
         const user = await window.auth?.getCurrentUser?.();
         if (!user) { window.location.href = 'spendnote-login.html'; return; }
+
+        let profile = null;
+        let role = '';
+
+        try {
+            profile = await window.db.profiles.getCurrent();
+        } catch (_) {
+            profile = null;
+        }
+        try {
+            role = String(await window.db?.orgMemberships?.getMyRole?.() || '').trim().toLowerCase();
+        } catch (_) {
+            role = '';
+        }
+
+        const tier = normalizeTier(profile?.subscription_tier);
+        const variant = role === 'user'
+            ? 'invited'
+            : (tier === 'pro' ? 'pro' : (tier === 'standard' ? 'standard' : 'free'));
+        applyWelcomeVariant(variant);
+
         const name = String(user.user_metadata?.full_name || '').trim();
         if (name) {
             document.getElementById('profileName').value = name;
             document.getElementById('receiptName').value = name;
             updatePreview();
         }
-        try {
-            const profile = await window.db.profiles.getCurrent();
-            if (profile?.full_name) document.getElementById('profileName').value = profile.full_name;
-            if (profile?.company_name) document.getElementById('receiptName').value = profile.company_name;
-            if (profile?.address) document.getElementById('receiptAddress').value = profile.address;
-            if (profile?.avatar_color) {
-                selectedColor = profile.avatar_color;
-                const match = document.querySelector(`#colorRow .color-dot[data-color="${profile.avatar_color}"]`);
-                if (match) {
-                    document.querySelectorAll('#colorRow .color-dot').forEach(d => d.classList.remove('active'));
-                    match.classList.add('active');
-                }
+
+        if (profile?.full_name) document.getElementById('profileName').value = profile.full_name;
+        if (profile?.company_name) document.getElementById('receiptName').value = profile.company_name;
+        if (profile?.phone) document.getElementById('receiptOtherId').value = profile.phone;
+        if (profile?.address) document.getElementById('receiptAddress').value = profile.address;
+        if (profile?.avatar_color) {
+            selectedColor = profile.avatar_color;
+            const match = document.querySelector(`#colorRow .color-dot[data-color="${profile.avatar_color}"]`);
+            if (match) {
+                document.querySelectorAll('#colorRow .color-dot').forEach(d => d.classList.remove('active'));
+                match.classList.add('active');
             }
-            updatePreview();
-        } catch (_) {}
+        }
+        updatePreview();
     } catch (_) {}
 })();
 </script>
