@@ -105,7 +105,8 @@ If a chat thread freezes / context is lost: in the new thread say:
   - Eredmény: megszűnt a mentés utáni visszaugrás (pl. 280% állapot), preview stabil.
 - **Google OAuth flow runtime validálás:**
   - Felhasználói visszajelzés alapján a Google belépés/regisztráció működik production környezetben.
-  - Nyitott pont: operatív checklist zárás (provider dashboard redirect whitelist + account-linking policy végső átnézés).
+  - Login oldalon is egységesítve a Google account chooser kérés (`prompt=select_account`), így login/signup viselkedés konzisztens.
+  - Új dokumentum: `GOOGLE-OAUTH-PROD-CHECKLIST.md` (Supabase + Google Console + runtime + account-linking policy zárási lista).
 - **Mobil new transaction pénznem kijelzés regresszió lezárva:**
   - `assets/js/dashboard-modal.js`: `applyModalCurrencyUi` export `window` alá a standalone oldal számára.
   - `spendnote-new-transaction.html`: cash box váltásnál és preset line-item injektálás után explicit currency UI refresh.
