@@ -19,13 +19,22 @@ Extends Supabase Auth with additional user data and subscription info.
 - `avatar_url` (TEXT) - Profile avatar image
 - `avatar_settings` (JSONB) - Profile avatar editor state `{scale,x,y}`
 - `avatar_color` (TEXT) - Monogram accent color
-- `subscription_tier` (TEXT) - 'free', 'standard', or 'pro'
+- `subscription_tier` (TEXT) - 'preview', 'free', 'standard', or 'pro'
+- `billing_status` (TEXT) - 'preview', 'free', 'trialing', 'active', 'past_due', 'canceled', 'unpaid', 'incomplete', 'incomplete_expired', 'paused'
+- `billing_cycle` (TEXT) - 'monthly' or 'yearly'
+- `trial_started_at` (TIMESTAMPTZ)
+- `trial_ends_at` (TIMESTAMPTZ)
+- `subscription_current_period_end` (TIMESTAMPTZ)
+- `stripe_price_id` (TEXT)
+- `stripe_cancel_at_period_end` (BOOLEAN)
+- `preview_transaction_cap` (INTEGER, default 200)
 - `stripe_customer_id` (TEXT)
 - `stripe_subscription_id` (TEXT)
 - `created_at` (TIMESTAMP)
 - `updated_at` (TIMESTAMP)
 
 **Subscription Limits:**
+- **Preview**: Full feature access, capped at 200 transactions
 - **Free**: 1 cash box, 1 user
 - **Standard**: 2 cash boxes, 1 user
 - **Pro**: Unlimited cash boxes, 3 users included (additional users paid)

@@ -30,6 +30,114 @@ const __spendnoteGetResponseRequestId = (resp) => {
     }
 };
 
+// S2: Billing state helper (Stripe-prep; no checkout/webhook calls here)
+window.SpendNoteBilling = {
+    _state: null,
+
+    _normalizeCycle(value) {
+        const raw = String(value || '').trim().toLowerCase();
+        return (raw === 'monthly' || raw === 'yearly') ? raw : '';
+    },
+
+    _normalizeStatus(value, tier) {
+        const raw = String(value || '').trim().toLowerCase();
+        if (raw) return raw;
+        if (tier === PREVIEW_SUBSCRIPTION_TIER) return PREVIEW_BILLING_STATUS;
+        if (tier === 'free') return 'free';
+        if (tier === 'standard' || tier === 'pro') return 'active';
+        return 'free';
+    },
+
+    _normalizeTier(value) {
+        const raw = String(value || '').trim().toLowerCase();
+        return Object.prototype.hasOwnProperty.call(window.SpendNoteFeatures?._FLAGS || {}, raw)
+            ? raw
+            : 'free';
+    },
+
+    _normalizeTimestamp(value) {
+        const raw = String(value || '').trim();
+        if (!raw) return '';
+        const dt = new Date(raw);
+        return Number.isNaN(dt.getTime()) ? '' : dt.toISOString();
+    },
+
+    _normalizeCap(value) {
+        const n = Number(value);
+        if (!Number.isFinite(n) || n <= 0) return PREVIEW_RECEIPT_LIMIT;
+        return Math.floor(n);
+    },
+
+    _normalizeRow(row) {
+        const tier = this._normalizeTier(row?.subscription_tier);
+        return {
+            tier,
+            billing_status: this._normalizeStatus(row?.billing_status, tier),
+            billing_cycle: this._normalizeCycle(row?.billing_cycle),
+            trial_started_at: this._normalizeTimestamp(row?.trial_started_at),
+            trial_ends_at: this._normalizeTimestamp(row?.trial_ends_at),
+            subscription_current_period_end: this._normalizeTimestamp(row?.subscription_current_period_end),
+            stripe_customer_id: String(row?.stripe_customer_id || '').trim(),
+            stripe_subscription_id: String(row?.stripe_subscription_id || '').trim(),
+            preview_transaction_cap: this._normalizeCap(row?.preview_transaction_cap)
+        };
+    },
+
+    invalidate() {
+        this._state = null;
+    },
+
+    async getState(options = {}) {
+        const force = Boolean(options && options.force);
+        if (!force && this._state) return this._state;
+
+        try {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (!user) {
+                this._state = this._normalizeRow({
+                    subscription_tier: 'free',
+                    billing_status: 'free',
+                    preview_transaction_cap: PREVIEW_RECEIPT_LIMIT
+                });
+                return this._state;
+            }
+
+            let data = null;
+            try {
+                const full = await supabaseClient
+                    .from('profiles')
+                    .select('subscription_tier,billing_status,billing_cycle,trial_started_at,trial_ends_at,subscription_current_period_end,stripe_customer_id,stripe_subscription_id,preview_transaction_cap')
+                    .eq('id', user.id)
+                    .single();
+                if (!full.error) {
+                    data = full.data || null;
+                }
+            } catch (_) {
+                data = null;
+            }
+
+            if (!data) {
+                const basic = await supabaseClient
+                    .from('profiles')
+                    .select('subscription_tier,stripe_customer_id,stripe_subscription_id')
+                    .eq('id', user.id)
+                    .single();
+                data = basic?.data || null;
+            }
+
+            this._state = this._normalizeRow(data || {});
+            return this._state;
+        } catch (_) {
+            this._state = this._normalizeRow({
+                subscription_tier: 'free',
+                billing_status: 'free',
+                preview_transaction_cap: PREVIEW_RECEIPT_LIMIT
+            });
+            return this._state;
+        }
+    }
+};
+
 const __spendnoteParseFetchError = async (resp, opts = {}) => {
     const defaultMessage = String(opts?.defaultMessage || 'Request failed').trim();
     let text = '';
@@ -117,6 +225,7 @@ const PREVIEW_RECEIPT_LIMIT = 200;
 const PREVIEW_RECEIPT_LIMIT_ERROR = 'PREVIEW_RECEIPT_LIMIT_REACHED';
 const PREVIEW_RECEIPT_LIMIT_OVERRIDE_KEY = 'spendnote.preview.receiptLimit.enabled.v1';
 const PREVIEW_SUBSCRIPTION_TIER = 'preview';
+const PREVIEW_BILLING_STATUS = 'preview';
 
 const isPreviewReceiptLimitEnabled = () => {
     try {
@@ -308,7 +417,13 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
         try {
             await supabaseClient
                 .from('profiles')
-                .insert([{ id: userId, email, full_name: fullName, subscription_tier: PREVIEW_SUBSCRIPTION_TIER }]);
+                .insert([{
+                    id: userId,
+                    email,
+                    full_name: fullName,
+                    subscription_tier: PREVIEW_SUBSCRIPTION_TIER,
+                    billing_status: PREVIEW_BILLING_STATUS
+                }]);
         } catch (_) {
             // ignore
         }
@@ -2640,8 +2755,15 @@ var db = {
 
             if (enforcePreviewLimit) {
                 try {
+                    let previewCap = PREVIEW_RECEIPT_LIMIT;
+                    try {
+                        const billingState = await window.SpendNoteBilling?.getState?.();
+                        const cap = Number(billingState?.preview_transaction_cap);
+                        if (Number.isFinite(cap) && cap > 0) previewCap = Math.floor(cap);
+                    } catch (_) {}
+
                     const usage = await getActiveTransactionCount();
-                    if (usage.success && usage.count >= PREVIEW_RECEIPT_LIMIT) {
+                    if (usage.success && usage.count >= previewCap) {
                         return {
                             success: false,
                             error: PREVIEW_RECEIPT_LIMIT_ERROR

@@ -5,14 +5,18 @@
 
 ---
 
-## 1. Data Model (already in DB)
+## 1. Data Model (S2 prep implemented)
 
-`profiles` table already has:
-- `subscription_tier` TEXT — 'free' | 'standard' | 'pro' (default: 'free')
-- `stripe_customer_id` TEXT — Stripe Customer ID (set on first checkout)
-- `stripe_subscription_id` TEXT — Stripe Subscription ID (set on active sub)
+`profiles` table now includes:
+- `subscription_tier` TEXT — 'preview' | 'free' | 'standard' | 'pro' (default: 'preview')
+- `billing_status` TEXT — preview/free/trialing/active/... lifecycle state
+- `billing_cycle` TEXT — monthly/yearly
+- `trial_started_at`, `trial_ends_at`, `subscription_current_period_end` timestamps
+- `stripe_price_id`, `stripe_customer_id`, `stripe_subscription_id`
+- `stripe_cancel_at_period_end` BOOLEAN
+- `preview_transaction_cap` INTEGER (default: 200)
 
-No DB migration needed for S3 start.
+Migration: `supabase-migrations/031_profiles_billing_state_and_preview_tier.sql`.
 
 ---
 

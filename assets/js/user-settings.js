@@ -185,6 +185,103 @@ let currentRole = 'owner';
 const memberColors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#6366f1'];
 const getMemberColor = (idx) => memberColors[idx % memberColors.length];
 
+const PLAN_LABELS = {
+    preview: 'Preview',
+    free: 'Free',
+    standard: 'Standard',
+    pro: 'Pro'
+};
+
+const formatBillingDate = (iso) => {
+    const raw = String(iso || '').trim();
+    if (!raw) return '';
+    const dt = new Date(raw);
+    if (Number.isNaN(dt.getTime())) return '';
+    return dt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+};
+
+const buildFallbackBillingState = (profile) => {
+    const tierRaw = String(profile?.subscription_tier || 'free').trim().toLowerCase();
+    const tier = PLAN_LABELS[tierRaw] ? tierRaw : 'free';
+    const status = String(profile?.billing_status || (tier === 'preview' ? 'preview' : (tier === 'free' ? 'free' : 'active'))).trim().toLowerCase();
+    const cap = Number(profile?.preview_transaction_cap);
+    return {
+        tier,
+        billing_status: status || 'free',
+        billing_cycle: String(profile?.billing_cycle || '').trim().toLowerCase(),
+        trial_ends_at: String(profile?.trial_ends_at || '').trim(),
+        subscription_current_period_end: String(profile?.subscription_current_period_end || '').trim(),
+        stripe_customer_id: String(profile?.stripe_customer_id || '').trim(),
+        preview_transaction_cap: Number.isFinite(cap) && cap > 0 ? Math.floor(cap) : 200
+    };
+};
+
+const renderBillingSummary = (billingState) => {
+    const state = billingState && typeof billingState === 'object' ? billingState : buildFallbackBillingState(currentProfile);
+    const planEl = document.getElementById('currentPlanName');
+    const nextEl = document.getElementById('nextBillingInfo');
+    const manageBtn = document.getElementById('manageBillingBtn');
+
+    if (planEl) {
+        planEl.textContent = PLAN_LABELS[String(state.tier || '').toLowerCase()] || 'Free';
+    }
+
+    const status = String(state.billing_status || '').toLowerCase();
+    const trialEnds = formatBillingDate(state.trial_ends_at);
+    const periodEnds = formatBillingDate(state.subscription_current_period_end);
+    const cycle = String(state.billing_cycle || '').toLowerCase();
+    let line = '';
+
+    if (status === 'preview' || String(state.tier || '').toLowerCase() === 'preview') {
+        const cap = Number(state.preview_transaction_cap) || 200;
+        line = `Preview full access. Transaction cap: ${cap}.`;
+    } else if (status === 'trialing') {
+        line = trialEnds ? `Trial active until ${trialEnds}.` : 'Trial active.';
+    } else if (status === 'active') {
+        if (periodEnds) {
+            line = `Billing active${cycle ? ` (${cycle})` : ''}. Next renewal: ${periodEnds}.`;
+        } else {
+            line = `Billing active${cycle ? ` (${cycle})` : ''}.`;
+        }
+    } else if (status === 'past_due') {
+        line = 'Payment past due. Update payment method in Stripe portal.';
+    } else if (status === 'canceled') {
+        line = periodEnds ? `Subscription canceled. Access remains until ${periodEnds}.` : 'Subscription canceled.';
+    } else if (status === 'free') {
+        line = 'Free plan active.';
+    } else {
+        line = status ? `Billing status: ${status}.` : '';
+    }
+
+    if (nextEl) nextEl.textContent = line;
+
+    if (manageBtn) {
+        const hasStripeCustomer = Boolean(String(state.stripe_customer_id || '').trim());
+        manageBtn.innerHTML = hasStripeCustomer
+            ? '<i class="fas fa-credit-card"></i> Manage Billing & Invoices'
+            : '<i class="fas fa-hourglass-half"></i> Billing setup at launch';
+    }
+};
+
+const refreshBillingSummary = async (profile) => {
+    let state = buildFallbackBillingState(profile);
+    try {
+        if (window.SpendNoteBilling?.getState) {
+            const live = await window.SpendNoteBilling.getState({ force: true });
+            if (live && typeof live === 'object') {
+                state = {
+                    ...state,
+                    ...live,
+                    tier: String(live.tier || state.tier || 'free').toLowerCase()
+                };
+            }
+        }
+    } catch (_) {
+        // ignore and render fallback state
+    }
+    renderBillingSummary(state);
+};
+
 // ===== PROFILE =====
 const applyAvatarTransform = () => {
     const img = document.getElementById('avatarImg');
@@ -310,6 +407,7 @@ const loadProfile = async () => {
     }
 
     fillProfile(mergedProfile);
+    await refreshBillingSummary(mergedProfile);
     // Sync DB logo to localStorage so it works on all devices
     if (window.LogoEditor?.loadFromProfile) {
         window.LogoEditor.loadFromProfile(mergedProfile);
@@ -655,27 +753,36 @@ const updatePricing = () => {
     const monthlyLabel = document.getElementById('monthlyLabel');
     const yearlyLabel = document.getElementById('yearlyLabel');
     const toggle = document.getElementById('billingToggle');
+    if (!monthlyLabel || !yearlyLabel || !toggle) return;
+
+    const standardPrice = document.getElementById('standardPrice');
+    const standardPeriod = document.getElementById('standardPeriod');
+    const standardSavings = document.getElementById('standardSavings');
+    const proPrice = document.getElementById('proPrice');
+    const proPeriod = document.getElementById('proPeriod');
+    const proSavings = document.getElementById('proSavings');
+    if (!standardPrice || !standardPeriod || !standardSavings || !proPrice || !proPeriod || !proSavings) return;
 
     if (isYearly) {
         toggle.classList.add('yearly');
         yearlyLabel.classList.add('active');
         monthlyLabel.classList.remove('active');
-        document.getElementById('standardPrice').textContent = '$190';
-        document.getElementById('standardPeriod').textContent = 'per year';
-        document.getElementById('standardSavings').textContent = 'Save $38 vs monthly';
-        document.getElementById('proPrice').textContent = '$290';
-        document.getElementById('proPeriod').textContent = 'per year';
-        document.getElementById('proSavings').textContent = 'Save $58 vs monthly';
+        standardPrice.textContent = '$190';
+        standardPeriod.textContent = 'per year';
+        standardSavings.textContent = 'Save $38 vs monthly';
+        proPrice.textContent = '$290';
+        proPeriod.textContent = 'per year';
+        proSavings.textContent = 'Save $58 vs monthly';
     } else {
         toggle.classList.remove('yearly');
         monthlyLabel.classList.add('active');
         yearlyLabel.classList.remove('active');
-        document.getElementById('standardPrice').textContent = '$19';
-        document.getElementById('standardPeriod').textContent = 'per month';
-        document.getElementById('standardSavings').textContent = '';
-        document.getElementById('proPrice').textContent = '$29';
-        document.getElementById('proPeriod').textContent = 'per month';
-        document.getElementById('proSavings').textContent = '';
+        standardPrice.textContent = '$19';
+        standardPeriod.textContent = 'per month';
+        standardSavings.textContent = '';
+        proPrice.textContent = '$29';
+        proPeriod.textContent = 'per month';
+        proSavings.textContent = '';
     }
 };
 

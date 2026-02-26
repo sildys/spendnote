@@ -275,7 +275,7 @@ function initTransactionForm() {
                 const fallbackName = user.user_metadata?.full_name || user.email || 'User';
                 const { data: createdProfile, error: profileError } = await window.supabaseClient
                     .from('profiles')
-                    .insert([{ id: user.id, email: user.email, full_name: fallbackName, subscription_tier: 'preview' }])
+                    .insert([{ id: user.id, email: user.email, full_name: fallbackName, subscription_tier: 'preview', billing_status: 'preview' }])
                     .select()
                     .single();
                 if (!profileError) profile = createdProfile;
