@@ -564,7 +564,7 @@ function buildReceiptUrl(format) {
     };
     
     const params = new URLSearchParams();
-    params.append('v', 'settings-preview-09');
+    params.append('v', 'settings-preview-10');
     params.append('demo', '1');
     
     // Display options
@@ -584,14 +584,8 @@ function buildReceiptUrl(format) {
             try { localStorage.setItem(tempKey, cbLogo); } catch (_) {}
             params.append('logoKey', tempKey);
         } else {
-            // Profile-level fallback only (do not reuse stale global localStorage logos across accounts)
-            const userLogo = String(DUMMY_PROFILE.account_logo_url || '').trim();
-            if (userLogo) {
-                try { localStorage.setItem('spendnote.proLogoDataUrl', userLogo); } catch (_) {}
-                params.append('logoKey', 'spendnote.proLogoDataUrl');
-            } else {
-                params.append('logo', '0');
-            }
+            try { localStorage.removeItem('spendnote.proLogoDataUrl'); } catch (_) {}
+            params.append('logo', '0');
         }
     } catch (e) {}
 
