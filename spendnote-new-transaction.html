@@ -737,7 +737,20 @@
     function formatBalance(balance, currency) {
         const n = parseFloat(balance);
         if (!Number.isFinite(n)) return '';
-        const sym = currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : '$';
+        const code = String(currency || 'USD').trim().toUpperCase();
+        let sym = code;
+        try {
+            const parts = new Intl.NumberFormat(code === 'HUF' ? 'hu-HU' : 'en-US', {
+                style: 'currency',
+                currency: code,
+                currencyDisplay: 'narrowSymbol'
+            }).formatToParts(1);
+            const currencyPart = parts.find(function (p) { return p && p.type === 'currency'; });
+            const resolved = String(currencyPart?.value || '').trim();
+            if (resolved) sym = resolved;
+        } catch (_) {
+            if (code === 'HUF') sym = 'Ft';
+        }
         return sym + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
