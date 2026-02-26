@@ -73,6 +73,13 @@ const LogoEditor = (() => {
         persistLogoSettingsToLocalStorage();
     };
 
+    const enforceBaselineIfPristine = () => {
+        if (hasUserEdited) return;
+        currentScale = 1.0;
+        currentX = 0;
+        currentY = 0;
+    };
+
     const renderSnapshot = async () => {
         if (!image || !image.src || !image.complete || image.naturalWidth === 0) return;
         try {
@@ -111,13 +118,14 @@ const LogoEditor = (() => {
         if (hasUserEdited) { console.warn('[LogoEditor] loadFromProfile: skipped (user edited)'); return; }
         const dbLogo = profile.account_logo_url || '';
         console.log('[LogoEditor] loadFromProfile: logo=' + (dbLogo ? dbLogo.slice(0, 40) + '...' : '(empty)'), 'preview=' + Boolean(preview), 'image=' + Boolean(image));
-        if (dbLogo) _logoDataUrl = dbLogo;
-        const ls = profile.logo_settings;
-        if (ls && typeof ls === 'object') {
-            if (ls.scale != null) currentScale = clampScale(ls.scale);
-            if (ls.x != null) currentX = Number(ls.x) || 0;
-            if (ls.y != null) currentY = Number(ls.y) || 0;
-        }
+        _logoDataUrl = dbLogo || null;
+
+        // Receipt logo saves are normalized to baseline.
+        // Always load editor state as 100% centered to avoid stale pre-baseline transforms.
+        currentScale = 1.0;
+        currentX = 0;
+        currentY = 0;
+
         persistLogoUrlToLocalStorage(_logoDataUrl);
         persistLogoSettingsToLocalStorage();
         loadLogo();
@@ -129,17 +137,21 @@ const LogoEditor = (() => {
         persistLogoSettings();
     };
 
+    const resetToBaselineView = () => {
+        currentScale = 1.0;
+        currentX = 0;
+        currentY = 0;
+        hasUserEdited = false;
+        persistLogoSettingsToLocalStorage();
+        updateInfo();
+    };
+
     const commitBaseline = async () => {
         try {
             const hasLogo = String(_logoDataUrl || image?.src || '').trim();
             if (!hasLogo) {
-                currentScale = 1.0;
-                currentX = 0;
-                currentY = 0;
-                hasUserEdited = false;
+                resetToBaselineView();
                 persistLogoUrlToLocalStorage(null);
-                persistLogoSettingsToLocalStorage();
-                updateInfo();
                 return { success: true, dataUrl: null };
             }
 
@@ -147,13 +159,9 @@ const LogoEditor = (() => {
             if (!snapshotUrl) return { success: false, error: 'Could not build logo snapshot.' };
 
             _logoDataUrl = snapshotUrl;
-            currentScale = 1.0;
-            currentX = 0;
-            currentY = 0;
-            hasUserEdited = false;
+            resetToBaselineView();
 
             persistLogoUrlToLocalStorage(snapshotUrl);
-            persistLogoSettingsToLocalStorage();
 
             if (image) {
                 image.src = snapshotUrl;
@@ -170,6 +178,7 @@ const LogoEditor = (() => {
     };
 
     const applyTransform = () => {
+        enforceBaselineIfPristine();
         if (image) {
             image.style.transformOrigin = '50% 50%';
             image.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
@@ -177,6 +186,7 @@ const LogoEditor = (() => {
     };
 
     const updateInfo = () => {
+        enforceBaselineIfPristine();
         if (info) {
             info.textContent = `${Math.round(currentScale * 100)}%`;
         }
@@ -211,6 +221,7 @@ const LogoEditor = (() => {
             const pos = readPosition();
             currentX = pos.x;
             currentY = pos.y;
+            enforceBaselineIfPristine();
             updateInfo();
 
             // If already loaded and broken, hide
@@ -350,7 +361,7 @@ const LogoEditor = (() => {
         loadLogo();
     };
 
-    return { init, loadLogo, removeLogo, uploadLogo, loadFromProfile, commitBaseline };
+    return { init, loadLogo, removeLogo, uploadLogo, loadFromProfile, commitBaseline, resetToBaselineView };
 })();
 
 // Export for manual initialization

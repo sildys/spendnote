@@ -15,6 +15,20 @@ const applyRoleBadge = (roleValue) => {
     roleEl.classList.add(normalized === 'owner' ? 'owner' : (normalized === 'admin' ? 'admin' : 'member'));
 };
 
+const forceReceiptLogoBaselineUi = () => {
+    try { localStorage.setItem('spendnote.receipt.logoScale.v1', '1'); } catch (_) {}
+    try { localStorage.setItem('spendnote.receipt.logoPosition.v1', JSON.stringify({ x: 0, y: 0 })); } catch (_) {}
+
+    const info = document.getElementById('logoEditorInfo');
+    if (info) info.textContent = '100%';
+
+    const image = document.getElementById('logoEditorImage');
+    if (image) {
+        image.style.transformOrigin = '50% 50%';
+        image.style.transform = 'translate(0px, 0px) scale(1)';
+    }
+};
+
 // Avatar in-memory state (DB is source of truth, no localStorage)
 const AVATAR_SCALE_STEP = 0.1;
 const AVATAR_MIN_SCALE = 0.5;
@@ -415,6 +429,10 @@ const loadProfile = async () => {
     if (window.LogoEditor?.loadFromProfile) {
         window.LogoEditor.loadFromProfile(mergedProfile);
     }
+    if (window.LogoEditor?.resetToBaselineView) {
+        window.LogoEditor.resetToBaselineView();
+    }
+    forceReceiptLogoBaselineUi();
 };
 
 const computeAndApplyRole = async () => {
@@ -1060,6 +1078,13 @@ const initUserSettingsPage = async () => {
         const result = await window.db.profiles.update(payload);
         if (!result?.success) { showAlert(result?.error || 'Failed to save.', { iconType: 'error' }); return; }
         fillProfile(result.data);
+        if (window.LogoEditor?.loadFromProfile) {
+            window.LogoEditor.loadFromProfile(result.data);
+        }
+        if (window.LogoEditor?.resetToBaselineView) {
+            window.LogoEditor.resetToBaselineView();
+        }
+        forceReceiptLogoBaselineUi();
         showAlert('Receipt identity saved.', { iconType: 'success' });
     });
 
