@@ -381,6 +381,25 @@
             box-shadow: 0 8px 24px rgba(var(--active-rgb), 0.15);
         }
 
+        .pricing-card.recommended {
+            border-color: rgba(245, 158, 11, 0.9) !important;
+            box-shadow: 0 12px 30px rgba(245, 158, 11, 0.28);
+        }
+
+        .recommended-badge {
+            position: absolute;
+            top: -12px;
+            right: 14px;
+            background: #f59e0b;
+            color: #111827;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
         .pricing-card:nth-child(1):hover {
             border-color: rgba(96, 165, 250, 0.6);
             transform: translateY(-4px);
@@ -1101,6 +1120,51 @@ function togglePreviewDetails() {
             window.alert(message);
         }
 
+        const planHint = (() => {
+            try {
+                const params = new URLSearchParams(window.location.search || '');
+                const minPlan = String(params.get('minPlan') || '').trim().toLowerCase();
+                const feature = String(params.get('feature') || '').trim();
+                return {
+                    minPlan: (minPlan === 'standard' || minPlan === 'pro') ? minPlan : '',
+                    feature
+                };
+            } catch (_) {
+                return { minPlan: '', feature: '' };
+            }
+        })();
+
+        function applyRecommendedPlanHint() {
+            if (!planHint.minPlan) return;
+            const map = { free: 0, standard: 1, pro: 2 };
+            const cards = Array.from(document.querySelectorAll('#pricingCards .pricing-card'));
+            cards.forEach((card) => {
+                card.classList.remove('recommended');
+                card.querySelector('.recommended-badge')?.remove();
+            });
+
+            const idx = map[planHint.minPlan];
+            const card = Number.isInteger(idx) ? cards[idx] : null;
+            if (!card) return;
+
+            card.classList.add('recommended');
+            const badge = document.createElement('div');
+            badge.className = 'recommended-badge';
+            badge.textContent = planHint.feature
+                ? `Recommended for ${planHint.feature}`
+                : 'Recommended';
+            card.appendChild(badge);
+
+            if (!window.__spendnotePlanHintScrolled) {
+                window.__spendnotePlanHintScrolled = true;
+                setTimeout(() => {
+                    try {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } catch (_) {}
+                }, 120);
+            }
+        }
+
         async function startPlanCheckout(planKey) {
             const plan = String(planKey || '').trim().toLowerCase();
             if (plan !== 'standard' && plan !== 'pro') {
@@ -1195,6 +1259,8 @@ function togglePreviewDetails() {
                     ${data.pro.yearlyLink && currentPlan !== 'pro' ? '<a href="#" class="monthly-link" onclick="switchToYearly(event)">or save with yearly →</a>' : ''}
                 </div>
             `;
+
+            applyRecommendedPlanHint();
         }
 
         function switchToYearly(e) {

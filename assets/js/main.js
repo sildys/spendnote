@@ -856,6 +856,23 @@ window.SpendNoteUpgrade = {
 
     _planUrl: '/spendnote-pricing.html',
 
+    _buildPlanUrl(requiredPlan, feature) {
+        try {
+            const url = new URL(this._planUrl, window.location.origin);
+            const plan = String(requiredPlan || '').trim().toLowerCase();
+            if (plan === 'standard' || plan === 'pro') {
+                url.searchParams.set('minPlan', plan);
+            }
+            const featureLabel = String(feature || '').trim();
+            if (featureLabel) {
+                url.searchParams.set('feature', featureLabel);
+            }
+            return `${url.pathname}${url.search}${url.hash}`;
+        } catch (_) {
+            return this._planUrl;
+        }
+    },
+
     showLockOverlay(opts) {
         const { feature = '', requiredPlan = 'standard', anchorEl = null } = opts || {};
 
@@ -863,6 +880,7 @@ window.SpendNoteUpgrade = {
         if (existing) existing.remove();
 
         const planLabel = this._planLabel[requiredPlan] || 'a paid plan';
+        const planUrl = this._buildPlanUrl(requiredPlan, feature);
         const overlay = document.createElement('div');
         overlay.id = this._overlayId;
         overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,0.55);display:flex;align-items:center;justify-content:center;padding:20px;';
@@ -874,7 +892,7 @@ window.SpendNoteUpgrade = {
             <div style="font-size:18px;font-weight:800;color:#0f172a;margin-bottom:8px;">Upgrade Required</div>
             <div style="font-size:14px;color:#64748b;margin-bottom:24px;line-height:1.5;">${feature ? `<strong>${feature}</strong> is` : 'This feature is'} available on the <strong>${planLabel}</strong> plan and above.</div>
             <div style="display:flex;gap:10px;justify-content:center;">
-              <a href="${this._planUrl}" style="display:inline-flex;align-items:center;gap:8px;background:#0f172a;color:#fff;border-radius:8px;padding:11px 22px;font-size:14px;font-weight:700;text-decoration:none;">
+              <a href="${planUrl}" style="display:inline-flex;align-items:center;gap:8px;background:#0f172a;color:#fff;border-radius:8px;padding:11px 22px;font-size:14px;font-weight:700;text-decoration:none;">
                 View Plans
               </a>
               <button type="button" id="sn-upgrade-overlay-close" style="appearance:none;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;">
