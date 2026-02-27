@@ -2065,60 +2065,6 @@
 
         .tx-createdby{ display:flex; justify-content:center; align-items:center; }
 
-/* --- FIX: Filters wrap into two rows (no overflow) --- */
-.filters-row, .filters-grid, .filters-container {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 10px !important;
-}
-.filters-row > *, .filters-grid > *, .filters-container > * {
-  flex: 1 1 220px !important;
-  min-width: 220px !important;
-}
-@media (min-width: 1100px) {
-  .filters-row > *, .filters-grid > *, .filters-container > * {
-    flex: 1 1 calc(50% - 10px) !important;
-    min-width: 260px !important;
-  }
-}
-/* Ensure filter dropdown panel fits viewport */
-.filters-dropdown, .filters-menu, .filter-dropdown-panel {
-  max-width: min(920px, 95vw) !important;
-  width: auto !important;
-}
-
-
-/* --- FIX: Transactions table fits screen (no horizontal scroll) --- */
-.transactions-table, table.transactions-table, .table-transactions {
-  width: 100% !important;
-  table-layout: fixed !important;
-}
-.transactions-table th, .transactions-table td,
-table.transactions-table th, table.transactions-table td,
-.table-transactions th, .table-transactions td {
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
-}
-/* Narrower "Name/Description" style columns */
-.transactions-table .col-name, .transactions-table .col-vendor, .transactions-table .col-desc,
-.table-transactions .col-name, .table-transactions .col-vendor, .table-transactions .col-desc {
-  width: 22% !important;
-}
-/* Standard widths for other columns */
-.transactions-table .col-date, .table-transactions .col-date { width: 12% !important; }
-.transactions-table .col-amount, .table-transactions .col-amount { width: 12% !important; text-align: right !important; }
-.transactions-table .col-category, .table-transactions .col-category { width: 14% !important; }
-.transactions-table .col-cashbox, .table-transactions .col-cashbox { width: 16% !important; }
-.transactions-table .col-createdby, .table-transactions .col-createdby { width: 14% !important; }
-
-
-/* Remove forced horizontal scroll on table wrappers */
-.table-responsive, .transactions-table-wrap, .table-wrap {
-  overflow-x: visible !important;
-}
-
-
 /* === v23 FIXES === */
 
 /* 1) Kill horizontal scrolling for the transactions table area */
