@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <body style="margin:0;padding:24px;background:#f8fafc;font-family:Arial,Helvetica,sans-serif;color:#111;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="560" style="max-width:560px;width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;">
+            <tr>
+              <td style="padding:18px 20px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;">
+                <div style="font-size:16px;font-weight:800;">SpendNote</div>
+                <div style="font-size:22px;font-weight:900;margin-top:4px;">Welcome to SpendNote</div>
+                <div style="font-size:13px;opacity:.95;margin-top:4px;">Your account is ready</div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:18px 20px;font-size:14px;line-height:1.6;">
+                <p style="margin:0 0 10px;">Hi {{ full_name | default: "there" }}, your SpendNote account has been created successfully.</p>
+                <p style="margin:0 0 14px;">You can now log in, create your first cash box, and start documenting cash handoffs.</p>
+                <p style="margin:18px 0 16px;">
+                  <a href="https://spendnote.app/spendnote-login.html" style="display:inline-block;background:#059669;color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;font-weight:800;">Open SpendNote</a>
+                </p>
+                <p style="margin:0;color:#6b7280;">Need help? Reply to this email and we’ll help you get started.</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:14px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:12px;">
+                Cash handoff documentation only. Not a tax or accounting tool.<br>
+                © SpendNote • spendnote.app
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

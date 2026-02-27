@@ -33,8 +33,8 @@ If a chat thread freezes / context is lost: in the new thread say:
   - [x] Cloudflare baseline: `RL-HighRisk-Paths` rate limit rule aktív (free tier max); Managed Rules → Cloudflare Pro-val később
   - ⚠️ **TODO premier előtt:** Cloudflare Pro előfizetés + Managed Ruleset bekapcsolás + további WAF szabályok bővítése
 - [x] **L1a** Onboarding UI (core, tier-agnosztikus): registration success state + post-login next steps (Cash Box → Transaction → Receipt), invite explanation — **kész** (`spendnote-welcome.html`)
-- [ ] **L2** Email pack (4 only): define copy + triggers + recipients (Welcome/Account created; Email confirmation; You’ve been invited; Invite accepted/user activated → admin)
-- [ ] **L3** Email delivery implementation: Resend + Edge Functions/hooks + templates
+- [x] **L2** Email pack (4 only): HTML template pack kész (`supabase/email-templates/*`) + trigger/recipient mapping dokumentálva (`supabase/email-templates/README.md`)
+- [~] **L3** Email delivery implementation: invite email path wired with shared template renderer (`supabase/functions/send-invite-email` + `_shared/email-templates.ts`); welcome/confirmation/admin-notify runtime hooks még nyitottak
 - [x] **L4** Role-based Settings UI: Owner/Admin vs User (hide non-owned sections) — **kész** (`user-settings` + `team` oldalon role-alapú megjelenítés/tiltás).
 - [x] **L5** Access control UX: user sees only assigned cash boxes; admin can assign/revoke cash box access in UI — **kész** (`spendnote-team.html` cash box grant/revoke, user scope szűrés).
 - [x] **DB-TEAM-1** Team/org/invite DB versioning alignment: `invites` tábla + `spendnote_create_invite` RPC + RLS policies → `supabase-migrations/030_invites_table_and_create_invite_rpc.sql`; `database/schema.sql` + `database/SCHEMA-DOCUMENTATION.md` frissítve a kanonikus modellel.
