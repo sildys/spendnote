@@ -74,7 +74,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ### Közepes prioritás
 
-- [ ] **AUDIT-M1** Onboarding/empty-state flow első belépésre (első cash box → első tranzakció → első receipt).
+- [x] **AUDIT-M1** Onboarding/empty-state flow első belépésre — **kész:** welcome oldal (`spendnote-welcome.html`) + auto-létrehozott default USD cash box (`018_auto_create_default_cash_box.sql`); új felhasználó 1 percen belül el tud indulni.
 - [x] **AUDIT-M2** ~~Tranzakció szerkesztés~~ — **by design: nincs.** Tranzakciók immutábilisak, kizárólag void lehetséges.
 - [x] **AUDIT-M3** ~~Tranzakció törlés~~ — **by design: nincs.** Kizárólag void használható, törlés nem lehetséges.
 - [x] **AUDIT-M4** Tranzakció export (CSV/PDF) a history nézetből — **már implementálva.**
