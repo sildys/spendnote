@@ -52,7 +52,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [x] **MKT-1** Market scan + positioning: direct/adjacent alternatives + SpendNote differentiation + keyword list — **lezárva**, pozicionálás kész
 - [x] **MKT-2** SEO content plan: 3 landing pages kész — `petty-cash-receipt-generator`, `cash-handoff-receipt`, `small-business-cash-receipt` (2026-02-27); sitemap frissítve, noindex → index, IRS/adó framing eltávolítva, cash handoff pozícionálás
 - [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
-- [ ] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass
+- [x] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass — **kész:** pricing og:image javítva, Organization schema sameAs (nem létező Twitter/LinkedIn) eltávolítva, tartalom/copy rendben
 
 ## App audit alapján megoldandó feladatok (2026-02-25)
 
