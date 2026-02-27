@@ -2230,15 +2230,11 @@ table.transactions-table td,
   width: auto !important;
   overflow-x: hidden !important;
 }
-/* Force filters into two columns on desktop, one on mobile */
+/* Force filters into a grid (columns set by v26 below) */
 .filter-grid {
   display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 14px !important;
   align-items: start !important;
-}
-@media (max-width: 820px) {
-  .filter-grid { grid-template-columns: 1fr !important; }
 }
 /* Amount range: keep inputs inside the card, allow shrink */
 .amount-range {
