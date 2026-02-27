@@ -1,13 +1,31 @@
-# SpendNote (demo)
+# SpendNote
 
 SpendNote is a **cash box + transaction + contacts** web app.
 
 - Frontend: **static HTML/CSS/JavaScript** (no framework)
 - Backend: **Supabase** (Auth + Postgres + RLS)
 
-This repository is meant to be deployable as a static site (e.g. Vercel).
+This repository is deployable as a static site (Cloudflare Pages, currently live at `spendnote.app`).
 
-## Current status (2026-02-26 late night — OAuth closed + onboarding variants shipped)
+## Current status (2026-02-27 — email branding + SVG fix + UI polish)
+
+### Email logo integration + SVG fix + UI fixes (2026-02-27)
+
+- **SpendNote receipt icon + wordmark added to all 6 email templates:**
+  - Shared renderer (`supabase/functions/_shared/email-templates.ts`): `LOGO_SVG` constant + white logo header bar with table-layout icon + "SpendNote" wordmark in `appCard`.
+  - All 6 static HTML templates updated: welcome, email-confirmation, invite, invite-accepted-admin, password-reset, password-changed.
+  - `send-user-event-email` and `send-invite-email` Edge Functions redeployed.
+- **Receipt icon SVG path fixed across all pages:**
+  - Broken mixed `M10 6 C10 4.89543 10.8954 4 12 4 L36 4...` path replaced with correct `M12 4 C10.895 4 10 4.895 10 6 L10 38...` shape.
+  - Fixed in 32 HTML files (all app + SEO + marketing pages + email templates).
+- **Forgot-password auth-icon alignment fixed:**
+  - `.auth-icon` CSS `justify-content: flex-start` → `center` — key and envelope icons now correctly centered.
+- **Dashboard Invite banner wired up:**
+  - "Invite" button now navigates to `spendnote-team.html`.
+- **L3 email delivery fully closed:** all 6 templates deployed with branding; manual step remaining: paste confirm/reset HTML into Supabase Auth template editor (see `supabase/email-templates/SUPABASE-SETUP.md`).
+- **Commits:** `ad0f170`, `d24118c`, `bef18fb`, `901f04b`, `45379c0`
+
+## Previous status (2026-02-26 late night — OAuth closed + onboarding variants shipped)
 
 ### User Settings logo + mobile transaction currency fixes (2026-02-26)
 

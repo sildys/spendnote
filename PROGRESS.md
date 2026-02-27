@@ -34,7 +34,7 @@ If a chat thread freezes / context is lost: in the new thread say:
   - ⚠️ **TODO premier előtt:** Cloudflare Pro előfizetés + Managed Ruleset bekapcsolás + további WAF szabályok bővítése
 - [x] **L1a** Onboarding UI (core, tier-agnosztikus): registration success state + post-login next steps (Cash Box → Transaction → Receipt), invite explanation — **kész** (`spendnote-welcome.html`)
 - [x] **L2** Email pack (6 templates): HTML template pack kész (`supabase/email-templates/*`) — welcome, confirmation, invite, invite-accepted, password-reset, password-changed + trigger/recipient mapping dokumentálva (`supabase/email-templates/README.md`)
-- [~] **L3** Email delivery implementation: runtime wired (`send-invite-email` + `send-user-event-email`) for invite, welcome, invite-accepted-admin, password-changed; remaining manual step: Supabase Auth template editorben confirm/reset HTML bemásolása (`supabase/email-templates/SUPABASE-SETUP.md`)
+- [x] **L3** Email delivery implementation: runtime wired (`send-invite-email` + `send-user-event-email`) for invite, welcome, invite-accepted-admin, password-changed; remaining manual step: Supabase Auth template editorben confirm/reset HTML bemásolása (`supabase/email-templates/SUPABASE-SETUP.md`)
 - [x] **L4** Role-based Settings UI: Owner/Admin vs User (hide non-owned sections) — **kész** (`user-settings` + `team` oldalon role-alapú megjelenítés/tiltás).
 - [x] **L5** Access control UX: user sees only assigned cash boxes; admin can assign/revoke cash box access in UI — **kész** (`spendnote-team.html` cash box grant/revoke, user scope szűrés).
 - [x] **DB-TEAM-1** Team/org/invite DB versioning alignment: `invites` tábla + `spendnote_create_invite` RPC + RLS policies → `supabase-migrations/030_invites_table_and_create_invite_rpc.sql`; `database/schema.sql` + `database/SCHEMA-DOCUMENTATION.md` frissítve a kanonikus modellel.
@@ -94,6 +94,23 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [x] **AUDIT-L5** `spendnote-faq-old.html` kivezetés (törlés vagy redirect).
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
+
+## Where we are now (last updated: 2026-02-27 — email logo + SVG fix + UI javítások)
+
+### 2026-02-27 frissítés — Email logo integráció + SVG path fix + UI javítások (KÉSZ)
+
+- **SpendNote receipt icon + wordmark logó bekerült minden email template-be:**
+  - Shared renderer (`supabase/functions/_shared/email-templates.ts`): `LOGO_SVG` konstans + `appCard` fehér header sávba table-layout logo blokk (icon + "SpendNote" felirat).
+  - Mind a 6 statikus HTML template frissítve: welcome, email-confirmation, invite, invite-accepted-admin, password-reset, password-changed.
+  - `send-user-event-email` és `send-invite-email` Edge Function-ök redepleyolva.
+- **Receipt icon SVG path javítva (az összes oldalon):**
+  - Hibás vegyes `M10 6 C10 4.89543 10.8954 4 12 4 L36 4...` path → helyes `M12 4 C10.895 4 10 4.895 10 6 L10 38...` alak.
+  - 32 HTML fájlban javítva (összes app + SEO + marketing oldal + email template-ek).
+- **Forgot-password auth-icon igazítás:**
+  - `.auth-icon` CSS `justify-content: flex-start` → `center` — kulcs és boríték ikon középre igazítva.
+- **Dashboard Invite banner bekötve:**
+  - „Invite" gomb mostantól `spendnote-team.html`-re navigál.
+- **Commitok:** `ad0f170`, `d24118c`, `bef18fb`, `901f04b`, `45379c0`
 
 ## Where we are now (last updated: 2026-02-26 late night — OAuth zárás + 4-way welcome variánsok)
 
