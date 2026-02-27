@@ -543,10 +543,11 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
 
         const email = String(user.email || '').trim();
         const fullName = String(user.user_metadata?.full_name || '').trim() || (email ? email.split('@')[0] : 'User');
+        const provider = String(user.app_metadata?.provider || '').trim().toLowerCase();
         if (!email) return;
 
         try {
-            await supabaseClient
+            const { error: insertError } = await supabaseClient
                 .from('profiles')
                 .insert([{
                     id: userId,
@@ -555,6 +556,14 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
                     subscription_tier: PREVIEW_SUBSCRIPTION_TIER,
                     billing_status: PREVIEW_BILLING_STATUS
                 }]);
+            if (insertError) return;
+            if (provider === 'google') {
+                try {
+                    await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
+                } catch (_) {
+                    // ignore email side-effect errors
+                }
+            }
         } catch (_) {
             // ignore
         }
