@@ -51,7 +51,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [x] **O1** Google OAuth: signup/login UI flow + provider/dashboard whitelist + account-linking policy validálva/lezárva (2026-02-26)
 - [x] **MKT-1** Market scan + positioning: direct/adjacent alternatives + SpendNote differentiation + keyword list — **lezárva**, pozicionálás kész
 - [x] **MKT-2** SEO content plan: 3 landing pages kész — `petty-cash-receipt-generator`, `cash-handoff-receipt`, `small-business-cash-receipt` (2026-02-27); sitemap frissítve, noindex → index, IRS/adó framing eltávolítva, cash handoff pozícionálás
-- [ ] **CLEAN-1** Codebase cleanup pass: remove unused/dead code, dedupe helpers, normalize versioned assets, performance + reliability polish
+- [x] **CLEAN-1** Codebase cleanup pass — **kész:** 3 unused footer template + `unified-styles.css` törölve (~500 sor), `dashboard.css` ~100 sor dead code eltávolítva (duplikált FIX blokkok, category hide, v23-v26 verziócímkék normalizálva), `supabase-config.js` scaffolding kommentek eltávolítva
 - [x] **P3-1** Polish: Landing/FAQ/Terms refinements + edge cases + final UX consistency pass — **kész:** pricing og:image javítva, Organization schema sameAs (nem létező Twitter/LinkedIn) eltávolítva, tartalom/copy rendben
 
 ## App audit alapján megoldandó feladatok (2026-02-25)
