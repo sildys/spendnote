@@ -522,6 +522,22 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
         if (error || !user) return;
         const userId = String(user?.id || '').trim();
         if (!userId) return;
+        const provider = String(user.app_metadata?.provider || '').trim().toLowerCase();
+        const createdAtMs = Date.parse(String(user.created_at || ''));
+        const isFreshAccount = Number.isFinite(createdAtMs) && (Date.now() - createdAtMs) < (30 * 60 * 1000);
+        const welcomeSentKey = `spendnote.welcome.sent.${userId}`;
+        const maybeSendGoogleWelcome = async () => {
+            if (provider !== 'google' || !isFreshAccount) return;
+            try {
+                if (localStorage.getItem(welcomeSentKey) === '1') return;
+            } catch (_) {}
+            try {
+                await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
+                try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
+            } catch (_) {
+                // ignore email side-effect errors
+            }
+        };
         try {
             if (typeof isUuid === 'function' && !isUuid(userId)) {
                 return;
@@ -536,14 +552,16 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
                 .select('id')
                 .eq('id', userId)
                 .single();
-            if (!selErr && existing?.id) return;
+            if (!selErr && existing?.id) {
+                await maybeSendGoogleWelcome();
+                return;
+            }
         } catch (_) {
             // ignore
         }
 
         const email = String(user.email || '').trim();
         const fullName = String(user.user_metadata?.full_name || '').trim() || (email ? email.split('@')[0] : 'User');
-        const provider = String(user.app_metadata?.provider || '').trim().toLowerCase();
         if (!email) return;
 
         try {
@@ -560,6 +578,7 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
             if (provider === 'google') {
                 try {
                     await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
+                    try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
                 } catch (_) {
                     // ignore email side-effect errors
                 }
