@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -201,7 +201,7 @@
         }
 
         .preview-benefits-list li::before {
-            content: 'â€¢';
+            content: '•';
             position: absolute;
             left: 8px;
             color: #10b981;
@@ -800,7 +800,7 @@
                 <ul class="preview-benefits-list">
                     <li><strong>200 transactions included</strong> (vs. standard 20 in Free plan)</li>
                     <li>Access to all currently available features</li>
-                    <li>Help shape the product with your feedback â†’ <a href="mailto:feedback@spendnote.app" style="color: #10b981; text-decoration: underline;">feedback@spendnote.app</a></li>
+                    <li>Help shape the product with your feedback › <a href="mailto:feedback@spendnote.app" style="color: #10b981; text-decoration: underline;">feedback@spendnote.app</a></li>
                 </ul>
             </div>
             <div class="preview-benefits-section">
@@ -874,9 +874,9 @@ function togglePreviewDetails() {
             </div>
 
             <div class="pricing-reassurance">
-                <div class="pricing-reassurance-item"><i class="fas fa-receipt"></i><span>Receipts are <strong>proof of handoff</strong> â€” not invoices.</span></div>
+                <div class="pricing-reassurance-item"><i class="fas fa-receipt"></i><span>Receipts are <strong>proof of handoff</strong> — not invoices.</span></div>
                 <div class="pricing-reassurance-item"><i class="fas fa-user-lock"></i><span>Your data stays private. Export/print when you need.</span></div>
-                <div class="pricing-reassurance-item"><i class="fas fa-bolt"></i><span>Designed for speed: one form â†’ PDF â†’ done.</span></div>
+                <div class="pricing-reassurance-item"><i class="fas fa-bolt"></i><span>Designed for speed: one form › PDF › done.</span></div>
             </div>
 
             <div class="pricing-toggle">
@@ -900,15 +900,15 @@ function togglePreviewDetails() {
                         <span class="tooltip-wrapper">
                             30-Day Money-Back Guarantee
                             <span class="tooltip-icon">i</span>
-                            <span class="tooltip-text">Valid for accounts with â‰¤20 transactions</span>
+                            <span class="tooltip-text">Valid for accounts with ?20 transactions</span>
                         </span>
-                    </strong> â€¢ Cancel anytime â€¢ No questions asked
+                    </strong> • Cancel anytime • No questions asked
                 </p>
             </div>
         </div>
     
         <div class="trust-badges">
-            <span>Hosted on EU servers â€¢ Encrypted in transit &amp; at rest â€¢ GDPR-ready</span>
+            <span>Hosted on EU servers • Encrypted in transit &amp; at rest • GDPR-ready</span>
         </div>
     </section>
 
@@ -1023,7 +1023,7 @@ function togglePreviewDetails() {
                 standard: { 
                     price: '$190', 
                     breakdown: 'Just $15.83/month',
-                    savings: 'ðŸ’° Save $38 vs monthly',
+                    savings: '?? Save $38 vs monthly',
                     period: 'per year',
                     bestFor: 'Solo users & small teams',
                     features: [
@@ -1040,7 +1040,7 @@ function togglePreviewDetails() {
                 pro: { 
                     price: '$290', 
                     breakdown: 'Just $24.17/month',
-                    savings: 'ðŸ’° Save $58 vs monthly',
+                    savings: '?? Save $58 vs monthly',
                     period: 'per year',
                     bestFor: 'Growing teams',
                     features: [
@@ -1241,7 +1241,7 @@ function togglePreviewDetails() {
                         ${data.standard.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
                     </ul>
                     ${getButtonHTML('standard')}
-                    ${data.standard.yearlyLink && currentPlan !== 'standard' ? '<a href="#" class="monthly-link" onclick="switchToYearly(event)">or save with yearly â†’</a>' : ''}
+                    ${data.standard.yearlyLink && currentPlan !== 'standard' ? '<a href="#" class="monthly-link" onclick="switchToYearly(event)">or save with yearly ›</a>' : ''}
                 </div>
                 
                 <div class="pricing-card">
@@ -1256,7 +1256,7 @@ function togglePreviewDetails() {
                         ${data.pro.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
                     </ul>
                     ${getButtonHTML('pro')}
-                    ${data.pro.yearlyLink && currentPlan !== 'pro' ? '<a href="#" class="monthly-link" onclick="switchToYearly(event)">or save with yearly â†’</a>' : ''}
+                    ${data.pro.yearlyLink && currentPlan !== 'pro' ? '<a href="#" class="monthly-link" onclick="switchToYearly(event)">or save with yearly ›</a>' : ''}
                 </div>
             `;
 
@@ -1297,7 +1297,7 @@ function togglePreviewDetails() {
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260226-1810"></script>
+    <script src="assets/js/supabase-config.js?v=20260227-1630"></script>
     <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
     <script>
         (async () => {

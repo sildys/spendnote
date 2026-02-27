@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -378,9 +378,9 @@
         <div class="page-header">
             <div class="page-header-row">
                 <div class="page-title-group">
-                    <span class="badge badge-success" id="contactIdBadge">â€”</span>
+                    <span class="badge badge-success" id="contactIdBadge">—</span>
                     <h1 class="page-title" id="pageTitle">Contact Details</h1>
-                    <p class="page-subtitle" id="contactMeta">Loadingâ€¦</p>
+                    <p class="page-subtitle" id="contactMeta">Loading…</p>
                 </div>
                 <div class="page-header-actions" id="headerActions"></div>
             </div>
@@ -438,15 +438,15 @@
                 <div class="stats-row" id="statsRow">
                     <div class="stat-box">
                         <div class="stat-box-label">Transactions</div>
-                        <div class="stat-box-value" id="statTransactions">â€”</div>
+                        <div class="stat-box-value" id="statTransactions">—</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-box-label">Last Activity</div>
-                        <div class="stat-box-value" id="statLastActivity">â€”</div>
+                        <div class="stat-box-value" id="statLastActivity">—</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-box-label">Cash Boxes</div>
-                        <div class="stat-box-value" id="statCashBoxes" style="display: flex; gap: 4px; align-items: center;">â€”</div>
+                        <div class="stat-box-value" id="statCashBoxes" style="display: flex; gap: 4px; align-items: center;">—</div>
                     </div>
                 </div>
 
@@ -456,7 +456,7 @@
                         <h2 class="card-title">Latest Transactions</h2>
                     </div>
                     <div class="card-body" id="transactionsList">
-                        <div class="empty-state"><div class="empty-state-text">Loadingâ€¦</div></div>
+                        <div class="empty-state"><div class="empty-state-text">Loading…</div></div>
                     </div>
                 </div>
             </div>
@@ -527,13 +527,13 @@
             try {
                 if (window.SpendNoteIds && typeof window.SpendNoteIds.formatContactDisplayId === 'function') {
                     const id = window.SpendNoteIds.formatContactDisplayId(sequenceNumber);
-                    return id ? id : 'â€”';
+                    return id ? id : '—';
                 }
             } catch (_) {
 
             }
             const n = Number(sequenceNumber);
-            if (!Number.isFinite(n) || n <= 0) return 'â€”';
+            if (!Number.isFinite(n) || n <= 0) return '—';
             return `CONT-${String(n).padStart(3, '0')}`;
         }
 
@@ -585,7 +585,7 @@
 
         function formatDateShort(value) {
             const dt = value ? new Date(value) : null;
-            if (!dt || Number.isNaN(dt.getTime())) return 'â€”';
+            if (!dt || Number.isNaN(dt.getTime())) return '—';
             return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
 
@@ -612,7 +612,7 @@
             }
             const receiptNumber = safeText(tx?.receipt_number, '');
             if (receiptNumber) return receiptNumber;
-            return 'â€”';
+            return '—';
         }
 
         function mergeTxCashBoxSnapshot(tx, cashBox) {
@@ -707,7 +707,7 @@
 
             if (mode === 'new') {
                 if (badge) {
-                    badge.textContent = 'â€”';
+                    badge.textContent = '—';
                     badge.style.opacity = '0.5';
                 }
                 const statsRow = document.getElementById('statsRow');
@@ -840,7 +840,7 @@
 
             const lastDt = txs.length ? new Date(txs[0]?.transaction_date || txs[0]?.created_at || '') : null;
             if (statsLast) {
-                statsLast.textContent = (lastDt && Number.isFinite(lastDt.getTime())) ? formatDateShort(lastDt) : 'â€”';
+                statsLast.textContent = (lastDt && Number.isFinite(lastDt.getTime())) ? formatDateShort(lastDt) : '—';
             }
 
             // Render cash box dots
@@ -867,7 +867,7 @@
                     dotsHtml += `<span style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-left: 2px; cursor: help;" title="${extraNames}">+${extraCount}</span>`;
                 }
                 
-                statsCashBoxes.innerHTML = dotsHtml || 'â€”';
+                statsCashBoxes.innerHTML = dotsHtml || '—';
             }
 
             if (!txs.length) {
@@ -883,7 +883,7 @@
                 try {
                     return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency || 'USD' }).format(Number(amount) || 0);
                 } catch (_) {
-                    return String(amount ?? 'â€”');
+                    return String(amount ?? '—');
                 }
             };
 
@@ -911,11 +911,11 @@
                                     <i class="fas ${isIn ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
                                 </div>
                                 <div class="transaction-info">
-                                    <div class="transaction-id">${safeText(displayId, 'â€”')}${typePill}</div>
-                                    <div class="transaction-date">${safeText(dateText, 'â€”')} â€¢ <i class="fas fa-building" style="color: ${cbColor};"></i> <span style="color: ${cbColor}; font-weight: 700;">${safeText(cbName, 'â€”')}</span></div>
+                                    <div class="transaction-id">${safeText(displayId, '—')}${typePill}</div>
+                                    <div class="transaction-date">${safeText(dateText, '—')} • <i class="fas fa-building" style="color: ${cbColor};"></i> <span style="color: ${cbColor}; font-weight: 700;">${safeText(cbName, '—')}</span></div>
                                 </div>
                             </div>
-                            <div class="transaction-amount ${iconCls}">${safeText(amountText, 'â€”')}</div>
+                            <div class="transaction-amount ${iconCls}">${safeText(amountText, '—')}</div>
                         </a>
                     `;
                 })
@@ -1038,7 +1038,7 @@
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260225-2000"></script>
+    <script src="assets/js/supabase-config.js?v=20260227-1630"></script>
     <script src="assets/js/auth-guard.js"></script>
     <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
     <script>loadNav();</script>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Event cash handling made simple. Issue receipts at the door, track cash by booth or table, and close out every event with a complete paper trail.">
+    <link rel="canonical" href="https://spendnote.app/event-cash-handling">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://spendnote.app/event-cash-handling">
+    <meta property="og:title" content="Event Cash Handling — Receipts & Tracking for Events | SpendNote">
+    <meta property="og:description" content="Issue receipts at the door, track cash by booth or table, and close out every event with a complete paper trail.">
+    <meta property="og:image" content="https://spendnote.app/assets/images/spendnote-transaction-history-1280.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://spendnote.app/event-cash-handling">
+    <meta property="twitter:title" content="Event Cash Handling — Receipts & Tracking for Events | SpendNote">
+    <meta property="twitter:description" content="Issue receipts at the door, track cash by booth or table, and close out every event with a complete paper trail.">
+    <meta property="twitter:image" content="https://spendnote.app/assets/images/spendnote-transaction-history-1280.jpg">
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
+    <title>Event Cash Handling — Receipts & Tracking for Events | SpendNote</title>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    [{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Event Cash Handling — Receipts & Tracking for Events",
+      "description": "Issue receipts at the door, track cash by booth or table, and close out every event with a complete paper trail.",
+      "image": "https://spendnote.app/assets/images/spendnote-transaction-history-1280.jpg",
+      "datePublished": "2026-02-27",
+      "dateModified": "2026-02-27",
+      "author": { "@type": "Organization", "name": "SpendNote", "url": "https://spendnote.app" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "SpendNote",
+        "logo": { "@type": "ImageObject", "url": "https://spendnote.app/favicon.svg" }
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do you track cash at an event?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Track cash at events by issuing a receipt for every transaction — ticket sales, booth payments, food and drink, donations. Use separate cash boxes per booth or table so you can reconcile each one independently at close. SpendNote supports multiple cash boxes and issues print, PDF, or email receipts from any device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you need receipts for cash at events?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "For any event that needs to account for its cash — fundraisers, markets, conferences, club events — yes. Receipts protect your volunteers and staff, give attendees proof of payment, and give your organization a complete record of income."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the best way to handle cash at a fundraiser?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Start with a documented opening float per cash box. Issue a receipt for every donation or sale. Assign two people to each cash box (one collects, one records). At close, count the cash and reconcile against your receipt total. SpendNote automates the receipt and history side of this process."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can SpendNote be used for multi-booth events?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. SpendNote supports multiple cash boxes — one per booth, table, or entry point. Each cash box has its own transaction history, so you can reconcile each one separately at the end of the event."
+          }
+        }
+      ]
+    }]
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=23">
+    <style>
+        body { background: var(--bg); min-height: 100vh; }
+
+        .seo-hero {
+            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #14b8a6 100%);
+            padding: 3rem 0; text-align: center; color: white;
+        }
+        .seo-hero-content { max-width: 650px; margin: 0 auto; padding: 0 var(--page-gutter); }
+        .seo-hero h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.75rem; color: white; }
+        .seo-hero p { font-size: 1rem; opacity: 0.95; margin-bottom: 1.5rem; color: white; }
+        .hero-btn {
+            display: inline-block; background: white; color: var(--primary);
+            font-weight: 700; padding: 0.875rem 2rem; font-size: 1rem;
+            border-radius: 999px; text-decoration: none;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); transition: all 0.2s;
+        }
+        .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .hero-pricing-note { margin-top: 0.75rem; font-size: 0.875rem; color: rgba(255,255,255,0.85); }
+
+        .seo-content { max-width: 700px; margin: 0 auto; padding: 2.5rem var(--page-gutter); }
+        .seo-content h2 { font-size: 1.625rem; font-weight: 800; margin-top: 2.5rem; margin-bottom: 1rem; color: var(--text); }
+        .seo-content h2:first-of-type { margin-top: 0; }
+        .seo-content p { font-size: 1.0625rem; line-height: 1.7; margin-bottom: 1.25rem; color: var(--text-muted); }
+        .seo-content ul, .seo-content ol { margin: 1.5rem 0; padding-left: 1.5rem; }
+        .seo-content li { font-size: 1.0625rem; line-height: 1.7; margin-bottom: 0.75rem; color: var(--text-muted); }
+        .seo-content strong { color: var(--text); font-weight: 600; }
+        .seo-content a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .seo-content a:hover { text-decoration: underline; }
+
+        .event-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+        @media (max-width: 600px) { .event-type-grid { grid-template-columns: 1fr; } }
+
+        .event-type-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 1.25rem;
+            display: flex; gap: 1rem; align-items: flex-start;
+        }
+        .event-type-icon {
+            font-size: 1.5rem; color: var(--primary);
+            min-width: 2rem; text-align: center; padding-top: 2px;
+        }
+        .event-type-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--text); }
+        .event-type-card p { font-size: 0.9375rem; line-height: 1.5; color: var(--text-muted); margin: 0; }
+
+        .checklist { list-style: none; padding: 0; margin: 1.5rem 0; }
+        .checklist li {
+            display: flex; gap: 0.875rem; align-items: flex-start;
+            padding: 0.75rem 0; border-bottom: 1px solid var(--border);
+            font-size: 1rem; line-height: 1.6; color: var(--text-muted);
+        }
+        .checklist li:last-child { border-bottom: none; }
+        .checklist li::before {
+            content: '✓'; color: #059669; font-weight: 800;
+            font-size: 1rem; flex-shrink: 0; margin-top: 2px;
+        }
+
+        .receipt-showcase { margin: 2rem 0 2.25rem; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); }
+        .receipt-showcase img { display: block; width: 100%; max-width: 520px; margin: 0 auto; border-radius: 12px; border: 1px solid rgba(15,23,42,0.12); box-shadow: 0 8px 24px rgba(15,23,42,0.1); }
+        .receipt-showcase figcaption { margin-top: 0.75rem; text-align: center; font-size: 0.9rem; color: var(--text-muted); }
+
+        .cta-box {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            border-radius: var(--radius-xl); padding: 2rem; text-align: center; margin: 2.5rem 0; color: white;
+        }
+        .cta-box h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.75rem; color: white; }
+        .cta-box p { font-size: 1rem; margin-bottom: 1.25rem; opacity: 0.95; color: white; }
+        .cta-box .btn {
+            background: white; color: var(--primary); font-weight: 700;
+            padding: 0.875rem 2rem; font-size: 1rem; border-radius: var(--radius-lg);
+            border: none; cursor: pointer; transition: all 0.2s; display: inline-block; text-decoration: none;
+        }
+        .cta-box .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+
+        @media (max-width: 768px) {
+            .seo-hero { padding: 2.5rem 0; }
+            .seo-content { padding: 2rem var(--page-gutter); }
+            .cta-box { padding: 1.75rem 1.25rem; }
+        }
+        @media (max-width: 480px) {
+            .seo-hero { padding: 2rem 0; }
+            .seo-content { padding: 1.5rem 1rem; }
+            .cta-box { padding: 1.25rem 1rem; }
+            .cta-box .btn, .hero-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#nav-logo-gradient-ech)"/>
+                    <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                    <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                    <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                    <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                    <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="nav-logo-gradient-ech" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#059669"/>
+                            <stop offset="100%" stop-color="#10b981"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>SpendNote</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="spendnote-pricing.html">Pricing</a></li>
+                <li><a href="spendnote-faq.html">FAQ</a></li>
+                <li><a href="spendnote-login.html" class="btn btn-secondary">Log in</a></li>
+                <li><a href="spendnote-signup.html" class="btn btn-primary">Sign up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="seo-hero">
+        <div class="seo-hero-content">
+            <h1>Event Cash Handling</h1>
+            <p>Issue receipts at the door, track cash across every booth and table, and close out every event with a clean paper trail. Built for teams who handle cash at events.</p>
+            <a href="spendnote-signup.html" class="hero-btn">Start Tracking Event Cash</a>
+            <p class="hero-pricing-note">Free to start. Paid plans from $19/month. No credit card required.</p>
+        </div>
+    </section>
+
+    <div class="seo-content">
+
+        <h2>Who Needs Event Cash Handling?</h2>
+        <p>Any event that takes cash needs a system. The difference between a smooth close and a missing-money argument is documentation — a receipt for every transaction, every time.</p>
+
+        <div class="event-type-grid">
+            <div class="event-type-card">
+                <div class="event-type-icon"><i class="fas fa-heart"></i></div>
+                <div>
+                    <h3>Fundraisers &amp; Charity Events</h3>
+                    <p>Donations and ticket sales tracked per booth. Receipts for donors. Clean accounting for your organization.</p>
+                </div>
+            </div>
+            <div class="event-type-card">
+                <div class="event-type-icon"><i class="fas fa-store"></i></div>
+                <div>
+                    <h3>Markets &amp; Fairs</h3>
+                    <p>Multiple vendors, multiple cash boxes. Each booth reconciles independently. No end-of-day guesswork.</p>
+                </div>
+            </div>
+            <div class="event-type-card">
+                <div class="event-type-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div>
+                    <h3>School &amp; Club Events</h3>
+                    <p>Bake sales, door entries, raffle tickets. Volunteers issue receipts. Treasurer reconciles at the end.</p>
+                </div>
+            </div>
+            <div class="event-type-card">
+                <div class="event-type-icon"><i class="fas fa-building"></i></div>
+                <div>
+                    <h3>Corporate &amp; Conference Events</h3>
+                    <p>Cash bars, merchandise, registration fees. Professional receipts for attendees, clean records for finance.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>Event Cash Handling Checklist</h2>
+        <p>Use this checklist for every event that handles cash:</p>
+
+        <ul class="checklist">
+            <li>Assign a named person to each cash box or booth — they're responsible for that float</li>
+            <li>Document the opening float before the event starts — signed by both the organizer and the handler</li>
+            <li>Issue a receipt for every cash transaction during the event</li>
+            <li>Keep cash boxes locked when not in active use</li>
+            <li>Never allow cash to move between boxes without a handoff receipt</li>
+            <li>Count cash at mid-event if the event runs more than 4 hours</li>
+            <li>At close: count physical cash, compare to transaction total, document any variance</li>
+            <li>Sign a closing handoff receipt when cash is transferred to the event organizer or bank bag</li>
+        </ul>
+
+        <figure class="receipt-showcase">
+            <img src="assets/images/seo/petty-cash-receipt-generator/print-two-copy-receipt.png"
+                 alt="SpendNote printable cash receipt — two-copy format for event cash handling"
+                 loading="lazy" width="520" height="360">
+            <figcaption>SpendNote's two-copy print receipt. Issue one to the payer, keep one for your event records.</figcaption>
+        </figure>
+
+        <div class="cta-box">
+            <h3>Receipts for Every Event Transaction</h3>
+            <p>Set up a cash box per booth in minutes. Your team issues receipts from any device. You close out with a complete log.</p>
+            <a href="spendnote-signup.html" class="btn">Try SpendNote Free</a>
+        </div>
+
+        <h2>How SpendNote Works for Events</h2>
+        <p>SpendNote is designed around the concept of a cash box — a named, tracked container for a specific pool of cash. For events, you create one cash box per booth, table, or entry point.</p>
+        <ul>
+            <li><strong>Multiple cash boxes</strong> — One per location, booth, or register. Separate history for each.</li>
+            <li><strong>Team access</strong> — Each volunteer or staff member gets access to their assigned cash box only</li>
+            <li><strong>Instant receipts</strong> — Print two-copy, download PDF, or send to the payer's email at the time of transaction</li>
+            <li><strong>Handoff receipts</strong> — When cash moves between people, both parties sign a receipt for the transfer</li>
+            <li><strong>Full transaction history</strong> — Filter by cash box, date, amount, or person for post-event reconciliation</li>
+            <li><strong>CSV export</strong> — Export your event's full transaction log for bookkeeping or reporting</li>
+        </ul>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <p><strong>What's the biggest cash handling mistake at events?</strong><br>
+        Not documenting transactions in real time. Teams that rely on memory or a hand-written tally at the end almost always have discrepancies. The fix is simple: issue a receipt for every transaction as it happens.</p>
+
+        <p><strong>How many people should handle a cash box?</strong><br>
+        Ideally two per box: one who accepts cash and one who issues the receipt and logs the transaction. This separation of duties is the single most effective control against errors and losses.</p>
+
+        <p><strong>Do attendees need receipts at events?</strong><br>
+        For ticket purchases, donations, and any purchase over a small threshold — yes. It protects the attendee and gives your organization proof of the transaction. SpendNote can email the receipt directly to the attendee at the time of payment.</p>
+
+        <p><strong>Can I use SpendNote for a one-day event?</strong><br>
+        Yes. There's no minimum commitment. You can set up a free account, create a cash box for your event, and use it for a single day — or a single hour.</p>
+
+        <p style="margin-top: 2rem;">Also see: <a href="cash-handoff-receipt.html">Cash handoff receipt</a>, <a href="cash-receipt-template.html">Cash receipt template</a>, <a href="small-business-cash-receipt.html">Small business cash receipt</a>.</p>
+        <p style="text-align: center;">See <a href="spendnote-pricing.html">pricing</a> or visit our <a href="spendnote-faq.html">FAQ</a> for more info.</p>
+    </div>
+
+    <footer class="app-footer">
+        <div class="app-footer-container">
+            <div class="app-footer-top">
+                <div class="app-footer-brand">
+                    <a href="index.html" class="app-footer-brand-logo">
+                        <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#footer-logo-gradient-ech)"/>
+                            <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                            <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                            <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                            <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                            <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                            <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                            <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="footer-logo-gradient-ech" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#059669"/>
+                                    <stop offset="100%" stop-color="#10b981"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>SpendNote</span>
+                    </a>
+                    <p class="app-footer-brand-desc">Complete cash visibility for your team.<br>Instant receipts, full history.</p>
+                </div>
+                <div class="app-footer-right">
+                    <div class="app-footer-links-simple">
+                        <a href="index.html#features">Features</a>
+                        <a href="spendnote-pricing.html">Pricing</a>
+                        <a href="spendnote-faq.html">FAQ</a>
+                        <a href="spendnote-terms.html">Terms</a>
+                        <a href="spendnote-privacy.html">Privacy</a>
+                    </div>
+                    <div class="app-footer-brand-disclaimer">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Cash handoff documentation only. Not a tax or accounting tool.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="app-footer-bottom">
+                <div class="app-footer-copyright">2026 SpendNote. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

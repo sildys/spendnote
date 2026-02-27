@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -53,7 +53,7 @@
                     </div>
                     <div class="summary-center">
                         <div class="summary-balance-label">CURRENT BALANCE</div>
-                        <div class="summary-balance" id="summaryBalance">â€”</div>
+                        <div class="summary-balance" id="summaryBalance">—</div>
                     </div>
                 </div>
 
@@ -72,10 +72,10 @@
                                 <input type="text" class="field-input" id="currencySelect" list="currencyList" value="USD" autocapitalize="characters" autocomplete="off" spellcheck="false">
                                 <datalist id="currencyList">
                                     <option value="USD" label="US Dollar ($)"></option>
-                                    <option value="EUR" label="Euro (â‚¬)"></option>
-                                    <option value="GBP" label="British Pound (Â£)"></option>
+                                    <option value="EUR" label="Euro (€)"></option>
+                                    <option value="GBP" label="British Pound (L)"></option>
                                     <option value="HUF" label="Hungarian Forint (Ft)"></option>
-                                    <option value="JPY" label="Japanese Yen (Â¥)"></option>
+                                    <option value="JPY" label="Japanese Yen (Y)"></option>
                                     <option value="CHF" label="Swiss Franc (CHF)"></option>
                                     <option value="CAD" label="Canadian Dollar (CA$)"></option>
                                     <option value="AUD" label="Australian Dollar (A$)"></option>
@@ -323,7 +323,7 @@
                                                 <button type="button" class="btn btn-secondary btn-small" id="cbLogoUploadBtn"><i class="fas fa-upload"></i> Upload</button>
                                                 <button type="button" class="btn btn-secondary btn-small" id="cbLogoRemoveBtn"><i class="fas fa-trash"></i> Remove</button>
                                             </div>
-                                            <div class="logo-compact-hint">1200Ã—600px PNG/JPG</div>
+                                            <div class="logo-compact-hint">1200×600px PNG/JPG</div>
                                         </div>
                                     </div>
                                 </div>
@@ -650,7 +650,7 @@ function buildReceiptUrl(format) {
 
     // Demo data params (from current user settings profile; avoid hardcoded company/address fallbacks)
     const demoCompany = String(DUMMY_PROFILE.company_name || DUMMY_PROFILE.full_name || '').trim();
-    params.append('demoCompany', demoCompany || 'â€”');
+    params.append('demoCompany', demoCompany || '—');
     if (String(DUMMY_PROFILE.address || '').trim()) {
         params.append('demoAddress', String(DUMMY_PROFILE.address || '').trim());
     }
@@ -1114,7 +1114,7 @@ window.addEventListener('beforeunload', () => {
 
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js?v=20260226-1710"></script>
+<script src="assets/js/supabase-config.js?v=20260227-1630"></script>
 <script src="assets/js/auth-guard.js"></script>
 <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
 <script src="assets/js/nav-loader.js?v=20260223-2101"></script>

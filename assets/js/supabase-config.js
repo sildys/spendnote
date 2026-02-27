@@ -13,8 +13,8 @@ try {
     // ignore
 }
 
-if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260226-1810');
-window.__spendnoteSupabaseConfigBuild = '20260226-1810';
+if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260227-1630');
+window.__spendnoteSupabaseConfigBuild = '20260227-1630';
 
 const __spendnoteGetResponseRequestId = (resp) => {
     try {
@@ -622,11 +622,11 @@ const __spendnoteAutoAcceptMyInvites = async () => {
 };
 
 const __spendnoteTryAcceptPendingInviteToken = async () => {
+    let __currentUser = null;
     try {
         const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) {
-            return;
-        }
+        if (!user) return;
+        __currentUser = user;
     } catch (_) {
         return;
     }
@@ -645,9 +645,19 @@ const __spendnoteTryAcceptPendingInviteToken = async () => {
 
     if (!token) {
         // No explicit invite token -> do not call acceptance RPCs on normal app pages.
+        // Guard: skip ensure calls if already done this session for this user.
         try {
+            const uid2 = String(__currentUser?.id || '').trim();
+            const ensureKey = uid2 ? `spendnote.ensureDone.${uid2}` : '';
+            if (ensureKey && sessionStorage.getItem(ensureKey) === '1') {
+                __spendnoteInviteAcceptAttemptedToken = '';
+                return;
+            }
             await __spendnoteEnsureProfileForCurrentUser();
             await __spendnoteEnsureDefaultCashBoxForCurrentUser();
+            if (ensureKey) {
+                try { sessionStorage.setItem(ensureKey, '1'); } catch (_) {}
+            }
         } catch (_) {
             // ignore
         }
@@ -867,9 +877,15 @@ try {
             return;
         }
 
-        if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+        if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+            __spendnoteWriteBootstrapSession(session);
+            return;
+        }
+
+        if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
             __spendnoteWriteBootstrapSession(session);
             try {
+                window.__spendnoteInitSessionHandled = true;
                 __spendnoteTryAcceptPendingInviteToken();
             } catch (_) {}
         }
@@ -877,6 +893,8 @@ try {
 
     (async () => {
         try {
+            await new Promise(r => setTimeout(r, 0));
+            if (window.__spendnoteInitSessionHandled) return;
             const { data: { session } } = await supabaseClient.auth.getSession();
             __spendnoteWriteBootstrapSession(session);
             if (session) {

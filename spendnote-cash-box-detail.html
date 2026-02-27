@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1082,14 +1082,14 @@
                     <i class="fas fa-building"></i>
                 </div>
                 <div class="summary-info">
-                    <div class="summary-id" id="cashBoxDetailCode">â€”</div>
-                    <div class="summary-name" id="cashBoxDetailName">â€”</div>
+                    <div class="summary-id" id="cashBoxDetailCode">—</div>
+                    <div class="summary-name" id="cashBoxDetailName">—</div>
                 </div>
             </div>
 
             <div class="summary-center">
                 <div class="summary-balance-label">Current Balance</div>
-                <div class="summary-balance" id="cashBoxDetailBalance">â€”</div>
+                <div class="summary-balance" id="cashBoxDetailBalance">—</div>
             </div>
 
             <div class="summary-actions">
@@ -1113,28 +1113,28 @@
                     <i class="fas fa-arrow-down"></i>
                     Total IN
                 </div>
-                <div class="stat-value" id="statTotalIn">â€”</div>
+                <div class="stat-value" id="statTotalIn">—</div>
             </div>
             <div class="stat-card out">
                 <div class="stat-label">
                     <i class="fas fa-arrow-up"></i>
                     Total OUT
                 </div>
-                <div class="stat-value" id="statTotalOut">â€”</div>
+                <div class="stat-value" id="statTotalOut">—</div>
             </div>
             <div class="stat-card in">
                 <div class="stat-label">
                     <i class="fas fa-arrow-down"></i>
                     Today IN
                 </div>
-                <div class="stat-value" id="statTodayIn">â€”</div>
+                <div class="stat-value" id="statTodayIn">—</div>
             </div>
             <div class="stat-card out">
                 <div class="stat-label">
                     <i class="fas fa-arrow-up"></i>
                     Today OUT
                 </div>
-                <div class="stat-value" id="statTodayOut">â€”</div>
+                <div class="stat-value" id="statTodayOut">—</div>
             </div>
         </div>
 
@@ -1185,7 +1185,7 @@
                         <label class="filter-label"><i class="fas fa-calendar"></i> Date Range</label>
                         <div class="amount-range">
                             <input type="date" class="filter-input" id="filterDateFrom" lang="en-US">
-                            <span>â€“</span>
+                            <span>–</span>
                             <input type="date" class="filter-input" id="filterDateTo" lang="en-US">
                         </div>
                     </div>
@@ -1193,7 +1193,7 @@
                         <label class="filter-label"><i class="fas fa-dollar-sign"></i> Amount Range</label>
                         <div class="amount-range">
                             <input type="number" class="filter-input" placeholder="Min" id="filterAmountMin" step="0.01">
-                            <span>â€“</span>
+                            <span>–</span>
                             <input type="number" class="filter-input" placeholder="Max" id="filterAmountMax" step="0.01">
                         </div>
                     </div>
@@ -1236,7 +1236,7 @@
 
         <!-- TABLE -->
         <div class="table-container">
-            <!-- Mobile card list â€” shown instead of table on small screens -->
+            <!-- Mobile card list — shown instead of table on small screens -->
             <div id="txCardList" class="tx-card-list" aria-label="Transactions"></div>
             <div class="table-wrapper">
                 <table id="transactionsTable">
@@ -1390,10 +1390,10 @@
                 if (!cashBox) return;
 
                 const nameEl = document.getElementById('cashBoxDetailName');
-                if (nameEl) nameEl.textContent = cashBox.name || 'â€”';
+                if (nameEl) nameEl.textContent = cashBox.name || '—';
 
                 const seq = Number(cashBox.sequence_number);
-                const code = Number.isFinite(seq) && seq > 0 ? `SN-${String(seq).padStart(3, '0')}` : 'â€”';
+                const code = Number.isFinite(seq) && seq > 0 ? `SN-${String(seq).padStart(3, '0')}` : '—';
                 const codeEl = document.getElementById('cashBoxDetailCode');
                 if (codeEl) codeEl.textContent = code;
 
@@ -1455,7 +1455,7 @@
     
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260225-2000"></script>
+    <script src="assets/js/supabase-config.js?v=20260227-1630"></script>
     <script src="assets/js/auth-guard.js"></script>
     <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=20260223-2101"></script>

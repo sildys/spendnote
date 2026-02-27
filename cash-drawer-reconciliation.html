@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Cash drawer reconciliation guide for teams. Track daily cash in and out, reconcile your drawer at shift end, and keep a clean audit trail — no spreadsheet needed.">
+    <link rel="canonical" href="https://spendnote.app/cash-drawer-reconciliation">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://spendnote.app/cash-drawer-reconciliation">
+    <meta property="og:title" content="Cash Drawer Reconciliation for Teams | SpendNote">
+    <meta property="og:description" content="Track daily cash in and out, reconcile your drawer at shift end, and keep a clean audit trail — no spreadsheet needed.">
+    <meta property="og:image" content="https://spendnote.app/assets/images/spendnote-transaction-history-1280.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://spendnote.app/cash-drawer-reconciliation">
+    <meta property="twitter:title" content="Cash Drawer Reconciliation for Teams | SpendNote">
+    <meta property="twitter:description" content="Track daily cash in and out, reconcile your drawer at shift end, and keep a clean audit trail — no spreadsheet needed.">
+    <meta property="twitter:image" content="https://spendnote.app/assets/images/spendnote-transaction-history-1280.jpg">
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
+    <title>Cash Drawer Reconciliation for Teams | SpendNote</title>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    [{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Cash Drawer Reconciliation for Teams",
+      "description": "Track daily cash in and out, reconcile your drawer at shift end, and keep a clean audit trail — no spreadsheet needed.",
+      "image": "https://spendnote.app/assets/images/spendnote-transaction-history-1280.jpg",
+      "datePublished": "2026-02-27",
+      "dateModified": "2026-02-27",
+      "author": { "@type": "Organization", "name": "SpendNote", "url": "https://spendnote.app" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "SpendNote",
+        "logo": { "@type": "ImageObject", "url": "https://spendnote.app/favicon.svg" }
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is cash drawer reconciliation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cash drawer reconciliation is the process of counting the physical cash in your drawer at the end of a shift or day and comparing it to the expected amount based on recorded transactions. Any difference (overage or shortage) is documented."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How often should you reconcile a cash drawer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "At minimum, reconcile at the end of every shift. High-volume cash businesses often reconcile at both the start and end of each shift to establish a clear opening float and closing count."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What causes cash drawer discrepancies?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Common causes include incorrect change given, unrecorded transactions, math errors in manual logs, theft, or misrouted cash (e.g. cash put in wrong register). A documented receipt for every transaction eliminates most of these."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can SpendNote help with cash drawer reconciliation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. SpendNote tracks every cash-in and cash-out transaction with receipts. At the end of a shift, your transaction history gives you the exact expected balance. You can export to CSV or filter by date and cash box for reconciliation."
+          }
+        }
+      ]
+    }]
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=23">
+    <style>
+        body { background: var(--bg); min-height: 100vh; }
+
+        .seo-hero {
+            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #14b8a6 100%);
+            padding: 3rem 0; text-align: center; color: white;
+        }
+        .seo-hero-content { max-width: 650px; margin: 0 auto; padding: 0 var(--page-gutter); }
+        .seo-hero h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.75rem; color: white; }
+        .seo-hero p { font-size: 1rem; opacity: 0.95; margin-bottom: 1.5rem; color: white; }
+        .hero-btn {
+            display: inline-block; background: white; color: var(--primary);
+            font-weight: 700; padding: 0.875rem 2rem; font-size: 1rem;
+            border-radius: 999px; text-decoration: none;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); transition: all 0.2s;
+        }
+        .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .hero-pricing-note { margin-top: 0.75rem; font-size: 0.875rem; color: rgba(255,255,255,0.85); }
+
+        .seo-content { max-width: 700px; margin: 0 auto; padding: 2.5rem var(--page-gutter); }
+        .seo-content h2 { font-size: 1.625rem; font-weight: 800; margin-top: 2.5rem; margin-bottom: 1rem; color: var(--text); }
+        .seo-content h2:first-of-type { margin-top: 0; }
+        .seo-content p { font-size: 1.0625rem; line-height: 1.7; margin-bottom: 1.25rem; color: var(--text-muted); }
+        .seo-content ul, .seo-content ol { margin: 1.5rem 0; padding-left: 1.5rem; }
+        .seo-content li { font-size: 1.0625rem; line-height: 1.7; margin-bottom: 0.75rem; color: var(--text-muted); }
+        .seo-content strong { color: var(--text); font-weight: 600; }
+        .seo-content a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .seo-content a:hover { text-decoration: underline; }
+
+        .step-list { list-style: none; padding: 0; margin: 1.5rem 0; counter-reset: steps; }
+        .step-list li {
+            counter-increment: steps;
+            display: flex; gap: 1rem; align-items: flex-start;
+            padding: 1rem 1.25rem; margin-bottom: 0.75rem;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+        }
+        .step-list li::before {
+            content: counter(steps);
+            min-width: 28px; height: 28px;
+            background: var(--primary); color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 0.875rem; font-weight: 800; flex-shrink: 0;
+        }
+        .step-list li span { font-size: 1rem; line-height: 1.6; color: var(--text-muted); padding-top: 2px; }
+        .step-list li strong { color: var(--text); }
+
+        .use-case-box {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 1.5rem; margin: 1.25rem 0;
+        }
+        .use-case-box h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+        .use-case-box p { font-size: 1rem; line-height: 1.6; color: var(--text-muted); margin: 0; }
+
+        .receipt-showcase { margin: 2rem 0 2.25rem; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); }
+        .receipt-showcase img { display: block; width: 100%; max-width: 520px; margin: 0 auto; border-radius: 12px; border: 1px solid rgba(15,23,42,0.12); box-shadow: 0 8px 24px rgba(15,23,42,0.1); }
+        .receipt-showcase figcaption { margin-top: 0.75rem; text-align: center; font-size: 0.9rem; color: var(--text-muted); }
+
+        .cta-box {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            border-radius: var(--radius-xl); padding: 2rem; text-align: center; margin: 2.5rem 0; color: white;
+        }
+        .cta-box h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.75rem; color: white; }
+        .cta-box p { font-size: 1rem; margin-bottom: 1.25rem; opacity: 0.95; color: white; }
+        .cta-box .btn {
+            background: white; color: var(--primary); font-weight: 700;
+            padding: 0.875rem 2rem; font-size: 1rem; border-radius: var(--radius-lg);
+            border: none; cursor: pointer; transition: all 0.2s; display: inline-block; text-decoration: none;
+        }
+        .cta-box .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+
+        @media (max-width: 768px) {
+            .seo-hero { padding: 2.5rem 0; }
+            .seo-content { padding: 2rem var(--page-gutter); }
+            .cta-box { padding: 1.75rem 1.25rem; }
+        }
+        @media (max-width: 480px) {
+            .seo-hero { padding: 2rem 0; }
+            .seo-content { padding: 1.5rem 1rem; }
+            .cta-box { padding: 1.25rem 1rem; }
+            .cta-box .btn, .hero-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#nav-logo-gradient-cdr)"/>
+                    <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                    <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                    <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                    <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                    <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="nav-logo-gradient-cdr" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#059669"/>
+                            <stop offset="100%" stop-color="#10b981"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>SpendNote</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="spendnote-pricing.html">Pricing</a></li>
+                <li><a href="spendnote-faq.html">FAQ</a></li>
+                <li><a href="spendnote-login.html" class="btn btn-secondary">Log in</a></li>
+                <li><a href="spendnote-signup.html" class="btn btn-primary">Sign up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="seo-hero">
+        <div class="seo-hero-content">
+            <h1>Cash Drawer Reconciliation</h1>
+            <p>Know exactly what's in your drawer — and why. Document every cash transaction so your end-of-shift count always has a paper trail.</p>
+            <a href="spendnote-signup.html" class="hero-btn">Start Tracking Cash</a>
+            <p class="hero-pricing-note">Free to start. Paid plans from $19/month. No credit card required.</p>
+        </div>
+    </section>
+
+    <div class="seo-content">
+
+        <h2>What Is Cash Drawer Reconciliation?</h2>
+        <p>Cash drawer reconciliation is the process of comparing the actual cash in your drawer to the expected amount based on your recorded transactions. You do it at the end of every shift — or any time you hand the drawer to someone else.</p>
+
+        <p>If the numbers match: clean close. If they don't: you have a documented starting point to find out why.</p>
+
+        <h2>The Standard Reconciliation Process</h2>
+        <ol class="step-list">
+            <li><span><strong>Record your opening float.</strong> Before the shift starts, count and document the cash you're starting with. This is your baseline.</span></li>
+            <li><span><strong>Document every transaction during the shift.</strong> Every cash-in and cash-out gets a receipt. No undocumented transactions.</span></li>
+            <li><span><strong>Count the physical cash at shift end.</strong> Count bills and coins separately. Write down the total.</span></li>
+            <li><span><strong>Compare to expected balance.</strong> Opening float + cash in − cash out = expected closing balance. If it matches your count, you're done.</span></li>
+            <li><span><strong>Document any discrepancy.</strong> If the count is off, record the overage or shortage with a note. Patterns over time reveal the source.</span></li>
+            <li><span><strong>Hand off with a receipt.</strong> When the drawer passes to the next person, both parties sign a handoff receipt for the closing count.</span></li>
+        </ol>
+
+        <h2>Why Discrepancies Happen</h2>
+
+        <div class="use-case-box">
+            <h3>Unrecorded Transactions</h3>
+            <p>The most common cause. Someone takes cash out (petty cash, change, refund) without creating a receipt. The transaction happened — it just wasn't documented.</p>
+        </div>
+
+        <div class="use-case-box">
+            <h3>Incorrect Change</h3>
+            <p>Giving a customer $1 too much or too little. Individually small, but adds up over a shift. Documented transaction amounts catch this at reconciliation.</p>
+        </div>
+
+        <div class="use-case-box">
+            <h3>Misrouted Cash</h3>
+            <p>Cash put in the wrong drawer, register, or cash box. With multiple cash boxes or locations, clear labeling and separate transaction logs prevent this.</p>
+        </div>
+
+        <div class="use-case-box">
+            <h3>Timing Errors</h3>
+            <p>A transaction from the previous shift recorded in the current one, or vice versa. Timestamped receipts eliminate ambiguity.</p>
+        </div>
+
+        <figure class="receipt-showcase">
+            <img src="assets/images/spendnote-transaction-history-1280.jpg"
+                 alt="SpendNote transaction history — searchable cash log for drawer reconciliation"
+                 loading="lazy" width="520" height="340">
+            <figcaption>SpendNote transaction history: filter by date, cash box, and amount for end-of-shift reconciliation.</figcaption>
+        </figure>
+
+        <div class="cta-box">
+            <h3>A Receipt for Every Cash Movement</h3>
+            <p>SpendNote documents every transaction with a receipt. Your drawer reconciliation starts with a complete, searchable log — not a memory.</p>
+            <a href="spendnote-signup.html" class="btn">Try SpendNote Free</a>
+        </div>
+
+        <h2>How SpendNote Supports Reconciliation</h2>
+        <p>SpendNote is built around one idea: every cash movement gets a receipt. That means when you sit down to reconcile your drawer, you already have everything you need.</p>
+        <ul>
+            <li><strong>Per-transaction receipts</strong> — Print, PDF, or email every cash-in and cash-out</li>
+            <li><strong>Transaction history with filters</strong> — Filter by date range, cash box, amount, or person</li>
+            <li><strong>Multiple cash boxes</strong> — Separate logs per register, drawer, or location</li>
+            <li><strong>CSV export</strong> — Pull your shift's transactions into a spreadsheet for reconciliation</li>
+            <li><strong>Shift handoff receipts</strong> — Both parties sign when the drawer changes hands</li>
+            <li><strong>Team access controls</strong> — Each team member sees only the cash boxes they're assigned to</li>
+        </ul>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <p><strong>How often should you reconcile a cash drawer?</strong><br>
+        At minimum, at the end of every shift. High-volume cash operations often do a mid-shift count too. The key is consistency: if you reconcile every shift, discrepancies are easy to isolate.</p>
+
+        <p><strong>What's an acceptable cash drawer variance?</strong><br>
+        Most businesses set a tolerance of $1–$5 per shift for small discrepancies. Anything above that requires investigation and documentation. Recurring small variances in the same direction are a red flag even if they stay under the threshold.</p>
+
+        <p><strong>Do I need special software for cash drawer reconciliation?</strong><br>
+        No. You need a documented record of every cash transaction. SpendNote gives you that. A spreadsheet works too — the difference is that SpendNote generates a receipt at the time of each transaction, so the documentation happens as you work, not as a separate step.</p>
+
+        <p style="margin-top: 2rem;">Also see: <a href="cash-handoff-receipt.html">Cash handoff receipt</a>, <a href="cash-receipt-template.html">Cash receipt template</a>, <a href="petty-cash-receipt-generator.html">Petty cash receipt generator</a>.</p>
+        <p style="text-align: center;">See <a href="spendnote-pricing.html">pricing</a> or visit our <a href="spendnote-faq.html">FAQ</a> for more info.</p>
+    </div>
+
+    <footer class="app-footer">
+        <div class="app-footer-container">
+            <div class="app-footer-top">
+                <div class="app-footer-brand">
+                    <a href="index.html" class="app-footer-brand-logo">
+                        <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#footer-logo-gradient-cdr)"/>
+                            <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                            <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                            <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                            <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                            <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                            <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                            <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="footer-logo-gradient-cdr" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#059669"/>
+                                    <stop offset="100%" stop-color="#10b981"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>SpendNote</span>
+                    </a>
+                    <p class="app-footer-brand-desc">Complete cash visibility for your team.<br>Instant receipts, full history.</p>
+                </div>
+                <div class="app-footer-right">
+                    <div class="app-footer-links-simple">
+                        <a href="index.html#features">Features</a>
+                        <a href="spendnote-pricing.html">Pricing</a>
+                        <a href="spendnote-faq.html">FAQ</a>
+                        <a href="spendnote-terms.html">Terms</a>
+                        <a href="spendnote-privacy.html">Privacy</a>
+                    </div>
+                    <div class="app-footer-brand-disclaimer">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Cash handoff documentation only. Not a tax or accounting tool.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="app-footer-bottom">
+                <div class="app-footer-copyright">2026 SpendNote. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
