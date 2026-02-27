@@ -140,3 +140,49 @@ export const renderInviteAcceptedAdminTemplate = (args: {
   const text = `Invite accepted\n\nHi ${args.adminName || "there"}, ${args.acceptedUserName || args.acceptedUserEmail} accepted your invitation and joined ${args.orgName || "your team"}.\nOpen team settings: ${args.teamUrl}`;
   return { subject, html, text };
 };
+
+export const renderPasswordResetTemplate = (args: {
+  resetUrl: string;
+}): BaseEmailTemplate => {
+  const resetUrl = esc(args.resetUrl || "");
+  const subject = "Reset your SpendNote password";
+
+  const html = appCard(
+    "Reset your password",
+    "We received a password reset request",
+    `
+      <p style="margin:0 0 10px;">Hi there, we received a request to reset your SpendNote password.</p>
+      <p style="margin:0 0 14px;">Click the button below to choose a new password. This link expires in 1 hour.</p>
+      <div style="margin:18px 0 16px;">
+        <a href="${resetUrl}" style="display:inline-block;background:#059669;color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;font-weight:800;">Reset password</a>
+      </div>
+      <p style="margin:0 0 10px;color:#374151;">If the button doesn't work, use this link:</p>
+      <p style="margin:0 0 16px;"><a href="${resetUrl}" style="color:#1d4ed8;word-break:break-all;">${resetUrl}</a></p>
+      <p style="margin:0;color:#6b7280;">If you didn't request this, you can safely ignore this email.</p>
+    `,
+  );
+
+  const text = `Reset your SpendNote password\n\nWe received a request to reset your password.\nReset link (expires in 1 hour):\n${args.resetUrl}\n\nIf you didn't request this, you can ignore this email.`;
+  return { subject, html, text };
+};
+
+export const renderPasswordChangedTemplate = (): BaseEmailTemplate => {
+  const subject = "Your SpendNote password was changed";
+  const loginUrl = "https://spendnote.app/spendnote-login.html";
+
+  const html = appCard(
+    "Password changed",
+    "Your password was updated successfully",
+    `
+      <p style="margin:0 0 10px;">Hi there, your SpendNote password was changed successfully.</p>
+      <p style="margin:0 0 14px;">If you made this change, no further action is needed.</p>
+      <div style="margin:18px 0 16px;">
+        <a href="${loginUrl}" style="display:inline-block;background:#059669;color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;font-weight:800;">Open SpendNote</a>
+      </div>
+      <p style="margin:0;color:#6b7280;">If you didn't make this change, please contact us immediately at <a href="mailto:hello@spendnote.app" style="color:#1d4ed8;">hello@spendnote.app</a>.</p>
+    `,
+  );
+
+  const text = `Your SpendNote password was changed\n\nYour password was updated successfully. If you made this change, no action is needed.\n\nIf you didn't make this change, contact us at hello@spendnote.app immediately.`;
+  return { subject, html, text };
+};
