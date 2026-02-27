@@ -2065,9 +2065,9 @@
 
         .tx-createdby{ display:flex; justify-content:center; align-items:center; }
 
-/* === v23 FIXES === */
+/* === Table layout: overflow + column widths === */
 
-/* 1) Kill horizontal scrolling for the transactions table area */
+/* Kill horizontal scrolling for the transactions table area */
 .table-responsive,
 .transactions-table-wrap,
 .table-wrap,
@@ -2170,7 +2170,7 @@ table.transactions-table td,
 .table-transactions .col-action,
 .recent-transactions .col-action { width: 8% !important; }
 
-/* === v24 FIXES: no horizontal scroll + proper row selection === */
+/* === Table layout: row selection + tooltip === */
 
 /* Hide any remaining tooltip UI */
 .row-tooltip { display: none !important; }
@@ -2220,7 +2220,7 @@ table.transactions-table td,
 }
 
 
-/* === v25 FIX: Filters panel layout (2-column grid, no overflow) === */
+/* === Filter panel layout === */
 .filter-panel-wrapper { 
   max-width: min(960px, 95vw) !important;
   width: auto !important;
@@ -2230,7 +2230,7 @@ table.transactions-table td,
   width: auto !important;
   overflow-x: hidden !important;
 }
-/* Force filters into a grid (columns set by v26 below) */
+/* Force filters into a grid (columns set below) */
 .filter-grid {
   display: grid !important;
   gap: 14px !important;
@@ -2249,7 +2249,7 @@ table.transactions-table td,
 .filter-input { min-width: 0 !important; }
 
 
-/* === v26 TWEAK: Filters in TWO ROWS (3 columns) === */
+/* === Filter grid columns (3-col desktop, 2-col tablet, 1-col mobile) === */
 .filter-grid{
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 }
