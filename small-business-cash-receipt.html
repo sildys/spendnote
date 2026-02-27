@@ -27,7 +27,7 @@
     
     <!-- Structured Data -->
     <script type="application/ld+json">
-    {
+    [{
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "Small Business Cash Receipt Tool",
@@ -48,7 +48,52 @@
           "url": "https://spendnote.app/favicon.svg"
         }
       }
-    }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "SpendNote",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "Is SpendNote accounting software?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. SpendNote documents cash handoffs — who gave cash, who received it, how much, and what for. It is not an accounting or tax tool. Use it alongside your accounting workflow, not instead of it."
+        }
+      }, {
+        "@type": "Question",
+        "name": "Can multiple people use the same cash box?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Team members can create receipts within shared cash boxes. Owners and admins control access per cash box, so each person sees only what they are assigned to."
+        }
+      }, {
+        "@type": "Question",
+        "name": "What receipt formats does SpendNote support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Print (two-copy format), PDF download, and email send. Every receipt is also stored in your transaction history indefinitely."
+        }
+      }, {
+        "@type": "Question",
+        "name": "Does SpendNote work for cash in and cash out?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. SpendNote records both incoming and outgoing cash transactions with separate receipt flows for each direction."
+        }
+      }]
+    }]
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
