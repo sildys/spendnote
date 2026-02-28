@@ -1,4 +1,4 @@
-// SpendNote - Main JavaScript
+﻿// SpendNote - Main JavaScript
 
 function updateMenuColors(color) {
     if (!color) return;
@@ -281,34 +281,6 @@ function initSentryMonitoring() {
     document.head.appendChild(s);
 }
 
-function initGoogleAnalytics() {
-    if (window.__spendnoteGtagInitDone) return;
-    window.__spendnoteGtagInitDone = true;
-
-    const host = String((window.location && window.location.hostname) || '').toLowerCase();
-    if (host === 'localhost' || host === '127.0.0.1') return;
-
-    if (!window.SpendNoteConsent?.canLoadAnalytics?.()) return;
-
-    const measurementId = 'G-M08R3XLHK7';
-
-    const existingGtagScript = document.querySelector(
-        `script[src*="googletagmanager.com/gtag/js?id=${measurementId}"]`
-    );
-
-    if (!existingGtagScript && !document.querySelector('script[data-spendnote-gtag="1"]')) {
-        const s = document.createElement('script');
-        s.async = true;
-        s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
-        s.dataset.spendnoteGtag = '1';
-        document.head.appendChild(s);
-    }
-
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function gtag(){ window.dataLayer.push(arguments); };
-    window.gtag('js', new Date());
-    window.gtag('config', measurementId);
-}
 
 function normalizeFooterBranding() {
     const brands = document.querySelectorAll('.app-footer .app-footer-brand');
@@ -341,7 +313,6 @@ function initSpendNoteNav() {
 
     window.SpendNoteConsent?.init?.().finally(() => {
         initSentryMonitoring();
-        initGoogleAnalytics();
     });
 
     // Mobile menu toggle (if needed in future)
