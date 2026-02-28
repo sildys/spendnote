@@ -290,7 +290,7 @@ function initGoogleAnalytics() {
 
     if (!window.SpendNoteConsent?.canLoadAnalytics?.()) return;
 
-    const measurementId = 'G-QPFM30F86Q';
+    const measurementId = 'G-M08R3XLHK7';
 
     const existingGtagScript = document.querySelector(
         `script[src*="googletagmanager.com/gtag/js?id=${measurementId}"]`
