@@ -378,9 +378,9 @@
         <div class="page-header">
             <div class="page-header-row">
                 <div class="page-title-group">
-                    <span class="badge badge-success" id="contactIdBadge">—</span>
+                    <span class="badge badge-success" id="contactIdBadge">-</span>
                     <h1 class="page-title" id="pageTitle">Contact Details</h1>
-                    <p class="page-subtitle" id="contactMeta">Loading…</p>
+                    <p class="page-subtitle" id="contactMeta">Loading-</p>
                 </div>
                 <div class="page-header-actions" id="headerActions"></div>
             </div>
@@ -438,15 +438,15 @@
                 <div class="stats-row" id="statsRow">
                     <div class="stat-box">
                         <div class="stat-box-label">Transactions</div>
-                        <div class="stat-box-value" id="statTransactions">—</div>
+                        <div class="stat-box-value" id="statTransactions">-</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-box-label">Last Activity</div>
-                        <div class="stat-box-value" id="statLastActivity">—</div>
+                        <div class="stat-box-value" id="statLastActivity">-</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-box-label">Cash Boxes</div>
-                        <div class="stat-box-value" id="statCashBoxes" style="display: flex; gap: 4px; align-items: center;">—</div>
+                        <div class="stat-box-value" id="statCashBoxes" style="display: flex; gap: 4px; align-items: center;">-</div>
                     </div>
                 </div>
 
@@ -456,7 +456,7 @@
                         <h2 class="card-title">Latest Transactions</h2>
                     </div>
                     <div class="card-body" id="transactionsList">
-                        <div class="empty-state"><div class="empty-state-text">Loading…</div></div>
+                        <div class="empty-state"><div class="empty-state-text">Loading-</div></div>
                     </div>
                 </div>
             </div>
@@ -527,13 +527,13 @@
             try {
                 if (window.SpendNoteIds && typeof window.SpendNoteIds.formatContactDisplayId === 'function') {
                     const id = window.SpendNoteIds.formatContactDisplayId(sequenceNumber);
-                    return id ? id : '—';
+                    return id ? id : '-';
                 }
             } catch (_) {
 
             }
             const n = Number(sequenceNumber);
-            if (!Number.isFinite(n) || n <= 0) return '—';
+            if (!Number.isFinite(n) || n <= 0) return '-';
             return `CONT-${String(n).padStart(3, '0')}`;
         }
 
@@ -585,7 +585,7 @@
 
         function formatDateShort(value) {
             const dt = value ? new Date(value) : null;
-            if (!dt || Number.isNaN(dt.getTime())) return '—';
+            if (!dt || Number.isNaN(dt.getTime())) return '-';
             return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
 
@@ -612,7 +612,7 @@
             }
             const receiptNumber = safeText(tx?.receipt_number, '');
             if (receiptNumber) return receiptNumber;
-            return '—';
+            return '-';
         }
 
         function mergeTxCashBoxSnapshot(tx, cashBox) {
@@ -707,7 +707,7 @@
 
             if (mode === 'new') {
                 if (badge) {
-                    badge.textContent = '—';
+                    badge.textContent = '-';
                     badge.style.opacity = '0.5';
                 }
                 const statsRow = document.getElementById('statsRow');
@@ -840,7 +840,7 @@
 
             const lastDt = txs.length ? new Date(txs[0]?.transaction_date || txs[0]?.created_at || '') : null;
             if (statsLast) {
-                statsLast.textContent = (lastDt && Number.isFinite(lastDt.getTime())) ? formatDateShort(lastDt) : '—';
+                statsLast.textContent = (lastDt && Number.isFinite(lastDt.getTime())) ? formatDateShort(lastDt) : '-';
             }
 
             // Render cash box dots
@@ -867,7 +867,7 @@
                     dotsHtml += `<span style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-left: 2px; cursor: help;" title="${extraNames}">+${extraCount}</span>`;
                 }
                 
-                statsCashBoxes.innerHTML = dotsHtml || '—';
+                statsCashBoxes.innerHTML = dotsHtml || '-';
             }
 
             if (!txs.length) {
@@ -883,7 +883,7 @@
                 try {
                     return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency || 'USD' }).format(Number(amount) || 0);
                 } catch (_) {
-                    return String(amount ?? '—');
+                    return String(amount ?? '-');
                 }
             };
 
@@ -911,11 +911,11 @@
                                     <i class="fas ${isIn ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
                                 </div>
                                 <div class="transaction-info">
-                                    <div class="transaction-id">${safeText(displayId, '—')}${typePill}</div>
-                                    <div class="transaction-date">${safeText(dateText, '—')} • <i class="fas fa-building" style="color: ${cbColor};"></i> <span style="color: ${cbColor}; font-weight: 700;">${safeText(cbName, '—')}</span></div>
+                                    <div class="transaction-id">${safeText(displayId, '-')}${typePill}</div>
+                                    <div class="transaction-date">${safeText(dateText, '-')} - <i class="fas fa-building" style="color: ${cbColor};"></i> <span style="color: ${cbColor}; font-weight: 700;">${safeText(cbName, '-')}</span></div>
                                 </div>
                             </div>
-                            <div class="transaction-amount ${iconCls}">${safeText(amountText, '—')}</div>
+                            <div class="transaction-amount ${iconCls}">${safeText(amountText, '-')}</div>
                         </a>
                     `;
                 })
