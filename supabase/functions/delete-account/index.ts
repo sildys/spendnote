@@ -266,8 +266,8 @@ Deno.serve(async (req: Request) => {
             </div>
             <div style="padding:18px 20px;">
               <p style="margin:0 0 10px;">Hi ${userName}, this is a confirmation that your SpendNote account was deleted successfully.</p>
-              <p style="margin:0 0 14px;">If this was not you, contact support immediately at <a href="mailto:support@spendnote.app" style="color:#1d4ed8;">support@spendnote.app</a>.</p>
-              <p style="margin:0;color:#6b7280;">This mailbox is not monitored.</p>
+              <p style="margin:0 0 14px;">This email is for confirmation only. This mailbox is not monitored.</p>
+              <p style="margin:0;color:#6b7280;">If you need help, contact support at <a href="mailto:support@spendnote.app" style="color:#1d4ed8;">support@spendnote.app</a>.</p>
             </div>
             <div style="padding:14px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:12px;">
               Cash handoff documentation only. Not a tax or accounting tool.<br>
@@ -276,7 +276,7 @@ Deno.serve(async (req: Request) => {
           </div>
         </div>
       `;
-      const text = `Your SpendNote account has been deleted\n\nHi ${userName}, this is a confirmation that your SpendNote account was deleted successfully.\nIf this was not you, contact support@spendnote.app immediately.`;
+      const text = `Your SpendNote account has been deleted\n\nHi ${userName}, this is a confirmation that your SpendNote account was deleted successfully.\nThis email is for confirmation only and is not monitored.\nIf you need help, contact support@spendnote.app.`;
 
       const resendResp = await fetch("https://api.resend.com/emails", {
         method: "POST",
