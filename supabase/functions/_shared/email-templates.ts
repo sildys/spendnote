@@ -11,7 +11,7 @@ const esc = (value: string): string => String(value || "")
   .replace(/\"/g, "&quot;")
   .replace(/'/g, "&#39;");
 
-const LOGO_HTML = `<span style="display:block;line-height:0;"><img src="https://spendnote.app/assets/images/spendnote-logo-horizontal-1024.png" alt="SpendNote" width="156" style="display:block;height:auto;border:0;outline:none;text-decoration:none;"/></span>`;
+const LOGO_HTML = `<span style="display:block;line-height:0;"><img src="https://spendnote.app/assets/images/spendnote-logo-horizontal-1024.png?v=20260301-1839" alt="SpendNote" width="156" style="display:block;height:auto;border:0;outline:none;text-decoration:none;"/></span>`;
 
 const appCard = (title: string, subtitle: string, bodyHtml: string): string => `
   <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#111;background:#f8fafc;padding:24px;">
