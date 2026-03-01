@@ -1412,20 +1412,59 @@ var auth = {
 
     async deleteAccount() {
         try {
+            const looksLikeJwt = (v) => {
+                const s = String(v || '');
+                return /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(s);
+            };
+
             const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
-            if (sessErr || !session?.access_token) {
-                return { success: false, error: 'Not authenticated.' };
+            let accessToken = String(session?.access_token || '');
+
+            if (sessErr || !looksLikeJwt(accessToken)) {
+                try {
+                    await supabaseClient.auth.refreshSession();
+                    const s2 = await supabaseClient.auth.getSession();
+                    accessToken = String(s2?.data?.session?.access_token || '');
+                } catch (_) {
+                    // ignore; handled by final check below
+                }
             }
-            const resp = await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session.access_token}`,
-                    'apikey': SUPABASE_ANON_KEY
-                },
-                body: JSON.stringify({})
-            });
+
+            if (!looksLikeJwt(accessToken)) {
+                return { success: false, error: 'Session expired/invalid. Please log in again.' };
+            }
+
+            const doRequest = async (jwt) => {
+                return await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${jwt}`,
+                        'apikey': SUPABASE_ANON_KEY
+                    },
+                    body: JSON.stringify({})
+                });
+            };
+
+            let resp = await doRequest(accessToken);
+
+            if (resp.status === 401) {
+                try {
+                    await supabaseClient.auth.refreshSession();
+                    const s2 = await supabaseClient.auth.getSession();
+                    const nextToken = String(s2?.data?.session?.access_token || '');
+                    if (looksLikeJwt(nextToken)) {
+                        resp = await doRequest(nextToken);
+                    }
+                } catch (_) {
+                    // ignore
+                }
+            }
+
             if (!resp.ok) {
+                if (resp.status === 401) {
+                    return { success: false, error: 'Session expired/invalid. Please log in again.' };
+                }
                 const parsed = await __spendnoteParseFetchError(resp, { defaultMessage: 'Account deletion failed.' });
                 return { success: false, error: parsed.message };
             }
