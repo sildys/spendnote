@@ -84,7 +84,7 @@ Deno.serve(async (req: Request) => {
     const countByEq = async (table: string, column: string, value: string): Promise<number> => {
       const { count, error } = await supabaseAdmin
         .from(table)
-        .select("id", { count: "exact", head: true })
+        .select("*", { count: "exact", head: true })
         .eq(column, value);
       if (error) throw new Error(`Failed to count ${table}: ${error.message}`);
       return Number(count || 0);
@@ -94,7 +94,7 @@ Deno.serve(async (req: Request) => {
       if (!values || values.length === 0) return 0;
       const { count, error } = await supabaseAdmin
         .from(table)
-        .select("id", { count: "exact", head: true })
+        .select("*", { count: "exact", head: true })
         .in(column, values);
       if (error) throw new Error(`Failed to count ${table}: ${error.message}`);
       return Number(count || 0);
