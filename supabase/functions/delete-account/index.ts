@@ -100,21 +100,42 @@ Deno.serve(async (req: Request) => {
       return Number(count || 0);
     };
 
-    // Check if user is an owner of any org
-    const { data: ownedOrgs, error: orgError } = await supabaseAdmin
-      .from("org_memberships")
-      .select("org_id")
-      .eq("user_id", userId)
-      .eq("role", "owner");
+    // Check if user owns any org (canonical source: orgs.owner_user_id).
+    // Fallback: legacy owner membership role if needed.
+    const { data: ownedOrgsByOwnerId, error: ownerIdError } = await supabaseAdmin
+      .from("orgs")
+      .select("id")
+      .eq("owner_user_id", userId);
 
-    if (orgError) {
-      return new Response(JSON.stringify({ error: "Failed to check org memberships: " + orgError.message }), {
+    if (ownerIdError) {
+      return new Response(JSON.stringify({ error: "Failed to check owned organizations: " + ownerIdError.message }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const ownedOrgIds = (ownedOrgs || []).map((m: { org_id: string }) => String(m.org_id || "").trim()).filter(Boolean);
+    let ownedOrgIds = (ownedOrgsByOwnerId || [])
+      .map((o: { id: string }) => String(o.id || "").trim())
+      .filter(Boolean);
+
+    if (ownedOrgIds.length === 0) {
+      const { data: ownedByMembership, error: membershipOwnerError } = await supabaseAdmin
+        .from("org_memberships")
+        .select("org_id")
+        .eq("user_id", userId)
+        .ilike("role", "owner");
+
+      if (membershipOwnerError) {
+        return new Response(JSON.stringify({ error: "Failed to check org memberships: " + membershipOwnerError.message }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      ownedOrgIds = (ownedByMembership || [])
+        .map((m: { org_id: string }) => String(m.org_id || "").trim())
+        .filter(Boolean);
+    }
 
     if (mode === "preview") {
       try {
