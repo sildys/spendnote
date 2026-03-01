@@ -33,7 +33,7 @@ Deno.serve(async (req: Request) => {
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
     const resendApiKey = Deno.env.get("RESEND_API_KEY") || "";
-    const from = Deno.env.get("SPENDNOTE_EMAIL_FROM") || "SpendNote <no-reply@spendnote.app>";
+    const from = "SpendNote <no-reply@spendnote.app>";
 
     if (!supabaseUrl || !supabaseAnonKey || !serviceRoleKey || !resendApiKey) {
       return new Response(JSON.stringify({ error: "Missing required secrets" }), {

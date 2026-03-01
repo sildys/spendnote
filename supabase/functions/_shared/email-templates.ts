@@ -80,15 +80,15 @@ export const renderWelcomeAccountCreatedTemplate = (args: {
     "Your account is ready",
     `
       <p style="margin:0 0 10px;">Hi ${name}, your SpendNote account has been created successfully.</p>
-      <p style="margin:0 0 14px;">You can now log in, create your first cash box, and start documenting cash handoffs.</p>
+      <p style="margin:0 0 14px;">You can now log in and start documenting cash handoffs.</p>
       <div style="margin:18px 0 16px;">
         <a href="${loginUrl}" style="display:inline-block;background:#059669;color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;font-weight:800;">Open SpendNote</a>
       </div>
-      <p style="margin:0;color:#6b7280;">Need help? Reply to this email and we’ll help you get started.</p>
+      <p style="margin:0;color:#6b7280;">Need help? Contact support at <a href="mailto:support@spendnote.app" style="color:#1d4ed8;">support@spendnote.app</a>.</p>
     `,
   );
 
-  const text = `Welcome to SpendNote\n\nHi ${args.fullName || "there"}, your account is ready.\nOpen SpendNote: ${args.loginUrl}`;
+  const text = `Welcome to SpendNote\n\nHi ${args.fullName || "there"}, your account is ready.\nOpen SpendNote: ${args.loginUrl}\nNeed help? Contact support@spendnote.app`;
   return { subject, html, text };
 };
 
