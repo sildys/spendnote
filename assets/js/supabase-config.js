@@ -522,12 +522,11 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
         if (error || !user) return;
         const userId = String(user?.id || '').trim();
         if (!userId) return;
-        const provider = String(user.app_metadata?.provider || '').trim().toLowerCase();
         const createdAtMs = Date.parse(String(user.created_at || ''));
         const isFreshAccount = Number.isFinite(createdAtMs) && (Date.now() - createdAtMs) < (30 * 60 * 1000);
         const welcomeSentKey = `spendnote.welcome.sent.${userId}`;
-        const maybeSendGoogleWelcome = async () => {
-            if (provider !== 'google' || !isFreshAccount) return;
+        const maybeSendWelcome = async () => {
+            if (!isFreshAccount) return;
             try {
                 if (localStorage.getItem(welcomeSentKey) === '1') return;
             } catch (_) {}
@@ -553,7 +552,7 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
                 .eq('id', userId)
                 .single();
             if (!selErr && existing?.id) {
-                await maybeSendGoogleWelcome();
+                await maybeSendWelcome();
                 return;
             }
         } catch (_) {
@@ -575,14 +574,7 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
                     billing_status: PREVIEW_BILLING_STATUS
                 }]);
             if (insertError) return;
-            if (provider === 'google') {
-                try {
-                    await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
-                    try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
-                } catch (_) {
-                    // ignore email side-effect errors
-                }
-            }
+            await maybeSendWelcome();
         } catch (_) {
             // ignore
         }
@@ -1326,6 +1318,12 @@ var auth = {
         if (data?.session?.access_token) {
             try {
                 await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
+                try {
+                    const userId = String(data?.user?.id || '').trim();
+                    if (userId) localStorage.setItem(`spendnote.welcome.sent.${userId}`, '1');
+                } catch (_) {
+                    // ignore localStorage side-effect errors
+                }
             } catch (_) {
                 // ignore email side-effect errors
             }
