@@ -13,8 +13,8 @@ try {
     // ignore
 }
 
-if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260301-2132');
-window.__spendnoteSupabaseConfigBuild = '20260301-2132';
+if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260301-2141');
+window.__spendnoteSupabaseConfigBuild = '20260301-2141';
 
 const __spendnoteGetResponseRequestId = (resp) => {
     try {
@@ -1415,16 +1415,19 @@ var auth = {
                 return /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(s);
             };
 
-            const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
-            let accessToken = String(session?.access_token || '');
+            let accessToken = '';
+            try {
+                const refreshed = await supabaseClient.auth.refreshSession();
+                accessToken = String(refreshed?.data?.session?.access_token || '');
+            } catch (_) {
+                // ignore; fallback to current cached session
+            }
 
-            if (sessErr || !looksLikeJwt(accessToken)) {
-                try {
-                    await supabaseClient.auth.refreshSession();
-                    const s2 = await supabaseClient.auth.getSession();
-                    accessToken = String(s2?.data?.session?.access_token || '');
-                } catch (_) {
-                    // ignore; handled by final check below
+            if (!looksLikeJwt(accessToken)) {
+                const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
+                accessToken = String(session?.access_token || '');
+                if (sessErr && window.SpendNoteDebug) {
+                    console.warn('getDeleteAccountPreview getSession error:', sessErr);
                 }
             }
 
@@ -1492,16 +1495,19 @@ var auth = {
                 return /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(s);
             };
 
-            const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
-            let accessToken = String(session?.access_token || '');
+            let accessToken = '';
+            try {
+                const refreshed = await supabaseClient.auth.refreshSession();
+                accessToken = String(refreshed?.data?.session?.access_token || '');
+            } catch (_) {
+                // ignore; fallback to current cached session
+            }
 
-            if (sessErr || !looksLikeJwt(accessToken)) {
-                try {
-                    await supabaseClient.auth.refreshSession();
-                    const s2 = await supabaseClient.auth.getSession();
-                    accessToken = String(s2?.data?.session?.access_token || '');
-                } catch (_) {
-                    // ignore; handled by final check below
+            if (!looksLikeJwt(accessToken)) {
+                const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
+                accessToken = String(session?.access_token || '');
+                if (sessErr && window.SpendNoteDebug) {
+                    console.warn('deleteAccount getSession error:', sessErr);
                 }
             }
 
