@@ -90,14 +90,67 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    // Delete the auth user — this cascades:
-    // auth.users → profiles (CASCADE) → cash_boxes, contacts, transactions,
-    // org_memberships, cash_box_memberships (all CASCADE)
-    // transactions.created_by_user_id → SET NULL (name text preserved)
+    // Best-effort cleanup for legacy/direct references that can block auth deletion.
+    // 1) Null-out audit actor refs (safe even if FK already SET NULL).
+    try {
+      await supabaseAdmin
+        .from("audit_log")
+        .update({ actor_id: null })
+        .eq("actor_id", userId);
+    } catch (_) {
+      // ignore
+    }
+
+    // 2) Delete storage objects owned by this user (if storage schema/column is present).
+    // Some projects can have restrictive FKs around storage ownership.
+    try {
+      const q1 = await supabaseAdmin
+        .schema("storage")
+        .from("objects")
+        .delete()
+        .eq("owner", userId);
+
+      if (q1.error && String(q1.error.message || "").toLowerCase().includes("owner_id")) {
+        await supabaseAdmin
+          .schema("storage")
+          .from("objects")
+          .delete()
+          .eq("owner_id", userId);
+      }
+    } catch (_) {
+      // ignore
+    }
+
+    // 3) Explicitly delete profile first so profile-rooted cascades are executed
+    // before deleting auth.users (helps avoid legacy FK blockers).
+    try {
+      const { error: profileDeleteError } = await supabaseAdmin
+        .from("profiles")
+        .delete()
+        .eq("id", userId);
+
+      if (profileDeleteError) {
+        return new Response(JSON.stringify({ error: "Failed to delete profile: " + profileDeleteError.message }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    } catch (profileErr) {
+      const msg = profileErr instanceof Error ? profileErr.message : "Unknown profile deletion error";
+      return new Response(JSON.stringify({ error: "Failed to delete profile: " + msg }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Delete the auth user.
     const { error: deleteUserError } = await supabaseAdmin.auth.admin.deleteUser(userId);
 
     if (deleteUserError) {
-      return new Response(JSON.stringify({ error: "Failed to delete user: " + deleteUserError.message }), {
+      return new Response(JSON.stringify({
+        error: "Failed to delete user: " + deleteUserError.message,
+        code: (deleteUserError as { code?: string }).code || null,
+      }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
