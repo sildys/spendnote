@@ -217,6 +217,15 @@ Deno.serve(async (req: Request) => {
         .in("id", orgIds);
 
       if (deleteOrgsError) {
+        const rawMessage = String(deleteOrgsError.message || "");
+        if (rawMessage.toLowerCase().includes("audit_log is immutable")) {
+          return new Response(JSON.stringify({
+            error: "Database schema mismatch: legacy immutable trigger on audit_log blocks organization deletion. Apply migration 035_audit_log_immutable_trigger_compat.sql and retry account deletion.",
+          }), {
+            status: 500,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
         return new Response(JSON.stringify({ error: "Failed to delete organization(s): " + deleteOrgsError.message }), {
           status: 500,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
