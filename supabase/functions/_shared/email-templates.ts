@@ -11,15 +11,15 @@ const esc = (value: string): string => String(value || "")
   .replace(/\"/g, "&quot;")
   .replace(/'/g, "&#39;");
 
-const LOGO_HTML = `<img src="https://spendnote.app/assets/images/spendnote-logo-horizontal-1024.png" alt="SpendNote" width="180" style="display:block;height:auto;border:0;outline:none;text-decoration:none;"/>`;
+const LOGO_HTML = `<span style="display:block;line-height:0;"><img src="https://spendnote.app/assets/images/spendnote-logo-horizontal-1024.png" alt="SpendNote" width="156" style="display:block;height:auto;border:0;outline:none;text-decoration:none;"/></span>`;
 
 const appCard = (title: string, subtitle: string, bodyHtml: string): string => `
   <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#111;background:#f8fafc;padding:24px;">
     <div style="max-width:560px;margin:0 auto;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;background:#ffffff;">
-      <div style="background:#ffffff;padding:14px 20px 12px;">
+      <div style="background:#ffffff;padding:8px 20px 6px;">
         <table role="presentation" cellspacing="0" cellpadding="0" border="0">
           <tr>
-            <td style="vertical-align:middle;">${LOGO_HTML}</td>
+            <td style="vertical-align:middle;line-height:0;">${LOGO_HTML}</td>
           </tr>
         </table>
       </div>
