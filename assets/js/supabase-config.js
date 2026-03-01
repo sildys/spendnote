@@ -13,8 +13,8 @@ try {
     // ignore
 }
 
-if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260227-1630');
-window.__spendnoteSupabaseConfigBuild = '20260227-1630';
+if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260301-2132');
+window.__spendnoteSupabaseConfigBuild = '20260301-2132';
 
 const __spendnoteGetResponseRequestId = (resp) => {
     try {
@@ -1446,7 +1446,7 @@ var auth = {
 
             let resp = await doRequest(accessToken);
 
-            if (resp.status === 401) {
+            if (resp.status === 401 || resp.status === 403) {
                 try {
                     await supabaseClient.auth.refreshSession();
                     const s2 = await supabaseClient.auth.getSession();
@@ -1460,10 +1460,14 @@ var auth = {
             }
 
             if (!resp.ok) {
-                if (resp.status === 401) {
+                if (resp.status === 401 || resp.status === 403) {
                     return { success: false, error: 'Session expired/invalid. Please log in again.' };
                 }
                 const parsed = await __spendnoteParseFetchError(resp, { defaultMessage: 'Failed to load deletion summary.' });
+                const parsedMessage = String(parsed?.message || '').toLowerCase();
+                if (parsedMessage.includes('invalid jwt') || parsedMessage.includes('jwt') || parsedMessage.includes('token')) {
+                    return { success: false, error: 'Session expired/invalid. Please log in again.' };
+                }
                 return { success: false, error: parsed.message };
             }
 
@@ -1519,7 +1523,7 @@ var auth = {
 
             let resp = await doRequest(accessToken);
 
-            if (resp.status === 401) {
+            if (resp.status === 401 || resp.status === 403) {
                 try {
                     await supabaseClient.auth.refreshSession();
                     const s2 = await supabaseClient.auth.getSession();
@@ -1533,10 +1537,14 @@ var auth = {
             }
 
             if (!resp.ok) {
-                if (resp.status === 401) {
+                if (resp.status === 401 || resp.status === 403) {
                     return { success: false, error: 'Session expired/invalid. Please log in again.' };
                 }
                 const parsed = await __spendnoteParseFetchError(resp, { defaultMessage: 'Account deletion failed.' });
+                const parsedMessage = String(parsed?.message || '').toLowerCase();
+                if (parsedMessage.includes('invalid jwt') || parsedMessage.includes('jwt') || parsedMessage.includes('token')) {
+                    return { success: false, error: 'Session expired/invalid. Please log in again.' };
+                }
                 return { success: false, error: parsed.message };
             }
 
