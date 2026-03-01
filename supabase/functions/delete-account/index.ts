@@ -257,6 +257,20 @@ Deno.serve(async (req: Request) => {
 
     // 3) Explicitly delete profile first so profile-rooted cascades are executed
     // before deleting auth.users (helps avoid legacy FK blockers).
+    const isMissingAuditLogColumnError = (message: string): boolean => {
+      const m = String(message || "");
+      return /column\s+"[^"]+"\s+of\s+relation\s+"audit_log"\s+does\s+not\s+exist/i.test(m);
+    };
+
+    const buildAuditLogSchemaMismatchResponse = () => {
+      return new Response(JSON.stringify({
+        error: "Database schema mismatch: audit_log is missing expected columns. Apply latest migrations (including 033_audit_log_actor_id_compat.sql and 034_audit_log_meta_compat.sql) and retry account deletion.",
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    };
+
     try {
       const { error: profileDeleteError } = await supabaseAdmin
         .from("profiles")
@@ -265,13 +279,8 @@ Deno.serve(async (req: Request) => {
 
       if (profileDeleteError) {
         const rawMessage = String(profileDeleteError.message || "");
-        if (rawMessage.includes('column "actor_id" of relation "audit_log" does not exist')) {
-          return new Response(JSON.stringify({
-            error: "Database schema mismatch: missing audit_log.actor_id column. Apply latest migrations (including 033_audit_log_actor_id_compat.sql) and retry account deletion.",
-          }), {
-            status: 500,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          });
+        if (isMissingAuditLogColumnError(rawMessage)) {
+          return buildAuditLogSchemaMismatchResponse();
         }
         return new Response(JSON.stringify({ error: "Failed to delete profile: " + profileDeleteError.message }), {
           status: 500,
@@ -280,13 +289,8 @@ Deno.serve(async (req: Request) => {
       }
     } catch (profileErr) {
       const msg = profileErr instanceof Error ? profileErr.message : "Unknown profile deletion error";
-      if (String(msg).includes('column "actor_id" of relation "audit_log" does not exist')) {
-        return new Response(JSON.stringify({
-          error: "Database schema mismatch: missing audit_log.actor_id column. Apply latest migrations (including 033_audit_log_actor_id_compat.sql) and retry account deletion.",
-        }), {
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+      if (isMissingAuditLogColumnError(String(msg))) {
+        return buildAuditLogSchemaMismatchResponse();
       }
       return new Response(JSON.stringify({ error: "Failed to delete profile: " + msg }), {
         status: 500,
