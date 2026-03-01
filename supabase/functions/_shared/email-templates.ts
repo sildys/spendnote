@@ -11,13 +11,7 @@ const esc = (value: string): string => String(value || "")
   .replace(/\"/g, "&quot;")
   .replace(/'/g, "&#39;");
 
-const LOGO_SVG = `<svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
-  <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#ec-g)"/>
-  <line x1="15" y1="14" x2="33" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-  <line x1="15" y1="20" x2="28" y2="20" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
-  <line x1="15" y1="26" x2="33" y2="26" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-  <defs><linearGradient id="ec-g" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs>
-</svg>`;
+const LOGO_BADGE = `<span style="display:inline-block;width:28px;height:28px;line-height:28px;text-align:center;border-radius:8px;background:#059669;color:#ffffff;font-size:16px;font-weight:700;">🧾</span>`;
 
 const appCard = (title: string, subtitle: string, bodyHtml: string): string => `
   <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#111;background:#f8fafc;padding:24px;">
@@ -25,7 +19,7 @@ const appCard = (title: string, subtitle: string, bodyHtml: string): string => `
       <div style="background:#ffffff;padding:14px 20px 12px;">
         <table role="presentation" cellspacing="0" cellpadding="0" border="0">
           <tr>
-            <td style="vertical-align:middle;padding-right:10px;">${LOGO_SVG}</td>
+            <td style="vertical-align:middle;padding-right:10px;">${LOGO_BADGE}</td>
             <td style="vertical-align:middle;font-size:17px;font-weight:800;color:#111;letter-spacing:0.1px;">SpendNote</td>
           </tr>
         </table>
