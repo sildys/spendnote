@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=23">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=21">
-    <link rel="stylesheet" href="assets/css/user-settings.css?v=20260225-2142">
+    <link rel="stylesheet" href="assets/css/user-settings.css?v=20260301-2230">
 </head>
 <body>
 <div id="nav-container"></div>
@@ -117,11 +117,21 @@
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="newPassword">New Password</label>
-                                <input type="password" id="newPassword" autocomplete="new-password" placeholder="Min. 8 chars, uppercase, number, symbol">
+                                <div class="password-input-wrap">
+                                    <input type="password" id="newPassword" autocomplete="new-password" placeholder="Min. 8 chars, uppercase, number, symbol">
+                                    <button type="button" class="password-toggle" id="newPasswordToggle" aria-label="Toggle new password visibility">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="confirmPassword">Confirm Password</label>
-                                <input type="password" id="confirmPassword" autocomplete="new-password" placeholder="Repeat password">
+                                <div class="password-input-wrap">
+                                    <input type="password" id="confirmPassword" autocomplete="new-password" placeholder="Repeat password">
+                                    <button type="button" class="password-toggle" id="confirmPasswordToggle" aria-label="Toggle confirm password visibility">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="form-actions">
@@ -275,7 +285,7 @@
 
 <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
 <script src="assets/js/logo-editor.js?v=20260226-2142"></script>
-<script src="assets/js/user-settings.js?v=20260301-2208"></script>
+<script src="assets/js/user-settings.js?v=20260301-2230"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/supabase-config.js?v=20260301-2141"></script>

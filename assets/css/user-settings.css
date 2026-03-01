@@ -333,6 +333,37 @@ body {
     font-family: inherit;
 }
 
+.password-input-wrap {
+    position: relative;
+}
+
+.password-input-wrap input {
+    width: 100%;
+    padding-right: 42px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    padding: 0;
+}
+
+.password-toggle:hover {
+    color: var(--text);
+}
+
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {

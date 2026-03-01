@@ -1094,6 +1094,23 @@ const initUserSettingsPage = async () => {
     });
 
     // Password form
+    const bindPasswordToggle = (inputId, buttonId) => {
+        const input = document.getElementById(inputId);
+        const btn = document.getElementById(buttonId);
+        if (!input || !btn) return;
+        btn.addEventListener('click', () => {
+            const isPassword = String(input.getAttribute('type') || 'password') === 'password';
+            input.setAttribute('type', isPassword ? 'text' : 'password');
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+            }
+        });
+    };
+
+    bindPasswordToggle('newPassword', 'newPasswordToggle');
+    bindPasswordToggle('confirmPassword', 'confirmPasswordToggle');
+
     document.getElementById('passwordForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const pw = document.getElementById('newPassword')?.value;
