@@ -226,6 +226,14 @@ Deno.serve(async (req: Request) => {
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
+        if (rawMessage.toLowerCase().includes("audit_log_org_id_fkey") || rawMessage.toLowerCase().includes("violates foreign key constraint")) {
+          return new Response(JSON.stringify({
+            error: "Database schema mismatch: legacy org_membership audit trigger writes rows after org deletion cascade. Apply migration 036_audit_log_membership_trigger_org_fk_compat.sql and retry account deletion.",
+          }), {
+            status: 500,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
         return new Response(JSON.stringify({ error: "Failed to delete organization(s): " + deleteOrgsError.message }), {
           status: 500,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
