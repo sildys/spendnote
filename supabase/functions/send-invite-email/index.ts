@@ -207,7 +207,7 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const from = Deno.env.get("SPENDNOTE_EMAIL_FROM") || "SpendNote <no-reply@spendnote.app>";
+    const from = "SpendNote <no-reply@spendnote.app>";
     const appUrl = Deno.env.get("SPENDNOTE_APP_URL") || "";
     const subject = Deno.env.get("SPENDNOTE_INVITE_SUBJECT") || "You have been invited to SpendNote";
 
