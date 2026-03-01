@@ -140,6 +140,16 @@ Deno.serve(async (req: Request) => {
     if (mode === "preview") {
       try {
         const isOwner = ownedOrgIds.length > 0;
+        const memberOrgRows = isOwner
+          ? []
+          : (await supabaseAdmin
+              .from("org_memberships")
+              .select("org_id")
+              .eq("user_id", userId)).data || [];
+        const memberOrgIds = (memberOrgRows || [])
+          .map((m: { org_id: string }) => String(m.org_id || "").trim())
+          .filter(Boolean);
+
         const summary = isOwner
           ? {
               isOwner,
@@ -155,9 +165,18 @@ Deno.serve(async (req: Request) => {
               ownedOrgCount: 0,
               teamMembershipCount: await countByEq("org_memberships", "user_id", userId),
               pendingInviteCount: 0,
+              // Backward-compatible aggregate keys currently used by UI.
               cashBoxCount: await countByEq("cash_boxes", "user_id", userId),
               contactCount: await countByEq("contacts", "user_id", userId),
               transactionCount: await countByEq("transactions", "user_id", userId),
+              // New explicit split for better non-owner messaging.
+              personalCashBoxCount: await countByEq("cash_boxes", "user_id", userId),
+              personalContactCount: await countByEq("contacts", "user_id", userId),
+              personalTransactionCount: await countByEq("transactions", "user_id", userId),
+              sharedOrgCount: memberOrgIds.length,
+              sharedCashBoxCount: await countByIn("cash_boxes", "org_id", memberOrgIds),
+              sharedContactCount: await countByIn("contacts", "org_id", memberOrgIds),
+              sharedTransactionCount: await countByIn("transactions", "org_id", memberOrgIds),
             };
 
         return new Response(JSON.stringify({ success: true, mode: "preview", summary }), {

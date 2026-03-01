@@ -1157,11 +1157,17 @@ const initUserSettingsPage = async () => {
                 lines.push(`• Contacts: ${n(s.contactCount)}`);
                 lines.push(`• Transactions: ${n(s.transactionCount)}`);
             } else {
-                lines.push('Your account data to be deleted:');
+                lines.push('Your personal account data to be deleted:');
                 lines.push(`• Team memberships: ${n(s.teamMembershipCount)}`);
-                lines.push(`• Cash boxes: ${n(s.cashBoxCount)}`);
-                lines.push(`• Contacts: ${n(s.contactCount)}`);
-                lines.push(`• Transactions: ${n(s.transactionCount)}`);
+                lines.push(`• Personal cash boxes: ${n(s.personalCashBoxCount ?? s.cashBoxCount)}`);
+                lines.push(`• Personal contacts: ${n(s.personalContactCount ?? s.contactCount)}`);
+                lines.push(`• Personal transactions: ${n(s.personalTransactionCount ?? s.transactionCount)}`);
+                lines.push('');
+                lines.push('Shared organization data that will NOT be deleted by your account deletion:');
+                lines.push(`• Shared organizations: ${n(s.sharedOrgCount)}`);
+                lines.push(`• Shared cash boxes: ${n(s.sharedCashBoxCount)}`);
+                lines.push(`• Shared contacts: ${n(s.sharedContactCount)}`);
+                lines.push(`• Shared transactions: ${n(s.sharedTransactionCount)}`);
             }
             lines.push('');
             lines.push('After deletion, a confirmation email will be sent to your account email.');
