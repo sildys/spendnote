@@ -6,6 +6,10 @@ const corsHeaders: Record<string, string> = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+type DeleteAccountBody = {
+  mode?: "preview" | "delete";
+};
+
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -15,6 +19,16 @@ Deno.serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+    const resendApiKey = Deno.env.get("RESEND_API_KEY") || "";
+    const from = "SpendNote <no-reply@spendnote.app>";
+
+    let body: DeleteAccountBody = {};
+    try {
+      body = (await req.json()) as DeleteAccountBody;
+    } catch (_) {
+      body = {};
+    }
+    const mode = String(body?.mode || "delete").trim().toLowerCase() === "preview" ? "preview" : "delete";
 
     if (!supabaseUrl || !supabaseAnonKey) {
       return new Response(JSON.stringify({ error: "Missing SUPABASE_URL / SUPABASE_ANON_KEY" }), {
@@ -58,6 +72,34 @@ Deno.serve(async (req: Request) => {
     // Service-role client for admin operations
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("full_name,email")
+      .eq("id", userId)
+      .maybeSingle();
+
+    const userEmail = String(profile?.email || user.email || "").trim().toLowerCase();
+    const userName = String(profile?.full_name || user.user_metadata?.full_name || "there").trim() || "there";
+
+    const countByEq = async (table: string, column: string, value: string): Promise<number> => {
+      const { count, error } = await supabaseAdmin
+        .from(table)
+        .select("id", { count: "exact", head: true })
+        .eq(column, value);
+      if (error) throw new Error(`Failed to count ${table}: ${error.message}`);
+      return Number(count || 0);
+    };
+
+    const countByIn = async (table: string, column: string, values: string[]): Promise<number> => {
+      if (!values || values.length === 0) return 0;
+      const { count, error } = await supabaseAdmin
+        .from(table)
+        .select("id", { count: "exact", head: true })
+        .in(column, values);
+      if (error) throw new Error(`Failed to count ${table}: ${error.message}`);
+      return Number(count || 0);
+    };
+
     // Check if user is an owner of any org
     const { data: ownedOrgs, error: orgError } = await supabaseAdmin
       .from("org_memberships")
@@ -72,10 +114,62 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    const ownedOrgIds = (ownedOrgs || []).map((m: { org_id: string }) => String(m.org_id || "").trim()).filter(Boolean);
+
+    if (mode === "preview") {
+      try {
+        const isOwner = ownedOrgIds.length > 0;
+        const summary = isOwner
+          ? {
+              isOwner,
+              ownedOrgCount: ownedOrgIds.length,
+              teamMembershipCount: await countByIn("org_memberships", "org_id", ownedOrgIds),
+              pendingInviteCount: await countByIn("invites", "org_id", ownedOrgIds),
+              cashBoxCount: await countByIn("cash_boxes", "org_id", ownedOrgIds),
+              contactCount: await countByIn("contacts", "org_id", ownedOrgIds),
+              transactionCount: await countByIn("transactions", "org_id", ownedOrgIds),
+            }
+          : {
+              isOwner,
+              ownedOrgCount: 0,
+              teamMembershipCount: await countByEq("org_memberships", "user_id", userId),
+              pendingInviteCount: 0,
+              cashBoxCount: await countByEq("cash_boxes", "user_id", userId),
+              contactCount: await countByEq("contacts", "user_id", userId),
+              transactionCount: await countByEq("transactions", "user_id", userId),
+            };
+
+        return new Response(JSON.stringify({ success: true, mode: "preview", summary }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      } catch (previewErr) {
+        const msg = previewErr instanceof Error ? previewErr.message : "Failed to build delete preview";
+        return new Response(JSON.stringify({ error: msg }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
+    if (!resendApiKey) {
+      return new Response(JSON.stringify({ error: "Missing RESEND_API_KEY secret" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (!userEmail) {
+      return new Response(JSON.stringify({ error: "User email is missing" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // If user is owner of any org(s), delete those orgs first
     // This cascades to org_memberships, removing all team members' access
-    if (ownedOrgs && ownedOrgs.length > 0) {
-      const orgIds = ownedOrgs.map((m: { org_id: string }) => m.org_id);
+    if (ownedOrgIds.length > 0) {
+      const orgIds = ownedOrgIds;
 
       const { error: deleteOrgsError } = await supabaseAdmin
         .from("orgs")
@@ -156,7 +250,60 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    return new Response(JSON.stringify({ success: true }), {
+    let emailSent = false;
+    let emailError: string | null = null;
+    try {
+      const subject = "Your SpendNote account has been deleted";
+      const html = `
+        <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#111;background:#f8fafc;padding:24px;">
+          <div style="max-width:560px;margin:0 auto;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;background:#ffffff;">
+            <div style="background:#ffffff;padding:8px 20px 6px;">
+              <img src="https://spendnote.app/assets/images/spendnote-logo-horizontal-1024.png?v=20260301-1839" alt="SpendNote" width="156" style="display:block;height:auto;border:0;outline:none;text-decoration:none;"/>
+            </div>
+            <div style="background:linear-gradient(135deg,#059669,#10b981);padding:14px 20px;color:#fff;">
+              <div style="font-size:20px;font-weight:900;">Account deleted</div>
+              <div style="font-size:13px;opacity:0.95;margin-top:4px;">Your SpendNote account has been permanently removed</div>
+            </div>
+            <div style="padding:18px 20px;">
+              <p style="margin:0 0 10px;">Hi ${userName}, this is a confirmation that your SpendNote account was deleted successfully.</p>
+              <p style="margin:0 0 14px;">If this was not you, contact support immediately at <a href="mailto:support@spendnote.app" style="color:#1d4ed8;">support@spendnote.app</a>.</p>
+              <p style="margin:0;color:#6b7280;">This mailbox is not monitored.</p>
+            </div>
+            <div style="padding:14px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:12px;">
+              Cash handoff documentation only. Not a tax or accounting tool.<br>
+              © SpendNote • spendnote.app
+            </div>
+          </div>
+        </div>
+      `;
+      const text = `Your SpendNote account has been deleted\n\nHi ${userName}, this is a confirmation that your SpendNote account was deleted successfully.\nIf this was not you, contact support@spendnote.app immediately.`;
+
+      const resendResp = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${resendApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from,
+          to: [userEmail],
+          subject,
+          html,
+          text,
+        }),
+      });
+
+      if (!resendResp.ok) {
+        const detail = await resendResp.text();
+        throw new Error(detail || "Resend returned non-OK response");
+      }
+      emailSent = true;
+    } catch (err) {
+      emailSent = false;
+      emailError = err instanceof Error ? err.message : "Failed to send post-delete email";
+    }
+
+    return new Response(JSON.stringify({ success: true, emailSent, emailError }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

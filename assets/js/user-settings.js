@@ -1116,56 +1116,100 @@ const initUserSettingsPage = async () => {
         }
     });
 
-    // Delete account — 5-second countdown then real deletion via Edge Function
+    // Delete account — preview summary, explicit confirmation, then real deletion via Edge Function
     const deleteBtn = document.getElementById('deleteAccountBtn');
-    let deleteCountdownTimer = null;
-
-    deleteBtn?.addEventListener('click', () => {
+    deleteBtn?.addEventListener('click', async () => {
         const confirmInput = document.getElementById('deleteConfirmInput');
         if (String(confirmInput?.value || '').trim() !== 'DELETE') {
             showAlert('Please type "DELETE" to confirm.', { iconType: 'warning' });
             return;
         }
 
-        // Prevent double-click while countdown is running
-        if (deleteCountdownTimer) return;
-
-        let remaining = 5;
         deleteBtn.disabled = true;
-        deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Deleting in ${remaining}...`;
+        deleteBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Loading summary...`;
 
-        deleteCountdownTimer = setInterval(async () => {
-            remaining--;
-            if (remaining > 0) {
-                deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Deleting in ${remaining}...`;
+        const resetDeleteBtn = () => {
+            deleteBtn.disabled = false;
+            deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Delete Account`;
+        };
+
+        try {
+            const preview = await window.auth?.getDeleteAccountPreview?.();
+            if (!preview?.success) {
+                resetDeleteBtn();
+                showAlert(preview?.error || 'Failed to load deletion summary.', { iconType: 'error' });
                 return;
             }
 
-            clearInterval(deleteCountdownTimer);
-            deleteCountdownTimer = null;
+            const s = preview?.summary || {};
+            const n = (v) => {
+                const x = Number(v || 0);
+                return Number.isFinite(x) ? x : 0;
+            };
+
+            const lines = ['This action is permanent and cannot be undone.', ''];
+            if (s?.isOwner) {
+                lines.push('You are an owner, so this will delete your full organization data:');
+                lines.push(`• Organizations: ${n(s.ownedOrgCount)}`);
+                lines.push(`• Team memberships: ${n(s.teamMembershipCount)}`);
+                lines.push(`• Pending invites: ${n(s.pendingInviteCount)}`);
+                lines.push(`• Cash boxes: ${n(s.cashBoxCount)}`);
+                lines.push(`• Contacts: ${n(s.contactCount)}`);
+                lines.push(`• Transactions: ${n(s.transactionCount)}`);
+            } else {
+                lines.push('Your account data to be deleted:');
+                lines.push(`• Team memberships: ${n(s.teamMembershipCount)}`);
+                lines.push(`• Cash boxes: ${n(s.cashBoxCount)}`);
+                lines.push(`• Contacts: ${n(s.contactCount)}`);
+                lines.push(`• Transactions: ${n(s.transactionCount)}`);
+            }
+            lines.push('');
+            lines.push('After deletion, a confirmation email will be sent to your account email.');
+            lines.push('Do you want to permanently delete your account now?');
+
+            resetDeleteBtn();
+            const confirmed = await showConfirm(lines.join('\n'), {
+                title: 'Delete account permanently?',
+                iconType: 'danger',
+                okLabel: 'Delete permanently',
+                cancelLabel: 'Cancel',
+                danger: true,
+            });
+
+            if (!confirmed) {
+                return;
+            }
+
+            deleteBtn.disabled = true;
             deleteBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Deleting...`;
 
-            try {
-                const result = await window.auth.deleteAccount();
-                if (!result?.success) {
-                    deleteBtn.disabled = false;
-                    deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Delete Account`;
-                    showAlert(result?.error || 'Account deletion failed.', { iconType: 'error' });
-                    return;
-                }
-
-                // Clear all local data
-                try { localStorage.clear(); } catch (_) {}
-                try { sessionStorage.clear(); } catch (_) {}
-
-                // Redirect to landing page
-                window.location.href = '/index.html';
-            } catch (e) {
-                deleteBtn.disabled = false;
-                deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Delete Account`;
-                showAlert(String(e?.message || 'Account deletion failed.'), { iconType: 'error' });
+            const result = await window.auth.deleteAccount();
+            if (!result?.success) {
+                resetDeleteBtn();
+                showAlert(result?.error || 'Account deletion failed.', { iconType: 'error' });
+                return;
             }
-        }, 1000);
+
+            try {
+                await window.auth.signOut();
+            } catch (_) {
+                // ignore
+            }
+
+            // Clear all local data
+            try { localStorage.clear(); } catch (_) {}
+            try { sessionStorage.clear(); } catch (_) {}
+
+            if (result?.emailSent === false) {
+                await showAlert('Account deleted, but confirmation email could not be delivered. Contact support@spendnote.app if needed.', { iconType: 'warning' });
+            }
+
+            // Redirect to landing page
+            window.location.href = '/index.html';
+        } catch (e) {
+            resetDeleteBtn();
+            showAlert(String(e?.message || 'Account deletion failed.'), { iconType: 'error' });
+        }
     });
 
     // Invite modal

@@ -1408,6 +1408,79 @@ var auth = {
         return await __spendnoteSendUserEventEmail(payload);
     },
 
+    async getDeleteAccountPreview() {
+        try {
+            const looksLikeJwt = (v) => {
+                const s = String(v || '');
+                return /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(s);
+            };
+
+            const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
+            let accessToken = String(session?.access_token || '');
+
+            if (sessErr || !looksLikeJwt(accessToken)) {
+                try {
+                    await supabaseClient.auth.refreshSession();
+                    const s2 = await supabaseClient.auth.getSession();
+                    accessToken = String(s2?.data?.session?.access_token || '');
+                } catch (_) {
+                    // ignore; handled by final check below
+                }
+            }
+
+            if (!looksLikeJwt(accessToken)) {
+                return { success: false, error: 'Session expired/invalid. Please log in again.' };
+            }
+
+            const doRequest = async (jwt) => {
+                return await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${jwt}`,
+                        'apikey': SUPABASE_ANON_KEY
+                    },
+                    body: JSON.stringify({ mode: 'preview' })
+                });
+            };
+
+            let resp = await doRequest(accessToken);
+
+            if (resp.status === 401) {
+                try {
+                    await supabaseClient.auth.refreshSession();
+                    const s2 = await supabaseClient.auth.getSession();
+                    const nextToken = String(s2?.data?.session?.access_token || '');
+                    if (looksLikeJwt(nextToken)) {
+                        resp = await doRequest(nextToken);
+                    }
+                } catch (_) {
+                    // ignore
+                }
+            }
+
+            if (!resp.ok) {
+                if (resp.status === 401) {
+                    return { success: false, error: 'Session expired/invalid. Please log in again.' };
+                }
+                const parsed = await __spendnoteParseFetchError(resp, { defaultMessage: 'Failed to load deletion summary.' });
+                return { success: false, error: parsed.message };
+            }
+
+            let payload = null;
+            try {
+                payload = await resp.json();
+            } catch (_) {
+                payload = null;
+            }
+            return { success: true, summary: payload?.summary || null };
+        } catch (e) {
+            const msg = String(e?.message || 'Failed to load deletion summary.');
+            if (window.SpendNoteDebug) console.error('getDeleteAccountPreview error:', e);
+            return { success: false, error: msg };
+        }
+    },
+
     async deleteAccount() {
         try {
             const looksLikeJwt = (v) => {
@@ -1440,7 +1513,7 @@ var auth = {
                         'Authorization': `Bearer ${jwt}`,
                         'apikey': SUPABASE_ANON_KEY
                     },
-                    body: JSON.stringify({})
+                    body: JSON.stringify({ mode: 'delete' })
                 });
             };
 
@@ -1466,7 +1539,19 @@ var auth = {
                 const parsed = await __spendnoteParseFetchError(resp, { defaultMessage: 'Account deletion failed.' });
                 return { success: false, error: parsed.message };
             }
-            return { success: true };
+
+            let payload = null;
+            try {
+                payload = await resp.json();
+            } catch (_) {
+                payload = null;
+            }
+
+            return {
+                success: true,
+                emailSent: payload?.emailSent !== false,
+                emailError: payload?.emailError ? String(payload.emailError) : null
+            };
         } catch (e) {
             const msg = String(e?.message || 'Account deletion failed.');
             if (window.SpendNoteDebug) console.error('deleteAccount error:', e);
