@@ -483,8 +483,9 @@
 <script src="assets/js/nav-loader.js?v=23"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        loadNavigation();
-        loadFooter();
+        if (typeof window.loadNav === 'function') {
+            window.loadNav('nav-container');
+        }
     });
 </script>
 </body>
