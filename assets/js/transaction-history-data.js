@@ -121,7 +121,7 @@
         const dt = new Date(year, month - 1, day);
         if (Number.isNaN(dt.getTime())) return raw;
 
-        return dt.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+        return dt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     }
 
     function getInitials(name) {
