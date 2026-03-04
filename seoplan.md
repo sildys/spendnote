@@ -275,6 +275,53 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
     - **Intent:** Owners unsure about the rules — and worried about misuse.
     - **Keywords:** can employees take petty cash without a receipt, petty cash no receipt policy.
 
+**Idea backlog Round 3 (additional small-business pain points):**
+
+*Small business trust & responsibility:*
+1. `petty-cash-trust-issues.html` 🔒 IDEA
+   - **Intent:** Building trust with staff who access petty cash.
+   - **Keywords:** how to trust staff with petty cash, petty cash access control.
+
+2. `petty-cash-manager-responsibility.html` 🔒 IDEA
+   - **Intent:** Deciding who should be responsible for petty cash.
+   - **Keywords:** who should manage petty cash, petty cash manager responsibility.
+
+*Daily practical issues:*
+3. `petty-cash-running-out.html` 🔒 IDEA ⭐ TOP PICK
+   - **Intent:** Handling situations when petty cash runs out unexpectedly.
+   - **Keywords:** petty cash runs out mid day, what to do when petty cash is empty.
+
+4. `forgot-to-record-petty-cash.html` 🔒 IDEA
+   - **Intent:** Fixing missed petty cash transaction records.
+   - **Keywords:** forgot to record petty cash, missed petty cash transaction fix.
+
+*Small business environments:*
+5. `small-shop-cash-control.html` 🔒 IDEA ⭐ TOP PICK
+   - **Intent:** Simple cash control tailored for small shops.
+   - **Keywords:** small shop cash control, petty cash for small retail.
+
+6. `family-business-cash-tracking.html` 🔒 IDEA
+   - **Intent:** Cash tracking for family-run businesses with trust dynamics.
+   - **Keywords:** family business cash tracking, petty cash family business.
+
+*Beginner entrepreneur questions:*
+7. `petty-cash-for-startups.html` 🔒 IDEA
+   - **Intent:** Addressing whether startups need petty cash tracking.
+   - **Keywords:** petty cash for startups, do startups need petty cash.
+
+8. `how-to-start-petty-cash-box.html` 🔒 IDEA
+   - **Intent:** Guide for setting up a petty cash box from scratch.
+   - **Keywords:** how to start petty cash box, set up petty cash from scratch.
+
+*Unique situations & mistakes:*
+9. `petty-cash-mixed-with-personal.html` 🔒 IDEA ⭐ TOP PICK
+   - **Intent:** Handling accidental mixing of petty cash with personal money.
+   - **Keywords:** petty cash mixed with personal money, separating petty cash personal.
+
+10. `petty-cash-lost-key.html` 🔒 IDEA
+    - **Intent:** Practical issue of losing access to the cash box.
+    - **Keywords:** lost key to cash box, petty cash box locked out.
+
 ### Core Pages (Non-SEO Landing)
 
 | URL | Source file | Current robots | Purpose |
