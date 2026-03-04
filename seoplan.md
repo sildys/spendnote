@@ -672,6 +672,29 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - **Keywords:** lost and found cash log, found cash documentation, cash return receipt.
    - **Framing:** Internal proof that found cash was documented and/or returned.
 
+---
+
+#### Future Phase: Multilingual SEO Expansion
+
+> **Key insight:** SpendNote receipts are already fully localizable — custom receipt labels (Pro) + currency selection mean the generated receipt works in ANY language/country. Only the app UI stays English, but the app is simple enough (few screens, few buttons) that non-English speakers can use it easily while their clients receive receipts in their local language.
+
+**Strategy:** Take the best-performing 20-30 English SEO pages and create localized versions in target languages using subfolder structure (`/es/`, `/de/`, `/pt/`, `/fr/`).
+
+**Target markets (priority order):**
+1. **Spanish** (`/es/`) — US Hispanic market + Latin America. Massive cash-heavy economy, millions of small tradesmen.
+2. **Portuguese** (`/pt/`) — Brazil. Cash-intensive small business sector.
+3. **German** (`/de/`) — DACH region. Surprisingly high cash usage, strong documentation culture.
+4. **French** (`/fr/`) — France + West Africa. Small tradesmen, community funds.
+
+**Why this works:**
+- Receipt output is already localized (labels + currency) → the product delivers in the user's language.
+- Same content structure as English pages → only text and keywords change.
+- Subfolder SEO (`spendnote.app/es/recibo-de-efectivo`) is a proven multilingual strategy.
+- Much lower keyword competition in non-English markets for cash receipt tools.
+- Multiplier effect: 30 pages × 4 languages = 120 additional SEO pages with minimal effort.
+
+**Timing:** Only after English SEO is established and generating stable traffic (earliest: 6-12 months after English content launch).
+
 ### Core Pages (Non-SEO Landing)
 
 | URL | Source file | Current robots | Purpose |
