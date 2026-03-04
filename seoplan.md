@@ -180,6 +180,47 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - **Topic:** Common petty cash tracking mistakes and everyday terminology.
    - **SEO Strategy:** Organically capture high-volume typos and phonetic searches common among everyday small business owners (e.g., *pety cash*, *peddy cash log*, *petty cash vaucher*, *pety cash slip*) in a helpful, non-spammy context.
 
+**Idea backlog (small-business language, colloquial + typo-friendly):**
+1. `cash-up-sheet-template.html` 🔒 IDEA
+   - **Intent:** End-of-day cash close routine for shops/teams.
+   - **Keywords:** cash up sheet, end of day cash sheet, till cash-up.
+
+2. `cash-shortage-log.html` 🔒 IDEA
+   - **Intent:** Document missing cash incidents with clear accountability.
+   - **Keywords:** cash shortage log, missing cash record, till shortage form.
+
+3. `cash-over-and-short-form.html` 🔒 IDEA
+   - **Intent:** Track over/short differences per shift.
+   - **Keywords:** over and short form, cash over short sheet.
+
+4. `shift-cash-handover-log.html` 🔒 IDEA
+   - **Intent:** Shift-to-shift handover proof.
+   - **Keywords:** shift cash handover, till handover log, cash handover form.
+
+5. `cash-paid-out-log.html` 🔒 IDEA
+   - **Intent:** Record day-time paid-out cash events.
+   - **Keywords:** cash paid out log, paid out slip, petty cash paid out.
+
+6. `petty-cash-sign-out-sheet.html` 🔒 IDEA
+   - **Intent:** Track who took cash, when, and why.
+   - **Keywords:** petty cash sign out sheet, cash sign out form.
+
+7. `cash-box-checklist.html` 🔒 IDEA
+   - **Intent:** Daily checklist workflow for cash box checks.
+   - **Keywords:** cash box checklist, daily cash box check.
+
+8. `pety-cash-guide.html` 🔒 IDEA
+   - **Intent:** Capture typo-driven searches in a useful guide format.
+   - **Keywords:** pety cash, pety cash log, pety cash slip.
+
+9. `petty-cash-vaucher-guide.html` 🔒 IDEA
+   - **Intent:** Capture voucher typo traffic in educational context.
+   - **Keywords:** petty cash vaucher, petty cash vucher.
+
+10. `cash-slip-vs-receipt.html` 🔒 IDEA
+    - **Intent:** Clarify terminology confusion for small business users.
+    - **Keywords:** cash slip vs receipt, petty cash slip meaning.
+
 ### Core Pages (Non-SEO Landing)
 
 | URL | Source file | Current robots | Purpose |
