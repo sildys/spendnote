@@ -544,37 +544,37 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
 
 *Contractor / tradesman cash advance receipts (extremely common daily use case):*
 
-> **Core scenario:** You give cash upfront to a contractor or tradesman. They do the work, then invoice you later. SpendNote documents the instant the cash changed hands — proof that money was given. The invoice and final settlement come separately.
+> **Core scenario:** The tradesman/contractor is the SpendNote user. A client gives them cash upfront as an advance. The tradesman logs the IN transaction in SpendNote and instantly gives the client a receipt as proof of the cash received. The official invoice comes later after the work is done. SpendNote = instant proof of cash received, not a tax invoice.
 
 20. `contractor-advance-payment-receipt.html` 🔒 IDEA ⭐ TOP PICK
-    - **Intent:** Giving a contractor cash upfront for a job — instant proof before the invoice arrives.
-    - **Keywords:** contractor advance payment receipt, cash advance to contractor proof, contractor deposit receipt.
-    - **Framing:** Proof of cash advance to contractor — invoice and final settlement come later.
+    - **Intent:** Contractor receives a cash advance from a client — needs to give instant proof of cash received before issuing the final invoice.
+    - **Keywords:** contractor advance payment receipt, contractor cash received proof, give client receipt for advance.
+    - **Framing:** Contractor gives instant proof of cash advance received — invoices after job completion.
 
 21. `plumber-cash-advance-receipt.html` 🔒 IDEA
-    - **Intent:** Paying a plumber cash upfront for parts/labor — documenting the handoff.
-    - **Keywords:** plumber cash advance, cash payment to plumber receipt, plumber deposit proof.
-    - **Framing:** Instant proof of cash given to plumber — they invoice the full job later.
+    - **Intent:** Plumber receives cash upfront for parts/labor — gives the client instant documentation.
+    - **Keywords:** plumber cash advance receipt, plumber proof of payment received, plumber cash deposit receipt.
+    - **Framing:** Plumber documents cash received from client — full invoice follows after the job.
 
 22. `electrician-cash-advance-receipt.html` 🔒 IDEA
-    - **Intent:** Cash advance to an electrician before the job is completed.
-    - **Keywords:** electrician cash advance receipt, cash payment to electrician proof.
-    - **Framing:** Proof of advance — electrician invoices after completion.
+    - **Intent:** Electrician receives cash advance before starting work — gives client a receipt on the spot.
+    - **Keywords:** electrician cash advance receipt, electrician proof of cash received.
+    - **Framing:** Electrician documents the advance — invoices after completion.
 
 23. `handyman-cash-payment-receipt.html` 🔒 IDEA ⭐ TOP PICK
-    - **Intent:** Paying a handyman in cash — very common, often no formal receipt exists.
-    - **Keywords:** handyman cash payment receipt, proof of cash payment to handyman.
-    - **Framing:** Instant proof of cash paid — the handyman may or may not invoice later.
+    - **Intent:** Handyman receives cash payment — very common, often no formal receipt given. SpendNote solves this.
+    - **Keywords:** handyman cash payment receipt, handyman give receipt for cash, handyman proof of payment.
+    - **Framing:** Handyman gives client instant proof of cash received — professional and simple.
 
 24. `construction-material-advance-receipt.html` 🔒 IDEA
-    - **Intent:** Giving cash to buy materials on a job site — documenting who got how much.
-    - **Keywords:** construction material cash advance, job site cash for materials receipt.
-    - **Framing:** Proof of cash given for material purchases — actual receipts from the store come later.
+    - **Intent:** Construction crew receives cash for material purchases — documents who received how much.
+    - **Keywords:** construction material cash advance, job site cash advance receipt, material purchase cash proof.
+    - **Framing:** Crew leader documents cash received for materials — store receipts collected separately.
 
 25. `service-provider-cash-advance.html` 🔒 IDEA
-    - **Intent:** General: giving any service provider (cleaner, painter, landscaper, mechanic) cash upfront.
-    - **Keywords:** service provider cash advance receipt, cash advance before invoice, pay tradesman cash proof.
-    - **Framing:** Universal — instant proof of cash advance to any service provider who invoices later.
+    - **Intent:** Any service provider (cleaner, painter, landscaper, mechanic) receives cash upfront and gives the client instant proof.
+    - **Keywords:** service provider cash advance receipt, tradesman cash received proof, give client receipt before invoice.
+    - **Framing:** Universal — any tradesman gives instant proof of cash received, invoices later.
 
 ### Core Pages (Non-SEO Landing)
 
