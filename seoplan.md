@@ -705,6 +705,70 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
 
 ---
 
+### Planned SEO Pages (22 pages — approved 2026-03-07)
+
+All pages will be created with `noindex, nofollow` until individually approved for indexing.
+
+#### Persona — Service Providers (7)
+
+| # | Slug | Primary keyword | Image reuse strategy |
+|---|---|---|---|
+| 1 | `freelancer-cash-payment-receipt` | freelancer cash receipt | contractor images |
+| 2 | `cleaning-service-cash-receipt` | cleaning service cash receipt | babysitter images |
+| 3 | `personal-trainer-cash-receipt` | personal trainer cash receipt | babysitter images |
+| 4 | `lawn-care-cash-payment-receipt` | lawn care cash receipt | contractor images |
+| 5 | `salon-cash-receipt` | salon cash receipt | babysitter images |
+| 6 | `moving-company-cash-receipt` | moving company cash receipt | contractor images |
+| 7 | `rent-payment-receipt` | rent payment receipt | generic receipt images |
+
+#### Excel / Spreadsheet Searchers (4)
+
+| # | Slug | Primary keyword | Content angle |
+|---|---|---|---|
+| 8 | `cash-receipt-template-excel` | cash receipt template excel | "Looking for Excel? Here's better" |
+| 9 | `petty-cash-template-excel` | petty cash template excel | Excel alternative positioning |
+| 10 | `cash-tracking-spreadsheet` | cash tracking spreadsheet | Spreadsheet replacement |
+| 11 | `petty-cash-app-vs-excel` | petty cash app vs excel | Direct comparison page |
+
+#### Panic / Problem Searches (3)
+
+| # | Slug | Primary keyword | Content angle |
+|---|---|---|---|
+| 12 | `petty-cash-does-not-balance` | petty cash doesn't balance | Problem → diagnosis → SpendNote as prevention |
+| 13 | `who-took-money-from-cash-box` | who took money from cash box | Trust problem → audit trail → SpendNote |
+| 14 | `cash-discrepancy-between-shifts` | cash discrepancy between shifts | Shift handover problem → SpendNote |
+
+#### Industry-Specific (1)
+
+| # | Slug | Primary keyword | Content angle |
+|---|---|---|---|
+| 15 | `construction-site-petty-cash` | construction site petty cash | Field/onsite cash management |
+
+#### Process / Feature Pages (7)
+
+| # | Slug | Primary keyword | Content angle |
+|---|---|---|---|
+| 16 | `daily-cash-report-template` | daily cash report template | End-of-day cash summary |
+| 17 | `digital-receipt-book` | digital receipt book | Replace paper receipt books |
+| 18 | `cash-count-sheet-template` | cash count sheet | Cash denomination counting |
+| 19 | `petty-cash-replenishment-form` | petty cash replenishment | Replenishment process |
+| 20 | `cash-refund-receipt` | cash refund receipt | Documenting cash refunds |
+| 21 | `petty-cash-audit-checklist` | petty cash audit checklist | Audit preparation |
+| 22 | `cash-paid-out-log` | cash paid out log | Disbursement tracking |
+
+#### Removed from consideration (legal/cannibalization risk)
+
+| Slug | Reason |
+|---|---|
+| ~~missing-petty-cash-receipts-tax~~ | Tax legal risk |
+| ~~restaurant-petty-cash-tips~~ | IRS tip reporting regulations |
+| ~~restaurant-cash-tracking~~ | POS/cash register regulatory overlap |
+| ~~shift-cash-handover-log~~ | Cannibalization with `cash-handoff-receipt` |
+| ~~petty-cash-sign-out-sheet~~ | Cannibalization with `petty-cash-voucher-template` |
+| ~~replace-petty-cash-spreadsheet~~ | Merged into `petty-cash-app-vs-excel` |
+
+---
+
 #### Future Phase: Multilingual SEO Expansion
 
 > **Key insight:** SpendNote receipts are already fully localizable — custom receipt labels (Pro) + currency selection mean the generated receipt works in ANY language/country. Only the app UI stays English, but the app is simple enough (few screens, few buttons) that non-English speakers can use it easily while their clients receive receipts in their local language.
