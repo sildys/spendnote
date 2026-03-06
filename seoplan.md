@@ -705,7 +705,7 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
 
 ---
 
-### Planned SEO Pages (22 pages — approved 2026-03-07)
+### Planned SEO Pages (24 pages — approved 2026-03-07)
 
 All pages will be created with `noindex, nofollow` until individually approved for indexing.
 
@@ -755,6 +755,42 @@ All pages will be created with `noindex, nofollow` until individually approved f
 | 20 | `cash-refund-receipt` | cash refund receipt | Documenting cash refunds |
 | 21 | `petty-cash-audit-checklist` | petty cash audit checklist | Audit preparation |
 | 22 | `cash-paid-out-log` | cash paid out log | Disbursement tracking |
+
+#### Educational / How-To Pages (2)
+
+| # | Slug | Primary keyword | Content angle |
+|---|---|---|---|
+| 23 | `how-to-track-cash-payments` | how to track cash payments | Educational guide → SpendNote as solution |
+| 24 | `how-to-manage-petty-cash-small-business` | how to manage petty cash small business | Educational cluster hub → SpendNote as tool |
+
+#### Keyword Expansion Tasks (existing pages — no new pages needed)
+
+The following keyword variants should be woven into existing pages' H2s, alt tags, meta descriptions, and body copy instead of creating separate pages (to avoid cannibalization).
+
+**"Printable / PDF / download" keywords → add to existing pages:**
+
+| Keyword variant | Target existing page |
+|---|---|
+| printable cash receipt, cash receipt printable | `cash-receipt-template.html` |
+| petty cash form pdf, petty cash voucher pdf | `petty-cash-voucher-template.html` |
+| cash log sheet pdf, cash log sheet printable | `petty-cash-log-template.html` |
+| cash payment receipt printable | `cash-payment-received-proof.html` |
+
+**"Alternative / replacement" keywords → add to existing pages:**
+
+| Keyword variant | Target existing page |
+|---|---|
+| receipt book alternative, paper receipt book replacement | `digital-receipt-book` (planned #17) |
+| digital petty cash log, petty cash ledger alternative | `digital-petty-cash-book.html` |
+| cash log book alternative | `petty-cash-log-template.html` |
+
+**"How to" variants absorbed into existing pages:**
+
+| Keyword variant | Target existing page |
+|---|---|
+| how to record cash expenses | `office-expense-reimbursement-form.html` |
+| how to keep cash receipts | `cash-receipt-template.html` |
+| petty cash management system | `digital-petty-cash-book.html` |
 
 #### Removed from consideration (legal/cannibalization risk)
 
