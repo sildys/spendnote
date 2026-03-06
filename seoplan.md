@@ -757,8 +757,14 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
 - petty-cash-receipt-generator.html ✅
 - cash-handoff-receipt.html ✅
 
-**Draft pages (noindex, nofollow - awaiting approval):** 1
+**Draft pages (noindex, nofollow - awaiting approval):** 7
 - spendnote-pricing.html 🔒 (intentional - no payment system yet)
+- handyman-cash-payment-receipt.html 🔒 (new - 2026-03-06)
+- tutor-cash-payment-receipt.html 🔒 (new - 2026-03-06)
+- employee-cash-advance-receipt.html 🔒 (new - 2026-03-06)
+- school-money-collection-tracker.html 🔒 (new - 2026-03-06)
+- cash-deposit-receipt.html 🔒 (new - 2026-03-06)
+- custom-cash-receipt-with-logo.html 🔒 (new - 2026-03-06)
 
 ### Key notes per page (important details)
 
@@ -783,6 +789,38 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - Most use Article or SoftwareApplication schema + FAQPage.
 
 ### Finish checklist for these SEO pages
+
+### Update log - 2026-03-06 (batch 2)
+
+1. **Created 6 new SEO draft pages (noindex, nofollow):**
+   - `handyman-cash-payment-receipt.html` — service provider segment, reuses contractor images
+   - `tutor-cash-payment-receipt.html` — service provider segment, reuses babysitter images
+   - `employee-cash-advance-receipt.html` — employer/HR segment, reuses contractor images
+   - `school-money-collection-tracker.html` — community/group segment, reuses generic dashboard images
+   - `cash-deposit-receipt.html` — landlord/vendor segment, reuses generic receipt images
+   - `custom-cash-receipt-with-logo.html` — feature-focused page, reuses contractor + generic images
+
+2. **Cannibalization check:**
+   - Each page targets a distinct search intent not covered by existing pages.
+   - handyman ≠ contractor (different service, different client type)
+   - tutor ≠ babysitter (different service, different payment context)
+   - employee advance ≠ contractor advance (internal vs external, payroll vs project)
+   - school collection ≠ event cash handling (ongoing collection vs one-time event)
+   - deposit receipt ≠ payment receipt (refundable deposit vs service payment)
+   - custom logo receipt ≠ receipt template (branding feature vs general template)
+
+3. **All 6 pages include:**
+   - Article + FAQPage structured data
+   - 4 unique FAQ items each
+   - Meta description ≤ 160 characters
+   - Title ≤ 60 characters
+   - Disclaimer box (not invoice/tax/accounting)
+   - Internal links to related (but different) existing pages
+   - Unique footer SVG gradient IDs to avoid conflicts
+
+4. **Draft page count updated:** 1 → 7
+
+---
 
 ### Update log - 2026-03-06
 
