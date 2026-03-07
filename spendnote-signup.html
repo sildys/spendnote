@@ -656,6 +656,32 @@
                 padding: 24px 20px;
             }
         }
+
+        /* FLOATING HOME BUTTON */
+        .fab-home {
+            position: fixed;
+            bottom: 28px;
+            left: 28px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.4);
+            text-decoration: none;
+            z-index: 9998;
+            transition: all 0.2s;
+        }
+
+        .fab-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(5, 150, 105, 0.5);
+            background: #047857;
+        }
     </style></head>
 <body>
 <div class="preview-banner" role="status" aria-live="polite">
@@ -911,6 +937,8 @@ function togglePreviewDetails() {
         </div>
     </div>
     </div>
+
+    <a href="/" class="fab-home" title="Back to homepage"><i class="fas fa-home"></i></a>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-config.js?v=20260227-1630"></script>
