@@ -1,4 +1,4 @@
-semmi<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -171,11 +171,12 @@ semmi<!DOCTYPE html>
 
         /* AUTH CONTAINER */
         .auth-container {
-            min-height: 100vh;
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 40px 32px;
+            min-width: 0;
         }
 
         .auth-card {
@@ -488,6 +489,141 @@ semmi<!DOCTYPE html>
                 font-size: 24px;
             }
         }
+
+        /* SPLIT LAYOUT */
+        .signup-split {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .signup-value {
+            flex: 1;
+            background: linear-gradient(160deg, #059669 0%, #047857 50%, #065f46 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .signup-value::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .signup-value-inner {
+            max-width: 440px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .signup-value h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        .signup-tagline {
+            font-size: 1.05rem;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .signup-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 32px 0;
+        }
+
+        .signup-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 18px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .signup-features li .feature-icon {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .signup-features li strong {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .signup-features li span {
+            opacity: 0.85;
+            font-size: 0.88rem;
+        }
+
+        .signup-screenshot {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 28px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .signup-trust {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 0.88rem;
+            opacity: 0.85;
+        }
+
+        .signup-trust span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .signup-trust i {
+            color: #a7f3d0;
+        }
+
+        @media (max-width: 960px) {
+            .signup-split {
+                flex-direction: column;
+            }
+
+            .signup-value {
+                padding: 36px 24px;
+            }
+
+            .signup-value h2 {
+                font-size: 1.5rem;
+            }
+
+            .signup-screenshot {
+                display: none;
+            }
+
+            .auth-container {
+                padding: 24px 20px;
+            }
+        }
     </style></head>
 <body>
 <div class="preview-banner" role="status" aria-live="polite">
@@ -542,7 +678,56 @@ function togglePreviewDetails() {
     }
 }
 </script>
-    <div class="auth-container">
+    <div class="signup-split">
+        <!-- Value Proposition -->
+        <div class="signup-value">
+            <div class="signup-value-inner">
+                <h2>Track cash. Generate receipts. Keep proof.</h2>
+                <p class="signup-tagline">The simplest way to manage cash payments and create professional receipts — for freelancers, small teams, and anyone handling cash.</p>
+
+                <ul class="signup-features">
+                    <li>
+                        <div class="feature-icon"><i class="fas fa-receipt"></i></div>
+                        <div>
+                            <strong>Instant PDF receipts</strong>
+                            <span>Print, email, or download — ready in seconds</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feature-icon"><i class="fas fa-cash-register"></i></div>
+                        <div>
+                            <strong>Multiple cash boxes</strong>
+                            <span>Separate tracking for each project, location, or team</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feature-icon"><i class="fas fa-users"></i></div>
+                        <div>
+                            <strong>Team collaboration</strong>
+                            <span>Invite team members with role-based access</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feature-icon"><i class="fas fa-search"></i></div>
+                        <div>
+                            <strong>Full audit trail</strong>
+                            <span>Every transaction tracked, searchable, and exportable</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <img src="assets/images/spendnote-dashboard-960.jpg" alt="SpendNote dashboard with cash box overview and transaction history" class="signup-screenshot" loading="lazy">
+
+                <div class="signup-trust">
+                    <span><i class="fas fa-check-circle"></i> No credit card required</span>
+                    <span><i class="fas fa-check-circle"></i> Free plan available</span>
+                    <span><i class="fas fa-check-circle"></i> Setup in 30 seconds</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Form -->
+        <div class="auth-container">
         <div class="auth-card">
             <!-- Logo -->
             <div class="auth-logo">
@@ -692,6 +877,7 @@ function togglePreviewDetails() {
                 Already have an account? <a id="loginLink" href="spendnote-login.html">Log in</a>
             </div>
         </div>
+    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
