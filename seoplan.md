@@ -1458,6 +1458,41 @@ Oldal struktúra:
 
 Framing: SpendNote = azonnali bizonylat arról, hogy a készpénz gazdát cserélt. Nem adóügyi dokumentum.
 
+Generic template oldalak (ÚJ — hiányzó long-tail template kulcsszavak)
+
+A template intent a legnagyobb volumenű SEO piac. A meglévő template oldalak (petty cash voucher, cash receipt, petty cash log) jól működnek, de ezek a generic variánsok hiányoznak:
+
+- payment-receipt-template — fizetési bizonylat sablon (nagy volumen)
+- deposit-receipt-template — letét / kaució sablon
+- refund-receipt-template — visszatérítés sablon (cash-refund-receipt LIVE, de nem template framing)
+- advance-payment-receipt-template — előleg bizonylat sablon
+
+Oldal struktúra: template preview + rövid magyarázat + generator CTA → SpendNote signup.
+
+"Proof / confirmation" kulcsszó klaszter (ÚJ)
+
+Óriási globális keresési klaszter. Az ember valamit igazolni akar — fizetést, átvételt, visszatérítést. Nagyon közel a SpendNote core funkciójához.
+
+Célkulcsszavak:
+- proof-of-payment — generic, hatalmas volumen
+- proof-of-payment-receipt — bizonylattal kombinált
+- payment-confirmation-receipt — fizetés megerősítése
+- payment-acknowledgement-receipt — fizetés elismerése
+
+Hub oldal: `proof-of-payment-receipt.html` (explanation + generator + FAQ)
+Supporting: `payment-confirmation-receipt.html`, `payment-acknowledgement-receipt.html`
+
+Framing: SpendNote = azonnali proof of payment, ami a helyszínen kiadható. Nem számla, nem adóügyi dokumentum.
+
+Cash handover klaszter kiegészítés (ÚJ)
+
+A `cash-handoff-receipt.html` LIVE, de a klaszter nem teljes. Hiányzó variánsok:
+
+- cash-received-from-employee — alkalmazottól kapott készpénz dokumentálása
+- cash-transfer-receipt — belső pénzmozgás bizonylat (cash box → cash box, személy → személy)
+
+Ezek a meglévő Cluster 3 (Cash Handoff & Team Accountability) bővítései.
+
 Ezek tool intent keresések.
 
 Általában a SERP-ben:
