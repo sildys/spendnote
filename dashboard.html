@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=23">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=21">
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260313-1950">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260313-2010">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
@@ -81,7 +81,7 @@
                                     <i class="fas fa-plus"></i>
                                 </div>
                                 <div class="add-cash-box-title">Add Cash Box</div>
-                                <div class="add-cash-box-subtitle">Keep your cash organized</div>
+                                <div class="add-cash-box-subtitle">Add another box, even in a different currency</div>
                                 <!-- Conditional upgrade message - only shown when limit reached -->
                                 <div class="add-cash-box-upgrade" data-upgrade-text="standard">Upgrade to Standard for more Cash Boxes</div>
                                 <div class="add-cash-box-upgrade" data-upgrade-text="pro">Upgrade to Pro for unlimited Cash Boxes</div>
@@ -115,7 +115,6 @@
                         <div class="onboarding-step-check"><i class="fas fa-check"></i></div>
                         <div class="onboarding-step-text">
                             <div class="onboarding-step-title">Record your opening balance</div>
-                            <div class="onboarding-step-desc">Add an IN transaction to set your starting cash amount</div>
                         </div>
                         <div class="onboarding-step-arrow"><i class="fas fa-chevron-right"></i></div>
                     </div>
@@ -123,23 +122,6 @@
                         <div class="onboarding-step-check"><i class="fas fa-check"></i></div>
                         <div class="onboarding-step-text">
                             <div class="onboarding-step-title">Record a payment</div>
-                            <div class="onboarding-step-desc">Create an OUT transaction when cash leaves the box</div>
-                        </div>
-                        <div class="onboarding-step-arrow"><i class="fas fa-chevron-right"></i></div>
-                    </div>
-                    <div class="onboarding-step" id="onboardingStep3" data-step="receipt">
-                        <div class="onboarding-step-check"><i class="fas fa-check"></i></div>
-                        <div class="onboarding-step-text">
-                            <div class="onboarding-step-title">Print or save a receipt</div>
-                            <div class="onboarding-step-desc">Open any transaction and generate a PDF or print receipt</div>
-                        </div>
-                        <div class="onboarding-step-arrow"><i class="fas fa-chevron-right"></i></div>
-                    </div>
-                    <div class="onboarding-step" id="onboardingStep4" data-step="identity">
-                        <div class="onboarding-step-check"><i class="fas fa-check"></i></div>
-                        <div class="onboarding-step-text">
-                            <div class="onboarding-step-title">Personalize your receipts</div>
-                            <div class="onboarding-step-desc">Add your company name and logo in Settings</div>
                         </div>
                         <div class="onboarding-step-arrow"><i class="fas fa-chevron-right"></i></div>
                     </div>
@@ -2016,14 +1998,12 @@
                 var steps = s.steps || {};
                 markStep(document.getElementById('onboardingStep1'), steps.deposit);
                 markStep(document.getElementById('onboardingStep2'), steps.payment);
-                markStep(document.getElementById('onboardingStep3'), steps.receipt);
-                markStep(document.getElementById('onboardingStep4'), steps.identity);
 
-                var done = [steps.deposit, steps.payment, steps.receipt, steps.identity].filter(Boolean).length;
+                var done = [steps.deposit, steps.payment].filter(Boolean).length;
                 var bar = document.getElementById('onboardingProgressBar');
-                if (bar) bar.style.width = (done / 4 * 100) + '%';
+                if (bar) bar.style.width = (done / 2 * 100) + '%';
 
-                if (done === 4) {
+                if (done === 2) {
                     setTimeout(function() {
                         card.style.opacity = '0';
                         card.style.transform = 'translateY(-10px)';
@@ -2046,12 +2026,6 @@
             });
             document.getElementById('onboardingStep2').addEventListener('click', function() {
                 if (typeof window.openModal === 'function') window.openModal({ direction: 'out' });
-            });
-            document.getElementById('onboardingStep3').addEventListener('click', function() {
-                window.location.href = 'spendnote-transaction-history.html';
-            });
-            document.getElementById('onboardingStep4').addEventListener('click', function() {
-                window.location.href = 'spendnote-user-settings.html';
             });
 
             window.addEventListener('SpendNoteDashboardDataLoaded', function() {

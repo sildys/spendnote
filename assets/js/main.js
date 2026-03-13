@@ -292,6 +292,118 @@ function initSentryMonitoring() {
 }
 
 
+function ensurePageTipStyles() {
+    if (document.getElementById('snPageTipStyles')) return;
+    const style = document.createElement('style');
+    style.id = 'snPageTipStyles';
+    style.textContent = `
+        .sn-page-tip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(5,150,105,0.06);
+            border: 1px solid rgba(5,150,105,0.15);
+            border-radius: 10px;
+            margin: 0 0 12px 0;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #0f172a;
+        }
+        .sn-page-tip > i { color: #059669; font-size: 14px; flex-shrink: 0; }
+        .sn-page-tip-text { flex: 1; }
+        .sn-page-tip-text strong { font-weight: 700; }
+        .sn-page-tip-dismiss {
+            width: 22px; height: 22px;
+            display: flex; align-items: center; justify-content: center;
+            background: transparent; border: none;
+            color: #94a3b8; font-size: 14px; cursor: pointer;
+            border-radius: 6px; flex-shrink: 0; transition: all 0.15s;
+        }
+        .sn-page-tip-dismiss:hover { background: rgba(0,0,0,0.05); color: #334155; }
+        @media (max-width: 768px) {
+            .sn-page-tip { padding: 8px 12px; font-size: 12px; gap: 8px; border-radius: 8px; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+window.showPageTip = function showPageTip(pageKey, html, opts) {
+    var TIPS_KEY = 'spendnote.tips.v1';
+    var targetSel = (opts && opts.target) || '.main-content';
+    var insertMode = (opts && opts.insert) || 'prepend';
+
+    function readTips() {
+        try { var r = localStorage.getItem(TIPS_KEY); return r ? JSON.parse(r) : {}; } catch(_) { return {}; }
+    }
+    function writeTips(t) {
+        try { localStorage.setItem(TIPS_KEY, JSON.stringify(t)); } catch(_) {}
+    }
+
+    var tips = readTips();
+    if (tips[pageKey]) return;
+
+    var checkTxCount = function(cb) {
+        var dbApi = window.db;
+        if (dbApi && dbApi.transactions && typeof dbApi.transactions.getAll === 'function') {
+            dbApi.transactions.getAll({ select: 'id', limit: 3 }).then(function(txs) {
+                cb(txs ? txs.length : 0);
+            }).catch(function() { cb(0); });
+        } else {
+            cb(0);
+        }
+    };
+
+    var render = function() {
+        ensurePageTipStyles();
+        var target = document.querySelector(targetSel);
+        if (!target) return;
+        if (document.getElementById('snPageTip_' + pageKey)) return;
+
+        var tip = document.createElement('div');
+        tip.className = 'sn-page-tip';
+        tip.id = 'snPageTip_' + pageKey;
+        tip.innerHTML = '<i class="fas fa-lightbulb"></i><div class="sn-page-tip-text">' + html + '</div><button type="button" class="sn-page-tip-dismiss" title="Dismiss"><i class="fas fa-times"></i></button>';
+        tip.querySelector('.sn-page-tip-dismiss').addEventListener('click', function() {
+            var t = readTips(); t[pageKey] = true; writeTips(t);
+            tip.style.transition = 'opacity 0.2s, transform 0.2s';
+            tip.style.opacity = '0'; tip.style.transform = 'translateY(-6px)';
+            setTimeout(function() { tip.remove(); }, 250);
+        });
+
+        if (insertMode === 'after' && opts && opts.afterEl) {
+            var ref = document.querySelector(opts.afterEl);
+            if (ref && ref.parentNode) { ref.parentNode.insertBefore(tip, ref.nextSibling); return; }
+        }
+        if (insertMode === 'before' && opts && opts.beforeEl) {
+            var bef = document.querySelector(opts.beforeEl);
+            if (bef && bef.parentNode) { bef.parentNode.insertBefore(tip, bef); return; }
+        }
+        var firstChild = target.querySelector('.page-header');
+        if (firstChild && firstChild.nextSibling) {
+            target.insertBefore(tip, firstChild.nextSibling);
+        } else {
+            target.prepend(tip);
+        }
+    };
+
+    var go = function() {
+        checkTxCount(function(count) {
+            if (count >= 3) {
+                var t = readTips(); t[pageKey] = true; writeTips(t);
+                return;
+            }
+            render();
+        });
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(go, 200); }, { once: true });
+    } else {
+        setTimeout(go, 200);
+    }
+};
+
 function injectCookieSettingsLink() {
     document.querySelectorAll('.app-footer-links-simple').forEach((linksDiv) => {
         if (linksDiv.querySelector('[data-cookie-settings]')) return;

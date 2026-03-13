@@ -1042,7 +1042,6 @@ const initUserSettingsPage = async () => {
         if (!result?.success) { showAlert(result?.error || 'Failed to save.', { iconType: 'error' }); return; }
         writeUserFullName(fullName);
         fillProfile(result.data);
-        try { var _ob = JSON.parse(localStorage.getItem('spendnote.onboarding.v1') || '{}'); _ob.steps = _ob.steps || {}; _ob.steps.identity = true; localStorage.setItem('spendnote.onboarding.v1', JSON.stringify(_ob)); } catch(_) {}
         showAlert('Profile saved.', { iconType: 'success' });
     });
 
@@ -1086,7 +1085,6 @@ const initUserSettingsPage = async () => {
             window.LogoEditor.resetToBaselineView();
         }
         forceReceiptLogoBaselineUi();
-        try { var _ob = JSON.parse(localStorage.getItem('spendnote.onboarding.v1') || '{}'); _ob.steps = _ob.steps || {}; _ob.steps.identity = true; localStorage.setItem('spendnote.onboarding.v1', JSON.stringify(_ob)); } catch(_) {}
         showAlert('Receipt identity saved.', { iconType: 'success' });
     });
 

@@ -1134,7 +1134,17 @@ window.addEventListener('beforeunload', () => {
 <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
 <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
 <script>loadNav();</script>
-<script src="assets/js/main.js?v=34"></script>
+<script src="assets/js/main.js?v=36"></script>
+<script>
+if (typeof showPageTip === 'function') {
+    var _cbId = new URLSearchParams(window.location.search).get('cashBoxId');
+    if (_cbId) {
+        showPageTip('cashbox-edit', 'Customize your cash box <strong>name, color, and icon</strong>. Choose which fields appear on your receipts.');
+    } else {
+        showPageTip('cashbox-create', 'Choose your <strong>currency</strong> and <strong>receipt ID prefix</strong> carefully — these cannot be changed later.');
+    }
+}
+</script>
 <script src="assets/js/cash-box-settings-data.js?v=51"></script>
 </body>
 </html>

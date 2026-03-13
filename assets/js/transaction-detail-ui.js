@@ -543,7 +543,6 @@ html, body { height: auto !important; overflow: auto !important; }
 
         if (printBtn) {
             printBtn.addEventListener('click', async () => {
-                try { var _ob = JSON.parse(localStorage.getItem('spendnote.onboarding.v1') || '{}'); _ob.steps = _ob.steps || {}; _ob.steps.receipt = true; localStorage.setItem('spendnote.onboarding.v1', JSON.stringify(_ob)); } catch(_) {}
                 const opened = openReceiptPlaceholder();
                 if (!opened) {
                     showAlert('Popup blocked. Please allow popups to print receipts.', { iconType: 'warning' });
@@ -570,7 +569,6 @@ html, body { height: auto !important; overflow: auto !important; }
         }
         if (pdfBtn) {
             pdfBtn.addEventListener('click', async () => {
-                try { var _ob = JSON.parse(localStorage.getItem('spendnote.onboarding.v1') || '{}'); _ob.steps = _ob.steps || {}; _ob.steps.receipt = true; localStorage.setItem('spendnote.onboarding.v1', JSON.stringify(_ob)); } catch(_) {}
                 const opened = openReceiptPlaceholder();
                 if (!opened) {
                     showAlert('Popup blocked. Please allow popups to download PDFs.', { iconType: 'warning' });
