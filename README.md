@@ -7,7 +7,41 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is deployable as a static site (Cloudflare Pages, currently live at `spendnote.app`).
 
-## Current status (2026-02-27 — email branding + SVG fix + UI polish)
+## Current status (2026-03-13 — Legal docs rewrite + cookie consent GDPR compliance)
+
+### Legal documents rewrite (2026-03-13)
+
+- **Terms of Service (`spendnote-terms.html`) — full rewrite (14 sections):**
+  - Sildsys, LLC (Delaware LLC) identified as operator with company address.
+  - Stripe, Inc. named as payment processor (§6.2) with links to Stripe ToS/Privacy.
+  - Preview / Early Access section added (§3): features may change, 200 receipt limit, pricing may change before GA.
+  - 30-day money-back guarantee — only if <20 transactions in the billing period.
+  - Instant permanent account + data deletion (replaces 30-day export period).
+  - Disclaimer of Warranties (§9), Indemnification (§11) sections added.
+  - Governing law: State of Delaware (§12), AAA arbitration, class action waiver.
+  - Acceptable Use cleaned up: removed money laundering / fake receipt policing lines.
+  - Cash box description fixed: "within one or more Cash Boxes" (not "across").
+- **Privacy Policy (`spendnote-privacy.html`) — full rewrite (12 sections):**
+  - Sildsys, LLC as data controller.
+  - Service provider table: Stripe, Cloudflare, Supabase (EU Frankfurt), Resend, Google Analytics, Microsoft Clarity.
+  - GDPR + CCPA rights sections (§8.1, §8.2).
+  - International Data Transfers section (§7) — SCCs, data transfer frameworks.
+  - Instant deletion promise — no backup retention mention, no data copies kept.
+  - Payment data handled exclusively by Stripe.
+- **Cookie consent banner GDPR compliance fix:**
+  - Hungarian text replaced with English ("Cookie Settings" / "Essential Only" / "Accept All").
+  - Privacy Policy link added to the banner ("Learn more" → privacy#cookies).
+  - Equal-weight buttons — no dark pattern (removed green "Accept All" styling).
+  - `reopenConsentBanner()` method added for consent withdrawal.
+  - "Cookie Settings" link dynamically injected into every page footer — consent withdrawal as required by GDPR.
+  - Cache bump: `main.js` v33 → v34 across 22 HTML files.
+- **Important rules established:**
+  - User's personal name must NEVER appear on any public-facing page.
+  - Backups must NEVER be used to restore individually deleted accounts (privacy promise).
+  - Footer copyright stays "SpendNote" (brand) — Sildsys, LLC only in legal documents.
+- **Commits:** `ce66aff`, `bdfa970`, `32f1fdb`, `d1960fb`, `f6a9862`, `d3d1a9a`, `71950ad`, `80ff2c6`
+
+## Previous status (2026-02-27 — email branding + SVG fix + UI polish)
 
 ### Email logo integration + SVG fix + UI fixes (2026-02-27)
 

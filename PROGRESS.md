@@ -95,6 +95,42 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
+## Where we are now (last updated: 2026-03-13 — Legal docs + cookie consent GDPR compliance)
+
+### 2026-03-13 frissítés — Legal dokumentumok átírása + cookie consent GDPR szabványosítás (KÉSZ)
+
+- **Terms of Service teljes átírás (14 szekció):**
+  - Sildsys, LLC (Delaware LLC) azonosítva mint üzemeltető
+  - Cég cím: 1111 S Governors Ave, B #45989, Dover, DE 19904, US
+  - Stripe, Inc. nevesítve mint payment processor (§6.2), Stripe ToS/Privacy linkkel
+  - Preview / Early Access szekció hozzáadva (§3): funkciók változhatnak, 200 receipt limit, árak változhatnak GA előtt
+  - 30 napos pénzvisszafizetési garancia — **csak ha <20 tranzakció** a billing periódusban
+  - Azonnali és végleges account + adat törlés (nem 30 napos export)
+  - Disclaimer of Warranties (§9), Indemnification (§11) szekciók hozzáadva
+  - Governing law: State of Delaware (§12), AAA arbitráció, class action waiver
+  - Acceptable Use: money laundering / fake receipt sorok eltávolítva (nem a mi felelősségünk)
+  - Cash box leírás javítva: "within one or more Cash Boxes" (nem "across")
+- **Privacy Policy teljes átírás (12 szekció):**
+  - Sildsys, LLC mint data controller
+  - Service provider tábla: Stripe, Cloudflare, Supabase (EU Frankfurt), Resend, Google Analytics, Microsoft Clarity
+  - Supabase lokáció: **EU (Frankfurt, Germany)** — GDPR erős jel
+  - GDPR + CCPA jogok szekció (§8.1, §8.2)
+  - International Data Transfers szekció (§7) — SCCs, data transfer frameworks
+  - Azonnali törlés ígéret — nincs backup retention mention, nincs data copy
+  - Payment adatokat kizárólag Stripe kezeli
+- **Cookie consent banner GDPR szabványosítás:**
+  - Magyar szöveg → **angol** ("Cookie Settings" / "Essential Only" / "Accept All")
+  - Privacy Policy link hozzáadva a bannerben ("Learn more" → privacy#cookies)
+  - Egyenrangú gombok — mindkettő azonos stílusú, nincs dark pattern (zöld "Accept All" eltávolítva)
+  - `reopenConsentBanner()` metódus hozzáadva a consent visszavonáshoz
+  - "Cookie Settings" link dinamikusan injektálva **minden footer**-be (45 oldal) — consent withdrawal GDPR-kötelező
+  - Cache bump: main.js v33 → v34 (22 HTML fájl frissítve)
+- **Fontos szabályok rögzítve:**
+  - User személyneve SOHA nem jelenhet meg publikus oldalon
+  - Backup SOHA nem használható egyéni törölt account visszaállítására (privacy ígéret)
+  - Footer copyright marad "SpendNote" (brand) — Sildsys, LLC csak a jogi dokumentumokban
+- **Commitok:** `ce66aff`, `bdfa970`, `32f1fdb`, `d1960fb`, `f6a9862`, `d3d1a9a`, `71950ad`, `80ff2c6`
+
 ## Where we are now (last updated: 2026-02-27 — email logo + SVG fix + UI javítások)
 
 ### 2026-02-27 frissítés — Email logo integráció + SVG path fix + UI javítások (KÉSZ)
