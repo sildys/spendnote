@@ -1423,6 +1423,41 @@ iou-receipt-generator
 
 cash-loan-receipt
 
+Generic high-volume generator oldalak (ÚJ — tool intent, nagy keresési volumen)
+
+Ezek a legáltalánosabb, legnagyobb forgalmú "generator" kulcsszavak.
+A SERP-ben kevés valódi SaaS tool van — többnyire PDF/Word sablonok → könnyebb rankelni.
+
+- receipt-generator — a legáltalánosabb, legnagyobb volumen
+- payment-receipt-generator — fizetési bizonylat generátor
+- proof-of-payment-generator — fizetés igazolása
+- refund-receipt-generator — visszatérítési bizonylat
+- cash-receipt-generator — (már fent van, de generic landing page kell hozzá)
+
+Ezek mind külön SEO oldalak lehetnek, mindegyik:
+- mini tool / instant preview
+- CTA → SpendNote signup
+- FAQ szekció a long-tail lefedéséhez
+
+"Cash received" kulcsszó klaszter (ÚJ)
+
+A "cash received" intent nagyon közel áll a SpendNote core funkciójához: valaki pénzt kap, és azonnal bizonylatot ad róla.
+
+Célkulcsszavak:
+- cash-received-receipt — bizonylat arról, hogy pénzt kaptam
+- cash-received-confirmation — megerősítés, hogy a pénz megérkezett
+- cash-received-template — sablon a pénz átvételéhez
+- cash-received-form — űrlap a pénz átvételének dokumentálásához
+- acknowledge-receipt-of-cash — formális "elismerem, hogy átvettem"
+- cash-received-from-customer — ügyfél által fizetett készpénz bizonylata
+
+Oldal struktúra:
+- Hub oldal: `cash-received-receipt.html` (generator + template + explanation)
+- Supporting: `acknowledge-receipt-of-cash.html` (formális minta / üzleti kontextus)
+- Kontextus oldalak: industry-specific variánsok (rent, deposit, advance, stb. — részben már tervben vannak)
+
+Framing: SpendNote = azonnali bizonylat arról, hogy a készpénz gazdát cserélt. Nem adóügyi dokumentum.
+
 Ezek tool intent keresések.
 
 Általában a SERP-ben:
