@@ -97,37 +97,6 @@
                 </div>
                 <!-- End of registers-swiper -->
 
-            <!-- Onboarding First Steps -->
-            <div class="onboarding-card" id="onboardingCard" style="display:none;">
-                <div class="onboarding-header">
-                    <div class="onboarding-header-left">
-                        <div class="onboarding-header-icon"><i class="fas fa-rocket"></i></div>
-                        <div>
-                            <h3>Get Started</h3>
-                            <p class="onboarding-header-subtitle">Complete these steps to start tracking your cash</p>
-                        </div>
-                    </div>
-                    <button class="onboarding-dismiss" id="onboardingDismiss" type="button" title="Dismiss"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="onboarding-progress"><div class="onboarding-progress-bar" id="onboardingProgressBar"></div></div>
-                <div class="onboarding-steps">
-                    <div class="onboarding-step" id="onboardingStep1" data-step="deposit">
-                        <div class="onboarding-step-check"><i class="fas fa-check"></i></div>
-                        <div class="onboarding-step-text">
-                            <div class="onboarding-step-title">Record your opening balance</div>
-                        </div>
-                        <div class="onboarding-step-arrow"><i class="fas fa-chevron-right"></i></div>
-                    </div>
-                    <div class="onboarding-step" id="onboardingStep2" data-step="payment">
-                        <div class="onboarding-step-check"><i class="fas fa-check"></i></div>
-                        <div class="onboarding-step-text">
-                            <div class="onboarding-step-title">Record a payment</div>
-                        </div>
-                        <div class="onboarding-step-arrow"><i class="fas fa-chevron-right"></i></div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Tip: invite your team (compact) - Moved below Cash Boxes -->
             <div class="invite-banner-compact" id="inviteBanner">
                 <i class="fas fa-lightbulb"></i>
@@ -1961,103 +1930,7 @@
             }
         });
 
-        // ========================================
-        // ONBOARDING CHECKLIST CARD
-        // ========================================
-        (function initOnboardingCard() {
-            var OB_KEY = 'spendnote.onboarding.v1';
-            var card = document.getElementById('onboardingCard');
-            if (!card) return;
-
-            function readOB() {
-                try {
-                    var raw = localStorage.getItem(OB_KEY);
-                    if (!raw) return { dismissed: false, steps: {} };
-                    var parsed = JSON.parse(raw);
-                    return parsed && typeof parsed === 'object' ? parsed : { dismissed: false, steps: {} };
-                } catch (_) { return { dismissed: false, steps: {} }; }
-            }
-            function writeOB(s) {
-                try { localStorage.setItem(OB_KEY, JSON.stringify(s)); } catch (_) {}
-            }
-
-            var obState = readOB();
-            if (obState.dismissed) return;
-
-            card.style.display = '';
-            var inviteBanner = document.getElementById('inviteBanner');
-            if (inviteBanner) inviteBanner.style.display = 'none';
-
-            function markStep(el, done) {
-                if (done) el.classList.add('completed');
-                else el.classList.remove('completed');
-            }
-
-            function refreshOBUI() {
-                var s = readOB();
-                var steps = s.steps || {};
-                markStep(document.getElementById('onboardingStep1'), steps.deposit);
-                markStep(document.getElementById('onboardingStep2'), steps.payment);
-
-                var done = [steps.deposit, steps.payment].filter(Boolean).length;
-                var bar = document.getElementById('onboardingProgressBar');
-                if (bar) bar.style.width = (done / 2 * 100) + '%';
-
-                if (done === 2) {
-                    setTimeout(function() {
-                        card.style.opacity = '0';
-                        card.style.transform = 'translateY(-10px)';
-                        setTimeout(function() { card.style.display = 'none'; }, 350);
-                    }, 1200);
-                }
-            }
-
-            document.getElementById('onboardingDismiss').addEventListener('click', function() {
-                var s = readOB();
-                s.dismissed = true;
-                writeOB(s);
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(-10px)';
-                setTimeout(function() { card.style.display = 'none'; }, 350);
-            });
-
-            document.getElementById('onboardingStep1').addEventListener('click', function() {
-                if (typeof window.openModal === 'function') window.openModal({ direction: 'in' });
-            });
-            document.getElementById('onboardingStep2').addEventListener('click', function() {
-                if (typeof window.openModal === 'function') window.openModal({ direction: 'out' });
-            });
-
-            window.addEventListener('SpendNoteDashboardDataLoaded', function() {
-                try {
-                    var s = readOB();
-                    if (!s.steps) s.steps = {};
-                    var dbApi = window.db;
-                    if (dbApi && dbApi.transactions && typeof dbApi.transactions.getAll === 'function') {
-                        dbApi.transactions.getAll({ select: 'id, type', limit: 50 }).then(function(txs) {
-                            if (txs && txs.length >= 3) {
-                                s.dismissed = true;
-                                writeOB(s);
-                                card.style.display = 'none';
-                                return;
-                            }
-                            if (txs && txs.length > 0) {
-                                var hasIn = txs.some(function(t) { return t.type === 'income'; });
-                                var hasOut = txs.some(function(t) { return t.type === 'expense'; });
-                                if (hasIn) s.steps.deposit = true;
-                                if (hasOut) s.steps.payment = true;
-                                writeOB(s);
-                            }
-                            refreshOBUI();
-                        }).catch(function() { refreshOBUI(); });
-                    } else {
-                        refreshOBUI();
-                    }
-                } catch (_) { refreshOBUI(); }
-            });
-
-            refreshOBUI();
-        })();
+        if (typeof showPageTip === 'function') showPageTip('dashboard', 'Record an <strong>IN</strong> transaction to set your opening balance, then track payments as <strong>OUT</strong>.');
 
     </script>
 </body>
