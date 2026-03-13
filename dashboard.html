@@ -2003,6 +2003,8 @@
             if (obState.dismissed) return;
 
             card.style.display = '';
+            var inviteBanner = document.getElementById('inviteBanner');
+            if (inviteBanner) inviteBanner.style.display = 'none';
 
             function markStep(el, done) {
                 if (done) el.classList.add('completed');
