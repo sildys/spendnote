@@ -261,9 +261,10 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - **Intent:** Mobile business owners tracking cash on the go.
    - **Keywords:** food truck cash tracking, mobile business cash log.
 
-8. `church-petty-cash-fund.html` 🔒 IDEA
+8. `church-petty-cash-fund.html` 🔒 IDEA ⚠️ JOGI KOCKÁZAT
    - **Intent:** Nonprofit / church cash fund management with minimal overhead.
    - **Keywords:** church petty cash fund, nonprofit petty cash policy.
+   - **⚠️ Figyelem:** Nonprofit/egyházi pénzkezelés IRS szabályozás alá eshet. Disclaimer szükséges.
 
 *Process & rules:*
 9. `how-often-count-petty-cash.html` 🔒 IDEA
@@ -336,13 +337,15 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - **Intent:** Small business owners afraid of audit with no proper cash documentation.
    - **Keywords:** petty cash audit checklist, small business petty cash audit.
 
-2. `petty-cash-records-for-tax-time.html` 🔒 IDEA
+2. `petty-cash-records-for-tax-time.html` 🔒 IDEA ⚠️ JOGI KOCKÁZAT
    - **Intent:** End-of-year scramble to organize cash records for the accountant.
    - **Keywords:** petty cash records for tax, organize petty cash before tax season.
+   - **⚠️ Figyelem:** Adótanácsadásnak tűnhet. Erős "not tax advice" disclaimer szükséges.
 
-3. `petty-cash-missing-receipts-tax.html` 🔒 IDEA
+3. `petty-cash-missing-receipts-tax.html` 🔒 IDEA ⚠️ JOGI KOCKÁZAT
    - **Intent:** Panic when receipts are missing at tax time.
    - **Keywords:** missing petty cash receipts tax, lost petty cash receipts what to do.
+   - **⚠️ Figyelem:** Adótanácsadásnak tűnhet. Erős "not tax advice" disclaimer szükséges.
 
 *Replacing Excel / paper:*
 4. `replace-petty-cash-spreadsheet.html` 🔒 IDEA ⭐ TOP PICK
@@ -402,9 +405,10 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - **Intent:** Practical security tips for keeping cash safe.
    - **Keywords:** petty cash security tips, how to keep petty cash safe.
 
-3. `does-insurance-cover-petty-cash-theft.html` 🔒 IDEA
+3. `does-insurance-cover-petty-cash-theft.html` 🔒 IDEA ⚠️ JOGI KOCKÁZAT
    - **Intent:** Very specific but high-intent question after a theft incident.
    - **Keywords:** does insurance cover petty cash theft, business insurance stolen cash.
+   - **⚠️ Figyelem:** Biztosítási tanácsadás területe. Erős disclaimer szükséges vagy kihagyni.
 
 *Owner not always present:*
 4. `manage-petty-cash-remotely.html` ✅ LIVE (2026-03-08)
@@ -420,9 +424,10 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - **Intent:** Emotionally charged — owner suspects theft but doesn't know how to address it.
    - **Keywords:** how to talk to employee about missing cash, confront staff about stolen money.
 
-7. `petty-cash-discipline-policy.html` 🔒 IDEA
+7. `petty-cash-discipline-policy.html` 🔒 IDEA ⚠️ JOGI KOCKÁZAT
    - **Intent:** What consequences to set when petty cash rules are broken.
    - **Keywords:** petty cash discipline policy, employee broke petty cash rules.
+   - **⚠️ Figyelem:** Munkajogi terület — fegyelmi eljárások szabályozása államonként eltér.
 
 *Comparison & decision support:*
 8. `best-petty-cash-app-for-small-business.html` 🔒 IDEA ⭐ TOP PICK
@@ -460,10 +465,11 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
 > **Positioning guardrail:** SpendNote provides instant proof of cash handoff — NOT a tax invoice or official accounting document. The official invoice/receipt comes later; SpendNote gives immediate documentation that cash changed hands. Every page must include this disclaimer.
 
 *Instant cash receipt / proof of payment (core app feature, new contexts):*
-1. `rent-payment-cash-receipt.html` 🔒 IDEA ⭐ TOP PICK
+1. `rent-payment-cash-receipt.html` 🔒 IDEA ⭐ TOP PICK ⚠️ JOGI KOCKÁZAT
    - **Intent:** Landlords who collect rent in cash and need to give tenants instant proof — the official invoice comes later.
    - **Keywords:** rent payment cash receipt, proof of rent payment cash, rent cash handoff receipt.
    - **Framing:** Instant proof that cash rent was received; not a tax document.
+   - **⚠️ Figyelem:** Több US államban (NY, CA) törvény szabályozza a rent receipt formátumát. Erős disclaimer kell.
 
 2. `cash-deposit-receipt.html` 🔒 IDEA ⭐ TOP PICK
    - **Intent:** Instant proof that a security deposit / advance was received in cash.
@@ -1537,17 +1543,8 @@ Célkulcsszavak:
 
 Oldal struktúra: app showcase + feature lista + CTA → signup/install.
 
-#### D) Személyes készpénz dokumentáció klaszter (kiaknázatlan niche)
-
-Barátok/család közötti kölcsönök, személyes tranzakciók dokumentálása. Meglepően nagy keresési volumen, és szinte senki nem célozza SaaS-ként.
-
-Célkulcsszavak:
-- receipt-for-personal-loan — kölcsön bizonylat
-- money-lent-receipt — kölcsönadott pénz dokumentálása
-- receipt-for-lending-money-to-friend — long-tail, de nagyon specifikus intent
-- personal-cash-receipt — személyes készpénz bizonylat
-
-Framing: "Need proof that you lent or received cash? Create an instant receipt — no app install needed."
+#### D) TÖRÖLVE — Személyes kölcsön bizonylat klaszter
+Törvényileg szabályozott terület (usury laws, Truth in Lending Act, állami lending engedélyek). A "loan" kulcsszó jogi kötelezettségeket implikál. Kihagyva.
 
 #### E) TÖRÖLVE — "Cash donation receipt" klaszter
 Törvényileg szabályozott terület (IRS 501(c)(3), tax deductibility). Nem illik a SpendNote pozícionáláshoz ("not a tax or accounting tool"). Kihagyva.
