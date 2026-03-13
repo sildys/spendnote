@@ -1495,6 +1495,98 @@ Ezek a meglévő Cluster 3 (Cash Handoff & Team Accountability) bővítései.
 
 Ezek tool intent keresések.
 
+---
+
+### Új klaszter ötletek (brainstorm)
+
+#### A) "How to write/make a receipt" — edukációs klaszter (HATALMAS volumen)
+
+Ez a top-of-funnel keresés. Aki nem tudja hogyan kell receipt-et írni, az pont a mi célcsoport: kisvállalkozás, egyéni vállalkozó, service provider aki készpénzt kap.
+
+Célkulcsszavak:
+- how-to-write-a-receipt — generic, masszív volumen
+- how-to-make-a-receipt — szinonima, szintén hatalmas
+- how-to-create-a-receipt-for-payment — konkrétabb intent
+- what-to-include-on-a-receipt — checklist formátum, jó FAQ-nak
+- receipt-format — milyen formátumú legyen egy bizonylat
+
+Oldal struktúra: step-by-step guide + receipt preview + "or just use SpendNote" CTA.
+Ezek nem tool intent, de NAGYON nagy volumenűek és erős funnel entry point-ok.
+
+#### B) "Free receipt maker" klaszter (konverzióra kész)
+
+A "free" módosító hatalmas keresési volument hoz. A SpendNote free tier (200 receipt) pont ide illik.
+
+Célkulcsszavak:
+- free-receipt-maker — a #1 keresés ebben a kategóriában
+- free-receipt-generator — tool intent + free
+- make-a-receipt-online-free — long-tail, de konvertál
+- create-receipt-online — tool intent, nincs "free" de implicit elvárás
+
+Hub oldal: `free-receipt-maker.html` — mini tool / instant preview + "Start free — 200 receipts included" CTA.
+
+#### C) "Receipt app" klaszter (mobile/app intent)
+
+Aki "receipt app"-ot keres, az telepíteni akar valamit. A SpendNote PWA/web app pont illik ide.
+
+Célkulcsszavak:
+- receipt-app — generic, nagy volumen
+- best-receipt-app-for-small-business — listicle / comparison format
+- cash-receipt-app — konkrétabb, kevesebb verseny
+- receipt-maker-app — tool + app intent kombó
+
+Oldal struktúra: app showcase + feature lista + CTA → signup/install.
+
+#### D) Személyes készpénz dokumentáció klaszter (kiaknázatlan niche)
+
+Barátok/család közötti kölcsönök, személyes tranzakciók dokumentálása. Meglepően nagy keresési volumen, és szinte senki nem célozza SaaS-ként.
+
+Célkulcsszavak:
+- receipt-for-personal-loan — kölcsön bizonylat
+- money-lent-receipt — kölcsönadott pénz dokumentálása
+- receipt-for-lending-money-to-friend — long-tail, de nagyon specifikus intent
+- personal-cash-receipt — személyes készpénz bizonylat
+
+Framing: "Need proof that you lent or received cash? Create an instant receipt — no app install needed."
+
+#### E) "Cash donation receipt" klaszter (nonprofit/egyház)
+
+Templomok, egyesületek, nonprofit szervezetek gyakran kapnak készpénz adományt és bizonylatot kell adniuk. Nagyon hűséges user bázis, ha egyszer elkezdik használni.
+
+Célkulcsszavak:
+- cash-donation-receipt — készpénz adomány bizonylata
+- donation-receipt-template — adomány sablon
+- charity-cash-donation-receipt — jótékonysági készpénz
+- church-donation-receipt — egyházi adomány (nagy volumen az USA-ban)
+
+Framing: "Give donors instant proof of their cash contribution. Not a tax receipt — just clear documentation."
+
+#### F) "Cash count / till" operatív klaszter
+
+A napi záró pénzszámlálás és a "till" (brit angol: kasszagép) kulcsszavak. UK/AU piacon különösen erős.
+
+Célkulcsszavak:
+- cash-count-sheet — napi pénzszámlálási ív
+- till-reconciliation-template — kasszaegyeztetés sablon (UK)
+- cash-counting-form — pénzszámlálási űrlap
+- end-of-day-cash-count — napi záró számlálás
+
+Ezek az existing `cash-drawer-reconciliation.html` (LIVE) és `daily-cash-report-template.html` (LIVE) köré csoportosulnak, de a "till" + "cash count" variánsok nincsenek lefedve.
+
+#### G) "Cash float / change fund" klaszter
+
+Nyitó pénzkészlet / váltópénz alap. Minden kiskereskedő és vendéglátós keresi. Direkt kapcsolódik a SpendNote "opening balance" IN tranzakciójához.
+
+Célkulcsszavak:
+- cash-float-template — nyitó pénzkészlet sablon
+- change-fund-log — váltópénz alap napló
+- how-to-set-up-a-cash-float — hogyan állítsuk be a nyitó pénzkészletet
+- opening-cash-balance-template — nyitó egyenleg sablon
+
+Framing: "Set your opening cash float in SpendNote and track every movement from there."
+
+---
+
 Általában a SERP-ben:
 
 PDF
