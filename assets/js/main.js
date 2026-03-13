@@ -109,10 +109,9 @@ function ensureConsentStyles() {
             font-weight: 600;
             cursor: pointer;
         }
-        .sn-consent-btn.sn-consent-accept {
-            background: #059669;
-            border-color: #059669;
-            color: #ffffff;
+        .sn-consent-banner a {
+            color: #059669;
+            text-decoration: underline;
         }
         @media (max-width: 640px) {
             .sn-consent-banner { left: 10px; right: 10px; bottom: 10px; }
@@ -132,12 +131,12 @@ function renderStrictConsentBanner(onDecision) {
     banner.className = 'sn-consent-banner';
     banner.innerHTML = `
         <div>
-            <strong>Cookie beállítások</strong><br>
-            Csak a működéshez szükséges sütik aktívak alapból. Az analitikai mérésekhez engedélyezés szükséges.
+            <strong>Cookie Settings</strong><br>
+            We use essential cookies to operate SpendNote. Analytics cookies help us improve the service and are only enabled with your consent. <a href="spendnote-privacy.html#cookies">Learn more</a>
         </div>
         <div class="sn-consent-actions">
-            <button type="button" class="sn-consent-btn" data-consent="necessary">Csak szükséges</button>
-            <button type="button" class="sn-consent-btn sn-consent-accept" data-consent="all">Összes elfogadása</button>
+            <button type="button" class="sn-consent-btn" data-consent="necessary">Essential Only</button>
+            <button type="button" class="sn-consent-btn" data-consent="all">Accept All</button>
         </div>
     `;
     banner.querySelectorAll('button[data-consent]').forEach((btn) => {
@@ -202,6 +201,17 @@ window.SpendNoteConsent = window.SpendNoteConsent || {
 
     canLoadAnalytics() {
         return Boolean(this._state?.analytics === true);
+    },
+
+    reopenConsentBanner() {
+        const country = String(this._state?.country || '').trim().toUpperCase();
+        renderStrictConsentBanner((allowAnalytics) => {
+            this._state = { analytics: allowAnalytics, regionMode: this._state?.regionMode || 'strict', country };
+            writeConsentState(this._state);
+            if (!allowAnalytics) {
+                window.location.reload();
+            }
+        });
     }
 };
 
@@ -281,6 +291,28 @@ function initSentryMonitoring() {
     document.head.appendChild(s);
 }
 
+
+function injectCookieSettingsLink() {
+    document.querySelectorAll('.app-footer-links-simple').forEach((linksDiv) => {
+        if (linksDiv.querySelector('[data-cookie-settings]')) return;
+        const privacyLink = linksDiv.querySelector('a[href*="privacy"]');
+        const cookieLink = document.createElement('a');
+        cookieLink.href = '#';
+        cookieLink.textContent = 'Cookie Settings';
+        cookieLink.setAttribute('data-cookie-settings', '1');
+        cookieLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.SpendNoteConsent?.reopenConsentBanner) {
+                window.SpendNoteConsent.reopenConsentBanner();
+            }
+        });
+        if (privacyLink && privacyLink.nextSibling) {
+            privacyLink.parentNode.insertBefore(cookieLink, privacyLink.nextSibling);
+        } else {
+            linksDiv.appendChild(cookieLink);
+        }
+    });
+}
 
 function normalizeFooterBranding() {
     const brands = document.querySelectorAll('.app-footer .app-footer-brand');
@@ -390,6 +422,7 @@ function initSpendNoteNav() {
     }
 
     normalizeFooterBranding();
+    injectCookieSettingsLink();
     highlightMarketingNav();
 }
 
