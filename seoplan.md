@@ -92,6 +92,12 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
 - Positioning cleanup needed on some pages: avoid accounting/tax/POS-replacement phrasing; keep internal cash control + handoff proof framing.
 - **IMPORTANT:** New SEO pages must have `noindex, nofollow` until explicitly approved by user for indexing.
 
+**Document structure (where to find what):**
+- **Idea backlog Rounds 1–7** = topic ideas with status (🔒 IDEA / ✅ LIVE / ⚠️ JOGI KOCKÁZAT). Items marked ⚠️ need strong disclaimers or should be skipped for legal risk.
+- **Planned SEO Pages (24+2)** = approved page list; status per row (✅ LIVE = indexable).
+- **Summary: Current Indexing Status** = full list of 41 indexable URLs.
+- **ChatGPT SEO terv** (bottom) = extended strategy: new keyword clusters (generator, cash received, proof-of-payment, receipt app, etc.), brainstorm A–T. Clusters D and E are explicitly excluded (legal).
+
 ### SEO Content Clusters
 
 #### Cluster 1: Petty Cash Voucher (Core Template + Supporting Pages)
@@ -244,9 +250,9 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - **Intent:** End-of-day panic — cash is short and no one knows why.
    - **Keywords:** petty cash doesn't balance, petty cash doesn't add up, cash box short at end of day.
 
-4. `petty-cash-how-much-to-keep.html` 🔒 IDEA
+4. `petty-cash-how-much-to-keep.html` ✅ LIVE (2026-03-14)
    - **Intent:** First-time setup question — how much cash to float.
-   - **Keywords:** how much money to keep in petty cash, petty cash starting amount.
+   - **Keywords:** how much money to keep in petty cash, petty cash starting amount, petty cash float formula.
 
 *Industry-specific:*
 5. `restaurant-petty-cash-tips.html` 🔒 IDEA ⭐ TOP PICK
@@ -348,9 +354,9 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - **⚠️ Figyelem:** Adótanácsadásnak tűnhet. Erős "not tax advice" disclaimer szükséges.
 
 *Replacing Excel / paper:*
-4. `replace-petty-cash-spreadsheet.html` 🔒 IDEA ⭐ TOP PICK
+4. `replace-petty-cash-spreadsheet.html` ~~IDEA~~ **Merged** → `petty-cash-app-vs-excel.html` ✅ LIVE
    - **Intent:** Frustrated Excel users looking for a simpler alternative.
-   - **Keywords:** replace petty cash spreadsheet, petty cash Excel alternative.
+   - **Keywords:** replace petty cash spreadsheet, petty cash Excel alternative. (Covered by app-vs-excel page.)
 
 5. `petty-cash-app-vs-excel.html` ✅ LIVE (2026-03-08)
    - **Intent:** Comparison content — strong conversion potential.
@@ -386,7 +392,7 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
     - **Intent:** Cash doesn't match between shifts — finding where it went wrong.
     - **Keywords:** cash discrepancy between shifts, shift change cash shortage.
 
-13. `two-person-cash-count-policy.html` 🔒 IDEA
+13. `two-person-cash-count-policy.html` ✅ LIVE (2026-03-14)
     - **Intent:** Dual control principle explained simply for small teams.
     - **Keywords:** two person cash count, dual control cash counting policy.
 
@@ -397,13 +403,13 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
 **Idea backlog Round 5 (security, remote management, confrontation, comparison, seasonal):**
 
 *Security & storage:*
-1. `where-to-keep-petty-cash.html` 🔒 IDEA ⭐ TOP PICK
+1. `where-to-keep-petty-cash.html` ✅ LIVE (2026-03-14)
    - **Intent:** Basic question about where to physically store petty cash.
-   - **Keywords:** where to keep petty cash, best place to store petty cash in office.
+   - **Keywords:** where to keep petty cash, best place to store petty cash in office, petty cash storage policy.
 
-2. `petty-cash-security-tips.html` 🔒 IDEA
+2. `petty-cash-security-tips.html` ✅ LIVE (2026-03-14)
    - **Intent:** Practical security tips for keeping cash safe.
-   - **Keywords:** petty cash security tips, how to keep petty cash safe.
+   - **Keywords:** petty cash security tips, how to keep petty cash safe, petty cash internal controls, petty cash fraud examples.
 
 3. `does-insurance-cover-petty-cash-theft.html` 🔒 IDEA ⚠️ JOGI KOCKÁZAT
    - **Intent:** Very specific but high-intent question after a theft incident.
@@ -471,7 +477,7 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - **Framing:** Instant proof that cash rent was received; not a tax document.
    - **⚠️ Figyelem:** Több US államban (NY, CA) törvény szabályozza a rent receipt formátumát. Erős disclaimer kell.
 
-2. `cash-deposit-receipt.html` 🔒 IDEA ⭐ TOP PICK
+2. `cash-deposit-receipt.html` ✅ LIVE
    - **Intent:** Instant proof that a security deposit / advance was received in cash.
    - **Keywords:** cash deposit receipt, security deposit receipt, deposit receipt.
    - **Framing:** Proof of cash handoff for deposits — official documentation follows later.
@@ -509,7 +515,7 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - **Keywords:** cash box per department, department petty cash tracking.
 
 *Receipt branding & Pro feature showcase:*
-10. `custom-cash-receipt-with-logo.html` 🔒 IDEA ⭐ TOP PICK
+10. `custom-cash-receipt-with-logo.html` ✅ LIVE
     - **Intent:** Creating branded internal receipts with company logo.
     - **Keywords:** cash receipt with logo, custom receipt template with branding.
 
@@ -535,7 +541,7 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
     - **Keywords:** event cash tracking, event cash management app.
 
 *Employee cash advances & reimbursements (very common, internal proof):*
-16. `employee-cash-advance-receipt.html` 🔒 IDEA ⭐ TOP PICK
+16. `employee-cash-advance-receipt.html` ✅ LIVE
     - **Intent:** Boss gives employee a payroll advance in cash — needs instant proof of handoff. Deducted from next paycheck later (not SpendNote's job).
     - **Keywords:** employee cash advance receipt, salary advance receipt, cash advance receipt employee.
     - **Framing:** Instant proof that cash advance was given — payroll reconciliation happens separately.
@@ -559,7 +565,7 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
 
 > **Core scenario:** The tradesman/contractor is the SpendNote user. A client gives them cash upfront as an advance. The tradesman logs the IN transaction in SpendNote and instantly gives the client a receipt as proof of the cash received. The official invoice comes later after the work is done. SpendNote = instant proof of cash received, not a tax invoice.
 
-20. `contractor-advance-payment-receipt.html` 🔒 IDEA ⭐ TOP PICK
+20. `contractor-advance-payment-receipt.html` ✅ LIVE
     - **Intent:** Contractor receives a cash advance from a client — needs to give instant proof of cash received before issuing the final invoice.
     - **Keywords:** contractor advance payment receipt, contractor cash received proof, give client receipt for advance.
     - **Framing:** Contractor gives instant proof of cash advance received — invoices after job completion.
@@ -574,7 +580,7 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
     - **Keywords:** electrician cash advance receipt, electrician proof of cash received.
     - **Framing:** Electrician documents the advance — invoices after completion.
 
-23. `handyman-cash-payment-receipt.html` 🔒 IDEA ⭐ TOP PICK
+23. `handyman-cash-payment-receipt.html` ✅ LIVE
     - **Intent:** Handyman receives cash payment — very common, often no formal receipt given. SpendNote solves this.
     - **Keywords:** handyman cash payment receipt, handyman give receipt for cash, handyman proof of payment.
     - **Framing:** Handyman gives client instant proof of cash received — professional and simple.
@@ -593,7 +599,7 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
 
 > **Core scenario:** One person collects cash from many people (parents, members, teammates). They need to track who paid, how much, and when — and be able to show proof to the group. SpendNote = each payment is an IN transaction from a contact, full transparency.
 
-26. `school-money-collection-tracker.html` 🔒 IDEA ⭐ TOP PICK
+26. `school-money-collection-tracker.html` ✅ LIVE
     - **Intent:** Parent or teacher collecting class fund money from families — tracking who paid and who didn't.
     - **Keywords:** school money collection, class fund tracker, school money collection tracker, class fund log.
     - **Framing:** The class fund treasurer uses SpendNote to log every cash payment, give receipts, and show the group where the money went.
@@ -638,7 +644,7 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
 > **Positioning guardrail reminder:** SpendNote documents the cash handoff moment. It is NOT a tax invoice, NOT a sales receipt, NOT an accounting document. Pages in this round must explicitly state that tax/invoicing obligations are handled separately. Rejected from this round: private vehicle sale, garage sale, auto mechanic, tow truck, moving company, consignment — all require official invoicing as the primary document.
 
 *Service providers documenting cash received (same framing as contractor round):*
-1. `babysitter-cash-payment-receipt.html` 🔒 IDEA ⭐ TOP PICK
+1. `babysitter-cash-payment-receipt.html` ✅ LIVE
    - **Intent:** Babysitter/nanny receives weekly cash payment — gives the family instant proof of cash received.
    - **Keywords:** babysitter cash payment receipt, nanny cash receipt, proof of babysitter payment.
    - **Framing:** The sitter documents cash received from the family — tax reporting is handled separately by each party.
@@ -653,7 +659,7 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
    - **Keywords:** lawn care cash receipt, landscaper cash payment proof, yard work cash receipt.
    - **Framing:** Landscaper documents cash received for the job — official invoice follows if needed.
 
-4. `tutor-cash-payment-receipt.html` 🔒 IDEA ⭐ TOP PICK
+4. `tutor-cash-payment-receipt.html` ✅ LIVE
    - **Intent:** Private tutor receives cash for lessons — gives parent/student instant proof.
    - **Keywords:** tutor cash payment receipt, private lesson cash receipt, tutoring payment proof.
    - **Framing:** Tutor documents cash received per session — tax obligations handled separately.
@@ -714,7 +720,7 @@ SpendNote is for **internal cash control**, **handoff proof**, and **team audit 
 ### Planned SEO Pages (24 planned + 2 bonus from idea backlog — approved 2026-03-07)
 
 All pages created with `noindex, nofollow` until individually approved for indexing.
-**Status: 22 of 24 planned pages LIVE.** Plus 2 bonus pages from idea backlog also LIVE.
+**Status:** 14 of 24 planned pages LIVE (remaining: 7 Service Provider + 3 Excel/Spreadsheet). Plus 2 bonus from idea backlog (how-to-start-petty-cash-box, manage-petty-cash-remotely) also LIVE.
 
 #### Persona — Service Providers (7)
 
@@ -787,7 +793,7 @@ The following keyword variants should be woven into existing pages' H2s, alt tag
 
 | Keyword variant | Target existing page |
 |---|---|
-| receipt book alternative, paper receipt book replacement | `digital-receipt-book` (planned #17) |
+| receipt book alternative, paper receipt book replacement | `digital-receipt-book.html` ✅ LIVE |
 | digital petty cash log, petty cash ledger alternative | `digital-petty-cash-book.html` |
 | cash log book alternative | `petty-cash-log-template.html` |
 
@@ -843,7 +849,7 @@ The following keyword variants should be woven into existing pages' H2s, alt tag
 
 ### Summary: Current Indexing Status
 
-**Indexable pages (index, follow):** 41
+**Indexable pages (index, follow):** 46
 - index.html ✅
 - spendnote-faq.html ✅
 - petty-cash-voucher-template.html ✅
@@ -885,6 +891,11 @@ The following keyword variants should be woven into existing pages' H2s, alt tag
 - cash-paid-out-log.html ✅ (added 2026-03-08)
 - how-to-start-petty-cash-box.html ✅ (added 2026-03-08)
 - manage-petty-cash-remotely.html ✅ (added 2026-03-08)
+- what-is-petty-cash.html ✅ (added 2026-03-14)
+- where-to-keep-petty-cash.html ✅ (added 2026-03-14)
+- petty-cash-security-tips.html ✅ (added 2026-03-14)
+- two-person-cash-count-policy.html ✅ (added 2026-03-14)
+- petty-cash-how-much-to-keep.html ✅ (added 2026-03-14)
 
 **Draft pages (noindex, nofollow - awaiting approval):** 1
 - spendnote-pricing.html 🔒 (intentional - no payment system yet)
@@ -912,6 +923,68 @@ The following keyword variants should be woven into existing pages' H2s, alt tag
    - Most use Article or SoftwareApplication schema + FAQPage.
 
 ### Finish checklist for these SEO pages
+
+### Update log - 2026-03-14 (weekend batch — 5 new SEO pages, indexed)
+
+1. **Created 5 new SEO pages — all live (index, follow), indexed in Google Search Console:**
+   - `what-is-petty-cash.html` — Educational/Definition page (ChatGPT SEO terv, Cluster R)
+     - Keywords: what is petty cash, petty cash definition, petty cash example
+     - Snippet bait: clear definition sentence + "Petty Cash Example" H2 with mini table
+     - Images: generic app screenshots (dashboard multi-box, transaction modal)
+     - CTA: "Start Tracking Petty Cash" (hero) / "Create Free Account" (mid-page)
+   - `where-to-keep-petty-cash.html` — Security/Storage page (Idea Round 5 #1)
+     - Keywords: where to keep petty cash, petty cash storage, petty cash storage policy
+     - Snippet bait: "Where Should Petty Cash Be Stored?" H2, checklist block, policy example
+     - Images: generic app screenshots (multi-box dashboard)
+     - CTA: "Track Your Cash Box Digitally" (hero) / "Create Free Account" (mid-page)
+   - `petty-cash-security-tips.html` — Security/Process page (Idea Round 5 #2)
+     - Keywords: petty cash security tips, petty cash internal controls, petty cash fraud examples
+     - Snippet bait: "Petty Cash Internal Controls" H2, "Security Policy Example" section, "Fraud Examples" table
+     - Images: generic app screenshots (transaction detail with receipt)
+     - CTA: "Digital Security for Physical Cash" (mid-page) / "Create Free Account"
+   - `two-person-cash-count-policy.html` — Process/Policy page (Idea Round 4 #13)
+     - Keywords: two person cash count, dual control cash counting policy
+     - Features: PDF download button (jsPDF) with real SpendNote logo, sign-off template
+     - Images: generic app screenshots (filtered transactions report)
+     - CTA: "Start Dual Control Tracking" (hero) / "Create Free Account" (mid-page)
+   - `petty-cash-how-much-to-keep.html` — Educational/Calculator page (Idea Round 2 #4)
+     - Keywords: how much petty cash to keep, petty cash float formula
+     - Snippet bait: "Petty Cash Float Formula" H2, float sizing table by business type
+     - Images: generic app screenshots (transactions dashboard)
+     - CTA: "Track Your Petty Cash Spending" (hero) / "Create Free Account" (mid-page)
+
+2. **All 5 pages include:**
+   - Article + FAQPage structured data (4 unique FAQ items each)
+   - Meta description ≤ 160 characters, title ≤ 60 characters
+   - Disclaimer box (not accounting/tax/invoicing)
+   - Related Resources internal link block (6 cards each)
+   - Keyword-rich hero subtitle
+   - SEO-optimized H2s with snippet bait keywords
+   - Intent-matching CTA texts
+   - In-context internal links in body copy
+   - Footer with Cookie Settings link (main.js)
+
+3. **SEO enhancements applied (snippet bait optimization):**
+   - what-is-petty-cash: added clear definition sentence + "Petty Cash Example" H2 + mini expense table
+   - where-to-keep-petty-cash: added "Where Should Petty Cash Be Stored?" H2 + 7-item checklist + "Storage Policy Example"
+   - petty-cash-security-tips: added "Petty Cash Internal Controls" H2 + "Security Policy Example" + "Fraud Examples" table (5 fraud types)
+   - petty-cash-how-much-to-keep: renamed H2 to "Petty Cash Float Formula" for keyword targeting
+   - two-person-cash-count-policy: added PDF download with real SpendNote logo, improved line spacing
+
+4. **Cannibalization check:**
+   - what-is-petty-cash ≠ how-to-start-petty-cash-box (definition/education vs first-time setup checklist)
+   - where-to-keep-petty-cash ≠ petty-cash-security-tips (storage location vs security controls/fraud)
+   - two-person-cash-count-policy ≠ cash-count-sheet-template (dual control policy vs denomination count sheet)
+   - petty-cash-how-much-to-keep ≠ how-to-start-petty-cash-box (float sizing formula vs general setup)
+   - petty-cash-security-tips ≠ petty-cash-audit-checklist (daily security tips vs audit process)
+
+5. **Sitemap updated:** 5 new URLs added with `lastmod: 2026-03-14`.
+
+6. **Indexing:** All 5 pages set to `index, follow` and submitted for indexing in Google Search Console.
+
+7. **Indexing status updated:** 41 → 46 indexable pages.
+
+---
 
 ### Update log - 2026-03-08 (batch 3 — 6 new pages)
 
