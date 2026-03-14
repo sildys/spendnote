@@ -613,7 +613,13 @@ const __spendnoteAutoAcceptMyInvites = async () => {
     }
 };
 
+let __spendnoteTryAcceptLock = null;
 const __spendnoteTryAcceptPendingInviteToken = async () => {
+    if (__spendnoteTryAcceptLock) return __spendnoteTryAcceptLock;
+    __spendnoteTryAcceptLock = __spendnoteTryAcceptPendingInviteTokenImpl();
+    try { return await __spendnoteTryAcceptLock; } finally { __spendnoteTryAcceptLock = null; }
+};
+const __spendnoteTryAcceptPendingInviteTokenImpl = async () => {
     let __currentUser = null;
     try {
         const { data: { user } } = await supabaseClient.auth.getUser();
