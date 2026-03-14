@@ -265,10 +265,6 @@
         doc.text('PETTY CASH \u2014 DUAL CONTROL COUNT RECORD',m,y);
         y+=lh*1.8;
 
-        // Separator
-        doc.setDrawColor(200);doc.setLineWidth(0.3);
-        doc.line(m,y-4,R,y-4);
-
         // Helper functions
         function label(t,x,yy){doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(80);doc.text(t,x,yy);}
         function field(x1,yy,x2){doc.setDrawColor(170);doc.setLineWidth(0.2);doc.line(x1,yy+1.5,x2,yy+1.5);}
@@ -295,7 +291,6 @@
         y+=lh*1.5;
 
         // Totals section
-        doc.setDrawColor(200);doc.line(m,y-4,R,y-4);
         heading('TOTAL CASH COUNTED:  $',y);
         doc.setFont('helvetica','bold');doc.setFontSize(11);
         field(m+48,y,R);
@@ -307,7 +302,6 @@
         y+=lh*1.5;
 
         // Signatures section
-        doc.setDrawColor(200);doc.line(m,y-4,R,y-4);
         heading('SIGNATURES',y);
         y+=lh*1.2;
         label('Counter 1 (Custodian):',m,y);field(m+44,y,m+120);label('Date:',m+125,y);field(m+137,y,R);
@@ -316,7 +310,6 @@
         y+=lh*1.8;
 
         // Notes section
-        doc.setDrawColor(200);doc.line(m,y-4,R,y-4);
         heading('NOTES',y);
         y+=lh;
         field(m,y,R);y+=lh;
