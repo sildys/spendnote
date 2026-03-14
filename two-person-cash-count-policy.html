@@ -161,6 +161,7 @@
             Counter 2 (Verifier):&nbsp; _________________ Date: _______<br><br>
             Notes: _________________________________________________
         </div>
+        <div style="text-align:center;margin:1.25rem 0 0"><button onclick="downloadCountSheet()" class="hero-btn" style="cursor:pointer;border:none;font-size:.95rem;padding:.75rem 1.75rem"><i class="fas fa-file-pdf" style="margin-right:6px"></i>Download PDF</button></div>
 
         <div class="cta-box">
             <h3>Automate the Audit Trail</h3>
@@ -226,6 +227,57 @@
         <p style="text-align:center;margin-top:2rem;">See <a href="spendnote-pricing.html">pricing</a> or visit our <a href="spendnote-faq.html">FAQ</a> for more info.</p>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+    <script>
+    function downloadCountSheet(){
+        const{jsPDF}=window.jspdf;
+        const doc=new jsPDF({unit:'mm',format:'letter'});
+        const W=doc.internal.pageSize.getWidth();
+        const m=20,lh=7,col2=W/2+5;
+        let y=m;
+        function bold(t,x,yy){doc.setFont('helvetica','bold');doc.text(t,x,yy);doc.setFont('helvetica','normal');}
+        function line(x1,yy,x2){doc.setDrawColor(180);doc.line(x1,yy+1,x2,yy+1);}
+
+        doc.setFontSize(13);
+        bold('PETTY CASH \u2014 DUAL CONTROL COUNT RECORD',m,y);y+=lh*2;
+
+        doc.setFontSize(10);
+        doc.text('Date:',m,y);line(m+12,y,m+55);
+        doc.text('Time:',m+65,y);line(m+77,y,m+120);y+=lh;
+        doc.text('Cash Box ID / Name:',m,y);line(m+38,y,W-m);y+=lh*2;
+
+        bold('CASH COUNT BY DENOMINATION',m,y);y+=lh+1;
+        const denoms=[['$100','$50'],['$20','$10'],['$5','$1']];
+        denoms.forEach(pair=>{
+            doc.text(pair[0]+' \u00d7',m,y);line(m+14,y,m+22);doc.text('= $',m+24,y);line(m+30,y,m+55);
+            doc.text(pair[1]+' \u00d7',col2,y);line(col2+12,y,col2+20);doc.text('= $',col2+22,y);line(col2+28,y,col2+53);
+            y+=lh;
+        });
+        doc.text('Coins: $',m,y);line(m+14,y,m+40);y+=lh*2;
+
+        doc.setFontSize(11);
+        bold('TOTAL CASH COUNTED: $',m,y);line(m+44,y,W-m);y+=lh+1;
+        doc.setFontSize(10);
+        doc.text('Total Receipts / Vouchers: $',m,y);line(m+54,y,W-m);y+=lh;
+        doc.text('Cash + Receipts: $',m,y);line(m+36,y,W-m);y+=lh;
+        doc.text('Expected Balance (Float): $',m,y);line(m+54,y,W-m);y+=lh;
+        doc.text('Discrepancy: $',m,y);line(m+30,y,W-m);y+=lh*2;
+
+        bold('SIGNATURES',m,y);y+=lh+1;
+        doc.text('Counter 1 (Custodian):',m,y);line(m+42,y,m+110);doc.text('Date:',m+115,y);line(m+126,y,W-m);y+=lh;
+        doc.text('Counter 2 (Verifier):',m,y);line(m+42,y,m+110);doc.text('Date:',m+115,y);line(m+126,y,W-m);y+=lh*2;
+
+        doc.text('Notes:',m,y);line(m+12,y,W-m);y+=lh;
+        line(m,y,W-m);y+=lh;
+        line(m,y,W-m);
+
+        y+=lh*3;
+        doc.setFontSize(8);doc.setTextColor(140);
+        doc.text('Generated from spendnote.app \u2014 Free petty cash tracking for small teams',m,y);
+
+        doc.save('petty-cash-dual-control-count-record.pdf');
+    }
+    </script>
     <script src="assets/js/main.js?v=34"></script>
     <footer class="app-footer"><div class="app-footer-container"><div class="app-footer-top"><div class="app-footer-brand"><a href="index.html" class="app-footer-brand-logo"><svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#footer-logo-gradient)"/><path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/><path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/><line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/><line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/><path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="footer-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs></svg><span>SpendNote</span></a><p class="app-footer-brand-desc">Complete cash visibility for your team.<br>Instant receipts, full history.</p></div><div class="app-footer-right"><div class="app-footer-links-simple"><a href="index.html#features">Features</a><a href="spendnote-pricing.html">Pricing</a><a href="spendnote-faq.html">FAQ</a><a href="spendnote-terms.html">Terms</a><a href="spendnote-privacy.html">Privacy</a></div><div class="app-footer-brand-disclaimer"><i class="fas fa-info-circle"></i><span>Cash handoff documentation only. Not a tax or accounting tool.</span></div></div></div><div class="app-footer-bottom"><div class="app-footer-copyright">2026 SpendNote. All rights reserved.</div></div></div></footer>
 </body>
