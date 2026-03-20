@@ -270,17 +270,31 @@ const renderBillingSummary = (billingState) => {
     if (nextEl) nextEl.textContent = line;
 
     if (manageBtn) {
-        const hasStripeCustomer = Boolean(String(state.stripe_customer_id || '').trim());
-        manageBtn.innerHTML = hasStripeCustomer
-            ? '<i class="fas fa-credit-card"></i> Manage Billing & Invoices'
-            : '<i class="fas fa-hourglass-half"></i> Billing setup at launch';
-        manageBtn.disabled = !hasStripeCustomer;
+        if (window.STRIPE_LIVE === false) {
+            manageBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> Billing setup at launch';
+            manageBtn.disabled = true;
+        } else {
+            const hasStripeCustomer = Boolean(String(state.stripe_customer_id || '').trim());
+            manageBtn.innerHTML = hasStripeCustomer
+                ? '<i class="fas fa-credit-card"></i> Manage Billing & Invoices'
+                : '<i class="fas fa-hourglass-half"></i> Billing setup at launch';
+            manageBtn.disabled = !hasStripeCustomer;
+        }
+    }
+
+    const changePlanBtn = document.getElementById('changePlanBtn');
+    if (changePlanBtn) {
+        changePlanBtn.style.display = window.STRIPE_LIVE === false ? 'none' : '';
     }
 
     const cancelBtn = document.getElementById('cancelSubscriptionBtn');
     if (cancelBtn) {
-        const isActive = ['active', 'trialing', 'past_due'].includes(String(state.billing_status || '').toLowerCase());
-        cancelBtn.style.display = isActive ? '' : 'none';
+        if (window.STRIPE_LIVE === false) {
+            cancelBtn.style.display = 'none';
+        } else {
+            const isActive = ['active', 'trialing', 'past_due'].includes(String(state.billing_status || '').toLowerCase());
+            cancelBtn.style.display = isActive ? '' : 'none';
+        }
     }
 };
 

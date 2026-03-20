@@ -1142,6 +1142,10 @@ function togglePreviewDetails() {
                 return '<button type="button" class="btn btn-get-started" id="proActionBtn" disabled style="opacity:0.6;cursor:default;">Current Plan</button>';
             }
 
+            if (window.STRIPE_LIVE === false) {
+                return '<button type="button" class="btn btn-get-started" disabled style="opacity:0.6;cursor:default;">Coming Soon</button>';
+            }
+
             if (hasActiveSubscription) {
                 const label = planKey === 'pro' ? 'Switch to Pro' : 'Switch to Standard';
                 return `<button type="button" class="btn btn-get-started" onclick="startPlanSwitch('${planKey}')">${label}</button>`;
@@ -1410,7 +1414,7 @@ function togglePreviewDetails() {
     </script>
     <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260314-1550"></script>
+    <script src="assets/js/supabase-config.js?v=20260320-2115"></script>
     <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
     <script>
         (async () => {

@@ -297,8 +297,16 @@ const __spendnoteSendUserEventEmail = async (payload = {}) => {
     }
 };
 
+// ── Stripe billing gate ──
+// Flip to true when Stripe is activated with live keys + adószám.
+const STRIPE_LIVE = false;
+window.STRIPE_LIVE = STRIPE_LIVE;
+
 window.SpendNoteStripe = {
     async _invoke(functionName, payload, defaultMessage) {
+        if (!STRIPE_LIVE) {
+            return { success: false, error: 'Billing is not yet available. We\'re launching soon!' };
+        }
         try {
             const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
             if (sessErr || !session?.access_token) {
