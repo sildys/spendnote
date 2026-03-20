@@ -165,6 +165,23 @@ const renderTeamTable = () => {
     }).join('');
 };
 
+// ── Seat counter ──
+
+const updateSeatCounter = () => {
+    const el = document.getElementById('seatCounter');
+    if (!el) return;
+
+    if (subscriptionTier !== 'pro') {
+        el.style.display = 'none';
+        return;
+    }
+
+    const used = teamMembers.filter(m => m.status === 'active' || m.status === 'pending').length;
+    el.textContent = `${used} / ${seatLimit} seats used`;
+    el.style.color = used >= seatLimit ? '#ef4444' : 'var(--text-muted)';
+    el.style.display = '';
+};
+
 // ── Data loading ──
 
 const loadTeam = async () => {
@@ -348,6 +365,7 @@ const initTeamPage = async () => {
     hide('teamError');
     show('teamContent');
     populateInviteCashBoxes();
+    updateSeatCounter();
     console.log('[team-page] rendered', teamMembers.length, 'members,', cashBoxes.length, 'boxes');
 
     const canManage = () => currentRole === 'owner' || currentRole === 'admin';
@@ -427,6 +445,7 @@ const initTeamPage = async () => {
         inviteModal?.classList.remove('active');
         document.getElementById('inviteEmail').value = '';
         await loadTeam();
+        updateSeatCounter();
 
         const token = result?.data?.token;
         if (Boolean(result?.emailSent)) { showAlert('Invitation sent!', { iconType: 'success' }); return; }
@@ -475,6 +494,7 @@ const initTeamPage = async () => {
             const result = await window.db.teamMembers.remove(id);
             if (!result?.success) { showAlert(result?.error || 'Failed.', { iconType: 'error' }); return; }
             await loadTeam();
+            updateSeatCounter();
             showAlert(isPending ? 'Invite revoked.' : 'Member removed.', { iconType: 'success' });
         }
     });
