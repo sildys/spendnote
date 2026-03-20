@@ -1020,9 +1020,6 @@ function togglePreviewDetails() {
     </footer>
 
     <script>
-        // MOCK: Current user plan (replace with actual user data)
-        const currentPlan = 'standard'; // 'free', 'standard', or 'pro'
-
         const pricingData = {
             yearly: {
                 free: { 
@@ -1121,12 +1118,48 @@ function togglePreviewDetails() {
         };
 
         let isYearly = true;
+        let currentPlan = ''; // '', 'free', 'preview', 'standard', 'pro'
+        let currentCycle = ''; // '', 'monthly', 'yearly'
+        let hasActiveSubscription = false;
 
         function getButtonHTML(planKey) {
             if (planKey === 'free') {
-                return '<a href="spendnote-signup.html" class="btn btn-start-free">Start Free</a>';
+                if (currentPlan === 'free' || currentPlan === 'preview' || !currentPlan) {
+                    return '<a href="spendnote-signup.html" class="btn btn-start-free">Start Free</a>';
+                }
+                return '<button type="button" class="btn btn-start-free" disabled>Downgrade via Settings</button>';
             }
+
+            const isCurrent = currentPlan === planKey;
+            if (isCurrent) {
+                return '<button type="button" class="btn btn-get-started" disabled style="opacity:0.6;cursor:default;">Current Plan</button>';
+            }
+
+            if (hasActiveSubscription) {
+                const label = planKey === 'pro' ? 'Switch to Pro' : 'Switch to Standard';
+                return `<button type="button" class="btn btn-get-started" onclick="startPlanSwitch('${planKey}')">${label}</button>`;
+            }
+
             return `<button type="button" class="btn btn-get-started" onclick="startPlanCheckout('${planKey}')">Get Started</button>`;
+        }
+
+        function getSeatSelectorHTML(planKey) {
+            if (planKey !== 'pro') return '';
+            return `
+                <div class="pro-seat-selector" style="margin:12px 0 8px;padding:10px 12px;background:var(--surface-alt,#f8f9fa);border-radius:8px;font-size:0.9rem;">
+                    <label style="display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap;">
+                        <span>Team size:</span>
+                        <select id="proSeatSelect" style="padding:4px 8px;border-radius:6px;border:1px solid var(--border,#ddd);font-size:0.9rem;">
+                            <option value="0">3 users (included)</option>
+                            <option value="1">4 users (+$5/mo)</option>
+                            <option value="2">5 users (+$10/mo)</option>
+                            <option value="3">6 users (+$15/mo)</option>
+                            <option value="5">8 users (+$25/mo)</option>
+                            <option value="7">10 users (+$35/mo)</option>
+                        </select>
+                    </label>
+                </div>
+            `;
         }
 
         function showBillingAlert(message, iconType = 'info') {
@@ -1182,6 +1215,13 @@ function togglePreviewDetails() {
             }
         }
 
+        function getProExtraSeats() {
+            try {
+                const sel = document.getElementById('proSeatSelect');
+                return sel ? Number(sel.value) || 0 : 0;
+            } catch (_) { return 0; }
+        }
+
         async function startPlanCheckout(planKey) {
             const plan = String(planKey || '').trim().toLowerCase();
             if (plan !== 'standard' && plan !== 'pro') {
@@ -1201,9 +1241,11 @@ function togglePreviewDetails() {
             }
 
             const cycle = isYearly ? 'yearly' : 'monthly';
+            const extraSeats = plan === 'pro' ? getProExtraSeats() : 0;
             const result = await window.SpendNoteStripe.createCheckoutSession({
                 plan,
                 billingCycle: cycle,
+                extraSeats,
                 successUrl: `${window.location.origin}/spendnote-user-settings.html?billing=success`,
                 cancelUrl: `${window.location.origin}/spendnote-pricing.html?billing=cancel`
             });
@@ -1220,6 +1262,51 @@ function togglePreviewDetails() {
             }
 
             window.location.href = url;
+        }
+
+        async function startPlanSwitch(planKey) {
+            const plan = String(planKey || '').trim().toLowerCase();
+            if (plan !== 'standard' && plan !== 'pro') return;
+
+            const user = await window.auth?.getCurrentUser?.();
+            if (!user) {
+                window.location.href = `spendnote-login.html?returnTo=${encodeURIComponent('/spendnote-pricing.html')}`;
+                return;
+            }
+
+            if (!window.SpendNoteStripe?.updateSubscription) {
+                showBillingAlert('Billing endpoint is not available yet.', 'info');
+                return;
+            }
+
+            const cycle = isYearly ? 'yearly' : 'monthly';
+            const extraSeats = plan === 'pro' ? getProExtraSeats() : 0;
+
+            const confirmMsg = `Switch to ${plan.charAt(0).toUpperCase() + plan.slice(1)} (${cycle})? The change takes effect at the end of your current billing period.`;
+            if (typeof window.showConfirm === 'function') {
+                const ok = await window.showConfirm(confirmMsg);
+                if (!ok) return;
+            } else if (!window.confirm(confirmMsg)) {
+                return;
+            }
+
+            const result = await window.SpendNoteStripe.updateSubscription({
+                newPlan: plan,
+                newBillingCycle: cycle,
+                extraSeats
+            });
+
+            if (!result?.success) {
+                showBillingAlert(result?.error || 'Could not update subscription.', 'error');
+                return;
+            }
+
+            const periodEnd = result?.data?.currentPeriodEnd;
+            const dateStr = periodEnd ? new Date(periodEnd).toLocaleDateString() : '';
+            showBillingAlert(
+                `Plan change scheduled! Your ${plan.charAt(0).toUpperCase() + plan.slice(1)} plan will activate ${dateStr ? 'on ' + dateStr : 'at the end of your current billing period'}.`,
+                'success'
+            );
         }
 
         function getBadgeHTML(planKey, data) {
@@ -1272,6 +1359,7 @@ function togglePreviewDetails() {
                     <ul>
                         ${data.pro.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
                     </ul>
+                    ${getSeatSelectorHTML('pro')}
                     ${getButtonHTML('pro')}
                     ${data.pro.yearlyLink && currentPlan !== 'pro' ? '<a href="#" class="monthly-link" onclick="switchToYearly(event)">or save with yearly &rarr;</a>' : ''}
                 </div>
@@ -1329,6 +1417,28 @@ function togglePreviewDetails() {
                     // ignore
                 }
             }
+
+            // Detect current plan from user profile
+            try {
+                const user = await window.auth?.getCurrentUser?.();
+                if (user) {
+                    const { data: profile } = await window.supabaseClient
+                        .from('profiles')
+                        .select('subscription_tier, billing_status, billing_cycle, stripe_subscription_id')
+                        .eq('id', user.id)
+                        .single();
+                    if (profile) {
+                        currentPlan = String(profile.subscription_tier || '').toLowerCase();
+                        currentCycle = String(profile.billing_cycle || '').toLowerCase();
+                        const status = String(profile.billing_status || '').toLowerCase();
+                        hasActiveSubscription = Boolean(
+                            profile.stripe_subscription_id &&
+                            (status === 'active' || status === 'trialing' || status === 'past_due')
+                        );
+                        renderPricing(isYearly ? 'yearly' : 'monthly');
+                    }
+                }
+            } catch (_) {}
         })();
     </script>
     <script src="assets/js/main.js?v=34"></script>

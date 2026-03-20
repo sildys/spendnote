@@ -7,6 +7,7 @@ type CheckoutBody = {
   successUrl?: string;
   cancelUrl?: string;
   quantity?: number;
+  extraSeats?: number;
 };
 
 const corsHeaders: Record<string, string> = {
@@ -28,6 +29,12 @@ const normalizeQuantity = (value: unknown): number => {
   const n = Number(value);
   if (!Number.isFinite(n) || n <= 0) return 1;
   return Math.min(100, Math.floor(n));
+};
+
+const normalizeExtraSeats = (value: unknown): number => {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n < 0) return 0;
+  return Math.min(97, Math.floor(n));
 };
 
 const normalizeReturnUrl = (value: unknown, fallback: string, appBaseUrl: string): string => {
@@ -119,6 +126,8 @@ Deno.serve(async (req: Request) => {
     const plan = normalizePlan(body?.plan);
     const billingCycle = normalizeCycle(body?.billingCycle);
     const quantity = normalizeQuantity(body?.quantity);
+    const extraSeats = plan === "pro" ? normalizeExtraSeats(body?.extraSeats) : 0;
+    const extraSeatPriceId = Deno.env.get("STRIPE_PRO_EXTRA_SEAT_PRICE_ID") || "";
 
     if (!plan || !billingCycle) {
       return new Response(JSON.stringify({ error: "Invalid plan or billingCycle" }), {
@@ -176,10 +185,20 @@ Deno.serve(async (req: Request) => {
       }
     }
 
+    const lineItems: Array<{ price: string; quantity: number }> = [
+      { price: priceId, quantity },
+    ];
+
+    if (plan === "pro" && extraSeats > 0 && extraSeatPriceId) {
+      lineItems.push({ price: extraSeatPriceId, quantity: extraSeats });
+    }
+
+    const totalSeats = plan === "pro" ? 3 + extraSeats : 1;
+
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       customer: stripeCustomerId,
-      line_items: [{ price: priceId, quantity }],
+      line_items: lineItems,
       success_url: successUrl,
       cancel_url: cancelUrl,
       allow_promotion_codes: true,
@@ -187,12 +206,14 @@ Deno.serve(async (req: Request) => {
         user_id: user.id,
         plan,
         billing_cycle: billingCycle,
+        seat_count: String(totalSeats),
       },
       subscription_data: {
         metadata: {
           user_id: user.id,
           plan,
           billing_cycle: billingCycle,
+          seat_count: String(totalSeats),
         },
       },
     });

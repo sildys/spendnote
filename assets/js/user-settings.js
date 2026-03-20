@@ -274,6 +274,13 @@ const renderBillingSummary = (billingState) => {
         manageBtn.innerHTML = hasStripeCustomer
             ? '<i class="fas fa-credit-card"></i> Manage Billing & Invoices'
             : '<i class="fas fa-hourglass-half"></i> Billing setup at launch';
+        manageBtn.disabled = !hasStripeCustomer;
+    }
+
+    const cancelBtn = document.getElementById('cancelSubscriptionBtn');
+    if (cancelBtn) {
+        const isActive = ['active', 'trialing', 'past_due'].includes(String(state.billing_status || '').toLowerCase());
+        cancelBtn.style.display = isActive ? '' : 'none';
     }
 };
 
@@ -1442,16 +1449,13 @@ const initUserSettingsPage = async () => {
     document.getElementById('yearlyLabel')?.addEventListener('click', () => { isYearly = true; updatePricing(); });
 
     // Billing buttons (S3 skeleton)
+    document.getElementById('changePlanBtn')?.addEventListener('click', () => {
+        window.location.href = 'spendnote-pricing.html';
+    });
     document.getElementById('cancelSubscriptionBtn')?.addEventListener('click', async (e) => {
         const btn = e.currentTarget;
         await withButtonLoading(btn, async () => {
             await openBillingPortal();
-        });
-    });
-    document.getElementById('upgradeProBtn')?.addEventListener('click', async (e) => {
-        const btn = e.currentTarget;
-        await withButtonLoading(btn, async () => {
-            await startCheckoutForPlan('pro');
         });
     });
     document.getElementById('manageBillingBtn')?.addEventListener('click', async (e) => {

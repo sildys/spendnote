@@ -63,14 +63,51 @@ const findUserIdFromSubscription = async (supabaseAdmin: ReturnType<typeof creat
   return String(profileByCustomer?.id || "").trim();
 };
 
+const resolveBasePriceItem = (sub: Stripe.Subscription) => {
+  const items = sub.items?.data || [];
+  for (const item of items) {
+    const pid = String(item.price?.id || "").trim();
+    if (resolveTierFromPrice(pid)) return item;
+  }
+  return items[0] || null;
+};
+
+const resolveSeatCount = (sub: Stripe.Subscription): number => {
+  // 1. Check metadata first (set by our Edge Functions)
+  const metaSeats = Number(sub.metadata?.seat_count || 0);
+  if (Number.isFinite(metaSeats) && metaSeats > 0) return metaSeats;
+
+  // 2. Derive from line items: find extra seat item and compute
+  const extraSeatPriceId = Deno.env.get("STRIPE_PRO_EXTRA_SEAT_PRICE_ID") || "";
+  if (!extraSeatPriceId) return 0;
+
+  const items = sub.items?.data || [];
+  const seatItem = items.find((item) => String(item.price?.id || "") === extraSeatPriceId);
+  if (seatItem) {
+    const extraSeats = Number(seatItem.quantity || 0);
+    return 3 + extraSeats; // Pro base = 3 included
+  }
+
+  // 3. If Pro plan without extra seats → 3
+  const baseItem = resolveBasePriceItem(sub);
+  const basePriceId = String(baseItem?.price?.id || "").trim();
+  const tier = resolveTierFromPrice(basePriceId);
+  if (tier === "pro") return 3;
+  if (tier === "standard") return 1;
+
+  return 0;
+};
+
 const upsertProfileSubscription = async (
   supabaseAdmin: ReturnType<typeof createClient>,
   userId: string,
   sub: Stripe.Subscription,
 ) => {
-  const stripePriceId = String(sub.items?.data?.[0]?.price?.id || "").trim();
+  const baseItem = resolveBasePriceItem(sub);
+  const stripePriceId = String(baseItem?.price?.id || "").trim();
   const tier = resolveTierFromPrice(stripePriceId);
   const billingCycle = resolveCycleFromPrice(stripePriceId);
+  const seatCount = resolveSeatCount(sub);
 
   const payload: Record<string, unknown> = {
     stripe_customer_id: String(sub.customer || "").trim() || null,
@@ -82,6 +119,7 @@ const upsertProfileSubscription = async (
     subscription_current_period_end: sub.current_period_end
       ? new Date(sub.current_period_end * 1000).toISOString()
       : null,
+    seat_count: seatCount,
   };
 
   if (tier) {
@@ -193,6 +231,7 @@ Deno.serve(async (req: Request) => {
               stripe_price_id: null,
               stripe_cancel_at_period_end: false,
               billing_cycle: null,
+              seat_count: 0,
             })
             .eq("id", userId);
         }

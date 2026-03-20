@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     preview_transaction_cap INTEGER DEFAULT 200,
     stripe_customer_id TEXT,
     stripe_subscription_id TEXT,
+    seat_count INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

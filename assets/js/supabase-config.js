@@ -349,6 +349,15 @@ window.SpendNoteStripe = {
             returnUrl: String(options?.returnUrl || `${window.location.origin}/spendnote-user-settings.html?billing=portal`)
         };
         return await this._invoke('create-portal-session', payload, 'Could not open billing portal');
+    },
+
+    async updateSubscription(options = {}) {
+        const payload = {
+            newPlan: String(options?.newPlan || '').trim().toLowerCase(),
+            newBillingCycle: String(options?.newBillingCycle || '').trim().toLowerCase(),
+            extraSeats: Number(options?.extraSeats) || 0
+        };
+        return await this._invoke('update-subscription', payload, 'Could not update subscription');
     }
 };
 

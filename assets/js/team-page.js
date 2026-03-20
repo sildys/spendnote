@@ -17,6 +17,8 @@ let cashBoxes = [];
 let currentRole = 'user';
 let selectedMemberForAccess = null;
 let currentOrgName = '';
+let seatLimit = 1;
+let subscriptionTier = 'preview';
 
 const show = (id) => { const el = document.getElementById(id); if (el) el.style.display = ''; };
 const hide = (id) => { const el = document.getElementById(id); if (el) el.style.display = 'none'; };
@@ -315,6 +317,28 @@ const initTeamPage = async () => {
     } catch (_) {}
 
     try {
+        const user = await window.auth?.getCurrentUser?.();
+        if (user && window.supabaseClient) {
+            const { data: profile } = await window.supabaseClient
+                .from('profiles')
+                .select('subscription_tier, seat_count')
+                .eq('id', user.id)
+                .single();
+            if (profile) {
+                subscriptionTier = String(profile.subscription_tier || 'preview').toLowerCase();
+                const sc = Number(profile.seat_count || 0);
+                if (subscriptionTier === 'pro') {
+                    seatLimit = sc > 0 ? sc : 3;
+                } else if (subscriptionTier === 'standard') {
+                    seatLimit = 1;
+                } else {
+                    seatLimit = 1;
+                }
+            }
+        }
+    } catch (_) {}
+
+    try {
         await Promise.all([loadTeam(), loadCashBoxes()]);
     } catch (err) {
         console.error('[team-page] load failed:', err);
@@ -352,8 +376,23 @@ const initTeamPage = async () => {
 
     // Invite modal
     const inviteModal = document.getElementById('inviteModal');
-    document.getElementById('inviteMemberBtn')?.addEventListener('click', () => {
+    document.getElementById('inviteMemberBtn')?.addEventListener('click', async () => {
         if (!canManage()) { showAlert('Only Owner/Admin can invite.', { iconType: 'warning' }); return; }
+
+        if (subscriptionTier !== 'pro') {
+            showAlert('Team invites are available on the Pro plan. Upgrade to add team members.', { iconType: 'info' });
+            return;
+        }
+
+        const currentCount = teamMembers.filter(m => m.status === 'active' || m.status === 'pending').length;
+        if (currentCount >= seatLimit) {
+            const ok = typeof showConfirm === 'function'
+                ? await showConfirm(`You\u2019ve reached your seat limit (${seatLimit}). Would you like to add more seats?`)
+                : window.confirm(`You\u2019ve reached your seat limit (${seatLimit}). Would you like to add more seats?`);
+            if (ok) window.location.href = 'spendnote-pricing.html';
+            return;
+        }
+
         populateInviteCashBoxes();
         toggleInviteCbGroup();
         inviteModal?.classList.add('active');
