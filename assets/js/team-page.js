@@ -334,13 +334,15 @@ const initTeamPage = async () => {
     } catch (_) {}
 
     try {
-        const user = await window.auth?.getCurrentUser?.();
-        if (user && window.supabaseClient) {
-            const { data: profile } = await window.supabaseClient
+        const { data: sessionData } = await window.supabaseClient.auth.getSession();
+        const user = sessionData?.session?.user;
+        if (user) {
+            const { data: profile, error: profileErr } = await window.supabaseClient
                 .from('profiles')
                 .select('subscription_tier, seat_count')
                 .eq('id', user.id)
                 .single();
+            console.log('[team-page] profile for seats:', profile, profileErr);
             if (profile) {
                 subscriptionTier = String(profile.subscription_tier || 'preview').toLowerCase();
                 const sc = Number(profile.seat_count || 0);
@@ -353,7 +355,8 @@ const initTeamPage = async () => {
                 }
             }
         }
-    } catch (_) {}
+        console.log('[team-page] tier:', subscriptionTier, 'seatLimit:', seatLimit);
+    } catch (e) { console.warn('[team-page] seat profile load error:', e); }
 
     try {
         await Promise.all([loadTeam(), loadCashBoxes()]);
