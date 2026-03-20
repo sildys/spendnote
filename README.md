@@ -7,7 +7,41 @@ SpendNote is a **cash box + transaction + contacts** web app.
 
 This repository is deployable as a static site (Cloudflare Pages, currently live at `spendnote.app`).
 
-## Current status (2026-03-13 — Legal docs rewrite + cookie consent GDPR compliance)
+## Current status (2026-03-20 — Google OAuth branding + Stripe subscription flow design)
+
+### Google OAuth consent screen fix (2026-03-20)
+
+- **Supabase Custom Domain AKTÍV:** `api.spendnote.app` → `zrnnharudlgxuvewqryj.supabase.co`
+- **Google consent screen** now shows `spendnote.app` instead of Supabase project URL
+- Cloudflare DNS: CNAME `api` + TXT `_acme-challenge.api`
+- Google Cloud Credentials: redirect URI `https://api.spendnote.app/auth/v1/callback`
+- Google Groups: SpendNote Support (support@spendnote.app)
+
+### Stripe subscription flow (2026-03-20 — designed, implementation pending)
+
+- **Stripe is in TEST MODE** (adószám pending)
+- **Products/Prices created:**
+  - Standard: $19/mo (`price_1TBGHNCemJwsJwrbKgoc6Xyd`) | $190/yr (`price_1TBGO3CemJwsJwrbjasyPzEV`)
+  - Pro: $29/mo (`price_1TBGHtCemJwsJwrbv2fGMxWC`) | $290/yr (`price_1TBGMDCemJwsJwrbSLt40xhV`)
+  - Extra Seat: $5/mo (`price_1TBGQkCemJwsJwrbLqsrk5PN`) — no yearly variant
+- **Subscription flow:**
+  - Signup → preview tier (free, no credit card)
+  - Upgrade → `spendnote-pricing.html` → Stripe Checkout (new subscription)
+  - Plan swap → `update-subscription` Edge Function (`proration_behavior: 'none'`, takes effect at period end)
+  - Manage billing → Stripe Customer Portal (payment method, invoices, cancel)
+- **Pro seat model:** 3 users included, +$5/mo per extra seat (2 line items: base + extra seats)
+- **Billing rules:**
+  - Plan changes take effect at END of current billing period, NO proration
+  - Refund only if <20 transactions in billing period
+  - Extra seat always $5/mo regardless of base plan cycle
+- **Existing Edge Functions:** `create-checkout-session`, `create-portal-session`, `stripe-webhook`
+- **Pending implementation:**
+  - DB `seat_count` field, `update-subscription` Edge Function, webhook seat sync
+  - Pricing page: detect current plan + seat selector for Pro
+  - User Settings: button separation (Change Plan → pricing, Manage Billing → Portal)
+  - Team page: seat limit enforcement on invite
+
+## Previous status (2026-03-13 — Legal docs rewrite + cookie consent GDPR compliance)
 
 ### Legal documents rewrite (2026-03-13)
 

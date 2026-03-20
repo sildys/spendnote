@@ -112,11 +112,27 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 1. **SEO Batch 2** — 11 oldal hátra (7 Service Provider + 3 Excel/Spreadsheet + 1 bonus)
 2. **Daily Cash Tracking klaszter** — 3 TOP PICK oldal: `restaurant-cash-count-sheet`, `retail-cash-reconciliation`, `store-daily-cash-log` + keyword expansion meglévő oldalakra
-3. **Stripe bekötés** — kód KÉSZ (Edge Functions: `create-checkout-session`, `create-portal-session`, `stripe-webhook`; frontend: `SpendNoteStripe` wrapper). Hiányzik:
-   - Stripe Dashboard: 4 Price létrehozás (Standard Monthly/Yearly, Pro Monthly/Yearly)
-   - Supabase Edge Function Secrets: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_STANDARD_MONTHLY_PRICE_ID`, `STRIPE_STANDARD_YEARLY_PRICE_ID`, `STRIPE_PRO_MONTHLY_PRICE_ID`, `STRIPE_PRO_YEARLY_PRICE_ID`, `APP_BASE_URL`
-   - Stripe Webhook endpoint → Supabase Edge Function URL
-   - Edge Function-ök deploy
+3. **Stripe bekötés** — részleges kód KÉSZ, teljes subscription flow újratervezve (2026-03-20):
+   - ✅ Stripe Dashboard: Products + Prices létrehozva (TEST MODE, adószám pending)
+   - ✅ Price ID-k (test): Standard $19/mo, $190/yr | Pro $29/mo, $290/yr | Extra Seat $5/mo
+   - ✅ Edge Functions kész: `create-checkout-session`, `create-portal-session`, `stripe-webhook`
+   - ✅ Frontend wrapper kész: `SpendNoteStripe` (supabase-config.js)
+   - ⏳ **Hiányzó implementáció:**
+     - DB: `seat_count` mező hozzáadása profiles táblához
+     - `create-checkout-session` frissítés: Pro-nál 2 line item (base + extra seats)
+     - ÚJ `update-subscription` Edge Function: plan swap + seat change (`proration_behavior: 'none'`, periódus végén vált)
+     - `stripe-webhook` frissítés: seat_count sync profilba
+     - `SpendNoteStripe.updateSubscription()` frontend method
+     - Pricing page: detect current plan, gomb logika (new checkout vs update-subscription), seat selector Pro-nál
+     - User Settings gombok szétválasztása: "Change Plan" → pricing page, "Manage Billing" → Stripe Portal, "Cancel" → Stripe Portal
+     - Team page: seat limit enforcement (invite blokk ha nincs szabad seat)
+     - Supabase Secrets feltöltés + Edge Function deploy + Stripe Webhook endpoint config
+     - Stripe Branding + Customer Portal config
+   - **Billing szabályok:**
+     - Plan váltás (upgrade/downgrade) a jelenlegi billing periódus VÉGÉN lép érvénybe, NINCS proration
+     - Visszatérítés csak ha <20 tranzakció készült az adott billing periódusban
+     - Extra seat mindig $5/hó, éves Pro plan esetén is
+     - Pro csomag 3 usert tartalmaz, felette extra seat szükséges
 4. ~~**Google OAuth consent screen**~~ — KÉSZ (2026-03-20):
    - Google Cloud Console Branding: app név → SpendNote, logó, privacy/terms linkek
    - Google Groups: SpendNote Support csoport (support@spendnote.app)
