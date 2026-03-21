@@ -6,6 +6,14 @@
 /signup /spendnote-signup.html 200
 /pricing /spendnote-pricing.html 200
 /pricing/ /spendnote-pricing.html 200
+/pricing.html /spendnote-pricing.html 301
+/faq.html /spendnote-faq.html 301
+/login.html /spendnote-login.html 301
+/signup.html /spendnote-signup.html 301
+/privacy.html /spendnote-privacy.html 301
+/terms.html /spendnote-terms.html 301
+/resources.html /spendnote-resources.html 301
+/dashboard.html /dashboard 301
 /faq /spendnote-faq 301
 /faq/ /spendnote-faq 301
 /spendnote-faq-old /spendnote-faq.html 301
