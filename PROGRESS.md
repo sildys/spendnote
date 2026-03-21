@@ -95,7 +95,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-03-21 — SEO CTR optimization Phase 1)
+## Where we are now (last updated: 2026-03-21 — SEO CTR optimization Phase 1 + Phase 2)
 
 ### 2026-03-21 frissítés — SEO Performance Analysis + Title/Meta Rewrite (13 oldal KÉSZ)
 
@@ -136,11 +136,27 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 **Várt hatás:** CTR javulás 2-4 héten belül, pozíció javulás 4-6 héten belül (top 3 jelölt page 1-re: two-person-cash-count-policy, babysitter-receipt, tutor-receipt)
 
-**Következő lépések (SEO Phase 2 — PENDING):**
+### 2026-03-21 frissítés — SEO Phase 2: Title/Meta Rewrite (maradék 31 oldal + index.html KÉSZ)
+
+**Elvégzett változtatások (commit `1fa0096`):**
+- Maradék 31 SEO oldal + index.html title + meta description átírása — ugyanaz a stratégia mint Phase 1
+- "| SpendNote" / "- SpendNote" suffix eltávolítva minden oldalról
+- Benefit/action szuffixok hozzáadva (pl. "— Track Every Disbursement", "— Find the Gap", "— Why Teams Switch")
+- Meta description-ök beszélgetős, kérdés formátumúra átírva
+- og:title, og:description, twitter:title, twitter:description szinkronizálva minden oldalon
+- index.html landing page: "SpendNote — Petty Cash Tracking & Receipts for Teams"
+
+**Frissített oldalak (31 + index.html = 32 oldal × 6 tag = 192 tag):**
+cash-count-sheet-template, cash-deposit-receipt, cash-discrepancy-between-shifts, cash-paid-out-log, cash-payment-received-proof, cash-receipt-template, construction-site-petty-cash, contractor-advance-payment-receipt, daily-cash-report-template, digital-receipt-book, handyman-cash-payment-receipt, how-to-fill-out-petty-cash-voucher, how-to-manage-petty-cash-small-business, how-to-start-petty-cash-box, how-to-track-cash-payments, manage-petty-cash-remotely, office-expense-reimbursement-form, petty-cash-app-vs-excel, petty-cash-audit-checklist, petty-cash-does-not-balance, petty-cash-log-template, petty-cash-policy-template, petty-cash-receipt-generator, petty-cash-reconciliation, petty-cash-replenishment-form, petty-cash-voucher-sample, petty-cash-voucher-template, small-business-cash-receipt, what-is-petty-cash, where-to-keep-petty-cash, who-took-money-from-cash-box, index.html
+
+**Összesen Phase 1 + Phase 2:** 13 + 32 = 45 oldal, 270 tag frissítve
+
+**Következő lépések (SEO Phase 3 — PENDING):**
 1. Tartalom megerősítés a top 3-5 oldalon (új H2-k GSC query-k alapján, hosszabb szöveg)
 2. "Template" oldalak repozícionálása (tool-framing a letölthető template helyett)
 3. Backlink építés indítása (LinkedIn poszt, startup directoriák, niche közösségek)
 4. GSC Performance monitoring 2-3 hét múlva — mérjük a CTR változást
+5. GSC-ben újraindexelés kérése az összes frissített URL-re
 
 ---
 

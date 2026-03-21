@@ -1056,6 +1056,62 @@ The following keyword variants should be woven into existing pages' H2s, alt tag
 
 ---
 
+### Update log - 2026-03-21 (SEO CTR Optimization — Phase 2 title/meta rewrite for ALL remaining pages)
+
+**Elvégzett változtatások (commit `1fa0096`):**
+
+Maradék 31 SEO oldal + index.html landing page — ugyanaz a stratégia mint Phase 1:
+- "| SpendNote" / "- SpendNote" suffix eltávolítva minden title-ből
+- Action/benefit szuffixok hozzáadva (pl. "— Track Every Disbursement", "— Find the Gap")
+- Meta description-ök beszélgetős, kérdés formátumúra átírva
+- og:title, og:description, twitter:title, twitter:description szinkronizálva
+
+| # | Oldal | Új title szuffix | Új meta desc stílus |
+|---|-------|-----------------|---------------------|
+| 1 | cash-count-sheet-template | — Count by Denomination | "Free cash count sheet..." |
+| 2 | cash-deposit-receipt | — Instant Proof of Deposit | "Received a cash deposit?..." |
+| 3 | cash-discrepancy-between-shifts | — Find the Gap | "Cash doesn't match?..." |
+| 4 | cash-paid-out-log | — Track Every Disbursement | "Track every cash payout..." |
+| 5 | cash-payment-received-proof | — Instant Documentation | "Need proof that cash was received?..." |
+| 6 | cash-receipt-template | — Printable & PDF | "Free cash receipt template..." |
+| 7 | construction-site-petty-cash | — Track Crew Expenses | "Track petty cash on construction sites..." |
+| 8 | contractor-advance-payment-receipt | — Instant Cash Proof | "Client paying cash upfront?..." |
+| 9 | daily-cash-report-template | — End-of-Day Summary | "End-of-day cash report..." |
+| 10 | digital-receipt-book | — Replace Your Paper Book | "Ditch the paper receipt book..." |
+| 11 | handyman-cash-payment-receipt | — Instant Client Proof | "Getting paid in cash for a handyman job?..." |
+| 12 | how-to-fill-out-petty-cash-voucher | — Step by Step | "Step-by-step guide..." |
+| 13 | how-to-manage-petty-cash-small-business | — Small Business Guide | "How to manage petty cash from scratch..." |
+| 14 | how-to-start-petty-cash-box | — First-Week Checklist | "First-time petty cash box setup..." |
+| 15 | how-to-track-cash-payments | — Simple System | "No system for tracking cash payments?..." |
+| 16 | manage-petty-cash-remotely | — See Balances Anywhere | "Not on-site?..." |
+| 17 | office-expense-reimbursement-form | — Track Advances | "Track office expense reimbursements..." |
+| 18 | petty-cash-app-vs-excel | — Why Teams Switch | "Still tracking petty cash in Excel?..." |
+| 19 | petty-cash-audit-checklist | — Be Ready When It Comes | "Petty cash audit coming?..." |
+| 20 | petty-cash-does-not-balance | Here's Why + How to Fix It | "Petty cash short and no one knows why?..." |
+| 21 | petty-cash-log-template | — Track Every Transaction | "Free petty cash log template..." |
+| 22 | petty-cash-policy-template | — Ready-Made Rules | "Free petty cash policy template..." |
+| 23 | petty-cash-receipt-generator | — Print, PDF, or Email | "Generate petty cash receipts instantly..." |
+| 24 | petty-cash-reconciliation | — Complete Step-by-Step Guide | "How to reconcile petty cash..." |
+| 25 | petty-cash-replenishment-form | — When & How to Top Up | "Petty cash running low?..." |
+| 26 | petty-cash-voucher-sample | — Real Business Examples | "Real petty cash voucher examples..." |
+| 27 | petty-cash-voucher-template | — Free Digital + Printable | "Free petty cash voucher template..." |
+| 28 | small-business-cash-receipt | — Document Every Handoff | "Document every cash handoff..." |
+| 29 | what-is-petty-cash | Definition & How It Works | (megtartva — már jó volt) |
+| 30 | where-to-keep-petty-cash | — Storage & Access Guide | (megtartva — már jó volt) |
+| 31 | who-took-money-from-cash-box | Find Out Fast | "Cash box short and no one's talking?..." |
+| 32 | **index.html** | SpendNote — Petty Cash Tracking & Receipts for Teams | "Track every cash movement..." |
+
+**Összesen Phase 1 + Phase 2:** 45 oldal × 6 tag = **270 tag** frissítve
+
+**SEO Phase 3 terv (PENDING):**
+1. **Tartalom megerősítés** — top 3-5 oldal H2 bővítése GSC query-k alapján
+2. **"Template" oldalak repozícionálása** — tool-framing a letölthető fájl helyett
+3. **Backlink építés** — LinkedIn, startup directoriák, niche közösségek
+4. **Keyword expansion** — meglévő oldalak bővítése secondary kulcsszavakkal
+5. **GSC újraindexelés** — mind a 45 URL-re beküldés
+
+---
+
 ### Update log - 2026-03-14 (weekend batch — 5 new SEO pages, indexed)
 
 1. **Created 5 new SEO pages — all live (index, follow), indexed in Google Search Console:**
