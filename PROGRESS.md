@@ -95,6 +95,55 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
+## Where we are now (last updated: 2026-03-21 — SEO CTR optimization Phase 1)
+
+### 2026-03-21 frissítés — SEO Performance Analysis + Title/Meta Rewrite (13 oldal KÉSZ)
+
+**Google Search Console elemzés eredménye:**
+- 47 indexelt oldal, ~1700+ megjelenés összesen, de mindössze ~10 kattintás
+- Átlagos pozíció ~50 — a legtöbb oldal 3-5. oldalon van a keresőben
+- Fő probléma: "template" kulcsszavakra (cash receipt template, petty cash voucher template) túl erős a verseny (Canva, Template.net)
+- Alacsony domain authority (új domain, kevés backlink)
+- Intent mismatch: a "template" keresők letölthető fájlt várnak, nem SaaS tool-t
+
+**Azonosított "majdnem page 1" oldalak (pozíció 5-26):**
+- 13 oldal, amelyek már relatíve jól rankelnek de alacsony CTR-rel
+- Ezekre fókuszáltunk: title tag + meta description átírás
+
+**Elvégzett változtatások (commit `74ae773`):**
+1. `two-person-cash-count-policy.html` (pos 5.1) — "Rules + Sign-Off Template"
+2. `babysitter-cash-payment-receipt.html` (pos 8.5) — "Instant Proof for Families"
+3. `tutor-cash-payment-receipt.html` (pos 9.4) — "Instant Proof per Session"
+4. `petty-cash-security-tips.html` (pos 10) — "Prevent Theft & Fraud"
+5. `event-cash-handling.html` (pos 10.8) — "Float Setup, Tracking & Close-Out"
+6. `digital-petty-cash-book.html` (pos 11.7) — "Replace Your Paper Ledger"
+7. `petty-cash-how-much-to-keep.html` (pos 12.9) — "Float Formula + Examples"
+8. `custom-cash-receipt-with-logo.html` (pos 14.9) — "Free to Create"
+9. `school-money-collection-tracker.html` (pos 15.4) — "See Who Paid"
+10. `cash-handoff-receipt.html` (pos 15.9) — "Document Every Internal Transfer"
+11. `employee-cash-advance-receipt.html` (pos 16.6) — "Instant Proof of Payment"
+12. `cash-refund-receipt.html` (pos 18.4) — "Instant Refund Documentation"
+13. `cash-drawer-reconciliation.html` (pos 26.3) — "Step-by-Step Close-Out Guide"
+
+**Minden oldalon frissítve:** `<title>`, `<meta name="description">`, `og:title`, `og:description`, `twitter:title`, `twitter:description`
+
+**Stratégia:**
+- "| SpendNote" brand suffix eltávolítva — 12+ karakter felszabadult klikkelhetó szövegnek
+- Action/benefit szavak hozzáadva — "Instant Proof", "Free to Create", "See Who Paid"
+- Meta description-ök beszélgetősek lettek — "Paying your babysitter in cash?" típusú kérdések
+- Fő kulcsszó előre került minden title-ben
+- Minden title 60 karakter alatt — teljes SERP láthatóság
+
+**Várt hatás:** CTR javulás 2-4 héten belül, pozíció javulás 4-6 héten belül (top 3 jelölt page 1-re: two-person-cash-count-policy, babysitter-receipt, tutor-receipt)
+
+**Következő lépések (SEO Phase 2 — PENDING):**
+1. Tartalom megerősítés a top 3-5 oldalon (új H2-k GSC query-k alapján, hosszabb szöveg)
+2. "Template" oldalak repozícionálása (tool-framing a letölthető template helyett)
+3. Backlink építés indítása (LinkedIn poszt, startup directoriák, niche közösségek)
+4. GSC Performance monitoring 2-3 hét múlva — mérjük a CTR változást
+
+---
+
 ## Where we are now (last updated: 2026-03-18 — SEO progress + pending tasks)
 
 ### 2026-03-18 frissítés — SEO Batch 1 + Resource Center + tervek (KÉSZ + PENDING)

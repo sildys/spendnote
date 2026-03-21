@@ -1008,6 +1008,54 @@ The following keyword variants should be woven into existing pages' H2s, alt tag
 
 ---
 
+### Update log - 2026-03-21 (SEO CTR Optimization — Phase 1 title/meta rewrite)
+
+**Háttér:** Google Search Console export elemzése (2026-02-21 – 2026-03-21):
+- 47 indexelt oldal, ~1700+ megjelenés, ~10 kattintás (CTR < 1%)
+- Átlagos pozíció ~50 — legtöbb oldal a 3-5. keresőoldalakon
+- 13 oldal azonosítva "majdnem page 1" pozícióban (5-26)
+
+**Fő megállapítások:**
+1. **"Template" kulcsszavak túl versenyezők** — Canva, Template.net, Vertex42 dominálnak; intent mismatch (letölthető fájlt várnak, nem SaaS tool-t)
+2. **Alacsony domain authority** — új domain, kevés backlink; nem támogatja a magas versenyt
+3. **Title/meta nem elég kattintható** — sok title "| SpendNote" suffixal végződött (12 karakter pazarlás), meta description-ök nem differenciáltak
+
+**Elvégzett változtatások (commit `74ae773`):**
+
+| # | Oldal | Régi title | Új title | Pozíció |
+|---|-------|-----------|---------|---------|
+| 1 | two-person-cash-count-policy | ...Dual Control Guide \| SpendNote | ...Rules + Sign-Off Template | 5.1 |
+| 2 | babysitter-cash-payment-receipt | ...Track Every Payment \| SpendNote | ...Instant Proof for Families | 8.5 |
+| 3 | tutor-cash-payment-receipt | ...| SpendNote | Private Tutor Cash Receipt — Instant Proof per Session | 9.4 |
+| 4 | petty-cash-security-tips | ...Theft & Shortages \| SpendNote | ...Theft & Fraud | 10 |
+| 5 | event-cash-handling | ...Stall Float Management \| SpendNote | ...Float Setup, Tracking & Close-Out | 10.8 |
+| 6 | digital-petty-cash-book | ...Automatic Tracking - SpendNote | ...Replace Your Paper Ledger | 11.7 |
+| 7 | petty-cash-how-much-to-keep | ...Float Sizing Guide \| SpendNote | ...Float Formula + Examples | 12.9 |
+| 8 | custom-cash-receipt-with-logo | ...| SpendNote | ...Your Logo — Free to Create | 14.9 |
+| 9 | school-money-collection-tracker | ...| SpendNote | ...See Who Paid | 15.4 |
+| 10 | cash-handoff-receipt | ...Internal Transfer Documentation \| SpendNote | ...Document Every Internal Transfer | 15.9 |
+| 11 | employee-cash-advance-receipt | ...| SpendNote | ...Instant Proof of Payment | 16.6 |
+| 12 | cash-refund-receipt | ...Template \| SpendNote | ...Instant Refund Documentation | 18.4 |
+| 13 | cash-drawer-reconciliation | ...Step-by-Step Guide \| SpendNote | ...Step-by-Step Close-Out Guide | 26.3 |
+
+**Meta description stratégia:** beszélgetős, kérdés formátumú ("Paying your babysitter in cash?"), konkrét benefit + CTA.
+
+**Frissítve minden oldalon:** `<title>`, `<meta name="description">`, `og:title`, `og:description`, `twitter:title`, `twitter:description` (13 × 6 = 78 tag)
+
+**Indexelés kérése:** mind a 13 URL-re GSC-ben beküldve.
+
+**Várt hatás:**
+- CTR javulás: 0-1% → 2-5% a position 5-15 tartományban (1-2 hét)
+- Pozíció javulás: top 3 jelölt page 1-re — two-person-cash-count-policy, babysitter-receipt, tutor-receipt (3-6 hét)
+
+**SEO Phase 2 terv (PENDING):**
+1. **Tartalom megerősítés** — top 3-5 oldal H2 bővítése GSC query-k alapján
+2. **"Template" oldalak repozícionálása** — tool-framing a letölthető fájl helyett
+3. **Backlink építés** — LinkedIn, startup directoriák, niche közösségek
+4. **Keyword expansion** — meglévő oldalak bővítése secondary kulcsszavakkal (daily cash log → daily-cash-report, cash tally sheet → cash-count-sheet stb.)
+
+---
+
 ### Update log - 2026-03-14 (weekend batch — 5 new SEO pages, indexed)
 
 1. **Created 5 new SEO pages — all live (index, follow), indexed in Google Search Console:**
