@@ -1155,6 +1155,63 @@ A title-ök SEO-technikai szempontból rendben vannak:
 
 ---
 
+### Update log - 2026-03-22 (Backlink sprint + Product Angle felismerés + Phase 4 terv)
+
+**Backlink státusz:**
+| Oldal | Státusz | DA |
+|-------|---------|-----|
+| SaasHub | LIVE | ~55 |
+| WebsiteLaunches | LIVE | ~30 |
+| G2 | LIVE | ~90 |
+| SourceForge | Jóváhagyás alatt | ~85 |
+| AlternativeTo | Jóváhagyás alatt | ~60 |
+| Capterra | Jóváhagyás alatt | ~80 |
+
+**GSC újraindexelés haladás:**
+- 22 URL beküldve (13 Phase 1 + 9 prioritásos Phase 2)
+- 11 URL holnap (what-is-petty-cash, petty-cash-does-not-balance, petty-cash-app-vs-excel, how-to-manage-petty-cash-small-business, cash-payment-received-proof, cash-receipt-template, petty-cash-reconciliation, petty-cash-voucher-template, petty-cash-log-template, petty-cash-audit-checklist, digital-receipt-book)
+- 12 URL maradék — ráér, Google magától is crawlolja
+
+**GSC pozíció elemzés (7 napos adat):**
+- 8 oldal page 1-en (pozíció < 10)
+- Jelentős javulások: digital-petty-cash-book (11.7→5.0), cash-drawer-reconciliation (26.3→8.3)
+- Legnagyobb volumen: petty-cash-how-much-to-keep (93 megjelenés, poz. 13.1)
+- Google képkeresés: 2000+ megjelenés (cash-payment-received-proof: 262, petty-cash-voucher-sample: 237)
+
+**Kulcs felismerés — product angle:**
+
+A SpendNote valójában nem "petty cash app" — hanem **"cash accountability tool"**: ki kezeli a pénzt, elszámolt-e, mennyi van még nála, a főnök lássa távolról. Az eredeti ötlet abból jött, hogy a founder 2 hétig keresett ilyen megoldást az LTCom-nak és nem talált.
+
+A jelenlegi SEO oldalak "petty cash" + "receipt" + "template" kulcsszavakra céloznak — jó alap, de hiányzik az éles use case. A valós user nem "petty cash"-t keres, hanem:
+- "ki kezeli a pénzt?"
+- "elszámolt-e a kolléga?"
+- "hogyan követem az irodai készpénzt?"
+- "a főnök lássa hol a pénz"
+
+**SEO Phase 4 terv — "Cash Accountability" angle oldalak (PLANNED, építés: ~április közepe):**
+
+| # | Slug | Title angle | Target pain |
+|---|------|------------|------------|
+| 1 | who-has-the-cash-right-now | Who Has the Cash Right Now? Track It Instantly | "Kinél van a pénz?" — átláthatóság |
+| 2 | office-cash-tracking | Office Cash Tracking — See Every Movement | Irodai készpénz mozgás követése |
+| 3 | cash-advance-not-returned | Employee Didn't Return Cash Advance? What to Do | Nem adta vissza az előleget |
+| 4 | track-cash-between-employees | Track Cash Between Employees — Who Gave, Who Got | Pénz mozgás emberek között |
+| 5 | small-business-cash-control | Small Business Cash Control — No Accounting Needed | Kontroll könyvelő nélkül |
+| 6 | boss-cant-see-where-cash-goes | Can't See Where Your Team's Cash Goes? Fix That | Főnök nem lát rá a pénzre |
+
+**Mi más ezekben:**
+- NEM "petty cash" / "template" keyword-ök — hanem szituáció/pain alapú
+- Nem template, hanem probléma-megoldás framing
+- Célcsoport: irodavezető, kisvállalkozó, csapatvezető aki távolról akarja látni a pénzt
+- Kiegészítik a meglévő 47 oldalt, nem helyettesítik
+
+**Időzítés:**
+1. Április eleje: GSC kiértékelés — Phase 1-2 title/meta hatása mérhető
+2. Április közepe: ezekből 2-3 oldal megépítése (nem mind 6 egyszerre)
+3. A legjobban performálót duplikálod a többire
+
+---
+
 ### Update log - 2026-03-14 (weekend batch — 5 new SEO pages, indexed)
 
 1. **Created 5 new SEO pages — all live (index, follow), indexed in Google Search Console:**

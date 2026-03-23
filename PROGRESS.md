@@ -177,11 +177,55 @@ A title-ök SEO szempontból rendben vannak (keyword elöl, nincs stuffing, ninc
 
 **Következő lépések (SEO Phase 3 — PENDING):**
 1. **7-10 nap várakozás** — ne nyúlj semmihez, hagyd hogy a Google indexelje az új title/meta-kat
-2. **GSC-ben újraindexelés kérése** az összes frissített URL-re (45 oldal)
+2. **GSC-ben újraindexelés kérése** az összes frissített URL-re (45 oldal) — FOLYAMATBAN (22 beküldve, 11 holnap, 12 ráér)
 3. **CTR elemzés** — GSC-ben megnézni: melyik oldalaknál marad 0% CTR top 15-ös pozícióban
 4. **Title framing csere (3-5 oldal)** — CSAK azoknál amelyek top 15-ben vannak de 0% CTR → szituáció/pain framing (nem keyword csere, csak copywriting)
 5. Tartalom megerősítés a top 3-5 oldalon (új H2-k GSC query-k alapján)
 6. Backlink építés folytatása (LinkedIn company page, Crunchbase, heti Reddit/Quora)
+
+### 2026-03-22 — Backlink státusz + Pozíció elemzés + Product Angle felismerés
+
+**Backlink státusz:**
+| Oldal | Státusz | DA |
+|-------|---------|-----|
+| SaasHub | LIVE | ~55 |
+| WebsiteLaunches | LIVE | ~30 |
+| G2 | LIVE | ~90 |
+| SourceForge | Jóváhagyás alatt | ~85 |
+| AlternativeTo | Jóváhagyás alatt | ~60 |
+| Capterra | Jóváhagyás alatt | ~80 |
+
+**GSC pozíció elemzés (2026-03-22, 7 napos adat):**
+- 8 oldal van page 1-en (pozíció < 10): homepage (2.0), how-to-start-petty-cash-box (4.0), digital-petty-cash-book (5.0), two-person-cash-count-policy (5.3), manage-petty-cash-remotely (6.5), babysitter-cash-payment-receipt (7.3), cash-drawer-reconciliation (8.3), who-took-money-from-cash-box (9.5)
+- Több oldal JAVULT a korábbi adatokhoz képest (digital-petty-cash-book: 11.7→5.0, cash-drawer-reconciliation: 26.3→8.3)
+- Legnagyobb volumenű oldal: petty-cash-how-much-to-keep (93 megjelenés, pozíció 13.1) — ha top 10-be kerül, az hozza a kattintásokat
+
+**Kulcs felismerés — product angle élesítés:**
+
+A SpendNote valójában nem "petty cash app" — hanem **"cash accountability tool"**: ki kezeli a pénzt, elszámolt-e, mennyi van még nála, a főnök lássa távolról.
+
+A jelenlegi SEO oldalak "petty cash" + "receipt" + "template" kulcsszavakra céloznak — ez jó alap, de hiányzik az éles use case angle. A valós user nem "petty cash"-t keres, hanem:
+- "honnan tudom hol a pénz?"
+- "elszámolt-e a kolléga?"
+- "hogyan követem az irodai készpénzt?"
+
+**SEO Phase 4 terv — "Cash Accountability" angle oldalak (PLANNED, építés: ~április közepe):**
+
+| # | Slug | Title angle | Target keyword / pain |
+|---|------|------------|----------------------|
+| 1 | who-has-the-cash-right-now | Who Has the Cash Right Now? Track It Instantly | "who has the cash", "track company cash" |
+| 2 | office-cash-tracking | Office Cash Tracking — See Every Movement | "office cash tracking", "track cash in office" |
+| 3 | cash-advance-not-returned | Employee Didn't Return Cash Advance? What to Do | "cash advance not returned", "employee owes money" |
+| 4 | track-cash-between-employees | Track Cash Between Employees — Who Gave, Who Got | "track cash between employees", "cash handoff tracking" |
+| 5 | small-business-cash-control | Small Business Cash Control — No Accounting Needed | "cash control small business", "control company cash" |
+| 6 | boss-cant-see-where-cash-goes | Can't See Where Your Team's Cash Goes? Fix That | "where does company cash go", "cash visibility" |
+
+**Fontos:** NEM "petty cash" keyword-ök, hanem szituáció/pain alapú. Nem template, hanem probléma-megoldás framing. Célcsoport: irodavezető, kisvállalkozó, csapatvezető aki távolról akarja látni a pénzt.
+
+**Időzítés:**
+1. Április eleje: GSC kiértékelés — Phase 1-2 title/meta hatása mérhető
+2. Április közepe: ezekből 2-3 oldal megépítése (nem mind 6 egyszerre)
+3. A legjobban performálót duplikálod a többire
 
 ---
 
