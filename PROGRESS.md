@@ -234,10 +234,24 @@ A kanibalizáció nem topic overlap, hanem **intent overlap**. Két oldal szólh
 
 **Fontos:** NEM "petty cash" keyword-ök, hanem szituáció/pain alapú. Célcsoport: irodavezető, kisvállalkozó, csapatvezető aki távolról akarja látni a pénzt.
 
-**Időzítés:**
-1. Április eleje: 3 core oldal megépítése
+**Bing Webmaster Tools adatok (2026-03-24):**
+- "app for petty cash" → pozíció **8** (page 1!)
+- "petty cash management app" → pozíció **7**
+- "i need a simple app for keeping track of petty cash" → pozíció **3**
+- Tanulság: az emberek appot/megoldást keresnek, nem template-et
+
+**Teljesítmény (2026-03-24):** hétfő-kedd ~10 kattintás, 1 UK charity regisztráció, legjobb napi GSC: 4 kattintás / 3.1% CTR
+
+**Időzítés (felgyorsítva):**
+1. **2026-03-24: 2 core oldal megépítése** — a Google gyorsabban indexel mint vártuk
 2. Teljesítmény figyelés 2 hétig
-3. Ha jól megy: 4. oldal megépítése + a meglévő oldalak angle finomítása
+3. Ha jól megy: további oldalak + meglévő oldalak angle finomítása
+
+**2 új SEO oldal KÉSZ + deployolva (2026-03-24):**
+- `who-has-the-cash-right-now.html` — "Who Has the Cash Right Now?" — core pain: valós idejű cash visibility
+- `boss-cant-see-where-cash-goes.html` — "Can't See Where Your Cash Goes?" — emotional trigger: owner nincs rálátás
+- Charity oldal kihagyva (jogi aggály), team feature nem hangsúlyozva (preview-ban nincs)
+- Következő: GSC indexelés kérés → 2 hét figyelés → ha jó: cash-advance-not-returned
 
 ### 2026-03-23 — UK charity signup + nonprofit szegmens felismerés
 

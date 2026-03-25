@@ -1222,9 +1222,53 @@ Fontos tanulság: a kanibalizáció nem **topic overlap**, hanem **intent overla
 - Kiegészítik a meglévő 47 oldalt, nem helyettesítik
 
 **Időzítés:**
-1. Április eleje: 3 core oldal megépítése
+1. ~~Április eleje~~ **2026-03-24: 2 core oldal megépítése** (felgyorsítva — a Google gyorsabban indexel mint vártuk, hétfő-kedden ~10 kattintás + 1 regisztráció jött)
 2. Teljesítmény figyelés 2 hétig
-3. Ha jól megy: 4. oldal + meglévő oldalak angle finomítása
+3. Ha jól megy: további oldalak + meglévő oldalak angle finomítása
+
+---
+
+### Update log - 2026-03-24 (Bing keyword adat + 2 új SEO oldal építés)
+
+**Bing Webmaster Tools adatok (értékes új insight):**
+
+| Keyword | Pozíció | Megjelenés | Amit jelent |
+|---------|---------|-----------|-------------|
+| site:spendnote.app | 1.0 | 2 | Brand keresés — valaki direkt kereste |
+| app for petty cash | **8.0** | 1 | Page 1! Pont ami a termék |
+| i need a simple app for keeping track of petty cash | **3.0** | 1 | Page 1! Természetes nyelvi keresés |
+| petty cash receipts smart capture | **6.0** | 1 | Page 1! Feature-specifikus |
+| petty cash management app | **7.0** | 1 | Page 1! Direkten a termékkategória |
+
+**Kulcs megállapítások:**
+- A Bing sokkal jobban rangsorol minket mint a Google (poz 3-8 vs Google 40-50) — kevésbé függ DA-tól
+- Az emberek **appot/megoldást keresnek**, NEM template-et → ez megerősíti a Phase 4 "cash accountability" irányt
+- Természetes nyelvi keresések ("i need a simple app for...") → AI/Copilot keresések irányába megy, és ott erősek vagyunk
+- Hiányzó keyword-ök a jelenlegi oldalakon: "app for petty cash", "petty cash management app"
+
+**Teljesítmény frissítés (2026-03-24):**
+- Hétfő-kedd: ~10 kattintás + 1 UK charity regisztráció
+- A Google a vártnál gyorsabban indexelte az új title/meta-kat
+- 24 órás GSC: 4 kattintás, 128 megjelenés, 3.1% CTR — eddigi legjobb nap
+
+**2 új SEO oldal KÉSZ + deployolva (2026-03-24):**
+
+| # | Slug | Title | Angle |
+|---|------|-------|-------|
+| 1 | `who-has-the-cash-right-now` | Who Has the Cash Right Now? — Track It Instantly | Core pain: valós idejű cash visibility, "kinél van a pénz?" |
+| 2 | `boss-cant-see-where-cash-goes` | Can't See Where Your Cash Goes? — Fix That Today | Emotional trigger: owner/manager frusztráció, nincs rálátás |
+
+**Döntések:**
+- `charity-cash-tracking` oldal KIHAGYVA — user aggódik a "donation receipt" jogi vonatkozásai miatt, helyette `boss-cant-see-where-cash-goes` került be
+- Team feature NEM hangsúlyozva egyiken sem — preview módban nincs team invite/multi-user
+- Owner/manager perspektíva mindkét oldalon: TE követed a pénzt, TE látsz rá
+- £ használat a boss oldalon (UK piac validáció a charity signup-pal)
+- Mindkét oldal: Article + FAQPage schema, 4 FAQ, disclaimer, 6 related resource link, CTA
+
+**Következő lépés:**
+1. GSC-ben indexelés kérés mindkét új oldalra
+2. 2 hét teljesítmény figyelés
+3. Ha jó: `cash-advance-not-returned` + opcionálisan `track-cash-between-employees`
 
 ---
 
