@@ -585,7 +585,7 @@ function buildReceiptUrl(format) {
     };
     
     const params = new URLSearchParams();
-    params.append('v', 'settings-preview-12');
+    params.append('v', 'settings-preview-13');
     params.append('demo', '1');
     if (format === 'pdf') {
         params.append('preview', '1');
@@ -630,7 +630,6 @@ function buildReceiptUrl(format) {
                     try { localStorage.removeItem(PROFILE_PREVIEW_LOGO_KEY); } catch (_) {}
                     params.delete('logoKey');
                     params.delete('logoUrl');
-                    params.set('logo', '0');
                 }
             }
         } catch (e) {}
