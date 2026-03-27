@@ -2981,7 +2981,7 @@ var db = {
             if (!txId) return { success: false, error: 'Missing transaction id' };
 
             const { data, error } = await supabaseClient.rpc('spendnote_void_transaction', {
-                p_tx_id: txId,
+                p_transaction_id: txId,
                 p_reason: reason || null
             });
 
