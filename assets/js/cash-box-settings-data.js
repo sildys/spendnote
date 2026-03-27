@@ -452,32 +452,25 @@ async function initCashBoxSettings() {
             isEditMode = false;
 
             // Enforce cash box limit before allowing create
-            console.log('[CashBoxLimit] START');
             try {
                 window.SpendNoteFeatures?.invalidate?.();
                 const feats = await window.SpendNoteFeatures?.getAll?.();
                 const tier = feats?.tier || 'free';
                 const maxBoxes = (tier === 'preview' || tier === 'pro') ? Infinity : (feats?.max_cash_boxes ?? 1);
-                console.log('[CashBoxLimit] tier:', tier, 'maxBoxes:', maxBoxes);
                 if (Number.isFinite(maxBoxes)) {
                     const user = await window.auth?.getCurrentUser?.();
-                    console.log('[CashBoxLimit] user:', user?.id);
-                    const { data: existing, error: boxErr } = await supabaseClient
+                    const { data: existing } = await supabaseClient
                         .from('cash_boxes')
                         .select('id')
                         .eq('user_id', user.id);
-                    console.log('[CashBoxLimit] existing:', existing?.length, 'error:', boxErr);
-                    const currentCount = existing?.length || 0;
-                    if (currentCount >= maxBoxes) {
-                        console.log('[CashBoxLimit] BLOCKED — showing upgrade modal');
+                    if ((existing?.length || 0) >= maxBoxes) {
                         window.SpendNoteUpgrade?.showCashBoxUpgrade?.(() => {
                             window.location.replace('spendnote-cash-box-list.html');
                         });
                         return;
                     }
                 }
-            } catch (e) { console.error('[CashBoxLimit] error:', e); }
-            console.log('[CashBoxLimit] PASSED — allowing create');
+            } catch (_) {}
             
             // Update page title
             const pageTitle = document.querySelector('.page-title');
