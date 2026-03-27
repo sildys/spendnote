@@ -1185,9 +1185,30 @@ async function handleSave(e) {
     }
 }
 
+// Lock Pro Options section for non-Pro users
+async function lockProSectionIfNeeded() {
+    try {
+        const canCustomize = await window.SpendNoteFeatures?.can('can_customize_labels');
+        if (canCustomize) return;
+        const proSection = document.getElementById('proSection');
+        if (!proSection) return;
+        proSection.querySelectorAll('input, textarea').forEach(el => {
+            el.disabled = true;
+            el.style.opacity = '0.5';
+            el.style.cursor = 'not-allowed';
+            el.addEventListener('focus', async (e) => {
+                e.preventDefault();
+                el.blur();
+                window.SpendNoteUpgrade?.showLockOverlay({ feature: 'Custom Labels & Per-Box Logo', requiredPlan: 'pro' });
+            });
+        });
+    } catch (_) {}
+}
+
 // Initialize when page loads
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCashBoxSettings);
+    document.addEventListener('DOMContentLoaded', () => { initCashBoxSettings(); lockProSectionIfNeeded(); });
 } else {
     initCashBoxSettings();
+    lockProSectionIfNeeded();
 }

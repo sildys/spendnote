@@ -427,10 +427,7 @@ const initTeamPage = async () => {
     document.getElementById('inviteMemberBtn')?.addEventListener('click', async () => {
         if (!canManage()) { showAlert('Only Owner/Admin can invite.', { iconType: 'warning' }); return; }
 
-        if (subscriptionTier !== 'pro') {
-            showAlert('Team invites are available on the Pro plan. Upgrade to add team members.', { iconType: 'info' });
-            return;
-        }
+        if (!await window.SpendNoteUpgrade?.guardFeature('can_invite_members', 'Team Invites', 'pro')) return;
 
         const currentCount = teamMembers.filter(m => m.status === 'active' || m.status === 'pending').length;
         if (currentCount >= seatLimit) {

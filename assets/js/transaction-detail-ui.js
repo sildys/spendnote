@@ -592,6 +592,7 @@ html, body { height: auto !important; overflow: auto !important; }
         }
         if (emailBtn) {
             emailBtn.addEventListener('click', async () => {
+                if (!await window.SpendNoteUpgrade?.guardFeature('can_send_email_receipt', 'Email Receipts', 'pro')) return;
                 let prefillEmail = '';
                 try {
                     const currentTxId = getCurrentTxId();

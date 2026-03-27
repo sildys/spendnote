@@ -341,7 +341,8 @@ const LogoEditor = (() => {
         const fileInput = document.getElementById('logoFileInput');
 
         if (uploadBtn && fileInput) {
-            uploadBtn.addEventListener('click', () => {
+            uploadBtn.addEventListener('click', async () => {
+                if (!await window.SpendNoteUpgrade?.guardFeature('can_upload_logo', 'Custom Logo', 'standard')) return;
                 try { fileInput.value = ''; } catch (_) {}
                 fileInput.click();
             });

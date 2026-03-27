@@ -1790,7 +1790,10 @@
         const bulkExportPdfBtn = qs('#bulkExportPdf');
 
         if (bulkExportCsvBtn) {
-            bulkExportCsvBtn.addEventListener('click', exportSelectedCsv);
+            bulkExportCsvBtn.addEventListener('click', async () => {
+                if (!await window.SpendNoteUpgrade?.guardFeature('can_export_csv', 'CSV Export', 'standard')) return;
+                exportSelectedCsv();
+            });
         }
         if (bulkExportPdfBtn) {
             bulkExportPdfBtn.addEventListener('click', exportSelectedPdf);
@@ -2285,7 +2288,8 @@
         }
 
         if (exportCsvBtn) {
-            exportCsvBtn.addEventListener('click', () => {
+            exportCsvBtn.addEventListener('click', async () => {
+                if (!await window.SpendNoteUpgrade?.guardFeature('can_export_csv', 'CSV Export', 'standard')) return;
                 exportFilteredCsv();
             });
         }

@@ -1225,9 +1225,9 @@ window.SpendNoteFeatures = {
 
     _FLAGS: {
         preview:  { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: true,  can_upload_logo: true,  can_customize_labels: true,  can_invite_members: true,  can_add_cash_box: true,   max_cash_boxes: Infinity, max_users: Infinity },
-        free:     { can_create_transaction: true,  can_export_csv: false, can_export_pdf: false, can_send_email_receipt: false, can_upload_logo: false, can_customize_labels: false, can_invite_members: false, can_add_cash_box: false,  max_cash_boxes: 1,  max_users: 1 },
+        free:     { can_create_transaction: true,  can_export_csv: false, can_export_pdf: true,  can_send_email_receipt: false, can_upload_logo: false, can_customize_labels: false, can_invite_members: false, can_add_cash_box: false,  max_cash_boxes: 1,  max_users: 1 },
         standard: { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: false, can_upload_logo: true,  can_customize_labels: false, can_invite_members: false, can_add_cash_box: true,   max_cash_boxes: 2,  max_users: 1 },
-        pro:      { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: true,  can_upload_logo: true,  can_customize_labels: true,  can_invite_members: true,  can_add_cash_box: true,   max_cash_boxes: Infinity, max_users: Infinity }
+        pro:      { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: true,  can_upload_logo: true,  can_customize_labels: true,  can_invite_members: true,  can_add_cash_box: true,   max_cash_boxes: Infinity, max_users: 3 }
     },
 
     async getTier() {
