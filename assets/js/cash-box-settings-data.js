@@ -450,6 +450,26 @@ async function initCashBoxSettings() {
         } else {
             // Create mode
             isEditMode = false;
+
+            // Enforce cash box limit before allowing create
+            try {
+                const feats = await window.SpendNoteFeatures?.getAll?.();
+                const tier = feats?.tier || 'free';
+                const maxBoxes = (tier === 'preview' || tier === 'pro') ? Infinity : (feats?.max_cash_boxes ?? 1);
+                if (Number.isFinite(maxBoxes)) {
+                    const { data: existing } = await window.supabaseClient
+                        .from('cash_boxes')
+                        .select('id', { count: 'exact', head: false })
+                        .limit(maxBoxes + 1);
+                    const currentCount = existing?.length || 0;
+                    if (currentCount >= maxBoxes) {
+                        const planLabel = tier === 'free' ? 'Free' : (tier === 'standard' ? 'Standard' : tier);
+                        showAlert(`You have reached the ${planLabel} plan limit (${maxBoxes} Cash Box${maxBoxes === 1 ? '' : 'es'}).\n\nUpgrade to add more Cash Boxes.`, { iconType: 'warning', title: 'Plan Limit Reached' });
+                        window.location.replace('spendnote-cash-box-list.html');
+                        return;
+                    }
+                }
+            } catch (_) {}
             
             // Update page title
             const pageTitle = document.querySelector('.page-title');
