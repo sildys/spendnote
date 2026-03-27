@@ -1157,13 +1157,13 @@ window.SpendNoteUpgrade = {
             <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             </div>
-            <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">Save and share your receipts</div>
-            <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Download receipts as PDF to store, share, or attach anywhere.<br>Without it, you can only print.</div>
+            <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">Download your receipts as PDF</div>
+            <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Download receipts as PDF to save or send later.<br>Without it, you can only print.</div>
             <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               Download as PDF
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
-            <div style="font-size:12px;color:#94a3b8;margin-top:8px;line-height:1.4;">Works with any device, anywhere</div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:8px;line-height:1.4;">Save and send anytime</div>
           </div>
         `;
         document.body.appendChild(overlay);
