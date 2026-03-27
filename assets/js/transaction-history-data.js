@@ -1791,7 +1791,10 @@
 
         if (bulkExportCsvBtn) {
             bulkExportCsvBtn.addEventListener('click', async () => {
-                if (!await window.SpendNoteUpgrade?.guardFeature('can_export_csv', 'CSV Export', 'standard')) return;
+                if (!await window.SpendNoteFeatures?.can('can_export_csv')) {
+                    window.SpendNoteUpgrade?.showCsvUpgrade?.();
+                    return;
+                }
                 exportSelectedCsv();
             });
         }
@@ -2289,7 +2292,10 @@
 
         if (exportCsvBtn) {
             exportCsvBtn.addEventListener('click', async () => {
-                if (!await window.SpendNoteUpgrade?.guardFeature('can_export_csv', 'CSV Export', 'standard')) return;
+                if (!await window.SpendNoteFeatures?.can('can_export_csv')) {
+                    window.SpendNoteUpgrade?.showCsvUpgrade?.();
+                    return;
+                }
                 exportFilteredCsv();
             });
         }
