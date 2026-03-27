@@ -1214,14 +1214,11 @@ async function lockProSectionIfNeeded() {
         const proSection = document.getElementById('proSection');
         if (!proSection) return;
         proSection.querySelectorAll('input, textarea').forEach(el => {
-            el.disabled = true;
+            el.readOnly = true;
             el.style.opacity = '0.5';
             el.style.cursor = 'not-allowed';
-            el.addEventListener('focus', async (e) => {
-                e.preventDefault();
-                el.blur();
-                window.SpendNoteUpgrade?.showLabelsUpgrade?.();
-            });
+            el.addEventListener('focus', () => { el.blur(); window.SpendNoteUpgrade?.showLabelsUpgrade?.(); });
+            el.addEventListener('click', () => { window.SpendNoteUpgrade?.showLabelsUpgrade?.(); });
         });
     } catch (_) {}
 }
