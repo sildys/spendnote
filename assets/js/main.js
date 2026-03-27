@@ -1073,11 +1073,23 @@ window.SpendNoteUpgrade = {
         el.appendChild(badge);
     },
 
-    showCashBoxUpgrade(onClose) {
+    async showCashBoxUpgrade(onClose) {
         const existing = document.getElementById(this._overlayId);
         if (existing) existing.remove();
 
-        const planUrl = this._buildPlanUrl('standard', 'Cash Boxes');
+        const tier = await window.SpendNoteFeatures?.getTier?.() || 'free';
+        const isStandard = tier === 'standard';
+        const targetPlan = isStandard ? 'pro' : 'standard';
+        const title = isStandard
+            ? "You've reached 2 cash boxes"
+            : "You're tracking cash in only one place";
+        const body = isStandard
+            ? "Upgrade to Pro for unlimited cash boxes."
+            : "Multiple locations need multiple cash boxes.<br>Upgrade to track everything.";
+        const cta = isStandard ? 'Upgrade to Pro' : 'Unlock full control';
+        const small = isStandard ? 'Unlimited cash boxes on Pro' : 'Standard: 2 cash boxes · Pro: unlimited';
+
+        const planUrl = this._buildPlanUrl(targetPlan, 'Cash Boxes');
         const overlay = document.createElement('div');
         overlay.id = this._overlayId;
         overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,0.55);display:flex;align-items:center;justify-content:center;padding:20px;';
@@ -1089,12 +1101,12 @@ window.SpendNoteUpgrade = {
             <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
             </div>
-            <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">You're tracking cash in only one place</div>
-            <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">If you handle cash in multiple locations, you're already losing visibility.<br>One cash box means one view — what you don't track, you don't see.</div>
+            <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">${title}</div>
+            <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">${body}</div>
             <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
-              Unlock full control
+              ${cta}
             </a>
-            <div style="font-size:12px;color:#94a3b8;margin-top:12px;line-height:1.4;">No blind spots. No guessing.</div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:12px;line-height:1.4;">${small}</div>
           </div>
         `;
         document.body.appendChild(overlay);
