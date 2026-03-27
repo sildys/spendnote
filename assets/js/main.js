@@ -1158,12 +1158,12 @@ window.SpendNoteUpgrade = {
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">Send receipts instantly</div>
-            <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Email receipts directly from the app in seconds.<br>No downloads, no attachments.</div>
+            <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Email receipts directly from the app.<br>No downloads, no attachments.</div>
             <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               Send via email
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
-            <div style="font-size:12px;color:#94a3b8;margin-top:8px;line-height:1.4;">Sent directly to your contact</div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:8px;line-height:1.4;">Sent instantly to your client</div>
           </div>
         `;
         document.body.appendChild(overlay);
