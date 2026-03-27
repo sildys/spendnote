@@ -1880,6 +1880,26 @@
         })();
 
         // ========================================
+        // UPGRADE CELEBRATION TOAST
+        // ========================================
+        (async () => {
+            try {
+                const tier = await window.SpendNoteFeatures?.getTier?.();
+                if (!tier) return;
+                const prevTier = localStorage.getItem('sn.lastKnownTier');
+                localStorage.setItem('sn.lastKnownTier', tier);
+                if (tier === 'free' || tier === 'preview') return;
+                if (!prevTier || prevTier === tier) return;
+                const upgrades = { free: 0, standard: 1, pro: 2, preview: 3 };
+                if ((upgrades[tier] || 0) <= (upgrades[prevTier] || 0)) return;
+                const label = tier === 'pro' ? 'Pro' : (tier === 'standard' ? 'Standard' : tier);
+                if (typeof showAlert === 'function') {
+                    showAlert(`Welcome to ${label}! All your new features are ready.`, { iconType: 'success', title: `You're on ${label}` });
+                }
+            } catch (_) {}
+        })();
+
+        // ========================================
         // TRANSACTIONS MENU - ADD CASHBOX FILTER
         // ========================================
         const transactionsLink = document.getElementById('navTransactions');

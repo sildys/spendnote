@@ -31,12 +31,12 @@ const showTeamOnboardingModal = () => new Promise((resolve) => {
         <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
-        <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:8px;line-height:1.3;">Set up your team</div>
-        <div style="font-size:14px;color:#475569;margin-bottom:20px;line-height:1.6;">Give your team a name so members can find it.</div>
+        <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:8px;line-height:1.3;">Start working with your team</div>
+        <div style="font-size:14px;color:#475569;margin-bottom:20px;line-height:1.6;">Invite people and manage cash together.</div>
+        <div style="font-size:12px;color:#94a3b8;margin-bottom:6px;text-align:left;">Give your team a name (you can change it later)</div>
         <input type="text" id="sn-onboard-team-name" placeholder="e.g. Acme Coffee Shop" maxlength="60" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:15px;font-family:inherit;outline:none;margin-bottom:16px;transition:border-color .15s;" onfocus="this.style.borderColor='#059669'" onblur="this.style.borderColor='#e2e8f0'">
         <button type="button" id="sn-onboard-submit" style="display:inline-flex;align-items:center;justify-content:center;background:#059669;color:#fff;border:none;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;cursor:pointer;width:100%;box-sizing:border-box;">Create team</button>
         <button type="button" id="sn-onboard-cancel" style="appearance:none;border:none;background:none;color:#94a3b8;font-size:12px;cursor:pointer;margin-top:12px;padding:4px;">I'll do this later</button>
-        <div style="font-size:12px;color:#94a3b8;margin-top:8px;">You can change the name anytime in Team settings</div>
       </div>
     `;
     document.body.appendChild(overlay);
@@ -405,7 +405,11 @@ const initTeamPage = async () => {
         if (!existingOrgId) {
             const teamName = await showTeamOnboardingModal();
             if (!teamName) {
-                window.location.href = 'dashboard.html';
+                hide('teamLoading');
+                hide('teamError');
+                show('teamContent');
+                const tbody = document.getElementById('teamTableBody');
+                if (tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:40px 20px;"><div style="font-size:16px;font-weight:600;margin-bottom:6px;">No team yet</div><div style="font-size:13px;margin-bottom:16px;">Invite people when you\'re ready.</div><button type="button" onclick="window.location.reload()" style="background:#059669;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;">Create team</button></td></tr>';
                 return;
             }
             try {
