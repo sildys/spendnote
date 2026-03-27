@@ -587,6 +587,10 @@ function buildReceiptUrl(format) {
     const params = new URLSearchParams();
     params.append('v', 'settings-preview-12');
     params.append('demo', '1');
+    if (format === 'pdf') {
+        params.append('preview', '1');
+        params.append('download', '0');
+    }
     
     // Display options
     for (const [key, value] of Object.entries(displayOptions)) {
