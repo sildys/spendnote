@@ -1247,7 +1247,10 @@ async function lockLogoToggleIfNeeded() {
         if (!logoToggle) return;
         logoToggle.checked = false;
         logoToggle.disabled = true;
-        logoToggle.dispatchEvent(new Event('change', { bubbles: true }));
+        if (typeof displayOptions !== 'undefined') {
+            displayOptions.logo = '0';
+        }
+        if (typeof reloadIframe === 'function') reloadIframe();
         const label = logoToggle.closest('.toggle-item');
         if (label) label.style.opacity = '0.5';
     } catch (_) {}
