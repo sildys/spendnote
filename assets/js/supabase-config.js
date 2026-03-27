@@ -1224,10 +1224,10 @@ window.SpendNoteFeatures = {
     _tier: null,
 
     _FLAGS: {
-        preview:  { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: true,  can_upload_logo: true,  can_customize_labels: true,  can_invite_members: true,  can_add_cash_box: true,   max_cash_boxes: Infinity, max_users: Infinity },
-        free:     { can_create_transaction: true,  can_export_csv: false, can_export_pdf: true,  can_send_email_receipt: false, can_upload_logo: false, can_customize_labels: false, can_invite_members: false, can_add_cash_box: true,   max_cash_boxes: 1,  max_users: 1 },
-        standard: { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: false, can_upload_logo: true,  can_customize_labels: false, can_invite_members: false, can_add_cash_box: true,   max_cash_boxes: 2,  max_users: 1 },
-        pro:      { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: true,  can_upload_logo: true,  can_customize_labels: true,  can_invite_members: true,  can_add_cash_box: true,   max_cash_boxes: Infinity, max_users: 3 }
+        preview:  { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: true,  can_upload_logo: true,  can_customize_labels: true,  can_invite_members: true,  can_add_cash_box: true,   max_cash_boxes: Infinity, max_users: Infinity, max_transactions: 200,      trial_days: Infinity },
+        free:     { can_create_transaction: true,  can_export_csv: false, can_export_pdf: true,  can_send_email_receipt: false, can_upload_logo: false, can_customize_labels: false, can_invite_members: false, can_add_cash_box: true,   max_cash_boxes: 1,  max_users: 1,        max_transactions: 20,       trial_days: 14 },
+        standard: { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: false, can_upload_logo: true,  can_customize_labels: false, can_invite_members: false, can_add_cash_box: true,   max_cash_boxes: 2,  max_users: 1,        max_transactions: Infinity, trial_days: Infinity },
+        pro:      { can_create_transaction: true,  can_export_csv: true,  can_export_pdf: true,  can_send_email_receipt: true,  can_upload_logo: true,  can_customize_labels: true,  can_invite_members: true,  can_add_cash_box: true,   max_cash_boxes: Infinity, max_users: 3,        max_transactions: Infinity, trial_days: Infinity }
     },
 
     async getTier() {
@@ -3103,39 +3103,44 @@ var db = {
         },
 
         async create(transaction) {
-            let enforcePreviewLimit = false;
-            if (isPreviewReceiptLimitEnabled()) {
-                try {
-                    const tier = await window.SpendNoteFeatures?.getTier?.();
-                    enforcePreviewLimit = String(tier || '').toLowerCase() === PREVIEW_SUBSCRIPTION_TIER;
-                } catch (_) {
-                    enforcePreviewLimit = false;
-                }
-            }
+            // Unified transaction limit check for all tiers
+            try {
+                const feats = await window.SpendNoteFeatures?.getAll?.();
+                const tier = feats?.tier || 'free';
+                const maxTx = feats?.max_transactions ?? Infinity;
+                const trialDays = feats?.trial_days ?? Infinity;
 
-            if (enforcePreviewLimit) {
-                try {
-                    let previewCap = PREVIEW_RECEIPT_LIMIT;
+                // Check trial expiry (free tier: 14 days from signup)
+                if (Number.isFinite(trialDays)) {
                     try {
-                        const billingState = await window.SpendNoteBilling?.getState?.();
-                        const cap = Number(billingState?.preview_transaction_cap);
-                        if (Number.isFinite(cap) && cap > 0) previewCap = Math.floor(cap);
+                        const { data: { user } } = await supabaseClient.auth.getUser();
+                        if (user?.created_at) {
+                            const signupDate = new Date(user.created_at);
+                            const now = new Date();
+                            const daysSinceSignup = (now - signupDate) / (1000 * 60 * 60 * 24);
+                            if (daysSinceSignup >= trialDays) {
+                                return {
+                                    success: false,
+                                    error: 'FREE_TRIAL_EXPIRED'
+                                };
+                            }
+                        }
                     } catch (_) {}
+                }
 
+                // Check transaction count limit
+                if (Number.isFinite(maxTx)) {
                     const usage = await getActiveTransactionCount();
-                    if (usage.success && usage.count >= previewCap) {
+                    if (usage.success && usage.count >= maxTx) {
                         return {
                             success: false,
-                            error: PREVIEW_RECEIPT_LIMIT_ERROR
+                            error: tier === 'free' ? 'FREE_TRANSACTION_LIMIT' : PREVIEW_RECEIPT_LIMIT_ERROR
                         };
                     }
-                    if (!usage.success && window.SpendNoteDebug) {
-                        console.warn('Could not validate preview receipt limit before create:', usage.error);
-                    }
-                } catch (e) {
-                    if (window.SpendNoteDebug) {
-                        console.warn('Preview receipt limit check failed, continuing create:', e);
-                    }
+                }
+            } catch (e) {
+                if (window.SpendNoteDebug) {
+                    console.warn('Transaction limit check failed, continuing create:', e);
                 }
             }
 
