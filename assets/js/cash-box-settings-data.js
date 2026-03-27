@@ -211,7 +211,12 @@ function bindTeamAccessToggle() {
     const icon = document.getElementById('teamToggleIcon');
     if (!header) return;
 
-    header.addEventListener('click', () => {
+    header.addEventListener('click', async () => {
+        const canTeam = await window.SpendNoteFeatures?.can('can_invite_members');
+        if (!canTeam) {
+            window.SpendNoteUpgrade?.showTeamUpgrade?.();
+            return;
+        }
         const isHidden = content.style.display === 'none' || !content.style.display;
         content.style.display = isHidden ? 'block' : 'none';
         if (icon) icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
@@ -221,6 +226,17 @@ function bindTeamAccessToggle() {
             });
         }
     });
+
+    const teamLink = content.querySelector('.team-manage-link');
+    if (teamLink) {
+        teamLink.addEventListener('click', async (e) => {
+            const canTeam = await window.SpendNoteFeatures?.can('can_invite_members');
+            if (!canTeam) {
+                e.preventDefault();
+                window.SpendNoteUpgrade?.showTeamUpgrade?.();
+            }
+        });
+    }
 }
 
 function bindCashBoxDeletePanelToggle() {
