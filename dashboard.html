@@ -105,6 +105,18 @@
                 <button class="dismiss-btn-compact" type="button" onclick="document.getElementById('inviteBanner').style.display='none'" title="Dismiss">-</button>
             </div>
 
+            <div id="trialExpiryBanner" style="display:none;background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;display:none;align-items:center;gap:12px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span style="font-size:13px;color:#92400e;font-weight:600;" id="trialBannerText">Your free trial ends in 3 days</span>
+                    <span style="font-size:12px;color:#b45309;">Upgrade to keep adding transactions without interruption</span>
+                </div>
+                <a href="spendnote-pricing.html?ref=trial-warning" style="font-size:12px;font-weight:600;color:#d97706;text-decoration:none;white-space:nowrap;">View plans →</a>
+                <button type="button" onclick="this.parentElement.style.display='none';try{localStorage.setItem('sn.trialBannerDismissed','1')}catch(_){}" style="appearance:none;border:none;background:none;color:#d97706;cursor:pointer;padding:2px;line-height:1;opacity:0.6;" title="Dismiss">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+
             <div class="transactions-card">
                 <div class="transactions-header" id="transactionsHeader" style="--cashbox-rgb: 5, 150, 105;">
                     <div class="header-top">
@@ -1842,6 +1854,29 @@
         if (typeof loadDashboardData === 'function') {
             loadDashboardData();
         }
+
+        // ========================================
+        // FREE TRIAL EXPIRY BANNER (T-3 days)
+        // ========================================
+        (async () => {
+            try {
+                if (localStorage.getItem('sn.trialBannerDismissed') === '1') return;
+                const tier = await window.SpendNoteFeatures?.getTier?.();
+                if (tier !== 'free') return;
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                if (!user?.created_at) return;
+                const signup = new Date(user.created_at);
+                const now = new Date();
+                const daysLeft = 14 - ((now - signup) / (1000 * 60 * 60 * 24));
+                if (daysLeft > 3 || daysLeft <= 0) return;
+                const banner = document.getElementById('trialExpiryBanner');
+                const textEl = document.getElementById('trialBannerText');
+                if (!banner) return;
+                const d = Math.ceil(daysLeft);
+                if (textEl) textEl.textContent = d <= 1 ? 'Your trial ends tomorrow' : `Your free trial ends in ${d} days`;
+                banner.style.display = 'flex';
+            } catch (_) {}
+        })();
 
         // ========================================
         // TRANSACTIONS MENU - ADD CASHBOX FILTER
