@@ -430,8 +430,9 @@ function initTransactionForm() {
                 if (raw === 'PREVIEW_RECEIPT_LIMIT_REACHED' || lower.includes('preview_receipt_limit_reached')) {
                     msg = 'Preview limit reached (200 transactions). You can view existing data, but cannot create more transactions.';
                 } else
-                if (raw === 'FREE_TRANSACTION_LIMIT') {
-                    msg = 'You have reached the Free plan limit (20 transactions).\n\nUpgrade to Standard or Pro for unlimited transactions.';
+                if (raw === 'FREE_TRANSACTION_LIMIT' || lower.includes('free_transaction_limit')) {
+                    window.SpendNoteUpgrade?.showTransactionLimitUpgrade?.();
+                    return;
                 } else
                 if (raw === 'FREE_TRIAL_EXPIRED') {
                     msg = 'Your 14-day free trial has expired.\n\nUpgrade to Standard or Pro to continue creating transactions.';
