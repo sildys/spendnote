@@ -1625,21 +1625,63 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
   - Consistent icon types: info, success, warning, error, danger
   - Destructive confirms use red danger styling; prompts for email, void reason, delete confirmation
 
-## Next focus (pick one)
-- **Marketing oldalak mobil optimalizálása (következő session első feladat):** `index.html`, `spendnote-pricing.html`, `spendnote-faq.html`, `spendnote-terms.html`, `spendnote-privacy.html` — 430/390/375px töréspontok, overflow, hero/CTA/footer/legal blokkok.
-- **Preview scope lock (7-8 nap):** onboardingban csak a kötelező receipt identity first-run modal készül el; az email templatek (L2/L3) post-preview feladatok.
-- **Preview scope lock (kiegészítés):** a Team multi-cash-box assignment/logika javítás **nem preview blocker**, külön post-preview workstream.
-- Landing polish for public preview (copy, CTA, preview messaging, trust/legal links).
-- Add visible contact email on landing (footer + clear `mailto:`) for inbound questions.
-- Preview disclaimer UX on landing + signup (signup explicit acceptance).
-- GA4 baseline on landing (`page_view` + signup CTA click event) + Search Console setup.
-- Onboarding: auto-create a default USD Cash Box (starting balance 0) after signup/first session.
-- Build SEO page #1: `petty-cash-log-software` intent page (angle: replace handwritten/duplicate receipt book with searchable digital cash handoff receipts; US keywords: "receipt book", "duplicate receipt book", "carbonless receipt book"; copy + layout + meta + canonical + internal links).
-- Build SEO page #2: `cash-handoff-receipt-app` intent page (copy + layout + meta + canonical + internal links).
-- Create a demo account with typical US cash box names, addresses, and transactions for screenshots (SEO pages + landing).
-- Populate the demo account data in Supabase tables so it is usable for screenshots/videos.
-- After landing is ready: enable indexing for landing + these 2 SEO pages only; keep internal/app pages `noindex`.
-- Deploy updated `send-invite-email` Edge Function (reply_to + personalized subject), then monitor inbox placement for 48h.
+## Paywall / Subscription rendszer — Állapot (2026-03-29)
+
+### KÉSZ (gated + működik):
+- ✅ **Feature flag rendszer** (`_FLAGS` in `supabase-config.js`) — 4 tier: preview, free, standard, pro
+- ✅ **Tier detection** DB-ből (`profiles.subscription_tier`)
+- ✅ **Cash box limit** — free=1, standard=2, pro=∞ (create-nél ellenőrizve)
+- ✅ **Transaction limit** — free=20 tx / 14 nap trial, preview=200, standard/pro=∞
+- ✅ **CSV export gating** — free blocked, dedicated upgrade modal
+- ✅ **PDF download gating** — free=print only, Standard+ kap PDF, dedicated modal
+- ✅ **Email receipt gating** — dedicated upgrade modal
+- ✅ **Logo upload gating** — dedicated upgrade modal
+- ✅ **Custom labels gating** — readonly inputs + upgrade modal (Pro only)
+- ✅ **Team invite gating** — `guardFeature` in team-page.js
+- ✅ **7 upgrade modal** sales copy-val: cashBox, logo, csv, pdf, labels, email, generic lockOverlay
+- ✅ **Stripe Edge Functions** léteznek: create-checkout-session, create-portal-session, stripe-webhook, update-subscription
+- ✅ **Client-side Stripe wiring** (`SpendNoteStripe` in supabase-config.js + user-settings.js)
+- ✅ **Cache version bump** minden HTML-en (main.js v38, supabase-config.js)
+
+### Free tier limitek:
+| Limit | Érték |
+|-------|-------|
+| Cash box-ok | **1** |
+| Userek | **1** |
+| Tranzakciók | **20** |
+| Trial időszak | **14 nap** (utána tx blocked) |
+| CSV export | ❌ |
+| PDF letöltés | ❌ (csak print) |
+| Email receipt | ❌ |
+| Logo feltöltés | ❌ |
+| Custom labels | ❌ |
+| Team invite | ❌ |
+
+### NEM KÉSZ / Ellenőrizendő:
+- ⚠️ **`STRIPE_LIVE = false`** (`supabase-config.js` ~302) — checkout/portal client-oldalon kikapcsolva, "Billing is not yet available" üzenetet ad
+- ⚠️ **Email modal → Standard pricing link, de `_FLAGS`-ban Pro only** — inkonzisztencia, dönteni kell
+- ⏳ **Stripe live mode tesztelés** — end-to-end: pricing → checkout → subscription aktív → tier frissül → limit feloldva
+- ⏳ **Preview → Free átállás** — meglévő preview userek tierje átírása, 30% kupon generálás
+- ⏳ **Preview banner eltávolítása/frissítése** — SEO oldalakon + app oldalakon
+
+### Ellenőrzés alatt (Windsurf session, félbemaradt):
+- Free tier cash box limit ✅
+- Free tier CSV export block ✅
+- Free tier logo upload block ✅
+- Free tier custom labels/message block ✅
+- Free tier transaction limit — **ellenőrizendő**
+- Free tier 14-day trial expiry — **ellenőrizendő**
+- Free tier PDF block — **ellenőrizendő**
+- Free tier email block — **ellenőrizendő**
+- Standard tier tesztelés — **nem kezdődött**
+- Pro tier tesztelés — **nem kezdődött**
+- Stripe checkout flow — **nem kezdődött**
+
+## Korábbi "Next focus" (archív)
+- ~~Marketing oldalak mobil optimalizálása~~ (alacsonyabb prioritás most)
+- ~~Preview scope lock~~ (preview lezárás alatt)
+- ~~Build SEO page #1-#2~~ (kész: who-has-the-cash, boss-cant-see)
+- Deploy updated `send-invite-email` Edge Function (post-launch)
 
 ## Backlog (UX + bugs)
 - **High**
