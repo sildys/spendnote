@@ -1625,57 +1625,91 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
   - Consistent icon types: info, success, warning, error, danger
   - Destructive confirms use red danger styling; prompts for email, void reason, delete confirmation
 
-## Paywall / Subscription rendszer — Állapot (2026-03-29)
+## Paywall / Subscription rendszer — Állapot (2026-03-08)
 
 ### KÉSZ (gated + működik):
 - ✅ **Feature flag rendszer** (`_FLAGS` in `supabase-config.js`) — 4 tier: preview, free, standard, pro
 - ✅ **Tier detection** DB-ből (`profiles.subscription_tier`)
-- ✅ **Cash box limit** — free=1, standard=2, pro=∞ (create-nél ellenőrizve)
-- ✅ **Transaction limit** — free=20 tx / 14 nap trial, preview=200, standard/pro=∞
+- ✅ **Cash box limit** — free=1, standard=2, pro=∞ (create-nél ellenőrizve, tier-aware modal)
+- ✅ **Transaction limit** — free=20 tx, preview=200, standard/pro=∞ — kliens + szerver guard (migration 039)
 - ✅ **CSV export gating** — free blocked, dedicated upgrade modal
 - ✅ **PDF download gating** — free=print only, Standard+ kap PDF, dedicated modal
-- ✅ **Email receipt gating** — dedicated upgrade modal
-- ✅ **Logo upload gating** — dedicated upgrade modal
+- ✅ **Email receipt gating** — dedicated upgrade modal (Pro only)
+- ✅ **Logo upload gating** — toggle locked + dimmed free-ben, dedicated upgrade modal
+- ✅ **Logo receipt display** — ha nincs feltöltött logó, "Company logo" placeholder elrejtve (minden tierben, minden template: print, PDF, email)
 - ✅ **Custom labels gating** — readonly inputs + upgrade modal (Pro only)
+- ✅ **Team access gating** — cash box settings header + link intercepted, dedicated showTeamUpgrade modal
 - ✅ **Team invite gating** — `guardFeature` in team-page.js
-- ✅ **7 upgrade modal** sales copy-val: cashBox, logo, csv, pdf, labels, email, generic lockOverlay
+- ✅ **10 upgrade modal** konverziós copy-val: cashBox (tier-aware), logo, csv, pdf, labels, email, team, transactionLimit, trialExpired, generic lockOverlay
 - ✅ **Stripe Edge Functions** léteznek: create-checkout-session, create-portal-session, stripe-webhook, update-subscription
 - ✅ **Client-side Stripe wiring** (`SpendNoteStripe` in supabase-config.js + user-settings.js)
-- ✅ **Cache version bump** minden HTML-en (main.js v38, supabase-config.js)
+- ✅ **Void transaction** — javított RPC (migration 038): parameter name fix, cash box owner auth fallback, correct INSERT columns, org_id NULL guard az audit loghoz
+- ✅ **Receipt print settings** — Done&Print és transaction detail receipt most a cash box settings display options-t és a can_upload_logo tier check-et használja
+- ✅ **14-day free trial** — kliens-oldali check (user.created_at) + szerver-oldali guard (migration 040) + dedikált showTrialExpiredUpgrade modal
+- ✅ **Trial warning banner** — dashboard tetején T-3 naptól, dinamikus countdown, date-based dismiss (másnap újra jön), "Upgrade now →" CTA
+- ✅ **Cash box upgrade modal tier-aware** — Free user → Standard (1→2 box), Standard user → Pro (2→∞ box), különböző copy
+- ✅ **Upgrade celebration toast** — tier változás detektálása localStorage-ból, "You're on [Plan]! All your new features are ready." success modal
+- ✅ **Pro onboarding flow** — team page: ha nincs org → "Start working with your team" modal, team név bekérés, RPC (migration 041: spendnote_ensure_org_for_pro), skip → empty state marad team page-en
+- ✅ **Upgrade overlay click fix** — CSS `pointer-events: none` javítás dashboard modal-open állapotban (#sn-upgrade-overlay kivétel hozzáadva)
 
 ### Free tier limitek:
-| Limit | Érték |
-|-------|-------|
-| Cash box-ok | **1** |
-| Userek | **1** |
-| Tranzakciók | **20** |
-| Trial időszak | **14 nap** (utána tx blocked) |
-| CSV export | ❌ |
-| PDF letöltés | ❌ (csak print) |
-| Email receipt | ❌ |
-| Logo feltöltés | ❌ |
-| Custom labels | ❌ |
-| Team invite | ❌ |
+| Limit | Érték | Enforcement |
+|-------|-------|-------------|
+| Cash box-ok | **1** | Kliens |
+| Userek | **1** | Kliens |
+| Tranzakciók | **20** | Kliens + szerver (RPC) |
+| Trial időszak | **14 nap** (utána tx blocked) | Kliens + szerver (RPC) |
+| CSV export | ❌ | Kliens |
+| PDF letöltés | ❌ (csak print) | Kliens |
+| Email receipt | ❌ | Kliens |
+| Logo feltöltés | ❌ (toggle locked) | Kliens |
+| Custom labels | ❌ | Kliens |
+| Team invite | ❌ | Kliens |
 
-### NEM KÉSZ / Ellenőrizendő:
-- ⚠️ **`STRIPE_LIVE = false`** (`supabase-config.js` ~302) — checkout/portal client-oldalon kikapcsolva, "Billing is not yet available" üzenetet ad
-- ⚠️ **Email modal → Standard pricing link, de `_FLAGS`-ban Pro only** — inkonzisztencia, dönteni kell
-- ⏳ **Stripe live mode tesztelés** — end-to-end: pricing → checkout → subscription aktív → tier frissül → limit feloldva
+### Standard tier:
+| Feature | Státusz |
+|---------|---------|
+| CSV export | ✅ feloldva |
+| PDF export | ✅ feloldva |
+| Logo feltöltés | ✅ feloldva |
+| Unlimited tx | ✅ nincs limit |
+| Max 2 cash box | ✅ enforce + upgrade modal → Pro |
+| Email receipt | ❌ → showEmailUpgrade → Pro |
+| Custom labels | ❌ → showLabelsUpgrade → Pro |
+| Team access | ❌ → showTeamUpgrade → Pro |
+
+### Pro tier:
+| Feature | Státusz |
+|---------|---------|
+| Minden Standard feature | ✅ feloldva |
+| Email receipt | ✅ feloldva |
+| Custom labels | ✅ feloldva |
+| Team access | ✅ feloldva |
+| Unlimited cash boxes | ✅ |
+| Max 3 users (seat) | ✅ enforce in team-page.js |
+| Org auto-create | ✅ RPC + onboarding modal |
+
+### Migrációk futtatandók (Supabase SQL Editor):
+| Migration | Leírás | Állapot |
+|-----------|--------|---------|
+| 038_fix_void_auth_fallback.sql | Void transaction auth + INSERT fix | ✅ futtatva |
+| 039_free_tier_transaction_limit_server_guard.sql | Free 20 tx szerver guard | ✅ futtatva |
+| 040_free_trial_expiry_server_guard.sql | Free 14 nap trial szerver guard | ✅ futtatva |
+| 041_ensure_org_for_pro.sql | Pro onboarding: org + owner membership auto-create | **futtatandó** |
+
+### Bugfixek (2026-03-08 session):
+- **Void transaction** — 4 rétegű hiba javítva: parameter name mismatch, auth logic (solo user), INSERT column names/types, audit_log org_id NULL
+- **Receipt logo placeholder** — "Company logo" szöveg eltávolítva ha nincs tényleges logó (print, PDF, email template), bootstrap fázis visszaállítja ha Supabase-ből jön logó
+- **Logo toggle lock** — free tierben disabled + unchecked + dimmed, click → showLogoUpgrade modal, timing fix (await initCashBoxSettings)
+- **Print settings mismatch** — Done&Print és transaction detail receipt most a cash box display settings-t és tier check-et használja
+- **Upgrade overlay pointer-events** — dashboard.css modal-open rule kiegészítve #sn-upgrade-overlay kivétellel
+
+### NEM KÉSZ / Következő lépések:
+- ⚠️ **`STRIPE_LIVE = false`** (`supabase-config.js` ~302) — checkout/portal client-oldalon kikapcsolva
+- ⏳ **Stripe end-to-end teszt** — pricing → checkout → subscription aktív → tier frissül → limitek feloldva
 - ⏳ **Preview → Free átállás** — meglévő preview userek tierje átírása, 30% kupon generálás
 - ⏳ **Preview banner eltávolítása/frissítése** — SEO oldalakon + app oldalakon
-
-### Ellenőrzés alatt (Windsurf session, félbemaradt):
-- Free tier cash box limit ✅
-- Free tier CSV export block ✅
-- Free tier logo upload block ✅
-- Free tier custom labels/message block ✅
-- Free tier transaction limit — **ellenőrizendő**
-- Free tier 14-day trial expiry — **ellenőrizendő**
-- Free tier PDF block — **ellenőrizendő**
-- Free tier email block — **ellenőrizendő**
-- Standard tier tesztelés — **nem kezdődött**
-- Pro tier tesztelés — **nem kezdődött**
-- Stripe checkout flow — **nem kezdődött**
+- ⏳ **Pricing oldal optimalizálás** — copy, positioning, conversion
 
 ## Korábbi "Next focus" (archív)
 - ~~Marketing oldalak mobil optimalizálása~~ (alacsonyabb prioritás most)
