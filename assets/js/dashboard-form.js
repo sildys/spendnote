@@ -434,8 +434,9 @@ function initTransactionForm() {
                     window.SpendNoteUpgrade?.showTransactionLimitUpgrade?.();
                     return;
                 } else
-                if (raw === 'FREE_TRIAL_EXPIRED') {
-                    msg = 'Your 14-day free trial has expired.\n\nUpgrade to Standard or Pro to continue creating transactions.';
+                if (raw === 'FREE_TRIAL_EXPIRED' || lower.includes('free_trial_expired')) {
+                    window.SpendNoteUpgrade?.showTrialExpiredUpgrade?.();
+                    return;
                 } else
                 if (lower.includes('permission denied') || lower.includes('row level security') || lower.includes('rls')) {
                     msg = 'Permission denied (RLS). Please log out and log in again. If the problem persists, your profile row may be missing.';
