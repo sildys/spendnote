@@ -95,15 +95,45 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-03-26 — SEO szünet + Google Ads terv + Stripe QA hétvégén)
+## Where we are now (last updated: 2026-03-08 — Domain repositioning: template → pain/anti-template)
+
+### 2026-03-08 frissítés — SEO domain repositioning (template cluster átfordítás)
+
+**Stratégiaváltás:**
+- A template cluster (voucher template, receipt template, log template) sok megjelenést hoz, de rossz intenttel (letölthető fájlt várnak, nem SaaS-t)
+- Nem több traffic kell — hanem **más traffic** (problem/pain intent)
+- Meglévő top impression oldalak átírása anti-template / pain-first angle-re
+
+**Elkészült (2026-03-08):**
+- ✅ `what-is-petty-cash` — Wikipedia explainer → pain page ("You Have Petty Cash. Where Did It Go?"), definíció lecsúsztatva 40%-ra
+- ✅ `cash-receipt-template` — template page → anti-template page ("You Downloaded a Template. Now Where Is It?"), intent mapping + hard positioning blokkok
+
+**Következő batch (2-3 nap várakozás után):**
+- 🔴 `petty-cash-voucher-template` (378 megjelenés) — anti-template átírás
+- 🔴 `petty-cash-voucher-sample` (187 megjelenés) — együtt kezelni a voucher template-tel
+- 🔴 `petty-cash-log-template` (137 megjelenés) — kulcs oldal, log = tracking → legközelebb a termékhez
+
+**Később (2. kör):**
+- 🟡 `cash-refund-receipt` (138 megjelenés) — pain irányba vihető
+- 🟡 `how-to-manage-petty-cash-small-business` (120 megjelenés) — túl általános, nehéz
+
+**Ne nyúlj hozzá (jó pozícióban vannak):**
+- 🟢 `petty-cash-how-much-to-keep` (poz 14.2) — arany, ne piszkáld
+- 🟢 `cash-drawer-reconciliation` (poz 25.6) — jó irány
+- 🟢 `employee-cash-advance-receipt` (poz 21.1) — use case oldal, békén hagyni
+- 🟢 Phase 4 oldalak (who-has-the-cash, boss-cant-see) — page 1-2, ne nyúlj hozzá
+
+---
+
+## Korábbi frissítés (2026-03-26 — SEO szünet + Google Ads terv + Stripe QA hétvégén)
 
 ### 2026-03-26 frissítés — SEO szünet, Google Ads terv, Stripe QA menetrend
 
-**SEO státusz — SZÜNET (tudatos döntés):**
+**SEO státusz — SZÜNET → REPOSITIONING (2026-03-08-tól aktív):**
 - A "template" / "petty cash voucher" kulcsszavak poz 50-100 → reménytelen (DA ~5 vs Canva DA 70-90)
 - Az organikus kattintások 16/28 nap — nem elég a növekedéshez
 - Phase 4 oldalak (who-has-the-cash, boss-cant-see) beindexelés alatt — várjuk az eredményt
-- **Döntés:** nem csinálunk több SEO oldalt, nem nyúlunk a meglévőkhöz. Várjuk a backlink-ek beérését (G2, SourceForge, AlternativeTo, Capterra) és a DA természetes emelkedését.
+- **Új döntés (2026-03-08):** nem új oldalak kellenek, hanem a meglévő top impression oldalak átfordítása template → pain/anti-template angle-re
 - Az SEO a háttérben dolgozik, de nem ez a növekedési motor rövid távon.
 
 **Eddigi eredmények (28 nap):**
