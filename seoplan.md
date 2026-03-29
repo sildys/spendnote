@@ -1411,6 +1411,67 @@ Indoklás:
 
 ---
 
+### Update log - 2026-03-29 (Gemini pain SEO ötletek — szűrt, stratégiához illő)
+
+**Forrás:** Gemini brainstorm, szűrve a meglévő pain/anti-template irányhoz.
+**Státusz:** ÖTLETBANK — nem építjük most, de a következő SEO fázisban (április közepe) innen válogatunk.
+
+**3 fő pain SEO tartalomtípus (Gemini javaslat, illeszkedik a Phase 4 irányhoz):**
+
+#### 1. "How to fix..." — Elszámolási pánik oldalak
+Célcsoport: menedzser/tulajdonos akinek nem stimmel a kassza, hónap végi/műszak végi pánik.
+
+| Keyword target | Angle |
+|----------------|-------|
+| how to handle missing petty cash receipts | Hiányzó bizonylat → prevenció SpendNote-tal |
+| what to do when the cash drawer is short | Kassza mínuszban → nyomozás helyett prevenció |
+| employee lost cash receipt accounting steps | Elveszett blokk → digitális megoldás |
+| how to track cash handoffs between employees | Alkalmazottak közötti átadás nyomon követése |
+
+Oldal struktúra: Validáld a pánikot → probléma gyökere (lusta admin, "majd később felírom") → hagyományos (rossz) megoldás → SpendNote mint 30 másodperces prevenció → FAQ.
+
+**Kanibalizáció-check szükséges:** `how to track cash handoffs` vs `cash-handoff-receipt` (LIVE) és `track-cash-between-employees` (planned Phase 4).
+
+#### 2. "Miért szar amit most használsz" — Alternatíva/migráció oldalak
+Célcsoport: aktívan váltani akaró user aki utálja az Excel-t/papírt.
+
+| Keyword target | Angle |
+|----------------|-------|
+| why Excel is bad for petty cash management | Excel fájdalom → SpendNote mint alternatíva |
+| paper receipt book alternatives | Fizikai tömb kiváltása → digitális |
+| digital petty cash voucher system | Papír voucher → digitális rendszer |
+| automated cash receipt generator vs Word templates | Word sablon vs valódi generátor |
+
+Oldal struktúra: Hook (papír elveszik, Excel nem nyílik meg telefonon) → rejtett költségek (könyvelő ideje) → összehasonlító táblázat (régi vs új) → SpendNote pitch → FAQ (biztonság, export, könyvelő elfogadja-e).
+
+**Megjegyzés:** `petty-cash-app-vs-excel` (LIVE) már fedi az Excel angle-t. Ezek inkább **kiegészítő** oldalak más intenttel (paper book, Word template, voucher system).
+
+#### 3. Iparág-specifikus pain oldalak
+Célcsoport: konkrét iparág + konkrét készpénzes fájdalom.
+
+| Keyword target | Iparág | Pain |
+|----------------|--------|------|
+| restaurant cash drawer shift change log | Vendéglátás | Műszakváltás kassza káosz |
+| construction daily cash expense tracking | Építőipar | Munkásoknak kiadott reggeli készpénz, nincs blokk |
+| event cash collection documentation | Rendezvény | Ajtónál beszedett pénz átláthatósága |
+
+Oldal struktúra: Konkrét iparági szituáció → miért nem működnek standard sablonok → SpendNote (mobil, helyszíni, 30 mp) → iparág-specifikus CTA.
+
+**Megjegyzés:** `construction-site-petty-cash` (LIVE) és `event-cash-handling` (LIVE) már léteznek. Ezek a pain angle-t erősítenék MELLETTÜK, nem helyettük. Kanibalizáció-check kötelező.
+
+#### Engineering as Marketing — interaktív SEO eszköz ötlet (LATER)
+- **Petty Cash Calculator** — egyszerű egyoldalas tool, Google szereti az interaktív tartalmat
+- **Vízjeles PDF receipt generátor** — mini tool, regisztráció nélkül is használható, CTA a teljes verzióra
+- Ezek a `seoplan.md` "5. Tool SEO oldalak" szekciójában már tervezve vannak, de még nem épültek meg
+- **Prioritás:** alacsony — először a pain repositioning és Ads validáció, utána eszközök
+
+#### KIHAGYVA (nem illeszkedik a stratégiához most):
+- ❌ **Programmatic SEO (pSEO)** — 400 klónozott oldal túl korai DA ~5-nél, Google thin content-nek értékelné
+- ❌ **Glossary/szótár stratégia** — top-of-funnel, nem konvertál, és a meglévő "what-is-petty-cash" oldal már fedi az edukációs intentet
+- ❌ **Közösségi média / fórum** — a stratégiánk kizárja (csak saját csatornák)
+
+---
+
 ### Update log - 2026-03-23 (UK charity signup + nonprofit szegmens + Phase 5 terv)
 
 **Új signup validáció:**
