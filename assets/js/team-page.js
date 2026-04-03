@@ -338,21 +338,9 @@ const openAccessModal = async (memberId, options = {}) => {
     }).join('');
 };
 
-// ── Invite modal: populate CB checkboxes ──
+// ── Invite modal: CB info note visibility ──
 
-const populateInviteCashBoxes = () => {
-    const list = document.getElementById('inviteCashBoxList');
-    if (!list) return;
-    if (!cashBoxes.length) {
-        list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;">No Cash Boxes available.</div>';
-        return;
-    }
-    list.innerHTML = cashBoxes.map(cb => `<label class="invite-cb-item">
-        <input type="checkbox" value="${cb.id}" checked>
-        <span class="invite-cb-dot" style="background:${cb.color || '#6b7280'}"></span>
-        <span class="invite-cb-name">${escapeHtml(cb.name)}</span>
-    </label>`).join('');
-};
+const populateInviteCashBoxes = () => {};
 
 const toggleInviteCbGroup = () => {
     const group = document.getElementById('inviteCashBoxGroup');
@@ -531,19 +519,9 @@ const initTeamPage = async () => {
         const role = document.getElementById('inviteRole')?.value || 'user';
         if (!email) { showAlert('Email is required.', { iconType: 'warning' }); return; }
 
-        const selectedCbs = [];
-        if (role !== 'admin') {
-            document.querySelectorAll('#inviteCashBoxList input[type="checkbox"]:checked').forEach(cb => selectedCbs.push(cb.value));
-            if (!selectedCbs.length) { showAlert('Select at least one Cash Box.', { iconType: 'warning' }); return; }
-        }
-
         if (!window.db?.teamMembers?.invite) { showAlert('Team feature not available.', { iconType: 'error' }); return; }
         const result = await window.db.teamMembers.invite(email, role);
         if (!result?.success) { showAlert(result?.error || 'Failed to invite.', { iconType: 'error' }); return; }
-
-        if (role !== 'admin' && selectedCbs.length && result?.data?.member_id && window.db?.cashBoxAccess?.grant) {
-            for (const cbId of selectedCbs) { try { await window.db.cashBoxAccess.grant(cbId, result.data.member_id); } catch (_) {} }
-        }
 
         inviteModal?.classList.remove('active');
         document.getElementById('inviteEmail').value = '';

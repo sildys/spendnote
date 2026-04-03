@@ -1437,7 +1437,7 @@ function togglePreviewDetails() {
                 if (user) {
                     const { data: profile } = await window.supabaseClient
                         .from('profiles')
-                        .select('subscription_tier, billing_status, billing_cycle, stripe_subscription_id')
+                        .select('subscription_tier, billing_status, billing_cycle, stripe_subscription_id, seat_count')
                         .eq('id', user.id)
                         .single();
                     if (profile) {

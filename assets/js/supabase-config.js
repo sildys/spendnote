@@ -3610,7 +3610,10 @@ var db = {
             });
 
             if (error) {
-                const rpcMessage = [error?.message, error?.details, error?.hint].filter(Boolean).join(' | ') || 'Failed to create invite.';
+                const rawMsg = [error?.message, error?.details, error?.hint].filter(Boolean).join(' | ') || '';
+                const rpcMessage = rawMsg.includes('SEAT_LIMIT_REACHED')
+                    ? 'Seat limit reached. Upgrade your plan or remove a member to free up a seat.'
+                    : (rawMsg || 'Failed to create invite.');
                 __spendnoteLogBackendError('teamMembers.invite.rpc', {
                     status: null,
                     requestId: String(error?.code || '').trim() || null,
