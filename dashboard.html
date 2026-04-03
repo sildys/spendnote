@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=23">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=21">
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260313-2010">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260403-1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
@@ -1989,10 +1989,29 @@
                 const uid = user.id;
 
                 // --- Currency Confirm Modal ---
+                const confirmedKey = `sn.currencyConfirmed.${uid}`;
                 const pendingCurrency = localStorage.getItem(`spendnote.currencyConfirm.${uid}`);
                 if (pendingCurrency) {
                     localStorage.removeItem(`spendnote.currencyConfirm.${uid}`);
                     await __snShowCurrencyConfirmModal(pendingCurrency, uid);
+                    localStorage.setItem(confirmedKey, '1');
+                } else if (!localStorage.getItem(confirmedKey)) {
+                    // Existing user who never confirmed currency — detect and offer
+                    const detected = typeof __spendnoteDetectCurrency === 'function' ? __spendnoteDetectCurrency() : null;
+                    if (detected) {
+                        try {
+                            const { data: boxes } = await supabaseClient
+                                .from('cash_boxes')
+                                .select('id, currency')
+                                .eq('user_id', uid)
+                                .limit(1);
+                            const box = boxes?.[0];
+                            if (box && box.currency !== detected) {
+                                await __snShowCurrencyConfirmModal(detected, uid);
+                            }
+                        } catch (_) {}
+                        localStorage.setItem(confirmedKey, '1');
+                    }
                 }
 
                 // --- GA4: first_login ---
@@ -2088,10 +2107,21 @@
                 if (txCount === 0 && !localStorage.getItem(nudgeKey)) {
                     localStorage.setItem(nudgeKey, '1');
                     setTimeout(() => {
-                        if (typeof showPageTip === 'function') {
-                            showPageTip('onboarding-nudge', 'Most users record their first transaction in under 30 seconds.');
-                        }
+                        const toast = document.createElement('div');
+                        toast.className = 'sn-toast';
+                        toast.textContent = 'Most users record their first transaction in under 30 seconds.';
+                        document.body.appendChild(toast);
+                        requestAnimationFrame(() => toast.classList.add('show'));
+                        setTimeout(() => {
+                            toast.classList.remove('show');
+                            setTimeout(() => toast.remove(), 300);
+                        }, 6000);
                     }, 5000);
+                }
+
+                // Page tip for returning users only (not during onboarding)
+                if (txCount > 0 && typeof showPageTip === 'function') {
+                    showPageTip('dashboard', 'Record an <strong>IN</strong> transaction to set your opening balance, then track payments as <strong>OUT</strong>.');
                 }
 
             } catch (e) {
@@ -2099,7 +2129,7 @@
             }
         })();
 
-        if (typeof showPageTip === 'function') showPageTip('dashboard', 'Record an <strong>IN</strong> transaction to set your opening balance, then track payments as <strong>OUT</strong>.');
+        // Page tip is shown from the onboarding block above (only for users with txCount > 0)
 
         // Currency confirm modal builder
         async function __snShowCurrencyConfirmModal(detectedCurrency, userId) {

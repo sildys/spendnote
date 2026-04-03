@@ -4471,6 +4471,33 @@ table.transactions-table td,
     background: #047857;
 }
 
+/* ========================================
+   MICRO NUDGE TOAST
+   ======================================== */
+.sn-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #111827;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.18);
+    z-index: 99998;
+    opacity: 0;
+    transition: opacity .25s ease, transform .25s ease;
+    pointer-events: none;
+    max-width: 90vw;
+    text-align: center;
+}
+.sn-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
 @media (max-width: 640px) {
     .sn-onboarding-checklist {
         flex-direction: column;
@@ -4479,6 +4506,11 @@ table.transactions-table td,
     }
     .sn-checklist-cta {
         width: 100%;
+    }
+    .sn-toast {
+        bottom: 16px;
+        font-size: 13px;
+        padding: 10px 18px;
     }
 }
 
