@@ -31,6 +31,59 @@ const __spendnoteGetResponseRequestId = (resp) => {
 };
 
 const __spendnoteDetectCurrency = () => {
+    // Prefer IANA time zone (beats en-US browser on a Hungarian Windows install)
+    const TZ_CURRENCY = {
+        'Europe/Budapest': 'HUF',
+        'Europe/Warsaw': 'PLN',
+        'Europe/Prague': 'CZK',
+        'Europe/Bratislava': 'EUR',
+        'Europe/Bucharest': 'RON',
+        'Europe/Zagreb': 'EUR',
+        'Europe/Ljubljana': 'EUR',
+        'Europe/London': 'GBP',
+        'Europe/Dublin': 'EUR',
+        'Europe/Stockholm': 'SEK',
+        'Europe/Oslo': 'NOK',
+        'Europe/Copenhagen': 'DKK',
+        'Europe/Helsinki': 'EUR',
+        'Europe/Riga': 'EUR',
+        'Europe/Tallinn': 'EUR',
+        'Europe/Vilnius': 'EUR',
+        'Europe/Kyiv': 'UAH',
+        'Europe/Kiev': 'UAH',
+        'Europe/Istanbul': 'TRY',
+        'Europe/Zurich': 'CHF',
+        'Europe/Amsterdam': 'EUR',
+        'Europe/Brussels': 'EUR',
+        'Europe/Paris': 'EUR',
+        'Europe/Berlin': 'EUR',
+        'Europe/Rome': 'EUR',
+        'Europe/Madrid': 'EUR',
+        'Europe/Lisbon': 'EUR',
+        'Europe/Vienna': 'EUR',
+        'Europe/Athens': 'EUR',
+        'America/New_York': 'USD',
+        'America/Detroit': 'USD',
+        'America/Chicago': 'USD',
+        'America/Denver': 'USD',
+        'America/Los_Angeles': 'USD',
+        'America/Toronto': 'CAD',
+        'America/Vancouver': 'CAD',
+        'America/Mexico_City': 'MXN',
+        'America/Sao_Paulo': 'BRL',
+        'Asia/Tokyo': 'JPY',
+        'Asia/Seoul': 'KRW',
+        'Asia/Shanghai': 'CNY',
+        'Asia/Hong_Kong': 'HKD',
+        'Asia/Singapore': 'SGD',
+        'Australia/Sydney': 'AUD',
+        'Pacific/Auckland': 'NZD'
+    };
+    try {
+        const tz = String(Intl.DateTimeFormat().resolvedOptions().timeZone || '').trim();
+        if (tz && TZ_CURRENCY[tz]) return TZ_CURRENCY[tz];
+    } catch (_) {}
+
     const COUNTRY_CURRENCY = {
         US: 'USD', GB: 'GBP', HU: 'HUF', PL: 'PLN', CZ: 'CZK', RO: 'RON',
         SE: 'SEK', DK: 'DKK', NO: 'NOK', CH: 'CHF', JP: 'JPY', CN: 'CNY',
