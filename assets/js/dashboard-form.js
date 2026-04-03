@@ -470,6 +470,11 @@ function initTransactionForm() {
 
             const addAnother = Boolean(document.getElementById('modalAddAnother')?.checked);
 
+            // Undo aggressive zero-tx onboarding (nav / IN-OUT / transactions table) before reload
+            if (typeof window.__spendnoteExitAggressiveOnboarding === 'function') {
+                window.__spendnoteExitAggressiveOnboarding();
+            }
+
             // Reload dashboard data
             if (typeof loadDashboardData === 'function') {
                 await loadDashboardData();

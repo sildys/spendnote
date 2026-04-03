@@ -1979,6 +1979,64 @@
             }
         });
 
+        // Restore dashboard chrome after aggressive zero-tx onboarding (same session)
+        window.__spendnoteAggressiveOnboardingActive = false;
+        window.__spendnoteExitAggressiveOnboarding = function () {
+            if (!window.__spendnoteAggressiveOnboardingActive) return;
+            try {
+                document.querySelectorAll('.register-quick-actions').forEach((el) => {
+                    el.style.removeProperty('display');
+                    el.style.removeProperty('opacity');
+                });
+                const navNewTx = document.getElementById('addTransactionBtn');
+                if (navNewTx) {
+                    navNewTx.style.removeProperty('opacity');
+                    navNewTx.style.removeProperty('pointer-events');
+                }
+                document.querySelectorAll('.register-card').forEach((card) => card.classList.remove('sn-deemphasized'));
+                document.querySelectorAll('.swiper-slide').forEach((slide) => {
+                    if (slide.querySelector('.add-cash-box-card')) slide.style.removeProperty('display');
+                });
+                const cl = document.getElementById('onboardingChecklist');
+                if (cl) cl.style.display = 'none';
+                const txCard = document.querySelector('.transactions-card');
+                if (txCard && !document.getElementById('transactionsTable')) {
+                    txCard.innerHTML = `
+                <div class="transactions-header" id="transactionsHeader" style="--cashbox-rgb: 5, 150, 105;">
+                    <div class="header-top">
+                        <h2 class="transactions-title">Latest Transactions</h2>
+                        <a href="spendnote-transaction-history.html" class="view-all-btn">
+                            <span>View All</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <div class="table-wrapper">
+                        <table id="transactionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Cash Box</th>
+                                    <th>Contact</th>
+                                    <th>Description</th>
+                                    <th class="col-amount">Amount</th>
+                                    <th>Created by</th>
+                                    <th class="col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="txCardList" class="tx-card-list" aria-label="Latest transactions"></div>
+                </div>`;
+                }
+            } catch (_) {}
+            window.__spendnoteAggressiveOnboardingActive = false;
+        };
+
         // ========================================
         // ONBOARDING: CURRENCY CONFIRM + CHECKLIST + EMPTY STATES + NUDGES
         // ========================================
@@ -2083,6 +2141,7 @@
 
                 // --- AGGRESSIVE ONBOARDING: first-transaction state ---
                 if (txCount === 0) {
+                    window.__spendnoteAggressiveOnboardingActive = true;
                     // 1. Kill all competing CTAs
                     document.querySelectorAll('.register-quick-actions').forEach(el => el.style.display = 'none');
                     const navNewTx = document.getElementById('addTransactionBtn');
