@@ -1069,58 +1069,51 @@ function togglePreviewDetails() {
                         }
                     } catch (_) {}
 
-                    // Detect fresh Google OAuth signup on login page:
-                    // if account was created <2 min ago, treat as new signup
+                    // Detect new OAuth user: check if profile exists
                     try {
-                        const createdAt = Date.parse(String(user.created_at || ''));
-                        const ageMs = Number.isFinite(createdAt) ? Date.now() - createdAt : Infinity;
-                        const isNewOAuthUser = ageMs < 120_000;
-                        if (isNewOAuthUser) {
-                            const uid = String(user.id || '').trim();
-                            const redirectedKey = uid ? `sn.oauthNewRedirected.${uid}` : '';
-                            const alreadyRedirected = redirectedKey && localStorage.getItem(redirectedKey);
-                            if (!alreadyRedirected) {
-                                if (redirectedKey) localStorage.setItem(redirectedKey, '1');
+                        const uid = String(user.id || '').trim();
+                        if (uid) {
+                            const { data: prof, error: profErr } = await window.supabaseClient
+                                .from('profiles').select('id').eq('id', uid).maybeSingle();
+                            const hasProfile = !profErr && prof?.id;
+                            console.log('[SN-LOGIN] profile check:', { uid, hasProfile, profErr: profErr?.message });
+
+                            if (!hasProfile) {
+                                console.log('[SN-LOGIN] New OAuth user detected, sending welcome email...');
                                 if (typeof gtag === 'function') gtag('event', 'signup_completed');
 
-                                // Send welcome email directly before redirecting
-                                const welcomeKey = uid ? `spendnote.welcome.sent.${uid}` : '';
-                                if (!welcomeKey || localStorage.getItem(welcomeKey) !== '1') {
+                                const { data: sess } = await window.supabaseClient.auth.getSession();
+                                if (sess?.session?.access_token) {
                                     try {
-                                        console.log('[SN-LOGIN] Sending welcome email for new OAuth user:', uid);
-                                        const { data: sess } = await window.supabaseClient.auth.getSession();
-                                        if (!sess?.session?.access_token) {
-                                            console.error('[SN-LOGIN] No session/token for welcome email');
-                                        } else {
-                                            const resp = await fetch('https://zrnnharudlgxuvewqryj.supabase.co/functions/v1/send-user-event-email', {
-                                                method: 'POST',
-                                                headers: {
-                                                    'Content-Type': 'application/json',
-                                                    'Authorization': 'Bearer ' + sess.session.access_token,
-                                                    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpybm5oYXJ1ZGxneHV2ZXdxcnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyOTkxMDgsImV4cCI6MjA4Mjg3NTEwOH0.kQLRMVrl_uYYzZwX387uFs_BAXc9c5v7EhcvGhPR7v4'
+                                        const resp = await fetch('https://zrnnharudlgxuvewqryj.supabase.co/functions/v1/send-user-event-email', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': 'Bearer ' + sess.session.access_token,
+                                                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpybm5oYXJ1ZGxneHV2ZXdxcnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyOTkxMDgsImV4cCI6MjA4Mjg3NTEwOH0.kQLRMVrl_uYYzZwX387uFs_BAXc9c5v7EhcvGhPR7v4'
                                                 },
                                                 body: JSON.stringify({ eventType: 'welcome_account_created' })
-                                            });
-                                            const respBody = await resp.text();
-                                            console.log('[SN-LOGIN] Welcome email response:', resp.status, respBody);
-                                            if (resp.ok && welcomeKey) localStorage.setItem(welcomeKey, '1');
-                                        }
+                                        });
+                                        const respBody = await resp.text();
+                                        console.log('[SN-LOGIN] Welcome email response:', resp.status, respBody);
                                     } catch (emailErr) {
-                                        console.error('[SN-LOGIN] Welcome email error:', emailErr);
+                                        console.error('[SN-LOGIN] Welcome email fetch error:', emailErr);
                                     }
+                                } else {
+                                    console.error('[SN-LOGIN] No session for welcome email');
                                 }
 
-                                // Clear the ensureDone guard so welcome page can
-                                // run profile creation + cash box setup from scratch
                                 try {
-                                    const ek = uid ? `spendnote.ensureDone.${uid}` : '';
-                                    if (ek) sessionStorage.removeItem(ek);
+                                    const ek = `spendnote.ensureDone.${uid}`;
+                                    sessionStorage.removeItem(ek);
                                 } catch (_) {}
                                 window.location.href = 'spendnote-welcome.html';
                                 return;
                             }
                         }
-                    } catch (_) {}
+                    } catch (detectErr) {
+                        console.error('[SN-LOGIN] New user detection error:', detectErr);
+                    }
 
                     await redirectAfterLogin();
                 }
