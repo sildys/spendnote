@@ -495,10 +495,14 @@ const initTeamPage = async () => {
 
         const currentCount = teamMembers.filter(m => m.status === 'active' || m.status === 'pending').length;
         if (currentCount >= seatLimit) {
-            const ok = typeof showConfirm === 'function'
-                ? await showConfirm(`You\u2019ve reached your seat limit (${seatLimit}). Would you like to add more seats?`)
-                : window.confirm(`You\u2019ve reached your seat limit (${seatLimit}). Would you like to add more seats?`);
-            if (ok) window.location.href = 'spendnote-pricing.html';
+            if (window.SpendNoteUpgrade?.showLockOverlay) {
+                window.SpendNoteUpgrade.showLockOverlay({
+                    feature: `You've used all ${seatLimit} seats`,
+                    requiredPlan: 'pro'
+                });
+            } else {
+                showAlert(`Seat limit reached (${seatLimit}). Upgrade your plan to add more members.`, { iconType: 'warning' });
+            }
             return;
         }
 
