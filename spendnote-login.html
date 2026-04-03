@@ -1099,15 +1099,45 @@ function togglePreviewDetails() {
                             if (isNew) {
                                 try { sessionStorage.removeItem(newUserFlagKey); } catch (_) {}
                                 if (typeof gtag === 'function') gtag('event', 'signup_completed');
-                                if (!welcomeAlreadySent) {
-                                    try {
-                                        await window.supabaseClient.functions.invoke('send-user-event-email', {
-                                            body: { eventType: 'welcome_account_created' }
-                                        });
+                                try {
+                                    const { data: emailData, error: emailError } = await window.supabaseClient.functions.invoke(
+                                        'send-user-event-email',
+                                        { body: { eventType: 'welcome_account_created' } }
+                                    );
+                                    if (emailError) {
+                                        console.error('[SN-LOGIN] Welcome email invoke error:', emailError);
+                                    } else if (emailData?.success !== true) {
+                                        console.error('[SN-LOGIN] Welcome email backend non-success:', emailData);
+                                    } else {
                                         try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
-                                    } catch (emailErr) {
-                                        console.error('[SN-LOGIN] Welcome email send error:', emailErr);
+                                        console.log('[SN-LOGIN] Welcome email sent:', emailData);
                                     }
+                                    if (emailError || emailData?.success !== true) {
+                                        try {
+                                            const { data: sessWrap } = await window.supabaseClient.auth.getSession();
+                                            const token = String(sessWrap?.session?.access_token || '').trim();
+                                            if (token) {
+                                                const fallbackResp = await fetch('https://zrnnharudlgxuvewqryj.supabase.co/functions/v1/send-user-event-email', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'Authorization': 'Bearer ' + token,
+                                                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpybm5oYXJ1ZGxneHV2ZXdxcnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyOTkxMDgsImV4cCI6MjA4Mjg3NTEwOH0.kQLRMVrl_uYYzZwX387uFs_BAXc9c5v7EhcvGhPR7v4'
+                                                    },
+                                                    body: JSON.stringify({ eventType: 'welcome_account_created' })
+                                                });
+                                                const fallbackBody = await fallbackResp.text();
+                                                console.log('[SN-LOGIN] Welcome email fallback response:', fallbackResp.status, fallbackBody);
+                                                if (fallbackResp.ok) {
+                                                    try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
+                                                }
+                                            }
+                                        } catch (fallbackErr) {
+                                            console.error('[SN-LOGIN] Welcome email fallback exception:', fallbackErr);
+                                        }
+                                    }
+                                } catch (emailErr) {
+                                    console.error('[SN-LOGIN] Welcome email send exception:', emailErr);
                                 }
                                 try { sessionStorage.removeItem('spendnote.ensureDone.' + uid); } catch (_) {}
                                 window.location.href = 'spendnote-welcome.html';
