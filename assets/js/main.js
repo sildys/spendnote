@@ -820,7 +820,10 @@ async function updateUserNav() {
 function getInitials(name) {
     if (!name) return 'U';
     const parts = String(name).trim().split(/\s+/).filter(Boolean);
-    const initials = parts.slice(0, 2).map((part) => part[0].toUpperCase()).join('');
+    const initials = parts
+        .slice(0, 2)
+        .map((part) => String(part || '').charAt(0).toUpperCase())
+        .join('');
     return initials || 'U';
 }
 
