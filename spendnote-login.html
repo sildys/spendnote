@@ -1069,44 +1069,16 @@ function togglePreviewDetails() {
                         }
                     } catch (_) {}
 
-                    // Detect new OAuth user: check if profile exists
+                    // Detect new OAuth user via flag set by supabase-config.js
                     try {
                         const uid = String(user.id || '').trim();
                         if (uid) {
-                            const { data: prof, error: profErr } = await window.supabaseClient
-                                .from('profiles').select('id').eq('id', uid).maybeSingle();
-                            const hasProfile = !profErr && prof?.id;
-                            console.log('[SN-LOGIN] profile check:', { uid, hasProfile, profErr: profErr?.message });
-
-                            if (!hasProfile) {
-                                console.log('[SN-LOGIN] New OAuth user detected, sending welcome email...');
+                            const isNew = sessionStorage.getItem('spendnote.isNewUser.' + uid) === '1';
+                            console.log('[SN-LOGIN] new user flag:', { uid, isNew });
+                            if (isNew) {
+                                sessionStorage.removeItem('spendnote.isNewUser.' + uid);
                                 if (typeof gtag === 'function') gtag('event', 'signup_completed');
-
-                                const { data: sess } = await window.supabaseClient.auth.getSession();
-                                if (sess?.session?.access_token) {
-                                    try {
-                                        const resp = await fetch('https://zrnnharudlgxuvewqryj.supabase.co/functions/v1/send-user-event-email', {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                                'Authorization': 'Bearer ' + sess.session.access_token,
-                                                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpybm5oYXJ1ZGxneHV2ZXdxcnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyOTkxMDgsImV4cCI6MjA4Mjg3NTEwOH0.kQLRMVrl_uYYzZwX387uFs_BAXc9c5v7EhcvGhPR7v4'
-                                                },
-                                                body: JSON.stringify({ eventType: 'welcome_account_created' })
-                                        });
-                                        const respBody = await resp.text();
-                                        console.log('[SN-LOGIN] Welcome email response:', resp.status, respBody);
-                                    } catch (emailErr) {
-                                        console.error('[SN-LOGIN] Welcome email fetch error:', emailErr);
-                                    }
-                                } else {
-                                    console.error('[SN-LOGIN] No session for welcome email');
-                                }
-
-                                try {
-                                    const ek = `spendnote.ensureDone.${uid}`;
-                                    sessionStorage.removeItem(ek);
-                                } catch (_) {}
+                                try { sessionStorage.removeItem('spendnote.ensureDone.' + uid); } catch (_) {}
                                 window.location.href = 'spendnote-welcome.html';
                                 return;
                             }

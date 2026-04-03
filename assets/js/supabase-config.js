@@ -634,28 +634,21 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
         if (error || !user) return;
         const userId = String(user?.id || '').trim();
         if (!userId) return;
-        const createdAtMs = Date.parse(String(user.created_at || ''));
-        const isFreshAccount = Number.isFinite(createdAtMs) && (Date.now() - createdAtMs) < (30 * 60 * 1000);
         const welcomeSentKey = `spendnote.welcome.sent.${userId}`;
-        const maybeSendWelcome = async () => {
-            if (!isFreshAccount) return;
+        const sendWelcome = async () => {
             try {
                 if (localStorage.getItem(welcomeSentKey) === '1') return;
             } catch (_) {}
             try {
                 await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
                 try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
-            } catch (_) {
-                // ignore email side-effect errors
-            }
+            } catch (_) {}
         };
         try {
             if (typeof isUuid === 'function' && !isUuid(userId)) {
                 return;
             }
-        } catch (_) {
-            // ignore
-        }
+        } catch (_) {}
 
         try {
             const { data: existing, error: selErr } = await supabaseClient
@@ -664,12 +657,9 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
                 .eq('id', userId)
                 .single();
             if (!selErr && existing?.id) {
-                await maybeSendWelcome();
                 return;
             }
-        } catch (_) {
-            // ignore
-        }
+        } catch (_) {}
 
         const email = String(user.email || '').trim();
         const fullName = String(user.user_metadata?.full_name || '').trim() || (email ? email.split('@')[0] : 'User');
@@ -686,13 +676,10 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
                     billing_status: PREVIEW_BILLING_STATUS
                 }]);
             if (insertError) return;
-            await maybeSendWelcome();
-        } catch (_) {
-            // ignore
-        }
-    } catch (_) {
-        // ignore
-    }
+            try { sessionStorage.setItem('spendnote.isNewUser.' + userId, '1'); } catch (_) {}
+            await sendWelcome();
+        } catch (_) {}
+    } catch (_) {}
 };
 
 const __spendnoteAutoAcceptMyInvites = async () => {
