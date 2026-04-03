@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=23">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=21">
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260403-9">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260403-10">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
@@ -2062,6 +2062,14 @@
                     setTimeout(resolve, 8000);
                 });
 
+                // --- v2 ack migration: the old code set ack even when the DB update failed ---
+                // Clear stale ack exactly once so the modal re-shows after the DB trigger fix.
+                const ackV2Key = `sn.currencyAck.v2.${uid}`;
+                if (localStorage.getItem(currencyAckKey) && !localStorage.getItem(ackV2Key)) {
+                    localStorage.removeItem(currencyAckKey);
+                    localStorage.setItem(ackV2Key, '1');
+                }
+
                 // --- Currency confirm: always once until Continue (sn.currencyAck; legacy sn.currencyConfirmed was buggy) ---
                 let currencyModalRanThisLoad = false;
                 if (!localStorage.getItem(currencyAckKey)) {
@@ -2088,11 +2096,13 @@
                         currencyModalRanThisLoad = true;
                         const baseline = String(box.currency || 'USD').trim().toUpperCase() || 'USD';
                         const suggested = (typeof __spendnoteDetectCurrency === 'function' ? __spendnoteDetectCurrency() : baseline) || baseline;
-                        await __snShowCurrencyConfirmModal(suggested, uid, baseline, box.id);
-                        try {
-                            localStorage.setItem(currencyAckKey, '1');
-                            localStorage.removeItem(`sn.currencyConfirmed.${uid}`);
-                        } catch (_) {}
+                        const result = await __snShowCurrencyConfirmModal(suggested, uid, baseline, box.id);
+                        if (result && result.saved !== false) {
+                            try {
+                                localStorage.setItem(currencyAckKey, '1');
+                                localStorage.removeItem(`sn.currencyConfirmed.${uid}`);
+                            } catch (_) {}
+                        }
                         if (typeof loadDashboardData === 'function') {
                             try { await loadDashboardData(); } catch (_) {}
                         }
@@ -2143,6 +2153,8 @@
                 // --- AGGRESSIVE ONBOARDING: first-transaction state ---
                 if (txCount === 0) {
                     window.__spendnoteAggressiveOnboardingActive = true;
+                    // 0. Hide checklist — the empty-state CTA is the single focus
+                    if (checklist) checklist.style.display = 'none';
                     // 1. Kill all competing CTAs
                     document.querySelectorAll('.register-quick-actions').forEach(el => el.style.display = 'none');
                     const navNewTx = document.getElementById('addTransactionBtn');
@@ -2252,16 +2264,18 @@
                     }
                     if (saveError) {
                         if (typeof showAlert === 'function') {
-                            showAlert('Could not save currency: ' + saveError + '. If you already recorded a transaction, currency is locked — add a new Cash Box for another currency.', { iconType: 'error', title: 'Currency not saved' });
-                        } else {
-                            alert(saveError);
+                            await showAlert('Could not save currency: ' + saveError + '. If you already recorded a transaction, currency is locked — add a new Cash Box for another currency.', { iconType: 'error', title: 'Currency not saved' });
                         }
+                        overlay.style.opacity = '0';
+                        setTimeout(() => overlay.remove(), 200);
+                        resolve({ saved: false, chosen });
+                        return;
                     }
                     overlay.style.opacity = '0';
                     setTimeout(() => overlay.remove(), 200);
 
                     if (typeof gtag === 'function') gtag('event', 'currency_selected', { currency: chosen });
-                    resolve(chosen);
+                    resolve({ saved: true, chosen });
                 });
             });
         }
