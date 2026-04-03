@@ -634,6 +634,8 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
         if (error || !user) return;
         const userId = String(user?.id || '').trim();
         if (!userId) return;
+        const createdAtMs = Date.parse(String(user.created_at || ''));
+        const isFreshAuthUser = Number.isFinite(createdAtMs) && (Date.now() - createdAtMs) < (20 * 60 * 1000);
         const welcomeSentKey = `spendnote.welcome.sent.${userId}`;
         const sendWelcome = async () => {
             try {
@@ -657,6 +659,10 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
                 .eq('id', userId)
                 .single();
             if (!selErr && existing?.id) {
+                if (isFreshAuthUser) {
+                    try { sessionStorage.setItem('spendnote.isNewUser.' + userId, '1'); } catch (_) {}
+                    await sendWelcome();
+                }
                 return;
             }
         } catch (_) {}

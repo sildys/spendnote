@@ -873,7 +873,7 @@ function togglePreviewDetails() {
     <a href="/" class="fab-home" title="Back to homepage"><i class="fas fa-home"></i></a>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260327-1850"></script>
+    <script src="assets/js/supabase-config.js?v=20260403-2205"></script>
     <script>
         const ensureProfile = async () => {
             try {
@@ -1069,15 +1069,46 @@ function togglePreviewDetails() {
                         }
                     } catch (_) {}
 
-                    // Detect new OAuth user via flag set by supabase-config.js
+                    // Detect new OAuth user via multiple signals (flag + recent profile/auth creation)
                     try {
                         const uid = String(user.id || '').trim();
                         if (uid) {
-                            const isNew = sessionStorage.getItem('spendnote.isNewUser.' + uid) === '1';
-                            console.log('[SN-LOGIN] new user flag:', { uid, isNew });
+                            const newUserFlagKey = 'spendnote.isNewUser.' + uid;
+                            const welcomeSentKey = 'spendnote.welcome.sent.' + uid;
+                            const isNewByFlag = sessionStorage.getItem(newUserFlagKey) === '1';
+                            let welcomeAlreadySent = false;
+                            try { welcomeAlreadySent = localStorage.getItem(welcomeSentKey) === '1'; } catch (_) {}
+
+                            let isNewByProfileRecency = false;
+                            try {
+                                const { data: prof, error: profErr } = await window.supabaseClient
+                                    .from('profiles')
+                                    .select('id,created_at')
+                                    .eq('id', uid)
+                                    .maybeSingle();
+                                if (!profErr && prof?.id) {
+                                    const profileCreatedMs = Date.parse(String(prof.created_at || ''));
+                                    isNewByProfileRecency = Number.isFinite(profileCreatedMs) && (Date.now() - profileCreatedMs) < (20 * 60 * 1000);
+                                }
+                            } catch (_) {}
+
+                            const authCreatedMs = Date.parse(String(user.created_at || ''));
+                            const isNewByAuthRecency = Number.isFinite(authCreatedMs) && (Date.now() - authCreatedMs) < (20 * 60 * 1000);
+                            const isNew = isNewByFlag || (!welcomeAlreadySent && (isNewByProfileRecency || isNewByAuthRecency));
+                            console.log('[SN-LOGIN] new user detection:', { uid, isNewByFlag, isNewByProfileRecency, isNewByAuthRecency, welcomeAlreadySent, isNew });
                             if (isNew) {
-                                sessionStorage.removeItem('spendnote.isNewUser.' + uid);
+                                try { sessionStorage.removeItem(newUserFlagKey); } catch (_) {}
                                 if (typeof gtag === 'function') gtag('event', 'signup_completed');
+                                if (!welcomeAlreadySent) {
+                                    try {
+                                        await window.supabaseClient.functions.invoke('send-user-event-email', {
+                                            body: { eventType: 'welcome_account_created' }
+                                        });
+                                        try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
+                                    } catch (emailErr) {
+                                        console.error('[SN-LOGIN] Welcome email send error:', emailErr);
+                                    }
+                                }
                                 try { sessionStorage.removeItem('spendnote.ensureDone.' + uid); } catch (_) {}
                                 window.location.href = 'spendnote-welcome.html';
                                 return;
