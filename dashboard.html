@@ -1894,8 +1894,16 @@
                 if (!localStorage.getItem(twKey)) {
                     localStorage.setItem(twKey, '1');
                     try {
+                        let twTxCount = 0;
+                        try {
+                            const { count } = await supabaseClient.from('transactions')
+                                .select('id', { count: 'exact', head: true })
+                                .or('is_system.is.null,is_system.eq.false')
+                                .eq('status', 'active');
+                            twTxCount = count || 0;
+                        } catch (_) {}
                         supabaseClient?.functions?.invoke('send-user-event-email', {
-                            body: { eventType: 'trial_expiry_warning', daysLeft: d },
+                            body: { eventType: 'trial_expiry_warning', daysLeft: d, txCount: twTxCount },
                         });
                     } catch (_e) {}
                 }

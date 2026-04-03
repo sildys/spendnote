@@ -38,6 +38,8 @@ const appCard = (title: string, subtitle: string, bodyHtml: string): string => `
 
 const CTA_STYLE = "display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:800;font-size:15px;";
 
+const PAIN_LINE = "If cash moves and you don't record it, you lose track.";
+
 // ─── Invite email ───────────────────────────────────────────────────────────────
 
 export const renderInviteEmailTemplate = (args: {
@@ -53,7 +55,7 @@ export const renderInviteEmailTemplate = (args: {
 
   const html = appCard(
     "You're invited",
-    "Your team is already tracking cash &mdash; join them.",
+    "Your team is already tracking cash. You're not.",
     `
       <p style="margin:0 0 10px;"><strong>${inviter}</strong> invited you to join their team on SpendNote as <strong>${role}</strong>.</p>
       <p style="margin:0 0 14px;">SpendNote records every cash handoff &mdash; who took it, when, and how much &mdash; so nothing goes unaccounted for.</p>
@@ -66,7 +68,7 @@ export const renderInviteEmailTemplate = (args: {
     `,
   );
 
-  const text = `${args.inviterLine || "Your team"} invited you to SpendNote\n\n${args.inviterLine} invited you to join their team as ${role}.\n\nSpendNote records every cash handoff so nothing goes unaccounted for.\n\nAccept invitation:\n${args.inviteLink}\n\nIf you didn't expect this invite, ignore this email.`;
+  const text = `${args.inviterLine || "Your team"} invited you to SpendNote\n\nYour team is already tracking cash. You're not.\n\n${args.inviterLine} invited you to join their team as ${role}.\n\nAccept invitation:\n${args.inviteLink}\n\nIf you didn't expect this invite, ignore this email.`;
 
   return { subject, html, text };
 };
@@ -87,7 +89,8 @@ export const renderWelcomeAccountCreatedTemplate = (args: {
     `
       <p style="margin:0 0 10px;">Hi ${name},</p>
       <p style="margin:0 0 10px;">Every unrecorded cash handoff is money you can't account for later. SpendNote fixes that.</p>
-      <p style="margin:0 0 14px;font-weight:700;">Your first task: record one cash movement. It takes 30 seconds.</p>
+      <p style="margin:0 0 10px;font-weight:700;">Right now, you have no record of your cash.</p>
+      <p style="margin:0 0 14px;">Start tracking your cash now. It takes 30 seconds.</p>
       <div style="margin:18px 0 16px;">
         <a href="${loginUrl}" style="${CTA_STYLE}">Record your first transaction &rarr;</a>
       </div>
@@ -101,7 +104,7 @@ export const renderWelcomeAccountCreatedTemplate = (args: {
     `,
   );
 
-  const text = `Your cash tracking starts now\n\nHi ${args.fullName || "there"},\n\nEvery unrecorded cash handoff is money you can't account for later.\n\nYour first task: record one cash movement (30 seconds).\n\nOpen SpendNote: ${args.loginUrl}\n\nQuestions? Reply to this email.`;
+  const text = `Your cash tracking starts now\n\nHi ${args.fullName || "there"},\n\nRight now, you have no record of your cash.\n\nStart tracking your cash now. It takes 30 seconds.\n\nOpen SpendNote: ${args.loginUrl}\n\nQuestions? Reply to this email.`;
   return { subject, html, text };
 };
 
@@ -113,7 +116,7 @@ export const renderEmailConfirmationTemplate = (args: {
 }): BaseEmailTemplate => {
   const name = esc(String(args.fullName || "there").trim() || "there");
   const confirmUrl = esc(args.confirmUrl || "");
-  const subject = "Confirm your email to start tracking cash";
+  const subject = "Confirm your email \u2014 start tracking your cash";
 
   const html = appCard(
     "One quick step",
@@ -125,11 +128,12 @@ export const renderEmailConfirmationTemplate = (args: {
       </div>
       <p style="margin:0 0 10px;color:#374151;font-size:13px;">If the button doesn't work, use this link:</p>
       <p style="margin:0 0 16px;"><a href="${confirmUrl}" style="color:#1d4ed8;word-break:break-all;font-size:13px;">${confirmUrl}</a></p>
+      <p style="margin:0 0 10px;color:#374151;font-size:13px;font-style:italic;">${PAIN_LINE}</p>
       <p style="margin:0;color:#6b7280;font-size:12px;">If you didn't create this account, you can safely ignore this email.</p>
     `,
   );
 
-  const text = `Confirm your email to start tracking cash\n\nHi ${args.fullName || "there"}, confirm your account:\n${args.confirmUrl}`;
+  const text = `Confirm your email \u2014 start tracking your cash\n\nHi ${args.fullName || "there"}, confirm your account:\n${args.confirmUrl}\n\n${PAIN_LINE}`;
   return { subject, html, text };
 };
 
@@ -209,7 +213,7 @@ export const renderFirstTransactionTemplate = (args: {
     `
       <p style="margin:0 0 10px;">Nice work, ${name}.</p>
       <p style="margin:0 0 10px;">Your first cash movement is now documented &mdash; who, when, how much. That's one handoff you'll never have to guess about.</p>
-      <p style="margin:0 0 14px;font-weight:700;">Now record the next one. That's how you stop losing track.</p>
+      <p style="margin:0 0 14px;font-weight:700;">Now do it again. That's how you stay in control.</p>
       <div style="margin:18px 0 16px;">
         <a href="${dashboardUrl}" style="${CTA_STYLE}">Record another transaction &rarr;</a>
       </div>
@@ -217,7 +221,7 @@ export const renderFirstTransactionTemplate = (args: {
     `,
   );
 
-  const text = `First transaction recorded\n\nNice work, ${args.fullName || "there"}. Your first cash movement is documented.\n\nNow record the next one: ${args.dashboardUrl}`;
+  const text = `First transaction recorded\n\nNice work, ${args.fullName || "there"}. Your first cash movement is documented.\n\nNow do it again. That's how you stay in control.\n\n${args.dashboardUrl}`;
   return { subject, html, text };
 };
 
@@ -227,12 +231,18 @@ export const renderTrialExpiryWarningTemplate = (args: {
   fullName?: string;
   daysLeft: number;
   pricingUrl: string;
+  txCount?: number;
 }): BaseEmailTemplate => {
   const name = esc(String(args.fullName || "there").trim() || "there");
   const days = Math.max(0, args.daysLeft || 0);
   const pricingUrl = esc(args.pricingUrl || "https://spendnote.app/spendnote-pricing.html");
   const urgency = days <= 1 ? "expires today" : `expires in ${days} days`;
   const subject = `Your SpendNote trial ${urgency}`;
+  const txCount = args.txCount ?? 0;
+
+  const txLine = txCount > 0
+    ? `<p style="margin:0 0 10px;font-weight:700;">You've recorded ${txCount} transaction${txCount === 1 ? "" : "s"}. After expiry, you can't add new ones.</p>`
+    : `<p style="margin:0 0 10px;font-weight:700;">${PAIN_LINE}</p>`;
 
   const html = appCard(
     `Trial ${urgency}`,
@@ -240,6 +250,7 @@ export const renderTrialExpiryWarningTemplate = (args: {
     `
       <p style="margin:0 0 10px;">Hi ${name},</p>
       <p style="margin:0 0 10px;">Your free trial ${urgency}. After that, you won't be able to create new transactions or receipts.</p>
+      ${txLine}
       <p style="margin:0 0 14px;"><strong>Your existing data stays safe</strong> &mdash; you can always view and export it. But new entries require an active plan.</p>
       <div style="margin:18px 0 16px;">
         <a href="${pricingUrl}" style="${CTA_STYLE}">Choose a plan &rarr;</a>
@@ -253,7 +264,10 @@ export const renderTrialExpiryWarningTemplate = (args: {
     `,
   );
 
-  const text = `Your SpendNote trial ${urgency}\n\nHi ${args.fullName || "there"},\n\nYour trial ${urgency}. Upgrade to keep creating transactions.\n\nChoose a plan: ${args.pricingUrl}`;
+  const txText = txCount > 0
+    ? `You've recorded ${txCount} transaction${txCount === 1 ? "" : "s"}. After expiry, you can't add new ones.`
+    : PAIN_LINE;
+  const text = `Your SpendNote trial ${urgency}\n\nHi ${args.fullName || "there"},\n\nYour trial ${urgency}.\n${txText}\n\nChoose a plan: ${args.pricingUrl}`;
   return { subject, html, text };
 };
 
@@ -276,7 +290,7 @@ export const renderUpgradeConfirmedTemplate = (args: {
 
   const html = appCard(
     `You're on ${plan}`,
-    "Your upgrade is active.",
+    "You're now set up to track your cash properly.",
     `
       <p style="margin:0 0 10px;">Hi ${name},</p>
       <p style="margin:0 0 14px;">Your SpendNote <strong>${plan}</strong> plan is now active. Here's what you've unlocked:</p>
@@ -288,7 +302,7 @@ export const renderUpgradeConfirmedTemplate = (args: {
     `,
   );
 
-  const text = `Welcome to SpendNote ${args.plan || "Standard"}\n\nHi ${args.fullName || "there"}, your ${args.plan} plan is now active.\n\nOpen SpendNote: ${args.dashboardUrl}`;
+  const text = `Welcome to SpendNote ${args.plan || "Standard"}\n\nHi ${args.fullName || "there"}, you're now set up to track your cash properly. Your ${args.plan} plan is active.\n\nOpen SpendNote: ${args.dashboardUrl}`;
   return { subject, html, text };
 };
 

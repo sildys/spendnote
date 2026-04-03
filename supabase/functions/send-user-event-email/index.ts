@@ -19,6 +19,7 @@ type EventBody = {
   inviteToken?: string;
   daysLeft?: number;
   plan?: string;
+  txCount?: number;
 };
 
 const corsHeaders: Record<string, string> = {
@@ -263,10 +264,12 @@ Deno.serve(async (req: Request) => {
     }
 
     if (eventType === "trial_expiry_warning") {
+      const txCount = Number(body?.txCount ?? 0);
       const rendered = renderTrialExpiryWarningTemplate({
         fullName: userName,
         daysLeft,
         pricingUrl: "https://spendnote.app/spendnote-pricing.html",
+        txCount,
       });
       const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text);
       return new Response(JSON.stringify({ success: true, data }), {
