@@ -1082,8 +1082,20 @@ function togglePreviewDetails() {
                             if (!alreadyRedirected) {
                                 if (redirectedKey) localStorage.setItem(redirectedKey, '1');
                                 if (typeof gtag === 'function') gtag('event', 'signup_completed');
+
+                                // Send welcome email directly before redirecting
+                                const welcomeKey = uid ? `spendnote.welcome.sent.${uid}` : '';
+                                if (!welcomeKey || localStorage.getItem(welcomeKey) !== '1') {
+                                    try {
+                                        await window.supabaseClient.functions.invoke('send-user-event-email', {
+                                            body: { eventType: 'welcome_account_created' },
+                                        });
+                                        if (welcomeKey) localStorage.setItem(welcomeKey, '1');
+                                    } catch (_) {}
+                                }
+
                                 // Clear the ensureDone guard so welcome page can
-                                // run profile creation + welcome email from scratch
+                                // run profile creation + cash box setup from scratch
                                 try {
                                     const ek = uid ? `spendnote.ensureDone.${uid}` : '';
                                     if (ek) sessionStorage.removeItem(ek);
