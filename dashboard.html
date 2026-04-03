@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=23">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=21">
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260403-11">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260403-12">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
@@ -1674,7 +1674,7 @@
     <script src="assets/js/dashboard-ui.js?v=8"></script>
     <script src="assets/js/dashboard-modal.js?v=20260226-2018"></script>
     <script src="assets/js/dashboard-form.js?v=20260308-2"></script>
-    <script src="assets/js/dashboard-data.js?v=20260226-2018"></script>
+    <script src="assets/js/dashboard-data.js?v=20260403-1"></script>
 
     <!-- Swiper JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -2183,10 +2183,22 @@
                                 <button class="sn-empty-cta sn-pulse" id="snMainCta" onclick="if(typeof window.openModal==='function')window.openModal({direction:'in'})">
                                     Start tracking your cash <span class="sn-cta-time">— 30 sec</span>
                                 </button>
+                                <button class="sn-empty-skip" id="snSkipOnboarding">I'll do it later</button>
                             </div>`;
                     }
 
-                    // 3. Auto-open tx modal only if currency dialog did NOT run this load (avoids stacked modals)
+                    // 3. "Skip" button — dismiss empty state and show normal dashboard
+                    const skipBtn = document.getElementById('snSkipOnboarding');
+                    if (skipBtn) {
+                        skipBtn.addEventListener('click', () => {
+                            if (typeof window.__spendnoteExitAggressiveOnboarding === 'function') {
+                                window.__spendnoteExitAggressiveOnboarding();
+                            }
+                            if (typeof loadDashboardData === 'function') loadDashboardData();
+                        });
+                    }
+
+                    // 4. Auto-open tx modal only if currency dialog did NOT run this load (avoids stacked modals)
                     const autoOpenKey = `sn.autoOpened.${uid}`;
                     if (!currencyModalRanThisLoad && !localStorage.getItem(autoOpenKey)) {
                         localStorage.setItem(autoOpenKey, '1');

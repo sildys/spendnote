@@ -4451,6 +4451,21 @@ table.transactions-table td,
 .sn-empty-cta:active {
     transform: translateY(0);
 }
+.sn-empty-skip {
+    appearance: none;
+    border: none;
+    background: none;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 12px;
+    cursor: pointer;
+    padding: 6px 12px;
+    transition: color .15s ease;
+}
+.sn-empty-skip:hover {
+    color: #64748b;
+}
 
 /* ========================================
    CURRENCY CONFIRM DIALOG
