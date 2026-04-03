@@ -642,8 +642,12 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
                 if (localStorage.getItem(welcomeSentKey) === '1') return;
             } catch (_) {}
             try {
-                await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
-                try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
+                const emailResult = await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
+                if (emailResult?.success === true) {
+                    try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
+                } else if (window.SpendNoteDebug) {
+                    console.warn('[welcome-email] send failed in ensureProfile:', emailResult?.error || emailResult);
+                }
             } catch (_) {}
         };
         try {
@@ -1428,12 +1432,16 @@ var auth = {
         }
         if (data?.session?.access_token) {
             try {
-                await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
-                try {
-                    const userId = String(data?.user?.id || '').trim();
-                    if (userId) localStorage.setItem(`spendnote.welcome.sent.${userId}`, '1');
-                } catch (_) {
-                    // ignore localStorage side-effect errors
+                const emailResult = await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
+                if (emailResult?.success === true) {
+                    try {
+                        const userId = String(data?.user?.id || '').trim();
+                        if (userId) localStorage.setItem(`spendnote.welcome.sent.${userId}`, '1');
+                    } catch (_) {
+                        // ignore localStorage side-effect errors
+                    }
+                } else if (window.SpendNoteDebug) {
+                    console.warn('[welcome-email] send failed in signUp:', emailResult?.error || emailResult);
                 }
             } catch (_) {
                 // ignore email side-effect errors

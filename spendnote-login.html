@@ -873,7 +873,7 @@ function togglePreviewDetails() {
     <a href="/" class="fab-home" title="Back to homepage"><i class="fas fa-home"></i></a>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260403-2205"></script>
+    <script src="assets/js/supabase-config.js?v=20260403-2240"></script>
     <script>
         const ensureProfile = async () => {
             try {
@@ -1104,11 +1104,13 @@ function togglePreviewDetails() {
                                         'send-user-event-email',
                                         { body: { eventType: 'welcome_account_created' } }
                                     );
+                                    let sentOk = false;
                                     if (emailError) {
                                         console.error('[SN-LOGIN] Welcome email invoke error:', emailError);
                                     } else if (emailData?.success !== true) {
                                         console.error('[SN-LOGIN] Welcome email backend non-success:', emailData);
                                     } else {
+                                        sentOk = true;
                                         try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
                                         console.log('[SN-LOGIN] Welcome email sent:', emailData);
                                     }
@@ -1129,6 +1131,7 @@ function togglePreviewDetails() {
                                                 const fallbackBody = await fallbackResp.text();
                                                 console.log('[SN-LOGIN] Welcome email fallback response:', fallbackResp.status, fallbackBody);
                                                 if (fallbackResp.ok) {
+                                                    sentOk = true;
                                                     try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
                                                 }
                                             }
@@ -1136,8 +1139,12 @@ function togglePreviewDetails() {
                                             console.error('[SN-LOGIN] Welcome email fallback exception:', fallbackErr);
                                         }
                                     }
+                                    if (!sentOk) {
+                                        try { localStorage.removeItem(welcomeSentKey); } catch (_) {}
+                                    }
                                 } catch (emailErr) {
                                     console.error('[SN-LOGIN] Welcome email send exception:', emailErr);
+                                    try { localStorage.removeItem(welcomeSentKey); } catch (_) {}
                                 }
                                 try { sessionStorage.removeItem('spendnote.ensureDone.' + uid); } catch (_) {}
                                 window.location.href = 'spendnote-welcome.html';
