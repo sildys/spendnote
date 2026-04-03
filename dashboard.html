@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=23">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=21">
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260403-12">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260403-13">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
@@ -107,6 +107,7 @@
                     <span class="sn-checklist-step" id="checkStep3"><i class="fas fa-circle"></i> View your receipt</span>
                 </div>
                 <button class="sn-checklist-cta" id="checklistCtaBtn" type="button">Record first transaction →</button>
+                <button class="sn-checklist-close" id="checklistCloseBtn" type="button" aria-label="Dismiss"><i class="fas fa-times"></i></button>
             </div>
 
             <!-- Tip: invite your team (compact) - Moved below Cash Boxes -->
@@ -2115,7 +2116,14 @@
                 // --- Checklist Banner ---
                 const checklist = document.getElementById('onboardingChecklist');
                 const checklistDoneKey = `sn.onboardingDone.${uid}`;
+                const dismissChecklist = () => {
+                    localStorage.setItem(checklistDoneKey, '1');
+                    if (checklist) checklist.style.display = 'none';
+                };
                 if (checklist && !localStorage.getItem(checklistDoneKey)) {
+                    // Close button always works
+                    document.getElementById('checklistCloseBtn')?.addEventListener('click', dismissChecklist);
+
                     if (txCount === 0) {
                         checklist.style.display = 'flex';
                         document.getElementById('checklistCtaBtn')?.addEventListener('click', () => {
@@ -2124,7 +2132,6 @@
                             }
                         });
                     } else if (txCount >= 1) {
-                        // First tx done, update checklist
                         const step2 = document.getElementById('checkStep2');
                         const step3 = document.getElementById('checkStep3');
                         const ctaBtn = document.getElementById('checklistCtaBtn');
@@ -2133,11 +2140,11 @@
                         if (ctaBtn) ctaBtn.textContent = 'View your receipt';
                         checklist.style.display = 'flex';
                         ctaBtn?.addEventListener('click', () => {
+                            dismissChecklist();
                             window.location.href = 'spendnote-transaction-history.html';
                         });
                         if (txCount >= 2) {
-                            localStorage.setItem(checklistDoneKey, '1');
-                            checklist.style.display = 'none';
+                            dismissChecklist();
                         }
                     }
                 }
