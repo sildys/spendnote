@@ -359,8 +359,33 @@ window.SpendNoteBackendErrors = {
 
 const __spendnoteSendUserEventEmail = async (payload = {}) => {
     try {
-        const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
-        if (sessErr || !session?.access_token) {
+        let accessToken = '';
+        for (let i = 0; i < 5; i++) {
+            try {
+                const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
+                if (!sessErr && session?.access_token) {
+                    accessToken = String(session.access_token || '').trim();
+                    break;
+                }
+            } catch (_) {
+                // ignore
+            }
+            await new Promise((resolve) => setTimeout(resolve, 250 * (i + 1)));
+        }
+
+        if (!accessToken) {
+            try {
+                const raw = String(localStorage.getItem('spendnote.session.bootstrap') || '').trim();
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    accessToken = String(parsed?.access_token || '').trim();
+                }
+            } catch (_) {
+                // ignore
+            }
+        }
+
+        if (!accessToken) {
             return { success: false, error: 'Not authenticated.' };
         }
 
@@ -368,7 +393,7 @@ const __spendnoteSendUserEventEmail = async (payload = {}) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session.access_token}`,
+                'Authorization': `Bearer ${accessToken}`,
                 'apikey': SUPABASE_ANON_KEY
             },
             body: JSON.stringify(payload || {})
