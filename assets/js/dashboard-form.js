@@ -462,6 +462,11 @@ function initTransactionForm() {
                     if (now === 1) {
                         gtag('event', 'first_transaction_created');
                         gtag('event', 'transaction_form_opened');
+                        try {
+                            supabaseClient?.functions?.invoke('send-user-event-email', {
+                                body: { eventType: 'first_transaction_created' },
+                            });
+                        } catch (_e) {}
                     } else if (now === 2) {
                         gtag('event', 'second_transaction_created');
                     }

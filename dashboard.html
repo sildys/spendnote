@@ -1890,6 +1890,15 @@
                 if (textEl) textEl.textContent = d <= 1 ? 'Your trial ends tomorrow' : `Your free trial ends in ${d} days`;
                 banner.style.display = 'flex';
                 if (typeof gtag === 'function') gtag('event', 'trial_warning_shown', { days_left: d });
+                const twKey = `sn.trialWarnEmail.${d}`;
+                if (!localStorage.getItem(twKey)) {
+                    localStorage.setItem(twKey, '1');
+                    try {
+                        supabaseClient?.functions?.invoke('send-user-event-email', {
+                            body: { eventType: 'trial_expiry_warning', daysLeft: d },
+                        });
+                    } catch (_e) {}
+                }
             } catch (_) {}
         })();
 
@@ -1911,6 +1920,11 @@
                 if (typeof showAlert === 'function') {
                     showAlert(`Welcome to ${label}! All your new features are ready.`, { iconType: 'success', title: `You're on ${label}` });
                 }
+                try {
+                    supabaseClient?.functions?.invoke('send-user-event-email', {
+                        body: { eventType: 'upgrade_confirmed', plan: label },
+                    });
+                } catch (_e) {}
             } catch (_) {}
         })();
 

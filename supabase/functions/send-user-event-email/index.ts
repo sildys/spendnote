@@ -1,13 +1,24 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
+  renderFirstTransactionTemplate,
   renderInviteAcceptedAdminTemplate,
   renderPasswordChangedTemplate,
+  renderTrialExpiryWarningTemplate,
+  renderUpgradeConfirmedTemplate,
   renderWelcomeAccountCreatedTemplate,
 } from "../_shared/email-templates.ts";
 
 type EventBody = {
-  eventType: "welcome_account_created" | "password_changed" | "invite_accepted_admin";
+  eventType:
+    | "welcome_account_created"
+    | "password_changed"
+    | "invite_accepted_admin"
+    | "first_transaction_created"
+    | "trial_expiry_warning"
+    | "upgrade_confirmed";
   inviteToken?: string;
+  daysLeft?: number;
+  plan?: string;
 };
 
 const corsHeaders: Record<string, string> = {
@@ -62,6 +73,8 @@ Deno.serve(async (req: Request) => {
     const body = (await req.json()) as EventBody;
     const eventType = String(body?.eventType || "").trim().toLowerCase();
     const inviteToken = String(body?.inviteToken || "").trim();
+    const daysLeft = Number(body?.daysLeft ?? 3);
+    const plan = String(body?.plan || "Standard").trim();
 
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
@@ -232,6 +245,44 @@ Deno.serve(async (req: Request) => {
       }
 
       return new Response(JSON.stringify({ success: true, sent: recipients.length, data: sends }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (eventType === "first_transaction_created") {
+      const rendered = renderFirstTransactionTemplate({
+        fullName: userName,
+        dashboardUrl: "https://spendnote.app/dashboard.html",
+      });
+      const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text);
+      return new Response(JSON.stringify({ success: true, data }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (eventType === "trial_expiry_warning") {
+      const rendered = renderTrialExpiryWarningTemplate({
+        fullName: userName,
+        daysLeft,
+        pricingUrl: "https://spendnote.app/spendnote-pricing.html",
+      });
+      const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text);
+      return new Response(JSON.stringify({ success: true, data }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (eventType === "upgrade_confirmed") {
+      const rendered = renderUpgradeConfirmedTemplate({
+        fullName: userName,
+        plan,
+        dashboardUrl: "https://spendnote.app/dashboard.html",
+      });
+      const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text);
+      return new Response(JSON.stringify({ success: true, data }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

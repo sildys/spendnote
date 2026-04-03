@@ -30,11 +30,15 @@ const appCard = (title: string, subtitle: string, bodyHtml: string): string => `
       <div style="padding:18px 20px;">${bodyHtml}</div>
       <div style="padding:14px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:12px;">
         Cash handoff documentation only. Not a tax or accounting tool.<br>
-        &copy; SpendNote • <a href="https://spendnote.app" style="color:#6b7280;">spendnote.app</a>
+        &copy; SpendNote &bull; <a href="https://spendnote.app" style="color:#6b7280;">spendnote.app</a>
       </div>
     </div>
   </div>
 `;
+
+const CTA_STYLE = "display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:800;font-size:15px;";
+
+// ─── Invite email ───────────────────────────────────────────────────────────────
 
 export const renderInviteEmailTemplate = (args: {
   inviterLine: string;
@@ -45,27 +49,29 @@ export const renderInviteEmailTemplate = (args: {
   const inviter = esc(args.inviterLine || "A team member");
   const role = args.role === "Admin" ? "Admin" : "User";
   const inviteLink = esc(args.inviteLink || "");
-  const subject = String(args.subject || "You have been invited to SpendNote");
+  const subject = String(args.subject || `${args.inviterLine || "Your team"} invited you to SpendNote`);
 
   const html = appCard(
-    "You’ve been invited",
-    "Join your team in SpendNote",
+    "You're invited",
+    "Your team is already tracking cash &mdash; join them.",
     `
-      <p style="margin:0 0 10px;">${inviter} invited you to join their SpendNote team.</p>
-      <p style="margin:0 0 14px;">Role: <strong>${role}</strong></p>
+      <p style="margin:0 0 10px;"><strong>${inviter}</strong> invited you to join their team on SpendNote as <strong>${role}</strong>.</p>
+      <p style="margin:0 0 14px;">SpendNote records every cash handoff &mdash; who took it, when, and how much &mdash; so nothing goes unaccounted for.</p>
       <div style="margin:18px 0 16px;">
-        <a href="${inviteLink}" style="display:inline-block;background:#059669;color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;font-weight:800;">Accept invitation</a>
+        <a href="${inviteLink}" style="${CTA_STYLE}">Accept invitation &rarr;</a>
       </div>
-      <p style="margin:0 0 10px;color:#374151;">If the button doesn’t work, copy and paste this link into your browser:</p>
-      <p style="margin:0 0 16px;"><a href="${inviteLink}" style="color:#1d4ed8;word-break:break-all;">${inviteLink}</a></p>
-      <p style="margin:0;color:#6b7280;">If you didn’t expect this invite, you can ignore this email.</p>
+      <p style="margin:0 0 10px;color:#374151;font-size:13px;">If the button doesn't work, copy and paste this link:</p>
+      <p style="margin:0 0 16px;"><a href="${inviteLink}" style="color:#1d4ed8;word-break:break-all;font-size:13px;">${inviteLink}</a></p>
+      <p style="margin:0;color:#6b7280;font-size:12px;">If you didn't expect this, you can safely ignore this email.</p>
     `,
   );
 
-  const text = `SpendNote invitation\n\n${args.inviterLine} invited you to join SpendNote as ${role}.\n\nAccept invitation:\n${args.inviteLink}\n\nIf you didn’t expect this invite, you can ignore this email.`;
+  const text = `${args.inviterLine || "Your team"} invited you to SpendNote\n\n${args.inviterLine} invited you to join their team as ${role}.\n\nSpendNote records every cash handoff so nothing goes unaccounted for.\n\nAccept invitation:\n${args.inviteLink}\n\nIf you didn't expect this invite, ignore this email.`;
 
   return { subject, html, text };
 };
+
+// ─── Welcome (account created) ──────────────────────────────────────────────────
 
 export const renderWelcomeAccountCreatedTemplate = (args: {
   fullName?: string;
@@ -73,24 +79,33 @@ export const renderWelcomeAccountCreatedTemplate = (args: {
 }): BaseEmailTemplate => {
   const name = esc(String(args.fullName || "there").trim() || "there");
   const loginUrl = esc(args.loginUrl || "https://spendnote.app/spendnote-login.html");
-  const subject = "Welcome to SpendNote";
+  const subject = `${args.fullName || "Hey"}, your cash tracking starts now`;
 
   const html = appCard(
-    "Welcome to SpendNote",
-    "Your account is ready",
+    "You're in.",
+    "One step left: record your first cash movement.",
     `
-      <p style="margin:0 0 10px;">Hi ${name}, your SpendNote account has been created successfully.</p>
-      <p style="margin:0 0 14px;">You can now log in and start documenting cash handoffs.</p>
+      <p style="margin:0 0 10px;">Hi ${name},</p>
+      <p style="margin:0 0 10px;">Every unrecorded cash handoff is money you can't account for later. SpendNote fixes that.</p>
+      <p style="margin:0 0 14px;font-weight:700;">Your first task: record one cash movement. It takes 30 seconds.</p>
       <div style="margin:18px 0 16px;">
-        <a href="${loginUrl}" style="display:inline-block;background:#059669;color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;font-weight:800;">Open SpendNote</a>
+        <a href="${loginUrl}" style="${CTA_STYLE}">Record your first transaction &rarr;</a>
       </div>
-      <p style="margin:0;color:#6b7280;">Need help? Contact support at <a href="mailto:support@spendnote.app" style="color:#1d4ed8;">support@spendnote.app</a>.</p>
+      <p style="margin:0 0 6px;color:#374151;font-size:13px;"><strong>What happens next:</strong></p>
+      <ul style="margin:0 0 14px;padding-left:18px;color:#374151;font-size:13px;">
+        <li>Record a cash IN or OUT &mdash; 30 seconds</li>
+        <li>Get an instant receipt you can print or share</li>
+        <li>Every handoff is logged with who, when, and how much</li>
+      </ul>
+      <p style="margin:0;color:#6b7280;font-size:12px;">Questions? Reply to this email or reach us at <a href="mailto:hello@spendnote.app" style="color:#1d4ed8;">hello@spendnote.app</a>.</p>
     `,
   );
 
-  const text = `Welcome to SpendNote\n\nHi ${args.fullName || "there"}, your account is ready.\nOpen SpendNote: ${args.loginUrl}\nNeed help? Contact support@spendnote.app`;
+  const text = `Your cash tracking starts now\n\nHi ${args.fullName || "there"},\n\nEvery unrecorded cash handoff is money you can't account for later.\n\nYour first task: record one cash movement (30 seconds).\n\nOpen SpendNote: ${args.loginUrl}\n\nQuestions? Reply to this email.`;
   return { subject, html, text };
 };
+
+// ─── Email confirmation ─────────────────────────────────────────────────────────
 
 export const renderEmailConfirmationTemplate = (args: {
   fullName?: string;
@@ -98,25 +113,27 @@ export const renderEmailConfirmationTemplate = (args: {
 }): BaseEmailTemplate => {
   const name = esc(String(args.fullName || "there").trim() || "there");
   const confirmUrl = esc(args.confirmUrl || "");
-  const subject = "Confirm your SpendNote email address";
+  const subject = "Confirm your email to start tracking cash";
 
   const html = appCard(
-    "Confirm your email",
-    "One quick step to activate your account",
+    "One quick step",
+    "Confirm your email to activate your account.",
     `
-      <p style="margin:0 0 10px;">Hi ${name}, please confirm your email address to activate your SpendNote account.</p>
+      <p style="margin:0 0 10px;">Hi ${name}, confirm your email address and you can start recording cash handoffs immediately.</p>
       <div style="margin:18px 0 16px;">
-        <a href="${confirmUrl}" style="display:inline-block;background:#059669;color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;font-weight:800;">Confirm email</a>
+        <a href="${confirmUrl}" style="${CTA_STYLE}">Confirm email &rarr;</a>
       </div>
-      <p style="margin:0 0 10px;color:#374151;">If the button doesn’t work, use this link:</p>
-      <p style="margin:0 0 16px;"><a href="${confirmUrl}" style="color:#1d4ed8;word-break:break-all;">${confirmUrl}</a></p>
-      <p style="margin:0;color:#6b7280;">If you didn’t create this account, you can safely ignore this email.</p>
+      <p style="margin:0 0 10px;color:#374151;font-size:13px;">If the button doesn't work, use this link:</p>
+      <p style="margin:0 0 16px;"><a href="${confirmUrl}" style="color:#1d4ed8;word-break:break-all;font-size:13px;">${confirmUrl}</a></p>
+      <p style="margin:0;color:#6b7280;font-size:12px;">If you didn't create this account, you can safely ignore this email.</p>
     `,
   );
 
-  const text = `Confirm your SpendNote email\n\nHi ${args.fullName || "there"}, confirm your account:\n${args.confirmUrl}`;
+  const text = `Confirm your email to start tracking cash\n\nHi ${args.fullName || "there"}, confirm your account:\n${args.confirmUrl}`;
   return { subject, html, text };
 };
+
+// ─── Invite accepted (admin notification) ────────────────────────────────────────
 
 export const renderInviteAcceptedAdminTemplate = (args: {
   adminName?: string;
@@ -130,24 +147,26 @@ export const renderInviteAcceptedAdminTemplate = (args: {
   const acceptedUserEmail = esc(args.acceptedUserEmail || "");
   const orgName = esc(String(args.orgName || "your team").trim() || "your team");
   const teamUrl = esc(args.teamUrl || "https://spendnote.app/spendnote-team.html");
-  const subject = `${args.acceptedUserName || args.acceptedUserEmail || "A user"} accepted your SpendNote invite`;
+  const subject = `${args.acceptedUserName || args.acceptedUserEmail || "A user"} joined your team`;
 
   const html = appCard(
-    "Invite accepted",
-    "A team member is now active",
+    "New team member",
+    `${args.acceptedUserName || args.acceptedUserEmail || "Someone"} is now on your team.`,
     `
       <p style="margin:0 0 10px;">Hi ${adminName},</p>
       <p style="margin:0 0 10px;"><strong>${acceptedUser}</strong> (${acceptedUserEmail}) accepted your invitation and joined ${orgName}.</p>
+      <p style="margin:0 0 14px;font-size:13px;color:#374151;">You can now assign Cash Box access from Team settings.</p>
       <div style="margin:18px 0 16px;">
-        <a href="${teamUrl}" style="display:inline-block;background:#059669;color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;font-weight:800;">Open team settings</a>
+        <a href="${teamUrl}" style="${CTA_STYLE}">Manage team &rarr;</a>
       </div>
-      <p style="margin:0;color:#6b7280;">You can now manage cash box access from Team settings.</p>
     `,
   );
 
-  const text = `Invite accepted\n\nHi ${args.adminName || "there"}, ${args.acceptedUserName || args.acceptedUserEmail} accepted your invitation and joined ${args.orgName || "your team"}.\nOpen team settings: ${args.teamUrl}`;
+  const text = `New team member\n\nHi ${args.adminName || "there"}, ${args.acceptedUserName || args.acceptedUserEmail} accepted your invitation and joined ${args.orgName || "your team"}.\nManage team: ${args.teamUrl}`;
   return { subject, html, text };
 };
+
+// ─── Password reset ─────────────────────────────────────────────────────────────
 
 export const renderPasswordResetTemplate = (args: {
   resetUrl: string;
@@ -157,16 +176,16 @@ export const renderPasswordResetTemplate = (args: {
 
   const html = appCard(
     "Reset your password",
-    "We received a password reset request",
+    "We received a password reset request.",
     `
-      <p style="margin:0 0 10px;">Hi there, we received a request to reset your SpendNote password.</p>
-      <p style="margin:0 0 14px;">Click the button below to choose a new password. This link expires in 1 hour.</p>
+      <p style="margin:0 0 10px;">Someone requested a password reset for your SpendNote account.</p>
+      <p style="margin:0 0 14px;">Click below to choose a new password. This link expires in 1 hour.</p>
       <div style="margin:18px 0 16px;">
-        <a href="${resetUrl}" style="display:inline-block;background:#059669;color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;font-weight:800;">Reset password</a>
+        <a href="${resetUrl}" style="${CTA_STYLE}">Reset password &rarr;</a>
       </div>
-      <p style="margin:0 0 10px;color:#374151;">If the button doesn't work, use this link:</p>
-      <p style="margin:0 0 16px;"><a href="${resetUrl}" style="color:#1d4ed8;word-break:break-all;">${resetUrl}</a></p>
-      <p style="margin:0;color:#6b7280;">If you didn't request this, you can safely ignore this email.</p>
+      <p style="margin:0 0 10px;color:#374151;font-size:13px;">If the button doesn't work, use this link:</p>
+      <p style="margin:0 0 16px;"><a href="${resetUrl}" style="color:#1d4ed8;word-break:break-all;font-size:13px;">${resetUrl}</a></p>
+      <p style="margin:0;color:#6b7280;font-size:12px;">If you didn't request this, you can safely ignore this email.</p>
     `,
   );
 
@@ -174,20 +193,121 @@ export const renderPasswordResetTemplate = (args: {
   return { subject, html, text };
 };
 
+// ─── First transaction congratulations ──────────────────────────────────────────
+
+export const renderFirstTransactionTemplate = (args: {
+  fullName?: string;
+  dashboardUrl: string;
+}): BaseEmailTemplate => {
+  const name = esc(String(args.fullName || "there").trim() || "there");
+  const dashboardUrl = esc(args.dashboardUrl || "https://spendnote.app/dashboard.html");
+  const subject = "Your first transaction is on record";
+
+  const html = appCard(
+    "First transaction recorded",
+    "You just made your cash trackable.",
+    `
+      <p style="margin:0 0 10px;">Nice work, ${name}.</p>
+      <p style="margin:0 0 10px;">Your first cash movement is now documented &mdash; who, when, how much. That's one handoff you'll never have to guess about.</p>
+      <p style="margin:0 0 14px;font-weight:700;">Now record the next one. That's how you stop losing track.</p>
+      <div style="margin:18px 0 16px;">
+        <a href="${dashboardUrl}" style="${CTA_STYLE}">Record another transaction &rarr;</a>
+      </div>
+      <p style="margin:0;color:#6b7280;font-size:12px;">Most teams record their opening balance first, then track every payment as it happens.</p>
+    `,
+  );
+
+  const text = `First transaction recorded\n\nNice work, ${args.fullName || "there"}. Your first cash movement is documented.\n\nNow record the next one: ${args.dashboardUrl}`;
+  return { subject, html, text };
+};
+
+// ─── Trial expiry warning ───────────────────────────────────────────────────────
+
+export const renderTrialExpiryWarningTemplate = (args: {
+  fullName?: string;
+  daysLeft: number;
+  pricingUrl: string;
+}): BaseEmailTemplate => {
+  const name = esc(String(args.fullName || "there").trim() || "there");
+  const days = Math.max(0, args.daysLeft || 0);
+  const pricingUrl = esc(args.pricingUrl || "https://spendnote.app/spendnote-pricing.html");
+  const urgency = days <= 1 ? "expires today" : `expires in ${days} days`;
+  const subject = `Your SpendNote trial ${urgency}`;
+
+  const html = appCard(
+    `Trial ${urgency}`,
+    "Keep your cash records intact.",
+    `
+      <p style="margin:0 0 10px;">Hi ${name},</p>
+      <p style="margin:0 0 10px;">Your free trial ${urgency}. After that, you won't be able to create new transactions or receipts.</p>
+      <p style="margin:0 0 14px;"><strong>Your existing data stays safe</strong> &mdash; you can always view and export it. But new entries require an active plan.</p>
+      <div style="margin:18px 0 16px;">
+        <a href="${pricingUrl}" style="${CTA_STYLE}">Choose a plan &rarr;</a>
+      </div>
+      <p style="margin:0 0 6px;color:#374151;font-size:13px;"><strong>Plans start at $19/month:</strong></p>
+      <ul style="margin:0 0 14px;padding-left:18px;color:#374151;font-size:13px;">
+        <li><strong>Standard</strong> &mdash; 2 Cash Boxes, printable receipts, CSV export</li>
+        <li><strong>Pro</strong> &mdash; Unlimited Cash Boxes, team access, email receipts</li>
+      </ul>
+      <p style="margin:0;color:#6b7280;font-size:12px;">Questions? Reply to this email.</p>
+    `,
+  );
+
+  const text = `Your SpendNote trial ${urgency}\n\nHi ${args.fullName || "there"},\n\nYour trial ${urgency}. Upgrade to keep creating transactions.\n\nChoose a plan: ${args.pricingUrl}`;
+  return { subject, html, text };
+};
+
+// ─── Upgrade confirmed ──────────────────────────────────────────────────────────
+
+export const renderUpgradeConfirmedTemplate = (args: {
+  fullName?: string;
+  plan: string;
+  dashboardUrl: string;
+}): BaseEmailTemplate => {
+  const name = esc(String(args.fullName || "there").trim() || "there");
+  const plan = esc(String(args.plan || "Standard").trim());
+  const dashboardUrl = esc(args.dashboardUrl || "https://spendnote.app/dashboard.html");
+  const subject = `Welcome to SpendNote ${args.plan || "Standard"}`;
+
+  const isPro = String(args.plan || "").toLowerCase() === "pro";
+  const featureList = isPro
+    ? `<li>Unlimited Cash Boxes</li><li>Team management &mdash; invite your first member</li><li>Email receipts</li><li>Custom receipt labels &amp; logo</li><li>CSV export</li>`
+    : `<li>2 Cash Boxes</li><li>Printable receipts</li><li>Custom receipt labels &amp; logo</li><li>CSV export</li>`;
+
+  const html = appCard(
+    `You're on ${plan}`,
+    "Your upgrade is active.",
+    `
+      <p style="margin:0 0 10px;">Hi ${name},</p>
+      <p style="margin:0 0 14px;">Your SpendNote <strong>${plan}</strong> plan is now active. Here's what you've unlocked:</p>
+      <ul style="margin:0 0 14px;padding-left:18px;color:#374151;font-size:13px;">${featureList}</ul>
+      <div style="margin:18px 0 16px;">
+        <a href="${dashboardUrl}" style="${CTA_STYLE}">Open SpendNote &rarr;</a>
+      </div>
+      <p style="margin:0;color:#6b7280;font-size:12px;">Manage your subscription anytime from Settings. Questions? Reply to this email.</p>
+    `,
+  );
+
+  const text = `Welcome to SpendNote ${args.plan || "Standard"}\n\nHi ${args.fullName || "there"}, your ${args.plan} plan is now active.\n\nOpen SpendNote: ${args.dashboardUrl}`;
+  return { subject, html, text };
+};
+
+// ─── Password changed ───────────────────────────────────────────────────────────
+
 export const renderPasswordChangedTemplate = (): BaseEmailTemplate => {
   const subject = "Your SpendNote password was changed";
   const loginUrl = "https://spendnote.app/spendnote-login.html";
 
   const html = appCard(
     "Password changed",
-    "Your password was updated successfully",
+    "Your password was updated successfully.",
     `
-      <p style="margin:0 0 10px;">Hi there, your SpendNote password was changed successfully.</p>
+      <p style="margin:0 0 10px;">Your SpendNote password was changed successfully.</p>
       <p style="margin:0 0 14px;">If you made this change, no further action is needed.</p>
       <div style="margin:18px 0 16px;">
-        <a href="${loginUrl}" style="display:inline-block;background:#059669;color:#fff;text-decoration:none;padding:10px 14px;border-radius:10px;font-weight:800;">Open SpendNote</a>
+        <a href="${loginUrl}" style="${CTA_STYLE}">Open SpendNote &rarr;</a>
       </div>
-      <p style="margin:0;color:#6b7280;">If you didn't make this change, please contact us immediately at <a href="mailto:hello@spendnote.app" style="color:#1d4ed8;">hello@spendnote.app</a>.</p>
+      <p style="margin:0;color:#6b7280;font-size:12px;">If you didn't make this change, contact us immediately at <a href="mailto:hello@spendnote.app" style="color:#1d4ed8;">hello@spendnote.app</a>.</p>
     `,
   );
 
