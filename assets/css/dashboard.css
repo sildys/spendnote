@@ -4400,8 +4400,14 @@ table.transactions-table td,
     min-height: 320px;
 }
 .sn-empty-illustration {
-    margin-bottom: 24px;
-    opacity: .85;
+    margin-bottom: 28px;
+}
+.sn-float {
+    animation: snFloat 3s ease-in-out infinite;
+}
+@keyframes snFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
 }
 .sn-empty-state h3 {
     font-size: 20px;
@@ -4410,11 +4416,16 @@ table.transactions-table td,
     margin: 0 0 8px;
 }
 .sn-empty-state p {
-    font-size: 14px;
-    color: #6b7280;
-    margin: 0 0 28px;
+    font-size: 15px;
+    color: #4b5563;
+    font-weight: 500;
+    margin: 0 0 32px;
     line-height: 1.6;
     max-width: 340px;
+}
+.sn-cta-time {
+    opacity: .75;
+    font-weight: 500;
 }
 .sn-empty-cta {
     appearance: none;
