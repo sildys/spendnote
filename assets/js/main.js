@@ -1082,19 +1082,12 @@ window.SpendNoteUpgrade = {
         document.addEventListener('keydown', escHandler);
     },
 
-    showSeatLimitUpgrade(seatLimit) {
-        const n = Math.max(1, Number(seatLimit) || 1);
+    /** Control-loss framing (invite blocked at seat cap): same trigger as before, conversion-focused copy. */
+    showSeatLimitUpgrade(_seatLimit) {
         const existing = document.getElementById(this._overlayId);
         if (existing) existing.remove();
 
-        const planUrl = this._buildPlanUrl('pro', 'Team seats');
-        const title = n === 1
-            ? 'You’ve used your included seat'
-            : `You’ve used all ${n} included seats`;
-        const body = n === 1
-            ? 'Your plan includes <strong>1 seat</strong> (you).<br>Add extra seats on Pro to invite teammates.'
-            : `Your plan includes <strong>${n} seats</strong> and they’re all in use.<br>Add more seats to invite another member.`;
-
+        const planUrl = this._buildPlanUrl('pro', 'Team visibility');
         const overlay = document.createElement('div');
         overlay.id = this._overlayId;
         overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,0.55);display:flex;align-items:center;justify-content:center;padding:20px;';
@@ -1103,16 +1096,17 @@ window.SpendNoteUpgrade = {
             <button type="button" id="sn-upgrade-overlay-close" style="position:absolute;top:14px;right:14px;appearance:none;border:none;background:none;color:#94a3b8;cursor:pointer;padding:4px;line-height:1;" aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#e0e7ff);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
-            <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">${title}</div>
-            <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">${body}</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
-              Add seats &amp; view plans
+            <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">You can&apos;t track who has the cash.</div>
+            <div style="font-size:14px;color:#475569;margin-bottom:16px;line-height:1.55;">Right now, only you can record transactions.</div>
+            <div style="font-size:14px;color:#475569;margin-bottom:10px;line-height:1.6;">Once cash leaves your hands, you lose visibility.</div>
+            <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Invite your team and track every handoff &mdash; who took it, when, and why.</div>
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;box-shadow:0 4px 14px rgba(79,70,229,0.35);">
+              Upgrade to Pro &rarr;
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
-            <div style="font-size:12px;color:#94a3b8;margin-top:8px;line-height:1.4;">Extra seats on Pro · invite more teammates</div>
           </div>
         `;
         document.body.appendChild(overlay);
