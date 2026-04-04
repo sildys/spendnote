@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>Team invite — SpendNote</title>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" href="assets/css/main.css?v=23">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/assets/css/main.css?v=23">
     <style>
         body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-page, #f8fafc); margin: 0; font-family: Inter, system-ui, sans-serif; }
         .invite-card { max-width: 420px; padding: 28px 24px; text-align: center; background: #fff; border-radius: 14px; border: 1px solid var(--border-color, #e5e7eb); box-shadow: 0 10px 40px rgba(15,23,42,0.08); }
@@ -23,7 +23,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260404-invite-flow"></script>
+    <script src="/assets/js/supabase-config.js?v=20260404-invite-flow"></script>
     <script>
 (function () {
     const INVITE_TOKEN_KEY = 'spendnote.inviteToken.pending';
@@ -33,10 +33,17 @@
 
     function parseInviteTokenFromPath() {
         try {
+            const href = String(window.location.href || '');
             const path = String(window.location.pathname || '');
-            const m = path.match(/^\/invite\/([^/?#]+)\/?$/i);
-            if (!m || !m[1]) return '';
-            return decodeURIComponent(m[1]).trim();
+            const patterns = [
+                path.match(/\/invite\/([A-Fa-f0-9]{20,})\/?$/),
+                href.match(/\/invite\/([A-Fa-f0-9]{20,})/),
+                path.match(/\/invite\/([^/?#]{20,})\/?$/)
+            ];
+            for (const m of patterns) {
+                if (m && m[1]) return decodeURIComponent(m[1]).trim();
+            }
+            return '';
         } catch (_) {
             return '';
         }
