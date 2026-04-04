@@ -81,22 +81,22 @@ export const renderWelcomeAccountCreatedTemplate = (args: {
 }): BaseEmailTemplate => {
   const name = esc(String(args.fullName || "there").trim() || "there");
   const loginUrl = esc(args.loginUrl || "https://spendnote.app/spendnote-login.html");
-  const subject = `${args.fullName || "Hey"}, your cash tracking starts now`;
+  const subject = `You're in — now track your first cash movement`;
 
   const html = appCard(
     "You're in.",
-    "One step left: record your first cash movement.",
+    "One step left: start tracking your cash.",
     `
       <p style="margin:0 0 10px;">Hi ${name},</p>
       <p style="margin:0 0 10px;">Every unrecorded cash handoff is money you can't account for later. SpendNote fixes that.</p>
       <p style="margin:0 0 10px;font-weight:700;">Right now, you have no record of your cash.</p>
-      <p style="margin:0 0 14px;">Start tracking your cash now. It takes 30 seconds.</p>
+      <p style="margin:0 0 14px;">Start now. It takes 30 seconds.</p>
       <div style="margin:18px 0 16px;">
-        <a href="${loginUrl}" style="${CTA_STYLE}">Record your first transaction &rarr;</a>
+        <a href="${loginUrl}" style="${CTA_STYLE}">Start tracking your cash (30 sec) &rarr;</a>
       </div>
       <p style="margin:0 0 6px;color:#374151;font-size:13px;"><strong>What happens next:</strong></p>
       <ul style="margin:0 0 14px;padding-left:18px;color:#374151;font-size:13px;">
-        <li>Record a cash IN or OUT &mdash; 30 seconds</li>
+        <li>Record your first cash movement &mdash; 30 seconds</li>
         <li>Get an instant receipt you can print or share</li>
         <li>Every handoff is logged with who, when, and how much</li>
       </ul>
@@ -104,7 +104,7 @@ export const renderWelcomeAccountCreatedTemplate = (args: {
     `,
   );
 
-  const text = `Your cash tracking starts now\n\nHi ${args.fullName || "there"},\n\nRight now, you have no record of your cash.\n\nStart tracking your cash now. It takes 30 seconds.\n\nOpen SpendNote: ${args.loginUrl}\n\nQuestions? Reply to this email.`;
+  const text = `You're in — now track your first cash movement\n\nHi ${args.fullName || "there"},\n\nEvery unrecorded cash handoff is money you can't account for later.\n\nRight now, you have no record of your cash.\n\nStart now. It takes 30 seconds.\n\nOpen SpendNote: ${args.loginUrl}\n\nQuestions? Reply to this email.`;
   return { subject, html, text };
 };
 
