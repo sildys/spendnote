@@ -100,11 +100,11 @@ export const renderWelcomeAccountCreatedTemplate = (args: {
         <li>Get an instant receipt you can print or share</li>
         <li>Every handoff is logged with who, when, and how much</li>
       </ul>
-      <p style="margin:0;color:#6b7280;font-size:12px;">Questions? Reply to this email or reach us at <a href="mailto:hello@spendnote.app" style="color:#1d4ed8;">hello@spendnote.app</a>.</p>
+      <p style="margin:0;color:#6b7280;font-size:12px;">Need help? Visit our <a href="https://spendnote.app/spendnote-faq.html" style="color:#1d4ed8;">FAQ</a> or contact <a href="mailto:support@spendnote.app" style="color:#1d4ed8;">support@spendnote.app</a>.</p>
     `,
   );
 
-  const text = `You're in — now track your first cash movement\n\nHi ${args.fullName || "there"},\n\nEvery unrecorded cash handoff is money you can't account for later.\n\nRight now, you have no record of your cash.\n\nStart now. It takes 30 seconds.\n\nOpen SpendNote: ${args.loginUrl}\n\nQuestions? Reply to this email.`;
+  const text = `You're in — now track your first cash movement\n\nHi ${args.fullName || "there"},\n\nEvery unrecorded cash handoff is money you can't account for later.\n\nRight now, you have no record of your cash.\n\nStart now. It takes 30 seconds.\n\nOpen SpendNote: ${args.loginUrl}\n\nNeed help? https://spendnote.app/spendnote-faq.html or support@spendnote.app`;
   return { subject, html, text };
 };
 
@@ -260,7 +260,7 @@ export const renderTrialExpiryWarningTemplate = (args: {
         <li><strong>Standard</strong> &mdash; 2 Cash Boxes, printable receipts, CSV export</li>
         <li><strong>Pro</strong> &mdash; Unlimited Cash Boxes, team access, email receipts</li>
       </ul>
-      <p style="margin:0;color:#6b7280;font-size:12px;">Questions? Reply to this email.</p>
+      <p style="margin:0;color:#6b7280;font-size:12px;">Need help? Visit our <a href="https://spendnote.app/spendnote-faq.html" style="color:#1d4ed8;">FAQ</a> or contact <a href="mailto:support@spendnote.app" style="color:#1d4ed8;">support@spendnote.app</a>.</p>
     `,
   );
 
@@ -298,7 +298,7 @@ export const renderUpgradeConfirmedTemplate = (args: {
       <div style="margin:18px 0 16px;">
         <a href="${dashboardUrl}" style="${CTA_STYLE}">Open SpendNote &rarr;</a>
       </div>
-      <p style="margin:0;color:#6b7280;font-size:12px;">Manage your subscription anytime from Settings. Questions? Reply to this email.</p>
+      <p style="margin:0;color:#6b7280;font-size:12px;">Manage your subscription anytime from Settings. Need help? Visit our <a href="https://spendnote.app/spendnote-faq.html" style="color:#1d4ed8;">FAQ</a> or contact <a href="mailto:support@spendnote.app" style="color:#1d4ed8;">support@spendnote.app</a>.</p>
     `,
   );
 
@@ -321,10 +321,10 @@ export const renderPasswordChangedTemplate = (): BaseEmailTemplate => {
       <div style="margin:18px 0 16px;">
         <a href="${loginUrl}" style="${CTA_STYLE}">Open SpendNote &rarr;</a>
       </div>
-      <p style="margin:0;color:#6b7280;font-size:12px;">If you didn't make this change, contact us immediately at <a href="mailto:hello@spendnote.app" style="color:#1d4ed8;">hello@spendnote.app</a>.</p>
+      <p style="margin:0;color:#6b7280;font-size:12px;">If you didn't make this change, contact us immediately at <a href="mailto:support@spendnote.app" style="color:#1d4ed8;">support@spendnote.app</a>.</p>
     `,
   );
 
-  const text = `Your SpendNote password was changed\n\nYour password was updated successfully. If you made this change, no action is needed.\n\nIf you didn't make this change, contact us at hello@spendnote.app immediately.`;
+  const text = `Your SpendNote password was changed\n\nYour password was updated successfully. If you made this change, no action is needed.\n\nIf you didn't make this change, contact us at support@spendnote.app immediately.`;
   return { subject, html, text };
 };
