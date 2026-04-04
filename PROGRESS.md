@@ -96,6 +96,61 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
+## Where we are now (last updated: 2026-04-04 — Welcome email + login flow fix + email audit)
+
+### 2026-04-04 frissítés — Welcome email + login flow fix + teljes email audit
+
+**Welcome email + login flow — ROOT CAUSE + FIX:**
+- A welcome email nem működött: 3 különböző helyen próbálta küldeni (supabase-config.js, spendnote-login.html, spendnote-welcome.html) → race condition + inkonzisztens viselkedés
+- Az Edge Function-ök NEM voltak `--no-verify-jwt` flag-gel deployolva → a Supabase gateway 401-et adott minden functions.invoke hívásra (a DB hívások RLS+anon key-jel mentek, ezért azok működtek)
+- A `SPENDNOTE_EMAIL_FROM` secret "invite"-ra volt állítva → rossz feladó név
+- A `DEFAULT_POST_LOGIN_PATH` `/app`-ra mutatott (nem létező URL) → javítva `dashboard.html`-re
+- A new user detekció `auth.created_at` alapú volt → törölt-újra-létrehozott fiókoknál nem ismerte fel újnak → javítva profil-alapú detekció (profiles tábla lekérdezés)
+
+**Elvégzett javítások:**
+1. ✅ Welcome email küldés centralizálva → egyetlen pont: **dashboard.html currency confirm "Continue" gomb**
+2. ✅ Welcome email küldés eltávolítva: `supabase-config.js` (`ensureProfile` + `signUp`), `spendnote-login.html`, `spendnote-welcome.html` page load
+3. ✅ `spendnote-welcome.html` Save/Skip gombok is hívják a `sendWelcomeEmail()`-t (fallback)
+4. ✅ `DEFAULT_POST_LOGIN_PATH` javítva: `/app` → `dashboard.html`
+5. ✅ New user detekció: profil-alapú (profiles tábla), nem `created_at` timestamp → fedezi törölt-újra-létrehozott fiókokat
+6. ✅ **Összes Edge Function újra deployolva `--no-verify-jwt` flag-gel** (7 db):
+   - `send-user-event-email`, `send-invite-email`, `delete-account`, `create-checkout-session`, `create-portal-session`, `update-subscription`, `stripe-webhook`
+7. ✅ `SPENDNOTE_EMAIL_FROM` secret beállítva: `SpendNote <no-reply@spendnote.app>`
+8. ✅ Cache-busting frissítve: `supabase-config.js` → `v=20260404-0150` (26 HTML fájlban), `dashboard-form.js` → `v=20260404-1`
+
+**Email copy polish (ChatGPT finomhangolás):**
+- ✅ **Welcome email**: subject → "You're in — now track your first cash movement", CTA → "Start tracking your cash (30 sec)", subtitle → "One step left: start tracking your cash."
+- ✅ **First transaction email**: subject → "Your first cash movement is on record", CTA → "Record the next one (30 sec)", opening → "Good. You're now tracking your cash."
+- ✅ Minden emailből eltávolítva "Reply to this email" → helyette: FAQ link + support@spendnote.app
+- ✅ Minden emailben `hello@spendnote.app` → `support@spendnote.app`
+
+**Bug fix:**
+- ✅ `first_transaction_created` email küldés ki volt véve a `gtag` feltétel mögül → ad blocker / inkognitó esetén nem ment ki → most mindig fut
+
+**Összesen 7 email típus — mind működik:**
+| # | Email | Trigger | Feladó |
+|---|-------|---------|--------|
+| 1 | Welcome | Dashboard currency confirm Continue | SpendNote |
+| 2 | Password changed | supabase-config.js updatePassword() | SpendNote |
+| 3 | Invite accepted (admin) | supabase-config.js invite accept | SpendNote |
+| 4 | First transaction | dashboard-form.js (1. tranzakció) | SpendNote |
+| 5 | Trial expiry warning | dashboard.html (3 nap hátra) | SpendNote |
+| 6 | Upgrade confirmed | dashboard.html (tier upgrade) | SpendNote |
+| 7 | Team invite | send-invite-email Edge Function | SpendNote |
+
+**Commitok:** `794b652` → `f01afcb` (7 commit)
+
+---
+
+**PENDING feladatok:**
+- [ ] Team invite — custom modal + bekötés
+- [ ] Teljes gating QA: tesztelés minden oldalon
+- [ ] Free tier transaction limit: 20 tx / 14 nap — tesztelés
+- [ ] Pricing → signup flow ellenőrzés
+- [ ] Checkout + webhook teszt (4242 kártya)
+
+---
+
 ## Where we are now (last updated: 2026-03-29 — Domain repositioning: template → pain/anti-template)
 
 ### 2026-03-29 frissítés — SEO domain repositioning (template cluster átfordítás)
