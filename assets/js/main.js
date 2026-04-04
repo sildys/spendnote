@@ -234,8 +234,15 @@ async function updateOrgContextIndicator() {
         const role = String(state?.role || state?.selectedRole || '').trim().toLowerCase();
 
         const isPro = Boolean(state?.isPro);
+        let appTier = '';
+        try {
+            appTier = String(await window.SpendNoteFeatures?.getTier?.() || '').trim().toLowerCase();
+        } catch (_) {
+            appTier = '';
+        }
         if (teamLink) {
-            const canSeeTeam = isPro && (role === 'owner' || role === 'admin');
+            // Pro: only owner/admin see Team in nav. Preview: always show so early adopters can open Team / create org (matches team-page gate).
+            const canSeeTeam = isPro && (appTier === 'preview' || role === 'owner' || role === 'admin');
             teamLink.style.display = canSeeTeam ? '' : 'none';
         }
 
