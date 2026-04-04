@@ -2119,28 +2119,42 @@ async function spendnoteResolveReceiptProfileForTx(tx, baseProfile) {
         const myId = String(me?.id || '').trim();
         if (!myId || !supabaseClient) return base;
 
-        let ownerId = '';
         const orgId = String(t?.org_id || '').trim();
-        if (orgId) {
-            const { data: orgRow } = await supabaseClient
-                .from('orgs')
-                .select('owner_user_id')
-                .eq('id', orgId)
-                .maybeSingle();
-            ownerId = String(orgRow?.owner_user_id || '').trim();
-        }
-        if (!ownerId) {
-            ownerId = String(t?.cash_box?.user_id || '').trim();
-        }
-        if (!ownerId || ownerId === myId) return base;
+        let o = null;
 
-        const { data: ownRows, error: pErr } = await supabaseClient
-            .from('profiles')
-            .select('company_name, phone, address, account_logo_url, logo_settings, full_name')
-            .eq('id', ownerId)
-            .limit(1);
-        const o = Array.isArray(ownRows) ? ownRows[0] : null;
-        if (pErr || !o) return base;
+        if (orgId) {
+            try {
+                const { data: rpcData, error: rpcErr } = await supabaseClient
+                    .rpc('spendnote_get_owner_receipt_identity', { p_org_id: orgId });
+                if (!rpcErr && rpcData && typeof rpcData === 'object') {
+                    o = rpcData;
+                }
+            } catch (_) {}
+        }
+
+        if (!o) {
+            let ownerId = '';
+            if (orgId) {
+                try {
+                    const { data: orgRow } = await supabaseClient
+                        .from('orgs').select('owner_user_id').eq('id', orgId).maybeSingle();
+                    ownerId = String(orgRow?.owner_user_id || '').trim();
+                } catch (_) {}
+            }
+            if (!ownerId) {
+                ownerId = String(t?.cash_box?.user_id || '').trim();
+            }
+            if (!ownerId || ownerId === myId) return base;
+            try {
+                const { data: ownRows, error: pErr } = await supabaseClient
+                    .from('profiles')
+                    .select('company_name, phone, address, account_logo_url, logo_settings, full_name')
+                    .eq('id', ownerId).limit(1);
+                o = (!pErr && Array.isArray(ownRows)) ? ownRows[0] : null;
+            } catch (_) {}
+        }
+
+        if (!o) return base;
 
         const ownerFull = String(o.full_name || '').trim();
         return {
@@ -3541,15 +3555,26 @@ var db = {
                     const role = String(ctx?.role || '').trim().toLowerCase();
                     const ownerId = String(ctx?.ownerUserId || '').trim();
                     if ((role === 'user' || role === 'admin') && ownerId && ownerId !== userId) {
-                        const { data: ownerRows, error: ownerErr } = await supabaseClient
-                            .from('profiles')
-                            .select('company_name, phone, address, account_logo_url, logo_settings, full_name')
-                            .eq('id', ownerId)
-                            .limit(1);
-                        const o = Array.isArray(ownerRows) ? (ownerRows[0] || null) : null;
-                        if (!ownerErr && o) {
+                        let o = null;
+                        try {
+                            const { data: rpcData, error: rpcErr } = await supabaseClient
+                                .rpc('spendnote_get_owner_receipt_identity', { p_org_id: ctx.orgId });
+                            if (!rpcErr && rpcData && typeof rpcData === 'object') {
+                                o = rpcData;
+                            }
+                        } catch (_) {}
+                        if (!o) {
+                            try {
+                                const { data: ownerRows, error: ownerErr } = await supabaseClient
+                                    .from('profiles')
+                                    .select('company_name, phone, address, account_logo_url, logo_settings, full_name')
+                                    .eq('id', ownerId)
+                                    .limit(1);
+                                o = (!ownerErr && Array.isArray(ownerRows)) ? (ownerRows[0] || null) : null;
+                            } catch (_) {}
+                        }
+                        if (o) {
                             const ownerFull = String(o.full_name || '').trim();
-                            // Use owner row only for receipt identity — do not fall back to member fields when owner has NULL.
                             return {
                                 ...row,
                                 company_name: o.company_name,

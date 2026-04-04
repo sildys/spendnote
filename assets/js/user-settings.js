@@ -213,14 +213,12 @@ const receiptDisplayNameFromSource = (r) => {
  * Uses org selection state so Receipt Identity reflects what receipts use even if profiles.getCurrent merge is stale.
  */
 const fetchWorkspaceOwnerReceiptIdentityProfile = async () => {
-    const dbg = (...args) => console.log('[ReceiptIdentity]', ...args);
     try {
         const user = await window.auth?.getCurrentUser?.();
         const uid = String(user?.id || '').trim();
-        if (!uid || !window.supabaseClient) { dbg('BAIL: no user or supabase', uid); return null; }
+        if (!uid || !window.supabaseClient) return null;
 
         const state = await window.SpendNoteOrgContext?.getSelectionState?.();
-        dbg('orgSelectionState:', JSON.stringify({ orgId: state?.orgId, role: state?.role, memberships: state?.memberships?.length }));
         let orgId = String(state?.orgId || '').trim();
         let role = String(state?.role || '').trim().toLowerCase();
         if (!orgId && Array.isArray(state?.memberships) && state.memberships.length === 1) {
@@ -228,43 +226,24 @@ const fetchWorkspaceOwnerReceiptIdentityProfile = async () => {
             orgId = String(m0?.org_id || '').trim();
             role = String(m0?.role || role).trim().toLowerCase();
         }
-        dbg('resolved orgId:', orgId, 'role:', role);
-        if (role !== 'user' && role !== 'admin') { dbg('BAIL: role not user/admin'); return null; }
-        if (!orgId) { dbg('BAIL: no orgId'); return null; }
+        if (role !== 'user' && role !== 'admin') return null;
+        if (!orgId) return null;
 
-        const { data: orgRow, error: oErr } = await window.supabaseClient
-            .from('orgs')
-            .select('owner_user_id')
-            .eq('id', orgId)
-            .maybeSingle();
-        dbg('orgs query:', JSON.stringify({ owner: orgRow?.owner_user_id, err: oErr?.message }));
-        if (oErr) { dbg('BAIL: orgs error'); return null; }
+        const { data: rpcData, error: rpcErr } = await window.supabaseClient
+            .rpc('spendnote_get_owner_receipt_identity', { p_org_id: orgId });
 
-        const ownerId = String(orgRow?.owner_user_id || '').trim();
-        if (!ownerId) { dbg('BAIL: no ownerId'); return null; }
+        if (rpcErr || !rpcData || typeof rpcData !== 'object') return null;
 
-        const { data: rows, error: pErr } = await window.supabaseClient
-            .from('profiles')
-            .select('company_name, phone, address, account_logo_url, logo_settings, full_name')
-            .eq('id', ownerId)
-            .limit(1);
-        const o = Array.isArray(rows) ? rows[0] : null;
-        dbg('owner profile:', JSON.stringify({ company: o?.company_name, full: o?.full_name, phone: o?.phone, err: pErr?.message }));
-        if (pErr || !o) { dbg('BAIL: profile error or empty'); return null; }
-
-        const ownerFull = String(o.full_name || '').trim();
-        const result = {
-            company_name: o.company_name,
-            phone: o.phone,
-            address: o.address,
-            account_logo_url: o.account_logo_url,
-            logo_settings: o.logo_settings,
+        const ownerFull = String(rpcData.full_name || '').trim();
+        return {
+            company_name: rpcData.company_name || null,
+            phone: rpcData.phone || null,
+            address: rpcData.address || null,
+            account_logo_url: rpcData.account_logo_url || null,
+            logo_settings: rpcData.logo_settings || null,
             spendnote_receipt_sender_fallback: ownerFull || null
         };
-        dbg('SUCCESS, returning:', JSON.stringify({ company: result.company_name, fallback: result.spendnote_receipt_sender_fallback }));
-        return result;
-    } catch (e) {
-        console.error('[ReceiptIdentity] EXCEPTION:', e);
+    } catch (_) {
         return null;
     }
 };
