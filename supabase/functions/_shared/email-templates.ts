@@ -205,23 +205,23 @@ export const renderFirstTransactionTemplate = (args: {
 }): BaseEmailTemplate => {
   const name = esc(String(args.fullName || "there").trim() || "there");
   const dashboardUrl = esc(args.dashboardUrl || "https://spendnote.app/dashboard.html");
-  const subject = "Your first transaction is on record";
+  const subject = "Your first cash movement is on record";
 
   const html = appCard(
-    "First transaction recorded",
+    "Your first cash movement is on record",
     "You just made your cash trackable.",
     `
-      <p style="margin:0 0 10px;">Nice work, ${name}.</p>
+      <p style="margin:0 0 10px;">Good. You're now tracking your cash, ${name}.</p>
       <p style="margin:0 0 10px;">Your first cash movement is now documented &mdash; who, when, how much. That's one handoff you'll never have to guess about.</p>
       <p style="margin:0 0 14px;font-weight:700;">Now do it again. That's how you stay in control.</p>
       <div style="margin:18px 0 16px;">
-        <a href="${dashboardUrl}" style="${CTA_STYLE}">Record another transaction &rarr;</a>
+        <a href="${dashboardUrl}" style="${CTA_STYLE}">Record the next one (30 sec) &rarr;</a>
       </div>
-      <p style="margin:0;color:#6b7280;font-size:12px;">Most teams record their opening balance first, then track every payment as it happens.</p>
+      <p style="margin:0;color:#6b7280;font-size:12px;">Most teams start with an opening balance &mdash; then track every payment as it happens.</p>
     `,
   );
 
-  const text = `First transaction recorded\n\nNice work, ${args.fullName || "there"}. Your first cash movement is documented.\n\nNow do it again. That's how you stay in control.\n\n${args.dashboardUrl}`;
+  const text = `Your first cash movement is on record\n\nGood. You're now tracking your cash, ${args.fullName || "there"}.\n\nNow do it again. That's how you stay in control.\n\n${args.dashboardUrl}`;
   return { subject, html, text };
 };
 
