@@ -23,7 +23,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/assets/js/supabase-config.js?v=20260404-invite-flow"></script>
+    <script src="/assets/js/supabase-config.js?v=20260405-invite-query"></script>
     <script>
 (function () {
     const INVITE_TOKEN_KEY = 'spendnote.inviteToken.pending';
@@ -34,8 +34,10 @@
     function parseInviteToken() {
         try {
             var sp = new URLSearchParams(window.location.search);
-            var fromQuery = String(sp.get('token') || '').trim();
-            if (fromQuery && fromQuery.length >= 20) return fromQuery;
+            var fromInviteToken = String(sp.get('inviteToken') || '').trim().replace(/^\/+|\/+$/g, '');
+            if (fromInviteToken && fromInviteToken.length >= 20) return fromInviteToken;
+            var fromToken = String(sp.get('token') || '').trim().replace(/^\/+|\/+$/g, '');
+            if (fromToken && fromToken.length >= 20) return fromToken;
 
             var href = String(window.location.href || '');
             var path = String(window.location.pathname || '');
@@ -46,8 +48,10 @@
             ];
             for (var i = 0; i < patterns.length; i++) {
                 var m = patterns[i];
-                if (m && m[1]) return decodeURIComponent(m[1]).trim();
+                if (m && m[1]) return decodeURIComponent(m[1]).trim().replace(/^\/+|\/+$/g, '');
             }
+            var hash = String(window.location.hash || '').replace(/^#/, '').trim();
+            if (hash && /^[A-Fa-f0-9]{20,}$/.test(hash)) return hash;
             return '';
         } catch (_) {
             return '';
