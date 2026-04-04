@@ -402,7 +402,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js?v=20260406-welcome-team"></script>
+<script src="assets/js/supabase-config.js?v=20260406-google-returning-user"></script>
 <script>
 let selectedColor = '#10b981';
 let currentWelcomeVariant = 'free';
@@ -610,6 +610,15 @@ async function saveSetup() {
         await waitForDb();
         const user = await window.auth?.getCurrentUser?.();
         if (!user) { window.location.href = 'spendnote-login.html'; return; }
+        const uidEarly = String(user.id || '').trim();
+        if (uidEarly) {
+            try {
+                if (localStorage.getItem('spendnote.welcome.sent.v2.' + uidEarly) === '1') {
+                    window.location.replace('dashboard.html');
+                    return;
+                }
+            } catch (_) {}
+        }
         try {
             const uid = String(user.id || '').trim();
             if (uid) {

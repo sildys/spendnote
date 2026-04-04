@@ -691,8 +691,6 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
         if (error || !user) return;
         const userId = String(user?.id || '').trim();
         if (!userId) return;
-        const createdAtMs = Date.parse(String(user.created_at || ''));
-        const isFreshAuthUser = Number.isFinite(createdAtMs) && (Date.now() - createdAtMs) < (20 * 60 * 1000);
         try {
             if (typeof isUuid === 'function' && !isUuid(userId)) {
                 return;
@@ -706,9 +704,9 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
                 .eq('id', userId)
                 .single();
             if (!selErr && existing?.id) {
-                if (isFreshAuthUser) {
-                    try { sessionStorage.setItem('spendnote.isNewUser.' + userId, '1'); } catch (_) {}
-                }
+                // Profile already exists — do NOT mark as "new user" (that flag drives welcome redirect).
+                // Previously we set isNewUser for "fresh" auth users here, which re-triggered onboarding
+                // for returning Google logins and invited members within minutes of account creation.
                 return;
             }
         } catch (_) {}

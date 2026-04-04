@@ -943,7 +943,7 @@ function togglePreviewDetails() {
     <a href="/" class="fab-home" title="Back to homepage"><i class="fas fa-home"></i></a>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260405-invite-signup-route"></script>
+    <script src="assets/js/supabase-config.js?v=20260406-google-returning-user"></script>
     <script>
         const __SN_INVITE_TOKEN_KEY = 'spendnote.inviteToken.pending';
         const __SN_INVITED_EMAIL_KEY = 'spendnote.invitedEmail.pending';
@@ -1363,7 +1363,10 @@ function togglePreviewDetails() {
 
             try {
                 const inviteToken = getInviteTokenFromContext();
-                const redirectUrl = new URL(`${window.location.origin}/spendnote-welcome.html`);
+                // Same callback as Log in — post-OAuth logic on login decides welcome vs dashboard (avoids
+                // sending existing accounts through signup onboarding again).
+                const redirectUrl = new URL(`${window.location.origin}/spendnote-login.html`);
+                redirectUrl.searchParams.set('returnTo', '/dashboard.html');
                 if (inviteToken) {
                     redirectUrl.searchParams.set('inviteToken', inviteToken);
                 }
