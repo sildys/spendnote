@@ -1,7 +1,7 @@
 /favicon.ico /favicon.svg 200
 
-# Short team invite URLs → invite.html (browser keeps /invite/{token})
-/invite/* /invite.html 200
+# Short team invite URLs: Cloudflare Pages splat rewrite preserves token in query
+/invite/:token /invite.html?token=:token 200
 
 /app /dashboard 302
 /app/ /dashboard 302

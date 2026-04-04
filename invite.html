@@ -31,16 +31,21 @@
     const SIGNUP_PATH = '/signup';
     const APP_PATH = '/app';
 
-    function parseInviteTokenFromPath() {
+    function parseInviteToken() {
         try {
-            const href = String(window.location.href || '');
-            const path = String(window.location.pathname || '');
-            const patterns = [
+            var sp = new URLSearchParams(window.location.search);
+            var fromQuery = String(sp.get('token') || '').trim();
+            if (fromQuery && fromQuery.length >= 20) return fromQuery;
+
+            var href = String(window.location.href || '');
+            var path = String(window.location.pathname || '');
+            var patterns = [
                 path.match(/\/invite\/([A-Fa-f0-9]{20,})\/?$/),
                 href.match(/\/invite\/([A-Fa-f0-9]{20,})/),
                 path.match(/\/invite\/([^/?#]{20,})\/?$/)
             ];
-            for (const m of patterns) {
+            for (var i = 0; i < patterns.length; i++) {
+                var m = patterns[i];
                 if (m && m[1]) return decodeURIComponent(m[1]).trim();
             }
             return '';
@@ -89,7 +94,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', async function () {
-        const token = parseInviteTokenFromPath();
+        const token = parseInviteToken();
         if (!token || token.length < 20 || /\s/.test(token)) {
             showError('This invite link is invalid or expired. Ask your team admin to send a new invite.');
             return;
