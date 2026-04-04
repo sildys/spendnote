@@ -749,6 +749,49 @@ function isValidAvatarSource(value) {
     return /^data:image\//i.test(src) || /^https?:\/\//i.test(src);
 }
 
+function spendNoteEscapeHtmlText(s) {
+    return String(s ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+function spendNoteEscapeHtmlAttr(s) {
+    return String(s ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;');
+}
+
+/** Team / settings lists: show member photo + crop/zoom from avatar_settings when available. */
+window.SpendNoteMemberAvatar = {
+    render(options = {}) {
+        const displayName = String(options.displayName || '').trim() || '—';
+        const initialsArg = String(options.initials || '').trim();
+        const ini = initialsArg || getInitials(displayName);
+        const fallbackBg = String(options.fallbackBg || '#6366f1').trim();
+        const circleBg = (() => {
+            const c = String(options.avatarColor || '').trim();
+            if (/^#?[0-9a-f]{6}$/i.test(c)) {
+                return c.startsWith('#') ? c : `#${c}`;
+            }
+            return fallbackBg;
+        })();
+        const avatarUrl = String(options.avatarUrl || '').trim();
+        const settings = options.avatarSettings;
+        const slotSizeOpt = Number(options.slotSize);
+        const slot = Number.isFinite(slotSizeOpt) && slotSizeOpt > 0 ? slotSizeOpt : 36;
+        const rootClass = String(options.rootClass || 'member-avatar').trim() || 'member-avatar';
+        const photoClass = rootClass === 'team-avatar' ? 'team-avatar--photo' : 'member-avatar--photo';
+
+        if (avatarUrl && isValidAvatarSource(avatarUrl)) {
+            const transform = buildMainAvatarTransform(settings, slot);
+            return `<div class="${rootClass} ${photoClass}" style="background:${spendNoteEscapeHtmlAttr(circleBg)}" role="img" aria-label="${spendNoteEscapeHtmlAttr(displayName)}"><img src="${spendNoteEscapeHtmlAttr(avatarUrl)}" alt="" draggable="false" style="width:100%;height:100%;object-fit:cover;border-radius:50%;transform-origin:50% 50%;transform:${spendNoteEscapeHtmlAttr(transform)}"/></div>`;
+        }
+        return `<div class="${rootClass}" style="background:${spendNoteEscapeHtmlAttr(circleBg)}">${spendNoteEscapeHtmlText(ini)}</div>`;
+    }
+};
+
 async function updateUserNav() {
     const nameEls = document.querySelectorAll('.user-name');
     const navAvatarImg = document.querySelector('#userAvatarBtn .user-avatar img');

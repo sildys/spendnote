@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=23">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=21">
-    <link rel="stylesheet" href="assets/css/user-settings.css?v=20260301-2230">
+    <link rel="stylesheet" href="assets/css/user-settings.css?v=20260415-member-avatars">
 </head>
 <body>
 <div id="nav-container"></div>
@@ -173,7 +173,7 @@
                         <div class="form-group span-2" id="deleteAccountInvitedAckWrap" style="display:none;margin-bottom:4px;">
                             <label class="delete-account-ack-label" style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:14px;line-height:1.5;color:var(--text-primary, #0f172a);">
                                 <input type="checkbox" id="deleteAccountInvitedAck" style="margin-top:4px;flex-shrink:0;width:16px;height:16px;">
-                                <span>I have asked my workspace owner or admin to remove my Cash Box access (Team settings). I will only delete my account after that access is gone.</span>
+                                <span>I have asked my team owner or admin to remove my Cash Box access (Team settings). I will only delete my account after that access is gone.</span>
                             </label>
                         </div>
                         <div class="form-grid">
@@ -198,7 +198,7 @@
                             <div class="settings-card-title">Receipt Identity</div>
                             <div class="settings-card-subtitle">Information displayed on your receipts</div>
                             <div class="settings-card-subtitle" id="receiptIdentityReadOnlyNote" style="display:none;color:var(--text-muted);margin-top:4px;">Read-only for User role.</div>
-                            <div class="settings-card-subtitle" id="receiptIdentityAdminNote" style="display:none;color:var(--text-muted);margin-top:4px;">As Admin, edits here update the workspace receipt identity for everyone, including the Owner.</div>
+                            <div class="settings-card-subtitle" id="receiptIdentityAdminNote" style="display:none;color:var(--text-muted);margin-top:4px;">As Admin, edits here update the team receipt identity for everyone, including the Owner.</div>
                         </div>
                     </div>
                     <div class="logo-compact">
@@ -300,14 +300,14 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js?v=20260413-rpc-owner-identity"></script>
+<script src="assets/js/supabase-config.js?v=20260415-team-member-avatars"></script>
 <script src="assets/js/auth-guard.js?v=20260223-1949"></script>
 <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
 <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
 <script>loadNav();</script>
-<script src="assets/js/main.js?v=45"></script>
+<script src="assets/js/main.js?v=20260415-member-avatars"></script>
 <script src="assets/js/logo-editor.js?v=20260327-1850"></script>
-<script src="assets/js/user-settings.js?v=20260414-receipt-user-readonly-ui"></script>
+<script src="assets/js/user-settings.js?v=20260415-member-avatars"></script>
 <script>if (typeof showPageTip === 'function') showPageTip('user-settings', 'Set your <strong>display name and logo</strong> — these appear on every receipt you print.');</script>
 </body>
 </html>

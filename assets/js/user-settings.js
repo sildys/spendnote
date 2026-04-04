@@ -30,7 +30,7 @@ const forceReceiptLogoBaselineUi = () => {
 };
 
 const RECEIPT_IDENTITY_READONLY_USER_MESSAGE =
-    'Receipt identity on printed receipts comes from your workspace owner’s account. You can view it here only—ask the owner or an admin if it needs to change.';
+    'Receipt identity on printed receipts comes from your team owner’s account. You can view it here only—ask the team owner or an admin if it needs to change.';
 
 let _lastReceiptReadonlyExplanationAt = 0;
 const showReceiptReadonlyExplanationForUserRole = () => {
@@ -221,7 +221,7 @@ const receiptDisplayNameFromSource = (r) => {
 };
 
 /**
- * Load workspace owner's receipt columns for Settings UI (org user + admin).
+ * Load team owner's receipt columns for Settings UI (org user + admin).
  * Uses org selection state so Receipt Identity reflects what receipts use even if profiles.getCurrent merge is stale.
  */
 const fetchWorkspaceOwnerReceiptIdentityProfile = async () => {
@@ -564,7 +564,7 @@ const computeAndApplyRole = async () => {
 
             const readOnlyNote = document.getElementById('receiptIdentityReadOnlyNote');
             if (readOnlyNote) {
-                readOnlyNote.textContent = 'Receipt identity on printed receipts comes from your workspace owner’s account (read-only here).';
+                readOnlyNote.textContent = 'Receipt identity on printed receipts comes from your team owner’s account (read-only here).';
                 readOnlyNote.style.display = isUserRole ? 'block' : 'none';
             }
 
@@ -641,7 +641,7 @@ const computeAndApplyRole = async () => {
                 } else if (currentRole === 'user') {
                     dangerWarningText.innerHTML = `<strong>Invited member — delete your own account only</strong>
                         <ul>
-                            <li>First, ask your workspace <strong>owner</strong> or <strong>admin</strong> to remove your Cash Box access (Team → manage access for your member).</li>
+                            <li>First, ask your team <strong>owner</strong> or <strong>admin</strong> to remove your Cash Box access (Team → manage access for your member).</li>
                             <li>After you no longer have access to any shared Cash Boxes, you can delete your SpendNote login and profile data below.</li>
                             <li>The team’s Cash Boxes, transactions, and receipts stay with the organization.</li>
                         </ul>`;
@@ -750,11 +750,24 @@ const renderTeamTable = () => {
             `;
         })();
 
+        const mem = m.member;
+        const avatarHtml = (typeof window.SpendNoteMemberAvatar?.render === 'function')
+            ? window.SpendNoteMemberAvatar.render({
+                displayName: name,
+                initials: getInitials(name),
+                avatarUrl: mem?.avatar_url,
+                avatarSettings: mem?.avatar_settings,
+                avatarColor: mem?.avatar_color,
+                fallbackBg: color,
+                slotSize: 36
+            })
+            : `<div class="member-avatar" style="background:${color}">${getInitials(name)}</div>`;
+
         return `
             <tr data-member-id="${m.id || ''}">
                 <td>
                     <div class="member-cell">
-                        <div class="member-avatar" style="background:${color}">${getInitials(name)}</div>
+                        ${avatarHtml}
                         <div>
                             <div class="member-name">${escapeHtml(name)}</div>
                             <div class="member-email">${escapeHtml(email)}</div>
@@ -1300,7 +1313,7 @@ const initUserSettingsPage = async () => {
         if (currentRole === 'user') {
             const ack = document.getElementById('deleteAccountInvitedAck');
             if (!ack || !ack.checked) {
-                showAlert('Please confirm that you have asked your workspace owner or admin to remove your Cash Box access, and wait until that is done before deleting your account.', { iconType: 'info' });
+                showAlert('Please confirm that you have asked your team owner or admin to remove your Cash Box access, and wait until that is done before deleting your account.', { iconType: 'info' });
                 return;
             }
         }

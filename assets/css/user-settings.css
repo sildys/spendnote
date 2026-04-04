@@ -527,6 +527,15 @@ body {
     flex-shrink: 0;
 }
 
+.member-avatar.member-avatar--photo {
+    padding: 0;
+    overflow: hidden;
+}
+
+.member-avatar.member-avatar--photo img {
+    display: block;
+}
+
 .member-name {
     font-weight: 600;
     color: var(--text);

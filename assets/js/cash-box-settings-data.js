@@ -211,8 +211,23 @@ async function renderCashBoxTeamMembersAccess() {
                 : (hasAccess ? 'Has access' : 'No access');
             const accessColor = hasAccess ? '#10b981' : '#6b7280';
 
+            const mem = m?.member;
+            const palette = teamMemberColor(idx);
+            const avatarCell = (typeof window.SpendNoteMemberAvatar?.render === 'function')
+                ? window.SpendNoteMemberAvatar.render({
+                    displayName: name,
+                    initials: initials(name),
+                    avatarUrl: mem?.avatar_url,
+                    avatarSettings: mem?.avatar_settings,
+                    avatarColor: mem?.avatar_color,
+                    fallbackBg: palette,
+                    slotSize: 36,
+                    rootClass: 'team-avatar'
+                })
+                : `<div class="team-avatar" style="background:${palette};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;">${esc(initials(name))}</div>`;
+
             return `<div class="team-member-row">
-                <div class="team-avatar" style="background:${teamMemberColor(idx)};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;">${esc(initials(name))}</div>
+                ${avatarCell}
                 <div class="team-member-info" style="min-width:0;flex:1;">
                     <div class="team-member-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(name)}</div>
                     <div class="team-member-role" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
@@ -489,7 +504,7 @@ async function initCashBoxSettings() {
             try {
                 const r = String(await window.db?.orgMemberships?.getMyRole?.() || '').trim().toLowerCase();
                 if (r === 'user') {
-                    await showAlert('Only workspace owners and admins can change Cash Box settings.', { iconType: 'info' });
+                    await showAlert('Only team owners and admins can change Cash Box settings.', { iconType: 'info' });
                     window.location.replace(`spendnote-cash-box-detail.html?cashBoxId=${encodeURIComponent(currentCashBoxId)}`);
                     return;
                 }
@@ -507,7 +522,7 @@ async function initCashBoxSettings() {
             try {
                 const r = String(await window.db?.orgMemberships?.getMyRole?.() || '').trim().toLowerCase();
                 if (r === 'user') {
-                    await showAlert('Only workspace owners and admins can create Cash Boxes. Ask your team admin if you need a new one.', { iconType: 'info' });
+                    await showAlert('Only team owners and admins can create Cash Boxes. Ask your team admin if you need a new one.', { iconType: 'info' });
                     window.location.replace('dashboard.html');
                     return;
                 }

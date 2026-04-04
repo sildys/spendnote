@@ -1184,7 +1184,7 @@ const TX_INSERT_SOFT_COLUMNS = Object.freeze([
 ]);
 
 try {
-    /** Company / FROM line on receipts — never use invited member full_name when org workspace overlay is active. */
+    /** Company / FROM line on receipts — never use invited member full_name when org team overlay is active. */
     window.spendnoteReceiptProfileDisplayName = function spendnoteReceiptProfileDisplayName(profile) {
         const p = profile && typeof profile === 'object' ? profile : {};
         const cn = String(p.company_name || '').trim();
@@ -2102,7 +2102,7 @@ async function getMyOrgContext() {
 }
 
 /**
- * Receipt pages must show workspace owner identity for org members even when getMyOrgContext()
+ * Receipt pages must show team owner identity for org members even when getMyOrgContext()
  * is stale, empty, or mismatched (e.g. iframe / new tab). Uses tx.org_id → org.owner_user_id,
  * else cash_boxes.user_id on the loaded tx, then loads that profile (RLS: same-org read).
  */
@@ -2190,7 +2190,7 @@ try {
 } catch (_) {}
 
 /**
- * In org workspace: list contacts tagged for the org OR legacy rows owned by the org owner with null org_id.
+ * In org team: list contacts tagged for the org OR legacy rows owned by the org owner with null org_id.
  * (Invited members need the owner's contact list, not only rows with org_id set.)
  */
 function __spendnoteApplyContactsWorkspaceScope(query, ctx) {
@@ -3549,7 +3549,7 @@ var db = {
 
                 const row = Array.isArray(data) ? (data[0] || null) : null;
 
-                // Org user + admin: same workspace receipt identity as the org owner (owner keeps own row).
+                // Org user + admin: same team receipt identity as the org owner (owner keeps own row).
                 try {
                     const ctx = await getMyOrgContext();
                     const role = String(ctx?.role || '').trim().toLowerCase();
@@ -3636,7 +3636,7 @@ var db = {
                     });
                     if (rpcErr) {
                         console.error('Error patching org owner receipt profile:', rpcErr);
-                        return { success: false, error: rpcErr.message || 'Failed to update workspace receipt identity.' };
+                        return { success: false, error: rpcErr.message || 'Failed to update team receipt identity.' };
                     }
                 }
 
@@ -3782,7 +3782,7 @@ var db = {
             if (userIds.length) {
                 const profRes = await supabaseClient
                     .from('profiles')
-                    .select('id,full_name,email')
+                    .select('id,full_name,email,avatar_url,avatar_settings,avatar_color')
                     .in('id', userIds);
                 if (!profRes.error) {
                     profilesById = new Map((profRes.data || []).map((p) => [p.id, p]));

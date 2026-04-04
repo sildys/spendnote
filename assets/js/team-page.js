@@ -188,10 +188,23 @@ const renderTeamTable = () => {
             </div>`;
         })();
 
+        const mem = m.member;
+        const avatarHtml = (typeof window.SpendNoteMemberAvatar?.render === 'function')
+            ? window.SpendNoteMemberAvatar.render({
+                displayName: name,
+                initials: getInitials(name),
+                avatarUrl: mem?.avatar_url,
+                avatarSettings: mem?.avatar_settings,
+                avatarColor: mem?.avatar_color,
+                fallbackBg: color,
+                slotSize: 28
+            })
+            : `<div class="member-avatar" style="background:${color}">${getInitials(name)}</div>`;
+
         return `<tr data-member-id="${m.id || ''}">
             <td>
                 <div class="member-cell">
-                    <div class="member-avatar" style="background:${color}">${getInitials(name)}</div>
+                    ${avatarHtml}
                     <div>
                         <div class="member-name">${escapeHtml(name)}</div>
                         <div class="member-email">${escapeHtml(email)}</div>
