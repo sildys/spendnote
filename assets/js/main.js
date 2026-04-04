@@ -1060,12 +1060,12 @@ window.SpendNoteUpgrade = {
             <button type="button" id="sn-upgrade-overlay-close" style="position:absolute;top:14px;right:14px;appearance:none;border:none;background:none;color:#94a3b8;cursor:pointer;padding:4px;line-height:1;" aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#e0e7ff);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">${title}</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">${body}</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               View plans
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
@@ -1103,7 +1103,7 @@ window.SpendNoteUpgrade = {
             <div style="font-size:14px;color:#475569;margin-bottom:16px;line-height:1.55;">Right now, only you can record transactions.</div>
             <div style="font-size:14px;color:#475569;margin-bottom:10px;line-height:1.6;">Once cash leaves your hands, you lose visibility.</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Invite your team and track every handoff &mdash; who took it, when, and why.</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;box-shadow:0 4px 14px rgba(79,70,229,0.35);">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;box-shadow:0 4px 16px rgba(79,70,229,0.3);">
               Upgrade to Pro &rarr;
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
@@ -1157,12 +1157,12 @@ window.SpendNoteUpgrade = {
             <button type="button" id="sn-upgrade-overlay-close" style="position:absolute;top:14px;right:14px;appearance:none;border:none;background:none;color:#94a3b8;cursor:pointer;padding:4px;line-height:1;" aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#e0e7ff);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">${title}</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">${body}</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               ${cta}
             </a>
             <div style="font-size:12px;color:#94a3b8;margin-top:12px;line-height:1.4;">${small}</div>
@@ -1190,12 +1190,12 @@ window.SpendNoteUpgrade = {
             <button type="button" id="sn-upgrade-overlay-close" style="position:absolute;top:14px;right:14px;appearance:none;border:none;background:none;color:#94a3b8;cursor:pointer;padding:4px;line-height:1;" aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#e0e7ff);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">Make your receipts look professional</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Add your logo to every receipt and look more professional.<br>Without it, your receipts stay generic.</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               Add your logo
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
@@ -1225,12 +1225,12 @@ window.SpendNoteUpgrade = {
             <button type="button" id="sn-upgrade-overlay-close" style="position:absolute;top:14px;right:14px;appearance:none;border:none;background:none;color:#94a3b8;cursor:pointer;padding:4px;line-height:1;" aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#e0e7ff);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">Use different logos for each cash box</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Assign a separate logo to each cash box.<br>Without it, all receipts use the same logo.</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               Set logos per cash box
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
@@ -1260,12 +1260,12 @@ window.SpendNoteUpgrade = {
             <button type="button" id="sn-upgrade-overlay-close" style="position:absolute;top:14px;right:14px;appearance:none;border:none;background:none;color:#94a3b8;cursor:pointer;padding:4px;line-height:1;" aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#e0e7ff);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">Export your data to Excel</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Download your transactions as a CSV file for reporting or accounting.<br>Without it, your data stays locked in the app.</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               Export to Excel
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
@@ -1295,12 +1295,12 @@ window.SpendNoteUpgrade = {
             <button type="button" id="sn-upgrade-overlay-close" style="position:absolute;top:14px;right:14px;appearance:none;border:none;background:none;color:#94a3b8;cursor:pointer;padding:4px;line-height:1;" aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#e0e7ff);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">Download your receipts as PDF</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Download receipts as PDF to save or send later.<br>Without it, you can only print.</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               Download as PDF
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
@@ -1330,12 +1330,12 @@ window.SpendNoteUpgrade = {
             <button type="button" id="sn-upgrade-overlay-close" style="position:absolute;top:14px;right:14px;appearance:none;border:none;background:none;color:#94a3b8;cursor:pointer;padding:4px;line-height:1;" aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#e0e7ff);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">Customize your receipts</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Rename fields and labels to match your workflow.<br>Without it, your receipts stay fixed.</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               Customize receipts
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
@@ -1365,12 +1365,12 @@ window.SpendNoteUpgrade = {
             <button type="button" id="sn-upgrade-overlay-close" style="position:absolute;top:14px;right:14px;appearance:none;border:none;background:none;color:#94a3b8;cursor:pointer;padding:4px;line-height:1;" aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#e0e7ff);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">Send receipts instantly</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Email receipts directly from the app.<br>No downloads, no attachments.</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               Send via email
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
@@ -1405,7 +1405,7 @@ window.SpendNoteUpgrade = {
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">Your free trial has ended</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Upgrade to keep adding transactions.</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               Upgrade now
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
@@ -1440,7 +1440,7 @@ window.SpendNoteUpgrade = {
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">You can't add more transactions</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Your Free plan limit is reached.<br>Upgrade to continue adding transactions.</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               Continue tracking
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
@@ -1470,12 +1470,12 @@ window.SpendNoteUpgrade = {
             <button type="button" id="sn-upgrade-overlay-close" style="position:absolute;top:14px;right:14px;appearance:none;border:none;background:none;color:#94a3b8;cursor:pointer;padding:4px;line-height:1;" aria-label="Close">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#e0e7ff);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div style="font-size:19px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.3;">Share access to your cash</div>
             <div style="font-size:14px;color:#475569;margin-bottom:24px;line-height:1.6;">Let your team manage cash together.<br>Without it, everything depends on one person.</div>
-            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#059669;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+            <a href="${planUrl}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#4f46e5;color:#fff;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
               Unlock team access
             </a>
             <button type="button" id="sn-upgrade-overlay-secondary" style="appearance:none;border:none;background:none;color:#cbd5e1;font-size:12px;font-weight:400;cursor:pointer;margin-top:14px;padding:4px;">Not now</button>
