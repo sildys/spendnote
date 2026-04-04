@@ -3,6 +3,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/invite/:token",
+      "destination": "/invite.html"
+    },
+    {
       "source": "/favicon.ico",
       "destination": "/favicon.svg"
     }
