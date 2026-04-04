@@ -873,7 +873,7 @@ function togglePreviewDetails() {
     <a href="/" class="fab-home" title="Back to homepage"><i class="fas fa-home"></i></a>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260403-2350"></script>
+    <script src="assets/js/supabase-config.js?v=20260404-0150"></script>
     <script>
         const ensureProfile = async () => {
             try {
@@ -938,7 +938,7 @@ function togglePreviewDetails() {
         const resendBtn = document.getElementById('resendBtn');
 
         let lastAttemptEmail = '';
-        const DEFAULT_POST_LOGIN_PATH = '/app';
+        const DEFAULT_POST_LOGIN_PATH = 'dashboard.html';
 
         const getSafeReturnTo = () => {
             try {
@@ -1069,95 +1069,39 @@ function togglePreviewDetails() {
                         }
                     } catch (_) {}
 
-                    // Detect new OAuth user via multiple signals (flag + recent profile/auth creation)
+                    // Detect new user: check isNewUser flag OR check if profile exists in DB
+                    // (covers re-created accounts where auth.created_at is old)
                     try {
                         const uid = String(user.id || '').trim();
                         if (uid) {
-                            const newUserFlagKey = 'spendnote.isNewUser.' + uid;
-                            const welcomeSentKey = 'spendnote.welcome.sent.v2.' + uid;
-                            const isNewByFlag = sessionStorage.getItem(newUserFlagKey) === '1';
-                            let welcomeAlreadySent = false;
-                            try { welcomeAlreadySent = localStorage.getItem(welcomeSentKey) === '1'; } catch (_) {}
-
-                            let isNewByProfileRecency = false;
-                            try {
-                                const { data: prof, error: profErr } = await window.supabaseClient
-                                    .from('profiles')
-                                    .select('id,created_at')
-                                    .eq('id', uid)
-                                    .maybeSingle();
-                                if (!profErr && prof?.id) {
-                                    const profileCreatedMs = Date.parse(String(prof.created_at || ''));
-                                    isNewByProfileRecency = Number.isFinite(profileCreatedMs) && (Date.now() - profileCreatedMs) < (20 * 60 * 1000);
-                                }
-                            } catch (_) {}
-
-                            const authCreatedMs = Date.parse(String(user.created_at || ''));
-                            const isNewByAuthRecency = Number.isFinite(authCreatedMs) && (Date.now() - authCreatedMs) < (20 * 60 * 1000);
-                            const isNew = isNewByFlag || (!welcomeAlreadySent && (isNewByProfileRecency || isNewByAuthRecency));
-                            console.log('[SN-LOGIN] new user detection:', { uid, isNewByFlag, isNewByProfileRecency, isNewByAuthRecency, welcomeAlreadySent, isNew });
-                            if (isNew) {
-                                const welcomePendingKey = 'spendnote.welcome.pending.' + uid;
-                                try { sessionStorage.setItem(welcomePendingKey, '1'); } catch (_) {}
-                                try { sessionStorage.removeItem(newUserFlagKey); } catch (_) {}
-                                if (typeof gtag === 'function') gtag('event', 'signup_completed');
+                            const isNewByFlag = sessionStorage.getItem('spendnote.isNewUser.' + uid) === '1';
+                            const welcomeAlreadySent = localStorage.getItem('spendnote.welcome.sent.v2.' + uid) === '1';
+                            let isNew = isNewByFlag;
+                            if (!isNew && !welcomeAlreadySent) {
                                 try {
-                                    const { data: emailData, error: emailError } = await window.supabaseClient.functions.invoke(
-                                        'send-user-event-email',
-                                        { body: { eventType: 'welcome_account_created' } }
-                                    );
-                                    let sentOk = false;
-                                    if (emailError) {
-                                        console.error('[SN-LOGIN] Welcome email invoke error:', emailError);
-                                    } else if (emailData?.success !== true) {
-                                        console.error('[SN-LOGIN] Welcome email backend non-success:', emailData);
+                                    const { data: prof, error: profErr } = await window.supabaseClient
+                                        .from('profiles')
+                                        .select('id,created_at')
+                                        .eq('id', uid)
+                                        .maybeSingle();
+                                    if (!profErr && prof?.id) {
+                                        // Profile exists — check if it was just created (< 2 min)
+                                        const profCreatedMs = Date.parse(String(prof.created_at || ''));
+                                        isNew = Number.isFinite(profCreatedMs) && (Date.now() - profCreatedMs) < (2 * 60 * 1000);
                                     } else {
-                                        sentOk = true;
-                                        try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
-                                        console.log('[SN-LOGIN] Welcome email sent:', emailData);
+                                        // No profile at all → definitely new (ensureProfile may not have run yet)
+                                        isNew = true;
                                     }
-                                    if (emailError || emailData?.success !== true) {
-                                        try {
-                                            const { data: sessWrap } = await window.supabaseClient.auth.getSession();
-                                            const token = String(sessWrap?.session?.access_token || '').trim();
-                                            if (token) {
-                                                const fallbackResp = await fetch('https://zrnnharudlgxuvewqryj.supabase.co/functions/v1/send-user-event-email', {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/json',
-                                                        'Authorization': 'Bearer ' + token,
-                                                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpybm5oYXJ1ZGxneHV2ZXdxcnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyOTkxMDgsImV4cCI6MjA4Mjg3NTEwOH0.kQLRMVrl_uYYzZwX387uFs_BAXc9c5v7EhcvGhPR7v4'
-                                                    },
-                                                    body: JSON.stringify({ eventType: 'welcome_account_created' })
-                                                });
-                                                const fallbackBody = await fallbackResp.text();
-                                                console.log('[SN-LOGIN] Welcome email fallback response:', fallbackResp.status, fallbackBody);
-                                                if (fallbackResp.ok) {
-                                                    sentOk = true;
-                                                    try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
-                                                }
-                                            }
-                                        } catch (fallbackErr) {
-                                            console.error('[SN-LOGIN] Welcome email fallback exception:', fallbackErr);
-                                        }
-                                    }
-                                    if (!sentOk) {
-                                        try { localStorage.removeItem(welcomeSentKey); } catch (_) {}
-                                    } else {
-                                        try { sessionStorage.removeItem(welcomePendingKey); } catch (_) {}
-                                    }
-                                } catch (emailErr) {
-                                    console.error('[SN-LOGIN] Welcome email send exception:', emailErr);
-                                    try { localStorage.removeItem(welcomeSentKey); } catch (_) {}
-                                }
-                                try { sessionStorage.removeItem('spendnote.ensureDone.' + uid); } catch (_) {}
+                                } catch (_) {}
+                            }
+                            if (isNew) {
+                                try { sessionStorage.removeItem('spendnote.isNewUser.' + uid); } catch (_) {}
+                                if (typeof gtag === 'function') gtag('event', 'signup_completed');
                                 window.location.href = 'spendnote-welcome.html';
                                 return;
                             }
                         }
-                    } catch (detectErr) {
-                        console.error('[SN-LOGIN] New user detection error:', detectErr);
-                    }
+                    } catch (_) {}
 
                     await redirectAfterLogin();
                 }

@@ -682,20 +682,6 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
         if (!userId) return;
         const createdAtMs = Date.parse(String(user.created_at || ''));
         const isFreshAuthUser = Number.isFinite(createdAtMs) && (Date.now() - createdAtMs) < (20 * 60 * 1000);
-        const welcomeSentKey = `spendnote.welcome.sent.v2.${userId}`;
-        const sendWelcome = async () => {
-            try {
-                if (localStorage.getItem(welcomeSentKey) === '1') return;
-            } catch (_) {}
-            try {
-                const emailResult = await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
-                if (emailResult?.success === true) {
-                    try { localStorage.setItem(welcomeSentKey, '1'); } catch (_) {}
-                } else if (window.SpendNoteDebug) {
-                    console.warn('[welcome-email] send failed in ensureProfile:', emailResult?.error || emailResult);
-                }
-            } catch (_) {}
-        };
         try {
             if (typeof isUuid === 'function' && !isUuid(userId)) {
                 return;
@@ -711,7 +697,6 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
             if (!selErr && existing?.id) {
                 if (isFreshAuthUser) {
                     try { sessionStorage.setItem('spendnote.isNewUser.' + userId, '1'); } catch (_) {}
-                    await sendWelcome();
                 }
                 return;
             }
@@ -733,7 +718,6 @@ const __spendnoteEnsureProfileForCurrentUser = async () => {
                 }]);
             if (insertError) return;
             try { sessionStorage.setItem('spendnote.isNewUser.' + userId, '1'); } catch (_) {}
-            await sendWelcome();
         } catch (_) {}
     } catch (_) {}
 };
@@ -1475,23 +1459,6 @@ var auth = {
             auth.__userCache.user = null;
             auth.__userCache.ts = 0;
             auth.__userCache.promise = null;
-        }
-        if (data?.session?.access_token) {
-            try {
-                const emailResult = await __spendnoteSendUserEventEmail({ eventType: 'welcome_account_created' });
-                if (emailResult?.success === true) {
-                    try {
-                        const userId = String(data?.user?.id || '').trim();
-                        if (userId) localStorage.setItem(`spendnote.welcome.sent.v2.${userId}`, '1');
-                    } catch (_) {
-                        // ignore localStorage side-effect errors
-                    }
-                } else if (window.SpendNoteDebug) {
-                    console.warn('[welcome-email] send failed in signUp:', emailResult?.error || emailResult);
-                }
-            } catch (_) {
-                // ignore email side-effect errors
-            }
         }
         return { success: true, user: data.user, session: data.session || null, needsEmailConfirmation: !data.session };
     },
