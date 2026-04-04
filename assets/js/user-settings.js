@@ -190,10 +190,76 @@ const scheduleAvatarPersistence = (options = {}) => {
 
 // State
 let currentProfile = null;
+/** Source object for Receipt Identity fields (owner row for org user/admin; else same as profile). */
+let currentReceiptIdentityProfile = null;
 let teamMembers = [];
 let cashBoxes = [];
 let selectedMemberForAccess = null;
 let currentRole = 'owner';
+
+const receiptDisplayNameFromSource = (r) => {
+    const row = r && typeof r === 'object' ? r : null;
+    if (!row) return '';
+    const cn = String(row.company_name || '').trim();
+    if (Object.prototype.hasOwnProperty.call(row, 'spendnote_receipt_sender_fallback')) {
+        const fb = String(row.spendnote_receipt_sender_fallback || '').trim();
+        return cn || fb || '';
+    }
+    return cn || String(row.full_name || '').trim() || '';
+};
+
+/**
+ * Load workspace owner's receipt columns for Settings UI (org user + admin).
+ * Uses org selection state so Receipt Identity reflects what receipts use even if profiles.getCurrent merge is stale.
+ */
+const fetchWorkspaceOwnerReceiptIdentityProfile = async () => {
+    try {
+        const user = await window.auth?.getCurrentUser?.();
+        const uid = String(user?.id || '').trim();
+        if (!uid || !window.supabaseClient) return null;
+
+        const state = await window.SpendNoteOrgContext?.getSelectionState?.();
+        let orgId = String(state?.orgId || '').trim();
+        let role = String(state?.role || '').trim().toLowerCase();
+        if (!orgId && Array.isArray(state?.memberships) && state.memberships.length === 1) {
+            const m0 = state.memberships[0];
+            orgId = String(m0?.org_id || '').trim();
+            role = String(m0?.role || role).trim().toLowerCase();
+        }
+        if (role !== 'user' && role !== 'admin') return null;
+        if (!orgId) return null;
+
+        const { data: orgRow, error: oErr } = await window.supabaseClient
+            .from('orgs')
+            .select('owner_user_id')
+            .eq('id', orgId)
+            .maybeSingle();
+        if (oErr) return null;
+
+        const ownerId = String(orgRow?.owner_user_id || '').trim();
+        if (!ownerId) return null;
+
+        const { data: rows, error: pErr } = await window.supabaseClient
+            .from('profiles')
+            .select('company_name, phone, address, account_logo_url, logo_settings, full_name')
+            .eq('id', ownerId)
+            .limit(1);
+        const o = Array.isArray(rows) ? rows[0] : null;
+        if (pErr || !o) return null;
+
+        const ownerFull = String(o.full_name || '').trim();
+        return {
+            company_name: o.company_name,
+            phone: o.phone,
+            address: o.address,
+            account_logo_url: o.account_logo_url,
+            logo_settings: o.logo_settings,
+            spendnote_receipt_sender_fallback: ownerFull || null
+        };
+    } catch (_) {
+        return null;
+    }
+};
 
 // Member colors
 const memberColors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#6366f1'];
@@ -383,8 +449,13 @@ const syncAvatarFromProfile = (profile) => {
 
 // Logo functions moved to logo-editor.js
 
-const fillProfile = (p) => {
+const fillProfile = (p, receiptIdentityOverride) => {
     currentProfile = p ? { ...p } : null;
+    const r = (receiptIdentityOverride !== undefined && receiptIdentityOverride != null)
+        ? receiptIdentityOverride
+        : p;
+    currentReceiptIdentityProfile = (r && typeof r === 'object') ? { ...r } : null;
+
     if (profileObjectHasAvatarColumns(p)) {
         avatarProfileColumnsSupported = true;
     }
@@ -401,10 +472,9 @@ const fillProfile = (p) => {
 
     applyRoleBadge(currentRole);
 
-    if (elDisplayName) elDisplayName.value = String(p?.company_name || '');
-    // Reuse profiles.phone as Receipt Identity "Other ID"
-    if (elOtherId) elOtherId.value = String(p?.phone || '');
-    if (elAddress) elAddress.value = String(p?.address || '');
+    if (elDisplayName) elDisplayName.value = receiptDisplayNameFromSource(r);
+    if (elOtherId) elOtherId.value = String(r?.phone || '');
+    if (elAddress) elAddress.value = String(r?.address || '');
 
     syncAvatarFromProfile(p);
     applyAvatar(fullName);
@@ -444,11 +514,18 @@ const loadProfile = async () => {
     } catch (_) {
     }
 
-    fillProfile(mergedProfile);
+    let receiptIdentity = null;
+    try {
+        receiptIdentity = await fetchWorkspaceOwnerReceiptIdentityProfile();
+    } catch (_) {
+        receiptIdentity = null;
+    }
+    const logoSource = receiptIdentity != null ? receiptIdentity : mergedProfile;
+    fillProfile(mergedProfile, receiptIdentity != null ? receiptIdentity : undefined);
     await refreshBillingSummary(mergedProfile);
     // Sync DB logo to localStorage so it works on all devices
     if (window.LogoEditor?.loadFromProfile) {
-        window.LogoEditor.loadFromProfile(mergedProfile);
+        window.LogoEditor.loadFromProfile(logoSource);
     }
     if (window.LogoEditor?.resetToBaselineView) {
         window.LogoEditor.resetToBaselineView();
@@ -1083,7 +1160,9 @@ const initUserSettingsPage = async () => {
     });
 
     // Profile form
-    document.getElementById('profileResetBtn')?.addEventListener('click', () => fillProfile(currentProfile));
+    document.getElementById('profileResetBtn')?.addEventListener('click', () => {
+        fillProfile(currentProfile, currentReceiptIdentityProfile != null ? currentReceiptIdentityProfile : undefined);
+    });
     document.getElementById('profileForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const fullName = document.getElementById('profileFullName')?.value?.trim();
@@ -1092,14 +1171,19 @@ const initUserSettingsPage = async () => {
         const result = await window.db.profiles.update({ full_name: fullName });
         if (!result?.success) { showAlert(result?.error || 'Failed to save.', { iconType: 'error' }); return; }
         writeUserFullName(fullName);
-        fillProfile(result.data);
+        fillProfile(
+            result.data,
+            currentReceiptIdentityProfile != null ? currentReceiptIdentityProfile : undefined
+        );
         showAlert('Profile saved.', { iconType: 'success' });
     });
 
     // Logo editor is handled by logo-editor.js
 
     // Receipt form
-    document.getElementById('receiptResetBtn')?.addEventListener('click', () => fillProfile(currentProfile));
+    document.getElementById('receiptResetBtn')?.addEventListener('click', () => {
+        fillProfile(currentProfile, currentReceiptIdentityProfile != null ? currentReceiptIdentityProfile : undefined);
+    });
     document.getElementById('receiptForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (currentRole === 'user') {
@@ -1128,9 +1212,16 @@ const initUserSettingsPage = async () => {
         };
         const result = await window.db.profiles.update(payload);
         if (!result?.success) { showAlert(result?.error || 'Failed to save.', { iconType: 'error' }); return; }
-        fillProfile(result.data);
+        let rid = null;
+        try {
+            rid = await fetchWorkspaceOwnerReceiptIdentityProfile();
+        } catch (_) {
+            rid = null;
+        }
+        const receiptSrc = rid != null ? rid : result.data;
+        fillProfile(result.data, rid != null ? rid : undefined);
         if (window.LogoEditor?.loadFromProfile) {
-            window.LogoEditor.loadFromProfile(result.data);
+            window.LogoEditor.loadFromProfile(receiptSrc);
         }
         if (window.LogoEditor?.resetToBaselineView) {
             window.LogoEditor.resetToBaselineView();
