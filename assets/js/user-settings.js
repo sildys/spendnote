@@ -491,9 +491,20 @@ const computeAndApplyRole = async () => {
                 readOnlyNote.style.display = isUserRole ? 'block' : 'none';
             }
 
-            const deleteAccountCard = document.getElementById('deleteAccountToggle')?.closest('.settings-card.danger-card');
-            if (deleteAccountCard) {
-                deleteAccountCard.style.display = isUserRole ? 'none' : '';
+            const invitedAckWrap = document.getElementById('deleteAccountInvitedAckWrap');
+            const invitedAck = document.getElementById('deleteAccountInvitedAck');
+            if (invitedAckWrap) {
+                invitedAckWrap.style.display = isUserRole ? '' : 'none';
+            }
+            if (invitedAck && !isUserRole) {
+                invitedAck.checked = false;
+            }
+
+            const delSub = document.getElementById('deleteAccountCardSubtitle');
+            if (delSub) {
+                delSub.textContent = isUserRole
+                    ? 'Remove your SpendNote account after your admin has removed your Cash Box access'
+                    : 'Permanently delete your account and all data';
             }
 
             const receiptDisplayName = document.getElementById('receiptDisplayName');
@@ -544,6 +555,13 @@ const computeAndApplyRole = async () => {
                             <li>All Cash Boxes, transactions, and receipts will be lost</li>
                             <li>All team members will lose access immediately</li>
                             <li>Your subscription will be cancelled</li>
+                        </ul>`;
+                } else if (currentRole === 'user') {
+                    dangerWarningText.innerHTML = `<strong>Invited member — delete your own account only</strong>
+                        <ul>
+                            <li>First, ask your workspace <strong>owner</strong> or <strong>admin</strong> to remove your Cash Box access (Team → manage access for your member).</li>
+                            <li>After you no longer have access to any shared Cash Boxes, you can delete your SpendNote login and profile data below.</li>
+                            <li>The team’s Cash Boxes, transactions, and receipts stay with the organization.</li>
                         </ul>`;
                 } else {
                     dangerWarningText.innerHTML = `<strong>Warning: This action cannot be undone</strong>
@@ -1117,7 +1135,7 @@ const initUserSettingsPage = async () => {
 
     // Delete Account collapsible toggle
     document.getElementById('deleteAccountToggle')?.addEventListener('click', () => {
-        document.querySelector('.collapsible-card')?.classList.toggle('open');
+        document.getElementById('deleteAccountToggle')?.closest('.collapsible-card')?.classList.toggle('open');
     });
 
     // Password form
@@ -1164,8 +1182,11 @@ const initUserSettingsPage = async () => {
     const deleteBtn = document.getElementById('deleteAccountBtn');
     deleteBtn?.addEventListener('click', async () => {
         if (currentRole === 'user') {
-            showAlert('Account deletion is not available for invited team members. Ask your workspace owner or admin.', { iconType: 'info' });
-            return;
+            const ack = document.getElementById('deleteAccountInvitedAck');
+            if (!ack || !ack.checked) {
+                showAlert('Please confirm that you have asked your workspace owner or admin to remove your Cash Box access, and wait until that is done before deleting your account.', { iconType: 'info' });
+                return;
+            }
         }
         const confirmInput = document.getElementById('deleteConfirmInput');
         if (String(confirmInput?.value || '').trim() !== 'DELETE') {

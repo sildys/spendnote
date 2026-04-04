@@ -153,7 +153,7 @@
                             <i class="fas fa-trash-alt" style="color:#dc2626;"></i>
                             <div>
                                 <div class="settings-card-title">Delete Account</div>
-                                <div class="settings-card-subtitle">Permanently delete your account and all data</div>
+                                <div class="settings-card-subtitle" id="deleteAccountCardSubtitle">Permanently delete your account and all data</div>
                             </div>
                         </div>
                         <i class="fas fa-chevron-down collapsible-icon"></i>
@@ -169,6 +169,12 @@
                                     <li>Your subscription will be cancelled immediately</li>
                                 </ul>
                             </div>
+                        </div>
+                        <div class="form-group span-2" id="deleteAccountInvitedAckWrap" style="display:none;margin-bottom:4px;">
+                            <label class="delete-account-ack-label" style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:14px;line-height:1.5;color:var(--text-primary, #0f172a);">
+                                <input type="checkbox" id="deleteAccountInvitedAck" style="margin-top:4px;flex-shrink:0;width:16px;height:16px;">
+                                <span>I have asked my workspace owner or admin to remove my Cash Box access (Team settings). I will only delete my account after that access is gone.</span>
+                            </label>
                         </div>
                         <div class="form-grid">
                             <div class="form-group span-2">
@@ -300,7 +306,7 @@
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=45"></script>
 <script src="assets/js/logo-editor.js?v=20260327-1850"></script>
-<script src="assets/js/user-settings.js?v=20260406-user-role-gates"></script>
+<script src="assets/js/user-settings.js?v=20260406-invited-delete-flow"></script>
 <script>if (typeof showPageTip === 'function') showPageTip('user-settings', 'Set your <strong>display name and logo</strong> — these appear on every receipt you print.');</script>
 </body>
 </html>
