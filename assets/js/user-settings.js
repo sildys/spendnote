@@ -492,6 +492,11 @@ const computeAndApplyRole = async () => {
                 readOnlyNote.style.display = isUserRole ? 'block' : 'none';
             }
 
+            const adminReceiptNote = document.getElementById('receiptIdentityAdminNote');
+            if (adminReceiptNote) {
+                adminReceiptNote.style.display = currentRole === 'admin' ? 'block' : 'none';
+            }
+
             const invitedAckWrap = document.getElementById('deleteAccountInvitedAckWrap');
             const invitedAck = document.getElementById('deleteAccountInvitedAck');
             if (invitedAckWrap) {

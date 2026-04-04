@@ -198,6 +198,7 @@
                             <div class="settings-card-title">Receipt Identity</div>
                             <div class="settings-card-subtitle">Information displayed on your receipts</div>
                             <div class="settings-card-subtitle" id="receiptIdentityReadOnlyNote" style="display:none;color:var(--text-muted);margin-top:4px;">Read-only for User role.</div>
+                            <div class="settings-card-subtitle" id="receiptIdentityAdminNote" style="display:none;color:var(--text-muted);margin-top:4px;">As Admin, edits here update the workspace receipt identity for everyone, including the Owner.</div>
                         </div>
                     </div>
                     <div class="logo-compact">
@@ -299,14 +300,14 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js?v=20260406-org-workspace"></script>
+<script src="assets/js/supabase-config.js?v=20260406-admin-receipt-rpc"></script>
 <script src="assets/js/auth-guard.js?v=20260223-1949"></script>
 <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
 <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=45"></script>
 <script src="assets/js/logo-editor.js?v=20260327-1850"></script>
-<script src="assets/js/user-settings.js?v=20260406-org-workspace-identity"></script>
+<script src="assets/js/user-settings.js?v=20260406-admin-receipt-rpc"></script>
 <script>if (typeof showPageTip === 'function') showPageTip('user-settings', 'Set your <strong>display name and logo</strong> — these appear on every receipt you print.');</script>
 </body>
 </html>

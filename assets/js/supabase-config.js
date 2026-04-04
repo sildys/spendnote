@@ -14,7 +14,7 @@ try {
 }
 
 if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260301-2141');
-window.__spendnoteSupabaseConfigBuild = '20260406-org-user-workspace-identity';
+window.__spendnoteSupabaseConfigBuild = '20260406-admin-shared-receipt-identity';
 
 const __spendnoteGetResponseRequestId = (resp) => {
     try {
@@ -3436,12 +3436,12 @@ var db = {
 
                 const row = Array.isArray(data) ? (data[0] || null) : null;
 
-                // Invited org members (role user): use workspace owner's receipt identity on receipts and in UI preview.
+                // Org user + admin: same workspace receipt identity as the org owner (owner keeps own row).
                 try {
                     const ctx = await getMyOrgContext();
                     const role = String(ctx?.role || '').trim().toLowerCase();
                     const ownerId = String(ctx?.ownerUserId || '').trim();
-                    if (role === 'user' && ownerId && ownerId !== userId) {
+                    if ((role === 'user' || role === 'admin') && ownerId && ownerId !== userId) {
                         const { data: ownerRows, error: ownerErr } = await supabaseClient
                             .from('profiles')
                             .select('company_name, phone, address, account_logo_url, logo_settings')
@@ -3476,9 +3476,65 @@ var db = {
             const user = await auth.getCurrentUser();
             if (!user) return { success: false, error: 'Not authenticated' };
 
+            const ctx = await getMyOrgContext();
+            const role = String(ctx?.role || '').trim().toLowerCase();
+            const orgId = String(ctx?.orgId || '').trim();
+            const ownerId = String(ctx?.ownerUserId || '').trim();
+
+            const RECEIPT_IDENTITY_KEYS = new Set([
+                'company_name',
+                'phone',
+                'address',
+                'account_logo_url',
+                'logo_settings'
+            ]);
+
+            const src = updates && typeof updates === 'object' ? { ...updates } : {};
+
+            if (role === 'admin' && orgId && ownerId && ownerId !== user.id) {
+                const patch = {};
+                const selfUpdates = {};
+                for (const [k, v] of Object.entries(src)) {
+                    if (RECEIPT_IDENTITY_KEYS.has(k)) {
+                        patch[k] = v;
+                    } else {
+                        selfUpdates[k] = v;
+                    }
+                }
+
+                if (Object.keys(patch).length > 0) {
+                    const { error: rpcErr } = await supabaseClient.rpc('spendnote_patch_org_owner_profile', {
+                        p_org_id: orgId,
+                        p_patch: patch
+                    });
+                    if (rpcErr) {
+                        console.error('Error patching org owner receipt profile:', rpcErr);
+                        return { success: false, error: rpcErr.message || 'Failed to update workspace receipt identity.' };
+                    }
+                }
+
+                if (Object.keys(selfUpdates).length > 0) {
+                    const { data, error } = await supabaseClient
+                        .from('profiles')
+                        .update(selfUpdates)
+                        .eq('id', user.id)
+                        .select()
+                        .single();
+                    if (error) {
+                        console.error('Error updating profile:', error);
+                        return { success: false, error: error.message };
+                    }
+                    const merged = await this.getCurrent();
+                    return { success: true, data: merged || data };
+                }
+
+                const mergedOnly = await this.getCurrent();
+                return { success: true, data: mergedOnly };
+            }
+
             const { data, error } = await supabaseClient
                 .from('profiles')
-                .update(updates)
+                .update(src)
                 .eq('id', user.id)
                 .select()
                 .single();
