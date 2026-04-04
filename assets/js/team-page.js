@@ -494,7 +494,8 @@ const initTeamPage = async () => {
         if (!await window.SpendNoteUpgrade?.guardFeature('can_invite_members', 'Team Invites', 'pro')) return;
 
         const currentCount = teamMembers.filter(m => m.status === 'active' || m.status === 'pending').length;
-        if (currentCount >= seatLimit) {
+        // Preview: unlimited team invites in product terms — do not show Pro seat paywall.
+        if (subscriptionTier !== 'preview' && currentCount >= seatLimit) {
             if (typeof window.SpendNoteUpgrade?.showSeatLimitUpgrade === 'function') {
                 window.SpendNoteUpgrade.showSeatLimitUpgrade(seatLimit);
             } else if (window.SpendNoteUpgrade?.showLockOverlay) {
