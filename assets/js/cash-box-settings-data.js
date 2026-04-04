@@ -485,6 +485,16 @@ async function initCashBoxSettings() {
         if (currentCashBoxId) {
             // Edit mode - load existing cash box
             isEditMode = true;
+
+            try {
+                const r = String(await window.db?.orgMemberships?.getMyRole?.() || '').trim().toLowerCase();
+                if (r === 'user') {
+                    await showAlert('Only workspace owners and admins can change Cash Box settings.', { iconType: 'info' });
+                    window.location.replace(`spendnote-cash-box-detail.html?cashBoxId=${encodeURIComponent(currentCashBoxId)}`);
+                    return;
+                }
+            } catch (_) {}
+
             await loadCashBoxData(currentCashBoxId);
             
             // Update page title

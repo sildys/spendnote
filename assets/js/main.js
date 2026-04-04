@@ -235,9 +235,9 @@ async function updateOrgContextIndicator() {
 
         const isPro = Boolean(state?.isPro);
         if (teamLink) {
-            // Same gate as team-page.js (pro or preview tier). Do not also require owner/admin — org "user" role may still open Team (read-only UX there).
-            // Rely on state.isPro only (not subscriptionTier string) so older cached supabase-config without subscriptionTier still works.
-            teamLink.style.display = isPro ? '' : 'none';
+            // Pro/preview only; org members with role "user" cannot manage team — hide entry (team-page redirects if opened directly).
+            const hideForInvitedMember = role === 'user';
+            teamLink.style.display = isPro && !hideForInvitedMember ? '' : 'none';
         }
 
         if (!orgId || !isPro) { hide(); return; }

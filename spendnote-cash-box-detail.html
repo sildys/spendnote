@@ -1446,7 +1446,16 @@
 
                 const settingsBtn = document.getElementById('detailSettingsBtn');
                 if (settingsBtn) {
-                    settingsBtn.setAttribute('href', `spendnote-cash-box-settings.html?cashBoxId=${encodeURIComponent(id)}`);
+                    let orgRole = '';
+                    try {
+                        orgRole = String(await window.db?.orgMemberships?.getMyRole?.() || '').trim().toLowerCase();
+                    } catch (_) {}
+                    if (orgRole === 'user') {
+                        settingsBtn.style.display = 'none';
+                    } else {
+                        settingsBtn.style.display = '';
+                        settingsBtn.setAttribute('href', `spendnote-cash-box-settings.html?cashBoxId=${encodeURIComponent(id)}`);
+                    }
                 }
             })().catch(() => {});
 
@@ -1476,8 +1485,8 @@
     <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
     <script>loadNav();</script>
-    <script src="assets/js/main.js?v=44"></script>
+    <script src="assets/js/main.js?v=45"></script>
     <script>if (typeof showPageTip === 'function') showPageTip('cashbox-detail', 'View all transactions for this cash box. Use <strong>filters</strong> to find specific entries or <strong>export</strong> them.');</script>
-    <script src="assets/js/transaction-history-data.js?v=83"></script>
+    <script src="assets/js/transaction-history-data.js?v=85"></script>
 </body>
 </html>

@@ -491,6 +491,11 @@ const computeAndApplyRole = async () => {
                 readOnlyNote.style.display = isUserRole ? 'block' : 'none';
             }
 
+            const deleteAccountCard = document.getElementById('deleteAccountToggle')?.closest('.settings-card.danger-card');
+            if (deleteAccountCard) {
+                deleteAccountCard.style.display = isUserRole ? 'none' : '';
+            }
+
             const receiptDisplayName = document.getElementById('receiptDisplayName');
             const receiptOtherId = document.getElementById('receiptOtherId');
             const receiptAddress = document.getElementById('receiptAddress');
@@ -1158,6 +1163,10 @@ const initUserSettingsPage = async () => {
     // Delete account — preview summary, explicit confirmation, then real deletion via Edge Function
     const deleteBtn = document.getElementById('deleteAccountBtn');
     deleteBtn?.addEventListener('click', async () => {
+        if (currentRole === 'user') {
+            showAlert('Account deletion is not available for invited team members. Ask your workspace owner or admin.', { iconType: 'info' });
+            return;
+        }
         const confirmInput = document.getElementById('deleteConfirmInput');
         if (String(confirmInput?.value || '').trim() !== 'DELETE') {
             showAlert('Please type "DELETE" to confirm.', { iconType: 'warning' });

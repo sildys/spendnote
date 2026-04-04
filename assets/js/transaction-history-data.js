@@ -23,6 +23,8 @@
         return false;
     }
 
+    let txHistoryCanVoidTransactions = false;
+
     function normalizeContactQuery(value) {
         try {
             if (window.SpendNoteIds && typeof window.SpendNoteIds.normalizeContactQuery === 'function') {
@@ -1573,6 +1575,13 @@
 
         try {
             if (debug) console.log('[TxHistory] Fetching cash boxes...');
+            try {
+                const r = String(await window.db?.orgMemberships?.getMyRole?.() || '').trim().toLowerCase();
+                txHistoryCanVoidTransactions = r === 'owner' || r === 'admin';
+            } catch (_) {
+                txHistoryCanVoidTransactions = false;
+            }
+
             const cashBoxes = await window.db.cashBoxes.getAll({ select: 'id, name, color, currency, sequence_number' });
             state.cashBoxes = Array.isArray(cashBoxes) ? cashBoxes : [];
             if (debug) console.log('[TxHistory] Got', state.cashBoxes.length, 'cash boxes');
@@ -1789,6 +1798,10 @@
         const bulkExportCsvBtn = qs('#bulkExportCsv');
         const bulkExportPdfBtn = qs('#bulkExportPdf');
 
+        if (bulkDeleteBtn && !txHistoryCanVoidTransactions) {
+            bulkDeleteBtn.style.display = 'none';
+        }
+
         if (bulkExportCsvBtn) {
             bulkExportCsvBtn.addEventListener('click', async () => {
                 if (!await window.SpendNoteFeatures?.can('can_export_csv')) {
@@ -1810,6 +1823,8 @@
 
         if (bulkDeleteBtn) {
             bulkDeleteBtn.addEventListener('click', async () => {
+                if (!txHistoryCanVoidTransactions) return;
+
                 const selected = getSelectedTxIdsFromTable(tbody);
 
                 if (!selected.length) return;

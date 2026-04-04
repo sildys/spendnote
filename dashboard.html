@@ -900,8 +900,12 @@
             // Initialize cash box carousel from rendered dashboard cards
             initModalCashboxCarousel();
             if (!modalCashBoxes || modalCashBoxes.length === 0) {
-                showAlert('You need to create a Cash Box before recording transactions.', { iconType: 'warning' }).then(() => {
-                    window.location.href = 'spendnote-cash-box-settings.html';
+                showAlert('You need a Cash Box before recording transactions.', { iconType: 'warning' }).then(() => {
+                    if (window.__spendnoteCanAddCashBox === false) {
+                        window.location.href = 'spendnote-cash-box-list.html';
+                    } else {
+                        window.location.href = 'spendnote-cash-box-settings.html';
+                    }
                 });
                 return;
             }
@@ -1671,11 +1675,11 @@
     <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
     <script>loadNav();</script>
-    <script src="assets/js/main.js?v=44"></script>
+    <script src="assets/js/main.js?v=45"></script>
     <script src="assets/js/dashboard-ui.js?v=20260406-role-add-box"></script>
-    <script src="assets/js/dashboard-modal.js?v=20260226-2018"></script>
+    <script src="assets/js/dashboard-modal.js?v=20260406-user-role-gates"></script>
     <script src="assets/js/dashboard-form.js?v=20260404-1"></script>
-    <script src="assets/js/dashboard-data.js?v=20260406-role-add-box"></script>
+    <script src="assets/js/dashboard-data.js?v=20260406-user-role-gates"></script>
 
     <!-- Swiper JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

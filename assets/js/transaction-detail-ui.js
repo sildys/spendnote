@@ -1000,7 +1000,7 @@ html, body { height: auto !important; overflow: auto !important; }
                 try {
                     const rawRole = await window.db?.orgMemberships?.getMyRole?.();
                     const role = String(rawRole || '').trim().toLowerCase();
-                    isAdmin = !role || role === 'owner' || role === 'admin';
+                    isAdmin = role === 'owner' || role === 'admin';
                 } catch (_) {
                     isAdmin = false;
                 }

@@ -226,12 +226,13 @@ async function loadCashBoxList() {
                             </div>
                         </div>
                         <div class="register-balance">${formattedBalance}</div>
+                        ${canAddCashBoxByRole ? `
                         <div class="register-actions">
                             <a class="btn btn-secondary btn-small register-settings-link" href="spendnote-cash-box-settings.html?cashBoxId=${box.id}" title="Cash Box Settings" aria-label="Cash Box Settings">
                                 <i class="fas fa-cog"></i>
                                 <span class="btn-small-text">Settings</span>
                             </a>
-                        </div>
+                        </div>` : ''}
                     </div>
                 `;
             });

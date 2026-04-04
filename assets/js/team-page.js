@@ -14,7 +14,7 @@ const getInitials = (name) => {
 
 let teamMembers = [];
 let cashBoxes = [];
-let currentRole = 'user';
+let currentRole = null;
 let selectedMemberForAccess = null;
 let currentOrgName = '';
 let seatLimit = 1;
@@ -419,10 +419,15 @@ const initTeamPage = async () => {
     try {
         if (window.db?.orgMemberships?.getMyRole) {
             const r = await window.db.orgMemberships.getMyRole();
-            const n = String(r || '').toLowerCase();
+            const n = String(r || '').trim().toLowerCase();
             if (n === 'owner' || n === 'admin' || n === 'user') currentRole = n;
         }
     } catch (_) {}
+
+    if (currentRole === 'user') {
+        window.location.replace('dashboard.html');
+        return;
+    }
 
     try {
         const { data: sessionData } = await window.supabaseClient.auth.getSession();

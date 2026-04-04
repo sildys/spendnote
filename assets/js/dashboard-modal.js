@@ -425,8 +425,12 @@ function openModal(preset) {
 
     initModalCashboxCarousel();
     if (!modalCashBoxes || !modalCashBoxes.length) {
-        showAlert('You need to create a Cash Box before recording transactions.', { iconType: 'warning' }).then(() => {
-            window.location.href = 'spendnote-cash-box-settings.html';
+        showAlert('You need a Cash Box before recording transactions.', { iconType: 'warning' }).then(() => {
+            if (window.__spendnoteCanAddCashBox === false) {
+                window.location.href = 'spendnote-cash-box-list.html';
+            } else {
+                window.location.href = 'spendnote-cash-box-settings.html';
+            }
         });
         return;
     }

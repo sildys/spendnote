@@ -572,6 +572,11 @@ async function loadDashboardData() {
                 window.__spendnoteCanAddCashBox = canAddCashBoxByRole;
             } catch (_) {}
 
+            try {
+                const inviteBanner = document.getElementById('inviteBanner');
+                if (inviteBanner && !canAddCashBoxByRole) inviteBanner.style.display = 'none';
+            } catch (_) {}
+
             const debug = Boolean(window.SpendNoteDebug);
 
             const { hexToRgb, getIconClass, formatCurrency } = getSpendNoteHelpers();
@@ -699,11 +704,12 @@ async function loadDashboardData() {
                                             <div class="register-id">${displayCode}</div>
                                         </div>
                                     </div>
+                                    ${canAddCashBoxByRole ? `
                                     <div class="register-actions">
                                         <a class="register-kebab" href="spendnote-cash-box-settings.html?cashBoxId=${box.id}" aria-label="Cash Box settings" title="Cash Box settings">
                                             <i class="fas fa-ellipsis-v"></i>
                                         </a>
-                                    </div>
+                                    </div>` : ''}
                                 </div>
                                 
                                 <div class="register-balance">${formattedBalance}</div>
