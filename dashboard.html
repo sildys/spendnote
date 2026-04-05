@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=23">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=21">
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260406-downgrade-locks">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20260406-downgrade-modal">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
@@ -382,20 +382,16 @@
     </div>
 
     <!-- Plan downgrade: pick active cash boxes (owner); see migration 066 -->
-    <div class="modal-overlay" id="tierCashBoxModal" aria-hidden="true" style="display:none;z-index:11000;">
-        <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="tierCashBoxModalTitle" style="max-width:480px;">
-            <div class="modal-header">
-                <h2 id="tierCashBoxModalTitle" style="margin:0;font-size:18px;font-weight:800;">Choose active cash boxes</h2>
+    <div id="tierCashBoxModal" class="tier-modal-overlay" aria-hidden="true" style="display:none;">
+        <div class="tier-modal" role="dialog" aria-modal="true" aria-labelledby="tierCashBoxModalTitle">
+            <div class="tier-modal-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
-            <div class="modal-body" style="padding:16px 24px;">
-                <p id="tierCashBoxModalBody" style="color:var(--text-muted);font-size:14px;line-height:1.55;margin:0 0 16px;"></p>
-                <div id="tierCashBoxModalList" style="display:flex;flex-direction:column;gap:10px;max-height:50vh;overflow:auto;"></div>
-            </div>
-            <div class="form-actions" style="padding:16px 24px;border-top:1px solid var(--border);">
-                <button type="button" class="btn btn-primary" id="tierCashBoxModalSave" style="width:100%;">
-                    Save selection
-                </button>
-            </div>
+            <h2 id="tierCashBoxModalTitle" class="tier-modal-title">Your plan has changed</h2>
+            <p id="tierCashBoxModalBody" class="tier-modal-desc"></p>
+            <div id="tierCashBoxModalList" class="tier-modal-list"></div>
+            <button type="button" class="tier-modal-save" id="tierCashBoxModalSave">Save selection</button>
+            <p class="tier-modal-hint">The other cash boxes stay visible — you can still view past transactions.</p>
         </div>
     </div>
 
@@ -1697,7 +1693,7 @@
     <script src="assets/js/dashboard-ui.js?v=20260406-downgrade-locks"></script>
     <script src="assets/js/dashboard-modal.js?v=20260406-user-role-gates"></script>
     <script src="assets/js/dashboard-form.js?v=20260406-downgrade-locks"></script>
-    <script src="assets/js/dashboard-data.js?v=20260406-downgrade-locks"></script>
+    <script src="assets/js/dashboard-data.js?v=20260406-downgrade-modal"></script>
 
     <!-- Swiper JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

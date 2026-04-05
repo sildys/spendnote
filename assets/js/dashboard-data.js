@@ -77,7 +77,10 @@ async function maybeShowTierDowngradeModal(profile, cashBoxes) {
         return;
     }
 
-    bodyEl.textContent = `Your plan allows ${maxKeep} active cash box${maxKeep === 1 ? '' : 'es'} for new transactions. You have ${n}. Select exactly ${maxKeep} to keep active. The rest stay visible with read-only recording until you upgrade.`;
+    const { formatCurrency } = getSpendNoteHelpers();
+    const isMulti = maxKeep > 1;
+
+    bodyEl.textContent = `Your plan now includes ${maxKeep} active cash box${isMulti ? 'es' : ''}. Pick ${isMulti ? 'the ones' : 'the one'} you want to keep recording into.`;
 
     listEl.innerHTML = '';
     const ordered = [...(cashBoxes || [])].sort((a, b) => {
@@ -87,43 +90,57 @@ async function maybeShowTierDowngradeModal(profile, cashBoxes) {
     });
     const selected = new Set(ordered.slice(0, maxKeep).map((b) => String(b?.id || '').trim()).filter(Boolean));
 
+    const syncSelectedUI = () => {
+        listEl.querySelectorAll('.tier-modal-item').forEach((item) => {
+            const isSel = selected.has(item.dataset.boxId || '');
+            item.classList.toggle('selected', isSel);
+        });
+    };
+
     (cashBoxes || []).forEach((box) => {
         const id = String(box?.id || '').trim();
         if (!id) return;
-        const row = document.createElement('label');
-        row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;';
-        const input = document.createElement('input');
-        input.type = maxKeep === 1 ? 'radio' : 'checkbox';
-        if (maxKeep === 1) input.name = 'tierKeepCashBox';
-        input.value = id;
-        input.checked = selected.has(id);
-        row.appendChild(input);
-        const span = document.createElement('span');
-        span.textContent = String(box?.name || id);
-        row.appendChild(span);
-        listEl.appendChild(row);
+        const color = box?.color || '#059669';
+        const balance = formatCurrency(box?.current_balance || 0, box?.currency || 'USD');
+        const currency = String(box?.currency || 'USD').toUpperCase();
 
-        input.addEventListener('change', () => {
-            if (maxKeep === 1) {
+        const item = document.createElement('div');
+        item.className = 'tier-modal-item' + (selected.has(id) ? ' selected' : '');
+        item.dataset.boxId = id;
+        item.setAttribute('role', 'option');
+        item.setAttribute('aria-selected', selected.has(id) ? 'true' : 'false');
+
+        const indicatorClass = isMulti ? 'tier-modal-item-check' : 'tier-modal-item-radio';
+        const indicatorInner = isMulti
+            ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+            : '';
+
+        item.innerHTML = `
+            <div class="${indicatorClass}">${indicatorInner}</div>
+            <div class="tier-modal-item-color" style="background:${color};"></div>
+            <div class="tier-modal-item-info">
+                <div class="tier-modal-item-name">${String(box?.name || id).replace(/</g, '&lt;')}</div>
+                <div class="tier-modal-item-meta">${currency} · ${balance}</div>
+            </div>
+        `;
+        listEl.appendChild(item);
+
+        item.addEventListener('click', () => {
+            if (isMulti) {
+                if (selected.has(id)) {
+                    selected.delete(id);
+                } else {
+                    if (selected.size >= maxKeep) {
+                        const oldest = selected.values().next().value;
+                        selected.delete(oldest);
+                    }
+                    selected.add(id);
+                }
+            } else {
                 selected.clear();
                 selected.add(id);
-                listEl.querySelectorAll('input[type="radio"]').forEach((r) => {
-                    if (r !== input) r.checked = false;
-                });
-            } else {
-                if (input.checked) {
-                    selected.add(id);
-                    while (selected.size > maxKeep) {
-                        const first = listEl.querySelector('input:checked');
-                        if (!first || first === input) break;
-                        const rid = String(first.value || '').trim();
-                        selected.delete(rid);
-                        first.checked = false;
-                    }
-                } else {
-                    selected.delete(id);
-                }
             }
+            syncSelectedUI();
         });
     });
 
@@ -131,14 +148,18 @@ async function maybeShowTierDowngradeModal(profile, cashBoxes) {
     overlay.setAttribute('aria-hidden', 'false');
 
     saveBtn.onclick = async () => {
-        if (selected.size !== maxKeep) {
+        if (selected.size < 1 || selected.size > maxKeep) {
             if (typeof showAlert === 'function') {
-                showAlert(`Select exactly ${maxKeep} cash box${maxKeep > 1 ? 'es' : ''}.`, { iconType: 'warning' });
+                showAlert(`Select ${isMulti ? 'up to ' + maxKeep : 'one'} cash box${isMulti ? 'es' : ''}.`, { iconType: 'warning' });
             }
             return;
         }
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving…';
         const keepIds = Array.from(selected);
         const res = await window.db?.profiles?.resolveTierCashBoxes?.(keepIds);
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save selection';
         if (!res || res.success !== true) {
             if (typeof showAlert === 'function') {
                 showAlert(String(res?.error || 'Could not save your selection.'), { iconType: 'error' });
