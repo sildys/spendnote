@@ -114,6 +114,46 @@ Deno.serve(async (req: Request) => {
     };
 
     if (eventType === "welcome_account_created") {
+      // Solo signups and workspace owners only — not invited team members (user/admin on someone else's org).
+      const { data: memberships, error: memErr } = await supabaseAdmin
+        .from("org_memberships")
+        .select("org_id")
+        .eq("user_id", user.id);
+
+      if (!memErr && Array.isArray(memberships) && memberships.length > 0) {
+        const orgIds = [
+          ...new Set(
+            memberships
+              .map((m) => String((m as Record<string, unknown>)?.org_id || "").trim())
+              .filter(Boolean),
+          ),
+        ];
+        if (orgIds.length > 0) {
+          const { data: orgRows } = await supabaseAdmin
+            .from("orgs")
+            .select("owner_user_id")
+            .in("id", orgIds);
+          const uid = String(user.id || "").trim();
+          const ownsAny = (orgRows || []).some((o) => {
+            const row = o as Record<string, unknown>;
+            return String(row?.owner_user_id || "").trim() === uid;
+          });
+          if (!ownsAny) {
+            return new Response(
+              JSON.stringify({
+                success: true,
+                skipped: true,
+                reason: "team_member_not_workspace_owner",
+              }),
+              {
+                status: 200,
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+              },
+            );
+          }
+        }
+      }
+
       const rendered = renderWelcomeAccountCreatedTemplate({
         fullName: userName,
         loginUrl: "https://spendnote.app/spendnote-login.html",

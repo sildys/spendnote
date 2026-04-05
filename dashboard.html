@@ -1670,7 +1670,7 @@
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260415-sync-oauth-avatar"></script>
+    <script src="assets/js/supabase-config.js?v=20260405-welcome-owner-only"></script>
     <script src="assets/js/auth-guard.js?v=20260223-1949"></script>
     <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
@@ -2344,13 +2344,25 @@
                         const welUid = String(userId || '').trim();
                         const welSentKey = welUid ? 'spendnote.welcome.sent.v2.' + welUid : '';
                         if (welSentKey && localStorage.getItem(welSentKey) !== '1') {
-                            const { data: welData, error: welErr } = await supabaseClient.functions.invoke(
-                                'send-user-event-email',
-                                { body: { eventType: 'welcome_account_created' } }
-                            );
-                            console.log('[SN-DASH] Welcome email:', JSON.stringify({ ok: welData?.success, err: welErr?.message || welErr }));
-                            if (!welErr && welData?.success) {
+                            let shouldSend = true;
+                            if (typeof window.spendnoteShouldSendOwnerWelcomeEmail === 'function') {
+                                try {
+                                    shouldSend = await window.spendnoteShouldSendOwnerWelcomeEmail();
+                                } catch (_) {
+                                    shouldSend = true;
+                                }
+                            }
+                            if (!shouldSend) {
                                 try { localStorage.setItem(welSentKey, '1'); } catch (_) {}
+                            } else {
+                                const { data: welData, error: welErr } = await supabaseClient.functions.invoke(
+                                    'send-user-event-email',
+                                    { body: { eventType: 'welcome_account_created' } }
+                                );
+                                console.log('[SN-DASH] Welcome email:', JSON.stringify({ ok: welData?.success, skipped: welData?.skipped, err: welErr?.message || welErr }));
+                                if (!welErr && welData && (welData.success || welData.skipped)) {
+                                    try { localStorage.setItem(welSentKey, '1'); } catch (_) {}
+                                }
                             }
                         }
                     } catch (_) {}

@@ -434,8 +434,50 @@ const __spendnoteSendUserEventEmail = async (payload = {}) => {
     }
 };
 
+/**
+ * Welcome / owner-onboarding emails apply to solo accounts and users who own a workspace.
+ * Invited members (org user/admin, not orgs.owner_user_id) should not receive them.
+ */
+async function spendnoteShouldSendOwnerWelcomeEmail() {
+    try {
+        const user = await auth.getCurrentUser();
+        if (!user) return false;
+
+        const { data: mems, error } = await supabaseClient
+            .from('org_memberships')
+            .select('org_id')
+            .eq('user_id', user.id);
+
+        if (error || !Array.isArray(mems) || mems.length === 0) {
+            return true;
+        }
+
+        const orgIds = [
+            ...new Set(
+                mems
+                    .map((m) => String(m?.org_id || '').trim())
+                    .filter(Boolean)
+            )
+        ];
+        if (!orgIds.length) return true;
+
+        const { data: orgRows } = await supabaseClient
+            .from('orgs')
+            .select('owner_user_id')
+            .in('id', orgIds);
+
+        const uid = String(user.id || '').trim();
+        return (orgRows || []).some((o) => String(o?.owner_user_id || '').trim() === uid);
+    } catch (_) {
+        return true;
+    }
+}
+
+window.spendnoteShouldSendOwnerWelcomeEmail = spendnoteShouldSendOwnerWelcomeEmail;
+
 window.SpendNoteEmailEvents = {
-    send: __spendnoteSendUserEventEmail
+    send: __spendnoteSendUserEventEmail,
+    shouldSendOwnerWelcome: spendnoteShouldSendOwnerWelcomeEmail
 };
 
 // ── Stripe billing gate ──

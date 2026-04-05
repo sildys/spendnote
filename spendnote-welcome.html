@@ -402,7 +402,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js?v=20260415-sync-oauth-avatar"></script>
+<script src="assets/js/supabase-config.js?v=20260405-welcome-owner-only"></script>
 <script>
 let selectedColor = '#10b981';
 let currentWelcomeVariant = 'free';
@@ -550,15 +550,26 @@ async function sendWelcomeEmail() {
         if (!uid) return;
         const sentKey = 'spendnote.welcome.sent.v2.' + uid;
         if (localStorage.getItem(sentKey) === '1') return;
+        if (typeof window.spendnoteShouldSendOwnerWelcomeEmail === 'function') {
+            try {
+                const ok = await window.spendnoteShouldSendOwnerWelcomeEmail();
+                if (!ok) {
+                    try { localStorage.setItem(sentKey, '1'); } catch (_) {}
+                    return;
+                }
+            } catch (_) {
+                // fall through to edge function (server also enforces)
+            }
+        }
         console.log('[SN-WELCOME] Sending welcome email via functions.invoke...');
         const { data, error } = await window.supabaseClient.functions.invoke(
             'send-user-event-email',
             { body: { eventType: 'welcome_account_created' } }
         );
         console.log('[SN-WELCOME] Result:', JSON.stringify({ data, error: error?.message || error }));
-        if (!error && data?.success) {
+        if (!error && data && (data.success || data.skipped)) {
             try { localStorage.setItem(sentKey, '1'); } catch (_) {}
-            console.log('[SN-WELCOME] Welcome email sent!');
+            if (data.success && !data.skipped) console.log('[SN-WELCOME] Welcome email sent!');
         }
     } catch (e) {
         console.error('[SN-WELCOME] Email error:', e);
