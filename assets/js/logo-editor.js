@@ -5,11 +5,6 @@ const LogoEditor = (() => {
     const MIN_SCALE = 0.5;
     const MAX_SCALE = 3.0;
     const STEP = 0.1;
-    const LEGACY_LOGO_KEY = 'spendnote.proLogoDataUrl';
-    const LEGACY_LOGO_KEY_V1 = 'spendnote.receipt.logo.v1';
-    const LEGACY_LOGO_SCALE_KEY = 'spendnote.receipt.logoScale.v1';
-    const LEGACY_LOGO_POSITION_KEY = 'spendnote.receipt.logoPosition.v1';
-
     let preview = null;
     let image = null;
     let info = null;
@@ -32,29 +27,8 @@ const LogoEditor = (() => {
 
     const readLogo = () => _logoDataUrl;
 
-    const persistLogoUrlToLocalStorage = (dataUrl) => {
-        try {
-            const value = String(dataUrl || '').trim();
-            if (!value) {
-                localStorage.removeItem(LEGACY_LOGO_KEY);
-                localStorage.removeItem(LEGACY_LOGO_KEY_V1);
-                return;
-            }
-            localStorage.setItem(LEGACY_LOGO_KEY, value);
-            localStorage.setItem(LEGACY_LOGO_KEY_V1, value);
-        } catch (_) {}
-    };
-
-    const persistLogoSettingsToLocalStorage = () => {
-        try {
-            localStorage.setItem(LEGACY_LOGO_SCALE_KEY, String(clampScale(currentScale)));
-            localStorage.setItem(LEGACY_LOGO_POSITION_KEY, JSON.stringify({ x: currentX, y: currentY }));
-        } catch (_) {}
-    };
-
     const writeLogo = (dataUrl) => {
         _logoDataUrl = dataUrl || null;
-        persistLogoUrlToLocalStorage(_logoDataUrl);
         try {
             if (window.db?.profiles?.update) {
                 window.db.profiles.update({ account_logo_url: dataUrl || null }).catch(() => {});
@@ -69,9 +43,7 @@ const LogoEditor = (() => {
         persistLogoSettings();
     };
 
-    const persistLogoSettings = () => {
-        persistLogoSettingsToLocalStorage();
-    };
+    const persistLogoSettings = () => {};
 
     const enforceBaselineIfPristine = () => {
         if (hasUserEdited) return;
@@ -126,8 +98,6 @@ const LogoEditor = (() => {
         currentX = 0;
         currentY = 0;
 
-        persistLogoUrlToLocalStorage(_logoDataUrl);
-        persistLogoSettingsToLocalStorage();
         loadLogo();
     };
 
@@ -142,7 +112,6 @@ const LogoEditor = (() => {
         currentX = 0;
         currentY = 0;
         hasUserEdited = false;
-        persistLogoSettingsToLocalStorage();
         updateInfo();
     };
 
@@ -151,7 +120,6 @@ const LogoEditor = (() => {
             const hasLogo = String(_logoDataUrl || image?.src || '').trim();
             if (!hasLogo) {
                 resetToBaselineView();
-                persistLogoUrlToLocalStorage(null);
                 return { success: true, dataUrl: null };
             }
 
@@ -160,8 +128,6 @@ const LogoEditor = (() => {
 
             _logoDataUrl = snapshotUrl;
             resetToBaselineView();
-
-            persistLogoUrlToLocalStorage(snapshotUrl);
 
             if (image) {
                 image.src = snapshotUrl;

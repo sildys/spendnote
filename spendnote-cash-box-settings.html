@@ -510,10 +510,6 @@ const DETAILED_PRESET = {
 let receiptMode = 'quick';
 let displayOptions = { ...QUICK_PRESET };
 
-const LOGO_SCALE_KEY = 'spendnote.receipt.logoScale.v1';
-const LOGO_ALIGN_KEY = 'spendnote.receipt.logoAlign.v1';
-const LOGO_POSITION_KEY = 'spendnote.receipt.logoPosition.v1';
-const PROFILE_PREVIEW_LOGO_KEY = 'spendnote.profileLogo.current';
 const LOGO_SETTINGS_MIN_SCALE = 0.5;
 const LOGO_SETTINGS_MAX_SCALE = 3.0;
 
@@ -532,56 +528,6 @@ function normalizeLogoSettings(value) {
     };
 }
 
-function getCashBoxLogoSettingsStorageKey(cashBoxId) {
-    const id = String(cashBoxId || '').trim();
-    if (!id) return '';
-    return `spendnote.cashBox.${id}.logoSettings.v1`;
-}
-
-function readStoredCashBoxLogoSettings(cashBoxId, includeGlobalFallback = true) {
-    const key = getCashBoxLogoSettingsStorageKey(cashBoxId);
-    if (key) {
-        try {
-            const raw = localStorage.getItem(key);
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (parsed && typeof parsed === 'object') {
-                    return normalizeLogoSettings(parsed);
-                }
-            }
-        } catch (_) {}
-    }
-
-    if (!includeGlobalFallback) {
-        return normalizeLogoSettings(null);
-    }
-
-    const fallback = { scale: 1, x: 0, y: 0 };
-    try {
-        const s = parseFloat(localStorage.getItem(LOGO_SCALE_KEY) || '1');
-        if (Number.isFinite(s)) fallback.scale = s;
-    } catch (_) {}
-
-    try {
-        const rawPos = localStorage.getItem(LOGO_POSITION_KEY);
-        if (rawPos) {
-            const p = JSON.parse(rawPos);
-            if (Number.isFinite(Number(p?.x))) fallback.x = Number(p.x);
-            if (Number.isFinite(Number(p?.y))) fallback.y = Number(p.y);
-        }
-    } catch (_) {}
-
-    return normalizeLogoSettings(fallback);
-}
-
-function writeStoredCashBoxLogoSettings(cashBoxId, settings) {
-    const key = getCashBoxLogoSettingsStorageKey(cashBoxId);
-    if (!key) return;
-    try {
-        localStorage.setItem(key, JSON.stringify(normalizeLogoSettings(settings)));
-    } catch (_) {}
-}
-
 let currentFormat = 'receipt-print-two-copies';
 let currentZoom = 0.6;
 
@@ -593,7 +539,7 @@ function buildReceiptUrl(format) {
     };
     
     const params = new URLSearchParams();
-    params.append('v', 'settings-preview-15');
+    params.append('v', 'settings-preview-16');
     params.append('demo', '1');
     if (format === 'pdf') {
         params.append('preview', '1');
@@ -609,51 +555,32 @@ function buildReceiptUrl(format) {
     params.append('itemsMode', receiptMode === 'quick' ? 'single' : 'full');
     params.append('recordedBy', '0');
 
-    // Cash box logo takes priority over user settings logo
-    let usingProfileLogoFallback = false;
+    // Cash box logo takes priority over profile logo; preview uses logoUrl query only (no localStorage).
     if (!isLogoEnabled) {
-        try { localStorage.removeItem(PROFILE_PREVIEW_LOGO_KEY); } catch (_) {}
         params.delete('logoKey');
         params.delete('logoUrl');
         params.set('logo', '0');
     } else {
-        try {
-            const cbLogo = typeof window.getCashBoxLogo === 'function' ? window.getCashBoxLogo() : '';
-            if (cbLogo) {
-                const cbId = currentCashBoxData?.id || 'temp';
-                const tempKey = 'spendnote.cbLogo.' + cbId;
-                try { localStorage.setItem(tempKey, cbLogo); } catch (_) {}
-                params.delete('logo');
-                params.delete('logoUrl');
-                params.append('logoKey', tempKey);
-            } else {
-                const profileLogo = String(DUMMY_PROFILE.account_logo_url || '').trim();
-                if (profileLogo) {
-                    usingProfileLogoFallback = true;
-                    try { localStorage.setItem(PROFILE_PREVIEW_LOGO_KEY, profileLogo); } catch (_) {}
-                    params.delete('logo');
-                    params.delete('logoUrl');
-                    params.set('logoKey', PROFILE_PREVIEW_LOGO_KEY);
-                } else {
-                    try { localStorage.removeItem(PROFILE_PREVIEW_LOGO_KEY); } catch (_) {}
-                    params.delete('logoKey');
-                    params.delete('logoUrl');
-                }
-            }
-        } catch (e) {}
+        const cbLogo = typeof window.getCashBoxLogo === 'function' ? String(window.getCashBoxLogo() || '').trim() : '';
+        const profileLogo = String(DUMMY_PROFILE.account_logo_url || '').trim();
+        const logoToUse = cbLogo || profileLogo;
+        params.delete('logoKey');
+        if (logoToUse) {
+            params.delete('logo');
+            params.set('logoUrl', logoToUse);
+        } else {
+            params.delete('logoUrl');
+        }
     }
 
     if (isLogoEnabled) {
         try {
-            let logoSettings = null;
-            if (usingProfileLogoFallback) {
-                logoSettings = normalizeLogoSettings(DUMMY_PROFILE.logo_settings || null);
-            } else {
-                const keyId = String(currentCashBoxData?.id || '').trim();
-                logoSettings = (typeof window.getCashBoxLogoSettings === 'function')
+            const usingProfileFallback = !(typeof window.getCashBoxLogo === 'function' && String(window.getCashBoxLogo() || '').trim());
+            const logoSettings = usingProfileFallback
+                ? normalizeLogoSettings(DUMMY_PROFILE.logo_settings || null)
+                : ((typeof window.getCashBoxLogoSettings === 'function')
                     ? window.getCashBoxLogoSettings()
-                    : readStoredCashBoxLogoSettings(keyId, true);
-            }
+                    : normalizeLogoSettings(null));
 
             const scale = Number(logoSettings?.scale);
             if (Number.isFinite(scale) && scale > 0) {
@@ -667,13 +594,6 @@ function buildReceiptUrl(format) {
             }
         } catch (e) {}
     }
-
-    try {
-        const storedAlign = String(localStorage.getItem(LOGO_ALIGN_KEY) || '').trim().toLowerCase();
-        if (storedAlign === 'left' || storedAlign === 'center' || storedAlign === 'right') {
-            params.append('logoAlign', storedAlign);
-        }
-    } catch (e) {}
 
     // Demo data params (from current user settings profile; avoid hardcoded company/address fallbacks)
     const demoCompany = (typeof window.spendnoteReceiptProfileDisplayName === 'function')
@@ -1118,29 +1038,19 @@ window.addEventListener('DOMContentLoaded', async function() {
 window.setCashBoxLogo = function(dataUrl) {
     loadedCashBoxLogo = String(dataUrl || '').trim();
     pendingCashBoxLogo = null;
-    const keyId = String(currentCashBoxData?.id || '').trim();
-    loadedCashBoxLogoSettings = readStoredCashBoxLogoSettings(keyId, true);
-    pendingCashBoxLogoSettings = null;
     showCashBoxLogo(loadedCashBoxLogo);
     reloadIframe();
 };
 
-/** After load or DB save: prefer server logo_settings over localStorage fallback. */
+/** After load or DB save: apply server logo_settings (defaults if absent). */
 window.hydrateCashBoxLogoSettingsFromDb = function(dbValue, cashBoxId) {
-    const keyId = String(cashBoxId || currentCashBoxData?.id || '').trim();
     const parsed = normalizeLogoSettings(dbValue);
     const hasDb = dbValue !== null && dbValue !== undefined && typeof dbValue === 'object'
         && (Number.isFinite(Number(dbValue.scale))
             || Number.isFinite(Number(dbValue.x))
             || Number.isFinite(Number(dbValue.y)));
-    if (hasDb) {
-        loadedCashBoxLogoSettings = parsed;
-        pendingCashBoxLogoSettings = null;
-        if (keyId) writeStoredCashBoxLogoSettings(keyId, parsed);
-    } else if (keyId) {
-        loadedCashBoxLogoSettings = readStoredCashBoxLogoSettings(keyId, true);
-        pendingCashBoxLogoSettings = null;
-    }
+    loadedCashBoxLogoSettings = hasDb ? parsed : normalizeLogoSettings(null);
+    pendingCashBoxLogoSettings = null;
     applyCashBoxLogoTransform();
 };
 
@@ -1164,31 +1074,18 @@ window.getCashBoxLogoSettingsPendingState = function() {
     return pendingCashBoxLogoSettings ? { ...pendingCashBoxLogoSettings } : null;
 };
 
-window.persistCashBoxLogoSettings = function(cashBoxId) {
-    const keyId = String(cashBoxId || currentCashBoxData?.id || '').trim();
-    if (!keyId) return;
+window.persistCashBoxLogoSettings = function(_cashBoxId) {
     const settings = getEffectiveCashBoxLogoSettings();
-    writeStoredCashBoxLogoSettings(keyId, settings);
     loadedCashBoxLogoSettings = normalizeLogoSettings(settings);
     pendingCashBoxLogoSettings = null;
 };
 
-loadedCashBoxLogoSettings = readStoredCashBoxLogoSettings('', true);
 applyCashBoxLogoTransform();
-
-// Cleanup temp logo keys on page leave
-window.addEventListener('beforeunload', () => {
-    try {
-        localStorage.removeItem('spendnote.cashBoxLogo.temp');
-        const cbId = currentCashBoxData?.id;
-        if (cbId) localStorage.removeItem('spendnote.cbLogo.' + cbId);
-    } catch (_) {}
-});
 </script>
 
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js?v=20260417-tx-receipt-snapshot"></script>
+<script src="assets/js/supabase-config.js?v=20260405-db-logo-only"></script>
 <script src="assets/js/auth-guard.js"></script>
 <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
 <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
@@ -1204,6 +1101,6 @@ if (typeof showPageTip === 'function') {
     }
 }
 </script>
-<script src="assets/js/cash-box-settings-data.js?v=20260417-receipt-toggle-save"></script>
+<script src="assets/js/cash-box-settings-data.js?v=20260405-db-logo-only"></script>
 </body>
 </html>

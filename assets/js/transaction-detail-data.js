@@ -321,21 +321,26 @@
 
         try {
             const cb = tx.cash_box;
-            const needsLogoSettings = Boolean(
+            const needLogoPatch = Boolean(
                 tx.cash_box_id &&
                 window.supabaseClient &&
                 cb &&
-                typeof cb === 'object' &&
-                !('logo_settings' in cb)
+                typeof cb === 'object'
+            ) && (
+                !('logo_settings' in cb) ||
+                !('cash_box_logo_url' in cb)
             );
-            if (needsLogoSettings) {
-                const { data: lsRow, error: lsErr } = await window.supabaseClient
+            if (needLogoPatch) {
+                const { data: row, error: rowErr } = await window.supabaseClient
                     .from('cash_boxes')
-                    .select('logo_settings')
+                    .select('logo_settings, cash_box_logo_url')
                     .eq('id', tx.cash_box_id)
                     .maybeSingle();
-                if (!lsErr && lsRow && typeof lsRow === 'object') {
-                    tx.cash_box = Object.assign({}, cb, { logo_settings: lsRow.logo_settings });
+                if (!rowErr && row && typeof row === 'object') {
+                    const next = { ...cb };
+                    if (!('logo_settings' in cb)) next.logo_settings = row.logo_settings;
+                    if (!('cash_box_logo_url' in cb)) next.cash_box_logo_url = row.cash_box_logo_url;
+                    tx.cash_box = next;
                 }
             }
         } catch (_) {

@@ -588,22 +588,7 @@ body {
   if (initialVoid) {
     document.querySelectorAll('.void-watermark').forEach((el) => (el.style.display = 'block'));
   }
-  const resolveLogoUrl = () => {
-    const logoKey = urlParams.get('logoKey');
-    const logoUrl = urlParams.get('logoUrl');
-    if (logoUrl) return logoUrl;
-    try {
-      if (logoKey) {
-        const fromKey = localStorage.getItem(logoKey) || '';
-        if (fromKey) return fromKey;
-      }
-      return localStorage.getItem('spendnote.proLogoDataUrl')
-        || localStorage.getItem('spendnote.receipt.logo.v1')
-        || '';
-    } catch (_) {
-      return '';
-    }
-  };
+  const resolveLogoUrl = () => String(urlParams.get('logoUrl') || '').trim();
   
   // Custom text replacements
   const forcedIdPrefixRaw = String(urlParams.get('idPrefix') || '').trim().toUpperCase();
@@ -846,12 +831,8 @@ body {
       document.querySelectorAll('.header-rule').forEach(el => el.classList.add('full-width'));
     }
 
-    // Apply logo scale from URL param or localStorage
     try {
-      let scaleRaw = urlParams.get('logoScale');
-      if (!scaleRaw) {
-        try { scaleRaw = localStorage.getItem('spendnote.receipt.logoScale.v1'); } catch (_) {}
-      }
+      const scaleRaw = urlParams.get('logoScale');
       const s = parseFloat(scaleRaw || '1');
       if (Number.isFinite(s) && s >= 0.5 && s <= 3.0) {
         document.querySelectorAll('.receipt').forEach(r => r.style.setProperty('--logo-scale', String(s)));
@@ -887,7 +868,7 @@ body {
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260418-logo-settings-tx-detail"></script>
+    <script src="assets/js/supabase-config.js?v=20260405-db-logo-only"></script>
     <script src="assets/js/auth-guard.js?v=20260207-2310"></script>
     <script src="assets/js/main.js?v=44"></script>
 
@@ -1114,7 +1095,7 @@ body {
           }
 
           try {
-            const urlHadLogo = Boolean(urlParams.get('logoUrl') || urlParams.get('logoKey'));
+            const urlHadLogo = Boolean(String(urlParams.get('logoUrl') || '').trim());
             if (!urlHadLogo && urlParams.get('logo') !== '0') {
               const preferredLogo = safeText(
                 String(tx.sender_profile_logo_url_snapshot || '').trim()

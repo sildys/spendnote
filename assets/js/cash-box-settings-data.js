@@ -38,36 +38,6 @@ function normalizeCashBoxIdPrefix(value) {
     return up;
 }
 
-function cashBoxLogoLocalStorageKey(cashBoxId) {
-    const id = String(cashBoxId || '').trim();
-    return id ? `spendnote.cashBoxLogo.data.${id}` : '';
-}
-
-function readStoredCashBoxLogo(cashBoxId) {
-    const key = cashBoxLogoLocalStorageKey(cashBoxId);
-    if (!key) return '';
-    try {
-        return String(localStorage.getItem(key) || '').trim();
-    } catch (_) {
-        return '';
-    }
-}
-
-function writeStoredCashBoxLogo(cashBoxId, logoDataUrl) {
-    const key = cashBoxLogoLocalStorageKey(cashBoxId);
-    if (!key) return;
-    try {
-        const v = String(logoDataUrl || '').trim();
-        if (!v) {
-            localStorage.removeItem(key);
-        } else {
-            localStorage.setItem(key, v);
-        }
-    } catch (_) {
-        // Quota or private mode — DB path should still work when column exists
-    }
-}
-
 function normalizeCashBoxLogoSettingsForDb(value) {
     const src = (value && typeof value === 'object') ? value : {};
     let scale = Number(src.scale);
@@ -611,12 +581,8 @@ async function initCashBoxSettings() {
         
         try {
             const profile = window.db?.profiles?.getCurrent ? await window.db.profiles.getCurrent() : null;
-            if (profile) {
-                const LOGO_K = 'spendnote.proLogoDataUrl';
-                const LEGACY_K = 'spendnote.receipt.logo.v1';
-                if (profile && window.LogoEditor?.loadFromProfile) {
-                    window.LogoEditor.loadFromProfile(profile);
-                }
+            if (profile && window.LogoEditor?.loadFromProfile) {
+                window.LogoEditor.loadFromProfile(profile);
             }
         } catch (_) {}
 
@@ -826,9 +792,7 @@ async function loadCashBoxData(id) {
         // Load cash-box-specific logo into Pro Options preview
         if (typeof window.setCashBoxLogo === 'function') {
             const dbLogo = String(cashBox.cash_box_logo_url || '').trim();
-            const storedLogo = readStoredCashBoxLogo(id);
-            console.log('[CB Logo Load] dbLogo length =', dbLogo.length, '| storedLogo length =', storedLogo.length, '| using =', dbLogo ? 'DB' : storedLogo ? 'localStorage' : 'none');
-            window.setCashBoxLogo(dbLogo || storedLogo || '');
+            window.setCashBoxLogo(dbLogo);
         }
         if (typeof window.hydrateCashBoxLogoSettingsFromDb === 'function') {
             try {
@@ -1041,13 +1005,11 @@ async function handleSave(e) {
             }
 
             if (!supportsCashBoxLogo) {
-                console.warn('[CB Logo Save] supportsCashBoxLogo=false → localStorage only');
-                const localLogo = String(cbLogoPending || '').trim();
-                writeStoredCashBoxLogo(targetId, localLogo);
-                if (typeof window.setCashBoxLogo === 'function') {
-                    window.setCashBoxLogo(localLogo);
-                }
-                return { success: true, localOnly: true };
+                console.warn('[CB Logo Save] cash_box_logo_url not available in this database.');
+                return {
+                    success: false,
+                    error: 'Cash box logo storage is not available. Apply the latest database migrations or contact support.'
+                };
             }
 
             const logoValue = String(cbLogoPending || '').trim();
@@ -1066,13 +1028,11 @@ async function handleSave(e) {
                 const isMissingLogoColumn = errText.includes('cash_box_logo_url')
                     && (errText.includes('column') || errText.includes('schema cache'));
                 if (isMissingLogoColumn) {
-                    console.warn('[CB Logo Save] Column missing → falling back to localStorage');
                     supportsCashBoxLogo = false;
-                    writeStoredCashBoxLogo(targetId, logoValue);
-                    if (typeof window.setCashBoxLogo === 'function') {
-                        window.setCashBoxLogo(logoValue);
-                    }
-                    return { success: true, localOnly: true };
+                    return {
+                        success: false,
+                        error: 'Cash box logo column is missing. Apply the latest database migrations or contact support.'
+                    };
                 }
                 return { success: false, error: error.message || 'Failed to save cash box logo.' };
             }
@@ -1100,17 +1060,18 @@ async function handleSave(e) {
                 }
             }
             if (persistedValue !== expectedValue && expectedValue) {
-                writeStoredCashBoxLogo(targetId, expectedValue);
                 if (typeof window.setCashBoxLogo === 'function') {
-                    window.setCashBoxLogo(expectedValue);
+                    window.setCashBoxLogo(persistedValue);
                 }
-                return { success: true, localOnly: true, verifyMismatch: true };
+                return {
+                    success: false,
+                    error: 'The saved logo did not match what was sent. It may have been truncated by the server; try a smaller image or a hosted URL.'
+                };
             }
 
             if (typeof window.setCashBoxLogo === 'function') {
                 window.setCashBoxLogo(persistedValue);
             }
-            writeStoredCashBoxLogo(targetId, persistedValue);
 
             return { success: true };
         };

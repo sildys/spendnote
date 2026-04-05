@@ -37,6 +37,18 @@ const QUICK_PRESET = {
     let receiptLogoUrl = '';
     const RECEIPT_MODE_KEY = 'spendnote.receiptMode';
 
+    /** Data URLs / very long URLs are not embedded in iframe src; receipt pages load logo via tx bootstrap + API. */
+    function appendReceiptLogoParam(params, logoUrl) {
+        const logo = String(logoUrl || '').trim();
+        if (!logo) return;
+        const isData = /^data:/i.test(logo);
+        const tooLong = logo.length > 6000;
+        if (isData || tooLong) {
+            return;
+        }
+        params.append('logoUrl', logo);
+    }
+
     let lastReceiptUrl = '';
     let reloadTimer = null;
     let hasInitializedFromTxData = false;
@@ -133,7 +145,7 @@ const QUICK_PRESET = {
             'email': 'spendnote-email-receipt.html'
         };
         const params = new URLSearchParams();
-        params.append('v', 'receipt-20260410-display-name');
+        params.append('v', 'receipt-20260405-db-logo-only');
         const currentTxId = getCurrentTxId();
         if (currentTxId) params.append('txId', currentTxId);
         params.append('bootstrap', '1');
@@ -173,9 +185,7 @@ const QUICK_PRESET = {
             params.append('idPrefix', resolvedPrefix);
         }
 
-        if (receiptLogoUrl) {
-            params.append('logoUrl', receiptLogoUrl);
-        }
+        appendReceiptLogoParam(params, receiptLogoUrl);
 
         try {
             const logoSettings = parseLogoSettingsFromCashBox(txData?.cash_box);
@@ -415,10 +425,11 @@ const QUICK_PRESET = {
         })();
 
         const snapshotLogo = String(t.sender_profile_logo_url_snapshot || '').trim();
+        const cbLogoDb = String(cb?.cash_box_logo_url || '').trim();
         receiptLogoUrl = String(
             snapshotLogo
-                || cb.cash_box_logo_url
-                || profile?.account_logo_url
+                || cbLogoDb
+                || String(profile?.account_logo_url || '').trim()
                 || ''
         ).trim();
 
@@ -926,6 +937,8 @@ html, body { height: auto !important; overflow: auto !important; }
 
                 const pdfParams = new URLSearchParams();
                 pdfParams.set('v', 'receipt-20260219-2048');
+                pdfParams.set('txId', currentTxId);
+                pdfParams.set('bootstrap', '1');
                 pdfParams.set('demo', '1');
                 pdfParams.set('download', '1');
                 pdfParams.set('preview', '0');
@@ -961,9 +974,7 @@ html, body { height: auto !important; overflow: auto !important; }
                     if (v) pdfParams.set(key, v);
                 }
 
-                if (receiptLogoUrl) {
-                    pdfParams.set('logoUrl', receiptLogoUrl);
-                }
+                appendReceiptLogoParam(pdfParams, receiptLogoUrl);
                 if (currentTxIsVoided) pdfParams.set('void', '1');
 
                 const pdfUrl = `${window.location.origin}/spendnote-pdf-receipt.html?${pdfParams.toString()}`;

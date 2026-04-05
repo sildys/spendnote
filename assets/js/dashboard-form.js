@@ -508,7 +508,7 @@ function initTransactionForm() {
                     };
 
                     const params = new URLSearchParams();
-                    params.set('v', 'print-20260220-2000');
+                    params.set('v', 'print-20260405-db-logo-only');
                     if (createdId) params.set('txId', createdId);
                     params.set('bootstrap', '1');
 

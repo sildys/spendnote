@@ -16,9 +16,6 @@ const applyRoleBadge = (roleValue) => {
 };
 
 const forceReceiptLogoBaselineUi = () => {
-    try { localStorage.setItem('spendnote.receipt.logoScale.v1', '1'); } catch (_) {}
-    try { localStorage.setItem('spendnote.receipt.logoPosition.v1', JSON.stringify({ x: 0, y: 0 })); } catch (_) {}
-
     const info = document.getElementById('logoEditorInfo');
     if (info) info.textContent = '100%';
 
@@ -522,7 +519,7 @@ const loadProfile = async () => {
     const logoSource = receiptIdentity != null ? receiptIdentity : mergedProfile;
     fillProfile(mergedProfile, receiptIdentity != null ? receiptIdentity : undefined);
     await refreshBillingSummary(mergedProfile);
-    // Sync DB logo to localStorage so it works on all devices
+    // Load receipt logo from profile (DB)
     if (window.LogoEditor?.loadFromProfile) {
         window.LogoEditor.loadFromProfile(logoSource);
     }
