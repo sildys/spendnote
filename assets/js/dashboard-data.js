@@ -80,7 +80,22 @@ async function maybeShowTierDowngradeModal(profile, cashBoxes) {
     const { formatCurrency, getIconClass, hexToRgb } = getSpendNoteHelpers();
     const isMulti = maxKeep > 1;
 
-    bodyEl.textContent = `Your plan now includes ${maxKeep} active cash box${isMulti ? 'es' : ''}. Pick ${isMulti ? 'the ones' : 'the one'} you want to keep recording into.`;
+    const titleEl = document.getElementById('tierCashBoxModalTitle');
+    if (titleEl) {
+        titleEl.textContent = `You can only use ${maxKeep} cash box${isMulti ? 'es' : ''} on this plan`;
+    }
+    bodyEl.innerHTML = `You currently have multiple cash boxes.<br>Only ${isMulti ? maxKeep : 'one'} can stay active &mdash; the others will stop recording new transactions.`;
+
+    const upgradeBtn = document.getElementById('tierCashBoxModalUpgrade');
+    if (upgradeBtn) {
+        try {
+            const planUrl = window.SpendNoteUpgrade?._buildPlanUrl?.('standard', 'Cash Boxes')
+                || '/spendnote-pricing.html?feature=Cash+Boxes';
+            upgradeBtn.href = planUrl;
+        } catch (_) {}
+    }
+
+    saveBtn.textContent = `Continue with ${maxKeep} cash box${isMulti ? 'es' : ''}`;
 
     listEl.innerHTML = '';
     const ordered = [...(cashBoxes || [])].sort((a, b) => {
