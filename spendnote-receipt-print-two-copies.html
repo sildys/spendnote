@@ -1108,7 +1108,8 @@ body {
           }
 
           try {
-            if (urlParams.get('logo') !== '0') {
+            const urlHadLogo = Boolean(urlParams.get('logoUrl') || urlParams.get('logoKey'));
+            if (!urlHadLogo && urlParams.get('logo') !== '0') {
               const preferredLogo = safeText(
                 String(tx.sender_profile_logo_url_snapshot || '').trim()
                   || tx?.cash_box?.cash_box_logo_url
