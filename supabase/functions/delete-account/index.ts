@@ -304,7 +304,57 @@ Deno.serve(async (req: Request) => {
       // ignore
     }
 
-    // 3) Explicitly delete profile first so profile-rooted cascades are executed
+    // 3) Re-assign org data to org owner BEFORE profile deletion.
+    // Without this, CASCADE on profiles.id would destroy org transactions/contacts/cash_boxes
+    // that the departing member created while on the team.
+    if (!isOwner) {
+      const orgDataTables: Array<{ table: string; userCol: string }> = [
+        { table: "transactions", userCol: "user_id" },
+        { table: "contacts", userCol: "user_id" },
+        { table: "cash_boxes", userCol: "user_id" },
+      ];
+
+      for (const { table, userCol } of orgDataTables) {
+        try {
+          const { data: orgRows } = await supabaseAdmin
+            .from(table)
+            .select("org_id")
+            .eq(userCol, userId)
+            .not("org_id", "is", null);
+
+          if (!orgRows || orgRows.length === 0) continue;
+
+          const distinctOrgIds = [
+            ...new Set(
+              orgRows
+                .map((r: Record<string, unknown>) => String(r.org_id || "").trim())
+                .filter(Boolean),
+            ),
+          ];
+
+          for (const oid of distinctOrgIds) {
+            const { data: orgRow } = await supabaseAdmin
+              .from("orgs")
+              .select("owner_user_id")
+              .eq("id", oid)
+              .maybeSingle();
+
+            const newOwnerId = String(orgRow?.owner_user_id || "").trim();
+            if (!newOwnerId || newOwnerId === userId) continue;
+
+            await supabaseAdmin
+              .from(table)
+              .update({ [userCol]: newOwnerId })
+              .eq(userCol, userId)
+              .eq("org_id", oid);
+          }
+        } catch (_) {
+          // Best-effort: if re-assignment fails, continue with deletion
+        }
+      }
+    }
+
+    // 4) Explicitly delete profile first so profile-rooted cascades are executed
     // before deleting auth.users (helps avoid legacy FK blockers).
     const isMissingAuditLogColumnError = (message: string): boolean => {
       const m = String(message || "");
