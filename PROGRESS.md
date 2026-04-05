@@ -98,24 +98,27 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-04-06 — Nyelvi szabály + billing hátralék)
+## Where we are now (last updated: 2026-04-06 — Tier gating lezárva, billing hátralék)
 
 ### Nyelv: PROGRESS vs app (kanonikus)
 
 - **PROGRESS + fejlesztői kommunikáció:** magyar.
 - **SpendNote app (production UI + emailek):** **csak angol.** Bármilyen új üzenet (upgrade/downgrade toast, email, gating szöveg) implementáláskor angol copy; nincs magyar user-facing szöveg az appban.
 
-### 2026-04-06 — Billing / csomagok (státusz és hátralék)
+### 2026-04-06 — Billing / csomagok: **minden tier client gating rendben**
 
-**Kész (visszajelzés alapján):**
+**Kész (kód + visszajelzés):**
 - Invite UX rendben.
-- **Free** csomag gating rendben (ellenőrizve).
+- **Free**, **Standard**, **Pro** (és **Preview** dev): feature flag térkép kanonikus helye `SpendNoteFeatures._FLAGS` (`assets/js/supabase-config.js`), paywallok és modálok a fő folyamatokon egyeztetve (`S1-SPEC.md` / `S2-STRIPE-PLAN.md`).
+- **Standard** ellenőrizve: új tx (nincs 20/200 kliens cap), CSV/PDF export, max 2 cash box + upgrade modal, org-szintű logo engedélyezett, Pro-only: custom receipt labels, email receipt, team invite, **custom ID prefix** (Pro modal + mentéskor SN), per-cash-box logo továbbra Pro felé (`can_customize_labels` proxy a cash box settings inline scriptben — viselkedés rendben).
+- **Cash box settings UX:** új kassza **currency** mező `<select>` (nem datalist); **ID prefix** upgrade modal szöveg frissítve (angol copy).
+- **Void:** UI korábban tévesen csak org `owner`/`admin` szerepkörnél engedélyezett → szóló / org-nélküli tulajoknál (Standard, Free, stb.) a gomb tiltva volt, holott az RPC (`spendnote_void_transaction`) a kassza tulajdonost is engedi. **Javítva:** void kizárólag org szerepkör **`user`** (meghívott tag) esetén tiltva UI-n; bulk void ugyanígy (`transaction-detail-ui.js`, `transaction-history-data.js`). Commit: `b249946` (és kapcsolódó cache-bust HTML).
 
-**Hátra:**
-- **Standard** csomag: teljes QA (owner/admin fő folyamatok — új tx, export, max 2 cash box, logo vs Pro címkék lock, email receipt tiltás, team invite tiltás). Forrás: `SpendNoteFeatures._FLAGS.standard` + `S1-SPEC.md` (figyelem: a spec táblázat „layout” vs „custom labels” sorai könnyen félreérthetők; a kódban Standardnál `can_customize_labels: false`).
+**Hátra (nem tier-gating):**
 - **Downgrade viselkedés:** `S1-SPEC.md` §4 szerint többlet cash box **zárolás** (nem törlés); jelenleg inkább limit **új** létrehozásnál — döntés: implementálni a zárolást, **vagy** frissíteni a specet, ha elfogadott a gyengébb garancia.
 - **Teljes lemondás:** Stripe `customer.subscription.deleted` → `free`; nincs dedikált downgrade UX/email.
 - **Üzenetek:** Upgrade után van dashboard **toast** (angol) + `upgrade_confirmed` email. **Downgrade** (vagy Pro→Standard) felé: még nincs párhuzamos toast/email — ha készül, **csak angol** szöveg + külön email handler (ne keverjük az upgrade copyval).
+- **S3 Stripe:** checkout / webhook / live teszt — lásd roadmap checklist.
 
 ---
 
@@ -199,10 +202,10 @@ If a chat thread freezes / context is lost: in the new thread say:
 **PENDING feladatok:**
 - [x] Team invite — custom modal + bekötés *(késznek jelölve — tulaj visszajelzés)*
 - [x] Free csomag gating — *(késznek jelölve)*
-- [ ] **Standard** csomag gating — teljes QA (lásd 2026-04-06 blokk)
+- [x] **Standard** (és tier-keresztmetszet) gating — **lezárva** (lásd fenti 2026-04-06 blokk: paywallok, void UI, ID prefix, currency select)
 - [ ] Downgrade / többlet erőforrás: **S1 §4 zárolás** vs jelenlegi viselkedés — döntés + implementáció vagy spec frissítés
 - [ ] Downgrade (és opcionálisan csomagváltás) **angol** in-app + email értesítés — upgrade mintájára, külön copy
-- [ ] Teljes gating QA: maradék oldalak / szerepkörök
+- [ ] Spot-check / regresszió: új oldalak vagy szerepkör-él esetek (nem blokkoló a tier launchra)
 - [ ] Free tier: 20 tx / 14 nap — regresszió teszt
 - [ ] Pricing → signup flow ellenőrzés
 - [ ] Checkout + webhook teszt (4242 kártya)
@@ -728,7 +731,7 @@ Jellemzők: sok készpénz, kis kifizetések, elszámolási kötelezettség, ön
   - `spendnote_void_transaction` auth átállítás `org_memberships` owner/admin modellre,
   - új atomi RPC: `spendnote_delete_cash_box`.
 - Frontend jogosultsági javítás:
-  - `transaction-detail-ui.js`: void gomb role-check átállítva `orgMemberships.getMyRole()` logikára (Owner/Admin).
+  - `transaction-detail-ui.js`: void gomb role-check átállítva `orgMemberships.getMyRole()` logikára (Owner/Admin). *Későbbi finomítás (2026-04-06): szóló tulaj / nem–`user` org tag számára is engedélyezve a UI, tiltás csak meghívott `user` szerepnél — lásd „Where we are now”.*
 - Frontend adatszűrés hardening:
   - `supabase-config.js`: org scope szűrés hozzáadva transactions és contacts lekérdezésekhez (`getAll`/`getPage`/`getStats`/`getById`).
 - Contact CRUD konzisztencia:
@@ -1769,10 +1772,11 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
   - Consistent icon types: info, success, warning, error, danger
   - Destructive confirms use red danger styling; prompts for email, void reason, delete confirmation
 
-## Paywall / Subscription rendszer — Állapot (2026-03-29)
+## Paywall / Subscription rendszer — Állapot (2026-04-06, előző összefoglaló: 2026-03-29)
 
 ### KÉSZ (gated + működik):
-- ✅ **Feature flag rendszer** (`_FLAGS` in `supabase-config.js`) — 4 tier: preview, free, standard, pro
+- ✅ **Feature flag rendszer** (`_FLAGS` in `supabase-config.js`) — 4 tier: preview, free, standard, pro; **`can_customize_id_prefix`** (Pro + preview), Standard/Free → SN + upgrade modal
+- ✅ **Új kassza currency** — `<select>` ISO listával (nem datalist); szerkesztés: currency továbbra zárolt
 - ✅ **Tier detection** DB-ből (`profiles.subscription_tier`)
 - ✅ **Cash box limit** — free=1, standard=2, pro=∞ (create-nél ellenőrizve, tier-aware modal)
 - ✅ **Transaction limit** — free=20 tx, preview=200, standard/pro=∞ — kliens + szerver guard (migration 039)
@@ -1784,10 +1788,10 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
 - ✅ **Custom labels gating** — readonly inputs + upgrade modal (Pro only)
 - ✅ **Team access gating** — cash box settings header + link intercepted, dedicated showTeamUpgrade modal
 - ✅ **Team invite gating** — `guardFeature` in team-page.js
-- ✅ **10 upgrade modal** konverziós copy-val: cashBox (tier-aware), logo, csv, pdf, labels, email, team, transactionLimit, trialExpired, generic lockOverlay
+- ✅ **Upgrade modalok** konverziós copy-val: cashBox (tier-aware), logo, csv, pdf, labels, email, team, transactionLimit, trialExpired, generic lockOverlay, **custom ID prefix** (`showIdPrefixUpgrade`)
 - ✅ **Stripe Edge Functions** léteznek: create-checkout-session, create-portal-session, stripe-webhook, update-subscription
 - ✅ **Client-side Stripe wiring** (`SpendNoteStripe` in supabase-config.js + user-settings.js)
-- ✅ **Void transaction** — javított RPC (migration 038): parameter name fix, cash box owner auth fallback, correct INSERT columns, org_id NULL guard az audit loghoz
+- ✅ **Void transaction** — javított RPC (migration 038): parameter name fix, cash box owner auth fallback, correct INSERT columns, org_id NULL guard az audit loghoz; **UI (2026-04-06):** void elérhető szóló tulajnak és Owner/Adminnak, kizárólag org **`user`** (meghívott) tiltva — egyezik az RPC-jogosultsággal
 - ✅ **Receipt print settings** — Done&Print és transaction detail receipt most a cash box settings display options-t és a can_upload_logo tier check-et használja
 - ✅ **14-day free trial** — kliens-oldali check (user.created_at) + szerver-oldali guard (migration 040) + dedikált showTrialExpiredUpgrade modal
 - ✅ **Trial warning banner** — dashboard tetején T-3 naptól, dinamikus countdown, date-based dismiss (másnap újra jön), "Upgrade now →" CTA
