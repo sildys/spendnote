@@ -1122,6 +1122,7 @@ window.setCashBoxLogo = function(dataUrl) {
     loadedCashBoxLogoSettings = readStoredCashBoxLogoSettings(keyId, true);
     pendingCashBoxLogoSettings = null;
     showCashBoxLogo(loadedCashBoxLogo);
+    reloadIframe();
 };
 
 /** After load or DB save: prefer server logo_settings over localStorage fallback. */
