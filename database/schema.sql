@@ -402,17 +402,29 @@ CREATE POLICY "Users can update their own contacts"
         )
     );
 
-CREATE POLICY "Users can delete their own contacts" 
-    ON public.contacts FOR DELETE 
+CREATE POLICY "Contacts delete owner admin or personal"
+    ON public.contacts FOR DELETE
     USING (
-        auth.uid() = user_id
+        (contacts.org_id IS NULL AND auth.uid() = contacts.user_id)
         OR (
-            org_id IS NOT NULL
+            contacts.org_id IS NOT NULL
             AND EXISTS (
                 SELECT 1
                 FROM public.org_memberships m
                 WHERE m.org_id = contacts.org_id
                   AND m.user_id = auth.uid()
+                  AND lower(m.role) IN ('owner', 'admin')
+            )
+        )
+        OR (
+            contacts.org_id IS NULL
+            AND EXISTS (
+                SELECT 1
+                FROM public.org_memberships m
+                INNER JOIN public.orgs o ON o.id = m.org_id
+                WHERE m.user_id = auth.uid()
+                  AND lower(m.role) IN ('owner', 'admin')
+                  AND o.owner_user_id = contacts.user_id
             )
         )
     );

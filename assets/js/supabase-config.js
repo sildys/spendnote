@@ -3013,6 +3013,44 @@ var db = {
             return { success: true, data };
         },
 
+        /**
+         * Delete permission aligned with RLS (057): shared org contacts — owner/admin only;
+         * personal (org_id null, own user_id) — always; legacy owner rows — owner/admin in that org.
+         */
+        async canDelete(contact) {
+            const user = await auth.getCurrentUser();
+            if (!user || !contact || typeof contact !== 'object') return false;
+
+            const ctx = await getMyOrgContext();
+            const role = String(ctx?.role || '').toLowerCase();
+            const elevated = role === 'owner' || role === 'admin';
+
+            const rowOrg = contact.org_id;
+            const rowUser = String(contact.user_id || '');
+            const myId = String(user.id);
+            const ownerId = String(ctx?.ownerUserId || '');
+
+            if (!rowOrg) {
+                if (rowUser === myId) return true;
+                if (elevated && ownerId && rowUser === ownerId) return true;
+                return false;
+            }
+            return elevated;
+        },
+
+        /** Bulk delete in list UI: hidden for org "user" role (cannot delete team contacts). */
+        async canBulkDeleteContacts() {
+            const user = await auth.getCurrentUser();
+            if (!user) return false;
+
+            const ctx = await getMyOrgContext();
+            const orgId = String(ctx?.orgId || '').trim();
+            if (!orgId) return true;
+
+            const role = String(ctx?.role || '').toLowerCase();
+            return role === 'owner' || role === 'admin';
+        },
+
         async delete(id) {
             const { error } = await supabaseClient
                 .from('contacts')

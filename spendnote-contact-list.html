@@ -928,10 +928,38 @@
                 .replace(/'/g, '&#39;');
         }
 
+        const CONTACT_DELETE_DENIED_HU = 'Nincs jogosultságod kontakt törléséhez. Kérd meg a csapat Owner vagy Admin szerepű tagját.';
+
+        async function applyContactBulkDeleteState() {
+            const bulkBtn = document.getElementById('bulkDelete');
+            if (!bulkBtn || !window.db?.contacts?.canBulkDeleteContacts) return;
+            try {
+                const ok = await window.db.contacts.canBulkDeleteContacts();
+                if (ok) {
+                    bulkBtn.removeAttribute('data-delete-restricted');
+                    bulkBtn.style.opacity = '';
+                    bulkBtn.style.cursor = '';
+                    bulkBtn.removeAttribute('title');
+                } else {
+                    bulkBtn.setAttribute('data-delete-restricted', '1');
+                    bulkBtn.style.opacity = '0.5';
+                    bulkBtn.style.cursor = 'not-allowed';
+                    bulkBtn.setAttribute('title', CONTACT_DELETE_DENIED_HU);
+                }
+            } catch (_) {
+                bulkBtn.setAttribute('data-delete-restricted', '1');
+                bulkBtn.style.opacity = '0.5';
+                bulkBtn.style.cursor = 'not-allowed';
+                bulkBtn.setAttribute('title', CONTACT_DELETE_DENIED_HU);
+            }
+        }
+
         async function loadContactsAndRender() {
             if (!window.db || !window.db.contacts) {
                 return;
             }
+
+            await applyContactBulkDeleteState();
 
             const [user, contacts, cashBoxes] = await Promise.all([
                 window.auth?.getCurrentUser ? window.auth.getCurrentUser() : Promise.resolve(null),
@@ -1668,6 +1696,11 @@
 
         // Bulk Delete
         document.getElementById('bulkDelete').addEventListener('click', async () => {
+            const bulkDelBtn = document.getElementById('bulkDelete');
+            if (bulkDelBtn?.getAttribute('data-delete-restricted') === '1') {
+                await showAlert(CONTACT_DELETE_DENIED_HU, { iconType: 'info' });
+                return;
+            }
             const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
             const count = checkedBoxes.length;
             if (count === 0) return;
@@ -1924,7 +1957,7 @@
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260415-sync-oauth-avatar"></script>
+    <script src="assets/js/supabase-config.js?v=20260405-contacts-delete-rbac-ui"></script>
     <script src="assets/js/auth-guard.js"></script>
     <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=20260223-2101"></script>
