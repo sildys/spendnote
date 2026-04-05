@@ -467,27 +467,30 @@ export const renderSubscriptionDowngradedTemplate = (args: {
 
   const needsCashBoxAction = total > max;
   const lostTeam = oldPlanLower === "pro" && teamCount > 0;
+  const needsAction = needsCashBoxAction || lostTeam;
+
+  const subtitle = needsCashBoxAction
+    ? "You need to choose which cash boxes stay active."
+    : (lostTeam ? "Your team access has changed." : "Your plan has been updated.");
 
   let consequenceHtml = "";
 
   if (needsCashBoxAction) {
-    consequenceHtml += `<p style="margin:0 0 8px;">You currently have <strong>${total} cash boxes</strong>, but your new plan allows only <strong>${max}</strong>.</p>
-      <p style="margin:0 0 4px;color:#b91c1c;font-weight:600;">The others will stop recording new transactions and become read-only.</p>`;
+    consequenceHtml += `<p style="margin:0 0 14px;">You currently have <strong>${total} cash boxes</strong>, but your new plan allows only <strong>${max}</strong>.</p>`;
+    consequenceHtml += `<p style="margin:0 0 6px;color:#b91c1c;font-weight:600;">The others will stop recording new transactions and become read-only.</p>`;
   }
 
   if (lostTeam) {
     const memberWord = teamCount === 1 ? "team member" : `${teamCount} team members`;
-    consequenceHtml += `<p style="margin:${needsCashBoxAction ? "12px" : "0"} 0 4px;color:#b91c1c;font-weight:600;">Your ${memberWord} will lose access to your cash boxes.</p>
-      <p style="margin:0 0 4px;color:#6b7280;font-size:13px;">Team management is only available on Pro. Without it, invited members can no longer view or record transactions.</p>`;
+    consequenceHtml += `<p style="margin:${needsCashBoxAction ? "6" : "0"}px 0 6px;color:#b91c1c;font-weight:600;">Your ${memberWord} will lose access to your cash boxes.</p>`;
   }
 
   if (!needsCashBoxAction && !lostTeam) {
-    consequenceHtml = `<p style="margin:0 0 4px;">Your ${total} cash ${total === 1 ? "box fits" : "boxes fit"} within the new limit, so nothing was changed.</p>`;
+    consequenceHtml = `<p style="margin:0 0 6px;">Your ${total} cash ${total === 1 ? "box fits" : "boxes fit"} within the new limit, so nothing was changed.</p>`;
   }
 
-  const needsAction = needsCashBoxAction || lostTeam;
   const primaryCta = needsAction
-    ? `<a href="${pricingUrl}" style="${CTA_STYLE}">Keep tracking across all locations &rarr;</a>`
+    ? `<a href="${pricingUrl}" style="${CTA_STYLE}">Keep all cash boxes active &rarr;</a>`
     : `<a href="${dashboardUrl}" style="${CTA_STYLE}">Open SpendNote &rarr;</a>`;
 
   const secondaryCta = needsCashBoxAction
@@ -496,10 +499,9 @@ export const renderSubscriptionDowngradedTemplate = (args: {
 
   const html = appCard(
     `Your plan was downgraded to ${newPlan}`,
-    "Action may be required.",
+    subtitle,
     `
       <p style="margin:0 0 10px;">Hi ${name},</p>
-      <p style="margin:0 0 14px;">Your SpendNote plan has been changed to <strong>${newPlan}</strong>.</p>
       <div style="margin:0 0 18px;">${consequenceHtml}</div>
       <div style="margin:18px 0 10px;">
         ${primaryCta}
@@ -509,7 +511,7 @@ export const renderSubscriptionDowngradedTemplate = (args: {
     `,
   );
 
-  const teamText = lostTeam ? `\nYour ${teamCount} team member${teamCount === 1 ? "" : "s"} will lose access to your cash boxes. Team management is only available on Pro.` : "";
-  const text = `Your SpendNote plan was downgraded to ${args.newPlan}\n\nHi ${args.fullName || "there"}, your plan has been changed to ${args.newPlan}.\n${needsCashBoxAction ? `You have ${total} cash boxes but the new limit is ${max}. The others will stop recording and become read-only.` : "Your cash boxes fit within the new limit."}${teamText}\n\nKeep all features: ${pricingUrl}\n${needsCashBoxAction ? `Choose which to keep: ${args.dashboardUrl}\n` : ""}Your data is safe — nothing will be deleted.`;
+  const teamText = lostTeam ? `\nYour ${teamCount} team member${teamCount === 1 ? "" : "s"} will lose access to your cash boxes.` : "";
+  const text = `Your SpendNote plan was downgraded to ${args.newPlan}\n\nHi ${args.fullName || "there"},\n${needsCashBoxAction ? `You currently have ${total} cash boxes, but your new plan allows only ${max}.\nThe others will stop recording new transactions and become read-only.` : "Your cash boxes fit within the new limit."}${teamText}\n\nKeep all cash boxes active: ${pricingUrl}\n${needsCashBoxAction ? `Choose which to keep: ${args.dashboardUrl}\n` : ""}\nYour data is safe — nothing will be deleted.`;
   return { subject, html, text };
 };
