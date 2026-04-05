@@ -831,6 +831,7 @@ async function loadCashBoxData(id) {
         if (typeof window.setCashBoxLogo === 'function') {
             const dbLogo = String(cashBox.cash_box_logo_url || '').trim();
             const storedLogo = readStoredCashBoxLogo(id);
+            console.log('[CB Logo Load] dbLogo length =', dbLogo.length, '| storedLogo length =', storedLogo.length, '| using =', dbLogo ? 'DB' : storedLogo ? 'localStorage' : 'none');
             window.setCashBoxLogo(dbLogo || storedLogo || '');
         }
         if (typeof window.hydrateCashBoxLogoSettingsFromDb === 'function') {
@@ -1026,16 +1027,25 @@ async function handleSave(e) {
             : undefined;
 
         const persistCashBoxLogoStrict = async (cashBoxId) => {
+            console.log('[CB Logo Save] persistCashBoxLogoStrict called', {
+                cbLogoPending: cbLogoPending === undefined ? 'undefined' : cbLogoPending === null ? 'null' : `string(${String(cbLogoPending).length})`,
+                supportsCashBoxLogo,
+                cashBoxId
+            });
+
             if (cbLogoPending === undefined || cbLogoPending === null) {
+                console.log('[CB Logo Save] No pending logo change, skipping');
                 return { success: true };
             }
 
             const targetId = String(cashBoxId || '').trim();
             if (!targetId) {
+                console.error('[CB Logo Save] Missing cash box ID');
                 return { success: false, error: 'Missing cash box ID for logo save.' };
             }
 
             if (!supportsCashBoxLogo) {
+                console.warn('[CB Logo Save] supportsCashBoxLogo=false → localStorage only');
                 const localLogo = String(cbLogoPending || '').trim();
                 writeStoredCashBoxLogo(targetId, localLogo);
                 if (typeof window.setCashBoxLogo === 'function') {
@@ -1045,6 +1055,7 @@ async function handleSave(e) {
             }
 
             const logoValue = String(cbLogoPending || '').trim();
+            console.log('[CB Logo Save] Attempting DB update, logoValue length =', logoValue.length);
 
             const { data, error } = await window.supabaseClient
                 .from('cash_boxes')
@@ -1054,10 +1065,12 @@ async function handleSave(e) {
                 .maybeSingle();
 
             if (error) {
+                console.error('[CB Logo Save] DB error:', error);
                 const errText = String(error?.message || '').toLowerCase();
                 const isMissingLogoColumn = errText.includes('cash_box_logo_url')
                     && (errText.includes('column') || errText.includes('schema cache'));
                 if (isMissingLogoColumn) {
+                    console.warn('[CB Logo Save] Column missing → falling back to localStorage');
                     supportsCashBoxLogo = false;
                     writeStoredCashBoxLogo(targetId, logoValue);
                     if (typeof window.setCashBoxLogo === 'function') {
@@ -1067,6 +1080,7 @@ async function handleSave(e) {
                 }
                 return { success: false, error: error.message || 'Failed to save cash box logo.' };
             }
+            console.log('[CB Logo Save] DB update result:', { id: data?.id, hasLogo: Boolean(data?.cash_box_logo_url), logoLength: String(data?.cash_box_logo_url || '').length });
 
             if (!data?.id) {
                 return { success: false, error: 'Cash box logo update did not affect any rows.' };
@@ -1130,6 +1144,9 @@ async function handleSave(e) {
 
         if (cbLogoPending !== null && cbLogoPending !== undefined) {
             updatePayload.cash_box_logo_url = cbLogoPending || null;
+            console.log('[CB Logo Save] Logo added to main updatePayload, length =', String(cbLogoPending || '').length);
+        } else {
+            console.log('[CB Logo Save] No pending logo → not in main payload');
         }
 
         const stripReceiptLabelFields = (payload) => {
@@ -1211,6 +1228,7 @@ async function handleSave(e) {
 
                 if (msg.includes('cash_box_logo_url')) {
                     if (supportsCashBoxLogo) {
+                        console.warn('[CB Logo Save] Main update failed on cash_box_logo_url → disabling for session', msg);
                         supportsCashBoxLogo = false;
                         changed = true;
                     }
