@@ -970,6 +970,17 @@ async function handleSave(e) {
             idPrefixInput.dataset.originalIdPrefix = idPrefix;
         }
 
+        if (!isEditMode) {
+            const canCustomPrefix = await window.SpendNoteFeatures?.can('can_customize_id_prefix');
+            if (!canCustomPrefix) {
+                idPrefix = normalizeCashBoxIdPrefix('SN');
+                if (idPrefixInput) {
+                    idPrefixInput.value = idPrefix;
+                    idPrefixInput.dataset.originalIdPrefix = idPrefix;
+                }
+            }
+        }
+
         const receiptTextValues = {
             receiptTitle: String(document.getElementById('receiptTitle')?.value || '').trim(),
             totalLabel: String(document.getElementById('totalLabel')?.value || '').trim(),
@@ -1380,6 +1391,39 @@ async function lockProSectionIfNeeded() {
     } catch (_) {}
 }
 
+async function applyIdPrefixTierLock() {
+    try {
+        const idPrefixInput = document.getElementById('idPrefixInput');
+        if (!idPrefixInput || isEditMode) return;
+
+        const canCustom = await window.SpendNoteFeatures?.can('can_customize_id_prefix');
+        if (canCustom) {
+            idPrefixInput.readOnly = false;
+            idPrefixInput.removeAttribute('aria-readonly');
+            idPrefixInput.classList.remove('field-input-locked');
+            idPrefixInput.title = '';
+            return;
+        }
+
+        idPrefixInput.value = normalizeCashBoxIdPrefix('SN');
+        idPrefixInput.readOnly = true;
+        idPrefixInput.setAttribute('aria-readonly', 'true');
+        idPrefixInput.classList.add('field-input-locked');
+        idPrefixInput.title = 'Custom receipt ID prefix is a Pro feature. Click to learn more.';
+
+        let idPrefixUpgradeCooldown = false;
+        const openIdPrefixUpgrade = () => {
+            if (idPrefixUpgradeCooldown) return;
+            idPrefixUpgradeCooldown = true;
+            setTimeout(() => { idPrefixUpgradeCooldown = false; }, 400);
+            idPrefixInput.blur();
+            window.SpendNoteUpgrade?.showIdPrefixUpgrade?.();
+        };
+        idPrefixInput.addEventListener('focus', openIdPrefixUpgrade);
+        idPrefixInput.addEventListener('click', openIdPrefixUpgrade);
+    } catch (_) {}
+}
+
 async function lockLogoToggleIfNeeded() {
     try {
         const canLogo = await window.SpendNoteFeatures?.can('can_upload_logo');
@@ -1406,7 +1450,17 @@ async function lockLogoToggleIfNeeded() {
 
 // Initialize when page loads
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', async () => { await initCashBoxSettings(); lockProSectionIfNeeded(); lockLogoToggleIfNeeded(); });
+    document.addEventListener('DOMContentLoaded', async () => {
+        await initCashBoxSettings();
+        await applyIdPrefixTierLock();
+        lockProSectionIfNeeded();
+        lockLogoToggleIfNeeded();
+    });
 } else {
-    (async () => { await initCashBoxSettings(); lockProSectionIfNeeded(); lockLogoToggleIfNeeded(); })();
+    (async () => {
+        await initCashBoxSettings();
+        await applyIdPrefixTierLock();
+        lockProSectionIfNeeded();
+        lockLogoToggleIfNeeded();
+    })();
 }
