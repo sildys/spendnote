@@ -601,7 +601,13 @@ const initTeamPage = async () => {
             if (!result?.success) { showAlert(result?.error || 'Failed.', { iconType: 'error' }); return; }
             await loadTeam();
             updateSeatCounter();
-            showAlert(isPending ? 'Invite revoked.' : 'Member removed.', { iconType: 'success' });
+            if (isPending) {
+                showAlert('Invite revoked.', { iconType: 'success' });
+            } else if (result?.emailError) {
+                showAlert('Member removed. The notification email could not be sent — they may still see the change when they sign in.', { iconType: 'warning' });
+            } else {
+                showAlert('Member removed.', { iconType: 'success' });
+            }
         }
     });
 

@@ -1541,7 +1541,13 @@ const initUserSettingsPage = async () => {
             const result = await window.db.teamMembers.remove(id);
             if (!result?.success) { showAlert(result?.error || 'Failed to remove.', { iconType: 'error' }); return; }
             await loadTeam();
-            showAlert(isPending ? 'Invite revoked.' : 'Member removed.', { iconType: 'success' });
+            if (isPending) {
+                showAlert('Invite revoked.', { iconType: 'success' });
+            } else if (result?.emailError) {
+                showAlert('Member removed. The notification email could not be sent — they may still see the change when they sign in.', { iconType: 'warning' });
+            } else {
+                showAlert('Member removed.', { iconType: 'success' });
+            }
         }
     });
 

@@ -390,6 +390,37 @@ export const renderWelcomeInvitedMemberTemplate = (args: {
   return { subject, html, text };
 };
 
+// ─── Removed from team (former org member) ───────────────────────────────────────
+
+export const renderTeamMemberRemovedTemplate = (args: {
+  fullName?: string;
+  orgName?: string;
+  dashboardUrl: string;
+}): BaseEmailTemplate => {
+  const name = esc(String(args.fullName || "there").trim() || "there");
+  const org = esc(String(args.orgName || "your team").trim() || "your team");
+  const dashboardUrl = esc(args.dashboardUrl || "https://spendnote.app/dashboard.html");
+  const subject = `You've been removed from ${args.orgName || "a team"} on SpendNote`;
+
+  const html = appCard(
+    "Team access removed",
+    `You no longer have access to ${org}.`,
+    `
+      <p style="margin:0 0 10px;">Hi ${name},</p>
+      <p style="margin:0 0 10px;">A team owner or admin removed you from <strong>${org}</strong> on SpendNote. You can no longer see that team's Cash Boxes, transactions, or contacts.</p>
+      <p style="margin:0 0 14px;">Your SpendNote account is still active. If you had a personal Cash Box with no activity, it may have been cleared so you start fresh on your own.</p>
+      <div style="margin:18px 0 16px;">
+        <a href="${dashboardUrl}" style="${CTA_STYLE}">Open your dashboard &rarr;</a>
+      </div>
+      <p style="margin:0;color:#6b7280;font-size:12px;">Questions? Visit our <a href="https://spendnote.app/spendnote-faq.html" style="color:#1d4ed8;">FAQ</a> or contact <a href="mailto:support@spendnote.app" style="color:#1d4ed8;">support@spendnote.app</a>.</p>
+    `,
+  );
+
+  const text =
+    `You've been removed from ${args.orgName || "a team"} on SpendNote\n\nHi ${args.fullName || "there"},\n\nA team owner or admin removed you from ${args.orgName || "a team"}. You can no longer see that team's Cash Boxes, transactions, or contacts.\n\nYour SpendNote account stays active.\n\nOpen your dashboard: ${args.dashboardUrl}`;
+  return { subject, html, text };
+};
+
 // ─── Password changed ───────────────────────────────────────────────────────────
 
 export const renderPasswordChangedTemplate = (): BaseEmailTemplate => {

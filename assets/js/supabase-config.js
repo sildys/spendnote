@@ -435,6 +435,92 @@ const __spendnoteSendUserEventEmail = async (payload = {}) => {
 };
 
 /**
+ * Remove an active org member via Edge Function (Cash Box membership cleanup, optional solo box cleanup, notification email).
+ */
+const __spendnoteInvokeRemoveOrgMember = async (orgId, targetUserId) => {
+    try {
+        try {
+            await (window.__spendnoteAuthCallbackPromise || Promise.resolve());
+        } catch (_) {
+            // ignore
+        }
+        let accessToken = '';
+        for (let i = 0; i < 8; i++) {
+            try {
+                const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();
+                if (!sessErr && session?.access_token) {
+                    accessToken = session.access_token;
+                    break;
+                }
+            } catch (_) {
+                // ignore
+            }
+            await new Promise((resolve) => setTimeout(resolve, 150 * (i + 1)));
+        }
+        if (!accessToken) {
+            try {
+                const { data, error } = await supabaseClient.auth.refreshSession();
+                if (!error && data?.session?.access_token) accessToken = data.session.access_token;
+            } catch (_) {
+                // ignore
+            }
+        }
+        if (!accessToken) {
+            return { success: false, error: 'Not authenticated.' };
+        }
+
+        const looksLikeJwt = (v) => {
+            const s = String(v || '');
+            return /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(s);
+        };
+        if (!looksLikeJwt(accessToken)) {
+            return { success: false, error: 'Session is invalid. Please log out and log in again.' };
+        }
+
+        const doRequest = async (jwt) => {
+            return await fetch(`${SUPABASE_URL}/functions/v1/remove-org-member`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`,
+                    'apikey': SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify({ orgId, targetUserId })
+            });
+        };
+
+        let resp = await doRequest(accessToken);
+        if (resp.status === 401) {
+            try {
+                await supabaseClient.auth.refreshSession();
+                const s2 = await supabaseClient.auth.getSession();
+                const t2 = String(s2?.data?.session?.access_token || '');
+                if (looksLikeJwt(t2)) resp = await doRequest(t2);
+            } catch (_) {
+                // ignore
+            }
+        }
+
+        let payload = null;
+        try {
+            payload = await resp.json();
+        } catch (_) {
+            payload = null;
+        }
+
+        if (!resp.ok) {
+            return { success: false, error: String(payload?.error || `Remove failed (${resp.status}).`) };
+        }
+        if (!payload || !payload.success) {
+            return { success: false, error: String(payload?.error || 'Failed to remove member.') };
+        }
+        return { success: true, data: payload };
+    } catch (e) {
+        return { success: false, error: String(e?.message || 'Failed to remove member.') };
+    }
+};
+
+/**
  * Welcome / owner-onboarding emails apply to solo accounts and users who own a workspace.
  * Invited members (org user/admin, not orgs.owner_user_id) should not receive them.
  */
@@ -4199,20 +4285,23 @@ var db = {
             const ctx = await getMyOrgContext();
             if (!ctx?.orgId) return { success: false, error: 'No org' };
 
-            const membershipDelete = await supabaseClient
+            const { data: activeMember, error: activeLookupErr } = await supabaseClient
                 .from('org_memberships')
-                .delete()
+                .select('user_id')
                 .eq('org_id', ctx.orgId)
                 .eq('user_id', memberId)
-                .select('user_id');
+                .maybeSingle();
 
-            if (membershipDelete.error) {
-                console.error('Error removing org membership:', membershipDelete.error);
-                return { success: false, error: membershipDelete.error.message };
-            }
-
-            if (Array.isArray(membershipDelete.data) && membershipDelete.data.length) {
-                return { success: true };
+            if (!activeLookupErr && activeMember?.user_id) {
+                const removed = await __spendnoteInvokeRemoveOrgMember(ctx.orgId, memberId);
+                if (!removed.success) {
+                    return { success: false, error: removed.error || 'Failed to remove member.' };
+                }
+                return {
+                    success: true,
+                    emailSent: Boolean(removed.data?.emailSent),
+                    emailError: removed.data?.emailError || null
+                };
             }
 
             // Pending invite removal: prefer SECURITY DEFINER RPC (RLS-safe)
