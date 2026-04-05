@@ -1141,9 +1141,7 @@ body {
             const urlHadLogo = Boolean(String(urlParams.get('logoUrl') || '').trim());
             if (!urlHadLogo && urlParams.get('logo') !== '0') {
               const preferredLogo = safeText(
-                String(tx?.cash_box?.cash_box_logo_url || '').trim()
-                  || String(tx.sender_profile_logo_url_snapshot || '').trim()
-                  || profile?.account_logo_url,
+                String(tx.sender_profile_logo_url_snapshot || '').trim(),
                 ''
               );
               if (preferredLogo) {

@@ -149,7 +149,7 @@ const QUICK_PRESET = {
             'email': 'spendnote-email-receipt.html'
         };
         const params = new URLSearchParams();
-        params.append('v', 'receipt-20260406-cb-logo-first');
+        params.append('v', 'receipt-20260406-snapshot-logo-only');
         const currentTxId = getCurrentTxId();
         if (currentTxId) params.append('txId', currentTxId);
         params.append('bootstrap', '1');
@@ -433,15 +433,8 @@ const QUICK_PRESET = {
             }
         })();
 
-        const snapshotLogo = String(t.sender_profile_logo_url_snapshot || '').trim();
-        const cbLogoDb = String(cb?.cash_box_logo_url || '').trim();
-        // Live cash box logo wins: snapshot often stores profile logo when the box had no logo at insert time.
-        receiptLogoUrl = String(
-            cbLogoDb
-                || snapshotLogo
-                || String(profile?.account_logo_url || '').trim()
-                || ''
-        ).trim();
+        // Frozen receipt logo only (transaction detail / historical receipts). Never live cash box or profile.
+        receiptLogoUrl = String(t.sender_profile_logo_url_snapshot || '').trim();
 
         const mapBool = (v, fallback) => {
             if (typeof v === 'boolean') return v;
