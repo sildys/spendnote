@@ -90,6 +90,16 @@ Deno.serve(async (req: Request) => {
       return Number(count || 0);
     };
 
+    const countPersonal = async (table: string, uid: string): Promise<number> => {
+      const { count, error } = await supabaseAdmin
+        .from(table)
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", uid)
+        .is("org_id", null);
+      if (error) throw new Error(`Failed to count personal ${table}: ${error.message}`);
+      return Number(count || 0);
+    };
+
     const countByIn = async (table: string, column: string, values: string[]): Promise<number> => {
       if (!values || values.length === 0) return 0;
       const { count, error } = await supabaseAdmin
@@ -195,9 +205,9 @@ Deno.serve(async (req: Request) => {
               ownedOrgCount: 0,
               teamMembershipCount: await countByEq("org_memberships", "user_id", userId),
               pendingInviteCount: 0,
-              personalCashBoxCount: await countByEq("cash_boxes", "user_id", userId),
-              personalContactCount: await countByEq("contacts", "user_id", userId),
-              personalTransactionCount: await countByEq("transactions", "user_id", userId),
+              personalCashBoxCount: await countPersonal("cash_boxes", userId),
+              personalContactCount: await countPersonal("contacts", userId),
+              personalTransactionCount: await countPersonal("transactions", userId),
               sharedOrgCount: memberOrgIds.length,
             };
 
