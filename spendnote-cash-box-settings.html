@@ -39,7 +39,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=23">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=21">
-    <link rel="stylesheet" href="assets/css/cash-box-settings.css?v=20260415-member-avatars">
+    <link rel="stylesheet" href="assets/css/cash-box-settings.css?v=20260405-currency-select">
 </head>
 <body>
 <div id="nav-container"></div>
@@ -83,18 +83,39 @@
                                 <span class="field-hint">Appears on receipts</span>
                             </div>
                             <div class="field-group" id="currencyFieldGroup">
-                                <label class="field-label"><i class="fas fa-coins"></i> Currency</label>
-                                <input type="text" class="field-input" id="currencySelect" list="currencyList" value="USD" autocapitalize="characters" autocomplete="off" spellcheck="false">
-                                <datalist id="currencyList">
-                                    <option value="USD" label="US Dollar ($)"></option>
-                                    <option value="EUR" label="Euro (EUR)"></option>
-                                    <option value="GBP" label="British Pound (L)"></option>
-                                    <option value="HUF" label="Hungarian Forint (Ft)"></option>
-                                    <option value="JPY" label="Japanese Yen (Y)"></option>
-                                    <option value="CHF" label="Swiss Franc (CHF)"></option>
-                                    <option value="CAD" label="Canadian Dollar (CA$)"></option>
-                                    <option value="AUD" label="Australian Dollar (A$)"></option>
-                                </datalist>
+                                <label class="field-label" for="currencySelect"><i class="fas fa-coins"></i> Currency</label>
+                                <select class="field-input" id="currencySelect" autocomplete="off">
+                                    <option value="USD">USD — US Dollar</option>
+                                    <option value="EUR">EUR — Euro</option>
+                                    <option value="GBP">GBP — British Pound</option>
+                                    <option value="HUF">HUF — Hungarian Forint</option>
+                                    <option value="JPY">JPY — Japanese Yen</option>
+                                    <option value="CHF">CHF — Swiss Franc</option>
+                                    <option value="CAD">CAD — Canadian Dollar</option>
+                                    <option value="AUD">AUD — Australian Dollar</option>
+                                    <option value="PLN">PLN — Polish Złoty</option>
+                                    <option value="CZK">CZK — Czech Koruna</option>
+                                    <option value="SEK">SEK — Swedish Krona</option>
+                                    <option value="NOK">NOK — Norwegian Krone</option>
+                                    <option value="DKK">DKK — Danish Krone</option>
+                                    <option value="RON">RON — Romanian Leu</option>
+                                    <option value="BGN">BGN — Bulgarian Lev</option>
+                                    <option value="ISK">ISK — Icelandic Króna</option>
+                                    <option value="INR">INR — Indian Rupee</option>
+                                    <option value="BRL">BRL — Brazilian Real</option>
+                                    <option value="MXN">MXN — Mexican Peso</option>
+                                    <option value="NZD">NZD — New Zealand Dollar</option>
+                                    <option value="SGD">SGD — Singapore Dollar</option>
+                                    <option value="KRW">KRW — South Korean Won</option>
+                                    <option value="CNY">CNY — Chinese Yuan</option>
+                                    <option value="TRY">TRY — Turkish Lira</option>
+                                    <option value="ZAR">ZAR — South African Rand</option>
+                                    <option value="ILS">ILS — Israeli Shekel</option>
+                                    <option value="PHP">PHP — Philippine Peso</option>
+                                    <option value="THB">THB — Thai Baht</option>
+                                    <option value="MYR">MYR — Malaysian Ringgit</option>
+                                    <option value="IDR">IDR — Indonesian Rupiah</option>
+                                </select>
                             </div>
                             <div class="field-group id-prefix-group">
                                 <span class="pro-badge id-prefix-badge"><i class="fas fa-crown"></i> Pro</span>
@@ -1124,6 +1145,6 @@ if (typeof showPageTip === 'function') {
     }
 }
 </script>
-<script src="assets/js/cash-box-settings-data.js?v=20260405-db-logo-only"></script>
+<script src="assets/js/cash-box-settings-data.js?v=20260405-currency-select"></script>
 </body>
 </html>

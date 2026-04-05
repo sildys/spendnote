@@ -238,6 +238,16 @@
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+select.field-input {
+    cursor: pointer;
+    min-height: 40px;
+    appearance: auto;
+}
+
+select.field-input:disabled {
+    cursor: not-allowed;
+}
+
 .field-input:hover {
     border-color: rgba(var(--active-rgb), 0.35);
 }

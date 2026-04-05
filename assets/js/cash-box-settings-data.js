@@ -38,6 +38,19 @@ function normalizeCashBoxIdPrefix(value) {
     return up;
 }
 
+/** Ensures <select id="currencySelect"> can show a stored ISO code not in the static option list. */
+function ensureCurrencySelectHasOption(selectEl, code) {
+    if (!selectEl || !code) return;
+    const c = String(code).trim().toUpperCase();
+    if (!/^[A-Z]{3}$/.test(c)) return;
+    const exists = Array.from(selectEl.options).some((o) => o.value === c);
+    if (exists) return;
+    const opt = document.createElement('option');
+    opt.value = c;
+    opt.textContent = `${c} — (saved)`;
+    selectEl.appendChild(opt);
+}
+
 function normalizeCashBoxLogoSettingsForDb(value) {
     const src = (value && typeof value === 'object') ? value : {};
     let scale = Number(src.scale);
@@ -443,13 +456,14 @@ function bindSummaryLiveUpdates() {
 
     const currencyInput = document.getElementById('currencySelect');
     if (currencyInput) {
-        currencyInput.addEventListener('input', () => {
+        const syncSummaryCurrency = () => {
             const balanceEl = document.getElementById('summaryBalance');
             if (!balanceEl) return;
             const currency = String(currencyInput.value || 'USD').toUpperCase();
             const amount = currentCashBoxData?.current_balance;
             balanceEl.textContent = formatMoney(amount, currency);
-        });
+        };
+        currencyInput.addEventListener('change', syncSummaryCurrency);
     }
 
     // Icon palette -> summary icon
@@ -661,15 +675,18 @@ async function loadCashBoxData(id) {
         // Populate currency
         const currencySelect = document.getElementById('currencySelect');
         if (currencySelect && cashBox.currency) {
-            currencySelect.value = cashBox.currency;
-            currencySelect.dataset.originalCurrency = cashBox.currency;
+            const code = String(cashBox.currency).trim().toUpperCase();
+            ensureCurrencySelectHasOption(currencySelect, code);
+            currencySelect.value = code;
+            currencySelect.dataset.originalCurrency = code;
         }
 
         if (currencySelect) {
             const lockCurrency = Boolean(isEditMode);
-            currencySelect.readOnly = lockCurrency;
-            currencySelect.setAttribute('aria-readonly', lockCurrency ? 'true' : 'false');
-            currencySelect.title = '';
+            currencySelect.disabled = lockCurrency;
+            currencySelect.setAttribute('aria-disabled', lockCurrency ? 'true' : 'false');
+            currencySelect.removeAttribute('aria-readonly');
+            currencySelect.title = lockCurrency ? 'Currency cannot be changed after creation.' : '';
             currencySelect.classList.toggle('field-input-locked', lockCurrency);
         }
 
@@ -902,7 +919,7 @@ async function handleSave(e) {
 
         let currency = canonicalizeCurrency(currencyInput ? currencyInput.value : 'USD');
         if (!currency) {
-            showAlert('Currency must be a valid ISO 4217 code (e.g., USD, EUR, HUF).\nTip: you can type "Ft" and it will be saved as HUF.', { iconType: 'warning' });
+            showAlert('Please choose a valid currency from the list.', { iconType: 'warning' });
             return;
         }
 
