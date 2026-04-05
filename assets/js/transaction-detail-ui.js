@@ -36,14 +36,18 @@ const QUICK_PRESET = {
 
     let receiptLogoUrl = '';
     const RECEIPT_MODE_KEY = 'spendnote.receiptMode';
+    /** Same cap as cash box settings preview — longer logos use previewLogoInject + parent postMessage. */
+    const PREVIEW_LOGO_MAX_QUERY_CHARS = 2048;
 
-    /** Data URLs / very long URLs are not embedded in iframe src; receipt pages load logo via tx bootstrap + API. */
+    /** data: URLs and very long URLs skip logoUrl query; parent sends logo via postMessage (see receiptFrame load). */
     function appendReceiptLogoParam(params, logoUrl) {
+        params.delete('previewLogoInject');
         const logo = String(logoUrl || '').trim();
         if (!logo) return;
         const isData = /^data:/i.test(logo);
-        const tooLong = logo.length > 6000;
-        if (isData || tooLong) {
+        const tooLongForQuery = logo.length > PREVIEW_LOGO_MAX_QUERY_CHARS;
+        if (isData || tooLongForQuery) {
+            params.set('previewLogoInject', '1');
             return;
         }
         params.append('logoUrl', logo);
@@ -145,7 +149,7 @@ const QUICK_PRESET = {
             'email': 'spendnote-email-receipt.html'
         };
         const params = new URLSearchParams();
-        params.append('v', 'receipt-20260405-db-logo-only');
+        params.append('v', 'receipt-20260405-preview-logo-pm');
         const currentTxId = getCurrentTxId();
         if (currentTxId) params.append('txId', currentTxId);
         params.append('bootstrap', '1');
@@ -185,7 +189,12 @@ const QUICK_PRESET = {
             params.append('idPrefix', resolvedPrefix);
         }
 
+        window.__spendnoteTxPreviewLogoPm = '';
         appendReceiptLogoParam(params, receiptLogoUrl);
+        if (params.get('previewLogoInject') === '1') {
+            const raw = String(receiptLogoUrl || '').trim();
+            if (raw) window.__spendnoteTxPreviewLogoPm = raw;
+        }
 
         try {
             const logoSettings = parseLogoSettingsFromCashBox(txData?.cash_box);
@@ -643,6 +652,19 @@ html, body { height: auto !important; overflow: auto !important; }
         if (receiptFrame) {
             receiptFrame.addEventListener('load', () => {
                 scheduleZoomUpdate();
+                try {
+                    const pm = String(window.__spendnoteTxPreviewLogoPm || '').trim();
+                    if (!pm) return;
+                    const w = receiptFrame.contentWindow;
+                    if (!w) return;
+                    const origin = window.location.origin;
+                    const send = () => {
+                        try {
+                            w.postMessage({ spendnote: 'previewLogo', logoUrl: pm }, origin);
+                        } catch (_) {}
+                    };
+                    requestAnimationFrame(() => requestAnimationFrame(send));
+                } catch (_) {}
             });
         }
 

@@ -557,6 +557,12 @@ body {
 
 <script>
   const urlParams = new URLSearchParams(window.location.search);
+  const spendnotePreviewLogoPmEligible = () => {
+    if (urlParams.get('previewLogoInject') !== '1') return false;
+    if (urlParams.get('demo') === '1') return true;
+    const tid = String(urlParams.get('txId') || '').trim();
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(tid);
+  };
   document.body.classList.add('two-copies');
   const shouldShowAddresses = urlParams.get('addresses') !== '0';
   const itemsMode = String(urlParams.get('itemsMode') || '').toLowerCase();
@@ -591,7 +597,7 @@ body {
   const resolveLogoUrl = () => String(urlParams.get('logoUrl') || '').trim();
 
   (function spendnoteBindSettingsPreviewLogoMessage() {
-    if (urlParams.get('previewLogoInject') !== '1' || urlParams.get('demo') !== '1') return;
+    if (!spendnotePreviewLogoPmEligible()) return;
     window.addEventListener('message', (e) => {
       try {
         if (!window.parent || e.source !== window.parent) return;
@@ -839,7 +845,7 @@ body {
     document.querySelectorAll('.logo, .logo-box, .logo-img, .sn-logo').forEach(el => el.style.display = 'none');
     // Make header-rule full width when logo is hidden
     document.querySelectorAll('.header-rule').forEach(el => el.classList.add('full-width'));
-  } else if (urlParams.get('previewLogoInject') === '1' && urlParams.get('demo') === '1') {
+  } else if (spendnotePreviewLogoPmEligible()) {
     document.querySelectorAll('.logo-box').forEach((box) => {
       box.textContent = '';
       box.style.display = '';
