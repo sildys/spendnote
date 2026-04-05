@@ -48,6 +48,7 @@ const QUICK_PRESET = {
     /** Org role User cannot edit Pro receipt labels (same policy as Receipt Identity in User settings). */
     let txProOptionsLockedForOrgUser = false;
     let _lastTxProLabelsUserRoleMsgAt = 0;
+    let receiptToggleSaveTimer = null;
 
     const TX_PRO_LABELS_USER_ROLE_MESSAGE =
         'Pro receipt labels are managed by your team owner or admin. You can view them here—ask the owner or an admin if they need to change.';
@@ -81,13 +82,47 @@ const QUICK_PRESET = {
         return txId;
     }
 
-    function resolveLogoRenderSettings(cb) {
-        const ls = cb?.logo_settings || null;
-        const parseFinite = (v) => { const n = Number(v); return Number.isFinite(n) ? n : null; };
+    function schedulePersistReceiptDisplayOptions() {
+        if (!hasInitializedFromTxData || currentTxIsVoided) return;
+        const currentTxId = getCurrentTxId();
+        if (!currentTxId || !window.db?.transactions?.update) return;
+
+        clearTimeout(receiptToggleSaveTimer);
+        receiptToggleSaveTimer = setTimeout(async () => {
+            try {
+                await window.db.transactions.update(currentTxId, {
+                    receipt_show_logo: displayOptions.logo === '1',
+                    receipt_show_addresses: displayOptions.addresses === '1',
+                    receipt_show_tracking: displayOptions.tracking === '1',
+                    receipt_show_additional: displayOptions.additional === '1',
+                    receipt_show_note: displayOptions.note === '1',
+                    receipt_show_signatures: displayOptions.signatures === '1'
+                });
+            } catch (e) {
+                if (window.SpendNoteDebug) console.warn('[tx receipt toggles] save failed', e);
+            }
+        }, 450);
+    }
+
+    function parseLogoSettingsFromCashBox(cb) {
+        if (!cb || typeof cb !== 'object') return null;
+        let raw = cb.logo_settings;
+        if (raw == null) return null;
+        if (typeof raw === 'string') {
+            try {
+                raw = JSON.parse(raw);
+            } catch (_) {
+                return null;
+            }
+        }
+        if (!raw || typeof raw !== 'object') return null;
+        const scale = Number(raw.scale);
+        const x = Number(raw.x);
+        const y = Number(raw.y);
         return {
-            scale: parseFinite(ls?.scale),
-            x: parseFinite(ls?.x),
-            y: parseFinite(ls?.y)
+            scale: Number.isFinite(scale) && scale > 0 ? scale : 1,
+            x: Number.isFinite(x) ? x : 0,
+            y: Number.isFinite(y) ? y : 0
         };
     }
 
@@ -143,15 +178,11 @@ const QUICK_PRESET = {
         }
 
         try {
-            const logoSettings = resolveLogoRenderSettings(txData?.cash_box);
-            if (Number.isFinite(Number(logoSettings.scale)) && Number(logoSettings.scale) > 0) {
-                params.append('logoScale', String(Number(logoSettings.scale)));
-            }
-            if (Number.isFinite(Number(logoSettings.x))) {
-                params.append('logoX', String(Number(logoSettings.x)));
-            }
-            if (Number.isFinite(Number(logoSettings.y))) {
-                params.append('logoY', String(Number(logoSettings.y)));
+            const logoSettings = parseLogoSettingsFromCashBox(txData?.cash_box);
+            if (logoSettings) {
+                params.append('logoScale', String(logoSettings.scale));
+                params.append('logoX', String(logoSettings.x));
+                params.append('logoY', String(logoSettings.y));
             }
         } catch (_) {}
 
@@ -233,6 +264,7 @@ const QUICK_PRESET = {
             const field = toggle.dataset.field;
             if (field) toggle.checked = displayOptions[field] === '1';
         });
+        schedulePersistReceiptDisplayOptions();
         requestReload(0);
     }
 
@@ -403,13 +435,19 @@ const QUICK_PRESET = {
             return fallback;
         };
 
+        const txOrCbReceiptBool = (key) => {
+            const tv = t[key];
+            if (tv !== undefined && tv !== null) return tv;
+            return cb[key];
+        };
+
         displayOptions = {
-            logo: resolveVisibilityBool(cb.receipt_show_logo, true) ? '1' : '0',
-            addresses: resolveVisibilityBool(cb.receipt_show_addresses, true) ? '1' : '0',
-            tracking: resolveVisibilityBool(cb.receipt_show_tracking, true) ? '1' : '0',
-            additional: resolveVisibilityBool(cb.receipt_show_additional, false) ? '1' : '0',
-            note: resolveVisibilityBool(cb.receipt_show_note, false) ? '1' : '0',
-            signatures: resolveVisibilityBool(cb.receipt_show_signatures, true) ? '1' : '0'
+            logo: resolveVisibilityBool(txOrCbReceiptBool('receipt_show_logo'), true) ? '1' : '0',
+            addresses: resolveVisibilityBool(txOrCbReceiptBool('receipt_show_addresses'), true) ? '1' : '0',
+            tracking: resolveVisibilityBool(txOrCbReceiptBool('receipt_show_tracking'), true) ? '1' : '0',
+            additional: resolveVisibilityBool(txOrCbReceiptBool('receipt_show_additional'), false) ? '1' : '0',
+            note: resolveVisibilityBool(txOrCbReceiptBool('receipt_show_note'), false) ? '1' : '0',
+            signatures: resolveVisibilityBool(txOrCbReceiptBool('receipt_show_signatures'), true) ? '1' : '0'
         };
 
         (async () => {
@@ -1145,6 +1183,7 @@ html, body { height: auto !important; overflow: auto !important; }
                 const field = this.dataset.field;
                 if (field) {
                     displayOptions[field] = this.checked ? '1' : '0';
+                    schedulePersistReceiptDisplayOptions();
                     requestReload(0);
                 }
             });
@@ -1175,6 +1214,7 @@ html, body { height: auto !important; overflow: auto !important; }
                         receipt_to_label: receiptText.toLabel || null,
                         receipt_description_label: receiptText.descriptionLabel || null,
                         receipt_amount_label: receiptText.amountLabel || null,
+                        receipt_notes_label: receiptText.notesLabel || null,
                         receipt_issued_by_label: receiptText.issuedByLabel || null,
                         receipt_received_by_label: receiptText.receivedByLabel || null,
                         receipt_footer_note: receiptText.footerNote || null

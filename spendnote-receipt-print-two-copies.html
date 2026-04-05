@@ -887,7 +887,7 @@ body {
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260416-cash-box-logo-fix"></script>
+    <script src="assets/js/supabase-config.js?v=20260418-logo-settings-tx-detail"></script>
     <script src="assets/js/auth-guard.js?v=20260207-2310"></script>
     <script src="assets/js/main.js?v=44"></script>
 
@@ -1085,6 +1085,12 @@ body {
             if (tx.cash_box_id && window.db?.cashBoxes?.getById) {
               const latestCashBox = await window.db.cashBoxes.getById(tx.cash_box_id);
               if (latestCashBox) tx.cash_box = latestCashBox;
+            }
+          } catch (_) {}
+
+          try {
+            if (typeof window.spendnoteApplyReceiptLogoLayoutFromCashBox === 'function') {
+              window.spendnoteApplyReceiptLogoLayoutFromCashBox(tx.cash_box);
             }
           } catch (_) {}
 

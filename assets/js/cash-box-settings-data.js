@@ -815,16 +815,12 @@ async function loadCashBoxData(id) {
         });
 
         currentCashBoxData = cashBox;
-        supportsReceiptLabels = Boolean(cashBox && Object.prototype.hasOwnProperty.call(cashBox, 'receipt_amount_label'));
-        // Assume logo column exists until a save proves otherwise (some responses omit null keys).
+        // PostgREST often omits JSON keys for NULL columns; hasOwnProperty would falsely mark
+        // receipt_show_* / receipt_* as "unsupported" and strip them on save. Assume schema ok until save proves otherwise.
+        supportsReceiptLabels = true;
         supportsCashBoxLogo = true;
-        unsupportedReceiptVisibilityFields = new Set(
-            RECEIPT_VISIBILITY_FIELDS.filter((field) => {
-                const column = RECEIPT_VISIBILITY_COLUMN_BY_FIELD[field];
-                return !(cashBox && Object.prototype.hasOwnProperty.call(cashBox, column));
-            })
-        );
-        supportsReceiptVisibility = unsupportedReceiptVisibilityFields.size < RECEIPT_VISIBILITY_FIELDS.length;
+        unsupportedReceiptVisibilityFields = new Set();
+        supportsReceiptVisibility = true;
         updateSummaryCard(cashBox);
 
         // Load cash-box-specific logo into Pro Options preview

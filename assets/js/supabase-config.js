@@ -1370,13 +1370,34 @@ const TX_CASH_BOX_SNAPSHOT_COLUMNS = Object.freeze([
     'cash_box_id_prefix_snapshot'
 ]);
 
+/** Receipt visibility + labels frozen on the transaction row at create time. */
+const TX_RECEIPT_SNAPSHOT_COLUMNS = Object.freeze([
+    'receipt_show_logo',
+    'receipt_show_addresses',
+    'receipt_show_tracking',
+    'receipt_show_additional',
+    'receipt_show_note',
+    'receipt_show_signatures',
+    'receipt_title',
+    'receipt_total_label',
+    'receipt_from_label',
+    'receipt_to_label',
+    'receipt_description_label',
+    'receipt_amount_label',
+    'receipt_notes_label',
+    'receipt_issued_by_label',
+    'receipt_received_by_label',
+    'receipt_footer_note'
+]);
+
 /** Optional INSERT columns: stripped on retry if DB schema is behind the client. */
 const TX_INSERT_SOFT_COLUMNS = Object.freeze([
     ...TX_CASH_BOX_SNAPSHOT_COLUMNS,
     'sender_company_name_snapshot',
     'sender_address_snapshot',
     'sender_phone_snapshot',
-    'sender_profile_logo_url_snapshot'
+    'sender_profile_logo_url_snapshot',
+    ...TX_RECEIPT_SNAPSHOT_COLUMNS
 ]);
 
 try {
@@ -1518,6 +1539,97 @@ function __spendnoteIsMissingLogoSettingsColumnError(err) {
         || msg.includes('400');
 }
 
+try {
+    /**
+     * Receipt iframes: first paint uses URL params only. After tx bootstrap loads cash_box,
+     * apply logo_settings from DB when logoScale was not in the query (slim embed omits logo_settings).
+     */
+    window.spendnoteApplyReceiptLogoLayoutFromCashBox = function spendnoteApplyReceiptLogoLayoutFromCashBox(cashBox) {
+        try {
+            const ups = new URLSearchParams(window.location.search || '');
+            if (ups.get('logoScale')) return;
+            if (!cashBox || typeof cashBox !== 'object') return;
+            let raw = cashBox.logo_settings;
+            if (typeof raw === 'string') {
+                try {
+                    raw = JSON.parse(raw);
+                } catch (_) {
+                    return;
+                }
+            }
+            if (!raw || typeof raw !== 'object') return;
+            const sc = Number(raw.scale);
+            const x = Number(raw.x);
+            const y = Number(raw.y);
+            if (Number.isFinite(sc) && sc > 0) {
+                document.documentElement.style.setProperty('--logo-scale', String(Math.min(3, Math.max(0.5, sc))));
+            }
+            if (Number.isFinite(x) && Number.isFinite(y)) {
+                document.documentElement.style.setProperty('--logo-x', (x * 0.25) + 'px');
+                document.documentElement.style.setProperty('--logo-y', (y * 0.25) + 'px');
+            }
+        } catch (_) {}
+    };
+} catch (_) {}
+
+function mapReceiptShowBoolFromCashBox(value, fallback) {
+    if (typeof value === 'boolean') return value;
+    if (value === 1 || value === '1') return true;
+    if (value === 0 || value === '0') return false;
+    return fallback;
+}
+
+function trimReceiptLabel(value) {
+    const s = String(value ?? '').trim();
+    return s || null;
+}
+
+/** Copy cash box receipt toggles + labels onto insert payload (fallback insert path). */
+function applyTxReceiptSnapshotToPayload(payload, cashBox) {
+    const next = payload && typeof payload === 'object' ? { ...payload } : {};
+    const cb = cashBox && typeof cashBox === 'object' ? cashBox : {};
+
+    if (next.receipt_show_logo === undefined || next.receipt_show_logo === null) {
+        next.receipt_show_logo = mapReceiptShowBoolFromCashBox(cb.receipt_show_logo, true);
+    }
+    if (next.receipt_show_addresses === undefined || next.receipt_show_addresses === null) {
+        next.receipt_show_addresses = mapReceiptShowBoolFromCashBox(cb.receipt_show_addresses, true);
+    }
+    if (next.receipt_show_tracking === undefined || next.receipt_show_tracking === null) {
+        next.receipt_show_tracking = mapReceiptShowBoolFromCashBox(cb.receipt_show_tracking, true);
+    }
+    if (next.receipt_show_additional === undefined || next.receipt_show_additional === null) {
+        next.receipt_show_additional = mapReceiptShowBoolFromCashBox(cb.receipt_show_additional, false);
+    }
+    if (next.receipt_show_note === undefined || next.receipt_show_note === null) {
+        next.receipt_show_note = mapReceiptShowBoolFromCashBox(cb.receipt_show_note, false);
+    }
+    if (next.receipt_show_signatures === undefined || next.receipt_show_signatures === null) {
+        next.receipt_show_signatures = mapReceiptShowBoolFromCashBox(cb.receipt_show_signatures, true);
+    }
+
+    const labelKeys = [
+        ['receipt_title', 'receipt_title'],
+        ['receipt_total_label', 'receipt_total_label'],
+        ['receipt_from_label', 'receipt_from_label'],
+        ['receipt_to_label', 'receipt_to_label'],
+        ['receipt_description_label', 'receipt_description_label'],
+        ['receipt_amount_label', 'receipt_amount_label'],
+        ['receipt_notes_label', 'receipt_notes_label'],
+        ['receipt_issued_by_label', 'receipt_issued_by_label'],
+        ['receipt_received_by_label', 'receipt_received_by_label'],
+        ['receipt_footer_note', 'receipt_footer_note']
+    ];
+    for (const [txKey, cbKey] of labelKeys) {
+        if (next[txKey] !== undefined && next[txKey] !== null && String(next[txKey]).trim() !== '') {
+            continue;
+        }
+        next[txKey] = trimReceiptLabel(cb[cbKey]);
+    }
+
+    return next;
+}
+
 function applyTxCashBoxSnapshotToPayload(payload, cashBox) {
     const next = payload && typeof payload === 'object' ? { ...payload } : {};
     const snapshot = buildTxCashBoxSnapshot(next, cashBox);
@@ -1541,7 +1653,7 @@ function applyTxCashBoxSnapshotToPayload(payload, cashBox) {
     );
     next.cash_box_id_prefix_snapshot = idPrefix || 'SN';
 
-    return next;
+    return applyTxReceiptSnapshotToPayload(next, cashBox);
 }
 
 function extractMissingTransactionsColumn(error) {
@@ -3713,7 +3825,12 @@ var db = {
                 if (cashBoxId) {
                     const cashBoxRes = await supabaseClient
                         .from('cash_boxes')
-                        .select('id, name, currency, color, icon, id_prefix')
+                        .select(
+                            'id, name, currency, color, icon, id_prefix, ' +
+                            'receipt_show_logo, receipt_show_addresses, receipt_show_tracking, receipt_show_additional, receipt_show_note, receipt_show_signatures, ' +
+                            'receipt_title, receipt_total_label, receipt_from_label, receipt_to_label, receipt_description_label, receipt_amount_label, receipt_notes_label, ' +
+                            'receipt_issued_by_label, receipt_received_by_label, receipt_footer_note'
+                        )
                         .eq('id', cashBoxId)
                         .maybeSingle();
 

@@ -1034,7 +1034,7 @@ if (urlParams.get('signatures') === '0') {
   
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/supabase-config.js?v=20260416-cash-box-logo-fix"></script>
+  <script src="assets/js/supabase-config.js?v=20260418-logo-settings-tx-detail"></script>
   <script src="assets/js/auth-guard.js?v=20260207-2310"></script>
   <script src="assets/js/main.js?v=44"></script>
 
@@ -1212,15 +1212,21 @@ if (urlParams.get('signatures') === '0') {
         const shouldShowVoid = Boolean(window.__spendnoteReceiptVoid) || String(tx?.status || 'active').toLowerCase() === 'voided';
         document.querySelectorAll('.void-watermark').forEach((el) => (el.style.display = shouldShowVoid ? 'block' : 'none'));
 
-        try {
-          if (tx.cash_box_id && window.db?.cashBoxes?.getById) {
-            const latestCashBox = await window.db.cashBoxes.getById(tx.cash_box_id);
-            if (latestCashBox) tx.cash_box = latestCashBox;
-          }
-        } catch (_) {}
+          try {
+            if (tx.cash_box_id && window.db?.cashBoxes?.getById) {
+              const latestCashBox = await window.db.cashBoxes.getById(tx.cash_box_id);
+              if (latestCashBox) tx.cash_box = latestCashBox;
+            }
+          } catch (_) {}
 
-        try {
-          const hasContactAddress = Boolean(overrideContactAddress || String(tx?.contact_address || tx?.contact?.address || '').trim());
+          try {
+            if (typeof window.spendnoteApplyReceiptLogoLayoutFromCashBox === 'function') {
+              window.spendnoteApplyReceiptLogoLayoutFromCashBox(tx.cash_box);
+            }
+          } catch (_) {}
+
+          try {
+            const hasContactAddress = Boolean(overrideContactAddress || String(tx?.contact_address || tx?.contact?.address || '').trim());
           if (!hasContactAddress && tx.contact_id && window.db?.contacts?.getById) {
             tx.contact = await window.db.contacts.getById(tx.contact_id);
           }

@@ -481,6 +481,24 @@ CREATE TABLE IF NOT EXISTS public.transactions (
     sender_address_snapshot TEXT,
     sender_phone_snapshot TEXT,
     sender_profile_logo_url_snapshot TEXT,
+
+    -- Receipt layout + labels at transaction time (reprints; NULL = client falls back to live cash box)
+    receipt_show_logo BOOLEAN,
+    receipt_show_addresses BOOLEAN,
+    receipt_show_tracking BOOLEAN,
+    receipt_show_additional BOOLEAN,
+    receipt_show_note BOOLEAN,
+    receipt_show_signatures BOOLEAN,
+    receipt_title TEXT,
+    receipt_total_label TEXT,
+    receipt_from_label TEXT,
+    receipt_to_label TEXT,
+    receipt_description_label TEXT,
+    receipt_amount_label TEXT,
+    receipt_notes_label TEXT,
+    receipt_issued_by_label TEXT,
+    receipt_received_by_label TEXT,
+    receipt_footer_note TEXT,
     
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

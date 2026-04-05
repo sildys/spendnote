@@ -319,6 +319,29 @@
 
         tx.cash_box = applyTxCashBoxSnapshot(tx, tx.cash_box);
 
+        try {
+            const cb = tx.cash_box;
+            const needsLogoSettings = Boolean(
+                tx.cash_box_id &&
+                window.supabaseClient &&
+                cb &&
+                typeof cb === 'object' &&
+                !('logo_settings' in cb)
+            );
+            if (needsLogoSettings) {
+                const { data: lsRow, error: lsErr } = await window.supabaseClient
+                    .from('cash_boxes')
+                    .select('logo_settings')
+                    .eq('id', tx.cash_box_id)
+                    .maybeSingle();
+                if (!lsErr && lsRow && typeof lsRow === 'object') {
+                    tx.cash_box = Object.assign({}, cb, { logo_settings: lsRow.logo_settings });
+                }
+            }
+        } catch (_) {
+            // ignore
+        }
+
         const cashBoxName = safeText(tx.cash_box?.name, 'Unknown');
         const cashBoxCode = getCashBoxCode(tx);
         const cashBoxColor = normalizeHexColor(tx.cash_box?.color || '#059669');
