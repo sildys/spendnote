@@ -1,0 +1,35 @@
+[project]
+id = "zrnnharudlgxuvewqryj"
+
+[functions.create-checkout-session]
+verify_jwt = false
+
+[functions.create-portal-session]
+verify_jwt = false
+
+[functions.update-subscription]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.delete-account]
+verify_jwt = false
+
+[functions.send-user-event-email]
+verify_jwt = false
+
+[functions.send-invite-email]
+verify_jwt = false
+
+[functions.send-receipt-email]
+verify_jwt = false
+
+[functions.owner-analytics]
+verify_jwt = false
+
+[functions.admin-stats]
+verify_jwt = false
+
+[functions.remove-org-member]
+verify_jwt = false
