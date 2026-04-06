@@ -203,7 +203,8 @@ Deno.serve(async (req: Request) => {
       cancel_url: cancelUrl,
       allow_promotion_codes: true,
       automatic_tax: { enabled: true },
-      customer_update: { address: "auto" },
+      tax_id_collection: { enabled: true },
+      customer_update: { address: "auto", name: "auto" },
       metadata: {
         user_id: user.id,
         plan,

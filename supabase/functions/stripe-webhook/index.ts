@@ -141,10 +141,9 @@ const upsertProfileSubscription = async (
 /** Paid tiers only (preview is not sold via Stripe). */
 const subscriptionTierRank = (t: string): number => {
   const x = String(t || "").trim().toLowerCase();
-  if (x === "free") return 0;
+  if (x === "free" || x === "preview") return 0;
   if (x === "standard") return 1;
   if (x === "pro") return 2;
-  if (x === "preview") return 3;
   return 0;
 };
 
@@ -454,12 +453,25 @@ Deno.serve(async (req: Request) => {
         const customerId = String(session.customer || "").trim();
         const subscriptionId = String(session.subscription || "").trim();
 
-        if (userId) {
+        if (userId && subscriptionId) {
+          try {
+            const sub = await stripe.subscriptions.retrieve(subscriptionId);
+            await upsertProfileSubscription(supabaseAdmin, userId, sub);
+          } catch (_) {
+            await supabaseAdmin
+              .from("profiles")
+              .update({
+                stripe_customer_id: customerId || null,
+                stripe_subscription_id: subscriptionId || null,
+                billing_status: "active",
+              })
+              .eq("id", userId);
+          }
+        } else if (userId) {
           await supabaseAdmin
             .from("profiles")
             .update({
               stripe_customer_id: customerId || null,
-              stripe_subscription_id: subscriptionId || null,
               billing_status: "active",
             })
             .eq("id", userId);
@@ -550,7 +562,21 @@ Deno.serve(async (req: Request) => {
       case "invoice.payment_succeeded": {
         const invoice = event.data.object as Stripe.Invoice;
         const customerId = String(invoice.customer || "").trim();
-        if (customerId) {
+        const invoiceSubId = String(invoice.subscription || "").trim();
+        if (customerId && invoiceSubId) {
+          try {
+            const sub = await stripe.subscriptions.retrieve(invoiceSubId);
+            const userId = await findUserIdFromSubscription(supabaseAdmin, sub);
+            if (userId) {
+              await upsertProfileSubscription(supabaseAdmin, userId, sub);
+            }
+          } catch (_) {
+            await supabaseAdmin
+              .from("profiles")
+              .update({ billing_status: "active" })
+              .eq("stripe_customer_id", customerId);
+          }
+        } else if (customerId) {
           await supabaseAdmin
             .from("profiles")
             .update({ billing_status: "active" })
