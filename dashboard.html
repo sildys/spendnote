@@ -1941,7 +1941,7 @@
                 localStorage.setItem('sn.lastKnownTier', tier);
                 if (tier === 'free' || tier === 'preview') return;
                 if (!prevTier || prevTier === tier) return;
-                const upgrades = { free: 0, standard: 1, pro: 2, preview: 3 };
+                const upgrades = { free: 0, preview: 0, standard: 1, pro: 2 };
                 if ((upgrades[tier] || 0) <= (upgrades[prevTier] || 0)) return;
                 const label = tier === 'pro' ? 'Pro' : (tier === 'standard' ? 'Standard' : tier);
                 if (typeof gtag === 'function') gtag('event', 'upgrade_completed', { tier });
