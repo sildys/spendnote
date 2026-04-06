@@ -81,7 +81,7 @@
                     if (email) {
                         await window.supabaseClient.from('profiles').insert([{
                             id: user.id, email, full_name: fullName,
-                            subscription_tier: 'preview', billing_status: 'preview'
+                            subscription_tier: 'free', billing_status: 'free'
                         }]);
                     }
                 }
