@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import Stripe from "https://esm.sh/stripe@14.25.0?target=deno";
 
 const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
@@ -74,12 +75,14 @@ Deno.serve(async (req: Request) => {
 
     const { data: profile } = await supabaseAdmin
       .from("profiles")
-      .select("full_name,email")
+      .select("full_name,email,stripe_subscription_id,stripe_customer_id")
       .eq("id", userId)
       .maybeSingle();
 
     const userEmail = String(profile?.email || user.email || "").trim().toLowerCase();
     const userName = String(profile?.full_name || user.user_metadata?.full_name || "there").trim() || "there";
+    const stripeSubId = String(profile?.stripe_subscription_id || "").trim();
+    const stripeCustomerId = String(profile?.stripe_customer_id || "").trim();
 
     const countByEq = async (table: string, column: string, value: string): Promise<number> => {
       const { count, error } = await supabaseAdmin
@@ -236,6 +239,19 @@ Deno.serve(async (req: Request) => {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // Cancel Stripe subscription before deleting anything
+    if (stripeSubId) {
+      try {
+        const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY") || "";
+        if (stripeSecretKey) {
+          const stripe = new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" });
+          await stripe.subscriptions.cancel(stripeSubId);
+        }
+      } catch (_) {
+        // Best-effort: if Stripe cancel fails, continue with account deletion
+      }
     }
 
     // If user is owner of any org(s), delete those orgs first
