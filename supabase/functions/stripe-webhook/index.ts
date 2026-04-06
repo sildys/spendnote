@@ -127,6 +127,8 @@ const upsertProfileSubscription = async (
     : 0;
   const now = Date.now();
 
+  const periodEnd = Number(sub.current_period_end) || 0;
+
   const payload: Record<string, unknown> = {
     stripe_customer_id: String(sub.customer || "").trim() || null,
     stripe_subscription_id: String(sub.id || "").trim() || null,
@@ -134,8 +136,8 @@ const upsertProfileSubscription = async (
     billing_status: billingStatusFromStripe(String(sub.status || "")),
     billing_cycle: billingCycle || null,
     stripe_cancel_at_period_end: Boolean(sub.cancel_at_period_end),
-    subscription_current_period_end: sub.current_period_end
-      ? new Date(sub.current_period_end * 1000).toISOString()
+    subscription_current_period_end: periodEnd > 0
+      ? new Date(periodEnd * 1000).toISOString()
       : null,
     seat_count: seatCount,
   };
@@ -476,6 +478,15 @@ Deno.serve(async (req: Request) => {
           try {
             const sub = await stripe.subscriptions.retrieve(subscriptionId);
             await upsertProfileSubscription(supabaseAdmin, userId, sub);
+
+            // If Stripe returned "incomplete" but checkout completed, override to "active"
+            const subStatus = String(sub.status || "").toLowerCase();
+            if (subStatus === "incomplete") {
+              await supabaseAdmin
+                .from("profiles")
+                .update({ billing_status: "active" })
+                .eq("id", userId);
+            }
           } catch (_) {
             await supabaseAdmin
               .from("profiles")

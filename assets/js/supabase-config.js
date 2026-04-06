@@ -1183,7 +1183,6 @@ try {
                 }
 
                 if (token_hash && type) {
-                    // Supabase may redirect with type=email for signup confirmation; signup/magiclink are legacy.
                     const typeLc = String(type || '').toLowerCase();
                     const tokenHashOtpTypes = new Set(['signup', 'recovery', 'email', 'magiclink', 'invite', 'email_change']);
                     if (!tokenHashOtpTypes.has(typeLc)) {
@@ -1193,6 +1192,16 @@ try {
                     if (error) {
                         return { handled: true, success: false, type, error: String(error.message || error) };
                     }
+
+                    if (typeLc === 'recovery') {
+                        try { sessionStorage.setItem('__spendnote_recovery_pending', '1'); } catch (_) {}
+                        const onResetPage = /spendnote-reset-password/i.test(window.location.pathname);
+                        if (!onResetPage) {
+                            window.location.replace('/spendnote-reset-password.html');
+                            return { handled: true, success: true, type, error: null };
+                        }
+                    }
+
                     cleanupUrl();
                     if (data?.session) {
                         await afterSession(data.session);
@@ -2120,6 +2129,15 @@ var auth = {
 
     // Redirect to login if not authenticated
     async requireAuth() {
+        try {
+            if (sessionStorage.getItem('__spendnote_recovery_pending') === '1') {
+                try { sessionStorage.removeItem('__spendnote_recovery_pending'); } catch (_) {}
+                await supabaseClient.auth.signOut();
+                window.location.href = '/spendnote-login.html';
+                return false;
+            }
+        } catch (_) {}
+
         const isAuth = await this.isAuthenticated();
         if (!isAuth) {
             let returnTo = '/app';

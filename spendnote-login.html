@@ -681,7 +681,7 @@
     <a href="/" class="fab-home" title="Back to homepage"><i class="fas fa-home"></i></a>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20260407-billing-ui"></script>
+    <script src="assets/js/supabase-config.js?v=20260407-recovery-fix"></script>
     <script>
         const __SN_INVITE_TOKEN_KEY = 'spendnote.inviteToken.pending';
 
@@ -874,6 +874,14 @@
                 }
                 const user = await window.auth.getCurrentUser();
                 if (user) {
+                    try {
+                        if (sessionStorage.getItem('__spendnote_recovery_pending') === '1') {
+                            sessionStorage.removeItem('__spendnote_recovery_pending');
+                            await window.supabaseClient.auth.signOut();
+                            return;
+                        }
+                    } catch (_) {}
+
                     try {
                         await acceptInviteToken(getInviteTokenFromContext());
                     } catch (_) {

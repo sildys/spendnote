@@ -333,11 +333,14 @@ const renderBillingSummary = (billingState) => {
             lines.push(`Preview full access. Transaction cap: ${cap}.`);
         } else if (status === 'trialing') {
             lines.push(trialEnds ? `Trial active until ${trialEnds}.` : 'Trial active.');
-        } else if (status === 'active') {
+        } else if (status === 'active' || status === 'incomplete') {
             if (cancelAtEnd && periodEnds) {
                 lines.push(`<span style="color:var(--warning)"><i class="fas fa-exclamation-triangle" style="font-size:11px"></i> Cancels on ${periodEnds}</span> — full access until then.`);
             } else if (periodEnds) {
                 lines.push(`Next renewal: <strong>${periodEnds}</strong>`);
+            }
+            if (status === 'incomplete') {
+                lines.push('<span style="color:var(--warning);font-size:12px"><i class="fas fa-clock"></i> Payment processing...</span>');
             }
         } else if (status === 'past_due') {
             lines.push('<span style="color:var(--danger)"><i class="fas fa-exclamation-circle" style="font-size:11px"></i> Payment past due</span> — update your payment method.');
