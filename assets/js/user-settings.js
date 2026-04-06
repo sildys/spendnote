@@ -276,6 +276,11 @@ const formatBillingDate = (iso) => {
     return dt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 };
 
+const PLAN_PRICES = {
+    standard: { monthly: 19, yearly: 190 },
+    pro: { monthly: 29, yearly: 290 }
+};
+
 const buildFallbackBillingState = (profile) => {
     const tierRaw = String(profile?.subscription_tier || 'free').trim().toLowerCase();
     const tier = PLAN_LABELS[tierRaw] ? tierRaw : 'free';
@@ -288,48 +293,67 @@ const buildFallbackBillingState = (profile) => {
         trial_ends_at: String(profile?.trial_ends_at || '').trim(),
         subscription_current_period_end: String(profile?.subscription_current_period_end || '').trim(),
         stripe_customer_id: String(profile?.stripe_customer_id || '').trim(),
-        preview_transaction_cap: Number.isFinite(cap) && cap > 0 ? Math.floor(cap) : 200
+        preview_transaction_cap: Number.isFinite(cap) && cap > 0 ? Math.floor(cap) : 200,
+        pending_subscription_tier: String(profile?.pending_subscription_tier || '').trim().toLowerCase(),
+        pending_tier_effective_date: String(profile?.pending_tier_effective_date || '').trim(),
+        stripe_cancel_at_period_end: Boolean(profile?.stripe_cancel_at_period_end)
     };
 };
 
 const renderBillingSummary = (billingState) => {
     const state = billingState && typeof billingState === 'object' ? billingState : buildFallbackBillingState(currentProfile);
     const planEl = document.getElementById('currentPlanName');
-    const nextEl = document.getElementById('nextBillingInfo');
+    const infoEl = document.getElementById('nextBillingInfo');
     const manageBtn = document.getElementById('manageBillingBtn');
 
-    if (planEl) {
-        planEl.textContent = PLAN_LABELS[String(state.tier || '').toLowerCase()] || 'Free';
-    }
-
+    const tier = String(state.tier || '').toLowerCase();
     const status = String(state.billing_status || '').toLowerCase();
-    const trialEnds = formatBillingDate(state.trial_ends_at);
-    const periodEnds = formatBillingDate(state.subscription_current_period_end);
     const cycle = String(state.billing_cycle || '').toLowerCase();
-    let line = '';
+    const periodEnds = formatBillingDate(state.subscription_current_period_end);
+    const trialEnds = formatBillingDate(state.trial_ends_at);
+    const pendingTier = String(state.pending_subscription_tier || '').trim().toLowerCase();
+    const pendingDate = formatBillingDate(state.pending_tier_effective_date);
+    const cancelAtEnd = Boolean(state.stripe_cancel_at_period_end);
 
-    if (status === 'preview' || String(state.tier || '').toLowerCase() === 'preview') {
-        const cap = Number(state.preview_transaction_cap) || 200;
-        line = `Preview full access. Transaction cap: ${cap}.`;
-    } else if (status === 'trialing') {
-        line = trialEnds ? `Trial active until ${trialEnds}.` : 'Trial active.';
-    } else if (status === 'active') {
-        if (periodEnds) {
-            line = `Billing active${cycle ? ` (${cycle})` : ''}. Next renewal: ${periodEnds}.`;
-        } else {
-            line = `Billing active${cycle ? ` (${cycle})` : ''}.`;
-        }
-    } else if (status === 'past_due') {
-        line = 'Payment past due. Update payment method in Stripe portal.';
-    } else if (status === 'canceled') {
-        line = periodEnds ? `Subscription canceled. Access remains until ${periodEnds}.` : 'Subscription canceled.';
-    } else if (status === 'free') {
-        line = 'Free plan active.';
-    } else {
-        line = status ? `Billing status: ${status}.` : '';
+    const planLabel = PLAN_LABELS[tier] || 'Free';
+    const price = PLAN_PRICES[tier]?.[cycle] || null;
+    const cycleLabel = cycle === 'yearly' ? '/year' : '/mo';
+
+    if (planEl) {
+        let html = planLabel;
+        if (price) html += ` <span style="color:var(--text-muted);font-weight:400;">— $${price}${cycleLabel}</span>`;
+        planEl.innerHTML = html;
     }
 
-    if (nextEl) nextEl.textContent = line;
+    if (infoEl) {
+        const lines = [];
+
+        if (status === 'preview' || tier === 'preview') {
+            const cap = Number(state.preview_transaction_cap) || 200;
+            lines.push(`Preview full access. Transaction cap: ${cap}.`);
+        } else if (status === 'trialing') {
+            lines.push(trialEnds ? `Trial active until ${trialEnds}.` : 'Trial active.');
+        } else if (status === 'active') {
+            if (cancelAtEnd && periodEnds) {
+                lines.push(`<span style="color:var(--warning)"><i class="fas fa-exclamation-triangle" style="font-size:11px"></i> Cancels on ${periodEnds}</span> — full access until then.`);
+            } else if (periodEnds) {
+                lines.push(`Next renewal: <strong>${periodEnds}</strong>`);
+            }
+        } else if (status === 'past_due') {
+            lines.push('<span style="color:var(--danger)"><i class="fas fa-exclamation-circle" style="font-size:11px"></i> Payment past due</span> — update your payment method.');
+        } else if (status === 'canceled') {
+            lines.push(periodEnds ? `Canceled. Access until ${periodEnds}.` : 'Subscription canceled.');
+        } else if (status === 'free') {
+            lines.push('Free plan — upgrade anytime.');
+        }
+
+        if (pendingTier && pendingDate && !cancelAtEnd) {
+            const pendingLabel = PLAN_LABELS[pendingTier] || pendingTier;
+            lines.push(`<span style="color:var(--primary);font-size:11px"><i class="fas fa-clock"></i> Changing to ${pendingLabel} on ${pendingDate}</span>`);
+        }
+
+        infoEl.innerHTML = lines.join('<br>');
+    }
 
     if (manageBtn) {
         if (window.STRIPE_LIVE === false) {
@@ -354,8 +378,8 @@ const renderBillingSummary = (billingState) => {
         if (window.STRIPE_LIVE === false) {
             cancelBtn.style.display = 'none';
         } else {
-            const isActive = ['active', 'trialing', 'past_due'].includes(String(state.billing_status || '').toLowerCase());
-            cancelBtn.style.display = isActive ? '' : 'none';
+            const isActive = ['active', 'trialing', 'past_due'].includes(status);
+            cancelBtn.style.display = (isActive && !cancelAtEnd) ? '' : 'none';
         }
     }
 };

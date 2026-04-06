@@ -115,6 +115,18 @@ const upsertProfileSubscription = async (
   const billingCycle = resolveCycleFromPrice(stripePriceId);
   const seatCount = resolveSeatCount(sub);
 
+  const { data: currentProfile } = await supabaseAdmin
+    .from("profiles")
+    .select("pending_subscription_tier, pending_tier_effective_date")
+    .eq("id", userId)
+    .maybeSingle();
+
+  const pendingTier = String(currentProfile?.pending_subscription_tier || "").trim();
+  const pendingEffective = currentProfile?.pending_tier_effective_date
+    ? new Date(currentProfile.pending_tier_effective_date).getTime()
+    : 0;
+  const now = Date.now();
+
   const payload: Record<string, unknown> = {
     stripe_customer_id: String(sub.customer || "").trim() || null,
     stripe_subscription_id: String(sub.id || "").trim() || null,
@@ -128,8 +140,15 @@ const upsertProfileSubscription = async (
     seat_count: seatCount,
   };
 
-  if (tier) {
-    payload.subscription_tier = tier;
+  if (pendingTier && pendingEffective > now) {
+    // Deferred downgrade still active — don't change tier
+  } else if (pendingTier && pendingEffective <= now) {
+    // Deferred downgrade effective now — apply tier and clear pending
+    if (tier) payload.subscription_tier = tier;
+    payload.pending_subscription_tier = null;
+    payload.pending_tier_effective_date = null;
+  } else {
+    if (tier) payload.subscription_tier = tier;
   }
 
   await supabaseAdmin
@@ -486,24 +505,41 @@ Deno.serve(async (req: Request) => {
         if (!userId) break;
         const { data: prevRow } = await supabaseAdmin
           .from("profiles")
-          .select("subscription_tier, stripe_cancel_at_period_end")
+          .select("subscription_tier, stripe_cancel_at_period_end, pending_subscription_tier, pending_tier_effective_date")
           .eq("id", userId)
           .maybeSingle();
         const oldTier = String(prevRow?.subscription_tier || "free").toLowerCase();
         const wasCanceling = Boolean(prevRow?.stripe_cancel_at_period_end);
+        const pendingTier = String(prevRow?.pending_subscription_tier || "").trim().toLowerCase();
+        const pendingEffective = prevRow?.pending_tier_effective_date
+          ? new Date(prevRow.pending_tier_effective_date).getTime()
+          : 0;
+        const now = Date.now();
+
         await upsertProfileSubscription(supabaseAdmin, userId, sub);
+
         const { data: nextRow } = await supabaseAdmin
           .from("profiles")
-          .select("subscription_tier")
+          .select("subscription_tier, pending_subscription_tier")
           .eq("id", userId)
           .maybeSingle();
         const newTier = String(nextRow?.subscription_tier || oldTier).toLowerCase();
-        if (subscriptionTierRank(newTier) < subscriptionTierRank(oldTier)) {
+
+        if (pendingTier && pendingEffective > now) {
+          // Deferred downgrade still active — tier was kept, skip emails
+        } else if (pendingTier && pendingEffective <= now) {
+          // Deferred downgrade just took effect at period renewal
           await applyCashBoxTierDowngrade(supabaseAdmin, userId, newTier);
           await sendDowngradeEmail(supabaseAdmin, userId, oldTier, newTier);
-        } else if (subscriptionTierRank(newTier) > subscriptionTierRank(oldTier)) {
-          await clearCashBoxTierLocks(supabaseAdmin, userId);
-          await sendUpgradeEmail(supabaseAdmin, userId, newTier);
+        } else {
+          // No pending downgrade — normal upgrade/downgrade detection
+          if (subscriptionTierRank(newTier) < subscriptionTierRank(oldTier)) {
+            await applyCashBoxTierDowngrade(supabaseAdmin, userId, newTier);
+            await sendDowngradeEmail(supabaseAdmin, userId, oldTier, newTier);
+          } else if (subscriptionTierRank(newTier) > subscriptionTierRank(oldTier)) {
+            await clearCashBoxTierLocks(supabaseAdmin, userId);
+            await sendUpgradeEmail(supabaseAdmin, userId, newTier);
+          }
         }
 
         // Detect cancel_at_period_end becoming true (user canceled but still active)
@@ -511,7 +547,7 @@ Deno.serve(async (req: Request) => {
           await sendSubscriptionCanceledEmail(
             supabaseAdmin,
             userId,
-            newTier || oldTier,
+            oldTier || newTier,
             sub.current_period_end || null,
           );
         }
@@ -524,9 +560,17 @@ Deno.serve(async (req: Request) => {
         if (userId) {
           const { data: delPrevRow } = await supabaseAdmin
             .from("profiles")
-            .select("subscription_tier")
+            .select("subscription_tier, stripe_subscription_id")
             .eq("id", userId)
             .maybeSingle();
+
+          const currentSubId = String(delPrevRow?.stripe_subscription_id || "").trim();
+          const deletedSubId = String(sub.id || "").trim();
+
+          if (currentSubId && currentSubId !== deletedSubId) {
+            break;
+          }
+
           const deletedOldTier = String(delPrevRow?.subscription_tier || "standard").toLowerCase();
           await supabaseAdmin
             .from("profiles")
@@ -538,6 +582,8 @@ Deno.serve(async (req: Request) => {
               stripe_cancel_at_period_end: false,
               billing_cycle: null,
               seat_count: 0,
+              pending_subscription_tier: null,
+              pending_tier_effective_date: null,
             })
             .eq("id", userId);
           await applyCashBoxTierDowngrade(supabaseAdmin, userId, "free");

@@ -253,12 +253,14 @@
                             <div class="settings-card-subtitle">Manage your plan and payment details</div>
                         </div>
                     </div>
-                    <div class="billing-info" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-                        <div class="billing-info-left" style="display:flex;align-items:center;gap:12px;">
-                            <i class="fas fa-calendar-check" style="font-size:20px;color:var(--primary);"></i>
+                    <div class="billing-info" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:14px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface);">
+                        <div class="billing-info-left" style="display:flex;align-items:center;gap:14px;">
+                            <div style="width:40px;height:40px;border-radius:10px;background:var(--primary-light, #ecfdf5);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-credit-card" style="font-size:18px;color:var(--primary);"></i>
+                            </div>
                             <div class="billing-info-text">
-                                <span style="font-size:15px;">You're on <strong id="currentPlanName">-</strong></span>
-                                <div id="nextBillingInfo" style="font-size:12px;color:var(--text-muted);margin-top:2px;"></div>
+                                <div style="font-size:15px;font-weight:600;line-height:1.3;">You're on <strong id="currentPlanName" style="color:var(--primary)">-</strong></div>
+                                <div id="nextBillingInfo" style="font-size:12.5px;color:var(--text-muted);margin-top:3px;line-height:1.5;"></div>
                             </div>
                         </div>
                         <button type="button" class="btn btn-primary btn-sm" id="changePlanBtn" style="white-space:nowrap;"><i class="fas fa-exchange-alt"></i> Change Plan</button>
@@ -300,14 +302,14 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js?v=20260407-stripe-live"></script>
+<script src="assets/js/supabase-config.js?v=20260407-billing-ui"></script>
 <script src="assets/js/auth-guard.js?v=20260223-1949"></script>
 <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
 <script src="assets/js/nav-loader.js?v=20260407-nav-fix"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=20260415-member-avatar-no-invite-fallback-photo"></script>
 <script src="assets/js/logo-editor.js?v=20260405-db-logo-only"></script>
-<script src="assets/js/user-settings.js?v=20260405-db-logo-only"></script>
+<script src="assets/js/user-settings.js?v=20260407-billing-ui"></script>
 <script>if (typeof showPageTip === 'function') showPageTip('user-settings', 'Set your <strong>display name and logo</strong> — these appear on every receipt you print.');</script>
 </body>
 </html>

@@ -215,7 +215,10 @@ window.SpendNoteBilling = {
             subscription_current_period_end: this._normalizeTimestamp(row?.subscription_current_period_end),
             stripe_customer_id: String(row?.stripe_customer_id || '').trim(),
             stripe_subscription_id: String(row?.stripe_subscription_id || '').trim(),
-            preview_transaction_cap: this._normalizeCap(row?.preview_transaction_cap)
+            preview_transaction_cap: this._normalizeCap(row?.preview_transaction_cap),
+            pending_subscription_tier: String(row?.pending_subscription_tier || '').trim().toLowerCase(),
+            pending_tier_effective_date: this._normalizeTimestamp(row?.pending_tier_effective_date),
+            stripe_cancel_at_period_end: Boolean(row?.stripe_cancel_at_period_end)
         };
     },
 
@@ -242,7 +245,7 @@ window.SpendNoteBilling = {
             try {
                 const full = await supabaseClient
                     .from('profiles')
-                    .select('subscription_tier,billing_status,billing_cycle,trial_started_at,trial_ends_at,subscription_current_period_end,stripe_customer_id,stripe_subscription_id,preview_transaction_cap')
+                    .select('subscription_tier,billing_status,billing_cycle,trial_started_at,trial_ends_at,subscription_current_period_end,stripe_customer_id,stripe_subscription_id,preview_transaction_cap,pending_subscription_tier,pending_tier_effective_date,stripe_cancel_at_period_end')
                     .eq('id', user.id)
                     .single();
                 if (!full.error) {

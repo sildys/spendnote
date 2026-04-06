@@ -12,6 +12,14 @@ const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const tierRank = (t: string): number => {
+  const x = String(t || "").trim().toLowerCase();
+  if (x === "free" || x === "preview") return 0;
+  if (x === "standard") return 1;
+  if (x === "pro") return 2;
+  return 0;
+};
+
 const normalizePlan = (value: unknown): "standard" | "pro" | "" => {
   const raw = String(value || "").trim().toLowerCase();
   return raw === "standard" || raw === "pro" ? raw : "";
@@ -102,7 +110,7 @@ Deno.serve(async (req: Request) => {
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
     const { data: profile, error: profileError } = await supabaseAdmin
       .from("profiles")
-      .select("stripe_subscription_id, stripe_customer_id")
+      .select("stripe_subscription_id, stripe_customer_id, subscription_tier")
       .eq("id", user.id)
       .single();
 
@@ -180,8 +188,20 @@ Deno.serve(async (req: Request) => {
     }
 
     const totalSeats = newPlan === "pro" ? 3 + extraSeats : 1;
+    const currentTier = String(profile?.subscription_tier || "free").toLowerCase();
+    const isDowngrade = tierRank(newPlan) < tierRank(currentTier);
 
-    // Apply the update — takes effect at period end, no proration
+    if (isDowngrade) {
+      const effectiveDate = new Date(subscription.current_period_end * 1000).toISOString();
+      await supabaseAdmin
+        .from("profiles")
+        .update({
+          pending_subscription_tier: newPlan,
+          pending_tier_effective_date: effectiveDate,
+        })
+        .eq("id", user.id);
+    }
+
     const updated = await stripe.subscriptions.update(subscriptionId, {
       items,
       proration_behavior: "none",
@@ -193,6 +213,20 @@ Deno.serve(async (req: Request) => {
       },
     });
 
+    if (!isDowngrade) {
+      await supabaseAdmin
+        .from("profiles")
+        .update({
+          pending_subscription_tier: null,
+          pending_tier_effective_date: null,
+        })
+        .eq("id", user.id);
+    }
+
+    const periodEndIso = updated.current_period_end
+      ? new Date(updated.current_period_end * 1000).toISOString()
+      : null;
+
     return new Response(
       JSON.stringify({
         success: true,
@@ -201,9 +235,9 @@ Deno.serve(async (req: Request) => {
           plan: newPlan,
           billingCycle: newBillingCycle,
           seatCount: totalSeats,
-          currentPeriodEnd: updated.current_period_end
-            ? new Date(updated.current_period_end * 1000).toISOString()
-            : null,
+          currentPeriodEnd: periodEndIso,
+          deferred: isDowngrade,
+          effectiveDate: isDowngrade ? periodEndIso : null,
         },
       }),
       {
