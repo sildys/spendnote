@@ -44,17 +44,18 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "SpendNote Petty Cash Reconciliation",
-      "applicationCategory": "BusinessApplication",
-      "description": "Complete petty cash reconciliation guide with automatic calculations and discrepancy detection.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
+      "@type": "Article",
+      "headline": "Petty Cash Reconciliation — Complete Step-by-Step Guide",
+      "description": "How to reconcile petty cash: count the cash, add receipts, compare to expected balance, document the result. Full procedure guide.",
       "image": "https://spendnote.app/assets/images/seo/spendnote-office-petty-cash-transactions-dashboard.webp",
-      "operatingSystem": "Web"
+      "datePublished": "2026-03-05",
+      "dateModified": "2026-03-07",
+      "author": { "@type": "Organization", "name": "SpendNote", "url": "https://spendnote.app" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "SpendNote",
+        "logo": { "@type": "ImageObject", "url": "https://spendnote.app/favicon.svg" }
+      }
     }
     </script>
     <script type="application/ld+json">
@@ -63,31 +64,24 @@
       "@type": "FAQPage",
       "mainEntity": [{
         "@type": "Question",
-        "name": "Can I print receipts immediately?",
+        "name": "Does SpendNote automatically reconcile my petty cash?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Print is the default format and supports a two-copy layout for handoff workflows."
+          "text": "No. You still need to physically count your cash. But SpendNote gives you the exact digital record (running balance and transaction log) to compare against, making reconciliation much faster."
         }
       }, {
         "@type": "Question",
-        "name": "Can I download the receipt as PDF?",
+        "name": "Can I export reconciliation reports?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Each receipt can be downloaded as a PDF for digital storage and sharing."
+          "text": "Yes. Filter transactions by date range and cash box, then export to CSV or generate a summary PDF report for your records."
         }
       }, {
         "@type": "Question",
-        "name": "Can I send receipts by email?",
+        "name": "What if I find a discrepancy?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Receipts can be sent by email directly after creation."
-        }
-      }, {
-        "@type": "Question",
-        "name": "Can I customize receipt fields and labels?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. You can personalize labels, logo, and visible sections to match your team process."
+          "text": "Review your transaction log in SpendNote to verify all cash handoffs were recorded. If a transaction was recorded incorrectly, an admin can void it (with a reason) and create a corrected entry. The void stays in your audit trail."
         }
       }]
     }
@@ -605,26 +599,6 @@
             </div>
         </div>
 
-        <h2>Role-Based Access for Small Teams</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <h3><i class="fas fa-user-shield"></i> Owners and Admins</h3>
-                <p>See all cash boxes across your team. Manage settings and void transactions when needed.</p>
-            </div>
-            <div class="feature-card">
-                <h3><i class="fas fa-user"></i> Assigned Users</h3>
-                <p>Only see the cash boxes they manage. Clean, focused view without unnecessary access.</p>
-            </div>
-            <div class="feature-card">
-                <h3><i class="fas fa-sync"></i> Instant Updates</h3>
-                <p>Balance changes sync across devices immediately. Everyone sees the current state.</p>
-            </div>
-            <div class="feature-card">
-                <h3><i class="fas fa-users-cog"></i> Team Visibility</h3>
-                <p>Shared access means no single point of failure. Multiple people can track the same cash box.</p>
-            </div>
-        </div>
-
         <figure style="margin: 1.75rem 0; text-align: center;">
             <img src="assets/images/seo/spendnote-cash-receipt-template-pdf-style.webp"
                  alt="PDF cash receipt template for petty cash reconciliation documentation"
@@ -657,60 +631,6 @@
             <h3>Simple Cash Tracking for Small Teams</h3>
             <p>Every receipt you generate becomes part of your transaction record. Clear, lightweight, no accounting complexity.</p>
             <a href="spendnote-signup.html" class="btn">Try SpendNote Free</a>
-        </div>
-
-        <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border: 2px solid #e2e8f0; border-radius: 16px; padding: 2.5rem; margin: 3rem 0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text);">What is SpendNote?</h3>
-                <p style="font-size: 1.0625rem; line-height: 1.6; color: var(--text-muted); max-width: 600px; margin: 0 auto;">A lightweight internal cash tracking tool for small teams</p>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-top: 2rem;">
-                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; display: flex; align-items: flex-start; gap: 1rem; transition: all 0.2s;">
-                    <div style="flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-sync" style="color: white; font-size: 1.125rem;"></i>
-                    </div>
-                    <div>
-                        <h4 style="font-size: 0.9375rem; font-weight: 700; color: var(--text); margin: 0 0 0.25rem 0;">Instant balance updates</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0; line-height: 1.5;">Balance updates instantly across devices</p>
-                    </div>
-                </div>
-                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; display: flex; align-items: flex-start; gap: 1rem; transition: all 0.2s;">
-                    <div style="flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-eye" style="color: white; font-size: 1.125rem;"></i>
-                    </div>
-                    <div>
-                        <h4 style="font-size: 0.9375rem; font-weight: 700; color: var(--text); margin: 0 0 0.25rem 0;">Shared visibility</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0; line-height: 1.5;">Team access across devices</p>
-                    </div>
-                </div>
-                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; display: flex; align-items: flex-start; gap: 1rem; transition: all 0.2s;">
-                    <div style="flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-user-shield" style="color: white; font-size: 1.125rem;"></i>
-                    </div>
-                    <div>
-                        <h4 style="font-size: 0.9375rem; font-weight: 700; color: var(--text); margin: 0 0 0.25rem 0;">Role-based access</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0; line-height: 1.5;">Control who sees what</p>
-                    </div>
-                </div>
-                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; display: flex; align-items: flex-start; gap: 1rem; transition: all 0.2s;">
-                    <div style="flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-receipt" style="color: white; font-size: 1.125rem;"></i>
-                    </div>
-                    <div>
-                        <h4 style="font-size: 0.9375rem; font-weight: 700; color: var(--text); margin: 0 0 0.25rem 0;">Printable receipts</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0; line-height: 1.5;">Cash handoff documentation</p>
-                    </div>
-                </div>
-                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; display: flex; align-items: flex-start; gap: 1rem; transition: all 0.2s;">
-                    <div style="flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-check-circle" style="color: white; font-size: 1.125rem;"></i>
-                    </div>
-                    <div>
-                        <h4 style="font-size: 0.9375rem; font-weight: 700; color: var(--text); margin: 0 0 0.25rem 0;">No complexity</h4>
-                        <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0; line-height: 1.5;">Not accounting software</p>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <p style="margin-top: 2rem; text-align: center;">Also see: <a href="petty-cash-log-template.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Petty cash log template</a>, <a href="petty-cash-voucher-template.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Petty cash voucher template</a>, <a href="how-to-fill-out-petty-cash-voucher.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">How to fill out a petty cash voucher</a>, <a href="petty-cash-voucher-sample.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Petty cash voucher sample</a>, <a href="petty-cash-policy-template.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Petty cash policy template</a>, <a href="office-expense-reimbursement-form.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Office expense reimbursement form</a>, <a href="digital-petty-cash-book.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Digital petty cash book</a>, <a href="petty-cash-receipt-generator.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Petty cash receipt generator</a>, <a href="petty-cash-does-not-balance.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Petty cash doesn't balance</a>, <a href="petty-cash-audit-checklist.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Petty cash audit checklist</a>, <a href="daily-cash-report-template.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Daily cash report template</a>, <a href="cash-count-sheet-template.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Cash count sheet template</a>, <a href="petty-cash-replenishment-form.html" style="color: inherit; font-weight: inherit; text-decoration: underline;">Petty cash replenishment form</a>.</p>
