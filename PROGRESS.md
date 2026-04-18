@@ -98,6 +98,34 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
+## Where we are now (last updated: 2026-04-13 — SEO: tool intent megerősítés terv 2 oldalra)
+
+### 2026-04-13 — SEO: tool intent megerősítés (PENDING — ne nyúlj hozzá amíg nem kérem)
+
+**Kontextus:** Az ápr. 9-10-i változtatások (6 template oldal noindex, boilerplate eltávolítás, cross-linkek, structured data fix) 3 napja élnek — Google még nem dolgozta fel. A template oldalak le vannak tiltva (noindex), a tool/pain oldalak jó pozícióban vannak (poz 2, 6, 9.7), de a keresési volumen alacsony (17 megjelenés/nap a tool oldalakon vs. korábbi 50/nap freshness boost idején).
+
+**Stratégia:** NEM új oldalak, NEM title rewrite mindenhol — a 2 legerősebb meglévő oldal tool intent megerősítése.
+
+**Target 1: `petty-cash-security-tips.html`** (eredetileg manage oldal volt a ChatGPT tervben, de az noindex + poz 57.5 + 0 kattintás 3 hónap alatt → elvetettük)
+- Miért: **page 1-en van (poz 6.0)**, indexelt, sitemap-ben van, és a security téma természetesen vezet tool intent-hez (security → audit trail → accountability → tracking rendszer)
+- Cél: tool intent jel megerősítése anélkül, hogy az informational ranking sérülne
+- Tennivaló:
+  1. Új blokk: "Digital tracking as a security layer" — a biztonsági tippek között a digitális nyomon követés logikus lépés (track every transaction, know who has the cash, instant receipt, audit trail)
+  2. SpendNote mention természetes kontextusban (nem sales pitch, hanem "tools like X help you…")
+  3. CTA nem marketinges: "Try a simple petty cash tracker (no setup, 30 sec)"
+
+**Target 2: `petty-cash-how-much-to-keep.html`**
+- Miért: jobb pozíció (6-13 körül volt), stabil query, entry-level funnel top
+- Tennivaló:
+  1. Új rész: "How to control petty cash amount" — limit beállítás, tracking, visibility
+  2. Áttolás: "The real problem is not how much you keep — but not knowing where it goes." + link a manage oldalra
+
+**Logika:** Nem új oldalakat kell írni — hanem ezt a 2-t kell úgy megnyomni, hogy Google végre értse: ez egy tool, nem egy cikk. Meglévő jel megerősítése, nem újrakezdés.
+
+**Státusz:** ⏸️ VÁRAKOZÁS — először az ápr. 9-10-i változtatások hatását meg kell várni (min. 2-4 hét). Ha utána sem javul: ezt a 2 oldalt megnyomjuk.
+
+---
+
 ## Where we are now (last updated: 2026-04-06 — Tier gating lezárva, billing hátralék)
 
 ### Nyelv: PROGRESS vs app (kanonikus)
