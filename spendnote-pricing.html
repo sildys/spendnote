@@ -19,21 +19,21 @@
 </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
-    <meta name="description" content="Track petty cash, know who has your money, and generate receipts in seconds. Free 14-day trial. Plans from $19/mo. No hidden fees.">
+    <meta name="description" content="Track petty cash, know who has your money, and generate receipts in seconds. Free 14-day trial. Plans from $15.83/mo. No hidden fees.">
     <link rel="canonical" href="https://spendnote.app/pricing">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://spendnote.app/pricing">
     <meta property="og:title" content="SpendNote Pricing — Petty Cash Tracking. Know Who Has Your Cash.">
-    <meta property="og:description" content="Track petty cash, know who has your money, and generate receipts in seconds. Free 14-day trial. Plans from $19/mo. No hidden fees.">
+    <meta property="og:description" content="Track petty cash, know who has your money, and generate receipts in seconds. Free 14-day trial. Plans from $15.83/mo. No hidden fees.">
     <meta property="og:image" content="https://spendnote.app/assets/images/seo/petty-cash-receipt-generator/print-two-copy-receipt.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://spendnote.app/pricing">
     <meta property="twitter:title" content="SpendNote Pricing — Petty Cash Tracking. Know Who Has Your Cash.">
-    <meta property="twitter:description" content="Track petty cash, know who has your money, and generate receipts in seconds. Free 14-day trial. Plans from $19/mo. No hidden fees.">
+    <meta property="twitter:description" content="Track petty cash, know who has your money, and generate receipts in seconds. Free 14-day trial. Plans from $15.83/mo. No hidden fees.">
     <meta property="twitter:image" content="https://spendnote.app/assets/images/seo/petty-cash-receipt-generator/print-two-copy-receipt.png">
 
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -363,11 +363,12 @@
             display: block;
             font-size: 16px;
             color: var(--text-muted);
-            margin-bottom: 2rem;
+            margin-bottom: 0.5rem;
         }
 
         .pricing-card ul {
             list-style: none;
+            margin-top: 1.5rem;
             margin-bottom: 2rem;
         }
 
@@ -845,10 +846,10 @@
                     ] 
                 },
                 standard: { 
-                    price: '$190', 
-                    breakdown: 'Just $15.83/month',
-                    savings: 'Save $38 vs monthly',
-                    period: 'per year',
+                    price: '$15.83', 
+                    breakdown: 'billed annually — $190/yr',
+                    savings: 'Save $38 vs paying monthly',
+                    period: '/month',
                     bestFor: 'Solo users & small teams',
                     features: [
                         '2 Cash Boxes',
@@ -862,10 +863,10 @@
                     popular: true
                 },
                 pro: { 
-                    price: '$290', 
-                    breakdown: 'Just $24.17/month',
-                    savings: 'Save $58 vs monthly',
-                    period: 'per year',
+                    price: '$24.17', 
+                    breakdown: 'billed annually — $290/yr',
+                    savings: 'Save $58 vs paying monthly',
+                    period: '/month',
                     bestFor: 'Growing teams',
                     features: [
                         'Customizable text & labels (localization)',
@@ -1160,9 +1161,9 @@
                     <h3>Standard</h3>
                     <p class="pricing-best-for">${data.standard.bestFor}</p>
                     <div class="price">${data.standard.price}</div>
+                    <span class="period">${data.standard.period}</span>
                     ${data.standard.breakdown ? `<div class="price-breakdown">${data.standard.breakdown}</div>` : ''}
                     ${data.standard.savings ? `<div class="savings">${data.standard.savings}</div>` : ''}
-                    <span class="period">${data.standard.period}</span>
                     <ul>
                         ${data.standard.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
                     </ul>
@@ -1175,9 +1176,9 @@
                     <h3>Pro</h3>
                     <p class="pricing-best-for">${data.pro.bestFor}</p>
                     <div class="price">${data.pro.price}</div>
+                    <span class="period">${data.pro.period}</span>
                     ${data.pro.breakdown ? `<div class="price-breakdown">${data.pro.breakdown}</div>` : ''}
                     ${data.pro.savings ? `<div class="savings">${data.pro.savings}</div>` : ''}
-                    <span class="period">${data.pro.period}</span>
                     <ul>
                         ${data.pro.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
                     </ul>
