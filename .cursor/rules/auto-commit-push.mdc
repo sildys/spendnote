@@ -1,0 +1,43 @@
+---
+description: Auto-commit and push every code change without asking
+alwaysApply: true
+---
+
+# Auto-Commit + Push Policy
+
+Whenever you finish a self-contained code/content change in this repo, **automatically commit and push to the current branch** without waiting for the user to ask.
+
+This overrides the default "only commit when explicitly asked" behavior — the user has set this preference for this project.
+
+## Workflow
+
+1. Finish the requested edits and verify no linter errors.
+2. `git add` only the files you actually touched in this turn.
+3. Write a clear conventional commit message (focus on the *why*, not just the *what*).
+4. `git commit` and `git push origin <current-branch>`.
+5. Confirm the push to the user with the commit short-SHA and the branch.
+
+## Do NOT auto-stage
+
+- Files modified by the user outside the current task (always check `git status` first — only `git add` the paths you edited).
+- Untracked data folders, exports, dumps, `.csv` reports, or anything that looks like local artifacts.
+- Files that may contain secrets (`.env`, credentials, tokens).
+
+If unsure whether a modified file belongs to your change, leave it unstaged and mention it to the user.
+
+## Safety rails (still apply)
+
+- Never `git commit --amend` a pushed commit.
+- Never force-push.
+- Never skip hooks (`--no-verify`).
+- Never touch `git config`.
+- If a pre-commit hook fails, fix the issue and create a **new** commit (don't amend).
+
+## Commit message style
+
+Follow the existing repo style (see `git log --oneline -20`). Current convention is a short prefix + colon + lowercase summary, e.g.:
+
+- `seo: tighten core SEO page titles for mobile SERP cut-off`
+- `fix: remove leftover preview-period content from FAQ`
+
+For multi-line bodies, explain the reasoning, not the diff.
