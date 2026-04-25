@@ -1,3 +1,300 @@
+# 📜 MUNKANAPLÓ — 2026-04-25 (snippet/keyword sprint, Bing-data alapján)
+
+> **Státusz:** A 04-18-i tervet (lent) elhalasztottuk. Helyette egy **akciós napot** csináltunk a 2026-04-25 GSC + a felhasználó által megosztott Bing query-data alapján. Cél: **mai snippet/title/keyword fix-ek**, plusz egy új landing page Bing tool-intent klaszterre.
+>
+> **Adatforrás (frissítve):** GSC export 2026-04-25 + Bing query-lista (felhasználói paste). A 04-18-i terv lentebb változatlanul.
+
+## 1. Megcsinált munka (commit-okkal)
+
+| Commit | Mit | Miért |
+|---|---|---|
+| `9f79873` | Title/meta tightening 3 oldalon: `petty-cash-replenishment-form`, `petty-cash-policy-template`, `petty-cash-reconciliation` | Mobil SERP cut-off + Bing tool-intent query-illesztés |
+| `68a3db2` | Title fix még 4 oldalon: `cash-drawer-reconciliation`, `digital-receipt-book`, `cash-handoff-receipt`, `two-person-cash-count-policy` | Handoff→handover US English, mobil SERP optimalizáció |
+| `d6984cb` | **Új oldal**: `petty-cash-app.html` (priority 0.9 sitemap) + bejövő linkek `spendnote-resources` és `petty-cash-app-vs-excel` oldalakról | Bing query-k: "app for petty cash", "petty cash management app", "digital petty cash apps" — dedikált product landing page |
+| `8a1efe2` | **Trust-fix**: hamis "Free Template/Sample/Checklist" claim-ek eltávolítása 4 oldalon | A SERP-ben látszó cím azt ígérte, hogy van letölthető template — de nem volt. Misleading → trust-loss → low CTR |
+| `193a0ca` | 10 belső link a `petty-cash-app.html`-re a clustertagokról + 2 link visszavonás `noindex` source page-ekről + 1 broken `noindex` target fix `petty-cash-app`-on belül | Felhasználó észrevette: olyan oldalakra/oldalakról linkelek amik `noindex`-ek → 0 link equity flow |
+| `1f7a213` | `boss-cant-see-where-cash-goes` teljes keyword-refaktor (title, H1, H2-k, FAQ, schema) | Az oldal nulla impressiont kapott GSC-ben pedig releváns; a rhetorical-style H1/title nem matchelt a search query-kkel |
+| `THIS COMMIT` | `petty-cash-how-much-to-keep` snippet enhance (TL;DR direkt válasz + új `$100 float breakdown` table sekció) + `who-has-the-cash-right-now` H1/H2 keyword refactor (boss-page minta szerint) + `seo-noindex-guard.mdc` Cursor rule + munkanapló | Featured-snippet farming a "how much petty cash" query-re; "who has the cash" oldal rhetorical→keyword shift; megelőzni a jövőbeli noindex-linking hibákat |
+
+## 2. Decision: 04-18-i ÚJ-OLDAL terv halasztva
+
+A 04-18-i terv első három új oldala (`cash-float-vs-petty-cash`, `payroll-cash-receipt`, `petty-cash-for-restaurants`) továbbra is releváns, de **2-3 hetet még várunk** a mostani index-csiga lefutására. A mai 6 commit (és a holnapi reindex-jel) után döntjük el, melyiket tesszük be először.
+
+## 3. Mit kell figyelni 1-2 héten belül
+
+- **`petty-cash-how-much-to-keep`**: pos 14 → várt mozgás top-10-be a TL;DR + `$100 breakdown` sekció miatt. Lekérdezéseket: `how much petty cash to keep`, `petty cash float`, `$100 float breakdown`.
+- **`who-has-the-cash-right-now`**: jelenleg nem rangsorolt a fő query-kre. Várt mozgás: `track who has petty cash`, `who is holding company cash`, `real-time cash tracking` query-kre top-30 → top-15.
+- **`boss-cant-see-where-cash-goes`**: várt impressionek: `track business cash`, `cash visibility` query-kre. Eddig nulla impressionnel ment.
+- **`petty-cash-app`**: új oldal, várt első impressionek 1-2 héten belül a Bing tool-intent query-kre.
+- **Trust-fix oldalak (`8a1efe2`)**: korábbi mismatch-CTR (0%) → várt felugrás, mivel most a SERP cím nem ígér meg semmit, ami nincs az oldalon.
+
+## 4. Új szabály életbe lépve
+
+`.cursor/rules/seo-noindex-guard.mdc` — minden új internal link előtt mindkét oldalon (source + target) ellenőrizzük a `<meta name="robots">` tagot. Linkelni csak `index, follow` ↔ `index, follow` között szabad. A 04-25-i `noindex` audit lista a rule-ban benne van.
+
+---
+
+# 🎯 AKTUÁLIS TERV — Keyword Research alapján (2026-04-18)
+
+> **Státusz:** Várakozó fázis. A 2026-04-17/18-i nagy belső link tisztítás + pricing átállás + FAQ kitisztítás után kb. **2-3 hét reindex-időszak**. Eddig semmi tartalmi piszkálás. Ezt a tervet **3 hét múlva** vesszük elő publikálásra.
+>
+> **Adatforrás:** Search Console export 2026-04-09 (28 napos) + 2026-04-18 (7 napos), `/spendnote.app-Performance-on-Search-*` mappák.
+
+---
+
+## Top 5 felfedezés a kulcsszó-adatokból
+
+1. **`cash float` cluster** — több, mint **45 megjelenés/28 nap** szétszórva 10+ query-n, **dedikált oldal nélkül**. Ez a legtisztább tartalmi hiány.
+2. **`payroll receipt`** — **48 megjelenés** (35+13) két query-n, **nincs hozzá oldal**, pos 38-39. Könnyű győzelem.
+3. **Industry vertikálisok** — `school-money-collection-tracker` (pos 8.73, **4.55% CTR**) bizonyítja, hogy működik. Új industry-pages-ek igazolt keresleti adattal.
+4. **Reckon competitor query** — **34 megjelenés** Reckon-related petty cash query-ken. Alternatíva-oldal magas commercial intent-tel.
+5. **Specifikus receipt típus minta** — `private tutor receipt` pos 1.5, `babysitter receipt` pos 6.5, `cash advance receipt` pos 6.46. Ez a formátum **gyorsan ranking-el alacsony versenyben** — több ilyen oldal érdemes.
+
+---
+
+## 1. ÚJ OLDALAK (publikálási sorrendben, 3 hét múlva kezdve)
+
+### 1. fázis (1-2 héten belül a reindex-szünet után)
+
+#### 🥇 `cash-float-vs-petty-cash.html` — TOP PRIORITÁS
+**Bizonyíték:** 45+ megjelenés/28 nap, dedikált oldal nélkül.
+
+| Query | Megjelenés (28d) | Pozíció |
+|---|---|---|
+| petty cash float | 13 | 48.31 |
+| cash float formula | 5 | 17.2 |
+| petty cash float in accounting | 9 | 73.89 |
+| petty cash float meaning | 2 | 26.5 |
+| cash float and petty cash | 8 | 67.5 |
+| cash float for market stall | 2 | 29 |
+| petty cash and cash float | 3 | 57 |
+| petty cash vs cash float | 1 | 11 |
+| cash float vs petty cash | 1 | 25 |
+| what is a petty cash float | 1 | 39 |
+
+**H1 javaslat:** "Cash Float vs Petty Cash — What's the Difference (And Why It Matters)"
+**Fókusz kulcsszavak:** cash float, petty cash float, cash float formula, cash float vs petty cash
+**Belső linkek bejövő:** `petty-cash-how-much-to-keep`, `how-to-start-petty-cash-box`, `digital-petty-cash-book`
+
+#### 🥈 `payroll-cash-receipt.html` — KÖNNYŰ GYŐZELEM
+**Bizonyíték:** 48 megjelenés/28 nap, pos 38-39, nincs oldal.
+
+| Query | Megjelenés | Pozíció |
+|---|---|---|
+| payroll receipts | 35 | 38.86 |
+| payroll receipt | 13 | 39.62 |
+
+**H1 javaslat:** "Payroll Cash Receipt — Proof of Cash Wage Payment"
+**Fókusz kulcsszavak:** payroll receipt, payroll receipts, cash payroll, payday cash receipt
+**Belső linkek bejövő:** `cash-handoff-receipt`, `employee-cash-advance-receipt`
+
+#### 🥉 `petty-cash-for-restaurants.html` — INDUSTRY VERTIKÁLIS #1
+**Bizonyíték:** `school-money-collection-tracker` pos 8.73, **4.55% CTR** (működő minta).
+**H1 javaslat:** "Petty Cash for Restaurants — Track Cash Tips, Float, and Daily Drops"
+
+### 2. fázis
+
+4. **`petty-cash-for-construction.html`** vagy meglévő `construction-site-petty-cash.html` átdolgozása
+   - Bizonyíték: `petty cash management for construction` 1 imp pos 18 (van keresés)
+5. **3-4 új specifikus receipt oldal** (a `private tutor receipt` pos 1.5 minta alapján):
+   - `nanny-cash-payment-receipt.html`
+   - `cleaning-service-cash-payment-receipt.html`
+   - `dog-walker-cash-payment-receipt.html`
+   - `personal-trainer-cash-payment-receipt.html`
+   - `music-lesson-cash-payment-receipt.html`
+   - `landscaper-cash-payment-receipt.html`
+6. **`reckon-vs-spendnote-petty-cash.html`** — competitor angle
+   - Bizonyíték: 34 imp/28d Reckon-related query-ken
+
+### 3. fázis (csendes optimalizáció, no new pages)
+
+7. **FAQ schema bővítés** a meglévő oldalakon az alábbi info-query-kre (lásd 4. szakasz)
+8. **Anchor text optimalizáció** a meglévő belső linkekben (lásd 5. szakasz)
+
+---
+
+## 2. QUICK WINS — meglévő oldalak, push top 10-be
+
+Csak belső linkelés vagy kis tartalmi bővítés (nincs új oldal):
+
+| Oldal | Pozíció (28d) | Imp | Stratégia |
+|---|---|---|---|
+| `manage-petty-cash-remotely` | **4.83** | 6 | Top 5 — több inbound link |
+| `school-money-collection-tracker` | **8.73** | 22 | Top 10 — tartani |
+| `boss-cant-see-where-cash-goes` | **2** | 1 | Top 2 — több query-ben felfutni |
+| `cash-handoff-receipt` | **16.36** | 59 | Top 10-be tolni |
+| `where-to-keep-petty-cash` | **15.78** | 74 | Top 10 közeli |
+| `petty-cash-policy-template` | **17** | 1 | Több visibility kell |
+| `digital-petty-cash-book` | **18.61** | 23 | Pillar, már piszkáltuk, érik |
+| `cash-discrepancy-between-shifts` | **20.57** | 28 | Push |
+| `employee-cash-advance-receipt` | **21.12** | 158 | **158 imp**, top 10 → forgalom-aranybánya |
+| `digital-receipt-book` | **21.38** | 29 | Push |
+
+---
+
+## 3. ERŐSEN MŰKÖDIK — VÉDENI (ne nyúlj hozzá)
+
+| Oldal | Pos | Imp | Klikk | CTR |
+|---|---|---|---|---|
+| Homepage | 5.88 | 66 | 9 | **13.64%** |
+| `manage-petty-cash-remotely` | 4.83 | 6 | 1 | 16.67% |
+| `school-money-collection-tracker` | 8.73 | 22 | 1 | 4.55% |
+| `cash-handoff-receipt` | 16.36 | 59 | 2 | 3.39% |
+| `petty-cash-receipt-generator` | 25.47 | 86 | 1 | 1.16% |
+
+**Specifikus receipt típusok**, amik már nagyon jól mennek (a "minta" amit replikálni érdemes):
+
+| Query | Pos | Imp |
+|---|---|---|
+| `cash refund receipt template` | **1** | 5 |
+| `private tutor receipt` | **1.5** | 4 |
+| `cash advance receipt` | **6.46** | 13 |
+| `babysitter receipt` | **6.5** | 10 |
+| `cash advance slip format` | 6.4 | 5 |
+| `cash advance receipt format` | 8.5 | 6 |
+| `tutoring receipt` | 10.75 | 4 |
+
+---
+
+## 4. FAQ SCHEMA BŐVÍTÉS (3. fázis, no new pages)
+
+Long-tail info-query-k, amiket meglévő oldalakon FAQ szekciókkal és FAQ schema-val be lehet fogni:
+
+| Query | Pos | Hova tegyük |
+|---|---|---|
+| how to track cash payments | 18.62 | `how-to-track-cash-payments` ✓ |
+| how to track petty cash | 72.93 | `digital-petty-cash-book` |
+| how to balance petty cash | 84.81 | `petty-cash-reconciliation` |
+| how can i keep my cash box organized | 36 | `petty-cash-security-tips` |
+| how to handle petty cash in a company | 68 | hub vagy új oldal |
+| how do you keep track of transactions | 71.5 | `digital-petty-cash-book` |
+| how much petty cash should be on hand | 67 | `petty-cash-how-much-to-keep` ✓ |
+| how to fill out cash receipt | 92.33 | `cash-payment-received-proof` |
+| how to use a receipt book | 52 | `digital-receipt-book` |
+| petty cash custodian job description | 71 | új vagy `how-to-start-petty-cash-box` |
+
+---
+
+## 5. ANCHOR TEXT OPTIMALIZÁLÁS (3. fázis, zero risk)
+
+Belső linkek anchor text-jei amik kulcsszót erősítenének:
+
+- Linkek `digital-petty-cash-book`-ra → **"digital petty cash log"**, **"online petty cash tracker"**, **"petty cash management system"**
+- Linkek `cash-handoff-receipt`-re → **"cash handoff documentation"**, **"who took the cash receipt"**
+- Linkek `petty-cash-receipt-generator`-ra → **"petty cash receipt generator"**, **"instant cash receipt maker"**
+- Linkek `cash-drawer-reconciliation`-re → **"reconcile cash drawer"**, **"end of shift cash count"**
+
+---
+
+## 6. STRATÉGIAI KONTEXT — noindex áldozat
+
+A 2026-04-09 előtti noindex 6 oldal **2 163 megjelenést** vitt el (28 nap):
+
+| Oldal (noindex) | Imp (28d) |
+|---|---|
+| `cash-receipt-template` | 787 |
+| `what-is-petty-cash` | 472 |
+| `petty-cash-voucher-template` | 429 |
+| `petty-cash-voucher-sample` | 187 |
+| `how-to-manage-petty-cash-small-business` | 151 |
+| `petty-cash-log-template` | 137 |
+
+Ez stratégiailag tudatos áldozat (low intent template/info traffic), de **5-6 hét alatt teljesen kicseng**. Az új cluster építésnek ezt **kompenzálnia kell** — ezért fontos a fenti 1-2-3 fázis.
+
+---
+
+## 7. BING TANULSÁGOK (2026-04-18)
+
+> **Kontextus:** Bing csak ~22 oldalt indexelt a ~50-ből, az összes URL be van adva, **mégis "szarik rá"**. Ennek ellenére már most jobb signal-eket ad mint Google.
+
+### Bing-en MŰKÖDŐ kulcsszavak (22 indexelt oldalból!)
+
+**Tool/app intent — Bing sokkal erősebb mint Google:**
+
+| Query | Pos |
+|---|---|
+| `sample petty cash voucher app` | **1** |
+| `petty cash receipt archiver` | **1** |
+| `petty cash management app` | **2** |
+| `i need a simple app for keeping track of petty cash` | **3** |
+| `app to record petty cash slips` | 6 |
+| `an ai generator for petty cash` | 6 |
+| `petty cash receipts smart capture` | 6 |
+| `app for petty cash` | 8 |
+
+**Replenishment cluster (már konvertál!):**
+
+| Query | Pos | Kattintás |
+|---|---|---|
+| `petty cash replenish request form` | **7** | **1 click, 100% CTR** ⭐ |
+| `replenishment form` | 8.67 | 0 (6 imp) |
+| `petty cash replenish requests` | 8 | 0 |
+
+**Policy cluster (top 10):**
+
+| Query | Pos |
+|---|---|
+| `petty cash policy template` | **5** |
+| `free sample petty cash policy` | **6** |
+| `i need a simple petty cash policy for my nonprofit` | **6** |
+
+**Cash box startup:**
+
+| Query | Pos |
+|---|---|
+| `suggested cashbox startup` | **1** |
+| `starting amount for cash box` | 6 |
+
+### Bing tanulságok stratégiai szinten
+
+1. **Az első dokumentált fizető-szignál Bing-ről jött** — `petty cash replenish request form` query-ről 1 kattintás. Bing kicsi, **de konvertál**.
+2. **Tool/app intent jobban megy Bing-en mint Google-ön** — ezek pont azok a query-k, amikre Google-ön küzdünk. Stratégiai következmény: **érdemes hangsúlyosan tool/app intent oldalakat építeni** (akkor is, ha Google rajtuk lassabb).
+3. **Bing nonprofit modifier-t honorál** — `i need a simple petty cash policy for my nonprofit` pos 6. Ez támogatja a `petty-cash-for-nonprofits.html` ötletet.
+4. **Az ESL/non-native phrasing query-ket Bing-en érdemes nézni** — pl. `is stall tracking machine alaso print receipt`, `drible petty cash dashboard`. Ezek nemzetközi user-eket jeleznek.
+
+### Miért nem indexel a Bing több oldalt?
+
+A 22-es indexáltság **nem konfigurációs hiba** — ez Bing alapvető viselkedése új site-okkal:
+
+- **Cloudflare bot challenge gyakran kiszúrja Bingbot-ot.** A Cloudflare alapértelmezett bot fight mode-ja Bingbot-ot is challenge-eli, és Bingbot ettől visszalép. Ellenőrizni: Cloudflare → Security → Bots → Verified Bots allow.
+- **Bing erősebben támaszkodik backlink-ekre és domain age-re** mint Google. Új domain + nulla backlink = Bing konzervatívan indexel.
+- **Bingbot globális kapacitása kisebb.** Új site reálisan **6-12 hét** alatt jut el 30-50 oldal indexáltságig, ha minden rendben.
+
+### Bing stratégia jelenleg
+
+**NE piszkáld** — minden URL be van adva, sitemap submit megvan, IndexNow se segítene. Bing **passzív** ebben a fázisban.
+
+**Egy dolog amit megérné:** Cloudflare bot challenge ellenőrzés (5 perc). Ha Bingbot blokkolva van WAF-on, az drámaian gyorsítana. Egyébként **6-8 hét alatt magától 35-45 oldalig kúszhat fel**.
+
+A Bing-traffic most **bonus**, nem fő play. A Google a fő játszma.
+
+---
+
+## 8. CLOUDFLARE BOT CHALLENGE — TODO
+
+> Egyszer érdemes megnézni, mert ha Bingbot blokkolva van, az durván fékezi az indexelést. **5 perces feladat.**
+
+1. Cloudflare dashboard → Security → Bots
+2. Verified Bots allow legyen aktív
+3. Cloudflare → Security → WAF → Events log → szűrő `User Agent: Bingbot`
+4. Ha vannak block események → engedélyezni Bingbot user agent-et
+5. Cloudflare → Security → WAF → Custom Rules → ellenőrizni hogy nincs-e Bingbot-ot kiszúró szabály
+
+Ugyanígy érdemes megnézni a `Googlebot`, `DuckDuckBot`, `YandexBot` user agent-eket is.
+
+---
+
+## ⏰ MIKOR mit csinálni
+
+| Időszak | Mit |
+|---|---|
+| **Most — 2026-05-09 (3 hét)** | NULLA tartalmi munka. Reindex-kérelmek napi adagja. Off-site dolgok (G2, Capterra, AlternativeTo profilok) ha akarunk valamit csinálni. |
+| **2026-05-09 — 2026-05-23** | 1. fázis: `cash-float-vs-petty-cash`, `payroll-cash-receipt`, `petty-cash-for-restaurants` (heti 1 új oldal) |
+| **2026-05-23 — 2026-06-13** | 2. fázis: industry vertikálisok + receipt típus oldalak + reckon competitor (heti 2 oldal) |
+| **2026-06-13 onnan** | 3. fázis: FAQ schema bővítés + anchor text optimalizáció + mérés |
+
+---
+
 # SEO + ICP Plan (v1)
 
 ## Positioning guardrail (must keep)

@@ -1,0 +1,54 @@
+---
+description: SEO link-equity guard — never link from/to noindex pages from indexable pages
+globs: **/*.html
+alwaysApply: false
+---
+
+# SEO Noindex Linking Guard
+
+When adding **new internal links** between HTML pages on `spendnote.app`, both the **source** and the **target** page must be `index, follow`. Linking from a `noindex` page is a wasted edit (no link equity flows). Linking to a `noindex` page leaks crawl budget into a dead end.
+
+## Pre-flight check (mandatory before adding any internal link)
+
+For each page involved (source AND target), verify the robots directive:
+
+```bash
+# Source page robots tag
+grep -E '<meta name="robots"' source-page.html
+
+# Target page robots tag
+grep -E '<meta name="robots"' target-page.html
+```
+
+Both must contain `content="index, follow"`. Anything else (`noindex`, `noindex,follow`, `noindex, nofollow`) is a stop.
+
+## Decision matrix
+
+| Source page | Target page | Action |
+|---|---|---|
+| `index, follow` | `index, follow` | ✅ Add the link |
+| `index, follow` | `noindex, *`    | ❌ Find an indexable replacement target, or skip |
+| `noindex, *`    | any            | ❌ Skip — nothing flows from a noindex page |
+
+## Known noindex pages (audit baseline, 2026-04-25)
+
+These are intentionally `noindex` and **must not be linked TO** from indexable pages:
+- `petty-cash-voucher-template.html`
+- `petty-cash-voucher-sample.html`
+- `cash-receipt-template.html`
+- `petty-cash-log-template.html`
+- `what-is-petty-cash.html`
+- `how-to-manage-petty-cash-small-business.html`
+
+If you need a "voucher" target, link to `how-to-fill-out-petty-cash-voucher.html` (indexable) instead.
+
+## When in doubt
+
+Run a quick sweep before committing:
+
+```bash
+# List all noindex pages currently in the repo
+grep -lE 'name="robots"\s+content="noindex' *.html
+```
+
+Cross-reference your changes against that list.
