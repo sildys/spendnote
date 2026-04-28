@@ -172,6 +172,36 @@ A Pro Custom Labels feature **valódi és értékes**, DE **rossz a query-tér**
 
 `receipt in spanish template` SERP-en Harvest "Receipt Template for Spain" oldal explicit hangsúlyozza: NIF + IVA 21% + **VERI*FACTU** (2026 január 1-től kötelező AEAT). Hasonló: francia TVA, német UStG, olasz e-fattura. **Ezekre soha NEM** célzunk, ne ütközzünk tax-compliance kötelezettségbe (mint a `payroll-cash-receipt` esetében sem). A SpendNote pozícionálás marad: **"internal cash handoff proof, NOT tax document"**.
 
+#### F.2.G Cloud / Online / Web-based angle — 2026-04-28 23:30 SERP-evidence
+
+**Felhasználó-felvetés:** A SpendNote real-time online sync feature (bárhonnan bárki ellenőrizheti) — versenyelőny az offline app-okhoz képest.
+
+**SERP-tesztelt query-k (4):**
+
+| Query | SpendNote pozíció | Top 5 | Diagnózis |
+|---|---|---|---|
+| `cloud petty cash software` | **TOP 3** | usepetty.cash, Pleo, **SpendNote**, Zoho Expense, Pluto | ✅ Erős valós tool-intent verseny, mi már bent vagyunk |
+| `online petty cash management` | **TOP 5** | usepetty.cash, Pluto, Pleo, pettycashweb, **SpendNote** | ✅ Tartható |
+| `web based petty cash app` | **TOP 4** | usepetty.cash, pettycashweb, Pleo, **SpendNote**, Pcash | ✅ Tartható |
+| `real time cash tracking app` | **NINCS top 5-ben** | Cash App, Quicken Simplifi, Monarch, PCMag, Cashmonki | ❌ Personal finance tér (Cash App / budgeting), NEM petty cash → SKIP |
+
+**Konzekvencia — ez meta-tweak-jelölt, NEM új oldal:**
+
+A `petty-cash-app.html` + homepage már TOP 3-5-ben rangsorol 3 query-n dedikált "cloud" / "online" / "web-based" framing nélkül. **Tartalom-erősítés** ezekkel a kulcsszavakkal **upgrade-elhet** TOP 3-ról TOP 1-re — NEW ÚJ OLDAL.
+
+**Action 2026-05-12 utánra (NEM most):**
+
+A `petty-cash-app.html`-ben:
+- H2-szekciókban explicit "cloud-based" / "online-accessible" / "web-based" / "real-time team visibility" keyword-bővítés
+- Meta description-be: `cloud / online / web-based` egyikét beemelni
+- A versenyző domináns oldal `usepetty.cash` ellen ki kell játszani a SpendNote előnyeit:
+  - **Pricing**: 14-napos free trial vs usepetty.cash €29/mo first day from sign-up
+  - **Egyszerűség**: nincs DMS/ELO complexity, nincs hash-chain audit log overengineering
+  - **Browser-only**: pure web-app, nincs telepítés, nincs mobile app store-keresés
+- VAGY: a homepage `petty cash tracking, transparent & always searchable` H1-t bővíteni `cloud-based / online team-visibility` framing-el
+
+**Skipped:** `real time cash tracking app` — Cash App + Quicken + Cashmonki personal finance tér, ahova SpendNote nem tud SERP-fittel betörni.
+
 #### F.2.B Tier 2 — Pages already winning (NE PISZKÁLJUK)
 
 - **`cash-drawer-reconciliation`** — `cash drawer reconciliation` cluster 50+ imp/28d, top 10-25 többségében. **Hagyjuk békén**, már működik.
