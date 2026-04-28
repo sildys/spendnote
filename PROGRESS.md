@@ -142,6 +142,33 @@ A felhasználó a 11:25 PM-i visszajelzéssel megerősítette: a SpendNote Pro p
 
 **Brainstorm-fázis lezárva.** A teljes ma esti research (4 batch, ~25 SERP-teszt) konzisztens üzenetet ad: nincs olyan new-landing-oldalat-érdemlő tail-keyword-jelölt, amit eddig nem fedtünk volna le. A 14-napos checkpoint (2026-05-12) marad a következő érdemi pont.
 
+### 2026-04-28 23:50 — Felhasználó pushback + iparág-vertikális batch (5. SERP-batch — végre VAN új jelölt)
+
+**Kontextus:** A 23:45-i F.2.H 8-batch lezárása után a felhasználó jogosan szólt: "tényleg csak ezeket tudod kitalálni, ezekre soha nem keres senki:( egy kibaszott találat sincs rájuk". Az eddigi brainstormjaim (pain-driven / specific role / migration / close-out) **recycled kategóriák** voltak, kevés új inspiráció. A pushback hozta a legtermékenyebb angle-t.
+
+**Új batch — teljesen friss angle-ek:**
+- Iparág-vertikális mikro-niche: `petty cash for hair salon`, `petty cash for food truck`, `petty cash for dentist office`
+- Outcome / failure: `lost petty cash receipt what to do`, `petty cash audit failed`
+- Tools / equipment: `petty cash without safe`
+- Geographic: `petty cash voucher uk`
+- Hybrid: `cash and card receipt template`
+
+**Eredmény (8/3/3/2):**
+- 🚀 **3 ÚJ JELÖLT** (post-checkpoint kandidaturára): `petty cash for hair salon` (top 5 = salon-management software-ek + salon-blog, NINCS SaaS-óriás), `petty cash for food truck` (top 5 = food-truck financial blog + 1 generikus F&B form), `petty cash for dentist office` (közepes — authority dental-fal). **Mindegyik low-comp, high-intent, no SaaS-giant verseny.**
+- ✅ **3 query-n már TOP 1-2** dedikált oldallal: `lost petty cash receipt what to do` (TOP 2, `petty-cash-does-not-balance`), `petty cash audit failed` (TOP 1+2, két SpendNote oldal), `petty cash without safe` (TOP 1+2+5, **3 SpendNote oldal a top 5-ben**).
+- ❌ 2 query bad SERP fit: `petty cash voucher uk` (UK fizikai voucher-pad bolt — Silvine Tesco/Ryman + Excel template), `cash and card receipt template` (template-marketplace dominanció — Template.net/eForms/InvoiceHome).
+
+**Stratégiai felismerés:** Az iparág-vertikális dimenzió **termékeny** — 8/3 érték dramatikusan jobb mint az előző F.2.H 8/0. A SpendNote olyan iparágakra dedikált oldalt írhat (salon, food truck, dentist), ahol a SERP-et iparág-specifikus management software-ek + generic blog-tartalom dominálja, NEM SaaS-óriás petty-cash-tool. **Alacsony-verseny, magas-intent** terület.
+
+**Conditional backlog (post-2026-05-12 — NEM most):**
+- `petty-cash-for-hair-salon.html` (erős fit, honest-claim ellenőrzéssel)
+- `petty-cash-for-food-truck.html` (erős fit, F&B petty cash workflow)
+- `petty-cash-for-dentist-office.html` (közepes — authority dental-fal nehezebb; csak ha hair salon + food truck validálta a stratégiát)
+
+**Trigger feltétel a 14-napos checkpointhoz:** Ha a 04-28-i 3 új oldal (`cash-float-vs-petty-cash`, `payroll-cash-receipt`, `petty-cash-custodian`) közül **legalább 1 első impressziót kap** a 14 napban → új iparág-vertikális landing-pipeline indítható (salon → food truck → dentist → vet clinic → barbershop → ...). Ha 0 impresszió → strategy fail, csak meta-tweakek.
+
+**Új post-checkpoint stratégiai irány körvonalazódott:** iparág-vertikál bővülés. Részletek: `seoplan.md` F.2.I szekció.
+
 ### 2026-04-28 ESTE — 4 meta-tweak + saját brainstorm 19 query-re (commit `4df7b48`)
 
 **Kontextus:** A felhasználó kérte, hogy ne csak GSC-export adataiból, hanem saját agyamból is brainstormoljak új keyword-clustereket. 19 ötletet teszteltem élő SERP-pel.

@@ -240,9 +240,53 @@ A homepage H1-bővítést **nem** csináltuk meg — minimálisra korlátoztuk a
 
 **Új teendő a 8-jelöltből: 0** — nincs új landing oldal, nincs meta-tweak. **Minden győztes query-re már megvan a dedikált oldal**, és a vesztes query-k mind rossz SERP-térben mozognak (POS / authority-fal / fizikai termékbolt / personal finance).
 
-**Ez a 4. piaci validáció ma este** (a 04-28 ESTE 9-jelölt + a 23:00 PM 8-GSC-jelölt + a 23:30 PM cloud/online 4-jelölt + a mostani 23:45 PM 8-jelölt batch): SpendNote **valós tool-intent piacon** működik, és sok query-n már TOP 1-en van, anélkül hogy ezt a GSC-export 4-8 hetes lag-jén keresztül látnánk.
+**Ez a 4. piaci validáció ma este** (a 04-28 ESTE 9-jelölt + a 23:00 PM 8-GSC-jelölt + a 23:30 PM cloud/online 4-jelölt + a 23:45 PM 8-jelölt batch): SpendNote **valós tool-intent piacon** működik, és sok query-n már TOP 1-en van, anélkül hogy ezt a GSC-export 4-8 hetes lag-jén keresztül látnánk.
 
-**Záró tanulság a brainstorm-blokkra:** A `seoplan.md` 2026-04-28-as moratóriuma **érvényes és ésszerű** — nincs olyan tail-keyword-jelölt, amire új oldalt vagy nagy meta-tweaket kellene csinálni. A 04-28 ÉJSZAKAI 2 tweak (`petty-cash-app` cloud/online + `custom-cash-receipt-with-logo` Pro Custom Labels) volt a maradék zero-kockázatú, célzott action; ezek után **valóban a 14-napos checkpoint (2026-05-12)** a következő érdemi pont. A brainstorm-fázis lezárható.
+#### F.2.I 8-jelölt iparág-vertikális batch — 2026-04-28 23:50 SERP-evidence (felhasználó pushback után — recycled kategóriák helyett friss angle-ek)
+
+**Kontextus:** A 23:45-i F.2.H 8-batch lezárása után a felhasználó jogosan szólt: "tényleg csak ezeket tudod kitalálni, ezekre soha nem keres senki:( egy kibaszott találat sincs rájuk". Az előző brainstormjaim (pain-driven / specific role / migration / close-out) recycled kategóriákat tartalmaztak, kevés új inspiriációval.
+
+A 8-batch ezúttal **teljesen új angle-ekben** volt: iparág-vertikális mikro-niche (hair salon, food truck, dentist office) + outcome/failure (lost receipt, audit failed) + tools (no safe) + geographic UK + hybrid scenarios.
+
+**SERP-tesztelt query-k (8):**
+
+| # | Query | Kategória | SpendNote pozíció | Top 5 | Diagnózis |
+|---|---|---|---|---|---|
+| 1 | `petty cash for hair salon` | iparág-vertikál | NINCS top 5-ben | SalonIQ FAQ + SalonToday + SalonBizSoftware + RosySalonSoftware + PerfectLocks | 🚀 **ÚJ JELÖLT** — a top 5 mind salon-management software vagy salon-blog. **NINCS SaaS-óriás** (Pleo / Spendesk / Expensify), **nincs dedikált petty-cash-for-salon landing**. SpendNote-fit. |
+| 2 | `petty cash for food truck` | iparág-vertikál | NINCS top 5-ben | Zapof F&B form + Mobile-Cuisine blog + Relayfi banking + PayAnywhere POS + FoodTruckEquip | 🚀 **ÚJ JELÖLT** — a top 5 generikus food-truck financial blog + 1 generikus F&B form-template. **Nincs petty-cash-specifikus food-truck landing.** SpendNote-fit. |
+| 3 | `petty cash for dentist office` | iparág-vertikál | NINCS top 5-ben | MDManagementGroup + Medical Economics + Henry Schein + DentistryToday + Dentally Community | ⚠️ **Közepes jelölt** — authority dental-management fal (Henry Schein, Medical Economics, DentistryToday). Küzdelem; lehet, de óvatosabb mint a salon/food truck. |
+| 4 | `lost petty cash receipt what to do` | outcome / failure | **TOP 2** | SparkReceipt + **`petty-cash-does-not-balance`** + FitSmallBusiness + InvoiceDataExtraction + AP-Now | ✅ Implicit módon már lefedve — skip |
+| 5 | `petty cash audit failed` | outcome / failure | **TOP 1 + TOP 2** | **`petty-cash-audit-checklist`** + **`petty-cash-does-not-balance`** + Pluto + AccountingTools + PettyCashPlus | ✅ Két SpendNote oldal a top 5-ben — skip |
+| 6 | `petty cash without safe` | tools / equipment | **TOP 1 + TOP 2 + TOP 5** | **`where-to-keep-petty-cash`** + **`petty-cash-security-tips`** + AccountingTools + Pleo Blog + **`how-to-start-petty-cash-box`** | ✅ HÁROM SpendNote oldal a top 5-ben — skip |
+| 7 | `petty cash voucher uk` | geographic UK | NINCS top 5-ben | BusinessAccountingBasics ×2 (free Excel template) + Silvine voucher pad Tesco/Ryman/Office2Home | ❌ UK Excel-template + **fizikai voucher pad bolt** (Silvine 100-sheets, £5.51 a Tesco-ban). Bad SERP fit. |
+| 8 | `cash and card receipt template` | hybrid scenario | NINCS top 5-ben | ReceiptWorks + Template.net + eForms + InvoiceHome + InvoiceFly | ❌ **Template-marketplace dominanció**. SpendNote nem template provider. Skip. |
+
+**Konzekvencia — most VAN 3 új jelölt (a korábbi 0 helyett):**
+
+| Verdikt | Darab | Query-k |
+|---|---|---|
+| 🚀 **ÚJ JELÖLT** (post-checkpoint kandidáns) | 2 | #1 `petty cash for hair salon`, #2 `petty cash for food truck` |
+| ⚠️ Közepes jelölt | 1 | #3 `petty cash for dentist office` (authority dental-fal) |
+| ✅ Már TOP 1-2 dedikált oldallal | 3 | #4 `lost petty cash receipt`, #5 `petty cash audit failed`, #6 `petty cash without safe` |
+| ❌ Bad SERP fit | 2 | #7 UK voucher pad fizikai termékboltok, #8 template-marketplace |
+
+**Új teendő MOST: 0** (a moratórium érvényben). **Új post-checkpoint backlog-bejegyzés: 2-3 jelölt** (post-2026-05-12 kandidatúra, ha a 14-napos checkpoint adatai engedélyezik).
+
+**Stratégiai felismerés — az iparág-vertikális dimenzió termékeny:** A 8/3 érték (új jelölt arány) **dramatikusan jobb** mint az előző F.2.H batch 8/0 értéke. Ez azt jelenti, hogy a SpendNote olyan iparágakra dedikált oldalt írhat (salon, food truck, dentist), ahol a SERP-et **iparág-specifikus management software-ek + generic blog-tartalom** dominálja, NEM SaaS-óriás petty-cash-tool. Ez **alacsony-verseny, magas-intent** terület — 14-napos checkpoint után érdemi vizsgálódásra méltó.
+
+**Conditional backlog (post-2026-05-12 — NEM most):**
+
+| Jelölt oldal | Query | Top 5 verseny | Megjegyzés |
+|---|---|---|---|
+| `petty-cash-for-hair-salon.html` | `petty cash for hair salon` | salon-management blog-tartalom (SalonIQ, SalonBizSoftware, RosySalon, PerfectLocks) | Erős fit. **Honest-claim ellenőrzés szükséges**: SpendNote használható-e tényleg salon-petty-cash-re? Multi-cashbox, role-based, mobile = igen, de explicit példák nélkül. |
+| `petty-cash-for-food-truck.html` | `petty cash for food truck` | food-truck financial blog-tartalom (Mobile-Cuisine, PayAnywhere, FoodTruckEquip, Relayfi) | Erős fit. SpendNote pont arra való amit a Zapof generikus F&B form is fed: F&B petty cash workflow audit-ready. |
+| `petty-cash-for-dentist-office.html` | `petty cash for dentist office` | dental-management authority (Henry Schein, Medical Economics, DentistryToday) | **Közepes** — authority-fal nehezebb. Lehet, hogy hair salon + food truck után válik validálttá az iparág-vertikál stratégia, és csak akkor írunk dental-t.
+
+**Trigger feltétel a 2026-05-12-i checkpointhoz:** Ha a 04-28-i 3 új oldal (`cash-float-vs-petty-cash`, `payroll-cash-receipt`, `petty-cash-custodian`) közül **legalább 1 első impressziót kap** a 14 napban (vagyis a Google indexbe vette és értelmes query-re felmegy a SERP-en), akkor a salon + food truck oldalakat el lehet kezdeni írni. Ha 0 impresszió a 3 új oldalra → a stratégia nem működik, csak meta-tweakeket csinálunk.
+
+**Záró tanulság a teljes ma esti research-ra:** A user pushback-je hozta a legtermékenyebb angle-t — **az iparág-vertikális dimenzió** (low-comp, high-intent, no SaaS-giant verseny) termékenyebb mint a generic pain-driven/role/migration angle-ek. Ez a 14-napos checkpoint utáni stratégia központi irányát adhatja: **iparág-vertikál bővülés** (salon → food truck → dentist → vet clinic → barbershop → tattoo shop → nail salon → fitness studio → ...).
+
+A 04-28 ÉJSZAKAI 2 tweak (`petty-cash-app` cloud/online + `custom-cash-receipt-with-logo` Pro Custom Labels) volt a maradék zero-kockázatú akció **most**. A **14-napos checkpoint (2026-05-12)** továbbra is a következő érdemi pont. A brainstorm-fázis ezzel valóban lezárul, **de új post-checkpoint stratégiai irány körvonalazódott**.
 
 #### F.2.B Tier 2 — Pages already winning (NE PISZKÁLJUK)
 
