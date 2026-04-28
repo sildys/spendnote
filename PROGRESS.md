@@ -130,6 +130,18 @@ A felhasználó a 11:25 PM-i visszajelzéssel megerősítette: a SpendNote Pro p
 
 **Override a "sleep-on-it" szabályra:** A felhasználó 23:31-kor explicit kérte, hogy ezeket ma csináljuk meg ("szerintem ezt ma is megcsinálhatod, nem?"). A változtatások **meta + content-bővítés szintűek, nem új URL** — kockázat-szempontból ekvivalensek a délutáni 4 meta-tweakkel. A 14-napos checkpoint (2026-05-12) változatlanul érvényes az új-oldal-építésre.
 
+### 2026-04-28 23:45 — 8-jelölt SERP-batch zárása (a 23:00 közbeszólás előtt elindított batch)
+
+**Kontextus:** A 23:00-i live SERP-batch ELŐTT elindítottam egy 8-jelölt párhuzamos SERP-tesztet 4 kategóriában (pain-driven / specific role / migration / specific use-case), de a felhasználó a customization+localization ötlettel közbeszólt és a 8-batch nem lett triage-elve. 23:45-kor a felhasználó kérte ("korábban kezdtél volna valamiket ellenőrizni a serpben mielőtt jöttem az ötleteimmel... folytasd azt"), ezért most lezártam a batch-et.
+
+**8-jelölt eredmény:**
+- ✅ **4/8 query-n már TOP 1-3 dedikált oldallal**: `petty cash never balances` (TOP 1+3, `petty-cash-does-not-balance`), `tired of petty cash spreadsheet` (TOP 2 + 3 másik SpendNote oldal a top 5-ben, `petty-cash-app-vs-excel`), `record cash without bank account` (TOP 1, `how-to-track-cash-payments`), `cash count at end of shift` (TOP 3, `cash-drawer-reconciliation`).
+- ❌ **4/8 query SKIP** rossz SERP fit miatt: `cash short at end of day` (POS/register intent — Cassida/Erply/Retaildogma), `office manager petty cash duties` (Investopedia+Bill.com authority-fal), `replace petty cash log book` (fizikai notebook-bolt-ok dominálnak — BookFactory/Amazon!), `cash on hand tracker app` (personal finance / coin-counter app tér).
+
+**Új teendő: 0.** Ez a **4. piaci validáció** ma este — SpendNote valós tool-intent piacon működik, és sok query-n már TOP 1-en van, anélkül hogy ezt a GSC-export 4-8 hetes lag-je mutatná. Részletek: `seoplan.md` F.2.H szekció.
+
+**Brainstorm-fázis lezárva.** A teljes ma esti research (4 batch, ~25 SERP-teszt) konzisztens üzenetet ad: nincs olyan new-landing-oldalat-érdemlő tail-keyword-jelölt, amit eddig nem fedtünk volna le. A 14-napos checkpoint (2026-05-12) marad a következő érdemi pont.
+
 ### 2026-04-28 ESTE — 4 meta-tweak + saját brainstorm 19 query-re (commit `4df7b48`)
 
 **Kontextus:** A felhasználó kérte, hogy ne csak GSC-export adataiból, hanem saját agyamból is brainstormoljak új keyword-clustereket. 19 ötletet teszteltem élő SERP-pel.

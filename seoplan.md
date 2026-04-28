@@ -214,6 +214,36 @@ A homepage H1-bővítést **nem** csináltuk meg — minimálisra korlátoztuk a
 
 **Reindex lépés:** A `petty-cash-app.html`-re a felhasználó 04-28 reggel már kért indexkérelmet (a 4. URL-en kifogyott a kvóta), de az **a tartalom-update ELŐTTI** snapshot. **04-29 reggel újabb Request Indexing kell** ezen az oldalon, hogy a friss snapshot menjen be.
 
+#### F.2.H 8-jelölt brainstorm batch — 2026-04-28 23:45 SERP-evidence (4 kategória: pain-driven / role / migration / use-case)
+
+**Kontextus:** A 23:30-as customization+localization batch ELŐTT elindítottam egy 8-jelölt SERP-tesztet 4 kategóriában (pain-driven / specific role / migration / specific use-case), de a felhasználó közbeszólt a saját ötletével és a 8-batch eredményei nem lettek triage-elve. Ma este 23:45-kor a felhasználó kifejezetten kérte a folytatást ("korábban kezdtél volna valamiket ellenőrizni a serpben mielőtt jöttem az ötleteimmel... folytasd azt").
+
+**SERP-tesztelt query-k (8):**
+
+| # | Query | Kategória | SpendNote pozíció | Top 5 | Diagnózis |
+|---|---|---|---|---|---|
+| 1 | `petty cash never balances` | pain-driven | **TOP 1 + TOP 3** | **`petty-cash-does-not-balance.html`** + Chron + **`petty-cash-does-not-balance`** + Investopedia + Spendesk | ✅ Saját oldal mind kanonikus mind .html-ben listázva — már nyertünk |
+| 2 | `tired of petty cash spreadsheet` | pain / migration | **TOP 2 + 3 más SpendNote oldal a top 5-ben** | Sheetrix + **`petty-cash-app-vs-excel`** + usepetty.cash + **SpendNote homepage** + **`how-to-manage-petty-cash-small-business`** | ✅ Brutális coverage — nyertünk |
+| 3 | `cash short at end of day` | use-case (close-out) | NINCS top 5-ben | Cassida.me + Dohassist + Erply + Retaildogma + Dohassist franchise | ❌ **POS / register intent** (cassida POS hardware, erply POS, retaildogma retail) — NEM petty cash custodian. Skip — bad SERP fit. |
+| 4 | `office manager petty cash duties` | specific role | NINCS top 5-ben | Investopedia + FinModelsLab + PettyCashPlus + Bill.com | ❌ **Authority-óriás fal** (Investopedia + Bill.com). A `petty-cash-custodian.html` magától felmehet az "office manager" role-implicitre, de itt direkt célzás nem éri meg a fight-ot. Skip. |
+| 5 | `replace petty cash log book` | migration | NINCS top 5-ben | **BookFactory** (fizikai notebook!) + BookFactory 8.5x11 + Amazon notebook + Store.com notebook + TemplateLab | ❌ **EXTRÉM rossz SERP fit** — a top 4 fizikai NOTEBOOK termékek (papír log book-ok)! Nem app-keresési intent. Skip. |
+| 6 | `record cash without bank account` | pain / off-grid | **TOP 1** | **`how-to-track-cash-payments`** + QuickBooks Intuit Forum + Beancount + Patriotsoftware + Cleverence | ✅ Már nyertünk |
+| 7 | `cash on hand tracker app` | semantic variant | NINCS top 5-ben | Cash on Hand iOS App + Cash Counter (coin counter) + Cash Book + Cash Tracker + Finfluence | ❌ **Personal finance / coin-counter app intent** — App Store coin-counting app-ok dominálják. NEM petty cash management. Skip. |
+| 8 | `cash count at end of shift` | use-case (close-out) | **TOP 3** | Cursa.app (cash handling course) + Cassida.me + **`cash-drawer-reconciliation`** + ShiftForce + Wikipedia (Cashier Balancing) | ✅ Top 3-ban + Cursa/Wiki konkurencia. Tartható. |
+
+**Konzekvencia:**
+
+| Verdikt | Darab | Query-k |
+|---|---|---|
+| ✅ Már TOP 1-3 dedikált oldallal — skip | 4 | #1 `petty cash never balances` (TOP 1+3), #2 `tired of petty cash spreadsheet` (TOP 2 + 3 másik oldal), #6 `record cash without bank account` (TOP 1), #8 `cash count at end of shift` (TOP 3) |
+| ❌ Bad SERP fit — skip | 4 | #3 POS/register intent, #4 Investopedia+Bill.com fal, #5 fizikai notebook-bolt-ok, #7 personal finance/coin-counter app-ok |
+
+**Új teendő a 8-jelöltből: 0** — nincs új landing oldal, nincs meta-tweak. **Minden győztes query-re már megvan a dedikált oldal**, és a vesztes query-k mind rossz SERP-térben mozognak (POS / authority-fal / fizikai termékbolt / personal finance).
+
+**Ez a 4. piaci validáció ma este** (a 04-28 ESTE 9-jelölt + a 23:00 PM 8-GSC-jelölt + a 23:30 PM cloud/online 4-jelölt + a mostani 23:45 PM 8-jelölt batch): SpendNote **valós tool-intent piacon** működik, és sok query-n már TOP 1-en van, anélkül hogy ezt a GSC-export 4-8 hetes lag-jén keresztül látnánk.
+
+**Záró tanulság a brainstorm-blokkra:** A `seoplan.md` 2026-04-28-as moratóriuma **érvényes és ésszerű** — nincs olyan tail-keyword-jelölt, amire új oldalt vagy nagy meta-tweaket kellene csinálni. A 04-28 ÉJSZAKAI 2 tweak (`petty-cash-app` cloud/online + `custom-cash-receipt-with-logo` Pro Custom Labels) volt a maradék zero-kockázatú, célzott action; ezek után **valóban a 14-napos checkpoint (2026-05-12)** a következő érdemi pont. A brainstorm-fázis lezárható.
+
 #### F.2.B Tier 2 — Pages already winning (NE PISZKÁLJUK)
 
 - **`cash-drawer-reconciliation`** — `cash drawer reconciliation` cluster 50+ imp/28d, top 10-25 többségében. **Hagyjuk békén**, már működik.
