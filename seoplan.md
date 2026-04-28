@@ -99,14 +99,42 @@ A "sleep-on-it" csak publikálási moratórium, a kutatás zéró kockázatú. A
 
 #### F.2.A Tier 1 — Existing pages with untapped query potential (meta-tweak jelöltek)
 
+> **Frissítés 2026-04-28 23:30 — élő SERP-teszt eredménye:** Az alábbi #1 és #2 cluster a GSC-export adata szerint "alulhasznosítottnak" tűnt, de élő SERP-keresés feltárta hogy már top 1 vagy gyenge SERP-fit. **Mindkettő törölve a tervből.** A megmaradó cluster-ek csak query-tracking-re vannak, nem actionable backlog. (Lásd lejjebb F.2.A.live-SERP szekciót.)
+
 | # | Cluster | Imp/28d | Oldal | Jelenlegi state | Action 2026-05-12 utánra |
 |---|---|---|---|---|---|
-| 1 | **Refund** (`refund receipt` 30 imp/pos 32, `refund receipt template` 9/47, `cash refund receipt template` 5/**1**, `what does a refund receipt look like` 4/12, + 8 további variáció) | **60+** | `cash-refund-receipt.html` (létezik!) | Pos 1 a `cash refund receipt template`-re, DE a 30 imp/pos 32 sima `refund receipt`-en alulhasznosított. Top 24 oldal között NINCS a 04-25-i exportban → kevés query-illeszkedés a fő title-lel. | **Meta-tweak** (NEM új oldal): title-pivot `Cash Refund Receipt — Free Refund Receipt Template`, description-be `customer refund receipt`, `refund receipt sample`, `refund receipt format` query-fragmentek. **Honest only**: csak ha tényleg generálható template-jelleg. |
-| 2 | **Reckon alternative** (`reckon accounting software petty cash features` 28/16, +variációk) | **34** | Nincs dedikált — a `petty-cash-app-vs-excel` mintázat lenne logikus | Már top 10-15 → ott **van** SpendNote-jelenlét egy meglévő oldalon, csak nem dedikált | **Opció A**: comparison page `petty-cash-app-vs-reckon.html`. **Opció B**: a `petty-cash-app` oldalon "Reckon alternative" framing erősítése (kockázatmentesebb). 2026-05-12 utáni döntés a 14-napos GSC alapján. |
-| 3 | **Track / Tracker** (`petty cash tracker` 1/39, `petty cash tracking` 1/43, `petty cash tracking template` 4/42, `petty cash tracker template` 1/43, `tracking cash` 2-4/47-58, `automate petty cash tracking` 1/63) | ~12 | `petty-cash-app.html` lehet hostja | Az új `petty-cash-app` oldalra nem optimalizált a "tracker"/"tracking" keyword | **Meta-tweak** a `petty-cash-app`-on: H2-ben "Petty Cash Tracker" alias. NEM most, csak ha 2026-05-12-ig sem jönnek imp-ek. |
+| 1 | ~~**Refund**~~ | ~~60+~~ | `cash-refund-receipt.html` | **TÖRÖLVE — 04-28 SERP-teszt: már TOP 1** a sima `refund receipt`-re is. GSC pos 32 régi adat. | **NINCS — already winning**. Hagyjuk békén. |
+| 2 | ~~**Reckon alternative**~~ | ~~34~~ | (nincs dedikált) | **TÖRÖLVE — 04-28 SERP-teszt:** Top 5: Pleo, Pluto, Kash AI, Easy Cash Manager — mély SaaS-verseny, gyenge SERP-fit egy SpendNote-comparison page-nek. A 34 imp accidental homepage rangsor. | **NINCS — bad SERP fit**. |
+| 3 | **Track / Tracker** (`petty cash tracker` 1/39, `petty cash tracking` 1/43, `petty cash tracking template` 4/42, `petty cash tracker template` 1/43, `tracking cash` 2-4/47-58, `automate petty cash tracking` 1/63) | ~12 | `petty-cash-app.html` lehet hostja | Az új `petty-cash-app` oldalra nem optimalizált a "tracker"/"tracking" keyword | **Meta-tweak** a `petty-cash-app`-on: H2-ben "Petty Cash Tracker" alias. NEM most, csak ha 2026-05-12-ig sem jönnek imp-ek. SERP-tesztelni a checkpoint napján. |
 | 4 | **Cash Advance** (`cash advance receipt` 13/**6**, `cash advance slip format` 5/**6**, `salary advance receipt format` 1/**1**, `cash advance receipt format` 6/8, `acknowledgement receipt for cash advance` 1/28, `advance receipt` 1/20, `advance slip` 1/20, `employee cash advance` 1/20, `receipt of advance payment by employee` 1/9) | **30+** | `employee-cash-advance-receipt.html` | **Mai (04-28) cím-pivot megtörtént** ("Cash Advance Receipt" front-load). Most figyelünk. | **NE piszkáljuk**, mai pivot hatását mérjük. |
 | 5 | **Cash discrepancy** (`cash discrepancy` 3/33, `cash discrepancies` 6/59, `cash register discrepancies` 2/47, `discrepancy note` 1/53) | ~12 | `cash-discrepancy-between-shifts.html` | **Mai (04-28) meta-tweak megtörtént** ("Small Business Guide" framing). | **NE piszkáljuk**, mai tweak hatását mérjük. |
-| 6 | **Audit** (`petty cash audit procedures` 2/49, `surprise cash count audit procedures` 1/61, `cash audit` 1/80, `cash audit report` 2/79, `petty cash audit` 1/60, `audit of petty cash fund` 1/95, `how to audit petty cash` 1/65) | ~10 | `petty-cash-audit-checklist.html` | Gyenge pozíciók, sok query-fragmentet nem fed | **Meta-tweak** (NEM most): description-be több audit-variáció. 2026-05-12 utánra. |
+| 6 | **Audit** (`petty cash audit procedures` 2/49, `surprise cash count audit procedures` 1/61, `cash audit` 1/80, `cash audit report` 2/79, `petty cash audit` 1/60, `audit of petty cash fund` 1/95, `how to audit petty cash` 1/65) | ~10 | `petty-cash-audit-checklist.html` | Gyenge pozíciók, sok query-fragmentet nem fed | **Meta-tweak** (NEM most): description-be több audit-variáció. 2026-05-12 utánra. SERP-tesztelni előtte. |
+
+#### F.2.A.live-SERP — 2026-04-28 SERP-evidence (élő Google search)
+
+A backlog összeállítása **nem alapulhat csak GSC-export adatán** — a GSC 28 napos átlag, így régi (akár hetekkel/hónapokkal korábbi) pozíciókat keverhet. 8 query-re élő Google-keresés:
+
+**Already winning — TOP 1 a SERP-en (NEM kell action):**
+
+| Query | Top 1 oldal | Megfigyelés |
+|---|---|---|
+| `refund receipt` | **`spendnote.app/cash-refund-receipt`** | A GSC `refund receipt` 30 imp/pos 32 adata **régi**. SERP-en már TOP 1. |
+| `simple petty cash software` | **`spendnote.app/index.html`** (homepage) | Saját brainstorm jelölt — már nyertes. |
+| `digital alternative to petty cash book` | **`spendnote.app/digital-petty-cash-book`** + #3 homepage | Saját brainstorm jelölt — már nyertes (top 1 + top 3). |
+| `proof of cash payment letter` | **`spendnote.app/cash-payment-received-proof`** | GSC pos 20 adata régi, SERP-en TOP 1. |
+
+**Bad SERP fit / wrong intent — SKIP:**
+
+| Query | Mit talál a SERP | Miért nem mi |
+|---|---|---|
+| `petty cash app no subscription` | Google Play "100% free" appok (Groosh, Vnnovate) | Mi fizetősek vagyunk a 14-napos trial után — query az ingyenességet keresi |
+| `cash drawer app for small business` | Denomination counter appok (CashUp $15/mo, Tilly Tally, Cash Counter) | Bankjegy-számláló intent ≠ tracking intent |
+| `reckon alternative petty cash` | Pleo, Pluto (G2 top 50!), Kash AI, Easy Cash Manager | Mélyen elmerült SaaS-verseny, gyenge SERP-fit egy comparison page-nek |
+| `cash float for retail till` | retaildogma.com, bizfluent.com, **nibusinessinfo.co.uk (gov)** | Info-intent + gov-page — verhetetlen, AI Overview-zóna |
+
+**Konzekvencia:** A 8 saját-brainstorm + GSC-derived jelölt közül **0 új oldal szükséges**, és **0 meta-tweak szükséges most**. A meglévő 4 oldal (homepage, `cash-refund-receipt`, `digital-petty-cash-book`, `cash-payment-received-proof`) magától nyer azokra a query-kre, amikre a GSC-export még csak régi adatot mutat.
+
+**Tanulság a metodológiához:** GSC-export pos-átlagok **nem tükrözik a jelenlegi rangsort**. Mielőtt bármi backlog-tételhez hozzányúlunk, **élő SERP-check kötelező**. A 2026-05-12-i checkpoint napján a maradék 4 backlog-tétel (Track/Tracker, Cash Advance, Cash Discrepancy, Audit) mindegyikét élő SERP-en meg kell nézni a döntés előtt.
 
 #### F.2.B Tier 2 — Pages already winning (NE PISZKÁLJUK)
 
