@@ -98,7 +98,70 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-04-25 — SEO sprint: 8 commit, új landing page, noindex-guard rule, AI Overview stratégia)
+## Where we are now (last updated: 2026-04-28 — Trust-fix sweep + 3 új query-backed oldal + meta-tweak; sleep-on-it fázis)
+
+### 2026-04-28 ESTE — 4 meta-tweak + saját brainstorm 19 query-re (commit `4df7b48`)
+
+**Kontextus:** A felhasználó kérte, hogy ne csak GSC-export adataiból, hanem saját agyamból is brainstormoljak új keyword-clustereket. 19 ötletet teszteltem élő SERP-pel.
+
+**Piaci bizonyíték:** 9 query-n már TOP 5 vagyunk dedikált oldal nélkül — `cash discrepancy small business` (top 1), `petty cash for tradies` (top 1), `cash box always missing money` (top 2-3), `switching from paper petty cash log` (3 oldal a top 5-ben), `first time setting up petty cash` (top 3), `petty cash for one-person business` (top 5), `replace petty cash with app` (top 5), `cash float for events` (top 4), `petty cash for freelancers` (top 5).
+
+**Mai meta-tweak (zero kockázat, tartalom változatlan, csak `<title>` + meta description + og/twitter):**
+
+| Oldal | Új cím-fókusz | Description-fókusz |
+|---|---|---|
+| `construction-site-petty-cash` | + "Tradies" hozzáadva | UK/AU contractor-niche |
+| `event-cash-handling` | "Cash Float for Markets, Festivals & Booths" | "cash float" lead-keyword |
+| `who-took-money-from-cash-box` | "Cash Box Always Missing Money? — Find Out Who Took It" | query-pontosabb pain framing |
+| `cash-discrepancy-between-shifts` | + "Small Business Guide to Finding the Gap" | célzott audience |
+
+Sitemap `lastmod` mind a 4-en → `2026-04-28`.
+
+**Kihagyott jelöltek (jogi kockázat — felhasználó kérdezett rá):**
+- `petty cash for church` / `petty cash for charity` / `petty cash for nonprofits` — **SKIPPELVE**: donor receipts (IRS $250 rule, UK Gift Aid), 501(c)(3) compliance, Form 990, restricted funds, Charity Commission filings. SpendNote nem kezel ilyet, és az asszociáció tax-deductible donation-felé vinné. Pénzügyi/jogi kockázat > SEO-haszon.
+- `imprest petty cash fund`, `do I need petty cash`, `is petty cash going away`, `alternatives to petty cash` — Wikipedia/Investopedia/Shopify/QuickBooks/SaaS-óriás-fal, esélytelen rövid távon.
+- `multiple petty cash boxes`, `shared cash box for team`, `office cash unaccounted for` — rossz SERP-intent (fizikai cashbox-shopok Q-Connect/Barska / hír-történetek Wake County).
+- `petty cash for school office` — csak iskolai politika-PDF-ek, gyenge SpendNote-intent.
+
+**Conditional later (NE most): `petty-cash-for-solo-business.html`** — sole trader + freelancer + one-person business csomag. Saját brainstorm szerint legjobb biztonságos jelölt (3 query-re top 5 dedikált oldal nélkül), DE óvatos fázisban vagyunk és a jelenlegi 3 új oldal stabilizálódását várjuk meg.
+
+### 2026-04-28 — Új oldal #3: `petty-cash-custodian.html` (commit `69907f4`) + `employee-cash-advance-receipt.html` meta optimization
+
+**Mit csináltunk:**
+- Új oldal: `petty-cash-custodian.html` — saját brainstorm jelölt, low-comp role-based query-cluster (custodian role, dual control, segregation of duties, handover protocol).
+- `employee-cash-advance-receipt.html` title/meta pivot: "Cash Advance Receipt" front-load (eredetileg "Employee Cash Advance Receipt" — a query-data alapján a "cash advance receipt" tisztább).
+- Internal linkek: `cash-handoff-receipt`, `employee-cash-advance-receipt`, `where-to-keep-petty-cash`, `two-person-cash-count-policy`, `how-to-manage-petty-cash-small-business` mind a custodian-oldalra.
+- **Sitemap fix**: `how-to-manage-petty-cash-small-business.html` (mostanáig hiányzott a sitemap-ből!) hozzáadva, lastmod `2026-04-28`.
+
+### 2026-04-28 — Új oldal #2: `payroll-cash-receipt.html` (commit `1fdbcbd`)
+
+**Mit csináltunk:** Query-backed gap-fill landing — `payroll receipts` 35 imp/pos 38, `payroll receipt` 13 imp/pos 39 → összesen 48 imp/28d, dedikált oldal nélkül. **Erős framing:** "Proof of a Cash Wage Payment", **NEM** payslip, **NEM** statutory wage statement, **NEM** tax document. Top disclaimer + dedikált "What This Is NOT" warning box (5 explicit kizárás): payroll software, payslip, official wage receipt, tax-compliant document, payroll template/form.
+
+Internal linkek: `cash-handoff-receipt`, `employee-cash-advance-receipt`, `cash-payment-received-proof` "Also see" szekcióiba.
+
+### 2026-04-28 — Új oldal #1: `cash-float-vs-petty-cash.html` (commit `2621750`)
+
+**Mit csináltunk:** Query-backed gap-fill landing — `cash float` cluster 45+ imp/28d 10+ query-n, dedikált oldal nélkül (a 2026-04-18-i seoplan.md top1 jelöltje). **Használati oldal**, nem definíciós: cash float vs petty cash összehasonlító tábla, formula, példák (retail float / office petty cash / event cash box), accounting treatment, tracking advice.
+
+Internal linkek: `petty-cash-how-much-to-keep`, `how-to-start-petty-cash-box`, `digital-petty-cash-book`, `cash-drawer-reconciliation` mind az új oldalra.
+
+### 2026-04-26 → 2026-04-27 — Hatalmas trust-fix sweep ("Free tier" → "Free 14-day trial" 28 oldalon, commitok: `2a8cce6` → `1176086`)
+
+**Kontextus:** Felhasználó észrevette, hogy a `petty-cash-app.html` **hamis feature-claim-eket** tartalmazott (photos, receipt-capture — SpendNote nem fotóz). Ez kibővült egy teljes site-audit-tá, amit fokozatosan megoldottunk:
+
+1. **Petty-cash-app rewrite** (commit `10f979e`) — minden hamis "photo / receipt capture" feature-claim eltávolítva
+2. **Negative phrasing eltávolítva** (commit `dce45a0`) — nem reklámozzuk, hogy mit nem tud
+3. **Native app implication kitisztítva** (commit `5dac5eb`, `2ea0107`) — SpendNote browser-app, nincs App Store / Play Store
+4. **"Immutable records" → "permanent records — voids stay visible"** (több oldalon)
+5. **"Free tier" / "Free plan" → "Free 14-day trial"** (commit `405c778`) — 28 oldal, JSON-LD FAQ + body FAQ + meta + hero + signup CTA + social tags
+6. **FAQ "What happens if I downgrade?" javítása** (commit `f02bd4b`, `ce92ed7`) — view-only állapot, NEM csak nincs új tranzakció, de **export sem lehet** (felhasználó konkrét visszajelzése korrigálta)
+7. **Sitemap lastmod bumps** (commit `1176086`) — a 14 érintett oldalra
+
+**Konzekvencia:** A site marketing-copy-ja most teljes mértékben tükrözi a valódi SpendNote viselkedést. Ez **trust-foundation**, ami nélkül a továbbiakban épülő oldalak nem tudnak honestly konvertálni.
+
+### 2026-04-26 — Indexelési quota leégés
+
+A felhasználó tegnap reggel kijegyezte: "tegnap lemerítettük a quotát... a rossz verziókkal". A 04-25-i sprint URL-jeit a régi verziókkal indexeltettük, nem a friss trust-fix után. Ez 1-2 napos veszteség, de a 14-napos checkpointot (2026-05-09) nem tolja el — a Google magától is feldolgozza a sitemap `lastmod` jelzéseit.
 
 ### 2026-04-25 — SEO sprint nap (8 commit, baseline-reset)
 

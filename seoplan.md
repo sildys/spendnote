@@ -1,6 +1,100 @@
-# 🛡️ STRATEGIC GUARDRAILS — 2026-04-25 ESTE (ChatGPT-review után)
+# 🛡️ STRATEGIC GUARDRAILS — 2026-04-28 ESTE (3 új oldal + meta-tweak után, sleep-on-it fázis)
 
-> Ez a blokk a 2026-04-25-i sprint **utáni** stratégiai irányt rögzíti — külső review (ChatGPT) megerősítette az irányt, néhány hangsúlyt finomított. Ez most a **legfrissebb iránymutatás**, minden alábbi (régebbi) szekciót ennek fényében olvass.
+> **Ez most a legfrissebb iránymutatás.** A 04-25-ös guardrails-blokk (lentebb) a **megelőző** állapotot rögzíti — a stratégiai irányt megerősíti, csak a teendőlistát váltja le.
+
+## A. NE PISZKÁLJUK 2-3 hetet (2026-04-28 → 2026-05-19)
+
+3 új oldal kiment 2 nap alatt (`cash-float-vs-petty-cash`, `payroll-cash-receipt`, `petty-cash-custodian`) + meta-tweak 4 oldalon + 28-oldalas trust-fix sweep ("Free tier" → "Free 14-day trial") + 1 cím-pivot (`employee-cash-advance-receipt`) + sitemap `lastmod` bump 38+ oldalon. Ez bőven elég jel a Google-nak.
+
+**Tilos:**
+- Új oldal
+- Új title-rewrite
+- Új H1/H2 átírás
+- Új internal-link átépítés
+
+**Megengedett:**
+- Indexelési kérés (egyenként, max 5/nap kvóta — a 04-26-i kvóta-leégés után figyelni kell)
+- Sitemap resubmit
+- Search Console figyelése (de nem napi, hetente max 1×)
+- GSC export napi/heti mentése
+
+**Cél:** Hagyni a Google-t feldolgozni 4 hét tartalmi lavinát (04-25-i nagy sprint + 04-26-04-28-i trust-fix + új oldalak) mielőtt újabb hullámot indítunk.
+
+## B. 14-napos checkpoint (2026-05-12)
+
+Ekkor (és csak ekkor) értékeljük:
+
+1. **`cash-float-vs-petty-cash`** — a 45+ imp/28d query-cluster bejön-e az új oldalra? Top 30-ba?
+2. **`payroll-cash-receipt`** — a 48 imp/28d (`payroll receipt(s)`) realizálódik-e az új oldalon? A "NOT a payslip" framing visszatartja-e a rossz intent-eket?
+3. **`petty-cash-custodian`** — saját-brainstorm jelölt teljesít-e? Ha igen, az validálja a brainstorm-stratégiát.
+4. **Trust-fix CTR (28 oldal)** — javult-e a CTR a "Free trial" honest framing után, vagy stagnált/csökkent?
+5. **4 meta-tweak** (`construction-site-petty-cash`, `event-cash-handling`, `who-took-money-from-cash-box`, `cash-discrepancy-between-shifts`) — query-targeting hatása.
+6. **`employee-cash-advance-receipt` cím-pivot** — a "Cash Advance Receipt" front-load-olás javította-e a CTR-t a query-re?
+
+## C. Saját brainstorm 19 query-re (2026-04-28 este, élő SERP-teszttel)
+
+**Kontextus:** A felhasználó kérte, hogy ne csak GSC-export adataiból, hanem saját agyamból is brainstormoljak új keyword-clustereket. 19 ötletet teszteltem élő SERP-pel.
+
+**Piaci validáció — 9 query-n már TOP 5 vagyunk dedikált oldal nélkül:**
+- `cash discrepancy small business` (top 1)
+- `petty cash for tradies` (top 1)
+- `cash box always missing money` (top 2-3)
+- `switching from paper petty cash log` (3 oldal a top 5-ben)
+- `first time setting up petty cash` (top 3)
+- `petty cash for one-person business` (top 5)
+- `replace petty cash with app` (top 5)
+- `cash float for events` (top 4)
+- `petty cash for freelancers` (top 5)
+
+**Action: 4 meta-tweak elvégezve** (zero kockázat, tartalom változatlan, csak `<title>` + meta description + og/twitter):
+- `construction-site-petty-cash` → + "Tradies"
+- `event-cash-handling` → "Cash Float for Markets, Festivals & Booths"
+- `who-took-money-from-cash-box` → "Cash Box Always Missing Money? — Find Out Who Took It"
+- `cash-discrepancy-between-shifts` → + "Small Business Guide"
+
+**Skipped jelöltek (jogi kockázat — ezt explicit a felhasználó kérdezte):**
+
+| Cluster | Miért NEM |
+|---|---|
+| `petty cash for church` / `petty cash for charity` / `petty cash for nonprofits` | Donor receipts (IRS $250 rule, UK Gift Aid), 501(c)(3) compliance, Form 990, restricted funds, Charity Commission filings — SpendNote nem kezel ilyet, és az asszociáció erősen tax-deductible donation-felé vinné. **Pénzügyi/jogi kockázat > SEO-haszon.** |
+| `petty cash for school office` | Iskolai politika-PDF-ek + district-policy oldalak, gyenge SpendNote-intent. |
+| `imprest petty cash fund`, `do I need petty cash`, `is petty cash going away`, `alternatives to petty cash` | Wikipedia / Investopedia / Shopify / QuickBooks-fal, esélytelen rövid távon. |
+| `multiple petty cash boxes`, `shared cash box for team`, `office cash unaccounted for` | Rossz SERP-intent — fizikai cashbox-shopok (Q-Connect, Barska) + hír-történetek (Wake County). |
+
+## D. Conditional PENDING: `petty-cash-for-solo-business.html` — NE most
+
+A saját brainstorm **legjobb biztonságos jelöltje** (3 query-re top 5 dedikált oldal nélkül: `petty cash for sole trader`, `petty cash for freelancers`, `petty cash for one-person business`). **DE** óvatos fázisban vagyunk és a jelenlegi 3 új oldal stabilizálódását várjuk meg.
+
+**Trigger feltételek (mindhárom kell 2026-05-12-ig):**
+1. A 3 új oldal stabilan indexelődött, kapnak impressiont.
+2. Search Console mutatja, hogy `sole trader` / `freelancer` / `one-person` query-kre is kapunk impressiont (most top 5 dedikált oldal nélkül).
+3. Felhasználó zöld jelzést ad.
+
+**Ha NEM teljesül:** marad a jelenlegi state, nem fragmentáljuk fel.
+
+## E. Csatorna-stratégia tisztázás (felhasználói kontextus)
+
+Felhasználó: full-time másik munka mellett dolgozik a SpendNote-on. **Nincs ideje** Reddit-postingra, Product Hunt-launchra, B2B outreach-re, paid Google Ads-re.
+
+**Konzekvencia:** **Google organic search az egyetlen marketing csatorna**. Minden stratégia ehhez igazodik:
+- Egyszer-megírt-örökre-rangsoroló oldalak (compounding asset)
+- Minimális karbantartás (havonta 1-2 commit)
+- Türelem (4-12 hét compounding)
+- Felhasználó CSAK átnéz, nem ír / nem postol / nem outreach-el
+- Skip verdiktek = quick-win SEO-stratégia, NEM piaci hiány
+
+## F. Backlog — query-data nélkül (2026-05-12 utánra fenntartva)
+
+A saját brainstormból kimaradt, **NEM most, de érdemes észben tartani:**
+- `petty-cash-for-solo-business.html` (lásd D pont)
+- `petty-cash-policy-pdf-printable` — ha kiderül hogy a `petty-cash-policy-template` nem produkál PDF/template-intent forgalmat, érdemes lehet külön asset-page (PDF download + preview). De csak SERP-evidence után.
+- `petty-cash-app-comparison` v. `best-petty-cash-app-2026` — commercial intent, alacsony AI Overview kockázat. 14-napos checkpoint adatai után dönthető.
+
+---
+
+# 🛡️ STRATEGIC GUARDRAILS — 2026-04-25 ESTE (ChatGPT-review után — REFERENCIA)
+
+> Ez a blokk a 2026-04-25-i sprint **utáni** stratégiai irányt rögzítette — külső review (ChatGPT) megerősítette az irányt, néhány hangsúlyt finomított. **2026-04-28-tól a fenti guardrails-blokk az aktív iránymutatás**, ezt csak referenciaként hagyjuk meg.
 
 ## A. 7-napos szabály (2026-04-25 → 2026-05-02): NE PISZKÁLJUK
 
