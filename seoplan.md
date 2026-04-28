@@ -136,6 +136,42 @@ A backlog összeállítása **nem alapulhat csak GSC-export adatán** — a GSC 
 
 **Tanulság a metodológiához:** GSC-export pos-átlagok **nem tükrözik a jelenlegi rangsort**. Mielőtt bármi backlog-tételhez hozzányúlunk, **élő SERP-check kötelező**. A 2026-05-12-i checkpoint napján a maradék 4 backlog-tétel (Track/Tracker, Cash Advance, Cash Discrepancy, Audit) mindegyikét élő SERP-en meg kell nézni a döntés előtt.
 
+#### F.2.F Customization & Localization brainstorm — 2026-04-28 23:30 SERP-evidence
+
+**Felhasználó-felvetés:** A SpendNote Pro tier-ben minden receipt-label szabadon átírható **bármilyen szövegre, bármilyen nyelven** (`Received from` → `Recibido de` / `Reçu de` / `Erhalten von` / akármi). Ez egy valódi, honest feature — a versenytárs Invovate **fix 11 nyelvet** ad, MyDocsGenerator 10-et, Receiptor AI csak olvas (nem generál); a SpendNote-Pro **akármilyen nyelvet** enged a felhasználó saját szövegeivel.
+
+**SERP-tesztelt query-k (4):**
+
+| Query | Top 5 | Diagnózis |
+|---|---|---|
+| `receipt in any language` | translate.how, indifferentlanguages, Cambridge Dictionary | **Fordítási szótár intent** — "hogy mondják spanyolul receipt". Nem SpendNote. |
+| `receipt with custom labels` | receiptbaker, makemyreceipt, onlinereceiptmaker, printit4less, etsy | **Fake-receipt builder + fizikai NCR könyv**. Nem SpendNote. |
+| `editable receipt template fields` | template.net ×3, receiptbaker, eforms | **Template-marketplace**. Nem SpendNote. |
+| `cash receipt your own language` | receiptbaker, wise, eforms, offidocs (NL), allbusinesstemplates (NL) | **Template-tömeg** + LibreOffice docs. Nem SpendNote. |
+
+**Konzekvencia — fontos stratégiai átkeretezés:**
+
+A Pro Custom Labels feature **valódi és értékes**, DE **rossz a query-tér** SEO-traffic szempontból. Minden ilyen query a template/builder/fake-receipt térbe megy, ahol nem versenyzünk.
+
+**Két különböző stratégia keveredett:**
+
+| Stratégia | Cél | Hova illik a Pro Custom Labels |
+|---|---|---|
+| **SEO-traffic** | Új user a Google-ből → SpendNote | ❌ NEM ide való — a query rossz intent-térben mozog. |
+| **Conversion** | Meglévő érdeklődő → Pro upgrade | ✅ **IDE való** — `custom-cash-receipt-with-logo`, `spendnote-pricing` oldalakon érdemes hangsúlyozni. |
+
+**Action 2026-05-12 utánra (NEM most):**
+
+- ❌ **NEM csinálunk** új landing oldalt `multilingual-cash-receipt.html` vagy `customizable-receipt-labels.html` néven.
+- ✅ **Conversion-content-bővítés** a meglévő oldalakon:
+  - `custom-cash-receipt-with-logo.html` — H2-ben emelni: "Customize every label — and translate the receipt into any language with your own wording"
+  - `spendnote-pricing.html` Pro-tier szekció — feature-list-be: "Editable receipt labels (any language, any wording)"
+- A felhasználó megerősítette a feature létezését (Pro tier), tehát **honest claim**.
+
+**Skipped templokálás (jogi kockázat):**
+
+`receipt in spanish template` SERP-en Harvest "Receipt Template for Spain" oldal explicit hangsúlyozza: NIF + IVA 21% + **VERI*FACTU** (2026 január 1-től kötelező AEAT). Hasonló: francia TVA, német UStG, olasz e-fattura. **Ezekre soha NEM** célzunk, ne ütközzünk tax-compliance kötelezettségbe (mint a `payroll-cash-receipt` esetében sem). A SpendNote pozícionálás marad: **"internal cash handoff proof, NOT tax document"**.
+
 #### F.2.B Tier 2 — Pages already winning (NE PISZKÁLJUK)
 
 - **`cash-drawer-reconciliation`** — `cash drawer reconciliation` cluster 50+ imp/28d, top 10-25 többségében. **Hagyjuk békén**, már működik.
