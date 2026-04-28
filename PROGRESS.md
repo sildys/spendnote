@@ -98,7 +98,37 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-04-28 — Trust-fix sweep + 3 új query-backed oldal + meta-tweak; sleep-on-it fázis)
+## Where we are now (last updated: 2026-04-28 ÉJSZAKA — Cloud/online framing tweak + Pro Custom Labels conversion-content)
+
+### 2026-04-28 ÉJSZAKA — `petty-cash-app` cloud/online framing + `custom-cash-receipt-with-logo` Pro Custom Labels szekció
+
+**Kontextus:** A 23:30-as live SERP-test megmutatta, hogy a `petty-cash-app.html` + homepage **már TOP 3-5-ben** rangsorol a `cloud petty cash software`, `online petty cash management`, `web based petty cash app` query-ken **dedikált "cloud / online" framing nélkül**. Tartalom-erősítés ezekkel a kulcsszavakkal a TOP 3 → TOP 1 push esélyét adja, **új oldal nélkül**.
+
+A felhasználó a 11:25 PM-i visszajelzéssel megerősítette: a SpendNote Pro plan **valóban engedi** minden receipt-text label átírását bármilyen szövegre, bármilyen nyelven (csak a kötelező legal disclaimer fix). Honest claim, dokumentálható.
+
+**Mit csináltunk (zero-kockázat, csak tartalom-erősítés meglévő oldalakon):**
+
+| Oldal | Mit | Cél |
+|---|---|---|
+| `petty-cash-app.html` | `<title>` + meta description + og/twitter title+description: "Online, Cloud-Based Tracking for Small Teams"; H1: "A Simple, **Cloud-Based** Petty Cash App for Small Teams"; lead bekezdés "online", "from anywhere", "real time across the team"; "What a Real Petty Cash App Does" lead-bekezdés explicit "**cloud-based, browser-only**" framing; **új feature card**: "Cloud-based — access from anywhere" (10. card) | TOP 3-5 → TOP 1 push a 3 cloud/online query-n |
+| `custom-cash-receipt-with-logo.html` | Új H2 szekció: "**Pro: Customize Every Label — In Any Language**" (4 bekezdés + bullet list) + új FAQ ("Can I customize the receipt text in my own language?") + JSON-LD FAQPage entry | **Conversion-content** a meglévő érdeklődőknek (NEM SEO-traffic — a SERP-test megerősítette, hogy a `receipt in any language` / `custom receipt labels` query-tér rossz intent-ben mozog: dictionary + fake-receipt builder). Honest Pro-feature highlight. |
+| `spendnote-pricing.html` | **NEM kellett** változtatni — a Pro tier feature-list **már tartalmazza** a `Customizable text & labels (localization)` sort (872 + 917 sor). | Pro Custom Labels feature már megfelelően dokumentálva. |
+| `sitemap.xml` | `lastmod` bump → `2026-04-28` mind a 2 érintett oldalra. | Recrawl-jel a Google-nak. |
+
+**JSON-LD frissítések:**
+- `petty-cash-app.html`: Article `headline` + `description` + `dateModified` (`2026-04-28T22:00:00+00:00`)
+- `custom-cash-receipt-with-logo.html`: FAQPage új entry + Article `dateModified` (`2026-04-28T22:00:00+00:00`)
+
+**Skipped (a 23:30 SERP-evidence alapján):**
+- ❌ Új landing oldal `multilingual-cash-receipt.html` vagy `customizable-receipt-labels.html` néven — a query-tér **rossz SERP-fittel** rendelkezik (template-marketplace + dictionary).
+- ❌ Új landing `online-petty-cash-management.html` — a `petty-cash-app.html` már jól rangsorol erre, csak meta-tweak kellett.
+- ❌ `real time cash tracking app` query-re célzás — Cash App / Quicken / Cashmonki personal finance tér.
+
+**Reindex lépés (mit a felhasználó csinál holnap):**
+- A `petty-cash-app.html`-re már ma reggel (04-28) volt indexkérelem, de ez a ma esti tartalom-update **előtt**. Holnap (04-29) érdemes újra Request Indexing-elni, hogy a Google a friss snapshot-ot lássa.
+- A `custom-cash-receipt-with-logo.html` még nincs a 04-28/04-29 indexkérelem-pipeline-ban — a 3 backlogban-lévő meta-tweak (cash-discrepancy / event-cash / who-took-money) után érdemes besorolni.
+
+**Override a "sleep-on-it" szabályra:** A felhasználó 23:31-kor explicit kérte, hogy ezeket ma csináljuk meg ("szerintem ezt ma is megcsinálhatod, nem?"). A változtatások **meta + content-bővítés szintűek, nem új URL** — kockázat-szempontból ekvivalensek a délutáni 4 meta-tweakkel. A 14-napos checkpoint (2026-05-12) változatlanul érvényes az új-oldal-építésre.
 
 ### 2026-04-28 ESTE — 4 meta-tweak + saját brainstorm 19 query-re (commit `4df7b48`)
 

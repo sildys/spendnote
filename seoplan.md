@@ -1,10 +1,12 @@
-# 🛡️ STRATEGIC GUARDRAILS — 2026-04-28 ESTE (3 új oldal + meta-tweak után, sleep-on-it fázis)
+# 🛡️ STRATEGIC GUARDRAILS — 2026-04-28 ÉJSZAKA (3 új oldal + 4 meta-tweak + cloud/online framing + Pro Custom Labels conversion-content után, sleep-on-it fázis)
 
 > **Ez most a legfrissebb iránymutatás.** A 04-25-ös guardrails-blokk (lentebb) a **megelőző** állapotot rögzíti — a stratégiai irányt megerősíti, csak a teendőlistát váltja le.
+>
+> **2026-04-28 ÉJSZAKA-update:** A felhasználó override-ja után a 23:30-as SERP-evidence (F.2.F + F.2.G) alapján **2 további meta/content-tweak** is végrehajtásra került ma (lásd a fenti két szekció VÉGREHAJTVA blokkjait). Ezzel az "A. NE PISZKÁLJUK" moratóriumot **a holnaptól (2026-04-29)** számoljuk újra. Új URL-t továbbra sem adunk hozzá, és új H1-rewrite sincs az érintett 2 oldalon kívül.
 
-## A. NE PISZKÁLJUK 2-3 hetet (2026-04-28 → 2026-05-19)
+## A. NE PISZKÁLJUK 2-3 hetet (2026-04-29 → 2026-05-19)
 
-3 új oldal kiment 2 nap alatt (`cash-float-vs-petty-cash`, `payroll-cash-receipt`, `petty-cash-custodian`) + meta-tweak 4 oldalon + 28-oldalas trust-fix sweep ("Free tier" → "Free 14-day trial") + 1 cím-pivot (`employee-cash-advance-receipt`) + sitemap `lastmod` bump 38+ oldalon. Ez bőven elég jel a Google-nak.
+3 új oldal kiment 2 nap alatt (`cash-float-vs-petty-cash`, `payroll-cash-receipt`, `petty-cash-custodian`) + meta-tweak 4 oldalon (04-28 ESTE) + cloud/online framing-tweak `petty-cash-app`-on + Pro Custom Labels conversion-content `custom-cash-receipt-with-logo`-n (04-28 ÉJSZAKA) + 28-oldalas trust-fix sweep ("Free tier" → "Free 14-day trial") + 1 cím-pivot (`employee-cash-advance-receipt`) + sitemap `lastmod` bump 40+ oldalon. Ez bőven elég jel a Google-nak.
 
 **Tilos:**
 - Új oldal
@@ -160,13 +162,13 @@ A Pro Custom Labels feature **valódi és értékes**, DE **rossz a query-tér**
 | **SEO-traffic** | Új user a Google-ből → SpendNote | ❌ NEM ide való — a query rossz intent-térben mozog. |
 | **Conversion** | Meglévő érdeklődő → Pro upgrade | ✅ **IDE való** — `custom-cash-receipt-with-logo`, `spendnote-pricing` oldalakon érdemes hangsúlyozni. |
 
-**Action 2026-05-12 utánra (NEM most):**
+**Action — VÉGREHAJTVA 2026-04-28 ÉJSZAKA (a felhasználó override-jára: "szerintem ezt ma is megcsinálhatod, nem?"):**
 
-- ❌ **NEM csinálunk** új landing oldalt `multilingual-cash-receipt.html` vagy `customizable-receipt-labels.html` néven.
-- ✅ **Conversion-content-bővítés** a meglévő oldalakon:
-  - `custom-cash-receipt-with-logo.html` — H2-ben emelni: "Customize every label — and translate the receipt into any language with your own wording"
-  - `spendnote-pricing.html` Pro-tier szekció — feature-list-be: "Editable receipt labels (any language, any wording)"
-- A felhasználó megerősítette a feature létezését (Pro tier), tehát **honest claim**.
+- ❌ **NEM csináltunk** új landing oldalt `multilingual-cash-receipt.html` vagy `customizable-receipt-labels.html` néven (és nem is fogunk — rossz query-tér).
+- ✅ **Conversion-content-bővítés DONE** a meglévő oldalakon:
+  - ✅ `custom-cash-receipt-with-logo.html` — új H2 szekció: "**Pro: Customize Every Label — In Any Language**" (4 bekezdés + 3 bullet use-case + a fix legal disclaimer kivételének tisztázása) + új FAQ ("Can I customize the receipt text in my own language?") body-ban és JSON-LD FAQPage-ben + Article `dateModified` `2026-04-28T22:00:00+00:00` + sitemap `lastmod` `2026-04-28`.
+  - ✅ `spendnote-pricing.html` — **NEM kellett** változtatni: a Pro tier feature-list **már tartalmazta** a `'Customizable text & labels (localization)'` sort (872 + 917 sor monthly+yearly).
+- A felhasználó 11:25 PM-i megerősítése (Pro tier akármilyen szöveg / akármilyen nyelv, csak a kötelező legal disclaimer fix) miatt ez **honest claim**, nem hamis feature-marketing.
 
 **Skipped templokálás (jogi kockázat):**
 
@@ -189,18 +191,28 @@ A Pro Custom Labels feature **valódi és értékes**, DE **rossz a query-tér**
 
 A `petty-cash-app.html` + homepage már TOP 3-5-ben rangsorol 3 query-n dedikált "cloud" / "online" / "web-based" framing nélkül. **Tartalom-erősítés** ezekkel a kulcsszavakkal **upgrade-elhet** TOP 3-ról TOP 1-re — NEW ÚJ OLDAL.
 
-**Action 2026-05-12 utánra (NEM most):**
+**Action — VÉGREHAJTVA 2026-04-28 ÉJSZAKA (a felhasználó override-jára):**
 
-A `petty-cash-app.html`-ben:
-- H2-szekciókban explicit "cloud-based" / "online-accessible" / "web-based" / "real-time team visibility" keyword-bővítés
-- Meta description-be: `cloud / online / web-based` egyikét beemelni
-- A versenyző domináns oldal `usepetty.cash` ellen ki kell játszani a SpendNote előnyeit:
-  - **Pricing**: 14-napos free trial vs usepetty.cash €29/mo first day from sign-up
-  - **Egyszerűség**: nincs DMS/ELO complexity, nincs hash-chain audit log overengineering
-  - **Browser-only**: pure web-app, nincs telepítés, nincs mobile app store-keresés
-- VAGY: a homepage `petty cash tracking, transparent & always searchable` H1-t bővíteni `cloud-based / online team-visibility` framing-el
+A `petty-cash-app.html`-en:
+- ✅ `<title>`: `"Petty Cash App — Online, Cloud-Based Tracking for Small Teams"` (62 char, mobil SERP-safe)
+- ✅ Meta description + og:description + twitter:description: `"Cloud-based petty cash app for small teams. Record cash online, generate PDF receipts, and track the float in real time across cash boxes. Free 14-day trial."` (157 char)
+- ✅ og:title + twitter:title: ugyanaz mint title
+- ✅ H1: `"A Simple, Cloud-Based Petty Cash App for Small Teams"` (előtte: "A Simple Petty Cash App for Small Teams")
+- ✅ Hero lead bekezdés: "Record every cash movement **online — from any phone or laptop, anywhere**" + "Watch the float update in real time **across the team**" + "SpendNote is a **web-based app**…"
+- ✅ "What a Real Petty Cash App Does" lead bekezdés: "SpendNote is a **cloud-based, browser-only** petty cash app… The whole team sees the same live data, updated in real time."
+- ✅ **Új feature card** (10. card): "**Cloud-based — access from anywhere**" — "Online and web-based, with nothing to install. The custodian records on site, the owner watches the dashboard from home, the office, or the road — same live data, real-time team visibility."
+- ✅ JSON-LD Article: `headline` + `description` + `dateModified: 2026-04-28T22:00:00+00:00`
+- ✅ Sitemap `lastmod` → `2026-04-28`
 
-**Skipped:** `real time cash tracking app` — Cash App + Quicken + Cashmonki personal finance tér, ahova SpendNote nem tud SERP-fittel betörni.
+A homepage H1-bővítést **nem** csináltuk meg — minimálisra korlátoztuk a változtatást egyetlen oldalra (`petty-cash-app.html`), hogy a 04-28-ÉJSZAKA-tweak ne menjen át "új sprint"-be.
+
+**Versenyhelyzet `usepetty.cash` ellen** (informatív, NEM ide-most action):
+- **Pricing**: SpendNote 14-napos free trial vs usepetty.cash €29/mo first day from sign-up — a **Free 14-day trial** kifejezést a meta description tartalmazza, így SERP-snippetben látszik.
+- **Egyszerűség / browser-only**: a friss "cloud-based, browser-only" framing már lefedi.
+
+**Skipped (nem változott):** `real time cash tracking app` — Cash App + Quicken + Cashmonki personal finance tér, ahova SpendNote nem tud SERP-fittel betörni.
+
+**Reindex lépés:** A `petty-cash-app.html`-re a felhasználó 04-28 reggel már kért indexkérelmet (a 4. URL-en kifogyott a kvóta), de az **a tartalom-update ELŐTTI** snapshot. **04-29 reggel újabb Request Indexing kell** ezen az oldalon, hogy a friss snapshot menjen be.
 
 #### F.2.B Tier 2 — Pages already winning (NE PISZKÁLJUK)
 
