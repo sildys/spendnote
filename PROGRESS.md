@@ -169,6 +169,28 @@ A felhasználó a 11:25 PM-i visszajelzéssel megerősítette: a SpendNote Pro p
 
 **Új post-checkpoint stratégiai irány körvonalazódott:** iparág-vertikál bővülés. Részletek: `seoplan.md` F.2.I szekció.
 
+### 2026-04-29 00:05 — Source-mining batch (6. SERP-batch — Reddit + Pleo + FAQ-pattern bányászás)
+
+**Kontextus:** Felhasználó újabb pushback-je: "semmi más eredeti ötlet, amire keresni szoktak az emberek? ezt sehonnan nem tudod megállapítani?". Ez új módszertant kényszerített ki: nem saját brainstorm, hanem konkrét adatforrásokból merítés.
+
+**Bányászott források:**
+- Reddit (`r/Accounting` "Petty Cash Report Help???" thread — pain-point goldmine)
+- Pleo blog architektúra (5+ dedikált petty-cash-cikk: vouchers / reimbursement / reconciliation / management / tools-comparison)
+- Shopify / Stanford / Beancount FAQ-pattern (PAA-stílusú query-k)
+- Investopedia / NPIfund / QuickBooks (modern relevance debate)
+
+**4 fresh SERP-test eredménye (4/0/1/2):**
+- ✅ **1 brutális meglepetés**: `how much petty cash should i keep` → **`petty-cash-how-much-to-keep` TOP 1** (Investopedia, Shopify Australia, Beancount, FinancialModelsLab közé szorulva). Élő piaci pozíció, amit a GSC-export eddig nem mutatott — tipikus 4-8 hetes lag.
+- ⚠️ **1 közepes backlog-jelölt**: `is petty cash still worth it` (concept-question, de Shopify/QuickBooks/Harvard authority-fal). Csak post-checkpoint, és csak ha az iparág-vertikál pipeline beváltja az ígéretét.
+- ❌ **2 bad SERP fit**: `petty cash limit per transaction` (.edu/.gov policy-fal: UTSA, Stanford ×2, U of Houston, Ohio OBM) + `petty cash report` (template/Excel dominancia).
+
+**Konzekvencia:**
+- **0 új landing-jelölt** a batchből
+- **1 nem-várt-felfedezés**: `petty-cash-how-much-to-keep` oldal TOP 1 — felvenni a 14-napos checkpoint figyelendő-listára.
+- **Reddit + Pleo + FAQ-mining önállóan nem termelt új jelöltet** — SpendNote már lefedi a fő FAQ-clustert. Az iparág-vertikális dimenzió (F.2.I batch — `hair salon` / `food truck` / `dentist`) marad a legjobb post-checkpoint stratégiai irány.
+
+**Záró tanulság a teljes ma esti research-ra (6 batch, ~30 SERP-teszt):** A brainstorm-források kimerültek (saját + GSC + cloud/online + iparág-vertikál + Reddit + Pleo + FAQ-pattern). Új query-jelölt nincs, **DE az iparág-vertikál batch (F.2.I) hozott 3 valós post-checkpoint kandidatúrát** (salon, food truck, dentist), amik a 2026-05-12 utáni elsődleges next-action területet adják.
+
 ### 2026-04-28 ESTE — 4 meta-tweak + saját brainstorm 19 query-re (commit `4df7b48`)
 
 **Kontextus:** A felhasználó kérte, hogy ne csak GSC-export adataiból, hanem saját agyamból is brainstormoljak új keyword-clustereket. 19 ötletet teszteltem élő SERP-pel.

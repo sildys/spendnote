@@ -288,6 +288,35 @@ A 8-batch ezúttal **teljesen új angle-ekben** volt: iparág-vertikális mikro-
 
 A 04-28 ÉJSZAKAI 2 tweak (`petty-cash-app` cloud/online + `custom-cash-receipt-with-logo` Pro Custom Labels) volt a maradék zero-kockázatú akció **most**. A **14-napos checkpoint (2026-05-12)** továbbra is a következő érdemi pont. A brainstorm-fázis ezzel valóban lezárul, **de új post-checkpoint stratégiai irány körvonalazódott**.
 
+#### F.2.J Source-mining batch — 2026-04-29 00:05 (Reddit + konkurens-blog + FAQ-pattern bányászás)
+
+**Kontextus:** A felhasználó újabb pushback-je: "semmi más eredeti ötlet, amire keresni szoktak az emberek? ezt sehonnan nem tudod megállapítani?". Ez új módszertant kényszerített ki: **nem saját brainstorm**, hanem konkrét adatforrásokból merítve query-keresés.
+
+**Bányászott források (4):**
+
+1. **Reddit pain-pointok** — `site:reddit.com petty cash problem` és `site:reddit.com petty cash help` lekérdezések. A `r/Accounting` "Petty Cash Report Help???" thread egy hatalmas pain-point gyűjtemény ($200 budget, $50 receipt-hiány, audit red flag, "petty cash is misleading — it's not petty").
+2. **Pleo blog architektúra** — `pleo.io petty cash blog` lekérdezés. 5+ dedikált petty-cash-cikk: `5 tools`, `management procedures`, `what is petty cash`, `reimbursement`, `vouchers`, `8 steps reconciliation`. Mutatja a "fully covered" content-mix-et.
+3. **Shopify / Stanford / Beancount FAQ-pattern** — generic "what is petty cash" oldalak FAQ-szekciójából kibányászva. PAA-stílusú query-k: `how much petty cash should i keep`, `petty cash limit per transaction`, `how long should petty cash last`, `is there a limit on petty cash`.
+4. **Investopedia / NPIfund.com / QuickBooks** — "is petty cash still worth it" angle. Modern relevance debate.
+
+**SERP-tesztelt query-k (4):**
+
+| # | Query | Kategória | SpendNote pozíció | Top 5 | Diagnózis |
+|---|---|---|---|---|---|
+| 1 | `how much petty cash should i keep` | FAQ-pattern (PAA-szerű) | **TOP 1** | **`petty-cash-how-much-to-keep`** + Beancount + Shopify Australia + FinancialModelsLab + Investopedia | ✅ **Brutális pozíció** — Investopedia / Shopify / Beancount közé szorulva NYERTÜNK. Eddig **nem is látszott a GSC-exportban** — tipikus 4-8 hetes lag. |
+| 2 | `petty cash limit per transaction` | FAQ-pattern | NINCS top 5-ben | UTSA + Stanford ×2 + U of Houston + Ohio OBM | ❌ **.edu / .gov policy-fal** — SpendNote nem tud authority-ban versenyezni. Bad SERP fit. |
+| 3 | `petty cash report` | Reddit-validated pain | NINCS top 5-ben | Vertex42 Excel + FitSmallBusiness + Wrapbook film/TV docs + Template.net + AtYourBusiness | ❌ **Template / Excel dominancia** — nem tool-intent. Skip. |
+| 4 | `is petty cash still worth it` | Concept-question | NINCS top 5-ben | Shopify + NPIfund + QuickBooks + Harvard + ManishChanda | ⚠️ **Authority-fal** (Shopify, QuickBooks, Harvard). Közepes jelölt, post-checkpoint backlogba. |
+
+**Konzekvencia:**
+
+- **0 új landing-jelölt** ebből a batchből (4/0)
+- **1 nem-várt-felfedezés**: `petty-cash-how-much-to-keep` TOP 1 a `how much petty cash should i keep` query-re — **élő piaci pozíció, amit a GSC-export eddig nem mutatott**. Ezt felvenni a 14-napos checkpoint figyelendő-listára (várható: a 04-26-i bulk-fix és a 04-28-i meta-tweakek után az export végre megmutatja az élő pozíciót).
+- **1 közepes backlog-jelölt**: `is petty cash still worth it` — concept-question, Shopify/QuickBooks/Harvard authority-fal, csak post-checkpoint és csak ha az iparág-vertikál pipeline beváltja az ígéretét.
+- **Validáció**: Reddit + Pleo blog + Shopify FAQ-mining önállóan **nem hozott** új landing-jelöltet, mert SpendNote már lefedi a fő FAQ-cluster-eket. Az iparág-vertikális dimenzió (F.2.I batch) lényegesen termékenyebb angle.
+
+**Záró tanulság a 04-29 00:05 source-mining batch-re:** A research-fázis ezzel végleg lezárható — **a brainstorm-források kimerültek** (saját + Reddit + Pleo blog + FAQ-pattern + iparág-vertikál). A 14-napos checkpoint (2026-05-12) marad a következő érdemi pont, post-checkpoint pedig az iparág-vertikál pipeline (`hair salon` → `food truck` → `dentist`) az elsődleges next-action terület.
+
 #### F.2.B Tier 2 — Pages already winning (NE PISZKÁLJUK)
 
 - **`cash-drawer-reconciliation`** — `cash drawer reconciliation` cluster 50+ imp/28d, top 10-25 többségében. **Hagyjuk békén**, már működik.
