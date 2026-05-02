@@ -98,7 +98,33 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-05-02 21:30 — Apposing pilot Phase 1 (`seoplan.md` `## I.`): 3-oldalas page-type conversion hipotézis-teszt SoftwareApplication schema + tool-intent blokkokkal, 2026-05-15-i checkpoint-ig)
+## Where we are now (last updated: 2026-05-02 21:45 — Apposing pilot Phase 1 + Codex follow-up: SoftwareApplication schemák page-specifikus `applicationSubCategory` + `featureList`-re cserélve, F.policy bővítés)
+
+### 2026-05-02 21:45 — Codex follow-up (Apposing Phase 1 schema-finomítás): SoftwareApplication schemák page-specifikusra cserélve
+
+**Trigger:** A 21:30-i Phase 1 pilot pushe után Codex küldött részletes javaslatokat a 3 oldal pontos schema-jára. Két szakmai eltérés volt az általam beillesztett schemától:
+
+1. **`applicationSubCategory`** — Codex page-specifikus értékeket használ (`"Remote Petty Cash Tracking"`, `"Cash Handoff Recording"`), én konzisztens `"Petty Cash Management"`-et használtam mind a 3 oldalon.
+2. **`featureList`** — Codex page-fókuszú 5-elemes listákat használ (csak az adott oldal use-case-ére releváns feature-ök), én az app teljes 7-8 elemes funkciólistáját toldottam be minden oldalra (redundáns).
+
+**Szakmai értékelés (felhasználói `swap_all` döntés alapja):** A page-specifikus megoldás jobb URL-szintű intent-relevance-re (a Google érti, hogy az ADOTT URL milyen specifikus use-case-t fed le), és az entity-konzisztencia ettől nem csökken (mert `name`/`alternateName`/`applicationCategory`/`creator`/`publisher` mindenhol "SpendNote"). A redundáns featureList gyengébb URL-szintű signal volt.
+
+**Mit cseréltem:**
+
+| Oldal | `applicationSubCategory` (új) | `description` (új, rövidebb) | `featureList` (új, 5 elem) |
+|---|---|---|---|
+| `/petty-cash-app-vs-excel` | "Petty Cash Tracking (Spreadsheet Replacement)" | "Replace Excel petty cash tracking with a browser-based app that auto-balances, generates a receipt for every transaction, and keeps a who-recorded-it log per entry." | Auto-balance / Receipt per transaction / Timestamped log / Multi-cash-box / Role-based access (mind Excel-replacement-fókuszú) |
+| `/manage-petty-cash-remotely` | "Remote Petty Cash Tracking" | "Manage petty cash remotely in a browser-based app. Review balances, transactions, and linked receipts from phone, tablet, or desktop." | View balance remotely / Review by user-time / Open linked receipts / Track multiple boxes / Use from any device |
+| `/cash-handoff-receipt` | "Cash Handoff Recording" | "Create cash handoff records in a browser-based workflow. Document amount, parties, purpose, and receipt links with a clear transaction history." | Record handoff in real time / Link receipt proof / Track who-when / Running balance impact / Printable/shareable records |
+
+**Mit NEM cseréltem (szakmai döntés a Codex-javaslat-szűrés során):**
+- A 3 új H2-blokk (Switch Trigger Score, Owner-Away Scenario, Receipt-Only vs Full Handoff Record) **maradt az enyém**, mert: (a) konkrétabbak (timestamps, dollarok, score-detail), (b) CSS-class-konzisztensek a meglévő oldalakkal (`use-case-box` MÁR LÉTEZŐ class — a Codex `comparison-grid`/`comparison-card` osztályokat feltételez, amelyek nincsenek a `cash-handoff-receipt.html` style-jában). Az enyém szakmailag legalább olyan jó vagy jobb, és már live-ban van a 21:30-i push óta.
+
+**Methodology-bővítés (F.policy):** A `SoftwareApplication` schemák jövőben **page-specifikus `applicationSubCategory` + `description` + `featureList`** szerkezetűek legyenek (csak a `name` / `alternateName` / `applicationCategory` / `creator` / `publisher` / `offers` konzisztens minden URL-en). Ez maximalizálja az URL-szintű intent-relevance-t és megőrzi az entity-konzisztenciát. (Rögzítve a `seoplan.md` `## I.` szekció Update-blokkjában.)
+
+**JSON-LD re-validation:** **9/9 blokk valid** (változatlan a csere után).
+
+**Következő mérési pont (változatlan):** 2026-05-15 GSC checkpoint a 3 URL-re.
 
 ### 2026-05-02 21:30 — Apposing pilot Phase 1 (`seoplan.md` `## I.`): 3-oldalas page-type conversion hipotézis-teszt (ChatGPT Codex SEO-strategy session után)
 

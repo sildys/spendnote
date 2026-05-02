@@ -615,6 +615,27 @@ Az új tool-intent blokkok internal-link anchor-szövegei **NEM lehetnek** mind 
 - ✅ Anchor-text diverzifikáció (a 2 új /petty-cash-app-link különböző natural anchor-rel)
 - ✅ JSON-LD validation: **9/9 blokk valid** (3 oldal × Article + SoftwareApplication + FAQPage)
 
+**Update (2026-05-02 21:45) — Codex follow-up: schema page-specifikusra cserélve:**
+
+Codex küldött részletes javaslatokat a 3 oldal pontos schema-jára. Két szakmai eltérés volt az általam beillesztett schemától:
+
+1. **`applicationSubCategory`** — Codex page-specifikus értékeket használ (`"Remote Petty Cash Tracking"`, `"Cash Handoff Recording"`), én konzisztens `"Petty Cash Management"`-et használtam mind a 3 oldalon.
+2. **`featureList`** — Codex page-fókuszú 5-elemes listákat használ (csak az adott oldal use-case-ére releváns feature-ök), én az app teljes 7-8 elemes funkciólistáját toldottam be minden oldalra.
+
+**Szakmai értékelés:** A page-specifikus megoldás jobb URL-szintű intent-relevance-re (a Google érti, hogy az ADOTT URL milyen specifikus use-case-t fed le), és az entity-konzisztencia ettől nem csökken (mert `name`/`alternateName`/`applicationCategory`/`creator`/`publisher` mindenhol "SpendNote"). A redundáns featureList gyengébb URL-szintű signal volt.
+
+**Csere implementálva mind a 3 oldalon (Codex közvetlen 2 javaslat + 1 oldalra magamtól page-specifikus):**
+
+| Oldal | `applicationSubCategory` | `featureList` (5 elem) |
+|---|---|---|
+| `/petty-cash-app-vs-excel` | "Petty Cash Tracking (Spreadsheet Replacement)" | Auto-balance / Receipt per transaction / Timestamped log / Multi-cash-box / Role-based access (mind Excel-replacement-fókuszú) |
+| `/manage-petty-cash-remotely` | "Remote Petty Cash Tracking" | View balance remotely / Review by user-time / Open linked receipts / Track multiple boxes / Use from any device |
+| `/cash-handoff-receipt` | "Cash Handoff Recording" | Record handoff in real time / Link receipt proof / Track who-when / Running balance impact / Printable/shareable records |
+
+**Methodology-bővítés (F.policy):** A `SoftwareApplication` schemák jövőben **page-specifikus `applicationSubCategory` + `description` + `featureList`** szerkezetűek legyenek (csak a `name` / `alternateName` / `applicationCategory` / `creator` / `publisher` / `offers` konzisztens). Ez maximalizálja az URL-szintű intent-relevance-t és megőrzi az entity-konzisztenciát.
+
+**JSON-LD re-validation Codex-csere után:** **9/9 blokk valid** (változatlan).
+
 **Következő mérési pont:** 2026-05-15 GSC Pages → Queries audit a 3 érintett URL-en. A kill/go criteria-t ott alkalmazzuk.
 
 # 🛡️ STRATEGIC GUARDRAILS — 2026-04-28 ÉJSZAKA (3 új oldal + 4 meta-tweak + cloud/online framing + Pro Custom Labels conversion-content után, sleep-on-it fázis) — REFERENCIA
