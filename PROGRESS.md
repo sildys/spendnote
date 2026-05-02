@@ -98,7 +98,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-05-03 01:10 — Codex 2nd batch SERP-gap-hunting eredmény + cannibalization-audit + execution (`seoplan.md` `## J.13.4`): 5 cluster (1 új URL + 3 meglévő bővítés + 1 defer); új landing `/cash-box-request-form.html` (PTO/PTA/event-volunteer angle, Tier B disclaimer a school/nonprofit donor-receipt zóna miatt) + `/cash-handoff-receipt` `form` keyword integration + új use-case-box "Volunteer & Event Handoffs" + `/event-cash-handling` új H2 "Cash Box Log for Fundraisers, PTAs, PTOs & Booster Clubs" + `/cash-count-sheet-template` új H2 "Event Cash Count Sheet & Post-Event Close-Out" + Codex value-prop blockquote, sitemap.xml új URL + 2 lastmod bump, J.13.4-J.13.6 dokumentálva)
+## Where we are now (last updated: 2026-05-03 01:33 — GSC indexing request mind a 8 érintett URL-re beküldve (új landing + homepage + 6 bővített/tweak-elt landing); 14-napos checkpoint 2026-05-19, addig NE módosítsuk őket. Codex 2nd batch full execution + cluster bidirectionality fix befejezve két commit-ban (`8aae362` + `d1d3b57`): 1 új URL `/cash-box-request-form` (PTO/PTA/event-volunteer angle, Tier B disclaimer) + 3 meglévő bővítés (cash-handoff-receipt `form` keyword + event-cash-handling cash-box-log H2 + cash-count-sheet-template event-cash-count H2) + bidirektális Related/Also-see linkek 4 oldalon)
 
 ### 2026-05-03 01:10 — Codex 2nd batch execution (J.13.4) — 1 új URL + 3 meglévő bővítés
 
@@ -178,6 +178,20 @@ NEM most. Codex maga: "Erős intent, de specializált és verseny van. Csak akko
 - A `/cash-box-request-form` siker-kritériuma: 2026-05-19-ig minimum 1 impression a `cash box request form` / `PTO cash box request form` query-clusterre (Codex evidence alapján reális elvárás)
 
 **Methodology-validáció (Opus):** A multi-agent F-policy (J.12.4) jó döntés volt — Codex brainstorming-fázisban **EXTRÉM ÉRTÉKES** (1st batch pain-language + 2nd batch SERP-gap-hunting + 3rd batch strategic synthesis = mind action-able evidence), DE az élesvégrehajtási fázisban a koordinátor agent (Opus) cannibalization-audit + tier-checking + compliance-zóna-check protokollja kötelező a Codex output-jaira.
+
+**Cluster bidirectionality fix (commit `d1d3b57`, 2026-05-03 01:30):** A J.13.4 első commit (`8aae362`) bevezette a 3 contextualis body-link-et (use-case-box, új H2-k), DE 4 oldalon hiányzott az `Also see` paragraph / `Related Resources` grid frissítése. Korrigálva: cash-handoff-receipt + event-cash-handling Also-see paragraph + cash-count-sheet-template + who-has-the-cash-right-now Related-grid card + who-has-the-cash-right-now Office Cash Log "Event cash floats" bullet contextualis inline link. Most mind a 4 oldalon kétirányú a klaszter (body + grid). Petty-cash-policy-template szándékosan kihagyva (egy darab incoming link miatt felesleges re-crawl-trigger volna nem-érintett oldalon, egyirányú beelinkelés a `/cash-box-request-form` Related-grid-jéből megfelelő).
+
+**GSC indexing request végrehajtva (felhasználói task, 2026-05-03 01:33):** Mind a 8 érintett URL beküldve manuális indexelésre (Search Console URL Inspection → Request Indexing):
+- `/cash-box-request-form` (P0 — új URL)
+- `/` (P0 — homepage `<title>` shift)
+- `/who-has-the-cash-right-now` (P0 — top-1 erősítés)
+- `/cash-handoff-receipt` (P1 — `<title>` "form" + use-case-box)
+- `/event-cash-handling` (P1 — új H2 cash-box-log + Also-see anchor)
+- `/cash-count-sheet-template` (P1 — új H2 event-cash-count + Related grid card)
+- `/cash-paid-out-log` (P1 — pain-hook)
+- `/petty-cash-does-not-balance` (P1 — pain-hook)
+
+Várható timeline: crawl 24-72h (priority queue gyakran 12-24h), index-update 3-7 nap, ranking-shift 7-21 nap (a homepage `<title>` shift miatt fluktuáció várható az első 2 hétben). 14-napos checkpoint **2026-05-19**, addig **NE piszkáljuk** a 8 URL-t (tiszta mérés). Heti 1× GSC-monitoring elég, napi nem.
 
 ### 2026-05-03 00:55 — Felhasználói "Full Execute" override (J.12.6 + J.13)
 
