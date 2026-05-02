@@ -98,7 +98,62 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-05-02 03:00 — Honest-claims-rule (`seoplan.md` `## H.`) + 6-oldalas bait-and-switch batch-fix + audit-checklist a jövőbeli új oldalakhoz)
+## Where we are now (last updated: 2026-05-02 21:30 — Apposing pilot Phase 1 (`seoplan.md` `## I.`): 3-oldalas page-type conversion hipotézis-teszt SoftwareApplication schema + tool-intent blokkokkal, 2026-05-15-i checkpoint-ig)
+
+### 2026-05-02 21:30 — Apposing pilot Phase 1 (`seoplan.md` `## I.`): 3-oldalas page-type conversion hipotézis-teszt (ChatGPT Codex SEO-strategy session után)
+
+**Trigger:** A felhasználó egy ChatGPT Codex-szel folytatott multi-turn SEO-strategy session-t osztott meg, amiben a közös konklúzió: **page-type conversion** — a SpendNote-oldalak Google szemében inkább "Article"-ok mint "SoftwareApplication landing"-ek, ezért a Google "content site"-ként, nem "tool-first" oldalként olvas. Ez magyarázhatja, miért nem kapunk áttörést "petty cash app" intent-query-kre, holott Bing már TOP 1-3-ban rangsorolja a `/petty-cash-app`-ot.
+
+**Codex-javaslatok kritikai szűrése (mit fogadtunk el, mit nem) — részletes táblázat a `seoplan.md` `## I.` alatt. Tömören:**
+
+✅ **Elfogadva**: SoftwareApplication schema bővítés tool-intent oldalakra; additív "tool-page" H2-blokkok új URL nélkül; hero H1-rewrite a `/petty-cash-app-vs-excel`-en (felhasználói B-választás); internal-link anchor diverzifikáció.
+
+⚠️ **Átkeretezve**: Codex-vocabulary ("audit trail", "evidence trail", "governance", "immutable history") túl-formalizálva → auditor/compliance-vibe (F. policy ütközés). Csere "transaction history", "linked receipt", "review routine", "full transaction log", "who-recorded entry"-re az új szövegekben. (A meglévő technical-context "audit trail" használat megmarad — Excel limitation vs App feature, nem accounting-kontextus.)
+
+❌ **Elutasítva**: új URL-cluster (`/petty-cash-software`, `/petty-cash-tracker-app`, stb. — felhasználói intuíció: *"sokszorosan le vannak uralva a nagy szoftvercégek által, nekem valami olyan rés kell ahhol előre is tudok jutni"*); `/expensify-vs-spendnote-petty-cash` (trademark-rizikó); external entity validation (Reddit/PH/backlink — `## E. Csatorna-stratégia` ütközés); 8-oldalas batch-rewrite (lavina-effect, pilot kell előbb).
+
+**Phase 1 implementáció (3 oldal):**
+
+| Oldal | Mit kapott | Kockázat |
+|---|---|---|
+| `/petty-cash-app-vs-excel` | + `SoftwareApplication` schema + Hero H1+subhead rewrite (`Petty Cash App vs Excel: When to Switch (and Why Teams Do)`) + Switch Trigger Score H2-blokk (6 igen/nem kérdés + 0–6 score-magyarázat) | **KÖZEPES** — H1-rewrite kockázat (CTR-érzékeny exact-match query). Ez a core-hipotézis-teszt. |
+| `/manage-petty-cash-remotely` | + `SoftwareApplication` schema + Owner-Away Scenario H2-blokk (5-lépéses storyboard egy nap remote-management-jéről, 9:14 AM → 5:30 PM) | **ALACSONY** — H1 érintetlen, csak additív. |
+| `/cash-handoff-receipt` | + `SoftwareApplication` schema + Receipt-Only vs Full Handoff Record H2-blokk (paper vs digital szembeállítás 2 use-case-box-szal) | **ALACSONY** — H1 érintetlen, csak additív. |
+
+**Mit NEM nyúltunk Phase 1-ben (szándékosan):**
+- `/petty-cash-app` (a 05-01-i sprint hatását mérnünk kell, nincs duplázás)
+- Hero/H1 a 2 low-risk oldalon
+- Új URL-ek
+- A maradék 5 prio-oldal a Codex-listájáról (Phase 2-3 attól függően, mit mond a 2026-05-15 checkpoint)
+- Meglévő `<title>`/meta description-ök (kontent-friss SERP-snippet-érzékeny → moratórium logika)
+- Meglévő "audit trail" szóhasználat a body-ban (technical-context-ben helyén van)
+
+**Anchor-text diverzifikáció (Codex utolsó megjegyzés alapján):**
+
+Az új blokkok internal-link anchor-szövegei NEM exact-match "petty cash app", helyette action/benefit-driven:
+- `/manage-petty-cash-remotely` → `/petty-cash-app`: **"See live cash balances from any device"**
+- `/cash-handoff-receipt` → `/petty-cash-app`: **"Track every handoff in one searchable place"**
+
+(Ez egyben új permanent F-policy bővítés: jövőbeli új blokkokban is action/benefit-driven anchor + diverzifikáció kötelező — a `seoplan.md` `## I.` alatt rögzítve.)
+
+**Sitemap `<lastmod>`** frissítve mind a 3 URL-en `2026-05-02`-re (volt: `2026-04-28` / `2026-04-26` / `2026-04-26`).
+
+**Schema `dateModified`** frissítve mind a 3 fájlban `2026-05-02T19:30:00+00:00`-ra.
+
+**JSON-LD validation:** **9/9 blokk valid** (3 oldal × Article + SoftwareApplication + FAQPage).
+
+**Hipotézis success criteria (2026-05-15 GSC checkpoint):**
+
+1. **Core test (`/petty-cash-app-vs-excel`):** A `petty cash app vs excel` exact-match query-pos megőrzve VAGY javítva + új query-cluster (`when to switch from excel to app`, `petty cash app vs spreadsheet`) megjelenése = sikeres. Pos-csökkenés >5 hely + új cluster nélkül = bukott → **rollback** a régi H1-re.
+2. **Low-risk test (2 másik oldal):** új impression-flow tool-intent query-kre VAGY pos-emelkedés meglévő query-ken = sikeres.
+3. **Go criteria Phase 2-höz:** legalább 1/3 oldalon mérhető pozitív jel → skálázás a Codex P2-3 oldalakra (`/petty-cash-does-not-balance`, `/petty-cash-receipt-generator`, `/cash-payment-received-proof`, `/petty-cash-reconciliation`).
+
+**Indexing-request prioritás (most kérendő, kvóta-spóroló):**
+1. `https://spendnote.app/petty-cash-app-vs-excel` (core hipotézis-teszt, H1-rewrite — a leginkább mérhető hatás várható)
+2. `https://spendnote.app/manage-petty-cash-remotely` (additív)
+3. `https://spendnote.app/cash-handoff-receipt` (additív)
+
+Plus sitemap resubmit GSC-ben (1 click, kvóta-független).
 
 ### 2026-05-02 03:00 — Honest-claims-rule (`seoplan.md` `## H.`) + 6-oldalas bait-and-switch batch-fix (felhasználói "csinálj meg mindent" nyomán)
 

@@ -548,6 +548,75 @@ A pontos Google-ranking **kimenet, nem bemenet** — ezt majd GSC-export méri. 
 
 **Methodology-konzekvencia:** A 04-25-i 8a1efe2 commit-tanulság — a "trust-fix sweep"-ek **ne csak `<title>`-t és heading-et** módosítsanak, hanem **a teljes head-block-ot** (meta description + og/twitter + schema). Az audit-checklist ezt a hiányt zárja ki a jövőre nézve.
 
+## I. Apposing pilot Phase 1 — page-type conversion hipotézis-teszt (2026-05-02 21:30, ChatGPT Codex-strategy session után)
+
+**Kontextus:** A felhasználó megosztott egy ChatGPT Codex-szel folytatott multi-turn SEO-strategy-session-t. A közös konklúzió: **page-type conversion** — a SpendNote-oldalak Google szemében inkább "Article"-ok mint "SoftwareApplication landing"-ek, ezért a Google "content site"-ként, nem "tool-first" oldalként olvas. Ez magyarázhatja, miért nem kapunk áttörést "petty cash app" intent-query-kre, holott Bing már TOP 1-3-ban rangsorolja a `/petty-cash-app`-ot.
+
+**Codex-javaslatok kritikai szűrése (mit fogadtunk el, mit nem):**
+
+| Codex-javaslat | Verdict | Indok |
+|---|---|---|
+| `SoftwareApplication` schema bővítés a tool-intent oldalakra | ✅ ELFOGADVA | Low-risk, high-signal. A `/petty-cash-app` 05-01-i sprint-ben már megkapta. |
+| Additív "tool-page" blokkok (Switch Trigger Score, Owner-Away Scenario, Receipt-Only vs Full Handoff Record) | ✅ ELFOGADVA | Új URL nélkül, edukációs/process-content marad, de explicit tool-action framing. |
+| Hero H1-rewrite a `/petty-cash-app-vs-excel`-en ("When to Switch (and Why Teams Do)") | ✅ ELFOGADVA (felhasználói B-választás) | Kockázat (CTR-csökkenés a "vs excel" exact-match query-n), de a tool-intent stronger signal a comparison-cikk-jelleg helyett. **Ez a hipotézis-teszt központi vállalása.** |
+| Új URL-cluster (`/petty-cash-software`, `/petty-cash-tracker-app`, `/petty-cash-management-tool`, `/petty-cash-log-app`) | ❌ ELUTASÍTVA | Felhasználói intuíció: *"már sokszorosan le vannak uralva a nagy szoftvercégek által, nekem valami olyan rés kell ahhol előre is tudok jutni"*. Konzisztens a F.4.A Bing-evidence-szel (QuickBooks/Smartsheet/Microsoft fal). |
+| `/expensify-vs-spendnote-petty-cash` comparison oldal | ❌ ELUTASÍTVA | Trademark-rizikó kis brand-nek + Expensify nem direct competitor petty-cash-en. |
+| External entity validation (product directories, "alternative to X" mentions, backlink-szerzés) | ❌ ELUTASÍTVA | Ütközik a `## E. Csatorna-stratégia` policy-vel: *"NINCS IDEJE Reddit-postingra, Product Hunt-launchra, B2B outreach-re"*. |
+| 8-oldalas batch-rewrite mind a 8 prio-oldalon | ❌ ELUTASÍTVA | Lavina-effect kockázat + moratórium. **Pilot kell:** 3 oldal először, mérés a 2026-05-15 checkpoint-on. |
+| Codex-vocabulary: "audit trail", "evidence trail", "governance", "immutable history", "user-attributed entry" | ⚠️ ÁTKERETEZVE | Túl-formalizálva → auditor/compliance-vibe (F. policy ütközés). Csere: "transaction history", "linked receipt", "review routine", "full transaction log", "who-recorded entry". *Megjegyzés: a meglévő szövegekben már van több "audit trail" használat technical-context-ben (Excel limitation vs App feature) — ezek MARADNAK, mert nem accounting-kontextusban vannak. Csak az ÚJ Codex-szövegekben kerüljük.* |
+| Internal-link anchor diverzifikáció (Codex utolsó megjegyzése) | ✅ ELFOGADVA | Ne mind `petty cash app` exact-match anchor legyen. Új blokkokban: "See live cash balances from any device", "Track every handoff in one searchable place". |
+
+**Phase 1 scope (3 oldal, additív bővítés):**
+
+| Oldal | Mit kap | Kockázat |
+|---|---|---|
+| `/petty-cash-app-vs-excel` | + `SoftwareApplication` schema + Hero H1+subhead rewrite + Switch Trigger Score blokk (`<h2>` Side-by-Side után) | **KÖZEPES** — H1-rewrite kockázat (CTR-érzékeny exact-match query). Ez a core-hipotézis-teszt. |
+| `/manage-petty-cash-remotely` | + `SoftwareApplication` schema + Owner-Away Scenario blokk (`<h2>` CTA után, "When Remote Management Matters Most" előtt) | **ALACSONY** — H1 érintetlen, csak additív. |
+| `/cash-handoff-receipt` | + `SoftwareApplication` schema + Receipt-Only vs Full Handoff Record blokk (`<h2>` "Digital vs Paper" után, "Also see" előtt) | **ALACSONY** — H1 érintetlen, csak additív. |
+
+**Mit NEM nyúltunk Phase 1-ben (szándékosan):**
+- ❌ `/petty-cash-app` (a 05-01-i sprint hatását mérnünk kell, nincs duplázás)
+- ❌ Hero/H1 a 2 low-risk oldalon (`/manage-petty-cash-remotely`, `/cash-handoff-receipt`)
+- ❌ Új URL-ek
+- ❌ A maradék 5 prio-oldal a Codex-listájáról (`/petty-cash-does-not-balance`, `/petty-cash-receipt-generator`, `/cash-payment-received-proof`, `/petty-cash-reconciliation`, plus a Codex P3 ajánlások)
+- ❌ Meglévő `<title>`/meta description-ök (kontent-friss SERP-snippet-érzékeny → moratórium logika)
+- ❌ Meglévő "audit trail"/"accountability" szóhasználat a `/petty-cash-app-vs-excel` body-ban (technical-context-ben helyén van)
+
+**Hipotézis (pilot success criteria a 2026-05-15 checkpoint-on):**
+
+1. **Core test (`/petty-cash-app-vs-excel`):** A `SoftwareApplication` schema + tool-intent H1 megemeli-e a `petty cash app vs excel` query-pos-t **vagy** új query-cluster-eken (pl. `petty cash app vs spreadsheet`, `when to switch from excel to app`) megjelenik-e új impression-flow?
+   - **Sikeres**: pos megőrzve VAGY javítva + új query-cluster-impression
+   - **Bukott**: pos-csökkenés a régi exact-match query-n + nincs új cluster-impression
+2. **Low-risk test (`/manage-petty-cash-remotely`, `/cash-handoff-receipt`):** A `SoftwareApplication` schema + új H2-blokk megemeli-e ezeket az oldalakat olyan query-clusterekre amik tool-jelleget keresnek (pl. `cash app for office manager`, `track cash handoff online`)?
+   - **Sikeres**: új impression-flow VAGY pos-emelkedés meglévő query-ken
+   - **Bukott**: nincs változás vagy pos-csökkenés
+
+**Kill criteria (Phase 2 NEM indul, ha):**
+- A `/petty-cash-app-vs-excel` core query (`petty cash app vs excel`) pos-csökken **>5 hely** a 2026-05-15-i checkpoint-ra → H1-rewrite hipotézis bukott, **rollback szükséges** (a régi H1-re vissza).
+- Egyik oldalon sincs új query-cluster-impression → "page-type conversion" hipotézis nem reprodukál, **NE skálázzunk** a maradék 5 oldalra.
+
+**Go criteria (Phase 2 indulhat, ha):**
+- Legalább 1/3 oldalon mérhető pos-emelkedés vagy új query-cluster-megjelenés → skálázás a Codex P2-3 oldalakra (`/petty-cash-does-not-balance`, `/petty-cash-receipt-generator`, `/cash-payment-received-proof`, `/petty-cash-reconciliation`).
+
+**Anchor-text diverzifikáció (Codex utolsó megjegyzés alapján — F.policy bővítés):**
+
+Az új tool-intent blokkok internal-link anchor-szövegei **NEM lehetnek** mind exact-match `petty cash app`. Helyette: action-driven vagy benefit-driven anchor-ok. Pl. ami most bekerült:
+- "See live cash balances from any device" (manage-remotely → /petty-cash-app)
+- "Track every handoff in one searchable place" (cash-handoff → /petty-cash-app)
+- "Record cash handoffs online" (példa jövőbeli use-case-re)
+- "Track your first cash box" (példa jövőbeli use-case-re)
+
+**Implementáció-státusz (2026-05-02 21:30):**
+- ✅ 3 oldal SoftwareApplication schema beillesztve (másolva a `/petty-cash-app`-ról, URL/description/featureList page-specifikusra adaptálva)
+- ✅ 3 oldal dateModified frissítve `2026-05-02T19:30:00+00:00`-ra
+- ✅ 3 oldal sitemap `<lastmod>` frissítve `2026-05-02`-re
+- ✅ 1 hero H1+subhead rewrite (vs-excel)
+- ✅ 3 új H2-blokk beillesztve (Switch Trigger Score, Owner-Away Scenario, Receipt-Only vs Full Handoff Record)
+- ✅ Anchor-text diverzifikáció (a 2 új /petty-cash-app-link különböző natural anchor-rel)
+- ✅ JSON-LD validation: **9/9 blokk valid** (3 oldal × Article + SoftwareApplication + FAQPage)
+
+**Következő mérési pont:** 2026-05-15 GSC Pages → Queries audit a 3 érintett URL-en. A kill/go criteria-t ott alkalmazzuk.
+
 # 🛡️ STRATEGIC GUARDRAILS — 2026-04-28 ÉJSZAKA (3 új oldal + 4 meta-tweak + cloud/online framing + Pro Custom Labels conversion-content után, sleep-on-it fázis) — REFERENCIA
 
 > **Megelőző iránymutatás** (a 05-01-i guardrails-blokk fent felülírja a teendőlistát, de ez a stratégiai megfontolásokat / SERP-research-eredményeket / conditional backlogot változatlanul érvényben tartja).
