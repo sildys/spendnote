@@ -98,7 +98,75 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-05-03 00:15 — Codex 3rd batch (`seoplan.md` `## J.11`): strategic synthesis — viral loop audit (mostani PDF footer ✅ funkcionálisan = Codex viral loop, DE Codex value-prop tagline post-checkpoint kombinálható) + 4-fájdalom-klaszter persona-mapping + entity-trust listings (G2/SourceForge 0-review state) + Square/Toast fórum-evidence + 3-szintű Codex-claim audit-protokoll)
+## Where we are now (last updated: 2026-05-03 00:30 — B opció: részleges moratórium-lazítás végrehajtva — Step 2.C viral loop footer csere mindkét NOINDEX PDF-mockup oldalon (`spendnote-pdf-receipt.html` 1×, `spendnote-receipt-print-two-copies.html` 2×) + Step 0.A G2 review-acquisition pilot kick-off protokoll dokumentálva. Apposing Phase 1 + how-much-to-keep snippet-rewrite mérése ÉRINTETLEN.)
+
+### 2026-05-03 00:30 — B opció: részleges moratórium-lazítás (Step 2.C + Step 0.A kick-off)
+
+**Trigger:** A felhasználó a 24h GSC adat alapján (0 click, 40 megjelenítés, /petty-cash-how-much-to-keep pos 9.7) felvetette, hogy értelmetlen-e a teljes moratórium tartása. Trend-megfigyelés: **minden frissítésnél egyre csökkenő megjelenítés a fő oldalon**, nap folyamán adat-leállás. 3-opciós döntés:
+- A) Full moratorium (eredeti)
+- **B) Részleges lazítás (kiválasztva)** — Apposing-mérés-protection mellett 2 független tétel végrehajtva
+- C) Full zöld jel (mérés-megsemmisítés)
+
+**B opció rationale:**
+- 0 click baseline → nincs mit veszíteni független URL-eken
+- A 4 Apposing-oldal + /petty-cash-how-much-to-keep aktív hipotézis-teszt → **EZEKET nem érintjük**
+- Step 2.C (viral loop footer) és Step 0.A (G2 outreach) **független** az SEO-méréstől → biztonságos most végrehajtani
+- Trend-csökkenés (felhasználó-megfigyelés) **alátámasztja** a türelmet az Apposing-on, NEM cáfolja
+
+**Step 2.C — Viral loop footer csere VÉGREHAJTVA:**
+
+Régi footer (mindhárom helyen):
+```
+SpendNote - Proof of cash handoff. Not a tax document. - https://spendnote.app/ [+ QR]
+```
+
+Új footer (Codex value-prop tagline kombinálva mostani előnyökkel):
+```
+SpendNote · Proof of cash handoff for teams · Not a tax document · spendnote.app [+ QR]
+```
+
+Változások:
+1. **+ "for teams"** — B2B-pozícionálás (Codex value-prop)
+2. **` - ` → ` · `** — modern brand-style middle-dot szeparátor (Stripe/Linear-stílus)
+3. **`https://spendnote.app/` → `spendnote.app`** — rövidebb, tisztább URL-megjelenítés
+4. **Megőrzött**: brand-attribution (SpendNote), operational claim (Proof of cash handoff), compliance disclaimer (Not a tax document), kattintható URL, QR-kód
+
+Érintett fájlok (mind NOINDEX, mind PDF/print receipt mockup):
+- ✅ `spendnote-pdf-receipt.html` (line 551 — 1 occurrence)
+- ✅ `spendnote-receipt-print-two-copies.html` (line 470 + line 552 — 2 occurrence, két-másolat layout)
+
+**Mérés-protection check (kritikus — miért biztonságos B opció):**
+- Mindkét érintett HTML NOINDEX → semmilyen SEO-impact
+- Egyik sem marketing landing → semmilyen Google-ranking-mérést nem érint
+- Apposing Phase 1 4 oldal (vs-excel, manage-remotely, cash-handoff, /petty-cash-app) ÉRINTETLEN
+- /petty-cash-how-much-to-keep snippet-rewrite mérése ÉRINTETLEN
+- Sitemap.xml NEM frissült (NOINDEX oldalak nincsenek a sitemap-ban)
+
+**Step 0.A — G2 review-acquisition pilot KICK-OFF (manuális outreach, felhasználó hajtja végre):**
+
+Részletes outreach-protokoll dokumentálva a `seoplan.md` `## J.11.3 Update`-ben:
+- **User-identification**: max 2 free user, last 30d aktív, legalább 2 hete regisztrált, no support-complaints
+- **Csatorna**: regisztrációs email, NEM in-app notification (túl marketing-szerű)
+- **Email-template**: 3-soros honest ask, NO incentive, NO scripted text — FTC endorsement guidelines + G2 ToS-conformant
+- **Sikerkritérium**: 1 valódi G2 review 30 napon belül = pilot SUCCESS → bővíthető 5-10 user batch-re
+- **Mérés**: PROGRESS.md napló (outreach dátum, reply rate, review-megjelenés)
+
+**Implementáció (kód + docs):**
+- ✅ Footer-csere mindkét NOINDEX PDF-mockup fájlban (3 occurrence össz)
+- ✅ `seoplan.md` J.11.1 update — Step 2.C VÉGREHAJTVA státusz + indoklás a moratóriumon belüli kivételre
+- ✅ `seoplan.md` J.11.3 update — Step 0.A KICK-OFF protokoll (user-id kritériumok, email-template, compliance-ellenőrzések, sikerkritérium)
+- ❌ Semmilyen marketing landing nem érintve — Apposing-mérés ÉRINTETLEN
+- ❌ Sitemap.xml nem frissült (NOINDEX oldalakhoz nincs lastmod)
+
+**Mit NE csináljunk továbbra sem (B opció keretein belül):**
+1. NE érintsük a 4 Apposing-oldalt (vs-excel, manage-remotely, cash-handoff, /petty-cash-app) — fő hipotézis-mérés
+2. NE érintsük /petty-cash-how-much-to-keep — Test A snippet-rewrite mérése
+3. NE új landing — SERP-validation hiányzik, magas effort, ismeretlen ROI
+4. NE pain-language copy-tweak más landingeken sem — minden HTML-change valamennyi mérés-noise
+
+**Következő lépés (változatlan):**
+- 2026-05-15 GSC checkpoint a 3 Apposing-URL-en (Step 1 a J.7 action-plan-ben)
+- Felhasználói task: G2 outreach 1-2 user-re (Step 0.A — independent timeline)
 
 ### 2026-05-03 00:15 — Codex 3rd batch (`seoplan.md` `## J.11`): strategic synthesis
 

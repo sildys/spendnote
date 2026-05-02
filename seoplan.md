@@ -924,13 +924,19 @@ Created with SpendNote — simple cash handoff receipts for teams
 
 **Verdikt:** a mostani footer **erősebb** compliance + acquisition-hook szempontból, **gyengébb** pozícionálás-tagline szempontból. A Codex-javaslat **NEM lecserélés**, hanem **kombinálás** post-checkpoint.
 
-**Javasolt kombináció (post-checkpoint Step 2.C — NEM most):**
+**Javasolt kombináció (Step 2.C):**
 
 ```
-SpendNote — cash handoff receipts for teams · Not a tax document · spendnote.app [+ QR]
+SpendNote · Proof of cash handoff for teams · Not a tax document · spendnote.app [+ QR]
 ```
 
-Ez megőrzi mind a 4 mostani előnyt + hozzáadja a Codex value-prop tagline-ját + B2B-pozícionálást. **TILOS most végrehajtani** — minden új PDF-en megjelenik = brand-perception-shock-kockázat → 2026-05-15-i checkpoint UTÁN.
+Ez megőrzi mind a 4 mostani előnyt + hozzáadja a "for teams" B2B-pozícionálást + cleaner middle-dot szeparátorokat + rövidebb URL-megjelenítést (`spendnote.app` vs. `https://spendnote.app/`).
+
+**Update (2026-05-03 00:30) — Step 2.C VÉGREHAJTVA:** A felhasználó B opciót választotta (részleges lazítás a moratóriumon, Apposing-mérés-protection mellett). A footer-csere végrehajtva mindkét érintett NOINDEX fájlban:
+- `spendnote-pdf-receipt.html` (1 helyen)
+- `spendnote-receipt-print-two-copies.html` (2 helyen — két-másolat layout)
+
+Indoklás a moratóriumon belüli kivételre: ezek a fájlok **NOINDEX** + **NEM marketing landing-ek** + a footer **shared component nem érintik a SEO-méréseket** (Apposing Phase 1 / how-much-to-keep snippet-rewrite mind érintetlen). Brand-perception-shock-kockázat alacsony (kevés user lát PDF-et most, 0 click). Long-term hatás: minden új PDF-en megjelenik a value-prop tagline → viral loop élesedik.
 
 #### J.11.2 4-fájdalom-klaszter persona-mapping (J.1 continuation, konkrétabb)
 
@@ -962,6 +968,56 @@ A J.1 5 user-segment-listáját Codex konkrétabb 4 fájdalom-klaszterbe szintet
 
 **Action (J.11 → backlog):**
 - Post-checkpoint Step 0.A (paralel a Step 1-gyel, nem-blokkoló): G2 (vagy Capterra ha Capterra-rejection rendezhető) authentic review-acquisition pilot — **1-2 elégedett free-user** identifikálása + finoman megkérdezés (NO incentive, NO scripted text)
+
+**Update (2026-05-03 00:30) — Step 0.A KICK-OFF (B opció keretében):**
+
+Manuális outreach-protokoll, a felhasználó hajtja végre saját Supabase user-listából:
+
+**1. User-identification kritériumok (kit kérdezzünk):**
+- Free plan user, aktív last 30 days (legalább 5 transaction logged)
+- Legalább 2 hete regisztrált (not brand-new — legyen valós tapasztalata)
+- NEM panaszkodott support-ban (ha van support log)
+- **Max 2 user** (pilot — nem mass-outreach)
+
+**2. Outreach-csatorna:**
+- Email a regisztrációkor megadott címre (NEM in-app notification — túl marketing-szerű)
+- Subject: `Quick question about your SpendNote experience` (3-line email, NOT survey, NOT formal)
+- **TILOS**: incentive ("if you review, we give you Pro free for X months") — FTC endorsement guidelines + G2 ToS megsértése
+
+**3. Email-template (G2-acquisition pilot, 2026-05-03):**
+
+```
+Subject: Quick question about your SpendNote experience
+
+Hi [first name],
+
+Noticed you've been using SpendNote for [X weeks] now — really appreciate it.
+Quick honest question: would you be open to writing a short G2 review about
+your experience? Even 2-3 sentences helps a lot. No pressure if not your thing.
+
+Here's the direct link if you'd like:
+[G2 SpendNote review URL]
+
+Thanks either way,
+[Founder name]
+```
+
+**4. Compliance-ellenőrzések (KRITIKUS — F-policy + FTC):**
+- NE ígérjünk semmit cserébe (Pro upgrade, kedvezmény, lottósorsolás → mind FTC-szabálysértés)
+- NE diktáljunk szöveget ("please mention X feature" → G2 ToS sértés)
+- NE follow-up-oljunk 1x-nél többször (spam-jellegű)
+- IF user nem válaszol: **STOP**, NE küldj reminder-t
+
+**5. Sikerkritérium:**
+- 1 valódi G2 review **30 napon belül** = pilot SUCCESS → bővíthető 5-10 user batch-re
+- 0 review 30 napon belül = pilot DEAD-END → Capterra-rejection-investigation prioritás
+- Negatív review = **VÁRT** (nem feltétlenül baj, ha konstruktív → product-feedback signal)
+
+**6. Mérés (PROGRESS.md napló):**
+- Outreach küldés dátuma + N user
+- Open/reply rate (ha mérhető)
+- Review-megjelenés dátuma G2-n
+- Review-rating (csillagok) + körülbelüli sentiment
 
 #### J.11.4 Konkrét fórum-evidence — Square paid in/out, Toast drawer discrepancy
 
