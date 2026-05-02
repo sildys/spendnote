@@ -98,7 +98,70 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-05-02 21:45 — Apposing pilot Phase 1 + Codex follow-up: SoftwareApplication schemák page-specifikus `applicationSubCategory` + `featureList`-re cserélve, F.policy bővítés)
+## Where we are now (last updated: 2026-05-03 00:00 — Codex fórum-research (`seoplan.md` `## J.`): pain-language vocabulary + restaurant/bar wedge + 4 hero/CTA copy-fragment + post-checkpoint 4-step action-plan, F.-policy bővítés tip-pool/wage-deduction TILOS-territory-vel)
+
+### 2026-05-03 00:00 — Codex fórum-research (`seoplan.md` `## J.`): pain-language insights + post-checkpoint backlog
+
+**Trigger:** A felhasználó megosztott egy ChatGPT Codex fórum/Reddit-research-t a SpendNote target-audience nyelvéről. Kulcsmegfigyelése: az emberek **nem** "petty cash app"-pal beszélnek, hanem **fájdalom-nyelven** ("short a drawer", "missing receipts", "fat envelope of crumpled receipts", "who handled the cash?", "we use a paper log/register and it sucks").
+
+**Validáció a meglévő stratégiánkkal — Codex MEGERŐSÍTI:**
+- F.4 Bucket 9 (Dispute prevention): pain-vocabulary átfedés erős
+- F.4 Bucket 11 (Spreadsheet) + Bucket 12 (Carbonless paper): "paper log/register that sucks" pontos megerősítés
+- ## E. Csatorna-stratégia: "Reddit nem szabad direkt-promo-postolással berontani"
+- ## F. Compliance-border: óvatosság nonprofit/charity territory-n (donor receipts, IRS $250 rule)
+- ## I. Apposing Phase 1: `/cash-handoff-receipt` Receipt-Only vs Full Handoff Record blokk pontosan a Codex "shared cash handoff log" wedge-jét fedi
+
+**Codex KIEGÉSZÍT (új resource a F-policy-ben):**
+
+1. **8 pain-language fájdalom-kifejezés** (J.2) — copy-vocabulary post-checkpoint copy-tweak-ekhez:
+   - "short a drawer", "missing receipts", "fat envelope of crumpled receipts", "who handled the cash?", "employees don't upload receipts", "how do I reconcile petty cash?", "cash came from events / volunteers / drawers", "we use a paper log/register and it sucks"
+
+2. **4 hero/CTA copy-fragment post-checkpoint-ra** (J.3) — NEM most, mert moratórium + Apposing-mérés-noise:
+   - "Stop chasing cash receipts at month-end."
+   - "Know who has the cash before month-end."
+   - "No more chasing staff for missing petty cash slips."
+   - "For teams that still use envelopes, cash boxes, and paper logs."
+
+3. **3 nyelvi klaszter post-checkpoint backlog** (J.4) — gap-analízis a meglévő oldalakkal:
+   - `cash handoff log` → MÁR VAN /cash-handoff-receipt (Apposing Phase 1) — csak copy-tweak
+   - `petty cash receipt for employee` → részleges, megfontolandó új landing post-checkpoint
+   - `cash drawer / safe cash tracking` → új vertikum-wedge (restaurant/bar/café)
+
+4. **Restaurant/bar/café wedge mint új vertikum** (J.5):
+   - Toast POS és más POS-ok NEM kezelik a petty cash / safe cash / drawer transfer problémát → konkrét piaci rés
+   - Belépő: `/petty-cash-for-restaurant-manager` (F.3 brainstorm jelölt, eddig nem implementáltuk)
+   - **Új TILOS-territory** (J.5 melléktermék): tip-pool tracking, wage-deduction-for-cash-shortage, cash-advance-loan (FLSA US labor law, payday-lending regulatory territory)
+
+**Post-checkpoint action-plan (2026-05-15 utánra, sorrendben):**
+
+| Step | Action | Trigger |
+|---|---|---|
+| **Step 1** | Apposing Phase 1 mérés (GSC Pages → Queries audit a 3 URL-en) | 2026-05-15 |
+| **Step 2** | Pain-language copy-tweak meglévő oldalakon (`/petty-cash-app`, `/cash-handoff-receipt`) | csak ha Step 1 sikeres |
+| **Step 3** | Új landing megfontolás (`/petty-cash-receipt-for-employee-expenses` VAGY `/cash-drawer-tracking-for-restaurant`) | csak ha Step 2 mérhetően jó |
+| **Step 4** | Restaurant/bar/café wedge (`/petty-cash-for-restaurant-manager` + 4-5 supporting page) | csak ha Step 3 sikeres |
+
+**Mit NE csináljunk most (kritikus):**
+1. NE új landing — moratórium 2026-05-15-ig.
+2. NE pain-language copy-tweak a most-pusholt 3 Apposing-oldalon (vs-excel, manage-remotely, cash-handoff). Másik H1-tweak NOW = noise → 2026-05-15-i hipotézis-mérés értelmét veszti.
+3. NE Reddit-postot/PH-launchot — ## E. csatorna-stratégia + Codex maga figyelmeztet.
+4. NE nyúljunk a `/petty-cash-app` hero-jához — a 05-01-i sprint hatását mérnünk kell.
+
+**Methodology-tanulság (J.9 — F.4.F bővítése):** A fórum/Reddit-research értéke is **aszimmetrikus**:
+- Pain-language vocabulary + vertikum-wedge identification = **MEGBÍZHATÓ** (kvalitatív evidence, alacsony bias)
+- Konkrét query-volume / ranking-claim = **NEM MEGBÍZHATÓ** (Reddit-thread ≠ Google-search-volume; SERP-validation szükséges)
+- Segment-conversion-claim ("nonprofit treasurer = legközelebb a vásárláshoz") = **PRELIMINARY** (analitikai következtetés, nem mért)
+
+**Konzekvencia:** A pain-language vocab + wedge-identifikáció AZONNAL F-policy-be kerül. A query-volume + segment-conversion claim-ek SERP-validation után backlog-ba.
+
+**Implementáció (csak docs, NEM kód-/tartalmi-változás):**
+- ✅ Új `## J. Codex fórum-research` szekció a `seoplan.md`-ben (9 sub-szekció: J.1-J.9)
+- ✅ F-policy bővítés: tip-pool / wage-deduction / cash-advance-loan TILOS-territory
+- ✅ F.4.F bővítés: fórum-research aszimmetrikus értéke
+- ✅ Post-checkpoint 4-step action-plan rögzítve
+- ❌ Semmilyen HTML-fájl, semmilyen sitemap-update, semmilyen schema-csere — moratórium betartva
+
+**Következő lépés (változatlan):** 2026-05-15 GSC checkpoint a 3 Apposing-URL-en (Step 1).
 
 ### 2026-05-02 21:45 — Codex follow-up (Apposing Phase 1 schema-finomítás): SoftwareApplication schemák page-specifikusra cserélve
 
