@@ -98,7 +98,127 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
-## Where we are now (last updated: 2026-05-03 00:00 — Codex fórum-research (`seoplan.md` `## J.`): pain-language vocabulary + restaurant/bar wedge + 4 hero/CTA copy-fragment + post-checkpoint 4-step action-plan, F.-policy bővítés tip-pool/wage-deduction TILOS-territory-vel)
+## Where we are now (last updated: 2026-05-03 00:15 — Codex 3rd batch (`seoplan.md` `## J.11`): strategic synthesis — viral loop audit (mostani PDF footer ✅ funkcionálisan = Codex viral loop, DE Codex value-prop tagline post-checkpoint kombinálható) + 4-fájdalom-klaszter persona-mapping + entity-trust listings (G2/SourceForge 0-review state) + Square/Toast fórum-evidence + 3-szintű Codex-claim audit-protokoll)
+
+### 2026-05-03 00:15 — Codex 3rd batch (`seoplan.md` `## J.11`): strategic synthesis
+
+**Trigger:** Codex harmadik research-batch — szintetizáló javaslat 5 ponttal: (1) ne "petty cash app"-ot adjunk el első mondatban, (2) POS cash drawer wedge legerősebb (Square/Toast), (3) nonprofit/event cash strong, (4) bookkeeper missing receipts pain, (5) **viral loop**: "Created with SpendNote" footer minden PDF/email receipten + entity-trust listings (SourceForge, G2 0-review).
+
+**Felhasználó-validáció:** "van rajta created by spendnote" — visszajelzés a viral loop pontra. Audit eredmény → **funkcionálisan IGEN, strukturálisan KÜLÖNBÖZIK**.
+
+**Viral loop audit (J.11.1) — mostani PDF/print receipt footer státusz:**
+
+Mostani footer (`spendnote-pdf-receipt.html`, `spendnote-receipt-print-two-copies.html`):
+```
+SpendNote — Proof of cash handoff. Not a tax document. — https://spendnote.app/ [+ QR code]
+```
+
+Codex-javaslat:
+```
+Created with SpendNote — simple cash handoff receipts for teams
+```
+
+| Funkció | Mostani | Codex-javaslat | Verdikt |
+|---|---|---|---|
+| Brand-attribution | ✅ | ✅ | egyenértékű |
+| Compliance disclaimer | ✅ | ❌ | **mostani jobb** (F-policy Tier B) |
+| Kattintható URL | ✅ | ❌ | **mostani jobb** (acquisition) |
+| QR mobile-scan | ✅ | ❌ | **mostani jobb** (mobile-acquisition) |
+| Value-prop tagline | ❌ | ✅ | **Codex jobb** (pozícionálás) |
+| "for teams" pozícionálás | ❌ | ✅ | **Codex jobb** (B2B-jel) |
+
+**Verdikt:** mostani footer **erősebb** compliance + acquisition-hook szempontból, **gyengébb** pozícionálás-tagline szempontból. Codex-javaslat **NEM lecserélés**, hanem **kombinálás post-checkpoint Step 2.C**:
+```
+SpendNote — cash handoff receipts for teams · Not a tax document · spendnote.app [+ QR]
+```
+**TILOS most** — minden új PDF-en megjelenik = brand-perception-shock-kockázat → 2026-05-15 UTÁN.
+
+**4-fájdalom-klaszter persona-mapping (J.11.2 — J.1 continuation):**
+
+| Codex-klaszter | Target persona | Coverage | Backlog-step |
+|---|---|---|---|
+| Cash drawer / paid out | Retail, café, restaurant manager | ⚠️ Részleges | J.10.5 Step 3.A #3 + J.5 restaurant-wedge |
+| Cash handoff receipt | Small teams, contractors, office managers | ✅ Teljes (Apposing Phase 1) | — |
+| Cash envelope / event cash | Nonprofit, school, church, PTO treasurer | ⚠️ Részleges | J.10.5 Step 3.A #1 (compliance-óvatosan) |
+| Missing petty cash receipts | Bookkeeper, admin, owner | ⚠️ Részleges | J.10.5 Step 3.B (dedikált landing) |
+
+J.10.5 action-plan **változatlan** — csak persona-fókusz pontosabb a copy-tweak-ekhez.
+
+**Entity-trust listings (J.11.3) — SourceForge, G2 0-review state:**
+- Codex-claim: "1 valódi review > 5 új landing" — ✅ megbízható (E-E-A-T signal)
+- ⚠️ Compliance-border: NEM szabad fizetésért review-t kérni (G2 ToS, FTC endorsement guidelines)
+- **Új backlog Step 0.A** (paralel Step 1-gyel, nem-blokkoló): G2/Capterra authentic review-acquisition pilot — 1-2 elégedett free-user finom megkérdezése, NO incentive
+
+**Konkrét fórum-evidence (J.11.4) — Square paid in/out + Toast drawer discrepancy:**
+- Megerősíti J.5 restaurant/bar/café wedge-et (NEM bővíti)
+- `/petty-cash-for-restaurant-manager` (F.3 jelölt) **prioritása emelkedik** post-Step-3, DE SERP-validation még szükséges (POS-tools versenyhelyzete: Toast, Square, Lightspeed, Clover, Lavu)
+
+**Codex meta-claim értékelés (J.11.5):**
+- "Ne neked kell 100 userrel beszélgetni" — ✅ stratégiailag igaz a 1-developer/0-marketing-budget context-ben, DE post-Step-3 ajánlott legalább **1-2 free-user follow-up email-interjú** (3-soros email, "what made you sign up?", NEM survey/focus-group)
+
+**3-szintű Codex-claim audit-protokoll (J.11.7 — új F-policy):**
+- ✅ MEGBÍZHATÓ: vocabulary, pain-language, vertikum-wedge identification, fórum-evidence linkek
+- ⚠️ PRELIMINARY: persona-mapping, segment-conversion-claim, strategic meta-recommendation (case-by-case)
+- ❌ NEM MEGBÍZHATÓ: konkrét query-volume / ranking-claim (SERP-validation kötelező, F.4.A)
+
+**Mit NE csináljunk most (J.11.6):**
+1. NE PDF/email receipt footer-tweak — post-checkpoint Step 2.C
+2. NE G2/Capterra/SourceForge review-acquisition kampány most — Step 0.A backlog
+3. NE `/petty-cash-for-restaurant-manager` landing most — SERP-validation post-Step-3
+4. NE direkt fórum-poszt a Codex által linkelt Square/Toast threadekben — ## E. csatorna-stratégia
+
+**Implementáció (csak docs, NEM kód-/tartalmi-változás):**
+- ✅ Új `## J.11` szekció a `seoplan.md`-ben (7 sub-szekció: J.11.1-J.11.7)
+- ✅ Viral loop audit: mostani PDF footer dokumentálva + Codex-kombinálás backlog-ban (Step 2.C)
+- ✅ Új backlog Step 0.A: G2/Capterra authentic review-acquisition pilot (paralel Step 1-gyel)
+- ✅ Új F-policy: 3-szintű Codex-claim audit-protokoll
+- ❌ Semmilyen HTML-fájl, semmilyen sitemap-update, semmilyen schema-csere — moratórium betartva
+
+**Következő lépés (változatlan):** 2026-05-15 GSC checkpoint a 3 Apposing-URL-en (Step 1).
+
+### 2026-05-03 00:08 — Codex follow-up (`seoplan.md` `## J.10`): köznyelvi vocabulary expansion
+
+**Trigger:** Codex második research-batch — a "petty cash" köznyelvi szinonimáit gyűjtötte össze (cash box, cash drawer, till, float, kitty, cash tin, cash envelope, change fund, safe cash, cash on hand, cash log, cash slip, paid out + 13 long-tail query-cluster jelölt).
+
+**Gap-analízis a meglévő 87 HTML-oldalunkkal — eredmény jobb mint vártam:**
+- ✅ **3 teljes coverage**: `cash handoff receipt` (/cash-handoff-receipt), `cash drawer reconciliation` (/cash-drawer-reconciliation), `who has the cash` (/who-has-the-cash-right-now + /boss-cant-see-where-cash-goes)
+- ⚠️ **7 részleges coverage**: `cash box tracker`, `cash drawer log`, `cash in cash out log`, `employee cash receipt`, `cash float tracker`, `cash payout receipt`, `missing petty cash receipts`
+- ❌ **3 hiányzik teljesen**: `cash envelope tracker`, `office cash log`, `safe cash log`
+
+**Új insight (geo-vakfolt):** A meglévő 87 HTML-oldalból **egyik sem** céloz UK/AU-specifikus vocabulary-t (`till`, `kitty`, `cash tin`, `till float`). Ez geo-blindspot, post-checkpoint alsó prioritás (GSC adat-bázisunk dominánsan US/IN, UK/AU traffic elenyésző).
+
+**F-policy bővítés (J.10.4) — 3 vocabulary-szó kapott figyelmeztető tagot:**
+1. `cash on hand` ⚠️ — ✅ operational ("track your cash on hand"), ❌ accounting/tax-decision ("calculate for balance sheet / tax purposes")
+2. `cash envelope` ⚠️ — ✅ event/operational ("track cash collected in envelopes"), ❌ donor-receipt ("IRS-compliant donation envelope receipts")
+3. `paid out` / `cash payout` ⚠️ — ✅ operational ("record cash paid out to vendor"), ❌ wage-deduction / tip-pool ("deduct cash payout from staff wages", "distribute tip pool cash payouts")
+
+**Post-checkpoint action-plan (J.7 sorrendje változatlan, csak Step 2 és Step 3 bővül):**
+
+| Step | Action (J.10 bővítés) | Trigger |
+|---|---|---|
+| **Step 2.B (új)** | Vocabulary-diversification a body-content-ben (1-2 szinonima-mention/oldal max, NE keyword-stuffing) | csak ha Step 1 sikeres |
+| **Step 3.A (új sorrend)** | 3 hiányzó cluster sorrendben: `cash envelope tracker` (compliance-óvatosan), `office cash log` (alacsony kockázat), `safe cash log` (restaurant-wedge-tel) | csak ha Step 2 mérhetően jó |
+| **Step 3.B (új)** | Részleges-coverage finomítás (`cash box tracker`, `cash drawer log`, `employee cash receipt`, `missing petty cash receipts`) — meglévő H1/title/H2 vagy új landing | csak ha Step 3.A sikeres |
+| **Step 4.B (új)** | UK/AU geo-vocabulary (`till float app`, `office kitty tracker`, `cash tin tracker`) — SERP-validation, alsó prioritás | csak ha Step 4 restaurant-wedge sikeres |
+
+**Mit NE csináljunk most (J.10.6, J.8 megerősítés):**
+1. NE új landing — moratórium 2026-05-15-ig, függetlenül a vocabulary-erőtől
+2. NE vocabulary-keyword-stuffing a meglévő oldalakon — még post-checkpoint sem (1-2 mention/oldal max)
+3. NE UK/AU geo-pivot — alacsony prioritás, csak post-Step-4
+4. NE érintsük a most-pusholt oldalakat (Apposing Phase 1, /petty-cash-app) — mérési ablak
+
+**Methodology-megerősítés (J.10.7 — J.9 alkalmazása):**
+- J.10 vocabulary-katalógus = **MEGBÍZHATÓ** (kvalitatív evidence, alacsony bias)
+- 13 query-cluster = **PRELIMINARY** (Codex hipotézis, NEM SERP-validált — minden új landing előtt SERP-validation szükséges, F.4.A szerint)
+- Pozitív SERP-jel = preliminary go; Negatív SERP-jel (QuickBooks/Smartsheet/Microsoft fal) = STOP, függetlenül a vocabulary-erőtől
+
+**Implementáció (csak docs, NEM kód-/tartalmi-változás):**
+- ✅ Új `## J.10` szekció a `seoplan.md`-ben (7 sub-szekció: J.10.1-J.10.7)
+- ✅ F-policy bővítés: 3 új vocabulary-használati szabály (cash on hand, cash envelope, paid out)
+- ✅ J.7 action-plan kibővítve Step 2.B, Step 3.A új sorrenddel, Step 3.B, Step 4.B
+- ❌ Semmilyen HTML-fájl, semmilyen sitemap-update, semmilyen schema-csere — moratórium betartva
+
+**Következő lépés (változatlan):** 2026-05-15 GSC checkpoint a 3 Apposing-URL-en (Step 1).
 
 ### 2026-05-03 00:00 — Codex fórum-research (`seoplan.md` `## J.`): pain-language insights + post-checkpoint backlog
 
