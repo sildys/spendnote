@@ -2338,6 +2338,71 @@ A Codex 5-jelölt-listája az AI-Overview-immune zónában a strukturális-moat 
 - [ ] Nincs cannibal-jel a `cash handoff` / `cash handover` query-családon
 - [ ] Mindhárom feltétel teljesülése esetén: A4 mehet; egyébként parkolás folytatódik vagy plus-future jelöltekre váltás
 
+#### J.15.5.11 SPRINT-2: `/petty-cash-software` MONEY-LANDING + 4 APP-OLDAL FINOM BELSŐ LINK ✅ **VÉGREHAJTVA (2026-05-22 13:25)**
+
+**Trigger:** A 2026-05-22-i 7-napos GSC riport: heti szinten NÖVEKEDÉS (4 → 11 klikk, 606 → 1282 megj, CTR 0,66% → 0,86%), de a query-mix még mindig 95%-ban INFO/TEMPLATE/PROCESS — csak ~1% APP_COMMERCIAL (heti ~13-23 megj `petty cash app`/`management app`/`tracker` query-családra). A felhasználói diagnózis: *"még mindig nem állt át appos query-kre"* — Codex megerősítette: money-query infrastruktúra hiányzik.
+
+**Időkorlát-trigger:** A felhasználó megosztott egy időablakot — 7 napon belül lejár az Opus-csomag, így 4 napos koncentrált gyártási-ablak indult ma (péntek - kedd). Drip-feed-stratégia (1 új landing/hét) meg van tartva, de a 2 új landing legyártása ezen a 4 napon belül kell hogy megtörténjen.
+
+**Codex-stratégia 2 körrel finomítva (1+2 üzenet):**
+1. **Money-query irány (buyer-language):** `software` NEM `app` — a buyer ezt a szót használja, a `petty cash app` query strukturálisan kicsi (~3-13 megj/hét), a `petty cash software` magasabb volume.
+2. **NEM brand-szerinti competitor-tábla** (UsePettyCash, Haeywa, EnKash, Pleo, stb.), hanem **4-saját-kategória**: spreadsheet/template + expense app + accounting software + **SpendNote (cash custody + handoff receipt)** — tisztább Google-nek, NEM ad túl sok idegen entitást.
+3. **Title (Codex 1:1):** `Petty Cash Software for Tracking Team Cash, Handoffs, and Receipts` (60 karakter).
+4. **Meta D (Codex 1:1):** `Track petty cash across your team, record every cash handoff, and generate signed PDF receipts without spreadsheets or accounting software.`
+5. **1 H2 pontosan (Codex exact):** `Petty Cash Tracking Software for Small Teams` (hosszabb query-családra is jel, URL marad rövid).
+6. **Kulcskifejezések buyer-language-vegyítve (Codex finomítás 2):** "cash custody" (hivatalos, max 2-3× — NE ez legyen az EGYETLEN nyelv) + simább buyer-language: "who has the cash", "cash handed from one person to another", "signed receipt for every transfer", "team cash tracking", "not accounting software" (kategória-szelepelés mantraként).
+7. **`/cash-handoff-receipt` belső link óvatos (Codex javasolta exact mondat):** "If you need a full software workflow instead of a single handoff receipt, see our petty cash software for teams page" — J.14.14 "békén hagyós" mellett ez 1-bekezdés-szintű minimális body-bővítés, NEM Title/H1/Meta/schema-csere.
+8. **Ads-landing NEM külön noindex URL** — `/petty-cash-software` + UTM (pragmatikusabb mint dedikált URL).
+
+**Sprint-2 deliverable (1 commit, 6 fájl, 0 query-rangsor-kockázat a meglévő top-on, Codex-szigorítás 100%):**
+
+**(1) ÚJ MONEY LANDING ÉLESÍTVE — `/petty-cash-software.html`**
+- URL: `/petty-cash-software` (új) — Cloudflare Pages clean URL.
+- ~720 sor, **11 H2**, 3 JSON-LD schema (Article + SoftwareApplication `applicationSubCategory: "Petty Cash Tracking Software (Cash Custody and Handoff Receipts)"` + FAQPage 6 tétel).
+- **4-kategória category-grid** (SpendNote zöld highlight, 4. saját kategória).
+- **4-oszlopos comparison-tábla** (Spreadsheet template / Expense app / Accounting software / **SpendNote**) 8 sorral — NEM brand-nevek, csak FAQ-ban említve példaként (Pleo / Ramp / Brex / Spendesk / QuickBooks / Xero / Sage / Bench).
+- 4 pain-point use-case-box ("Multi-location small business", "School office and club treasurers", "Construction/field-site PMs", "Owners managing cash remotely").
+- 6 cluster-link Related Resources-ben: `/petty-cash-app`, `/digital-petty-cash-book`, `/petty-cash-app-vs-excel`, `/petty-cash-app-vs-google-sheets`, `/petty-cash-receipt-generator`, `/who-has-the-cash-right-now` (cluster-bridge a buyer-language H2-jéhez).
+- Inline kontextuális linkek a body-ban: `/petty-cash-app`, `/digital-petty-cash-book`, `/manage-petty-cash-remotely`, `/who-has-the-cash-right-now`, `/cash-handoff-receipt`, `/petty-cash-receipt-generator`, `/petty-cash-app-vs-excel`, `/petty-cash-app-vs-google-sheets`, `/spendnote-signup`, `/spendnote-pricing`, `/spendnote-faq`.
+- CTA (Codex): `Start Tracking Cash with Built-In Receipts`.
+- Disclaimer-box: "not accounting software, not tax filing software, not bank reconciliation software".
+
+**(2) 4 APP-OLDAL FINOM BELSŐ LINK — Codex-szigorítás 100% (1 inline-link/oldal, NULLA Title/H1/Meta/schema/dateModified-csere):**
+
+| Oldal | Hol | Pontos szöveg |
+|---|---|---|
+| `/petty-cash-app` | meglévő comparison-szakasz végén (a vs-Excel + vs-Google-Sheets sibling-link bekezdésnek további bővítése) | "Some teams shop for this category as 'app', others as petty cash software — same SpendNote, slightly different buyer language." |
+| `/digital-petty-cash-book` | "This Is Not Accounting Software" H2 végén (új bekezdés) | "If you're evaluating this category more broadly rather than the multi-site flow specifically, see our petty cash software for teams overview — same underlying tool, framed from the buyer-perspective." |
+| `/manage-petty-cash-remotely` | meglévő cluster-link szakaszban (vs-Excel link mellett) | "For the broader category view, our petty cash software for teams page covers how this fits between spreadsheets, expense apps, and accounting software." |
+| `/cash-handoff-receipt` (J.14.14 "békén hagyós") | meglévő "Also see:" link-bekezdés előtt új bekezdés | "If you need a full software workflow instead of a single handoff receipt, see our petty cash software for teams page — same handoff documentation, with multi-cash-box tracking, role-based access, and an audit log around it." |
+
+**(3) `sitemap.xml`:** új URL hozzáadva `priority 0.9` + `lastmod 2026-05-22`; 4 boostolt oldal `lastmod` bumpolva `2026-05-22`-re (azonos crawl-szignál az új landing-cluster felfedezéséhez).
+
+**Indexing-request stratégia:** felhasználói feladat — kézi reindex-request kérve a `/petty-cash-software` URL-re a GSC URL Inspection-ben (az A1 tapasztalat alapján: sitemap-discovery + organic crawl 35 perc, de a kézi request azonnali indexelést hoz). A 4 boostolt oldalra NEM kérünk reindex-request-et (1-bekezdés-szintű módosítás, természetes recrawl elég).
+
+**Mérési időablak:** **2026-05-29-i 7-napos riport** mutatja meg a sprint-2 first-impressions-t a `petty cash software` query-családra. Várt mutatók (Codex-óvatosabb):
+- 7 napon belül: 0-15 megj a `petty cash software` query-családra (cold-start)
+- 14 napon belül: első impr-stabilizálás poz 30-50 között
+- 21-28 napon belül: page 1 vagy 1-2 klikk (Codex óvatosabb forgatókönyv: 0-2 klikk/hó az első 2 hónapban)
+
+**Cannibal-mitigálás (Codex-szigorítás 100%):**
+- vs `/petty-cash-app`: `petty cash software` és `petty cash app` SEMI-átfedő query-családok, de a `/petty-cash-app` H2-jeiben NEM dominál a "software" szó (csak 1-2x említve). Az új landing dedikáltan a "software" buyer-language-et célozza. **Az inline-link a /petty-cash-app-on → /petty-cash-software-re egyértelmű hierarchia-szignál Google-nek.**
+- vs `/digital-petty-cash-book`: az új landing NEM multi-site-fókuszú, csak 1 use-case-box. A multi-site-intent továbbra is a /digital-petty-cash-book-é.
+- vs `/petty-cash-app-vs-excel` és `/petty-cash-app-vs-google-sheets`: vs-comparison oldalak, NEM kategória-bemutatás. Az új /petty-cash-software a "what is petty cash software, do I need it" intent.
+- vs `/cash-handoff-receipt` (J.14.14): a /petty-cash-software fő use-case-e is a handoff (Cash Custody H2 + 4-kategória cash-handoff-receipt-USP), de az új landing kategória-szintű, NEM template-letöltési intent. **Codex óvatos belső link is csak 1 inline-bekezdés** — NEM Title/H1/Meta-csere a /cash-handoff-receipt-en.
+
+**Sprint-2 folytatása (NAP 2-4):**
+- **Szombat (NAP 2):** `/cash-handoff-software` teljes HTML legyártása (Codex 2. landing javaslata) — drip-feed, NEM élesítjük szombaton.
+- **Vasárnap (NAP 3):** `/cash-handoff-software` élesítés a hétfői Google-crawl-csúcs előtt, sitemap-bump, kézi reindex-request.
+- **Hétfő (NAP 4 első része):** Ads-kampány előkészítés — exact/phrase keyword lista (`petty cash software`, `petty cash tracking software`, `cash tracking software`, `petty cash app`, `petty cash management software`) + negative lista (`free template`, `download`, `pdf`, `excel template`, `quickbooks`, `xero`).
+- **Kedd (NAP 4 második része):** Conversion tracking GA4 events: `signup_started`, `trial_started`, `pricing_view` + UTM-séma a `/petty-cash-software`-hez. Final QA.
+
+**A1 (`/petty-cash-app-vs-google-sheets`) jelenleg békén hagyva** — Codex egyetértés: 14-21 nap után retro-audit ha nincs google sheets/spreadsheet impression. Az 1 hetes 0-megj tény-állapot **nem dönt** — Codex jogosan: "Még nem bizonyított, de nem is kapott elég időt. Most a 'software' irány a fontosabb." Sprint-3 (A3 decision-point) tovább vár a /petty-cash-app érlelődési metrikák megerősödésére.
+
+**Új SEO-meta-tanulság (J.15.5.11.X):** *"Query-volume vs. query-fit dilemma — Ha a Google-on egy adott query-családra már TOP 3-ban vagyunk, de a query strukturálisan alacsony volume-ú (3-13 megj/hét), akkor NEM a rangsor-bővítés, hanem a **szomszéd-cluster-expanzió** a megoldás. A buyer-language audit (Cursor/AI-search ELLENŐRZÉS NEM elég — GSC + manual incognito Google SERP a tényleges mérce) feltár olyan szomszéd-clustereket (pl. `software` vs `app`), amelyek nagyobb query-pool-t hoznak ugyanahhoz a buyer-intent-hez. Sprint-strategia: kategória-bemutató landing építése a szomszéd-cluster query-családra, NEM újabb vs-comparison ugyanazon szűk piacra."*
+
+---
+
 #### J.15.5.10 CODEX-MEGBESZÉLÉS AUDIT-TRAIL (2026-05-15 ~14:00)
 
 **Felhasználói trigger:** *"itt van a codex válasza és utána felvetettem neki egy kérdést, de ezt beszéljük át mi is"*

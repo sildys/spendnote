@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QPFM30F86Q"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-QPFM30F86Q');
+    </script>
+    <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vqin4v9ift");
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Track petty cash across your team, record every cash handoff, and generate signed PDF receipts without spreadsheets or accounting software.">
+    <link rel="canonical" href="https://spendnote.app/petty-cash-software">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://spendnote.app/petty-cash-software">
+    <meta property="og:title" content="Petty Cash Software for Tracking Team Cash, Handoffs, and Receipts">
+    <meta property="og:description" content="Track petty cash across your team, record every cash handoff, and generate signed PDF receipts without spreadsheets or accounting software.">
+    <meta property="og:image" content="https://spendnote.app/assets/images/seo/spendnote-dashboard-multiple-cash-boxes-overview.webp">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://spendnote.app/petty-cash-software">
+    <meta property="twitter:title" content="Petty Cash Software for Tracking Team Cash, Handoffs, and Receipts">
+    <meta property="twitter:description" content="Track petty cash across your team, record every cash handoff, and generate signed PDF receipts without spreadsheets or accounting software.">
+    <meta property="twitter:image" content="https://spendnote.app/assets/images/seo/spendnote-dashboard-multiple-cash-boxes-overview.webp">
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
+    <title>Petty Cash Software for Tracking Team Cash, Handoffs, and Receipts</title>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Petty Cash Software for Tracking Team Cash, Handoffs, and Receipts",
+      "description": "A practical guide to choosing petty cash software: where it fits between spreadsheets, expense apps, and accounting software, what cash-custody workflow it should support, and how signed PDF receipts per transfer differ from vendor receipt capture.",
+      "image": [
+        "https://spendnote.app/assets/images/seo/spendnote-dashboard-multiple-cash-boxes-overview.webp"
+      ],
+      "datePublished": "2026-05-22T11:30:00+00:00",
+      "dateModified": "2026-05-22T11:30:00+00:00",
+      "author": {
+        "@type": "Organization",
+        "name": "SpendNote"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "SpendNote",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://spendnote.app/assets/images/spendnote-logo-horizontal-1024.png"
+        }
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"SoftwareApplication","name":"SpendNote","alternateName":"SpendNote Petty Cash Software","applicationCategory":"BusinessApplication","applicationSubCategory":"Petty Cash Tracking Software (Cash Custody and Handoff Receipts)","operatingSystem":"Web Browser (Chrome, Safari, Firefox, Edge)","url":"https://spendnote.app/petty-cash-software","description":"Petty cash tracking software for small teams: record every cash handoff with a signed PDF receipt, see who has the cash in real time across multiple cash boxes, and keep a per-user audit log without using spreadsheets or accounting software.","image":"https://spendnote.app/assets/images/seo/spendnote-dashboard-multiple-cash-boxes-overview.webp","offers":[{"@type":"Offer","name":"Free Trial","price":"0","priceCurrency":"USD","description":"14-day free trial, capped at 20 transactions."},{"@type":"Offer","name":"Standard","description":"Billed annually — $190/yr","price":"15.83","priceCurrency":"USD","priceSpecification":{"@type":"UnitPriceSpecification","price":"15.83","priceCurrency":"USD","billingDuration":"P1Y","unitText":"MONTH"}},{"@type":"Offer","name":"Pro","description":"Billed annually — $290/yr","price":"24.17","priceCurrency":"USD","priceSpecification":{"@type":"UnitPriceSpecification","price":"24.17","priceCurrency":"USD","billingDuration":"P1Y","unitText":"MONTH"}}],"featureList":["Live per-cash-box running balance (no formulas to maintain)","Signed PDF receipt generated for every cash handoff (not vendor receipt capture)","\"Who has the cash right now?\" team visibility across multiple cash boxes","Per-user audit log of every transaction (timestamp + user attribution)","Role-based access (Owner / Admin / User) for void and replenishment controls","Browser-based — no install, works on any phone or laptop"],"creator":{"@type":"Organization","name":"SpendNote","url":"https://spendnote.app/"},"publisher":{"@type":"Organization","name":"SpendNote","logo":{"@type":"ImageObject","url":"https://spendnote.app/assets/images/spendnote-logo-horizontal-1024.png"}}}
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What's the difference between petty cash software and accounting software like QuickBooks or Xero?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Accounting software is the ledger — it records the formal journal entries, balance sheet, and tax-ready totals your bookkeeper needs. Petty cash software sits one layer below: it tracks the physical cash itself as it moves between people, generates a receipt for each handoff, and shows who has the cash right now. SpendNote does not replace QuickBooks or Xero — it gives them a clean monthly CSV/PDF of the cash that moved, so your bookkeeper isn't reconstructing a paper voucher book."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "We already use Pleo / Ramp / Brex / Spendesk for expenses — do we need separate petty cash software?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Those tools are built around company cards and reimbursements — what employees pay for with plastic or get paid back for later. Petty cash is the opposite workflow: physical cash that moves between people on your team (custodian to supervisor, office float to site manager) where the proof is a signed receipt, not a card swipe. If you have a real cash drawer and people who actually carry cash around, an expense app won't track who has it or generate the handoff receipt. SpendNote handles exactly that, and is intentionally not trying to compete with Pleo on the card side."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why generate receipts? Isn't capturing vendor receipts enough?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Vendor receipt capture is the wrong half of the workflow for shared cash. The receipt that actually matters is the one you generate when cash leaves your hand and goes to someone else on your team. The custodian hands $200 to the supervisor; the supervisor signs; both keep a PDF; the system records it. That's the proof that stops \"I never got that money\" disputes. SpendNote treats every transaction as a signed receipt event — that's the structural difference."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is this different from a Google Sheets or Excel petty cash template?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A template is a static file — you do all the work (formulas, manual entries, version control, role rules you can't actually enforce). Petty cash software handles those automatically and adds things a spreadsheet structurally can't: a signed PDF receipt for every transfer, a per-row \"who recorded this\" log, real role separation between admins and regular users, and multi-cash-box dashboards instead of multi-tab juggling. If you've already outgrown your sheet, see our petty cash app vs Excel and petty cash app vs Google Sheets comparisons for the detail."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can multiple people on my team use it at the same time?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. SpendNote is built around team cash custody from day one. Each team member has their own login, role-based permissions, and every action is timestamped and attributed. The Pro plan includes 3 users and role-based access; the custodian records, the supervisor signs, the owner reviews from anywhere — all on the same live dashboard."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does SpendNote replace my accountant?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, and it intentionally doesn't try. SpendNote is operational software — it documents the cash that moves between people on your team and generates the receipts that go with each handoff. Your accountant and accounting software still handle the formal journal entries, tax filings, and reconciliation against the general ledger. SpendNote just hands them clean monthly data instead of a shoebox of paper slips."
+          }
+        }
+      ]
+    }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=23">
+    <style>
+        body {
+            background: var(--bg);
+            min-height: 100vh;
+        }
+
+        .seo-hero {
+            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #14b8a6 100%);
+            padding: 3rem 0;
+            text-align: center;
+            color: white;
+        }
+
+        .seo-hero-content {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 var(--page-gutter);
+        }
+
+        .seo-hero h1 {
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+            color: white;
+        }
+
+        .seo-hero p {
+            font-size: 1rem;
+            opacity: 0.95;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            font-weight: 700;
+            padding: 0.875rem 2rem;
+            font-size: 1rem;
+            border-radius: 999px;
+            text-decoration: none;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-pricing-note {
+            margin-top: 0.75rem;
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.85);
+        }
+
+        .seo-content {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 2.5rem var(--page-gutter);
+        }
+
+        .seo-content h2 {
+            font-size: 1.625rem;
+            font-weight: 800;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .seo-content h2:first-of-type {
+            margin-top: 0;
+        }
+
+        .seo-content p {
+            font-size: 1.0625rem;
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+            color: var(--text-muted);
+        }
+
+        .seo-content ul,
+        .seo-content ol {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .seo-content li {
+            font-size: 1.0625rem;
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .seo-content strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .seo-content a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .seo-content a:hover {
+            text-decoration: underline;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0 2rem;
+        }
+
+        .category-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+        }
+
+        .category-card.us {
+            background: #ecfdf5;
+            border-color: #a7f3d0;
+        }
+
+        .category-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-card.us h3 {
+            color: #065f46;
+        }
+
+        .category-card p {
+            font-size: 0.925rem;
+            line-height: 1.55;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .category-card.us p {
+            color: #047857;
+        }
+
+        .pain-point-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .pain-point-box h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .pain-point-box p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .receipt-showcase {
+            margin: 2rem 0 2.25rem;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            background: var(--surface);
+        }
+
+        .receipt-showcase img {
+            display: block;
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+            border-radius: 12px;
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+        }
+
+        .receipt-showcase figcaption {
+            margin-top: 0.75rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin: 1.5rem 0 2rem;
+        }
+
+        .comparison-table thead th {
+            background: #f4f4f5;
+            padding: 0.875rem 0.875rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-align: left;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table thead th:first-child {
+            width: 28%;
+        }
+
+        .comparison-table thead th.col-us {
+            color: var(--primary);
+            background: #ecfdf5;
+        }
+
+        .comparison-table tbody td {
+            padding: 0.75rem 0.875rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tbody td:first-child {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .comparison-table tbody td.col-us {
+            background: #f0fdf4;
+            color: #047857;
+        }
+
+        .comparison-table .check { color: var(--success); font-weight: 700; }
+        .comparison-table .cross { color: var(--error); font-weight: 700; }
+        .comparison-table .partial { color: #f59e0b; font-weight: 700; }
+
+        .cta-box {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            text-align: center;
+            margin: 2.5rem 0;
+            color: white;
+        }
+
+        .cta-box h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            color: white;
+        }
+
+        .cta-box p {
+            font-size: 1rem;
+            margin-bottom: 1.25rem;
+            opacity: 0.95;
+            color: white;
+        }
+
+        .cta-box .btn {
+            background: white;
+            color: var(--primary);
+            font-weight: 700;
+            padding: 0.875rem 2rem;
+            font-size: 1rem;
+            border-radius: var(--radius-lg);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .cta-box .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .disclaimer-box {
+            background: #fffbeb;
+            border: 1px solid #f59e0b;
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .disclaimer-box p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #92400e;
+            margin: 0;
+        }
+
+        .disclaimer-box strong {
+            color: #78350f;
+        }
+
+        .faq-section {
+            margin-top: 2.5rem;
+        }
+
+        .faq-section h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .faq-item h3 {
+            font-size: 1.0625rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .faq-item p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .related-resources {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .related-resources h2 {
+            margin-top: 0;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+
+        .related-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: block;
+        }
+
+        .related-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(5,150,105,0.12);
+            text-decoration: none;
+        }
+
+        .related-card i {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 0.6rem;
+            display: block;
+        }
+
+        .related-card h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: var(--text);
+        }
+
+        .related-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .seo-hero { padding: 2.5rem 0; }
+            .seo-content { padding: 2rem var(--page-gutter); }
+            .cta-box { padding: 1.75rem 1.25rem; }
+            .comparison-table { font-size: 0.8rem; }
+            .comparison-table thead th,
+            .comparison-table tbody td { padding: 0.5rem 0.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .seo-hero { padding: 2rem 0; }
+            .seo-hero h1 { font-size: clamp(1.9rem, 9vw, 2.4rem); }
+            .seo-content { padding: 1.5rem 1rem; }
+            .cta-box { padding: 1.25rem 1rem; }
+            .cta-box .btn,
+            .hero-btn { width: 100%; text-align: center; }
+            .comparison-table { display: block; overflow-x: auto; white-space: nowrap; }
+            .related-grid { grid-template-columns: 1fr; }
+            .category-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#nav-logo-gradient)"/>
+                    <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                    <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                    <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                    <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                    <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                    <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="nav-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#059669"/>
+                            <stop offset="100%" stop-color="#10b981"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>SpendNote</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/spendnote-pricing">Pricing</a></li>
+                <li><a href="/spendnote-faq">FAQ</a></li>
+                <li><a href="/spendnote-login" class="btn btn-secondary">Log in</a></li>
+                <li><a href="/spendnote-signup" class="btn btn-primary">Sign up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="seo-hero">
+        <div class="seo-hero-content">
+            <h1>Petty Cash Software for Tracking Team Cash, Handoffs, and Receipts</h1>
+            <p>Built for the physical cash that moves between people on your team &mdash; not for receipts you upload to a spreadsheet, and not for the books your accountant keeps.</p>
+            <a href="/spendnote-signup" class="hero-btn">Start Tracking Cash with Built-In Receipts</a>
+            <p class="hero-pricing-note">Free 14-day trial. Paid plans from $15.83/month. No credit card required.</p>
+        </div>
+    </section>
+
+    <div class="seo-content">
+
+        <h2>Why Most Tools Solve the Wrong Petty Cash Problem</h2>
+
+        <p>When someone searches for <strong>petty cash software</strong>, they usually mean one specific thing: <em>I need to know who has the cash right now, where it went, and that there's a receipt for it.</em> But most of what comes back in the search results solves a slightly different problem.</p>
+
+        <p>Spreadsheet templates assume you're alone with a quiet drawer. Expense apps like Pleo and Ramp assume the cash is on a card. Accounting software like QuickBooks or Xero assumes the cash already moved and just needs to land in the right line of the general ledger. None of them treat the moment <strong>cash is handed from one person to another</strong> as the event worth tracking.</p>
+
+        <p>That gap is what dedicated petty cash software exists for. SpendNote sits in exactly that slot: track every cash handoff between team members, generate a signed PDF receipt for each one, and see who is holding the cash in real time &mdash; without trying to replace the spreadsheet, the expense card platform, or the accounting books.</p>
+
+        <h2>The Four Categories &mdash; Where Petty Cash Software Actually Fits</h2>
+
+        <p>If you're evaluating tools, it helps to see them side by side as <em>categories</em>, not brands. Each of these four does a real job. Mixing them up is where money and time get lost.</p>
+
+        <div class="category-grid">
+            <div class="category-card">
+                <h3><i class="fas fa-table" style="color:#6b7280;"></i> Spreadsheet / template</h3>
+                <p>Google Sheets, Excel, Apple Numbers, downloadable templates. Free, familiar, single-user-friendly. Falls apart the moment a second person handles the cash or someone asks for a printable receipt.</p>
+            </div>
+            <div class="category-card">
+                <h3><i class="fas fa-credit-card" style="color:#6b7280;"></i> Expense app</h3>
+                <p>Pleo, Ramp, Brex, Spendesk, Spendwise. Built around company cards and reimbursements. Captures vendor receipts after a card swipe. Cash boxes are an afterthought; the cash custody workflow isn't the design center.</p>
+            </div>
+            <div class="category-card">
+                <h3><i class="fas fa-book" style="color:#6b7280;"></i> Accounting software</h3>
+                <p>QuickBooks, Xero, Sage, Bench. The formal ledger. Records the journal entries, tax-ready totals, and reconciliation against the general ledger. Far too heavy for "who has the $40 right now?" &mdash; that isn't its layer.</p>
+            </div>
+            <div class="category-card us">
+                <h3><i class="fas fa-coins"></i> Petty cash software (SpendNote)</h3>
+                <p>Tracks the physical cash itself as it moves between people on your team. Generates a signed PDF receipt for every transfer. Shows who has the cash right now. Not accounting, not an expense app, not a template.</p>
+            </div>
+        </div>
+
+        <p>This page is about the fourth one. If you genuinely just need a template or a card platform, the other three are great at what they do. If you have actual cash moving between people, keep reading.</p>
+
+        <h2>Petty Cash Tracking Software for Small Teams</h2>
+
+        <p>Most teams who land here are not big-enterprise finance departments. They're small businesses, school offices, construction sites, nonprofits, multi-location shops &mdash; teams of 3 to 20 people where one or two people physically handle the cash and the owner just wants to know where it is.</p>
+
+        <p>For that group, petty cash tracking software needs to do five things well:</p>
+
+        <ul>
+            <li><strong>Record every cash movement.</strong> Cash in, cash out, who, when, what for. One form, fast enough to fill in 20 seconds on a phone.</li>
+            <li><strong>Generate a receipt for the handoff.</strong> Not capture a vendor receipt after a purchase &mdash; <em>generate</em> a signed receipt at the moment cash leaves your hand.</li>
+            <li><strong>Show the running balance per cash box.</strong> Live, no formulas, multi-box if you have more than one drawer or location.</li>
+            <li><strong>Attribute every entry to a user.</strong> So when something doesn't match at month-end, you know who logged what.</li>
+            <li><strong>Stay out of the way of your accountant.</strong> Export clean monthly data; don't try to replace the general ledger or invoicing system.</li>
+        </ul>
+
+        <p>That's the whole job. If a tool tries to do less, it's a notebook. If it tries to do more, you're paying for a card platform you won't use.</p>
+
+        <figure class="receipt-showcase">
+            <img src="assets/images/seo/spendnote-dashboard-multiple-cash-boxes-overview.webp" alt="SpendNote dashboard showing multiple petty cash boxes with live balances across a team" loading="lazy">
+            <figcaption>The dashboard view of petty cash tracking software for a small team: multiple cash boxes, every balance live, every entry attributed.</figcaption>
+        </figure>
+
+        <h2>The Cash Custody Workflow &mdash; Who Has the Cash Right Now?</h2>
+
+        <p>Here's the question that breaks most setups: <em>who has the cash right now?</em></p>
+
+        <p>In a paper voucher book, only the custodian knows. In a spreadsheet, you have to scroll through rows to figure it out. In an expense app, the answer is "no one, because the cash isn't on a card." In accounting software, the answer arrived two weeks late after the month closed.</p>
+
+        <p>Petty cash software answers that question in real time. The custodian hands $200 to the supervisor for the day's float drops; the supervisor's name shows up against that $200 in the dashboard; the owner sees it from the road on their phone. When the supervisor reconciles at end of day, the dashboard zeroes back to the custodian, with a per-entry record of every transfer in between.</p>
+
+        <p>That's <strong>cash custody tracking</strong>: the chain of who holds the money, signed and timestamped at every handover, visible to whoever needs to see it. Sometimes teams call it <a href="/who-has-the-cash-right-now">who has the cash right now</a>, sometimes <a href="/cash-handoff-receipt">cash handoff documentation</a>. Same workflow, different name.</p>
+
+        <div class="pain-point-box">
+            <h3>Why this matters when something goes wrong</h3>
+            <p>"There's $40 missing" is a different conversation when the dashboard says "Sarah logged $40 out at 11:42, supervisor receipt SN3-018, signed handoff to Tom at 12:15, supervisor receipt SN3-019." That's an audit trail. The spreadsheet version of the same conversation is "I think Sarah took it? Maybe?" &mdash; and then a week of bad feelings.</p>
+        </div>
+
+        <h2>Signed PDF Receipts for Every Transfer</h2>
+
+        <p>This is the structural difference, and it deserves its own section. Every expense app on the market lets users <em>upload</em> a receipt &mdash; a photo of the vendor's till slip after a purchase. Useful, but it's the wrong half of the workflow for shared cash.</p>
+
+        <p>The receipt that actually matters in a cash-custody environment is the one <em>your software generates</em> when cash leaves your hand and goes to someone else on your team. SpendNote treats every transaction as a signed receipt event:</p>
+
+        <ul>
+            <li>Each transaction gets a unique ID (e.g. SN3-007).</li>
+            <li>A printable, Letter-size PDF is generated automatically &mdash; two copies per page, one for each party.</li>
+            <li>Pro plan adds email delivery: send the PDF directly from the transaction screen, with a public link the recipient can open without an account.</li>
+            <li>Optional logo, branded layout, and field toggles (signature line, tracking details, addresses).</li>
+        </ul>
+
+        <p>For the full receipt format, see our <a href="/petty-cash-receipt-generator">petty cash receipt generator</a>. That same receipt logic is what powers every transaction inside this petty cash software &mdash; it's not a separate tool, it's the workflow.</p>
+
+        <figure class="receipt-showcase">
+            <img src="assets/images/seo/spendnote-cash-receipt-printable-proof-of-cash-handoff.webp" alt="SpendNote printable petty cash receipt — generated automatically for every cash handoff" loading="lazy">
+            <figcaption>A signed PDF receipt for every transfer &mdash; not a vendor receipt uploaded later. Print, download, or email instantly.</figcaption>
+        </figure>
+
+        <h2>Side-by-Side: Spreadsheet vs Expense App vs Accounting Software vs SpendNote</h2>
+
+        <p>Same four categories as before, this time as a feature grid. Honest version &mdash; each tool wins something.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Spreadsheet template</th>
+                    <th>Expense app (cards)</th>
+                    <th>Accounting software</th>
+                    <th class="col-us">SpendNote</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cost</td>
+                    <td><span class="check">&#10003;</span> Free</td>
+                    <td><span class="partial">~</span> Paid per user</td>
+                    <td><span class="partial">~</span> Paid per user</td>
+                    <td class="col-us"><span class="partial">~</span> From $15.83/mo</td>
+                </tr>
+                <tr>
+                    <td>Live per-cash-box balance</td>
+                    <td><span class="partial">~</span> Formula-dependent</td>
+                    <td><span class="cross">&#10007;</span> Card balance only</td>
+                    <td><span class="cross">&#10007;</span> Books, not boxes</td>
+                    <td class="col-us"><span class="check">&#10003;</span> Live, multi-box</td>
+                </tr>
+                <tr>
+                    <td>Signed PDF receipt per transfer</td>
+                    <td><span class="cross">&#10007;</span> Not possible</td>
+                    <td><span class="partial">~</span> Vendor receipts only</td>
+                    <td><span class="cross">&#10007;</span> Not the layer</td>
+                    <td class="col-us"><span class="check">&#10003;</span> Built in, every entry</td>
+                </tr>
+                <tr>
+                    <td>"Who has the cash right now?"</td>
+                    <td><span class="cross">&#10007;</span> Hidden in cells</td>
+                    <td><span class="cross">&#10007;</span> Card-holder only</td>
+                    <td><span class="cross">&#10007;</span> Not the workflow</td>
+                    <td class="col-us"><span class="check">&#10003;</span> Live dashboard</td>
+                </tr>
+                <tr>
+                    <td>Multi-user, role-based access</td>
+                    <td><span class="cross">&#10007;</span> Editor / Viewer only</td>
+                    <td><span class="check">&#10003;</span> Built in</td>
+                    <td><span class="check">&#10003;</span> Built in</td>
+                    <td class="col-us"><span class="check">&#10003;</span> Owner / Admin / User</td>
+                </tr>
+                <tr>
+                    <td>Built around physical cash box</td>
+                    <td><span class="partial">~</span> Reusable template</td>
+                    <td><span class="cross">&#10007;</span> Cards-first</td>
+                    <td><span class="cross">&#10007;</span> GL-first</td>
+                    <td class="col-us"><span class="check">&#10003;</span> Cash box-first</td>
+                </tr>
+                <tr>
+                    <td>Replaces accounting books</td>
+                    <td><span class="cross">&#10007;</span> No</td>
+                    <td><span class="cross">&#10007;</span> No</td>
+                    <td><span class="check">&#10003;</span> Yes</td>
+                    <td class="col-us"><span class="cross">&#10007;</span> No (intentionally)</td>
+                </tr>
+                <tr>
+                    <td>Clean export for your bookkeeper</td>
+                    <td><span class="partial">~</span> Manual</td>
+                    <td><span class="check">&#10003;</span> Built in</td>
+                    <td><span class="check">&#10003;</span> Native</td>
+                    <td class="col-us"><span class="check">&#10003;</span> CSV + branded PDF</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>The pattern: spreadsheet wins on cost, accounting software wins on formal books, expense apps win on card workflows. SpendNote wins on the one specific thing the other three don't really try to do &mdash; <strong>tracking physical cash that moves between people, with a signed receipt at every step.</strong></p>
+
+        <div class="cta-box">
+            <h3>Track Your Team's Petty Cash in One Browser Tab</h3>
+            <p>Set a starting balance, log your first transaction, generate a signed handoff receipt &mdash; in under 30 seconds.</p>
+            <a href="/spendnote-signup" class="btn">Start Free Trial</a>
+        </div>
+
+        <h2>What Teams Actually Use It For</h2>
+
+        <p>Petty cash software shows up in a handful of recognisable shapes. If any of these is your situation, the workflow above probably maps directly:</p>
+
+        <div class="pain-point-box">
+            <h3>Multi-location small business</h3>
+            <p>Two to four shops, a small franchise group, a multi-site clinic, food trucks. Each location has its own cash drawer; the owner wants every balance on one dashboard. See the <a href="/digital-petty-cash-book">online petty cash book for multi-site teams</a> for the per-site flow.</p>
+        </div>
+
+        <div class="pain-point-box">
+            <h3>School office and club treasurers</h3>
+            <p>One main office plus separate floats for the PTA, athletics, the library fund, club treasurers. Each one needs its own balance and its own person responsible, with the office seeing across all of them.</p>
+        </div>
+
+        <div class="pain-point-box">
+            <h3>Construction or field-site project managers</h3>
+            <p>Cash for site supplies, parking, quick paid-cash purchases. Site supervisors record on their phone; you see the running balance for every site without driving out to collect a paper book.</p>
+        </div>
+
+        <div class="pain-point-box">
+            <h3>Owners managing cash remotely</h3>
+            <p>The custodian is on-site, the owner is on the road, the cash never moves through the owner's hands. You still need to see what's happening. The <a href="/manage-petty-cash-remotely">remote-management workflow</a> covers exactly that.</p>
+        </div>
+
+        <h2>When You Don't Need Petty Cash Software</h2>
+
+        <p>Honestly: not every cash setup needs a paid tool. SpendNote is $15.83/month after a free 14-day trial, and it earns its keep when you have <em>shared</em> cash. If your situation is any of these, a notebook or a single spreadsheet tab is genuinely fine:</p>
+
+        <ul>
+            <li>You are the only person who ever touches the cash, and nobody else ever needs to know what happened.</li>
+            <li>Volume is genuinely tiny &mdash; under 5 cash movements per month.</li>
+            <li>Nobody ever asks you for a receipt for a cash handoff.</li>
+            <li>There's no audit, no bookkeeper, no boss who wants visibility.</li>
+        </ul>
+
+        <p>If you tick all four, save your $15. The moment any of them flips &mdash; a second person handles the cash, someone needs a receipt, you start losing track of who has what &mdash; that's when this category exists.</p>
+
+        <div class="disclaimer-box">
+            <p><strong>Important:</strong> SpendNote is petty cash tracking software for internal cash custody and handoff receipt generation. It is not accounting software, tax filing software, or bank reconciliation software. It does not replace QuickBooks, Xero, your accountant, or your tax preparer. It hands them clean monthly cash data instead of a shoebox of paper slips.</p>
+        </div>
+
+        <h2>Getting Started in Under Five Minutes</h2>
+
+        <p><strong>Step 1:</strong> <a href="/spendnote-signup">Create a free account</a> &mdash; no credit card.</p>
+        <p><strong>Step 2:</strong> Set your current cash-on-hand as the starting balance for your first cash box.</p>
+        <p><strong>Step 3:</strong> Record the next real transaction on your phone the moment the cash moves &mdash; amount, who, what for, which cash box.</p>
+        <p><strong>Step 4:</strong> Print or download the PDF handoff receipt. Hand a copy to whoever received the cash.</p>
+        <p><strong>Step 5 (Pro):</strong> Invite your team. Each person sees only the cash boxes they're assigned to; every action is attributed.</p>
+
+        <p>That's the whole onboarding. Within a week you'll have a complete digital record of every cash movement and a printable handoff receipt for each one. For a slower walk-through of the underlying tool, see the longer <a href="/petty-cash-app">SpendNote petty cash app overview</a>.</p>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-section">
+
+            <div class="faq-item">
+                <h3>What's the difference between petty cash software and accounting software like QuickBooks or Xero?</h3>
+                <p>Accounting software is the ledger &mdash; it records the formal journal entries, balance sheet, and tax-ready totals your bookkeeper needs. Petty cash software sits one layer below: it tracks the physical cash itself as it moves between people, generates a receipt for each handoff, and shows who has the cash right now. SpendNote does not replace QuickBooks or Xero &mdash; it gives them a clean monthly CSV/PDF of the cash that moved, so your bookkeeper isn't reconstructing a paper voucher book.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>We already use Pleo / Ramp / Brex / Spendesk for expenses &mdash; do we need separate petty cash software?</h3>
+                <p>Those tools are built around company cards and reimbursements &mdash; what employees pay for with plastic or get paid back for later. Petty cash is the opposite workflow: physical cash that moves between people on your team (custodian to supervisor, office float to site manager) where the proof is a signed receipt, not a card swipe. If you have a real cash drawer and people who actually carry cash around, an expense app won't track who has it or generate the handoff receipt. SpendNote handles exactly that, and is intentionally not trying to compete with Pleo on the card side.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Why generate receipts? Isn't capturing vendor receipts enough?</h3>
+                <p>Vendor receipt capture is the wrong half of the workflow for shared cash. The receipt that actually matters is the one you generate when cash leaves your hand and goes to someone else on your team. The custodian hands $200 to the supervisor; the supervisor signs; both keep a PDF; the system records it. That's the proof that stops "I never got that money" disputes. SpendNote treats every transaction as a signed receipt event &mdash; that's the structural difference.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How is this different from a Google Sheets or Excel petty cash template?</h3>
+                <p>A template is a static file &mdash; you do all the work (formulas, manual entries, version control, role rules you can't actually enforce). Petty cash software handles those automatically and adds things a spreadsheet structurally can't: a signed PDF receipt for every transfer, a per-row "who recorded this" log, real role separation between admins and regular users, and multi-cash-box dashboards instead of multi-tab juggling. If you've already outgrown your sheet, see our <a href="/petty-cash-app-vs-excel">petty cash app vs Excel</a> and <a href="/petty-cash-app-vs-google-sheets">petty cash app vs Google Sheets</a> comparisons for the detail.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can multiple people on my team use it at the same time?</h3>
+                <p>Yes. SpendNote is built around team cash custody from day one. Each team member has their own login, role-based permissions, and every action is timestamped and attributed. The Pro plan includes 3 users and role-based access; the custodian records, the supervisor signs, the owner reviews from anywhere &mdash; all on the same live dashboard.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does SpendNote replace my accountant?</h3>
+                <p>No, and it intentionally doesn't try. SpendNote is operational software &mdash; it documents the cash that moves between people on your team and generates the receipts that go with each handoff. Your accountant and accounting software still handle the formal journal entries, tax filings, and reconciliation against the general ledger. SpendNote just hands them clean monthly data instead of a shoebox of paper slips.</p>
+            </div>
+
+        </div>
+
+        <div class="related-resources">
+            <h2>Related Resources</h2>
+            <div class="related-grid">
+                <a href="/petty-cash-app" class="related-card">
+                    <i class="fas fa-mobile-screen"></i>
+                    <h3>Petty Cash App</h3>
+                    <p>The browser-based app this software runs on &mdash; free 14-day trial.</p>
+                </a>
+                <a href="/digital-petty-cash-book" class="related-card">
+                    <i class="fas fa-book"></i>
+                    <h3>Online Petty Cash Book</h3>
+                    <p>Multi-site teams: one dashboard, many cash boxes, per-site running balances.</p>
+                </a>
+                <a href="/petty-cash-app-vs-excel" class="related-card">
+                    <i class="fas fa-table"></i>
+                    <h3>Petty Cash App vs Excel</h3>
+                    <p>When the spreadsheet stops being enough &mdash; the Excel-specific story.</p>
+                </a>
+                <a href="/petty-cash-app-vs-google-sheets" class="related-card">
+                    <i class="fas fa-file-spreadsheet"></i>
+                    <h3>Petty Cash App vs Google Sheets</h3>
+                    <p>Same wall, slightly different shape &mdash; the shared-sheet version.</p>
+                </a>
+                <a href="/petty-cash-receipt-generator" class="related-card">
+                    <i class="fas fa-receipt"></i>
+                    <h3>Petty Cash Receipt Generator</h3>
+                    <p>The receipt format that gets generated for every transaction.</p>
+                </a>
+                <a href="/who-has-the-cash-right-now" class="related-card">
+                    <i class="fas fa-magnifying-glass-dollar"></i>
+                    <h3>Who Has the Cash Right Now?</h3>
+                    <p>The real-time custody question this software answers.</p>
+                </a>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 2rem;">See <a href="/spendnote-pricing">pricing</a> or visit our <a href="/spendnote-faq">FAQ</a> for more info.</p>
+    </div>
+
+    <footer class="app-footer">
+        <div class="app-footer-container">
+            <div class="app-footer-top">
+                <div class="app-footer-brand">
+                    <a href="/" class="app-footer-brand-logo">
+                        <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#footer-logo-gradient-software)"/>
+                            <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                            <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                            <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                            <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                            <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                            <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                            <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="footer-logo-gradient-software" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#059669"/>
+                                    <stop offset="100%" stop-color="#10b981"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>SpendNote</span>
+                    </a>
+                    <p class="app-footer-brand-desc">
+                        Complete cash visibility for your team.<br>Instant receipts, full history.
+                    </p>
+                </div>
+                <div class="app-footer-right">
+                    <div class="app-footer-links-simple">
+                        <a href="/#features">Features</a>
+                        <a href="/spendnote-pricing">Pricing</a>
+                        <a href="/spendnote-faq">FAQ</a>
+                        <a href="/spendnote-resources">Resources</a>
+                        <a href="/spendnote-terms">Terms</a>
+                        <a href="/spendnote-privacy">Privacy</a>
+                    </div>
+                    <div class="app-footer-brand-disclaimer">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Cash handoff documentation only. Not a tax or accounting tool.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="app-footer-bottom">
+                <div class="app-footer-copyright">
+                    2026 SpendNote. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
