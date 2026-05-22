@@ -3067,7 +3067,7 @@ drafts/
 | | **— DECISION-PONTOK (NEM DRAFT, FELHASZNÁLÓI/CODEX DÖNTÉS-IGÉNY) —** | | | |
 | DEC-1 | `/what-is-petty-cash` | **DECISION-PENDING 2026-05-22** | (döntésre vár) | Sitemap-missing + info-pure pain-pivot. Opciók: (A) sitemap-add + LIGHT-EDIT CTA-erősítés, (B) noindex (NOINDEX-CAND). G.10 felmérés alapján alacsony ROI |
 | DEC-2 | `/how-to-manage-petty-cash-small-business` | **DECISION-PENDING 2026-05-22** | (döntésre vár) | Sitemap-missing + comprehensive info-guide. Opciók: (A) sitemap-add + LIGHT-EDIT, (B) noindex, (C) MERGE más oldalba |
-| DEC-3 | `/petty-cash-policy-template` | **DECISION-PENDING 2026-05-22** | (döntésre vár) | NOINDEX-CAND vagy REWRITE. Policy/compliance vibe G.10-FAIL alapvető. 5 GSC poz 40 nem éri meg a kockázatot. Javasolt: NOINDEX (compliance-border policy) |
+| DEC-3 | `/petty-cash-policy-template` | **DECIDED-NOINDEX 2026-05-22 16:35** (felhasználói + Codex egyetértés) | élesítve | NOINDEX,FOLLOW + sitemap-eltávolítás. Indok: policy+template kettős rossz irány (compliance/legal vibe + template-intent), GSC értéke kicsi (5 megj poz 40), nem money page, F-policy határzóna. NEM rewrite, csak tisztítás. Belső link-takarítás KÉSŐBB (19 link mutat rá, noindex,follow miatt PageRank átfolyik). **30-napos retro-audit 2026-06-21**: query-mixből eltűnt-e "policy/template" kombo |
 | DEC-4 | `/petty-cash-voucher-sample` | **DECISION-PENDING 2026-05-22** | (döntésre vár) | MERGE-CAND a `/petty-cash-voucher-template`-tal. 0 GSC + overlap. Javasolt: 301 redirect → `/petty-cash-voucher-template` |
 | DEC-5 | `/spendnote-faq` | **PROTECTED 2026-05-22** (poz 3.4 EXCELLENS!) | (semmilyen edit) | Audit-javasolt FAQ-kérdés-bővítés OPCIONÁLIS, de bármi változtatás kockázat. Hagyjuk PROTECTED-en |
 
