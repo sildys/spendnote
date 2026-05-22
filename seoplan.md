@@ -2403,6 +2403,29 @@ A Codex 5-jelölt-listája az AI-Overview-immune zónában a strukturális-moat 
 
 ---
 
+#### J.15.5.11.Z DECISION-LOG: `/petty-cash-software` SERP-CHECK ELMARADÁSA (2026-05-22 13:30)
+
+**Tényállás:** A J.14.15.5 szabály (AI-OVERVIEW-VULNERABILITY-CHECK ÚJ TARTALOM ELŐTT) explicit 0. lépésként követeli az élő SERP-tesztet minden új landing előtt. A `/petty-cash-software` esetében ez a 0. lépés nem futott le élesítés előtt. Utólagos asszisztens-SERP-check (Cursor WebSearch) ellentmondó eredményt adott: TOP 2-ben SpendNote /petty-cash-app + homepage, miközben GSC-ben a `petty cash software` query **soha nem jelent meg** a top-100-ban (7-napos riport). Codex-megerősítés: Cursor/asszisztens-WebSearch NEM megbízható proxy-ja a valódi Google US-SERP-nek (region/personalization/AI Overview-jelenlét nem rekonstruálható).
+
+**Bizonytalansági szint:** Sem az asszisztens, sem Codex, sem a felhasználó nem tudott élesítés idején megbízható US-incognito SERP-tesztet futtatni. A Google Ads "Ad Preview and Diagnosis" rendelkezésre állt volna, de időablak-korlát miatt (7-napos Opus-csomag) a stratégiai gyártás prioritást kapott a manual-verifikáció felett.
+
+**Hivatalos döntési-napló bejegyzés (Codex-megfogalmazás):**
+> *"SERP-check could not be reliably completed before launch due to tool limitations. Risk accepted because GSC showed no existing petty-cash-software query visibility and Opus capacity window was time-limited."*
+
+**Kockázat-elfogadási indoklás:**
+1. **GSC-empirikus evidence:** a `petty cash software` query 7-napos top-100-ban nem szerepel → tényleges Google US-SERP-en valószínűleg nincs SpendNote-rangsor erre, vagyis cannibalizációs kockázat alacsony.
+2. **Időablak:** 7 napos Opus-kapacitás, ezen belül 4 napos koncentrált money-query gyártási-sprint. A SERP-check-blokkolás teljes elnapolásig csökkentette volna a sprint output-ját.
+3. **Mitigálás betervezve:** 14-21 nap után retro-audit GSC-evidence alapján (impressionek megjelenése, melyik URL kap impr-t, AI-Overview-szignálok a query-re); ha cannibalizáció bizonyítást nyer → URL-konszolidáció vagy noindex-mégis opció.
+
+**Új process-szabály (J.15.5.11.Z.1) — "UNCERTAINTY-ACCEPTED LANDING-LAUNCH":**
+*"Ha új landing előtt a SERP-check (J.14.15.5 0. lépés) eszköz-korlát miatt nem futtatható megbízhatóan és a stratégiai időablak (pl. korlátozott kapacitás-csomag) prioritást követel, az élesítés megengedett az alábbi 4 feltétellel: (1) GSC-impressionek a célzott query-családra a top-100-ban hiányoznak (cannibalizációs kockázat empirikus alacsony); (2) a döntési-naplóba kerül 'Risk accepted because X / capacity window was time-limited' megfogalmazású bejegyzés (NEM önkorbácsolás-stílus, döntési napló); (3) 14-21 nap utáni retro-audit GSC-evidence alapján kötelezően ütemezve; (4) ha későbbi manuál incognito SERP-check vagy GSC-evidence cannibalizációt bizonyít → URL-konszolidáció vagy noindex előírt."*
+
+**Következő landing (`/cash-handoff-software`, szombat) process-szigorítás:**
+- Szombaton ELŐSZÖR újra-próbálkozás manuál incognito Google + Google Ads Preview tool-on. Ha sikerül → szabványos SERP-check.
+- Ha NEM sikerül → ugyanezen "Uncertainty-Accepted" feljegyzés a döntési naplóba, és ugyanezzel a 4-feltétellel élesítés.
+
+---
+
 #### J.15.5.10 CODEX-MEGBESZÉLÉS AUDIT-TRAIL (2026-05-15 ~14:00)
 
 **Felhasználói trigger:** *"itt van a codex válasza és utána felvetettem neki egy kérdést, de ezt beszéljük át mi is"*
