@@ -2946,18 +2946,44 @@ drafts/
 
 **KRITIKUS:** a `drafts/<slug>-DRAFT.html` fájlt **ne töröld** publikálás után. Marad referenciaként ha később bug-fixet vagy schema-frissítést kell visszanyomni. Csak akkor töröld ha a felhasználó explicit kéri.
 
-### J.16.3 Élesítési ütemterv (drip-feed, ~1 / 5-7 nap)
+### J.16.3 Élesítési ütemterv — GYORSÍTOTT CLUSTER-BATCH (2026-05-22 15:05 felülírás)
 
-| # | Draft fájl | Élesítési cél-dátum | Retro-audit (+14 nap) | Megjegyzés |
-|---|---|---|---|---|
-| ~~L1~~ | ~~`cash-handoff-software-DRAFT.html`~~ | **CANCELLED 2026-05-22** | — | Visszavonva J.16.9 SERP-evidence + Codex visszavonta |
-| L2 | `cash-handoff-receipt-DRAFT.html` (page-rewrite) | 2026-05-31 (vasárnap) | 2026-06-14 | "anti-complexity / lightweight proof" angle beépítés (J.16.9.4 Fázis 2) |
-| L3 | `small-business-cash-receipt-DRAFT.html` (page-rewrite) | 2026-06-07 (vasárnap) | 2026-06-21 | handoff-intent fő-oldal Codex-szegregáció szerint |
-| L4 | `petty-cash-software-DRAFT.html` (page-rewrite) | 2026-06-14 (vasárnap) | 2026-06-28 | enterprise-hangulat ellensúlyozás + "cash custody" diszkamper |
-| L5 | `digital-receipt-book-DRAFT.html` (page-rewrite) | 2026-06-21 (vasárnap) | 2026-07-05 | handoff-intent másodlagos oldal Codex-szegregáció szerint |
-| L6+ | TBD page-rewrite #5-n | hetente 1 (vasárnaponként) | +14 nap mindig | Amíg van draft a `drafts/`-ban |
+> **Felülírás indok (felhasználói direktíva 2026-05-22 15:01 + Codex egyetértés):** *"még mindig itt finomkodni és ütemezni akar nekem, pedig már kiderült hogy a jelenlegi irány szar.... mi a faszra várjunk????"*
+>
+> Codex visszaigazolás (idézet): *"a heti 1 oldal túl óvatos ehhez a helyzethez. (...) A jelenlegi állapot nem olyan, hogy egy működő SEO-gépet kell óvni. A jelenlegi irány nem hoz üzleti választ. Tehát nincs értelme 14 hétig finomkodni. (...) Ne használja a 'retro-audit-szinkron 2026-06-08' kifogást általános fékként. A /petty-cash-software-t védjük, oké. De a régi oldalaknál már van elég evidence: nem konvertáló, rosszul kategorizáló, túl nehéz irány. Ott nem várni kell, hanem átírni."*
+>
+> **VISSZAVONT korábbi ütemterv (14:30 / J.16.3 első verzió + 14:50 retro-audit-szinkron javaslat):** heti 1 page-rewrite vasárnaponként, 14 hét teljes lefutás. Indokolatlanul lassú a G-doktrína-pivot fényében. **Megtartva audit-trail-ként** alábbi J.16.3.OLD bullet-ben.
 
-**Drip-feed indok (Codex J.15.5.10):** vasárnapi push → hétfői Google-crawl-csúcs → tisztább first-impressions mérés. Heti 1 új deploy NEM zavarja össze az aktuálisan érlelődő oldalak GSC-metrikáit, NEM ad lavina-effektet a sitemap-discovery-nek.
+**Új ütemterv: cluster-batch, 3 batch ~10 nap alatt** (a Codex választott B+ ritmus):
+
+| # | Batch | Oldalak | DRAFT-gyártás | ÉLESÍTÉS | Cluster-szignál |
+|---|---|---|---|---|---|
+| **BATCH-1** | Handoff-cluster | L2 `/cash-handoff-receipt` + L3 `/small-business-cash-receipt` + L4 `/digital-receipt-book` (3 oldal) | 2026-05-22 (péntek 15:05-től) → 2026-05-23 (szombat este) | **2026-05-25 (hétfő reggel) EGYÜTT** | Receipt-cluster doktrína-konformis átfordítás 1 batch-ben |
+| **BATCH-2** | Cash-tracking/proof-cluster | L7 `/petty-cash-replenishment-form` + L12 `/cash-payment-received-proof` + L8 `/employee-cash-advance-receipt` (3 oldal, részletek BATCH-1 élesítés után finomítva) | 2026-05-26 (kedd) → 2026-05-27 (szerda) | **2026-05-28 (csütörtök) EGYÜTT** | Cash-tracking/proof cluster doktrína-átfordítás |
+| **BATCH-3** | Dashboard/remote-cluster | L9 `/digital-petty-cash-book` + L10 `/manage-petty-cash-remotely` (2 oldal) | 2026-05-29 (péntek) → 2026-05-30 (szombat) | **2026-05-31 (vasárnap) EGYÜTT** | Dashboard/remote cluster doktrína-átfordítás |
+| **EGYENKÉNT** | 5 LIGHT-EDIT | L5 + L6 + L13 + L14 + 1 további info-pure | 2026-06-01-től napi 1 | **Egyenként 2026-06-02-től** | Minimális risk, csak CTA-csere + 1 anti-complexity-bekezdés |
+
+**Teljes P0 lefutás: ~10 nap (2026-05-22 → 2026-05-31), nem 14 hét.**
+
+**Cluster-batch indok (felülírja J.15.5.10 eredeti heti-vasárnap-érvét):**
+- A handoff-cluster 3 oldala (L2 + L3 + L4) Google-szemmel **összetartozik** — ha külön-külön módosítjuk hetente, Google nem fogja cluster-szignálnak venni. Codex: *"egyik oldal húzza a régi jelentést, másik az újat, megint keveredik minden."*
+- A G-doktrína csak akkor mérhető Google-szinten, ha legalább 1 klaszter (3-4 oldal) együtt jelenik meg
+- Hétfő reggeli push → kedd-szerda Google-crawl + indexálás → első GSC-jelek 7-10 nap múlva (a következő batch ezzel párhuzamosan élesedik)
+- A cluster-batch-ek között 2-3 nap monitor-ablak — NEM 7 — mert a régi oldalak nem konvertálnak, sürget az idő, és a 3 batch közötti 2-3 napos szünet elég a "Google-crawl-rhytm" tisztelésére
+
+**A /petty-cash-software (PROTECTED-SEO) NEM blokkolja a BATCH-1/2/3 élesítést.** A 2026-06-05 retro-audit-eredmény külön döntési pont a /petty-cash-software variant-ADS-clone vagy "cash custody" diszkamper-rewrite-ra (G.10.D PROTECTED-ADS state) — NEM blokkolja a többi P0 oldalt.
+
+**Élesítési kritérium minden DRAFT-ra (a G.10 3-rétegű checklist szerint):** 5/5 TT + 6/6 L + 4/4 AF = AF=good. Ha bármelyik nem teljes → DRAFT-revízió a `drafts/`-ban.
+
+**Batch-élesítési protokoll (a J.16.2 6-lépéses protokoll cluster-bővítése):**
+1. Mind a batch összes DRAFT-ja átment az élesítési kritériumon
+2. Intent-konszolidáció audited (cluster-batch-ekre kötelező — handoff-cluster esetén dokumentálva a 7.8 új audit-szekcióban)
+3. `git mv drafts/page-rewrites/<slug1>-DRAFT.html <slug1>.html` mind a 2-3 fájlra
+4. `sitemap.xml` lastmod-bump mind a 2-3 URL-re (EGYÜTT, nem külön commit-okban)
+5. EGY commit a batch-re ("seo: batch-1 handoff-cluster doctrine rewrite — L2+L3+L4 EGYÜTT")
+6. Push + GSC reindex-request mind a 2-3 URL-re
+
+**J.16.3.OLD audit-trail (megtartott eredeti):** ~~L1~~ (CANCELLED 2026-05-22 J.16.9), L2 (`cash-handoff-receipt-DRAFT.html` cél: 2026-05-31), L3 (`small-business-cash-receipt-DRAFT.html` cél: 2026-06-07), L4 (`petty-cash-software-DRAFT.html` cél: 2026-06-14 — DE EZ MOST PROTECTED-SEO! lásd G.10.D, ez az L4 a régi terv-szerinti L4, nem a 2026-05-22 audit-szerinti L4 `/digital-receipt-book`!), L5 (`digital-receipt-book-DRAFT.html` cél: 2026-06-21). **Az eredeti terv és az új cluster-batch közötti különbség**: az eredeti vasárnapi-heti-1 oldal-szám-sorrend (L2 → L3 → L4 → L5), az új cluster-batch a 2026-05-22 audit P0-besorolása szerinti L-számokra hivatkozik (L2 `/cash-handoff-receipt`, L3 `/small-business-cash-receipt`, L4 `/digital-receipt-book` — a `/petty-cash-software` PROTECTED-SEO, NEM része a P0 REWRITE batch-nek).
 
 **Page-rewrite vs új landing különbség (J.16.3.A új meta-szabály):** új landing (mint a 2026-05-22 14:00-i `/petty-cash-software`) friss URL → sitemap-bump + manuál reindex-request + 14-21 nap várás first-impressions-re. Page-rewrite (L2-L5) MÁR rangsoroló meglévő URL → csak `sitemap.xml lastmod` bump szükséges, manuál reindex-request opcionális (organic recrawl elég, ha nem sürgős). Retro-audit page-rewrite-on a meglévő top-query-rangsor STABILITÁSÁT vizsgálja (NEM zuhant-e), NEM új-rangsor-felfedezést.
 
@@ -2990,10 +3016,16 @@ drafts/
 | # | Fájl | Státusz | Élesítési cél | Forrás-szabály |
 |---|---|---|---|---|
 | ~~D1~~ | ~~`drafts/new-landings/cash-handoff-software-DRAFT.html`~~ | **CANCELLED (2026-05-22 14:05)** | — | Visszavonva J.16.9 SERP-evidence + Codex visszavonta saját javaslatát |
-| D2 | `drafts/page-rewrites/cash-handoff-receipt-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | 2026-05-31 vasárnap (L2) | J.16.9.4 Fázis 2 — anti-complexity / lightweight proof angle |
-| D3 | `drafts/page-rewrites/small-business-cash-receipt-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | 2026-06-07 vasárnap (L3) | J.16.9.4 Fázis 2 — handoff-intent fő SpendNote-oldal Codex-szegregáció szerint |
-| D4 | `drafts/page-rewrites/petty-cash-software-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | 2026-06-14 vasárnap (L4) | J.16.9.4 Fázis 2 — enterprise-hangulat ellensúlyozás + "cash custody" diszkamper |
-| D5 | `drafts/page-rewrites/digital-receipt-book-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | 2026-06-21 vasárnap (L5) | J.16.9.4 Fázis 2 — handoff-intent másodlagos oldal Codex-szegregáció szerint |
+| D2 | `drafts/page-rewrites/cash-handoff-receipt-DRAFT.html` | **PENDING** (gyártás 2026-05-22 péntek 15:30+) | **2026-05-25 hétfő (BATCH-1 EGYÜTT)** | J.16.3 gyorsított cluster-batch — handoff-cluster Codex-szegregáció: "handoff-specific receipt" |
+| D3 | `drafts/page-rewrites/small-business-cash-receipt-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | **2026-05-25 hétfő (BATCH-1 EGYÜTT)** | J.16.3 gyorsított cluster-batch — handoff-cluster Codex-szegregáció: "small business cash receipt / proof" |
+| ~~D4~~ | ~~`drafts/page-rewrites/petty-cash-software-DRAFT.html`~~ | **POSTPONED** (G.10.D PROTECTED-SEO, a 2026-06-05 retro-audit-ig nem érintjük) | (POSTPONED 2026-06-05 utáni külön döntés) | A `/petty-cash-software` PROTECTED-SEO state, NEM része a P0 REWRITE batch-eknek |
+| D5 | `drafts/page-rewrites/digital-receipt-book-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | **2026-05-25 hétfő (BATCH-1 EGYÜTT)** | J.16.3 gyorsított cluster-batch — handoff-cluster Codex-szegregáció: "receipt book / digital records" |
+| D6 | `drafts/page-rewrites/petty-cash-replenishment-form-DRAFT.html` | **PENDING** (gyártás 2026-05-26 kedd) | **2026-05-28 csütörtök (BATCH-2 EGYÜTT)** | J.16.3 BATCH-2 cash-tracking/proof-cluster |
+| D7 | `drafts/page-rewrites/cash-payment-received-proof-DRAFT.html` | **PENDING** (gyártás 2026-05-26 kedd) | **2026-05-28 csütörtök (BATCH-2 EGYÜTT)** | J.16.3 BATCH-2 cash-tracking/proof-cluster |
+| D8 | `drafts/page-rewrites/employee-cash-advance-receipt-DRAFT.html` | **PENDING** (gyártás 2026-05-27 szerda) | **2026-05-28 csütörtök (BATCH-2 EGYÜTT)** | J.16.3 BATCH-2 cash-tracking/proof-cluster |
+| D9 | `drafts/page-rewrites/digital-petty-cash-book-DRAFT.html` | **PENDING** (gyártás 2026-05-29 péntek) | **2026-05-31 vasárnap (BATCH-3 EGYÜTT)** | J.16.3 BATCH-3 dashboard/remote-cluster |
+| D10 | `drafts/page-rewrites/manage-petty-cash-remotely-DRAFT.html` | **PENDING** (gyártás 2026-05-30 szombat) | **2026-05-31 vasárnap (BATCH-3 EGYÜTT)** | J.16.3 BATCH-3 dashboard/remote-cluster |
+| D11-D15 | 5 LIGHT-EDIT (CTA-csere + 1 anti-complexity-bekezdés) | **PENDING** (gyártás 2026-06-01-től napi 1) | **Egyenként 2026-06-02-től** | L5 / L6 / L13 / L14 + 1 további info-pure (P0 LIGHT-EDIT zóna) |
 
 **Hozzáadási és státusz-csere protokoll:** minden új draft amikor bekerül a `drafts/`-ba → új sor a táblázatba `PENDING` státusszal. Amikor élesítve → státusz `LIVE (élesítés YYYY-MM-DD)`, és külön bejegyzés a `seoplan.md` J.16.x audit-trail-be (mint pl. `J.16.x.1 L1 élesítve YYYY-MM-DD`). Ha CANCELLED → áthúzás + indok-bejegyzés (lásd D1).
 
