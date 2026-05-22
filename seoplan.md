@@ -2460,7 +2460,134 @@ A Codex 5-jelölt-listája az AI-Overview-immune zónában a strukturális-moat 
 >
 > **2026-05-01 ESTE-update:** A 04-29 → 05-19 moratóriumot a felhasználó override-ja után megszakítottuk a `/petty-cash-app` Google-discoverability micro-sprint-tel (lásd fent, `STRATEGIC GUARDRAILS — 2026-05-01 ESTE` szakasz). Az új moratórium-ablak: **2026-05-01 → 2026-05-15**. Az alábbi 04-28-i blokk teendőlistája (## A.) ezzel **lezárult**; a stratégiai irányok (## C. brainstorm, ## D. solo-business backlog, ## E. csatorna-stratégia, ## F. kutatás-backlog) változatlanul referencia.
 
-## A. NE PISZKÁLJUK 2-3 hetet (2026-04-29 → 2026-05-19) — LEZÁRVA 2026-05-01-EN
+---
+
+## J.16 EXECUTION-PLAYBOOK FOR LIMITED-CAPACITY MODE (2026-05-29 — ?)
+
+> **Fontos kontextus.** 2026-05-29-től a felhasználó Opus-csomagja visszáll egy kisebb verzióra. **Ettől kezdve új tervezés / nagy stratégiai módosítás / új landing-tervezés NEM lehetséges**, csak a **2026-05-22 és 2026-05-28 közötti gyártási-sprint kimenetének végrehajtása**. Ez a szekció a "playbook" amit egy kisebb-csomag Opus is biztonságosan tud követni: nem kell újragondolnia semmit, csak végre kell hajtania az itt rögzített ütemtervet.
+>
+> **A szekció célja:** ha a jövő-Opus csak ezt az egy szakaszt olvassa el, akkor is pontosan tudja **mit szabad** és **mit NEM szabad** csinálni, és milyen sorrendben kell publikálni a már legyártott draftokat.
+
+### J.16.1 Draft-mentő rendszer
+
+**Mappa-struktúra (repo gyökerében, `.gitignore`-olt):**
+```
+drafts/
+├── new-landings/     → új landingek (pl. cash-handoff-software-DRAFT.html)
+├── page-rewrites/    → meglévő oldalak feljavított változatai
+└── README.md         → lokális reminder (NEM track-elt)
+```
+
+**Védelem-rétegek hogy SOHA ne kerüljön idő előtt élesbe:**
+- **L1**: `.gitignore` bejegyzés `drafts/` → sem `git add drafts/...`, sem `git add .` nem viszi be a repo-ba.
+- **L2**: Fájlnév-konvenció `-DRAFT.html` suffix → ha mégis manuál feltöltődne, az URL nyilvánvaló hibajelzés (pl. `cash-handoff-software-DRAFT.html`).
+- **L3**: Cloudflare Pages csak track-elt fájlokat lát → `drafts/` SOHA nem létezik a Cloudflare számára.
+- **L4**: `sitemap.xml` SOHA nem tartalmazza a `-DRAFT` URL-eket → még ha valami csoda folytán publikálódna is, Google sitemap-discovery-vel nem találja meg.
+
+**Backup felelősség:** a `drafts/` mappa lokális-only (nincs git-történet). A felhasználó felelőssége a Google Drive / OneDrive sync beállítása ezen a gépen ha laptop-csere vagy adatvesztés ellen védeni akar.
+
+### J.16.2 Élesítési protokoll (6 lépés, 1 commit, manuális — NEM szkriptált, hogy soha ne legyen accidental publish)
+
+**MINDEN egyes draft publikálása EZT a 6 lépést követi pontosan:**
+
+```
+1. Másolás:
+   copy drafts\new-landings\<slug>-DRAFT.html  <slug>.html
+   (page-rewrite esetén: copy drafts\page-rewrites\<slug>-DRAFT.html <slug>.html — felülírja a meglévő live verziót)
+
+2. sitemap.xml frissítés:
+   - új landing: új <url> blokk hozzáadása (priority 0.9, lastmod <ma>)
+   - page-rewrite: meglévő <url> blokk lastmod bump <ma>-re
+
+3. PROGRESS.md "Where we are now" frissítés (új audit-trail bekezdés a tetejére + korábbi bekezdés "Korábbi (...) Where we are now (megtartott audit-trail):"-re lefokozva).
+
+4. seoplan.md J.16.5 lista frissítés:
+   - élesített draft státusza: "PENDING" → "LIVE (élesítés YYYY-MM-DD)"
+   - retro-audit dátum +14 nap bejegyezve.
+
+5. Git commit + push:
+   git add <slug>.html sitemap.xml PROGRESS.md seoplan.md
+   git commit -m "seo: launch <slug> drip-feed (J.16.<x>)"
+   git push origin main
+   (a drafts/ folder a .gitignore miatt automatikusan kimarad)
+
+6. Felhasználói feladat:
+   Google Search Console → URL Inspection → /<slug> → Request Indexing
+   (a "Run an early discovery push" gomb-megnyomása az ÚJ URL-ekre kötelező,
+    a page-rewrite-okra opcionális — natural recrawl is elég).
+```
+
+**KRITIKUS:** a `drafts/<slug>-DRAFT.html` fájlt **ne töröld** publikálás után. Marad referenciaként ha később bug-fixet vagy schema-frissítést kell visszanyomni. Csak akkor töröld ha a felhasználó explicit kéri.
+
+### J.16.3 Élesítési ütemterv (drip-feed, ~1 új landing / 5-7 nap)
+
+| # | Draft fájl | Élesítési cél-dátum | Retro-audit (+14 nap) | Megjegyzés |
+|---|---|---|---|---|
+| L1 | `cash-handoff-software-DRAFT.html` | 2026-05-24 (vasárnap, hétfői Google-crawl-csúcs előtt) | 2026-06-07 | Sprint-2 NAP 3, Codex 2. landing javaslata |
+| L2 | TBD page-rewrite #1 | 2026-05-31 (vasárnap) | 2026-06-14 | Ha gyártás 2026-05-22..05-28 sikeres |
+| L3 | TBD page-rewrite #2 | 2026-06-07 (vasárnap) | 2026-06-21 | Drip-feed folytatás |
+| L4 | TBD page-rewrite #3 | 2026-06-14 (vasárnap) | 2026-06-28 | Drip-feed folytatás |
+| L5+ | TBD page-rewrite #4-n | hetente 1 (vasárnaponként) | +14 nap mindig | Amíg van draft a `drafts/`-ban |
+
+**Drip-feed indok (Codex J.15.5.10):** vasárnapi push → hétfői Google-crawl-csúcs → tisztább first-impressions mérés. Heti 1 új deploy NEM zavarja össze az aktuálisan érlelődő oldalak GSC-metrikáit, NEM ad lavina-effektet a sitemap-discovery-nek.
+
+### J.16.4 Mit NE csinálj limited-capacity módban (HARD RULES)
+
+| # | TILTOTT művelet | Indok |
+|---|---|---|
+| ❌1 | Új landing tervezés a nulláról (URL-választás, cannibalizáció-elemzés, AI-Overview-check, content-stratégia) | Opus-szintű döntés, kisebb-Opus túl könnyen vét J.14.15.5 / J.15.5.10 / J.15.5.11.Z.1 szabályt |
+| ❌2 | Meglévő top-rangsoroló oldal Title/H1/Meta-csere | J.14.13 / J.14.14 / J.15.4 rangsor-vesztés-rizikó; csak akkor MEGENGEDETT ha a `drafts/page-rewrites/` mappában már létezik egy gyártott draft erre az URL-re |
+| ❌3 | Sitemap nagy átdolgozása (több URL `priority` cseréje, struktúra-változás) | A jelenlegi sitemap `lastmod`-bump-ok természetes részei a publikálási protokollnak — minden más sitemap-művelet new-design feladat |
+| ❌4 | Schema-csere meglévő live oldalakon | JSON-LD field-szintű frissítés Opus-szintű döntés |
+| ❌5 | Új SEO-szabály bevezetése a J.x rendszerbe (J.17 vagy újabb) | Új meta-rule csak akkor jusson a `seoplan.md`-be ha új felhasználói direktíva vagy explicit Codex-konszenzus van mögötte; kisebb-Opus NEM dönt |
+| ❌6 | Új cluster-stratégia indítás | Cluster-link-háló design, hub-page tervezés mind Opus-szintű |
+| ❌7 | A1, A3, A4 retro-audit-eredmények alapján URL-konszolidáció vagy noindex önállóan | Ha cannibalizáció bizonyított a retro-audit-on → szóljon a felhasználónak, NE cselekedjen önállóan |
+
+### J.16.5 ENGEDÉLYEZETT műveletek limited-capacity módban (✅ SAFE LIST)
+
+| # | MEGENGEDETT művelet | Hogyan |
+|---|---|---|
+| ✅1 | Draft publikálás a `drafts/`-ból | J.16.2 6-lépéses protokoll szerint |
+| ✅2 | Sitemap `lastmod` bump publikálás keretében | csak a publikált URL-re, NEM batch-szinten |
+| ✅3 | Reindex-request emlékeztető a felhasználónak | szóbeli reminder a commit után |
+| ✅4 | Retro-audit GSC-evidence alapján (csak adatértelmezés, NEM cselekvés) | J.16.3 retro-audit-dátum-ütemterv szerint, eredmény-jelentés a felhasználónak |
+| ✅5 | Low-risk batch-fix folytatás (J.15.1.A pricing-note / J.15.1.C "template"-cleanup) | csak ha új oldalak kerültek be a backlog-ba (új grep-pel ellenőrizve) és NULLA query-rangsor-kockázat |
+| ✅6 | Bug-fix élesített oldalon ha a felhasználó jelzi | minimális diff, ne lépje túl a bug-szintet |
+| ✅7 | `PROGRESS.md` audit-trail vezetés | folyamatos |
+
+### J.16.6 Aktuális drafts/ tartalom-listája (DINAMIKUS — frissítse minden draft-gyártás után)
+
+| # | Fájl | Státusz | Élesítési cél | Forrás-szabály |
+|---|---|---|---|---|
+| D1 | `drafts/new-landings/cash-handoff-software-DRAFT.html` | **PENDING** (gyártás 2026-05-22 ~14:00-tól) | 2026-05-24 vasárnap | Sprint-2 NAP 2-3, Codex J.15.5.10 |
+
+**Hozzáadási és státusz-csere protokoll:** minden új draft amikor bekerül a `drafts/`-ba → új sor a táblázatba `PENDING` státusszal. Amikor élesítve → státusz `LIVE (élesítés YYYY-MM-DD)`, és külön bejegyzés a `seoplan.md` J.16.x audit-trail-be (mint pl. `J.16.x.1 L1 élesítve YYYY-MM-DD`).
+
+### J.16.7 Eszkalációs protokoll (mikor kell felhasználói döntés)
+
+A kisebb-Opus **mindenképpen szól a felhasználónak** ezekben az esetekben — NEM hozza meg önállóan a döntést:
+
+1. **GSC retro-audit cannibalizációt mutat** (pl. új landing élesítése után 14 nap múlva a saját korábbi oldal rangsora esik) → felhasználói konzultáció (URL-konszolidáció vagy noindex)
+2. **Új landing nem indexálódik 21 napon belül** → felhasználói konzultáció (kérjen-e ismételt reindex-request-et, vagy mélyebb diagnózis kell)
+3. **Cloudflare deploy fail vagy build-error a publikálás után** → azonnali rollback (`git revert HEAD; git push`) + felhasználói notification
+4. **Pre-commit hook fail vagy git push fail** → felhasználói notification, ne próbálkozzon `--no-verify`-val
+5. **Schema validation fail új landing publikálásakor** (Google Rich Results Test) → publikálás STOP, draft-vissza-javítás a felhasználói felülvizsgálat után
+6. **Új SEO-rule kandidátum felmerül** (pl. újfajta cannibalizációs minta) → NE rögzítse a `seoplan.md`-be önállóan, csak jelentse a felhasználónak a retro-audit-jelentésben
+
+### J.16.8 Verifikáció kisebb-Opus első futtatásakor (önteszt)
+
+A kisebb-Opus első session-ének elején ezt az ellenőrző-listát futtassa le mielőtt bármit csinál:
+
+- [ ] `seoplan.md` J.16 szekció létezik és olvasható
+- [ ] `drafts/` mappa létezik (lokálisan, `Test-Path drafts` → True)
+- [ ] `.gitignore` tartalmazza a `drafts/` sort
+- [ ] `J.16.6` tartalom-listájában szereplő `PENDING` draftok fizikailag léteznek a `drafts/new-landings/` vagy `drafts/page-rewrites/` mappákban
+- [ ] `J.16.3` ütemtervből a következő esedékes élesítés dátuma a jövőben van (NEM lemaradt — ha igen, kérjen felhasználói iránymutatást)
+- [ ] Cloudflare Pages build-státusz `success` az utolsó push-on (felhasználói ellenőrzés)
+
+Ha bármelyik elbukik → STOP, felhasználói konzultáció.
+
+---
 
 3 új oldal kiment 2 nap alatt (`cash-float-vs-petty-cash`, `payroll-cash-receipt`, `petty-cash-custodian`) + meta-tweak 4 oldalon (04-28 ESTE) + cloud/online framing-tweak `petty-cash-app`-on + Pro Custom Labels conversion-content `custom-cash-receipt-with-logo`-n (04-28 ÉJSZAKA) + 28-oldalas trust-fix sweep ("Free tier" → "Free 14-day trial") + 1 cím-pivot (`employee-cash-advance-receipt`) + sitemap `lastmod` bump 40+ oldalon. Ez bőven elég jel a Google-nak.
 

@@ -4,3 +4,16 @@ supabase/.temp/
 # OS files
 .DS_Store
 Thumbs.db
+
+# SEO draft workspace (J.16 EXECUTION-PLAYBOOK)
+# Local drafts for upcoming landings / page rewrites, NEVER pushed to main.
+# Publishing flow: copy from drafts/ to repo root, then commit the .html file.
+# Backup is the user's responsibility (e.g. Google Drive sync of drafts/).
+drafts/
+
+# GSC export folders (local-only Performance reports)
+spendnote.app-Performance-on-Search-*/
+spendnote.app-Performance-on-Search-*.zip
+
+# Local commit-message temp file
+.commit-msg-tmp.txt
