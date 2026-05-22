@@ -656,6 +656,175 @@ Az alábbi 5 oldal **PROTECTED / observe-only** státuszt kap a G-audit során �
 
 **Protected != tabu**: ha a 14-napos retro-audit (2026-06-05+) kényszerítő evidence-et hoz (pl. /petty-cash-software-en enterprise-query-k jönnek), akkor a "cash custody" visszavágás engedélyezett (a J.16.9.6 watchlist-protokoll szerint).
 
+### G.10 LAYOUT / VISUAL DOCTRINE (Codex direktíva, 2026-05-22 14:36)
+
+> **Felhasználói trigger (2026-05-22 14:34):** *"még egy fontos dolgot érintenünk kell, az a megjelnés, codexel már beszéltem róla: a seo oldalak layoutja és designje megfelelő ehhez a könnyed témához?"*
+>
+> **Codex elemzés (2026-05-22 14:36, idézet):** *"A mostani SEO layout tiszta, profi, SaaS-szerű, nem gagyi. (...) De az új irányhoz kicsit túl nehéznek / túl software-esnek / túl authority-guide-osnak érződik. A 'könnyű, egyszerű, természetes elismervény' témához a legfontosabb első benyomásnak ennek kellene lennie: 'Egy pénzátadás. Egy gyors kitöltés. Egy aláírt elismervény. Kész.' A mostani SEO oldalak sokszor inkább ezt sugallják: 'Itt egy részletes business guide egy cash management témáról.' (...) Én nem teljes redesignban gondolkodnék most, hanem az auditban legyen egy layout/doktrína-fit szempont is."*
+>
+> **Asszisztens layout-evidence (2026-05-22 14:38) 4 reprezentatív oldalon (`/cash-handoff-receipt`, `/small-business-cash-receipt`, `/cash-float-vs-petty-cash`, `/petty-cash-software`):** 6/6 oldalon nincs korai receipt-screenshot vagy receipt-mockup a hero közelében; 5/6 oldal nem kommunikál 5-másodperces vizuális flow-t; a /petty-cash-software (PROTECTED) hero alatt rögtön 4-category-comparison-grid jelenik meg (Codex pontosan ezt a mintázatot nevezte aggályosnak).
+
+**A G.10 alapelv:**
+
+> **A G. doktrína nemcsak szövegi (G.4 vocabulary, G.5 message-block), hanem VIZUÁLIS is. A hero alatti első 1-2 scroll-mentes elemnek 5 másodperc alatt láthatóvá kell tennie a "gyors elismervény" flow-t — NEM definíciót, NEM business-guide-ot, NEM 4-oszlopos comparison-táblát.**
+
+**A G.10 6 layout-szabálya (Codex-eredeti + asszisztens-finomítás):**
+
+| # | Szabály | Mit jelent | Miért fontos |
+|---|---|---|---|
+| **L1** | **Hero CTA P3-action-oriented** (NEM generic) | TILTOTT: "Start for Free", "Track Both in One Place", "Try SpendNote", "Learn More". ENGEDÉLYEZETT: "Create a Signed Receipt", "Make a Handoff Receipt", "Create First Receipt in 30 Seconds", "Sign Your First Cash Handoff" | A CTA a doktrína-pivot **legpregnánsabb** felülete — itt dől el hogy a buyer "új rendszert bevezet" érzésbe sodródik vagy "1 elismervényt csinálok" érzésbe |
+| **L2** | **Az első vizuális elem hero alatt: receipt-mockup VAGY 3-step flow** | TILTOTT első-elem: szöveges definíció, comparison-table, authority-quote-block, "Why this matters" paragrafus. ENGEDÉLYEZETT: SpendNote-receipt-screenshot (vagy mockup), 3-step illustration ("Open → Fill → Sign"), "Done" animation/static | 5-másodperces felismerhetőség (G.2 filter VIZUÁLIS megfelelője) |
+| **L3** | **5-másodperces vizuális flow KÖTELEZŐ** | A felhasználó SCROLL NÉLKÜL lássa hogy mit fog kapni (receipt-output) | Codex: *"Egy pénzátadás. Egy gyors kitöltés. Egy aláírt elismervény. Kész."* — ez ne csak szöveg legyen |
+| **L4** | **Comparison / table / authority a SCROLL ALATT** | TILTOTT: az első képernyő tetején comparison-grid (mint a /petty-cash-software jelenleg). ENGEDÉLYEZETT: comparison-grid a 3-4. H2 után | A /petty-cash-software a hero alatt rögtön 4-category-comparison-t mutat — Codex pontosan ezt nevezte "túl software-es" mintázatnak |
+| **L5** | **Hero alatt MAX 2-3 sornyi szöveg** | Ne legyen 2-3 paragraph definíció-jellegű "intro" a hero után. Max 1 rövid lead-bekezdés, aztán rögtön vizuális elem | "Not a guide intro" — Codex |
+| **L6** | **Meglévő SaaS-arculat MARAD** (zöld brand, navigation, illustrations) | NEM kell teljes redesign. A G.10 csak a hero-area + első-fold layout-jára vonatkozik | Codex: *"Nem kell kidobni. Viszont a draft-rewrite-oknál a top third legyen sokkal egyszerűbb, receipt-first, emberibb, kevésbé 'tananyag'."* |
+
+### G.10.A ABOVE-THE-FOLD SZABÁLY (Codex finomítás, 2026-05-22 14:40)
+
+> **Codex indoklás (2026-05-22 14:40, idézet):** *"A layout itt stratégiai SEO/konverziós kérdés, mert ha a top third azt sugallja, hogy 'hosszú guide / komoly rendszer / cash management tudomány', akkor hiába írjuk bele később, hogy könnyű és természetes. A látogató addigra már besorolta fejben."*
+
+**A G.10.A alapelv (mentális kategorizáció érv):**
+
+> **A buyer az első képernyőn (above-the-fold, scroll nélkül) kategorizálja az oldalt 1-3 másodperc alatt: "guide" / "tudományos rendszer" / "vállalati software" / "egyszerű eszköz". Ha a kategorizáció rossz, a G.4 vocabulary és G.5 message-block később mar nem tudja visszahúzni — a látogató addigra már mentálisan besorolta a terméket.**
+
+**A 4 kötelező above-the-fold elem** (minden fontos SEO/money-oldalon, scroll nélkül látható):
+
+| # | Elem | Mit kommunikál | Példa |
+|---|---|---|---|
+| **AF1** | Mi történik | A felhasználó valódi helyzete | "Cash changes hands" |
+| **AF2** | Mit csinál SpendNote | A termék 1-mondatos lényege | "Signed receipt in seconds" |
+| **AF3** | Miért könnyű (anti-complexity) | Hova NEM tartozik a termék | "No template, no spreadsheet, no accounting setup" |
+| **AF4** | Mit látok (vizuális evidence) | Receipt-screenshot vagy 3-step flow | (vizuális elem, NEM szöveg) |
+
+**Above-fold-fit besorolás (G.10.A 4-elem ellenőrzéssel):**
+- **good**: 4/4 elem (AF1-AF4) jelen az above-the-fold-on
+- **weak**: 2-3/4 elem jelen (általában AF4 hiányzik = nincs vizuális evidence)
+- **fail**: 0-1/4 elem jelen (jellemzően a hero alatt rögtön definíció/comparison jön)
+
+**Ha AF nem "good" → az oldal informatív lehet, de NEM SpendNote-szerű.**
+
+### G.10.B TOP-THIRD PATTERN (kötelező rewrite-DRAFT recept)
+
+Minden P0/P1 page-rewrite-DRAFT az alábbi 5-elemes recept szerint épül fel a top-third zónában (hero + első scroll-felület):
+
+| Sorrend | Elem | Specifikáció |
+|---|---|---|
+| 1 | **H1** | G.5 message-block szerint, P3-természetes hangon |
+| 2 | **1-mondatos P3-subtitle** | NEM 2-3 paragraph definíció. EGY rövid mondat (max 18-22 szó) ami AF1+AF2-t összerakja |
+| 3 | **CTA** (P3-action-oriented) | G.10/L1 szerint (NEM generic) |
+| 4 | **3-step mini-flow VAGY receipt-mockup** | G.10/L2 szerint, scroll nélkül látható (AF4) |
+| 5 | **AZTÁN** részletes guide/comparison/use-case-boxok | NEM előbb. Comparison/table/authority a SCROLL ALATT (G.10/L4) |
+
+**Ez az új doktrína VIZUÁLIS megfelelője.** Hasonló a régi SaaS-landing-pattern-hez, de a 4-es sorszám (3-step flow vagy receipt-mockup) a top-third zónában kötelező — ez a G.10.A AF4 elem.
+
+### G.10.C MIT NEM CSINÁLUNK (anti-rule)
+
+- **NEM** új dizájnrendszer (zöld brand, navigation, base typography MARAD)
+- **NEM** minden oldalra full layout-redesign
+- **NEM** retroaktív rewrite a 53 oldalon egyszerre — csak a drip-feed-batch szerint a P0-tól
+- **NEM** layout-revízió a PROTECTED-oldalakon közvetlenül (lásd G.10.D)
+
+### G.10.D PROTECTED-OLDALAK LAYOUT-STATE — kettéosztva (Codex finomítás)
+
+> **Codex (2026-05-22 14:40, idézet):** *"A /petty-cash-software-nél különösen igaz: PROTECTED most, de a retro-auditban nézni kell, hogy az első benyomás túl 'category essay'-e. Mert SEO-ra jó lehet, de ads/conversion-re lehet nehéz."*
+
+A PROTECTED-state (G.9) eddig **egyetlen szempontot** védett: SEO-ranking-stabilitást. A G.10.D ezt kettéosztja:
+
+| State-réteg | Mit véd | Mikor felülbírálható |
+|---|---|---|
+| **PROTECTED-SEO** (eddigi G.9) | A meglévő GSC-ranking-pozíciókat — NE módosítsuk a meglévő ranking-jelet | Csak ha a 14-napos retro-audit kényszerítő evidence-et hoz (J.16.9.6 watchlist) |
+| **PROTECTED-ADS** (G.10.D ÚJ) | A landing-page Ads-konverziós viselkedését | **Felülbírálható ha:** (a) elindul az Ads-kampány (Sprint-2 NAP 4 előkészítés folyamatban), és (b) az above-fold layout bizonyítottan rontja a CTR/CVR-t. Ekkor a G.10.A 4-elem-csomagot beépíteni szabad — DE új URL alatt (variant-A vs. variant-B split, vagy `/petty-cash-software-ads` landing-clone) |
+
+**Konkrét hatás a `/petty-cash-software`-re:**
+- SEO-side: marad (PROTECTED-SEO), J.16.9.6 watchlist alapján
+- Ads-side: ha az Ads-kampány indul (Sprint-2 NAP 4), és a CVR < 1%, az above-fold layout-rewrite engedélyezett (de új variant-URL-en, nem az élesedett `/petty-cash-software`-en közvetlenül)
+
+### G.10.E AUDIT-OUTPUT INTEGRÁCIÓ (új oszlopok)
+
+A `seo-audit-2026-05-22.md` thin-audit-tabella **2 új oszloppal egészül ki** a P0 zónára (és a layout-erős érintettségű oldalakra):
+
+| Oszlop | Értékek | Mit jelent |
+|---|---|---|
+| **AF** (Above-fold doctrine fit) | `good` / `weak` / `fail` | G.10.A 4-elem ellenőrzés (AF1-AF4) |
+| **FV** (First visual) | `receipt` / `3-step` / `dashboard` / `illustration` / `comparison` / `quick-answer` / `definition` / `none` | Az above-the-fold zónában mi az első nem-szöveges vizuális elem (vagy ha szöveges, akkor milyen típusú szövegblokk) |
+
+**Cél**: a 2 új oszlop segít szétválasztani:
+- **csak copy-problémás oldal** (FV = receipt/3-step/illustration + AF = weak/fail) → page-rewrite-DRAFT elég a hero-szövegre
+- **layout-problémás oldal is** (FV = comparison/quick-answer/definition/none + AF = fail) → DRAFT-ban a top-third pattern (G.10.B) is teljes átépítés szükséges
+
+A teljes 7.6 szekció `seo-audit-2026-05-22.md`-ben (per-P0-page AF + FV besorolás).
+
+### G.10.F INTEGRÁCIÓ a meglévő G.10 6-szabályával
+
+A G.10.A (above-fold rule) és G.10.B (top-third pattern) **nem ellentmond** az eredeti G.10 L1-L6-nak — kiegészíti:
+
+- **L1 (P3-CTA)** = a G.10.B 3. eleme
+- **L2 (első vizuális elem)** = a G.10.A AF4 + a G.10.B 4. eleme
+- **L3 (5-mp flow)** = a G.10.A teljes koncepció vizuális megvalósítása
+- **L4 (comparison SCROLL alatt)** = a G.10.B 5. eleme
+- **L5 (max 2-3 sornyi szöveg)** = a G.10.B 2. eleme (1-mondatos subtitle)
+- **L6 (SaaS-arculat marad)** = a G.10.C anti-rule explicit megfogalmazása
+
+**A G.10.B 5-pontos top-third recept az operatív checklist a DRAFT-gyártáshoz.** A G.10 L1-L6 a hiba-checklist a meglévő audithoz.
+
+---
+
+**G.10 — Layout-Audit-Output integráció:**
+
+A `seo-audit-2026-05-22.md` 7. szekció ("LAYOUT-AUDIT — G.10 szabályok a P0 oldalakon") tartalmazza a 4 reprezentatív oldal részletes layout-evidence-ét + Codex-checklist-et minden P0 page-rewrite-DRAFT-hoz + 7.6 AF/FV per P0-oldal.
+
+**G.10 — Page-rewrite-DRAFT layout-checklist (J.16 EXECUTION-PLAYBOOK kötelező kiterjesztés):**
+
+Minden új DRAFT a `drafts/page-rewrites/`-ben **kötelezően végigfut KÉT checkliszten** (a G.10.B finomítás után):
+
+**Checklist-1: G.10.B Top-third recept (5-pontos, KONSTRUKCIÓS)** — a DRAFT-gyártáskor:
+
+- [ ] **TT1** H1 (G.5 message-block szerint)
+- [ ] **TT2** 1-mondatos P3-subtitle (max 18-22 szó, AF1+AF2 összerakva)
+- [ ] **TT3** CTA P3-action-oriented (G.10/L1)
+- [ ] **TT4** 3-step mini-flow VAGY receipt-mockup (G.10.A AF4)
+- [ ] **TT5** Comparison/guide/use-case-boxok csak EZUTÁN (G.10/L4)
+
+**Checklist-2: G.10 L1-L6 (6-pontos, HIBAVADÁSZ)** — a DRAFT-revíziókor (ha valami "nem érzi jól magát"):
+
+- [ ] **L1** Hero CTA P3-action-oriented (NEM generic)?
+- [ ] **L2** Hero alatti első vizuális elem receipt-mockup vagy 3-step flow?
+- [ ] **L3** Scroll nélkül látszik a "gyors elismervény" flow?
+- [ ] **L4** Comparison/table/authority a SCROLL ALATT van (NEM hero közelében)?
+- [ ] **L5** Hero alatt max 2-3 sornyi szöveg (NEM 2-3 paragraph)?
+- [ ] **L6** SaaS-arculat megtartva (zöld brand, navigation, design rendszer)?
+
+**Checklist-3: G.10.A AF besorolás (KIMENETI MINŐSÍTÉS)** — az élesítés előtt:
+
+- [ ] **AF1** Mi történik (cash changes hands) — látható?
+- [ ] **AF2** Mit csinál SpendNote (signed receipt in seconds) — látható?
+- [ ] **AF3** Miért könnyű (no template / no spreadsheet / no accounting setup) — látható?
+- [ ] **AF4** Mit látok (receipt-screenshot vagy 3-step flow) — látható?
+
+**Élesítési kritérium**: 5/5 TT + 6/6 L + 4/4 AF = **AF=good besorolás**. Ha AF=weak vagy fail → DRAFT-revízió a `drafts/`-ban, NEM élesítés.
+
+**G.10 — /petty-cash-software PROTECTED-state layout-watchlist (G.10.D kettéosztással):**
+
+A `/petty-cash-software` (MA élesedett) hero alatt rögtön 4-category-comparison-grid van — Codex L4-szabály legpregnánsabb megsértője, és Codex külön kiemelte: *"PROTECTED most, de a retro-auditban nézni kell, hogy az első benyomás túl 'category essay'-e. Mert SEO-ra jó lehet, de ads/conversion-re lehet nehéz."* Ez **G.10.D-tipikus eset**: két különböző viselkedés (SEO vs. Ads), két különböző state.
+
+**SEO-side (PROTECTED-SEO):**
+1. Ha a GSC-impressionek doktrína-konformis query-családra jönnek (`petty cash software for teams`, `petty cash tracking software`) → a layout-szabály-megsértés ELLENÉRE működik, marad élesedett állapotban
+2. Ha a GSC-impressionek enterprise-CIT-banking-query-családra jönnek (J.16.9.6 watchlist) → a "cash custody" vocabulary VALÓSZÍNŰLEG együtt a 4-category-comparison-layout-tal sodorja az oldalt rossz klaszterbe → SEO-side layout-revízió engedélyezett a meglévő URL-en (rövid hero-alatti vizuális csere)
+
+**Ads-side (PROTECTED-ADS — G.10.D ÚJ):**
+1. Ha az Ads-kampány indul (Sprint-2 NAP 4), és a `/petty-cash-software` lesz a landing-page, akkor a CVR-tesztelés kötelező (GA4 events + UTM-séma szerint, s16 todo)
+2. Ha a CVR < 1% (vagy Codex/asszisztens-benchmarkhoz képest gyenge), **az above-fold layout-rewrite engedélyezett** — DE új variant-URL-en (`/petty-cash-software-ads` vagy hasonló), **NEM** az élesedett SEO-URL-en közvetlenül
+3. Az Ads-variant az AF1+AF2+AF3+AF4 csomagot teljes G.10.B top-third recept szerint kapja meg
+
+**G.10 kapcsolat a G.4-vocabulary és G.5-message-block-szabályokkal:**
+
+A G.10 a **VIZUÁLIS megfelelője** a G.5 minimum-message-block szövegi receptúrájának. A 3 réteg együtt működik:
+- **G.4 vocabulary**: melyik szavakat használjuk
+- **G.5 message-block**: hogyan strukturáljuk a hero-szakasz szövegét (6/3 kategória)
+- **G.10 layout**: hogyan néz ki vizuálisan a hero-area + első-fold
+
+Mindhárom kötelező egy page-rewrite-DRAFT-ban. Egyik nélkül a doktrína-implementáció hiányos.
+
 ---
 
 **Trigger:** A `petty-cash-how-much-to-keep` snippet-rewrite után audit derítette ki, hogy a 04-25-i `8a1efe2` commit **nem cleanup-olta végig** a "Free / Template / (Free) / Free checklist included" claim-eket — **6 oldalon** (4 indexed + 2 noindex) maradt félrevezető SERP-snippet ahol **nincs valós letölthető fájl**. A `petty-cash-replenishment-form` GSC pos=39.0 (impression van, klikk nincs) ennek a bait-and-switch trust-penalty-jának egyértelmű jele.
