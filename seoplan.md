@@ -2987,6 +2987,55 @@ drafts/
 
 **Page-rewrite vs új landing különbség (J.16.3.A új meta-szabály):** új landing (mint a 2026-05-22 14:00-i `/petty-cash-software`) friss URL → sitemap-bump + manuál reindex-request + 14-21 nap várás first-impressions-re. Page-rewrite (L2-L5) MÁR rangsoroló meglévő URL → csak `sitemap.xml lastmod` bump szükséges, manuál reindex-request opcionális (organic recrawl elég, ha nem sürgős). Retro-audit page-rewrite-on a meglévő top-query-rangsor STABILITÁSÁT vizsgálja (NEM zuhant-e), NEM új-rangsor-felfedezést.
 
+### J.16.3.B POST-P0 FOLYTATÁS — KLASZTER A-F + DEC + RETRO TELJES DRIP-FEED IDŐVONAL (2026-05-22 16:50)
+
+> **Hozzáadás indok:** A 2026-05-22 16:30 BULK PRE-PREP-tel 33 további DRAFT (D16-D48) készült a `drafts/page-rewrites/`-be, plusz 4 DECISION-PONT eldöntve (DEC-1..4). A J.16.3 fő-táblázata csak BATCH-1/2/3 + 5 LIGHT-EDIT-et tartalmaz — ezért ez a J.16.3.B 1 táblában összefoglalja a teljes 2026-05-22 → 2026-07-09 drip-feed idővonalat. **A kis-Opus innen olvassa el a következő esedékes teendőt.**
+
+**TELJES DRIP-FEED IDŐVONAL 2026-05-22 → 2026-07-09:**
+
+| Dátum | Esedékes akció | DRAFT-ok / URL-ek | Akció-típus | Részletek |
+|---|---|---|---|---|
+| 2026-05-22 | ✅ **BATCH-1 LIVE** | L2+L3+L4 (cash-handoff-receipt + small-business-cash-receipt + digital-receipt-book) | ÉLESÍTÉS | Commit `3f72380`, kész |
+| 2026-05-22 | ✅ **DEC-3 NOINDEX LIVE** | `/petty-cash-policy-template` | NOINDEX,FOLLOW + sitemap-removal | Commit `de77ba7`, kész |
+| 2026-05-28 csüt | **BATCH-2 ÉLESÍTÉS** | D6 + D7 + D8 (replenishment + payment-received-proof + employee-advance) | ÉLESÍTÉS | HTML-comment kiszedés, Move-Item -Force, sitemap-bump 2026-05-28, J.16.6 LIVE marker, commit+push, GSC reindex |
+| 2026-05-31 vas | **BATCH-3 ÉLESÍTÉS** | D9 + D10 (digital-petty-cash-book + manage-petty-cash-remotely) | ÉLESÍTÉS | Ugyanaz mint BATCH-2 |
+| 2026-06-02 | 5 LIGHT-EDIT #1 | D11 (cash-float-vs-petty-cash) | ÉLESÍTÉS | Napi 1 LIGHT-EDIT |
+| 2026-06-03 | 5 LIGHT-EDIT #2 | D12 (petty-cash-how-much-to-keep) | ÉLESÍTÉS | Napi 1 LIGHT-EDIT |
+| 2026-06-04 | 5 LIGHT-EDIT #3 | D13 (cash-drawer-reconciliation) | ÉLESÍTÉS | Napi 1 LIGHT-EDIT |
+| 2026-06-05 | 5 LIGHT-EDIT #4 + **BATCH-1 14-NAPOS RETRO** + `/petty-cash-software` RETRO | D14 (cash-receipt-template) + BATCH-1 3 URL rangsor-check + `/petty-cash-software` döntési pont | ÉLESÍTÉS + RETRO-AUDIT | A retro-audit külön döntési pont a /petty-cash-software variant-ADS-clone vagy 'cash custody' diszkamper-rewrite (G.10.D PROTECTED-ADS state) |
+| 2026-06-06 | 5 LIGHT-EDIT #5 | D15 (where-to-keep-petty-cash) | ÉLESÍTÉS | Napi 1 LIGHT-EDIT |
+| **2026-06-09 → 2026-06-17** | **KLASZTER A 10 LIGHT-EDIT** | D16 + D17 + D18 + D19 + D20 + D21 + D22 + D23 + D24 + D25 (10 maradék receipt-cluster) | ÉLESÍTÉS (napi 1) | Receipt-cluster, hero MARAD többségében (vertical-specifikus), body CTA P3-csere. D21 babysitter quick-win poz 6. ÓVATOSAN: D20 contractor-advance poz 2! |
+| **2026-06-19 → 2026-06-21** | **KLASZTER B 6 REWRITE-MIN BATCH** | D26 + D27 + D28 + D29 + D30 + D31 (template/voucher/log) | ÉLESÍTÉS (3-3 batch) | Title MARAD mind 6-on (template-query rangsorol), hero+body CTA P3-csere. D28 daily-cash-report 61 GSC quick-win, D29 cash-count-sheet poz 12 quick-win, D30 audit-checklist poz 6.29 quick-win |
+| **2026-06-21** | **DEC-3 30-NAPOS RETRO** | `/petty-cash-policy-template` | RETRO-AUDIT | (1) `site:spendnote.app/petty-cash-policy-template` Google-keresés — eltűnt-e az indexből; (2) GSC query-mix — "policy/template" kombo csökkent-e; (3) Ha igen → belső link-takarítás 19 fájlból (URL eltávolítás vagy átirányítás `/petty-cash-audit-checklist` / `/two-person-cash-count-policy`-re); (4) Opcionális: `robots.txt Disallow:` hozzáadás crawl-budget-spórlásra |
+| **2026-06-23 → 2026-06-25** | **KLASZTER C 3 RECONCILIATION** | D32 + D33 + D34 (petty-cash-reconciliation + petty-cash-does-not-balance + cash-discrepancy-between-shifts) | ÉLESÍTÉS (napi 1) | Title mind 3-on MARAD; hero+body CTA P3 ("Reconcile in 5 Minutes" / "Stop Chasing the Missing Money" / "Sign Off Every Shift Change") |
+| **2026-06-26 → 2026-06-30** | **KLASZTER D 5 INFO-PURE** | D35 + D36 + D37 + D38 + D39 (security-tips + custodian + how-to-track-cash-payments + how-to-start-petty-cash-box + how-to-fill-out-petty-cash-voucher) | ÉLESÍTÉS (napi 1) | AI-Overview-vulnerable info-pure oldalak, hero+body CTA P3-csere. D39 MERGE-CAND jelölt! (későbbi MERGE-döntés a `/petty-cash-voucher-template`-be a DEC-4 mintájára, ha jó döntés) |
+| **2026-07-01 → 2026-07-06** | **KLASZTER E 6 VISIBILITY/PAIN** | D40 + D41 + D42 + D43 + D44 + D45 (event-cash + construction + who-has-the-cash + boss-cant-see + who-took-money + office-reimbursement) | ÉLESÍTÉS (napi 1) | Hero MARAD többségében (pain-fókusz JÓ); body CTA P3-csere. D40 event poz 8.29 quick-win |
+| **2026-07-07 → 2026-07-09** | **KLASZTER F 3 LOG/FORM/HUB** | D46 + D47 + D48 (cash-paid-out-log + cash-box-request-form + spendnote-resources) | ÉLESÍTÉS (napi 1) | Title MARAD; hero+body CTA P3-csere. D48 `/spendnote-resources` Title-finom-revízió Codex-feedback után. `/spendnote-faq` PROTECTED (poz 3.4) — érintetlen |
+| **2026-07-15-ig (rugalmas)** | **DEC-1/2/4 light-edit/doctrine rewrite DRAFT-ok** | `/what-is-petty-cash` (DEC-1) + `/how-to-manage-petty-cash-small-business` (DEC-2) + `/petty-cash-voucher-sample` (DEC-4) | DRAFT-GYÁRTÁS (NEM élesítés) | A felhasználói direktíva szerint NEM ma — későbbi nagy-Opus session-ben. DEC-1 light-edit, DEC-2 doctrine rewrite, DEC-4 301 redirect döntés. Sitemap-add/redirect csak ha a draft tényleg jó |
+
+**ÖSSZESEN:** 5 LIVE (BATCH-1 + DEC-3 már megvan MA) + 43 ÉLESÍTÉS hátra (BATCH-2/3 + 5 LIGHT-EDIT + Klaszter A-F 33) + 2 RETRO-AUDIT (BATCH-1 14-napos + DEC-3 30-napos + `/petty-cash-software` döntési pont) + 3 DEC-DRAFT (DEC-1/2/4 később). **Idővonal vége: 2026-07-09** (Klaszter F vége), DEC-1/2/4 + retro-takarítás 2026-07-15-ig rugalmasan.
+
+**KIS-OPUS DRIP-FEED MÓD HASZNÁLATA (2026-05-29-től kezdődően):**
+1. **Session-elején:** olvassa el a J.16.3.B táblázatot, keresse meg a *következő esedékes dátumot* a "Dátum" oszlopban
+2. Ha a dátum **MA vagy elmúlt nap** → futtassa az adott akciót (élesítés vagy retro-audit)
+3. Ha a dátum **jövőbeli** → ne csináljon semmit, kivéve felhasználói-kérésre
+4. Mindegyik élesítés után:
+   - J.16.6 inventory megfelelő DRAFT-sor: státusz `LIVE YYYY-MM-DD` + élesítési oszlop "élesítve"
+   - PROGRESS.md új audit-trail bejegyzés
+   - Commit + push (1 commit / batch / nap)
+5. **Hard-stop esetek (J.16.7 eszkalációs protokoll):** GSC retro-audit cannibalizációt mutat / új landing nem indexálódik / Cloudflare deploy fail / pre-commit hook fail / Schema validation fail / új SEO-rule kandidátum → felhasználói notification
+
+**A kis-Opus NEM csinálja MA:**
+- Új DRAFT-gyártás (mind 43 már elkészült)
+- Új SEO-stratégiai-döntés (mind a 4 DEC eldöntve)
+- DEC-1/2/4 light-edit/doctrine DRAFT-ok (későbbi nagy-Opus session)
+- `/petty-cash-policy-template` belső link-takarítás (csak 2026-06-21 retro után)
+
+**A kis-Opus csinálja MA-tól:**
+- BATCH-2/3/LIGHT-EDIT élesítések a fenti táblázat szerinti dátumokon
+- Klaszter A-F élesítések 2026-06-09-től napi 1
+- Retro-audit-jelentések 2026-06-05 (BATCH-1 14-nap + `/petty-cash-software`) és 2026-06-21 (DEC-3 30-nap)
+
 ### J.16.4 Mit NE csinálj limited-capacity módban (HARD RULES)
 
 | # | TILTOTT művelet | Indok |
