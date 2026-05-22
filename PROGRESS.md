@@ -3641,7 +3641,7 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
 
 Teljes terv kidolgozva. Cél: app launch-ready állapotba hozása.
 
-### 1. Team member modell
+### 1. Team member modell ✅ KÉSZ (2026-04-06, App Launch)
 
 A meghívott user **nem kap saját subscription-t**. Tagság nélküli felhasználó, aki az org owner előfizetésén keresztül dolgozik.
 
@@ -3686,7 +3686,7 @@ A meghívott user **nem kap saját subscription-t**. Tagság nélküli felhaszn�
 - Újrameghívás eltávolítás után: új `org_membership` sor, tier marad `team_member`, azonnal működik
 - Önmeghívás: kliens-oldalon blokkolva: "You can't invite yourself."
 
-### 2. Seat billing flow (block + redirect)
+### 2. Seat billing flow (block + redirect) ✅ KÉSZ (2026-04-06, App Launch)
 
 Amikor a Pro owner a seat limitnél (default 3) több embert próbál meghívni:
 - Blokkolás + üzenet: "You've used all 3 included seats. Add more seats to invite another team member."
@@ -3700,7 +3700,7 @@ Amikor a Pro owner a seat limitnél (default 3) több embert próbál meghívni:
 - `create-checkout-session/index.ts`: validálni `extraSeats`/`quantity` Stripe line item-be kerülését
 - `stripe-webhook/index.ts`: `seat_count` update ellenőrzése subscription update-nél
 
-### 3. Conversion-oriented onboarding email rendszer
+### 3. Conversion-oriented onboarding email rendszer ❌ HIÁNYZIK (2026-05-22 reconciliation: nincs pg_cron, nincs drip/D+X koncepció, csak event-based emailek vannak)
 
 #### State machine (viselkedés-alapú, nem idő-alapú)
 
@@ -3825,7 +3825,7 @@ CREATE INDEX idx_email_log_user ON email_log(user_id, email_type);
 4. Cursor implementálja a végleges verziót a kódba
 Ez minden email template-re és in-app onboarding szövegre (checklist, empty states, nudge-ök, modals) vonatkozik.
 
-### 4. In-app onboarding (behavior forcing flow)
+### 4. In-app onboarding (behavior forcing flow) ⚠️ RÉSZBEN KÉSZ (2026-04-06: celebration toast Standard+Pro ✅, Pro team page onboarding modal ✅; HÁTRA: post-payment flow audit Stripe redirect → toast → megfelelő oldal töltődés mindkét csomagra)
 
 Egyetlen cél: **first transaction 30 másodpercen belül**. Minden más másodlagos.
 
@@ -3865,7 +3865,7 @@ Checklist frissül: ✓ Cash box created ✓ First transaction → View your rec
 - A dashboard NEM hagy mást csinálni, mint az első tranzakciót
 - Ha a user 10-15 másodpercen belül nem indítja el az első tranzakciót, az onboarding UX nem elég erős
 
-### 5. Upgrade / Downgrade flow
+### 5. Upgrade / Downgrade flow ✅ KÉSZ (2026-04-06, App Launch)
 
 #### Alapelv: "Soft lock"
 
@@ -3948,7 +3948,7 @@ Pro→Standard + Standard→Free szabályok együtt alkalmazandók. Cash box vá
 - Operatív grace: a `past_due` állapot maga a grace period (Stripe retry)
 - Ha a subscription törlődik, a downgrade azonnal érvényes
 
-### 6. Guardok és jogi követelmények
+### 6. Guardok és jogi követelmények ⚠️ RÉSZBEN (2026-05-22 reconciliation: account deletion + team guard ✅ migration 062; CAN-SPAM unsubscribe + email_opt_out flag ❌ HIÁNYZIK — csak akkor sürgős ha V1 #3 drip emailek élesednek)
 
 **Email unsubscribe (CAN-SPAM):**
 - Drip/onboarding emailek (D+0 — D+21) aljára unsubscribe link kötelező
@@ -3962,7 +3962,7 @@ Pro→Standard + Standard→Free szabályok együtt alkalmazandók. Cash box vá
 - Solo user (nincs team): normális törlés, delete-account edge function
 - Team member (nem owner): törölheti a saját fiókját, org_membership törlődik vele
 
-### 7. Meglévő bugok javítása
+### 7. Meglévő bugok javítása ⚠️ 3/5 KÉSZ (2026-05-22 reconciliation: extraSeats ✅ create-checkout-session sor 10/129/192, seat_count select ✅ pricing sor 1255, Pricing FAQ ellentmondás ✅ "20 or fewer" mind két helyen; HÁTRA: CB access grant invite ? + trial_ends_at Stripe webhook sync ?)
 
 - `createCheckoutSession` nem küldi az `extraSeats`-et — payload-ból hiányzik
 - Pricing page nem tölti be a `seat_count`-ot — profile query nem select-eli
@@ -3970,7 +3970,7 @@ Pro→Standard + Standard→Free szabályok együtt alkalmazandók. Cash box vá
 - `trial_ends_at` nem szinkronizálódik a Stripe webhook-ból — Stripe trialing állapotban a dátum nem íródik profiles-ba
 - Pricing FAQ ellentmondás — "20+ transactions" vs "20 transactions or fewer" a money-back guarantee-nél
 
-### 8. Conversion tracking (teljes)
+### 8. Conversion tracking (teljes) ⚠️ RÉSZBEN (2026-05-22 reconciliation: Admin Stats oldal ✅ spendnote-admin-stats.html + admin-stats edge function + unconfirmed-szűrés ✅ sor 369-486; GA4 events 5/10 ✅: first_transaction_created, transaction_form_opened, second_transaction_created, invite_sent, checkout_started — HIÁNYZIK 5: signup_completed, first_login, currency_selected, upgrade_completed, trial_warning_shown; Resend webhook + email_log open/click tracking ?)
 
 **GA4 funnel események** (gtag custom events, pár sor kliens-oldali kód):
 - `signup_completed` — sikeres regisztráció
@@ -4017,14 +4017,14 @@ Technikai:
 - Chart.js vagy hasonló lightweight chart library
 - Hozzáférés: `profiles.email` === owner email (hardcoded guard, vagy admin role check)
 
-### 9. Stripe end-to-end teszt + STRIPE_LIVE
+### 9. Stripe end-to-end teszt + STRIPE_LIVE ✅ KÉSZ (2026-04-06, App Launch — STRIPE_LIVE = true, supabase-config.js sor 573)
 
 - Migration 041 futtatása (Pro onboarding org auto-create)
 - Stripe teszt módban végigmenni: pricing → checkout → subscription aktív → tier frissül → feature-ök feloldva
 - Post-payment redirect (Standard → dashboard, Pro → team page)
 - `STRIPE_LIVE = true` átkapcsolás ha minden működik
 
-### Implementációs sorrend / prioritás
+### Implementációs sorrend / prioritás (eredeti 2026-04-03)
 
 1-2-7-9 a kritikus path (team + billing + bugfixes + Stripe E2E)
 3 (email rendszer) párhuzamosan építhető
@@ -4032,6 +4032,37 @@ Technikai:
 5 (upgrade/downgrade flow) a Stripe E2E-vel együtt tesztelhető
 6 (guardok) kis feladatok, bármikor beilleszthetőek
 8 (conversion tracking) az in-app onboarding és email rendszer mellé épül — GA4 események az onboarding kódba kerülnek, Resend tracking az email infraba
+
+### V1 LAUNCH STATUS RECONCILIATION 2026-05-22
+
+> **Miért szükséges:** a fenti 9-pontos V1 Launch terv és a hozzá tartozó "Implementációs sorrend / prioritás" 2026-04-03-as snapshot. Az óta a 2026-04-06-os "App Launch sprint" (88 commit, 115 fájl) sok mindent lezárt — de a 9-pontos terv NEM volt frissítve, ami félrevezető a kis-Opus és session-eleji audit-szempontjából. Ez a szakasz a *tényleges* állapotot rögzíti.
+
+| # | Téma | Tényleges állapot | Mit jelent |
+|---|---|---|---|
+| **1** | Team member modell | ✅ **KÉSZ** (2026-04-06) | team_member tier + RLS scoped visibility (migrations 058-066), nincs tennivaló |
+| **2** | Seat billing flow | ✅ **KÉSZ** (2026-04-06) | seat_count migration 037 + extraSeats checkout + deferred update, nincs tennivaló |
+| **3** | Drip onboarding email rendszer | ❌ **HIÁNYZIK** | NAGY tétel (~1-2 nap): D+0/D+3/D+7/D+14/D+21 templates + pg_cron job + Resend integráció. AHA → upgrade hídja |
+| **4** | In-app onboarding | ⚠️ **RÉSZBEN** | Celebration toast + Pro modal ✅, post-payment flow audit ⏳ HÁTRA (~1-2 óra kézi teszt + esetleges fix, 30-40% activation múlik rajta) |
+| **5** | Upgrade / Downgrade flow | ✅ **KÉSZ** (2026-04-06) | Cash box lock, deferred downgrade, webhook, downgrade/cancel email, nincs tennivaló |
+| **6** | Guardok (CAN-SPAM unsubscribe + email_opt_out) | ❌ **HIÁNYZIK** | KICSI (~2-3 óra): csak akkor sürgős ha #3 drip emailek élesednek. Account deletion + team guard ✅ (migration 062) |
+| **7** | 5 db bug | ⚠️ **3/5 KÉSZ** | extraSeats ✅, seat_count ✅, Pricing FAQ ✅; HÁTRA: CB access grant invite + trial_ends_at Stripe sync (~2-3 óra mind a 2 reprodukálás+fix) |
+| **8** | Conversion tracking | ⚠️ **RÉSZBEN** | Admin Stats oldal + unconfirmed-szűrés ✅; GA4 events 5/10 (HIÁNYZIK: signup_completed, first_login, currency_selected, upgrade_completed, trial_warning_shown — ~2 óra); Resend webhook ? |
+| **9** | Stripe E2E + STRIPE_LIVE | ✅ **KÉSZ** (2026-04-06) | STRIPE_LIVE = true, nincs tennivaló |
+
+**Összegzés:** 4 pont ✅ teljesen kész (#1, #2, #5, #9), 3 pont ⚠️ részben kész (#4, #7, #8), 2 pont ❌ tényleg hiányzik (#3, #6). **A kritikus path = #3 + #6 (drip + guard kombinálva ~1-2 nap), a maradék kvázi-finomítás.**
+
+**Új prioritás-sorrend 2026-05-22-től (tényleges állapotra hangolva):**
+1. **V1 #7 maradék 2 bug** — CB access grant invite + trial_ends_at Stripe sync (~2-3 óra, low-risk quick-win)
+2. **V1 #4 post-payment flow audit** — kézi teszt + esetleges fix (~1-2 óra, 30-40% activation hatás)
+3. **V1 #8 GA4 5 hiányzó event** — 5 gtag-line a megfelelő flow-pontokon (~2 óra)
+4. **V1 #6 Guardok** — email_opt_out flag + unsubscribe link template (~2-3 óra, V1 #3 prerekvizit)
+5. **V1 #3 Drip onboarding email rendszer** — D+0/D+3/D+7/D+14/D+21 + pg_cron + Resend (~1-2 nap, AHA→upgrade híd, leghosszabb)
+6. **V1 #8 második fele** — Resend webhook + email_log open/click columns (~3-4 óra, V1 #3 után logikus)
+7. **Console.log cleanup pass** (~1-2 óra)
+8. **UX bugok** (table column, nav underline, contacts hint) (~3-5 óra)
+9. **Footer redesign + Google Ads launch** (Low)
+
+**Sorrend-indok:** #1-#4 mind low-risk quick-win (~7-10 óra összesen), ezek után indítható a #5 drip-rendszer (NAGY tétel) jó conversion-mérési alappal. #6-#9 utolsó körre.
 
 ---
 
@@ -4041,7 +4072,7 @@ Technikai:
 - ~~Build SEO page #1-#2~~ (kész: who-has-the-cash, boss-cant-see)
 - Deploy updated `send-invite-email` Edge Function (post-launch)
 
-## Backlog (UX + bugs)
+## Backlog (UX + bugs) — 2026-05-22 reconciliation
 - **High**
   - ~~Permissions & roles (owner/admin/user) + org/team model~~ — ✅ KÉSZ (2026-04-06)
   - ~~Stripe élesítés~~ — ✅ KÉSZ (2026-04-06)
@@ -4049,8 +4080,8 @@ Technikai:
   - Table column widths need adjustment.
   - Navigation underline styling is still inconsistent.
   - "Save to Contacts" checkbox: add a short inline hint ("so you can reuse it later").
-  - Debug console.log-ok eltávolítása (cleanup pass)
-  - Admin stats tábla javítás — unconfirmed kiszűrés + szűrés/rendezés
+  - Debug console.log-ok eltávolítása (cleanup pass) — ~64 db a 10 fő JS-fájlban (2026-05-22 grep: cash-box-list-data 2, dashboard-data 6, cash-box-settings-data 16, team-page 4, transaction-history-data 8, dashboard-form 4, supabase-config 9, dashboard-modal 9, logo-editor 3, user-settings 3)
+  - ~~Admin stats tábla javítás — unconfirmed kiszűrés + szűrés/rendezés~~ — ✅ KÉSZ (2026-05-22 reconciliation: spendnote-admin-stats.html sor 369 + 450 + 486 + admin-stats edge function sor 188-201+275)
 - **Low**
   - Footer redesign.
   - Google Ads launch ($10-20/day, targeting "petty cash app", "cash tracking app")
