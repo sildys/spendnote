@@ -767,11 +767,27 @@ A G.10.A (above-fold rule) és G.10.B (top-third pattern) **nem ellentmond** az 
 
 **A G.10.B 5-pontos top-third recept az operatív checklist a DRAFT-gyártáshoz.** A G.10 L1-L6 a hiba-checklist a meglévő audithoz.
 
+### G.10.G ASSET-STOCK HARD RULE (2026-05-22 14:50 — felhasználói korrekció)
+
+> **Felhasználói korrekció (idézet):** *"van egy csomó képernyőképünk, receipt képeink is... mit akarsz még pluszban gyártani???"*
+>
+> **Asszisztens-hiba**: a G.10 első bevezetésekor (14:42) "új vizuális asset-szükséglet" került dokumentálásra anélkül, hogy az `assets/images/seo/` stock fel lett volna mérve. A HTML-grep 9 generic SpendNote-screenshot + 3 klaszter-specifikus print-receipt-mockup-ot mutatott — mindegyik G.10.A AF4-kompatibilis.
+
+**G.10.G HARD RULE: ASSET-STOCK-FIRST**
+
+> **Minden G.10 implementációs lépés ELŐTT KÖTELEZŐ felmérni a meglévő `assets/images/seo/` stockot.** Új PNG/JPG/WEBP asset-gyártás csak akkor merülhet fel, ha a HTML-grep és a stock-térkép bizonyítottan nem fedi le az adott oldal AF4-igényét. **Új asset-gyártást NEM lehet felhasználói feladatként javasolni** anélkül, hogy az asszisztens előbb felmérte volna a meglévő stockot.
+
+**A 6 LAYOUT IS + 3 CSAK COPY P0 REWRITE oldal asset-térképe** (lásd `seo-audit-2026-05-22.md` 7.5.1 + 7.5.2): a meglévő stock 100%-ban lefedi a G.10.A AF4 igényt. **NEM kell új gyártás.** Az igazi feladat **vizuális újrapozicionálás** — a meglévő `<img>` tag-ek felhozatala a hero alá.
+
+**3-step flow SVG státusz**: opcionális, NEM blokkoló. Ha valamelyik DRAFT-on kell, asszisztens inline-SVG-ben generálja (NEM külön asset-fájl).
+
+**Felhasználói gyártási feladat**: NINCS. Az asszisztens szombat reggel önállóan tud DRAFT-okat gyártani a meglévő asset-stock újrapozicionálásával.
+
 ---
 
 **G.10 — Layout-Audit-Output integráció:**
 
-A `seo-audit-2026-05-22.md` 7. szekció ("LAYOUT-AUDIT — G.10 szabályok a P0 oldalakon") tartalmazza a 4 reprezentatív oldal részletes layout-evidence-ét + Codex-checklist-et minden P0 page-rewrite-DRAFT-hoz + 7.6 AF/FV per P0-oldal.
+A `seo-audit-2026-05-22.md` 7. szekció ("LAYOUT-AUDIT — G.10 szabályok a P0 oldalakon") tartalmazza a 4 reprezentatív oldal részletes layout-evidence-ét + Codex-checklist-et minden P0 page-rewrite-DRAFT-hoz + 7.5 asset-stock-térkép (meglévő stock felmérése) + 7.6 AF/FV per P0-oldal.
 
 **G.10 — Page-rewrite-DRAFT layout-checklist (J.16 EXECUTION-PLAYBOOK kötelező kiterjesztés):**
 
