@@ -3016,10 +3016,10 @@ drafts/
 | # | Fájl | Státusz | Élesítési cél | Forrás-szabály |
 |---|---|---|---|---|
 | ~~D1~~ | ~~`drafts/new-landings/cash-handoff-software-DRAFT.html`~~ | **CANCELLED (2026-05-22 14:05)** | — | Visszavonva J.16.9 SERP-evidence + Codex visszavonta saját javaslatát |
-| D2 | `drafts/page-rewrites/cash-handoff-receipt-DRAFT.html` | **PENDING** (gyártás 2026-05-22 péntek 15:30+) | **2026-05-25 hétfő (BATCH-1 EGYÜTT)** | J.16.3 gyorsított cluster-batch — handoff-cluster Codex-szegregáció: "handoff-specific receipt" |
-| D3 | `drafts/page-rewrites/small-business-cash-receipt-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | **2026-05-25 hétfő (BATCH-1 EGYÜTT)** | J.16.3 gyorsított cluster-batch — handoff-cluster Codex-szegregáció: "small business cash receipt / proof" |
+| D2 | ~~`drafts/page-rewrites/cash-handoff-receipt-DRAFT.html`~~ → `cash-handoff-receipt.html` | **LIVE 2026-05-22** (BATCH-1 EGYÜTT) | élesítve | Handoff-specifikus receipt, two-copy mockup hero alá, G.10.B top-third pattern |
+| D3 | ~~`drafts/page-rewrites/small-business-cash-receipt-DRAFT.html`~~ → `small-business-cash-receipt.html` | **LIVE 2026-05-22** (BATCH-1 EGYÜTT) | élesítve | Small business cash receipt / proof, Title "Document Every Handoff" → "Proof Every Time You Take Cash" — handoff-cannibalizáció megszüntetve |
 | ~~D4~~ | ~~`drafts/page-rewrites/petty-cash-software-DRAFT.html`~~ | **POSTPONED** (G.10.D PROTECTED-SEO, a 2026-06-05 retro-audit-ig nem érintjük) | (POSTPONED 2026-06-05 utáni külön döntés) | A `/petty-cash-software` PROTECTED-SEO state, NEM része a P0 REWRITE batch-eknek |
-| D5 | `drafts/page-rewrites/digital-receipt-book-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | **2026-05-25 hétfő (BATCH-1 EGYÜTT)** | J.16.3 gyorsított cluster-batch — handoff-cluster Codex-szegregáció: "receipt book / digital records" |
+| D5 | ~~`drafts/page-rewrites/digital-receipt-book-DRAFT.html`~~ → `digital-receipt-book.html` | **LIVE 2026-05-22** (BATCH-1 EGYÜTT) | élesítve | Digital receipt book / archive, receipt-mockup hero alá + tx-history body közepébe (archive intent vizuális) |
 | D6 | `drafts/page-rewrites/petty-cash-replenishment-form-DRAFT.html` | **PENDING** (gyártás 2026-05-26 kedd) | **2026-05-28 csütörtök (BATCH-2 EGYÜTT)** | J.16.3 BATCH-2 cash-tracking/proof-cluster |
 | D7 | `drafts/page-rewrites/cash-payment-received-proof-DRAFT.html` | **PENDING** (gyártás 2026-05-26 kedd) | **2026-05-28 csütörtök (BATCH-2 EGYÜTT)** | J.16.3 BATCH-2 cash-tracking/proof-cluster |
 | D8 | `drafts/page-rewrites/employee-cash-advance-receipt-DRAFT.html` | **PENDING** (gyártás 2026-05-27 szerda) | **2026-05-28 csütörtök (BATCH-2 EGYÜTT)** | J.16.3 BATCH-2 cash-tracking/proof-cluster |
