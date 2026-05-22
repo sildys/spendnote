@@ -488,7 +488,175 @@ A 4 új bucket × 20 jelölt × 10 SERP-test eredménye:
 
 A pontos Google-ranking **kimenet, nem bemenet** — ezt majd GSC-export méri. **Methodology-prioritás**: SKIP-decisions > priority-rankings.
 
-## H. Title-policy / honest-claims-rule — HARD RULE (felhasználói direktíva, 2026-05-02 03:00)
+## G. LIGHTWEIGHT-PROOF DOCTRINE — HARD RULE (felhasználói + Codex direktíva, 2026-05-22 14:05)
+
+> **Felhasználói trigger (2026-05-22 14:05):** *"a spendnote lényege, hogy nem bonyolult, nem tudományos, nem napokig kalibrálandó, hanem villámgyors egyszerű, könnyítti az egész dokumentálást"* + *"a napi munkát könnyíti, egyszerűsíti, nem hivatalos tudományos könyvelés rendszer!!!"*
+>
+> **Codex egyetértés (2026-05-22 14:05):** *"A SpendNote nem attól erős, hogy 'petty cash software' mint kategória. Hanem attól, hogy: készpénzátadás dokumentálása 30 másodperc alatt, bonyolult accounting rendszer nélkül."*
+
+### G.1 A doktrína megfogalmazása (három pillér)
+
+**Hivatalos megfogalmazás (egy mondatban):**
+
+> **SpendNote = gyors, egyszerű bizonyíték készpénzátadásról. Nem könyvelési rendszer. Nem template. Nem enterprise software.**
+
+**Angolul (landing-szintű message):**
+
+> **SpendNote is not heavy cash management software. It is lightweight cash handoff documentation that simplifies daily work — a natural receipt for every time cash changes hands.**
+
+**A doktrína 3 pillére (mindhárom kötelező — bármelyik nélkül gyengébb):**
+
+| Pillér | Mit mond el | Funkció | Vocabulary-magja |
+|---|---|---|---|
+| **P1. LIGHTWEIGHT** (Codex angle, 2026-05-22 14:02) | "Gyors, egyszerű, 30 másodperc alatt. NEM rendszer-bevezetés, NEM kalibrálás, NEM setup." | termék-tulajdonság (technikai) | fast, simple, lightweight, 30 seconds, no setup, no template, instant proof |
+| **P2. DAILY-WORK-SIMPLIFICATION** (felhasználói angle, 2026-05-22 14:07) | "A napi munkát könnyíti, mindennapi rutin. NEM hivatalos tudományos rendszer, NEM occasional documentation." | termék-tulajdonság (workflow) | daily routine, every cash handoff, day-to-day, less hassle, less arguing, less "where's the cash?" chaos |
+| **P3. NATURAL-RECEIPT-FOCUSED** (felhasználói + Codex direktíva, 2026-05-22 14:22) | "Az átvételi elismervény természetes emberi/üzleti gesztus amikor pénz gazdát cserél — NEM bürokrácia, NEM compliance-feladat. SpendNote ezt 30 másodpercessé teszi." | **vásárlói pszichológia** (elfogadás) | natural proof, signed receipt for both sides, everyday cash handoff, without turning it into paperwork, both sides know what was handed over |
+
+**Codex funkcionális megkülönböztetés (2026-05-22 14:23):**
+> *"A 'gyors, egyszerű, napi munkát könnyítő' azt mondja el, MILYEN a termék. A 'természetes átvételi elismervény' azt mondja el, MIÉRT NEM IDEGEN vagy terhes a használata. SpendNote-ot nem úgy kell eladni, hogy 'vezess be egy új cash management systemet', hanem úgy, hogy: 'amikor pénzt adsz át, természetes, hogy legyen róla egy egyszerű elismervény; mi ezt 30 másodpercessé tesszük.'"*
+
+P1+P2 = TERMÉK-TULAJDONSÁGOK (milyen). P3 = VÁSÁRLÓI PSZICHOLÓGIA (miért nem terhes).
+
+### G.2 Az 5-másodperces filter (Codex)
+
+Minden meglévő és új oldalra alkalmazandó alapkérdés:
+
+> **Does this page make SpendNote feel like a fast, lightweight way to document cash handoffs, without sounding like accounting software, a legal template, or an enterprise cash-management system?**
+
+**Magyarul:** elhiszem-e 5 másodperc alatt hogy ez egy gyors, egyszerű eszköz a pénzátadás dokumentálására? Vagy úgy érzem, hogy rendszert kell bevezetnem, sablonokat kell letöltenem, vagy enterprise-szoftverbe ütöttem?
+
+Ha az oldal a **management / system / software / compliance / template / policy** szóhasználatban él, és NEM mondja el 5 másodperc alatt hogy *"gyorsan kapsz bizonyítékot a pénzátadásról"* → **rossz irányba ment**, revízió kell.
+
+### G.3 Tiltott vocabulary (G-FAIL automatikus jel)
+
+Az alábbi szóhasználatok 5-másodperces felismerhetőséggel **rossz klaszterbe** sorolják az oldalt — Google-szemben és buyer-szemben egyaránt:
+
+| ❌ TILTOTT (vagy óvatosan) | Miért rossz | Mit jelez |
+|---|---|---|
+| `cash management system` | enterprise érzés | "rendszert kell bevezetnem" |
+| `cash management software` | enterprise érzés | "drága SaaS-piac" |
+| `formal bookkeeping` | accounting-pivot | "nem nekem való, könyvelőnek" |
+| `enterprise` | nagyvállalati érzés | "túl nagy nekünk" |
+| `compliance system` | legal érzés | "auditorra van szükségem" |
+| `heavy` (mint adjective) | terhes érzés | "nem nekem" |
+| `comprehensive` (egyedül) | enterprise érzés | "túl komplex" |
+| `cash custody` (egyedül, lehatárolás nélkül) | enterprise-banking-CIT érzés | "banki vault-management" — J.16.9.6 evidence |
+| `download template` / `free PDF` | passive-doc érzés | "letöltök egy űrlapot, kész" |
+| `accounting policy` / `policy template` | legal-doc érzés | "ügyvédet kell kérdeznem" |
+| `mandatory documentation` | legal/compliance/tax-pivot (Codex 2026-05-22 14:22) | "kötelező nyilvántartás, hivatalos szerv-szintű" |
+| `legally required` (documentation/records) | legal-pivot | "törvénybe ütközik ha nem csinálom" |
+| `compliance documentation` | enterprise-audit-pivot | "compliance-tisztviselő kell hozzá" |
+| `official cash records` | enterprise-banking-pivot | "hivatalos könyvelés, NEM operational" |
+| `you already need` / `you must have` / `required by law` (presupposition-stílusban) | implicit kritika (Codex 2026-05-22 14:23 — felhasználói visszacsatolás) | "számonkér engem hogy eddig nem csináltam" |
+
+**KIVÉTEL:** ha a kontextus EXPLICIT lehatárolja (pl. *"petty cash custody, not bank vault custody"*) → megengedett, de óvatosan, max 1-2× / oldal.
+
+**Presupposition-szabály (G.3.A új meta-szabály, 2026-05-22 14:23):**
+> *"NEM feltételezzük hogy a buyer már most ad elismervényt. Kerüljük az 'already need' / 'must have' / 'you should be doing this' presupposition-mintákat — ezek implicit kritikát hordoznak azoknak akik EDDIG NEM csinálták meg. Helyette: kontextuális kifejezések — 'when cash changes hands', 'whenever you hand cash to someone', 'for every cash handoff' (NEM 'for the cash handoffs you already document')."*
+
+### G.4 Preferált vocabulary (G-GOOD automatikus jel)
+
+| ✅ JÓ vocabulary | Pillér | Forrás |
+|---|---|---|
+| `simple cash handoff receipt` | P1 | Codex |
+| `quick cash receipt app` | P1 | Codex |
+| `easy petty cash tracking` | P1 | Codex |
+| `lightweight petty cash software` | P1 (lehatárolt "software") | Codex |
+| `cash handoff proof` | P1 | Codex |
+| `signed cash receipt in seconds` | P1 | Codex |
+| `track petty cash without spreadsheets` | P1 | Codex |
+| `receipt for cash given to an employee` | P2 | Codex |
+| `simple proof of cash received` | P1 + P2 | Codex |
+| `daily cash handoffs` | P2 | Felhasználói |
+| `who has the cash right now` | P2 | meglévő SpendNote-vocabulary |
+| `30 seconds, no setup` | P1 | hero-message-magja |
+| `not a system to set up — just a receipt` | P1 + P2 | mantra |
+| `less hassle, less arguing about cash` | P2 | felhasználói pain-point |
+| `natural proof` | P3 | Codex (2026-05-22 14:22) |
+| `signed receipt for both sides` | P3 | Codex |
+| `everyday cash handoff` | P3 + P2 | Codex |
+| `without turning it into paperwork` | P3 | Codex |
+| `both sides know what was handed over` | P3 | Codex |
+| `for every cash handoff` (NEM `for the cash handoffs you already document`) | P3 (presupposition-mentes) | Codex angol-finomítás `for` > `of` |
+| `when cash changes hands` (kontextuális) | P3 (presupposition-mentes) | Codex |
+| `whenever you hand cash to someone` (kontextuális) | P3 | Codex |
+
+### G.5 Minimum message-block receptúra (minden új oldal / page-rewrite-on KÖTELEZŐ)
+
+Minden új oldal vagy page-rewrite **hero-szakaszában** (Title alatt, első 200 szóban) kötelezően megjelenni az alábbiak közül **legalább 3 (6-ból)**:
+
+1. ⏱️ **"Fast / 30 seconds / in seconds / quick"** — sebesség (P1)
+2. 🪶 **"Simple / lightweight / without"** — anti-complexity (P1)
+3. 📅 **"Daily / every / each / routine"** — daily-work (P2)
+4. ❌ **"No setup / no template / no spreadsheet / no accounting"** — anti-rendszer (P1)
+5. 📋 **"Proof / receipt / documentation / record"** — output-side (kontra input-side ami a competitor-mintázat)
+6. 🤝 **"Natural / both sides / when cash changes hands / without paperwork"** — natural-receipt-focused (P3)
+
+**Példa 1 — kompakt minimum-message-block hero-szakaszra:**
+
+> *"**Simple proof for cash handoffs in 30 seconds.** Daily routine for small teams that hand cash to each other. No accounting setup. No template downloads. Just open, enter the amount, sign, receipt done."*
+
+(Ez tartalmazza: ⏱️ "30 seconds" + 🪶 "Simple" + 📅 "Daily routine" + ❌ "No accounting setup, No template" + 📋 "proof / receipt" = 5/6 kategória.)
+
+**Példa 2 — Codex+felhasználói VÉGLEGES hero-páros (2026-05-22 14:25, P3-hangsúly):**
+
+> *"**Create natural proof for every cash handoff, without turning it into paperwork.**
+>
+> SpendNote turns everyday cash handoffs into signed receipts in seconds: no templates, no spreadsheets, no accounting setup."*
+
+(Ez tartalmazza: ⏱️ "in seconds" + 🪶 "no spreadsheets" + 📅 "every" + "everyday" + ❌ "no templates, no accounting setup, no spreadsheets" + 📋 "proof / signed receipts" + 🤝 "natural proof, without turning it into paperwork" = mind a 6/6 kategória.)
+
+**Hero-páros-választási iránymutatás:**
+- Új landing-eken: a Példa 2 (P3-hangsúly) preferred mert ez a doktrína legtisztább kifejezése.
+- Meglévő page-rewrite-okon: kontextustól függően Példa 1 vagy 2; ha az oldal MÁR receipt-fókuszú (pl. `/cash-handoff-receipt`, `/small-business-cash-receipt`), Példa 2 illik.
+- SEO-szintű Title változatlan marad (G.6 kétszintű stratégia), a hero-páros a Title ALATT él.
+
+### G.6 Kétszintű stratégia (Codex kulcs-megerősítés a 2026-05-22 14:19-i válaszában)
+
+> **"Nem kidobni a kulcsszavakat, hanem átírni mögéjük az értelmet."** — Codex
+
+Ez a G-doktrína és a hagyományos SEO-keyword-stratégia **összebékítése**:
+
+| Szint | Mit csinál | Példa |
+|---|---|---|
+| **SEO-szint** (Title, Meta D, H1, schema-fields) | továbbra is fogni kell a keresett kulcsszavakat: `petty cash software`, `cash receipt`, `cash handover`, `cash tracking`, `digital petty cash book` stb. | Title változatlan: *"Petty Cash Software for Tracking Team Cash..."* |
+| **Doktrína-szint** (hero-message, H2-k, body-bekezdések, CTA) | a fő üzenet legyen: **fast, simple proof for cash handoffs** (G.5 minimum-message-block) | Hero alatt: *"30 seconds, no setup, daily routine for small teams..."* |
+
+**Más szavakkal:** a Title/Meta a Google-attention-grab, a body-message a buyer-pre-conversion-conviction. Ne keverjük össze: a Title-ben "Software" OK ha a body-ban tisztázzuk hogy "lightweight, not heavy".
+
+### G.7 Kapcsolat az F-policy-vel és a H. Title-policy-vel
+
+| Policy | Mit szabályoz | Példa |
+|---|---|---|
+| **F. Compliance-border** | mit NEM csinálunk (mit NEM állítunk magunkról) | "not accounting / tax / legal software" |
+| **G. Lightweight-Proof Doctrine** | HOGYAN beszélünk arról amit CSINÁLUNK | "lightweight, daily-work, fast proof" |
+| **H. Title-policy / honest-claims** | hogyan ÍGÉRJÜK amit kínálunk a SERP-snippet-szinten | "no bait-and-switch, no fake 'free template'" |
+
+F. + G. + H. együtt = teljes pozicionálási rendszer. F. mondja meg mit NEM, G. mondja meg HOGYAN, H. mondja meg mit IGAZÁN ígérünk a Google SERP-en.
+
+### G.8 Visszamenőleges audit-jogosultság (H. szekció triggerelése)
+
+A G-doktrína bevezetése **azonnali teljes audit-szükségletet** indukál a meglévő ~51 publikus SEO oldalra. Az audit-output a `seo-audit-2026-05-22.md` külön fájlban él (lásd H. szekció), és minden oldalra a G.2 5-másodperces filter alapján besorolást ad: `good / near-miss / fail / uncertain`.
+
+**Audit-mód:** thin audit minden 51 oldalra (Title + Meta D + H1 + hero-első-100-szó alapján); mély audit csak a P0-P1 prioritású 15-20 oldalra (GSC-evidence + body-content + cluster-overlap).
+
+**Élesítés-mód (KÖTELEZŐ):** drip-feed (1 page-rewrite / vasárnap), J.16 EXECUTION-PLAYBOOK protokoll szerint. **Sehol NEM élesítünk batch-szinten** — Google-lavina-effekt elkerülése (J.14.13 figyelmeztetés).
+
+### G.9 PROTECTED list (top-konverter védelem, 2026-05-22)
+
+Az alábbi 5 oldal **PROTECTED / observe-only** státuszt kap a G-audit során — audit IGEN (tudjuk meg a doktrína-fitjüket), de **module-szintű revízió NEM** amíg GSC retro-audit nem mutat kényszerítő evidence-et:
+
+| URL | Indok |
+|---|---|
+| `/` (homepage) | Aktív konverter — ma is regisztráció jön belőle (2026-05-08 evidence: 2 regisztráció / 4 klikk) |
+| `/petty-cash-app` | Indexed but slow-ranked — aktív J.14.13 tesztelési ablakban, ma kapott 1 új belső link a `/petty-cash-software`-re |
+| `/petty-cash-software` | MA élesedett (2026-05-22 13:25) — friss, NEM piszkáljuk 14-21 nap retro-audit-ig (csak "cash custody" vocabulary-watchlist a J.16.9.6 szerint) |
+| `/spendnote-pricing` | Konverziós oldal — pricing-info változás üzleti döntés, NEM SEO-döntés |
+| `/petty-cash-app-vs-excel` | Codex-rangsoroló #1-jelölt — Title-csere kockázat (J.14.13) |
+
+**Protected != tabu**: ha a 14-napos retro-audit (2026-06-05+) kényszerítő evidence-et hoz (pl. /petty-cash-software-en enterprise-query-k jönnek), akkor a "cash custody" visszavágás engedélyezett (a J.16.9.6 watchlist-protokoll szerint).
+
+---
 
 **Trigger:** A `petty-cash-how-much-to-keep` snippet-rewrite után audit derítette ki, hogy a 04-25-i `8a1efe2` commit **nem cleanup-olta végig** a "Free / Template / (Free) / Free checklist included" claim-eket — **6 oldalon** (4 indexed + 2 noindex) maradt félrevezető SERP-snippet ahol **nincs valós letölthető fájl**. A `petty-cash-replenishment-form` GSC pos=39.0 (impression van, klikk nincs) ennek a bait-and-switch trust-penalty-jának egyértelmű jele.
 
@@ -547,6 +715,80 @@ A pontos Google-ranking **kimenet, nem bemenet** — ezt majd GSC-export méri. 
 - ✅ **JSON-LD validation:** 12/12 blokk valid (Article + FAQPage mindegyikben).
 
 **Methodology-konzekvencia:** A 04-25-i 8a1efe2 commit-tanulság — a "trust-fix sweep"-ek **ne csak `<title>`-t és heading-et** módosítsanak, hanem **a teljes head-block-ot** (meta description + og/twitter + schema). Az audit-checklist ezt a hiányt zárja ki a jövőre nézve.
+
+## H.2 TELJES SEO-AUDIT 2026-05-22 — G-DOKTRÍNA SZERINTI VÉGIGNÉZÉS A 51 PUBLIKUS SEO OLDALON
+
+> **Trigger (felhasználói direktíva, 2026-05-22 14:14):** *"mi lenne ha csinálnánk megint egy teljes seo audiott és újrapozicionálást, ne ezt a régi elvetélt vonalat toldoznánk foltoznánk?"* → válasz: igen, audit IGEN, live rewrite drip-feed (1/hét) NEM tömeges. Codex egyetértés (2026-05-22 14:17): *"Igen, szerintem ez a jó irány: teljes SEO-audit igen, teljes live rewrite nem."*
+
+### H.2.1 Cél
+
+A G. doktrína (LIGHTWEIGHT-PROOF) bevezetése után a meglévő ~51 publikus SEO oldal **mindegyikét** át kell nézni a G.2 5-másodperces filter alapján. Output: prioritás-lista (P0-P3) hogy melyik oldalakat érdemes a kisebb-Opus-mód alatt drip-feed-szerűen revideálni.
+
+**KRITIKUS:** semmilyen live HTML-modifikáció NEM történik az audit fázisában. Csak Markdown-tabella + jelentés.
+
+### H.2.2 Audit-output fájl
+
+A teljes audit-tabella + page-by-page elemzés a **`seo-audit-2026-05-22.md`** külön fájlban él (NEM a `seoplan.md`-ben, mert az ~5400 sor és túl nagy lenne).
+
+A `seo-audit-2026-05-22.md` szerkezete:
+1. **Bevezető**: doktrína-link + audit-módszer + PROTECTED-list
+2. **Audit-tabella**: 51 oldal × 10 oszlop
+3. **Page-by-page jegyzetek**: csak a P0-P1 prioritású oldalakra (mély-audit)
+4. **Output prioritás-lista**: 6-8 rewrite-jelölt az első drip-feed-batchhez (élesítés 2026-05-31-től vasárnaponként)
+5. **Codex-review-ready summary**: 1 oldalas összefoglaló Codex-konzultációhoz
+
+### H.2.3 Audit-tabella oszlopai (Codex specifikáció, 2026-05-22 14:17)
+
+| # | Oszlop | Érték-skála | Forrás |
+|---|---|---|---|
+| 1 | URL | szöveg | sitemap.xml |
+| 2 | Current role | szöveg (1-2 mondat) | manual review |
+| 3 | GSC value | `high / medium / low / none` | `Lekérdezések.csv` + `Oldalak.csv` 2026-05-22 |
+| 4 | Doctrine fit | `good / near-miss / fail / uncertain` | G.2 5-másodperces filter |
+| 5 | Wrong-intent risk | `template / accounting / enterprise / info-only / none` | G.3 tiltott vocabulary + body-content |
+| 6 | Money proximity | `high / medium / low` | tool/commercial query-családi távolság (J.14.15.3) |
+| 7 | Cannibal risk | `high / medium / low / none` | overlap más SpendNote-oldalakkal |
+| 8 | Recommended action | `protect / light edit / rewrite draft / noindex candidate / merge candidate` | aggregált döntés |
+| 9 | Publish priority | `P0 / P1 / P2 / P3` | P0 = first drip-feed batch (2026-05-31..06-21), P1 = 2026-07, P2 = 2026-08+, P3 = backlog |
+| 10 | Notes | szabad szöveg | observation + vocabulary-jelzők |
+
+### H.2.4 Doktrína-filter (G.2 ismétlés, audit-input)
+
+> **"Does this page make SpendNote feel like a fast, lightweight way to document cash handoffs, without sounding like accounting software, a legal template, or an enterprise cash-management system?"**
+
+**Konkrét audit-jelek:**
+- **GOOD**: Title/H1/hero a G.4 preferált vocabulary-ből merít; minimum-message-block 3/6 vagy több kategória; receipt-output-fókuszú (NEM input-side, NEM template-passive); P3-pillér jelei jelen vannak
+- **NEAR-MISS**: alap-message megvan de hiányzik 1-2 G.5-kategória; vagy van 1-2 G.3 tiltott vocabulary-jel ami enyhén rossz klaszterbe sodorhat
+- **FAIL**: Title vagy H1 G.3 tiltott vocabulary-ből merít; vagy az oldal alapvetően template/accounting/enterprise érzést kelt; G.5 message-block 0-1 kategória
+- **UNCERTAIN**: nem egyértelmű — body részletes mély-auditra szorul
+
+### H.2.5 PROTECTED list (G.9 ismétlés, audit-állapot)
+
+| URL | Audit-státusz | Akció |
+|---|---|---|
+| `/` (homepage) | AUDIT IGEN, REVÍZIÓ NEM | observe only (aktív konverter) |
+| `/petty-cash-app` | AUDIT IGEN, REVÍZIÓ NEM | observe only (J.14.13 tesztelési ablakban) |
+| `/petty-cash-software` | AUDIT IGEN, REVÍZIÓ NEM | observe only (MA élesedett, 14-21 nap retro-audit várás) + "cash custody" watchlist (J.16.9.6) |
+| `/spendnote-pricing` | AUDIT IGEN, REVÍZIÓ NEM | observe only (konverziós oldal) |
+| `/petty-cash-app-vs-excel` | AUDIT IGEN, REVÍZIÓ NEM | observe only (rangsoroló #1-jelölt, Title-csere kockázat) |
+
+Ezek auditálva lesznek (tudni akarjuk doktrína-fitjüket), de a `Recommended action` oszlopban automatikusan `protect` érték kerül, függetlenül a doctrine fit-től. Live revízió csak akkor, ha 14-napos retro-audit kényszerítő evidence-et hoz.
+
+### H.2.6 Audit-mód: thin + mély
+
+- **THIN AUDIT** mind a 51-re: Title + Meta D + H1 + hero-első-100-szó alapján besorolás (oszlop 1-7). Cél: gyors gross-status-snapshot. Becsült idő: ~3-4 perc/oldal × 51 = ~3 óra.
+- **MÉLY AUDIT** csak a thin-audit FAIL + NEAR-MISS + GSC-high-value (~15-20 oldal): teljes body-content + cluster-overlap + javasolt-revízió-jegyzetek (oszlop 8-10 finomítás + page-by-page jegyzet). Becsült idő: ~10 perc/oldal × 20 = ~3-4 óra.
+- **OUTPUT**: prioritás-lista + 6-8 első drip-feed-batch rewrite-jelölt.
+
+### H.2.7 Audit kezdés: 2026-05-22 14:30+
+
+A `seo-audit-2026-05-22.md` fájl most kerül létrehozásra. Cél: 2026-05-23 (szombat) reggelre kész thin-audit-output, és 2026-05-23 estére kész mély-audit-output + prioritás-lista.
+
+### H.2.8 Audit utáni protokoll
+
+1. **Codex-review** (felhasználói feladat): az audit-output megosztása Codex-szel véleményezésre.
+2. **Drip-feed gyártás** (asszisztens): a P0 oldalak DRAFT-jainak gyártása a `drafts/page-rewrites/`-be (~1-2 oldal/nap, szombat-vasárnap-hétfő).
+3. **Drip-feed élesítés** (kisebb-Opus-mód): heti 1 page-rewrite, vasárnaponként, J.16.2 protokoll szerint.
 
 ## I. Apposing pilot Phase 1 — page-type conversion hipotézis-teszt (2026-05-02 21:30, ChatGPT Codex-strategy session után)
 
@@ -2519,17 +2761,20 @@ drafts/
 
 **KRITIKUS:** a `drafts/<slug>-DRAFT.html` fájlt **ne töröld** publikálás után. Marad referenciaként ha később bug-fixet vagy schema-frissítést kell visszanyomni. Csak akkor töröld ha a felhasználó explicit kéri.
 
-### J.16.3 Élesítési ütemterv (drip-feed, ~1 új landing / 5-7 nap)
+### J.16.3 Élesítési ütemterv (drip-feed, ~1 / 5-7 nap)
 
 | # | Draft fájl | Élesítési cél-dátum | Retro-audit (+14 nap) | Megjegyzés |
 |---|---|---|---|---|
-| L1 | `cash-handoff-software-DRAFT.html` | 2026-05-24 (vasárnap, hétfői Google-crawl-csúcs előtt) | 2026-06-07 | Sprint-2 NAP 3, Codex 2. landing javaslata |
-| L2 | TBD page-rewrite #1 | 2026-05-31 (vasárnap) | 2026-06-14 | Ha gyártás 2026-05-22..05-28 sikeres |
-| L3 | TBD page-rewrite #2 | 2026-06-07 (vasárnap) | 2026-06-21 | Drip-feed folytatás |
-| L4 | TBD page-rewrite #3 | 2026-06-14 (vasárnap) | 2026-06-28 | Drip-feed folytatás |
-| L5+ | TBD page-rewrite #4-n | hetente 1 (vasárnaponként) | +14 nap mindig | Amíg van draft a `drafts/`-ban |
+| ~~L1~~ | ~~`cash-handoff-software-DRAFT.html`~~ | **CANCELLED 2026-05-22** | — | Visszavonva J.16.9 SERP-evidence + Codex visszavonta |
+| L2 | `cash-handoff-receipt-DRAFT.html` (page-rewrite) | 2026-05-31 (vasárnap) | 2026-06-14 | "anti-complexity / lightweight proof" angle beépítés (J.16.9.4 Fázis 2) |
+| L3 | `small-business-cash-receipt-DRAFT.html` (page-rewrite) | 2026-06-07 (vasárnap) | 2026-06-21 | handoff-intent fő-oldal Codex-szegregáció szerint |
+| L4 | `petty-cash-software-DRAFT.html` (page-rewrite) | 2026-06-14 (vasárnap) | 2026-06-28 | enterprise-hangulat ellensúlyozás + "cash custody" diszkamper |
+| L5 | `digital-receipt-book-DRAFT.html` (page-rewrite) | 2026-06-21 (vasárnap) | 2026-07-05 | handoff-intent másodlagos oldal Codex-szegregáció szerint |
+| L6+ | TBD page-rewrite #5-n | hetente 1 (vasárnaponként) | +14 nap mindig | Amíg van draft a `drafts/`-ban |
 
 **Drip-feed indok (Codex J.15.5.10):** vasárnapi push → hétfői Google-crawl-csúcs → tisztább first-impressions mérés. Heti 1 új deploy NEM zavarja össze az aktuálisan érlelődő oldalak GSC-metrikáit, NEM ad lavina-effektet a sitemap-discovery-nek.
+
+**Page-rewrite vs új landing különbség (J.16.3.A új meta-szabály):** új landing (mint a 2026-05-22 14:00-i `/petty-cash-software`) friss URL → sitemap-bump + manuál reindex-request + 14-21 nap várás first-impressions-re. Page-rewrite (L2-L5) MÁR rangsoroló meglévő URL → csak `sitemap.xml lastmod` bump szükséges, manuál reindex-request opcionális (organic recrawl elég, ha nem sürgős). Retro-audit page-rewrite-on a meglévő top-query-rangsor STABILITÁSÁT vizsgálja (NEM zuhant-e), NEM új-rangsor-felfedezést.
 
 ### J.16.4 Mit NE csinálj limited-capacity módban (HARD RULES)
 
@@ -2559,9 +2804,13 @@ drafts/
 
 | # | Fájl | Státusz | Élesítési cél | Forrás-szabály |
 |---|---|---|---|---|
-| D1 | `drafts/new-landings/cash-handoff-software-DRAFT.html` | **PENDING** (gyártás 2026-05-22 ~14:00-tól) | 2026-05-24 vasárnap | Sprint-2 NAP 2-3, Codex J.15.5.10 |
+| ~~D1~~ | ~~`drafts/new-landings/cash-handoff-software-DRAFT.html`~~ | **CANCELLED (2026-05-22 14:05)** | — | Visszavonva J.16.9 SERP-evidence + Codex visszavonta saját javaslatát |
+| D2 | `drafts/page-rewrites/cash-handoff-receipt-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | 2026-05-31 vasárnap (L2) | J.16.9.4 Fázis 2 — anti-complexity / lightweight proof angle |
+| D3 | `drafts/page-rewrites/small-business-cash-receipt-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | 2026-06-07 vasárnap (L3) | J.16.9.4 Fázis 2 — handoff-intent fő SpendNote-oldal Codex-szegregáció szerint |
+| D4 | `drafts/page-rewrites/petty-cash-software-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | 2026-06-14 vasárnap (L4) | J.16.9.4 Fázis 2 — enterprise-hangulat ellensúlyozás + "cash custody" diszkamper |
+| D5 | `drafts/page-rewrites/digital-receipt-book-DRAFT.html` | **PENDING** (gyártás 2026-05-23 szombat) | 2026-06-21 vasárnap (L5) | J.16.9.4 Fázis 2 — handoff-intent másodlagos oldal Codex-szegregáció szerint |
 
-**Hozzáadási és státusz-csere protokoll:** minden új draft amikor bekerül a `drafts/`-ba → új sor a táblázatba `PENDING` státusszal. Amikor élesítve → státusz `LIVE (élesítés YYYY-MM-DD)`, és külön bejegyzés a `seoplan.md` J.16.x audit-trail-be (mint pl. `J.16.x.1 L1 élesítve YYYY-MM-DD`).
+**Hozzáadási és státusz-csere protokoll:** minden új draft amikor bekerül a `drafts/`-ba → új sor a táblázatba `PENDING` státusszal. Amikor élesítve → státusz `LIVE (élesítés YYYY-MM-DD)`, és külön bejegyzés a `seoplan.md` J.16.x audit-trail-be (mint pl. `J.16.x.1 L1 élesítve YYYY-MM-DD`). Ha CANCELLED → áthúzás + indok-bejegyzés (lásd D1).
 
 ### J.16.7 Eszkalációs protokoll (mikor kell felhasználói döntés)
 
@@ -2586,6 +2835,136 @@ A kisebb-Opus első session-ének elején ezt az ellenőrző-listát futtassa le
 - [ ] Cloudflare Pages build-státusz `success` az utolsó push-on (felhasználói ellenőrzés)
 
 Ha bármelyik elbukik → STOP, felhasználói konzultáció.
+
+---
+
+### J.16.9 SPRINT-2 NAP 2-3 REVÍZIÓ (2026-05-22 14:05) — `/cash-handoff-software` PARKOL, "anti-complexity / lightweight proof" angle aktiválva
+
+**Felhasználói trigger:** *"előbb kérjünk indexet"* (manuál reindex-request a 4 URL-re) UTÁN — *"kész, mehet a gyártás"* (a `/cash-handoff-software-DRAFT.html` gyártásra kérés).
+
+**Asszisztens-akció:** a J.16.9 új process-szabály (J.15.5.11.Z.1 UNCERTAINTY-ACCEPTED LANDING-LAUNCH 0. lépésének betartása) értelmében **gyártás ELŐTT élő SERP-check** 3 query-családra: `cash handoff software`, `cash handover software for business`, `cash custody tracking software`.
+
+#### J.16.9.1 SERP-evidence (cannibalization BIZONYÍTVA)
+
+| Query | Cursor-WebSearch SpendNote poz #1 | Cursor-WebSearch SpendNote poz #2 | Competitor |
+|---|---|---|---|
+| `cash handoff software` | **`/small-business-cash-receipt`** (H1: *"Document Every Handoff"*) | **`/digital-receipt-book`** | CashProof |
+| `cash handover software for business` | **`/small-business-cash-receipt`** | **`/digital-receipt-book`** | CashProof + ALVARA (enterprise CIT) |
+| `cash custody tracking software` | — (SpendNote nincs TOP 5-ben) | — | **TOP 4 mind ENTERPRISE banking**: ECM ISA 8™ (central bank vault), NamSys Currency Controller (CIT), ALVARA ICC (CIT), Intellect Custody (treasury/capital markets) |
+
+**KRITIKUS különbség a J.15.5.11.Z eseményhez képest:** a `/petty-cash-software` SERP-check-nél a Cursor-WebSearch TOP 2-t mutatott, DE GSC-ben 0 impr volt → torzítás-gyanú. **ITT viszont 3 query-n KONSZISZTENSEN UGYANAZ a 2 SpendNote-oldal jön elő** (`/small-business-cash-receipt` + `/digital-receipt-book`), ami **sokkal kevésbé valószínű hogy puszta WebSearch-torzítás**. Plus mindkét oldal H1-je explicit a "handoff" intent-mezőt fedi (*"Document Every Handoff"*).
+
+**Cannibalization-diagnózis (J.15.5.11.Z.1 (d) feltétel):** új `/cash-handoff-software` landing **fragmentálná a juicet** a már rangsoroló SpendNote-oldalak között. A J.15.5.11.Z eset (`/petty-cash-software`-rel) "homepage-overshadow" volt, ITT viszont **direkt content-overlap** a SpendNote sajat 2 meglévő top-oldalával. Kockázat: MAGAS, NEM elfogadható.
+
+#### J.16.9.2 Codex visszavonja saját javaslatát (új evidence fényében)
+
+**Codex 2026-05-22 ~14:00 válasz (idézet):**
+> *"Igen, itt Opus most jól húzta be a féket. A /cash-handoff-software-t én is leállítanám. Az új evidence alapján már nem ugyanaz a helyzet, mint amikor javasoltam. Akkor az volt a feltételezés, hogy ez külön money-query mező. Most viszont két gond látszik: (1) A handoff/software intentet már meglévő SpendNote oldalak fogják → új landing tényleg könnyen szétvághatja a jelet. (2) A 'cash custody' tényleg veszélyesebb szó, mint gondoltuk → ha a SERP enterprise vault / CIT / banking irányba megy, akkor ezt nem szabad tovább tolni kisvállalkozós oldalon."*
+
+**Codex módosított sprint-2 NAP 2-3 javaslata:** Opció A (parkolás) + részben Opció C (Codex visszavonja saját javaslatát). Opció B (restaurant/bar/café wedge) szintén elvetve — *"nem compliance miatt elsősorban, hanem mert az is új bizonytalan keresleti zóna. Most nem kell még egy ismeretlen vertical."*
+
+#### J.16.9.3 Felhasználói "lightweight proof" instinct → Codex "anti-complexity angle" stratégia
+
+**Felhasználói kérdés (2026-05-22 14:01):** *"mi lenne ha inkább abba az irányba tapogatóznánk, hogy könnyű egyszerű, nem bonyolult, csak lightos átvételi igazolás????"*
+
+**Codex válasz (2026-05-22 14:02 — idézet):**
+> *"Igen. Sőt, szerintem ez jobb emberi pozicionálás, mint a 'software' irány önmagában. Mert lehet, hogy a buyer fejében nem ez van: 'I need petty cash management software.' Hanem ez: 'Csak legyen valami egyszerű bizonyíték, hogy átadtam a pénzt.' Ez nagyon SpendNote-kompatibilis. Lightweight proof, not accounting software. Ez lehet a legerősebb üzenet."*
+
+**Codex SEO-óvatosság — vocabulary-irány-szabály (J.16.9.3 új meta-szabály):**
+
+| ❌ KERÜLT vocabulary (régi mocsár) | ✅ JÓ vocabulary (anti-complexity angle) |
+|---|---|
+| `cash receipt template` | `simple cash handoff receipt app` |
+| `cash handover form` | `cash handoff proof` |
+| `receipt format` | `digital cash handoff receipt` |
+| `acknowledgement sample` | `cash received confirmation` |
+| `free pdf` | `signed receipt for cash transfer` |
+| | `receipt app for cash handoffs` |
+
+**Pozicionálási üzenet:** *"Simple proof for cash handoffs. No accounting setup. No spreadsheet. No template."* — ez **ellensúlyozza** a `/petty-cash-software` esetleges túl-enterprise/software-hangulatát is (kontextuális link a /petty-cash-software-ből erre az angle-re értelemszerűen kontextus-megerősítés).
+
+**Codex jövőbeli Title-javaslat ha későbbi külön landing igénye felmerül** (NEM most, sprint-3+ horizon):
+> *"Simple Cash Handoff Receipts — Signed Proof Without Accounting Software"*
+
+NEM "software", NEM "template", hanem **egyszerű bizonyíték pénzátadásra**.
+
+#### J.16.9.4 ÚJ Sprint-2 NAP 2-3 ütemterv (4-fázisú, 1 commit/fázis, NULLA új landing HTML)
+
+**Fázis 1 — MA (2026-05-22 14:05+):** Docs-only commit (jelen seoplan.md + PROGRESS.md frissítés). NULLA HTML-érintés. `/cash-handoff-software-DRAFT.html` PENDING-státusz CANCELLED-re vált a J.16.6 inventory-ban.
+
+**Fázis 2 — SZOMBAT (2026-05-23):** "Anti-complexity / lightweight proof" message-beépítés DRAFT-jainak gyártása a `drafts/page-rewrites/`-be, **4 meglévő oldalra**:
+1. `drafts/page-rewrites/cash-handoff-receipt-DRAFT.html` (J.14.14 békén-hagyós oldal — itt 1 új "lightweight proof" bekezdés, NEM Title/H1/Meta-csere, body-only)
+2. `drafts/page-rewrites/small-business-cash-receipt-DRAFT.html` (handoff-intent fő SpendNote-oldal a SERP-evidence szerint — itt "anti-complexity" message-hangsúly)
+3. `drafts/page-rewrites/petty-cash-software-DRAFT.html` ("lightweight proof" angle beépítése = enterprise-hangulat ellensúlyozása + 1 bekezdés "cash custody NEM enterprise" diszkamper)
+4. `drafts/page-rewrites/digital-receipt-book-DRAFT.html` (handoff-intent másodlagos oldal a SERP-evidence szerint — itt "anti-complexity" message-finomítás)
+
+**Fázis 3 — VASÁRNAP (2026-05-24):** Handoff cluster intent-konszolidációs audit (J.16.10 — lásd lentebb). Cél: a 4 oldal végleges intent-szegregációja DRAFT-szinten (NEM élesítés most).
+
+**Fázis 4 — HÉTFŐ-KEDD (2026-05-25..05-26):** Ads-validáció előkészítés (J.16.9.7 keyword-csoport + GA4 conversion tracking + UTM-séma a `/petty-cash-software`-hez).
+
+**SZOMBATI page-rewrite-draftok ÉLESÍTÉSI ÜTEMTERVE (kisebb-Opus-mód alatt, J.16.2 protokoll):**
+- L2: `cash-handoff-receipt-DRAFT.html` → élesítés 2026-05-31 vasárnap
+- L3: `small-business-cash-receipt-DRAFT.html` → élesítés 2026-06-07 vasárnap
+- L4: `petty-cash-software-DRAFT.html` → élesítés 2026-06-14 vasárnap
+- L5: `digital-receipt-book-DRAFT.html` → élesítés 2026-06-21 vasárnap
+
+#### J.16.9.5 HANDOFF CLUSTER INTENT-KONSZOLIDÁCIÓS AUDIT (Codex-javaslat, J.16.10)
+
+**Cél (Codex):** eldönteni melyik oldal milyen intentet visz, ne legyenek pucér átfedések:
+
+| Oldal | Cél-intent (Codex-szegregáció) | Anti-complexity message-fókusz |
+|---|---|---|
+| `/small-business-cash-receipt` | "small business cash receipt / proof" | "Simple proof, not accounting" |
+| `/digital-receipt-book` | "receipt book / digital records" | "Searchable records, no template hassle" |
+| `/cash-handoff-receipt` | "handoff-specific receipt" | "Signed proof of cash transfer, ~30 seconds" |
+| `/petty-cash-software` | "petty cash software (team cash custody)" — de **enterprise-hangulat-ellensúlyozás "simple proof" üzenettel** | "Software-class control without enterprise-software complexity" |
+
+**Audit-output (vasárnap):** GSC-evidence + current-message audit + javasolt-intent definíció minden oldalra. **Új landing-szintű URL NEM jön létre most.**
+
+#### J.16.9.6 `/petty-cash-software` RETRO-AUDIT "cash custody" WARNING (Codex)
+
+**Beépítés a `/petty-cash-software` 14-napos retro-auditba (2026-06-05 körül):**
+
+> **🚨 Watch-list a retro-auditkor:** ha a `/petty-cash-software` GSC-query-listáján enterprise vault / CIT / banking / treasury / custody-banking query-k jelennek meg (pl. `cash vault management`, `cash custody banking`, `cash-in-transit software`, `treasury custody`, `central bank cash`), akkor a "cash custody" Codex-nyelvezet HÚZTA AZ OLDALT rossz klaszterbe. Akció: a "cash custody" kifejezés **visszavágása** az oldal body-jában — `petty cash custody` vagy `team cash custody` kifejezésekre cserélni, hogy a small-business-kontextus dominálj a banking-kontextus felett. Ha small-business-query-k jönnek (mit várunk) → marad ahogy van.
+
+**Most NEM pánikból kivenni** (Codex): csak figyelni a 14-napos retro-auditkor.
+
+#### J.16.9.7 ADS-VALIDÁCIÓ KEYWORD-CSOPORT (Codex 2 ad group + brutal negatives)
+
+**Ad Group 1 — Software/money-query:**
+- `petty cash software`
+- `petty cash tracking software`
+- `petty cash management software`
+- `petty cash app`
+- `petty cash tracking app`
+- `cash tracking app`
+- `cash handover register`
+- `cash handover receipt`
+
+**Ad Group 2 — Lightweight-proof angle (Codex új):**
+- `simple cash receipt app`
+- `cash handoff receipt`
+- `cash received proof`
+- `digital cash receipt for cash payment`
+- `receipt for cash handoff`
+
+**Brutal negative-lista (mindkét csoportra):**
+`template`, `form`, `sample`, `format`, `free`, `pdf`, `excel`, `spreadsheet`, `definition`, `meaning`, `accounting`, `policy`, `worksheet`, `report`, `salary`, `payroll`
+
+**Landing URL** (mindkét csoport):
+- Ad Group 1 → `/petty-cash-software` + UTM
+- Ad Group 2 → `/cash-handoff-receipt` (vagy a vasárnapi audit-eredmény szerint a leginkább "lightweight proof"-message-elt oldal) + UTM
+
+**GA4 conversion events** (Codex):
+- `signup_started`
+- `trial_started`
+- `pricing_view`
+
+**UTM-séma:** `utm_source=google_ads&utm_medium=cpc&utm_campaign=spendnote_v1&utm_content=<ad_group>&utm_term=<keyword>`
+
+#### J.16.9.8 ÚJ SEO meta-szabály — J.16.9.X "VOCABULARY-CSAPDA WARNING"
+
+> *"Új SEO-vocabulary bevezetése előtt SERP-check kötelező a vocabulary KIRAGADOTT változatára is. Példa: a 'cash custody' kifejezés önmagában (`cash custody tracking software`) ENTERPRISE banking/treasury/CIT klasszterbe sorolja a SERP-et, NEM small-business segmentbe. A vocabulary 'kísérleti SERP-tesztje' kötelező 0. lépés (J.14.15.5 + J.15.5.11.Z.1 mellett külön szabályként), különben az új landing akaratlanul rossz Google-klaszterbe kerül és NEM az adott target-buyer-audience-t éri el."*
 
 ---
 
