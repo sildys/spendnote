@@ -128,6 +128,8 @@ const upsertProfileSubscription = async (
   const now = Date.now();
 
   const periodEnd = Number(sub.current_period_end) || 0;
+  const trialStart = Number(sub.trial_start) || 0;
+  const trialEnd = Number(sub.trial_end) || 0;
 
   const payload: Record<string, unknown> = {
     stripe_customer_id: String(sub.customer || "").trim() || null,
@@ -138,6 +140,12 @@ const upsertProfileSubscription = async (
     stripe_cancel_at_period_end: Boolean(sub.cancel_at_period_end),
     subscription_current_period_end: periodEnd > 0
       ? new Date(periodEnd * 1000).toISOString()
+      : null,
+    trial_started_at: trialStart > 0
+      ? new Date(trialStart * 1000).toISOString()
+      : null,
+    trial_ends_at: trialEnd > 0
+      ? new Date(trialEnd * 1000).toISOString()
       : null,
     seat_count: seatCount,
   };

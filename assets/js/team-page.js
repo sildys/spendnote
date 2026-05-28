@@ -331,11 +331,34 @@ const openAccessModal = async (memberId, options = {}) => {
 
     let memberAccess = [];
     const userId = member.member_id || member.member?.id;
-    if (!userId) { list.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px;">Access can be set after the user accepts the invite.</div>'; return; }
+
+    if (!cashBoxes.length) { list.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px;">No Cash Boxes available.</div>'; return; }
+
+    if (!userId) {
+        const preGrantedIds = Array.isArray(member?.cash_box_ids) ? member.cash_box_ids.map(String) : [];
+        const preGrantedSet = new Set(preGrantedIds);
+        const hasPreGrants = preGrantedSet.size > 0;
+        const headerNote = hasPreGrants
+            ? '<div style="text-align:center;color:var(--text-muted);padding:10px 12px;font-size:13px;background:var(--surface);border-radius:6px;margin-bottom:8px;"><i class="fas fa-clock" style="margin-right:6px;"></i>Pending invite — these Cash Boxes will be granted automatically when the user accepts. To change, cancel and re-send the invite.</div>'
+            : '<div style="text-align:center;color:var(--text-muted);padding:10px 12px;font-size:13px;background:var(--surface);border-radius:6px;margin-bottom:8px;"><i class="fas fa-clock" style="margin-right:6px;"></i>Pending invite — no Cash Box pre-selected. The user will get access to your first Cash Box automatically on accept.</div>';
+        list.innerHTML = headerNote + cashBoxes.map(cb => {
+            const isPreGranted = preGrantedSet.has(String(cb.id));
+            return `<div class="access-item" style="opacity:${isPreGranted ? '1' : '0.55'};">
+                <div class="access-item-left">
+                    <div class="access-dot" style="background:${cb.color || '#6b7280'}"></div>
+                    <div class="access-name">${escapeHtml(cb.name)}</div>
+                </div>
+                <span class="btn btn-small ${isPreGranted ? 'btn-primary' : 'btn-secondary'}" style="pointer-events:none;">
+                    ${isPreGranted ? '<i class="fas fa-clock"></i> Pre-granted' : '—'}
+                </span>
+            </div>`;
+        }).join('');
+        return;
+    }
+
     if (window.db?.cashBoxAccess?.getForUser) memberAccess = await window.db.cashBoxAccess.getForUser(userId) || [];
 
     const accessSet = new Set(memberAccess.map(a => a.cash_box_id));
-    if (!cashBoxes.length) { list.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px;">No Cash Boxes available.</div>'; return; }
 
     list.innerHTML = cashBoxes.map(cb => {
         const hasAccess = accessSet.has(cb.id);
@@ -351,9 +374,44 @@ const openAccessModal = async (memberId, options = {}) => {
     }).join('');
 };
 
-// ── Invite modal: CB info note visibility ──
+// ── Invite modal: CB pre-grant picker ──
 
-const populateInviteCashBoxes = () => {};
+const populateInviteCashBoxes = () => {
+    const picker = document.getElementById('inviteCashBoxPicker');
+    const list = document.getElementById('inviteCashBoxList');
+    const hint = document.getElementById('inviteCashBoxHint');
+    if (!picker || !list) return;
+
+    if (!Array.isArray(cashBoxes) || cashBoxes.length < 2) {
+        picker.style.display = 'none';
+        if (hint) {
+            hint.innerHTML = (cashBoxes?.length === 1)
+                ? '<strong>User</strong> role: gets access to your Cash Box. <strong>Admin</strong> role: full access.'
+                : '<strong>User</strong> role: gets access to your first Cash Box. <strong>Admin</strong> role: full access.';
+        }
+        return;
+    }
+
+    picker.style.display = '';
+    list.innerHTML = cashBoxes.map((cb) => {
+        const id = String(cb?.id || '');
+        const name = escapeHtml(String(cb?.name || ''));
+        const color = String(cb?.color || '#6b7280');
+        return `<label style="display:flex;align-items:center;gap:8px;padding:6px 4px;cursor:pointer;">
+            <input type="checkbox" class="invite-cb-checkbox" value="${id}" style="margin:0;">
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${color};flex-shrink:0;"></span>
+            <span style="flex:1;">${name}</span>
+        </label>`;
+    }).join('');
+    if (hint) {
+        hint.innerHTML = '<strong>User</strong> role: select which Cash Boxes this member can access. If none selected, they\'ll get access to your first Cash Box automatically.';
+    }
+};
+
+const getSelectedInviteCashBoxIds = () => {
+    const nodes = document.querySelectorAll('#inviteCashBoxList .invite-cb-checkbox:checked');
+    return Array.from(nodes).map((el) => String(el.value || '').trim()).filter(Boolean);
+};
 
 const toggleInviteCbGroup = () => {
     const group = document.getElementById('inviteCashBoxGroup');
@@ -545,7 +603,8 @@ const initTeamPage = async () => {
         if (!email) { showAlert('Email is required.', { iconType: 'warning' }); return; }
 
         if (!window.db?.teamMembers?.invite) { showAlert('Team feature not available.', { iconType: 'error' }); return; }
-        const result = await window.db.teamMembers.invite(email, role);
+        const preGrantCbIds = (role === 'user') ? getSelectedInviteCashBoxIds() : [];
+        const result = await window.db.teamMembers.invite(email, role, preGrantCbIds);
         if (!result?.success) { showAlert(result?.error || 'Failed to invite.', { iconType: 'error' }); return; }
 
         inviteModal?.classList.remove('active');
@@ -583,7 +642,8 @@ const initTeamPage = async () => {
             if (!member || member.status !== 'pending') return;
             btn.disabled = true;
             try {
-                const result = await window.db.teamMembers.invite(String(member.invited_email || '').trim(), String(member.role || 'user'));
+                const resendCbIds = Array.isArray(member?.cash_box_ids) ? member.cash_box_ids : [];
+                const result = await window.db.teamMembers.invite(String(member.invited_email || '').trim(), String(member.role || 'user'), resendCbIds);
                 if (!result?.success) { showAlert(result?.error || 'Failed.', { iconType: 'error' }); return; }
                 await loadTeam();
                 if (Boolean(result?.emailSent)) { showAlert('Invitation resent.', { iconType: 'success' }); return; }

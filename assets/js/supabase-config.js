@@ -4259,7 +4259,7 @@ var db = {
 
             const invitesRes = await supabaseClient
                 .from('invites')
-                .select('id,invited_email,role,status,created_at')
+                .select('id,invited_email,role,status,created_at,cash_box_ids')
                 .eq('org_id', orgId)
                 .eq('status', 'pending')
                 .order('created_at', { ascending: false });
@@ -4279,6 +4279,7 @@ var db = {
                         invited_email: i?.invited_email || null,
                         role: i?.role || 'user',
                         status: i?.status || 'pending',
+                        cash_box_ids: Array.isArray(i?.cash_box_ids) ? i.cash_box_ids : null,
                         member: null,
                         member_id: null
                     };
@@ -4291,15 +4292,22 @@ var db = {
             return [...members, ...invites];
         },
 
-        async invite(email, role) {
+        async invite(email, role, cashBoxIds) {
             const ctx = await getMyOrgContext();
             if (!ctx?.orgId) return { success: false, error: 'No org' };
+
+            const normalizedCbIds = Array.isArray(cashBoxIds)
+                ? cashBoxIds
+                    .map((id) => String(id || '').trim())
+                    .filter((id) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id))
+                : null;
 
             const { data, error } = await supabaseClient.rpc('spendnote_create_invite', {
                 p_org_id: ctx.orgId,
                 p_invited_email: email,
                 p_role: role || 'user',
-                p_expires_at: null
+                p_expires_at: null,
+                p_cash_box_ids: (normalizedCbIds && normalizedCbIds.length > 0) ? normalizedCbIds : null
             });
 
             if (error) {
