@@ -1,4 +1,4 @@
-﻿# 🛡️ STRATEGIC GUARDRAILS — 2026-05-01 ESTE (`/petty-cash-app` Google-discoverability micro-sprint + 3-page SoftwareApplication schema annual-price alignment)
+# 🛡️ STRATEGIC GUARDRAILS — 2026-05-01 ESTE (`/petty-cash-app` Google-discoverability micro-sprint + 3-page SoftwareApplication schema annual-price alignment)
 
 > **Ez most a legfrissebb iránymutatás.** A 04-28-ös guardrails-blokk (lentebb) a **megelőző** állapotot rögzíti — a stratégiai irányt megerősíti, csak a teendőlistát váltja le.
 
