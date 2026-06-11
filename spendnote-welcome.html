@@ -619,6 +619,21 @@ async function saveSetup() {
                 }
             } catch (_) {}
         }
+
+        // Signup conversion (Google Ads / GA4 key event). Fires exactly once per user, on the
+        // single page every genuinely completed new signup lands on: email-confirmed (login?confirmed=1
+        // -> welcome), instant email (signup -> welcome), and Google OAuth (login -> welcome). Reaching
+        // here means the user has not completed onboarding yet, so this is a real new account.
+        try {
+            const convKey = uidEarly ? 'spendnote.adsconv.signup.v1.' + uidEarly : '';
+            if (convKey && localStorage.getItem(convKey) !== '1') {
+                const signupMethod = String(user.app_metadata?.provider || 'email');
+                if (typeof gtag === 'function') {
+                    gtag('event', 'sign_up', { method: signupMethod });
+                }
+                try { localStorage.setItem(convKey, '1'); } catch (_) {}
+            }
+        } catch (_) {}
         try {
             const uid = String(user.id || '').trim();
             if (uid) {
