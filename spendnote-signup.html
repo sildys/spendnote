@@ -1006,7 +1006,12 @@
                 }
 
                 if (result.success) {
-                    if (typeof gtag === 'function') gtag('event', 'signup_completed');
+                    // NOTE: this fires the moment Supabase accepts the sign-up, which is BEFORE
+                    // email confirmation. It is a funnel/diagnostic event only (attempt, not a
+                    // completed account) and must NOT be a GA4 key event / Ads conversion. The real
+                    // conversion is the 'sign_up' event on spendnote-welcome.html, which only fires
+                    // once the user actually lands logged-in (email confirmed / OAuth / instant session).
+                    if (typeof gtag === 'function') gtag('event', 'signup_attempt');
 
                     if (result.needsEmailConfirmation || !result.session) {
                         successMessage.classList.add('show');

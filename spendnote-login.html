@@ -922,7 +922,9 @@
                             }
                             if (isNew) {
                                 try { sessionStorage.removeItem('spendnote.isNewUser.' + uid); } catch (_) {}
-                                if (typeof gtag === 'function') gtag('event', 'signup_completed');
+                                // Conversion is fired once on spendnote-welcome.html (single source of
+                                // truth for all signup flows: email-confirmed, instant, OAuth). No gtag
+                                // here to avoid a second, differently-named completion event.
                                 window.location.href = 'spendnote-welcome.html';
                                 return;
                             }
