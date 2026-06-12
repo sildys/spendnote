@@ -629,7 +629,12 @@ async function saveSetup() {
             if (convKey && localStorage.getItem(convKey) !== '1') {
                 const signupMethod = String(user.app_metadata?.provider || 'email');
                 if (typeof gtag === 'function') {
+                    // GA4 analytics event (kept for funnel/reporting).
                     gtag('event', 'sign_up', { method: signupMethod });
+                    // Google Ads conversion. The Ads "SIGNUP" conversion action is GA4-sourced and
+                    // the linked Google tag (G-QPFM30F86Q) is already loaded on this page, so firing
+                    // this named event routes the conversion to Google Ads without a separate AW- tag.
+                    gtag('event', 'conversion_event_signup', { method: signupMethod });
                 }
                 try { localStorage.setItem(convKey, '1'); } catch (_) {}
             }
