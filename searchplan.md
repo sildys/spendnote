@@ -11,7 +11,7 @@
 - **Stratégia:** szűk, célzott, kontrollált. Most **tanulási fázis** — a következő ~1-2 hétben **NEM bővítünk**, csak adatot gyűjtünk + negatívokkal tisztítunk.
 - **Bid:** „Kattintások maximalizálása" + **max CPC-korlát $4** (fedezi a $3,30-as releváns petty cash klikket; a negatívok szűrnek témára, nem az ár).
 - **Keret:** **$10/nap** (hétvégi adatgyűjtés; 2× plafon = $20).
-- **Ütemezés:** **13:45–03:30 CET** minden nap (US prime time-ra koncentrál, EU/AU hajnali zaj kihagyva).
+- **Ütemezés:** **12:45–06:00 CET** minden nap (OFF csak 06:00–12:45 CET = amikor az USA tuti alszik). US kelet+nyugat teljes ébren-ablak lefedve, EU/AU hajnali zaj kihagyva.
 - **Reális elvárás:** kis niche, kis keret → napi pár megjelenés/kattintás. A cél most **validáció** (jön-e releváns klikk, konvertál-e a landing), nem profit.
 
 ---
@@ -110,7 +110,7 @@ Bővítve **6 angol nyelvű országra** (mind **Ország** szinten, **Jelenlét/P
 
 **Keret → $10/nap:** a 2. nap **$12,18 = pontosan 2× a $6,09 keret** → elérte az „over-delivery" 2× plafont és **délutánra leállt**. $10 keret → 2× = $20 plafon → kitart az US-ablakig.
 
-**Ütemezés (dayparting) — ÚJ:** időzóna-csapda: a fiók **GMT+2 (CET)**, a keret CET-éjféltől délutánig fogyott el → mire az **USA dolgozni kezd (CET ~15:00)**, a keret elfogyott. Megoldás: **Hirdetésütemezés 13:45–03:30 CET** minden nap (a Google nem engedi egy sorban átlépni az éjfélt → két sor: `13:45–0:00` + `0:00–3:30`). Lefedi a teljes US munkanapot + estét (kelet 7:45–21:30, nyugat ~04:45–18:30), kihagyja a hajnali EU/AU zajt.
+**Ütemezés (dayparting) — ÚJ:** időzóna-csapda: a fiók **GMT+2 (CET)**, a keret CET-éjféltől délutánig fogyott el → mire az **USA dolgozni kezd (CET ~15:00)**, a keret elfogyott. Megoldás: **Hirdetésütemezés 12:45–06:00 CET** minden nap (a Google nem engedi egy sorban átlépni az éjfélt → két sor: `12:45–0:00` + `0:00–6:00`). **OFF csak 06:00–12:45 CET** = amikor az USA tuti alszik (kelet éjfél–06:45, nyugat 21:00–03:45). Elv: „csak akkor álljon, amikor Amerika biztosan alszik". ⚠️ Tradeoff: szélesebb ablak → a $10 vékonyabban terül szét ~17 órára, a Google front-loadolhat a US-kelet reggelre → ha a nyugati part alulszolgált lesz, a reggeli kezdést feljebb húzzuk (~13:45).
 
 **2. kizáró-kör (CSV-alapon, budgeting/receipt szivárgás):** hozzáadott kifejezés-negatívok:
 `"every dollar"`, `"everydollar"`, `"cleo"`, `"actual budget"`, `"budget"`, `"budgeting"`, `"net worth"`, `"expense tracker"`, `"spending tracker"`, `"bill tracker"`, `"money manager"`, `"money tracking"`, `"money management"`, `"cash back"`, `"receipt maker"`, `"receipt scanner"`.
