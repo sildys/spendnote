@@ -4,12 +4,14 @@
 
 ---
 
-## ⭐ HOL TARTUNK MOST (2026-06-12 este)
+## ⭐ HOL TARTUNK MOST (2026-06-13 este)
 
-- **Státusz:** A `Search – Petty Cash Software` kampány **ÉL és kiszolgál** — az első nap végén **12 megjelenítés, 0 kattintás, $0 költség**.
-- **Konverziókövetés:** bekötve és tiszta (lásd `A.3`). A SIGNUP konverzió Adsben **Aktív**.
-- **Stratégia:** szűk, célzott, kontrollált. Most **tanulási fázis** — a következő ~1-2 hétben **NEM bővítünk**, csak adatot gyűjtünk.
-- **Bid:** „Kattintások maximalizálása", **CPC-plafon levéve**.
+- **Státusz:** A `Search – Petty Cash Software` kampány **ÉL és kiszolgál** — 2. nap: **141 megjelenítés, 4 kattintás, $12,18 költség** (a $6 keret 2×-ese → délutánra leállt, lásd lent).
+- **Konverziókövetés:** bekötve és tiszta (lásd `A.3`). A SIGNUP konverzió Adsben **Aktív**. Konverzió eddig: **0**.
+- **Stratégia:** szűk, célzott, kontrollált. Most **tanulási fázis** — a következő ~1-2 hétben **NEM bővítünk**, csak adatot gyűjtünk + negatívokkal tisztítunk.
+- **Bid:** „Kattintások maximalizálása" + **max CPC-korlát $4** (fedezi a $3,30-as releváns petty cash klikket; a negatívok szűrnek témára, nem az ár).
+- **Keret:** **$10/nap** (hétvégi adatgyűjtés; 2× plafon = $20).
+- **Ütemezés:** **13:45–03:30 CET** minden nap (US prime time-ra koncentrál, EU/AU hajnali zaj kihagyva).
 - **Reális elvárás:** kis niche, kis keret → napi pár megjelenés/kattintás. A cél most **validáció** (jön-e releváns klikk, konvertál-e a landing), nem profit.
 
 ---
@@ -99,6 +101,23 @@ Bővítve **6 angol nyelvű országra** (mind **Ország** szinten, **Jelenlét/P
 - **Licit-korlát:** „Kattintások maximalizálása" mellé **max CPC-ajánlatkorlát ~$4** (az átlag $3,04 fölött → csak a drága farkat vágja, nem esik vissza 0-megjelenésbe). Finomhangolás: ha tartja a megjelenést → le $3,50-re; ha beesik → fel $4,50-5-re.
 - **Keret:** átmeneti hétvégi **kis emelés** (~$6 → ~$8-10) gyorsabb adatért; **hétfőn vissza**.
 - ⚠️ Megj.: a bid-korlát + keret-változás újraindítja a tanulási fázist — kerüljük a gyakori yo-yózást.
+
+### A.9 Esti finomítás-csomag (2026-06-13 ~21:00, a keresési kifejezések CSV alapján)
+
+**Geo-adat (4 klikk, parányi minta):** AU 2 klikk @ $3,41 átl., USA 2 klikk @ $2,67 átl. → a vegyes $3,04-et **AU húzta fel**, az USA az olcsóbb. Döntés: **minden geo marad** (a CPC-korlát szabályoz, nem geo-kapcsolgatás).
+
+**CPC-korlát — KORRIGÁLVA $4-re (nem $3):** menet közben felmerült a $3, DE a **legrelevánsabb** kattintás (`petty cash book format`) **$3,30** volt → $3-as korlát pont a célforgalmat vágná. **Tanulság:** a CPC-korlát **árban** vág, nem témában; a drága szemét (~$3,41 AU budgeting) és a drága jó (~$3,30 petty cash) **átfedik egymást** → a szűrést a **negatívok** végzik, a korlát csak a kiugró farkat fékezi. Ezért **$4**.
+
+**Keret → $10/nap:** a 2. nap **$12,18 = pontosan 2× a $6,09 keret** → elérte az „over-delivery" 2× plafont és **délutánra leállt**. $10 keret → 2× = $20 plafon → kitart az US-ablakig.
+
+**Ütemezés (dayparting) — ÚJ:** időzóna-csapda: a fiók **GMT+2 (CET)**, a keret CET-éjféltől délutánig fogyott el → mire az **USA dolgozni kezd (CET ~15:00)**, a keret elfogyott. Megoldás: **Hirdetésütemezés 13:45–03:30 CET** minden nap (a Google nem engedi egy sorban átlépni az éjfélt → két sor: `13:45–0:00` + `0:00–3:30`). Lefedi a teljes US munkanapot + estét (kelet 7:45–21:30, nyugat ~04:45–18:30), kihagyja a hajnali EU/AU zajt.
+
+**2. kizáró-kör (CSV-alapon, budgeting/receipt szivárgás):** hozzáadott kifejezés-negatívok:
+`"every dollar"`, `"everydollar"`, `"cleo"`, `"actual budget"`, `"budget"`, `"budgeting"`, `"net worth"`, `"expense tracker"`, `"spending tracker"`, `"bill tracker"`, `"money manager"`, `"money tracking"`, `"money management"`, `"cash back"`, `"receipt maker"`, `"receipt scanner"`.
+
+> ⚠️ **`free` SZÁNDÉKOSAN NEM negatív:** a SpendNote maga ingyenes/ingyenes próbás → a „free petty cash app" / „petty cash app free" **ideális intent**. A `free`-s szemét (`best free budgeting app`, `budget app free`, `free receipt maker app`…) a **kategória-negatívokba** (`budget`, `budgeting`, `receipt maker`…) amúgy is beleakad — nem a `free` szót kell tiltani, hanem a témát.
+
+**On-target jelek (CSV):** `petty cash book format` (1 klikk, $3,30) ✅, `petty cash book` ✅, korábbról `cash receipt app` ✅ → a **petty cash + receipt-angle húz**.
 
 ## B. NYITOTT TAKARÍTÁSI TEENDŐK (nem sürgős — Maximize Clicks nem használ konverzióadatot a licithez)
 
