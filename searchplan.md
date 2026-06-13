@@ -11,7 +11,8 @@
 - **Stratégia:** szűk, célzott, kontrollált. Most **tanulási fázis** — a következő ~1-2 hétben **NEM bővítünk**, csak adatot gyűjtünk + negatívokkal tisztítunk.
 - **Bid:** „Kattintások maximalizálása" + **max CPC-korlát $4** (fedezi a $3,30-as releváns petty cash klikket; a negatívok szűrnek témára, nem az ár).
 - **Keret:** **$10/nap** (hétvégi adatgyűjtés; 2× plafon = $20).
-- **Ütemezés:** **12:45–06:00 CET** minden nap (OFF csak 06:00–12:45 CET = amikor az USA tuti alszik). US kelet+nyugat teljes ébren-ablak lefedve, EU/AU hajnali zaj kihagyva.
+- **Geo:** **csak USA + Kanada** (a 6-ból szűkítve). Indok: anyagilag jobban jövünk ki + az időzóna-csapda magától megszűnik (csak US/CA-keresésre költ, ami US/CA-órákban van; nincs EU/AU hajnali pénzégetés). US+CA ugyanaz az időzóna-sáv.
+- **Ütemezés:** **TÖRÖLVE** (24/7). US+CA-only mellett redundáns volt — a geo-szűkítés önmagában megoldja az időzóna-problémát.
 - **Reális elvárás:** kis niche, kis keret → napi pár megjelenés/kattintás. A cél most **validáció** (jön-e releváns klikk, konvertál-e a landing), nem profit.
 
 ---
@@ -67,9 +68,9 @@ A nap eleji állapot: **0 megjelenés** egész nap + **hibás konverziómérés*
 
 ### A.4 Geo + piacok
 
-Bővítve **6 angol nyelvű országra** (mind **Ország** szinten, **Jelenlét/Presence** célzással):
-**USA, Egyesült Királyság, Kanada, Ausztrália, Írország, Új-Zéland.**
-(Indok: kis niche → több angol piac = több jogosult keresés; a „petty cash" eleve brit/nemzetközösségi szóhasználat.)
+Eredetileg **6 angol nyelvű országra** bővítve (USA, UK, Kanada, Ausztrália, Írország, Új-Zéland), mind **Ország** szinten, **Jelenlét/Presence** célzással.
+
+> ⚠️ **2026-06-13 este SZŰKÍTVE: csak USA + Kanada.** Indok: anyagi optimalizálás + időzóna-csapda megszüntetése (lásd A.9). Az AU/UK/IE/NZ kivéve.
 
 ### A.5 Egyéb
 
@@ -110,7 +111,7 @@ Bővítve **6 angol nyelvű országra** (mind **Ország** szinten, **Jelenlét/P
 
 **Keret → $10/nap:** a 2. nap **$12,18 = pontosan 2× a $6,09 keret** → elérte az „over-delivery" 2× plafont és **délutánra leállt**. $10 keret → 2× = $20 plafon → kitart az US-ablakig.
 
-**Ütemezés (dayparting) — ÚJ:** időzóna-csapda: a fiók **GMT+2 (CET)**, a keret CET-éjféltől délutánig fogyott el → mire az **USA dolgozni kezd (CET ~15:00)**, a keret elfogyott. Megoldás: **Hirdetésütemezés 12:45–06:00 CET** minden nap (a Google nem engedi egy sorban átlépni az éjfélt → két sor: `12:45–0:00` + `0:00–6:00`). **OFF csak 06:00–12:45 CET** = amikor az USA tuti alszik (kelet éjfél–06:45, nyugat 21:00–03:45). Elv: „csak akkor álljon, amikor Amerika biztosan alszik". ⚠️ Tradeoff: szélesebb ablak → a $10 vékonyabban terül szét ~17 órára, a Google front-loadolhat a US-kelet reggelre → ha a nyugati part alulszolgált lesz, a reggeli kezdést feljebb húzzuk (~13:45).
+**Ütemezés (dayparting) → végül ELVETVE, helyette GEO-SZŰKÍTÉS:** időzóna-csapda: a fiók **GMT+2 (CET)**, a keret CET-éjféltől délutánig fogyott el → mire az **USA dolgozni kezd (CET ~15:00)**, a keret elfogyott. Először dayparting-gal próbáltuk (12:45–06:00 CET), de a sok időzóna (US kelet↔nyugat) miatt a finomhangolás körülményes és értelmetlen volt. **Végső megoldás:** az **ütemezés törölve (24/7)** + a **geo USA + Kanada-ra szűkítve**. Így a budget **csak US/CA-keresésre** költ (ami eleve US/CA-órákban történik) → az időzóna-pénzégetés magától megszűnik, és anyagilag is jobban jövünk ki. Az **AU (drága, $3,41) + UK/IE/NZ kiesett**, az USA a te adataidban amúgy is **olcsóbb** volt ($2,67). Kanada azért marad, mert ugyanaz az időzóna-sáv + jó angol B2B-piac.
 
 **2. kizáró-kör (CSV-alapon, budgeting/receipt szivárgás):** hozzáadott kifejezés-negatívok:
 `"every dollar"`, `"everydollar"`, `"cleo"`, `"actual budget"`, `"budget"`, `"budgeting"`, `"net worth"`, `"expense tracker"`, `"spending tracker"`, `"bill tracker"`, `"money manager"`, `"money tracking"`, `"money management"`, `"cash back"`, `"receipt maker"`, `"receipt scanner"`.
