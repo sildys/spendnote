@@ -76,11 +76,17 @@ Bővítve **6 angol nyelvű országra** (mind **Ország** szinten, **Jelenlét/P
 - **Hirdetés:** „Petty Cash Software | Petty Cash App for Teams | Track Cash in Seconds" — **Jóváhagyva**.
 - **Sitelinkek:** Pricing, Petty Cash App, Receipt Generator, Digital Cash Book (mentés akadozott — *ellenőrizni az Eszközök/Assets fülön*).
 
-### A.6 Mai eredmény (nap vége)
+### A.6 Mai eredmény (nap vége + másnap hajnal)
 
-- **12 megjelenítés, 0 kattintás, $0 költség** (0 kattintás 12 megjelenésnél teljesen normális).
-- **Eszközök:** ~91,7% mobil.
-- **Első valós keresési kifejezések:** `petty cash book` ✅, `small cash book` ✅ (on-target), `receipt app` / `receipt apps` ⚠️ (tágabb — figyelni).
+- **Nap vége:** 12 megjelenítés, 0 kattintás.
+- **2026-06-13 ~02:40:** **26 megjelenítés, 1 kattintás, ~3,8% CTR, Átl. CPC $2,64** — egészséges első nap. A kattintás a **`"cash receipt app"`** kulcsszóból jött → a **receipt-angle húz**.
+- **Eszközök:** ~96% mobil.
+- **Keresési kifejezések:** `cash receipt app` ✅, `petty cash book` ✅, `small cash book` ✅, `receipts for cash` ✅; ⚠️ `receipt snapping apps` (OCR/szkennelő — más kategória).
+
+### A.7 Korai optimalizálás (2026-06-13 hajnal)
+
+- **Kizáró kulcsszavak hozzáadva** (szkennelő/OCR kategória kiszűrése, a `receipt` szándék bántása nélkül): `snapping`, `snap`, `scanner`, `scanning`, `scan`, `ocr`.
+- **CÉLOLDAL-DÖNTÉS:** a hirdetés Végső URL-je **`petty-cash-software` → `https://spendnote.app/` (főoldal)**. Indok: a főoldal **bizonyítottan konvertál** (organikus regisztrációk), **petty-cash-releváns** (QS OK), és **minden angle-t lefed** (software/app/receipt/handoff) — tehát a sokféle kulcsszónak egyszerre releváns. A `petty-cash-software` / `petty-cash-receipt-generator` stb. a 2. fázisú intent-szerinti ad group landingjei lesznek.
 
 ---
 
