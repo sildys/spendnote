@@ -27,7 +27,7 @@ A nap eleji állapot: **0 megjelenés** egész nap + **hibás konverziómérés*
 | Hirdetéscsoport | `1. hirdetéscsoport` (Petty Cash Software) |
 | Típus | **csak Keresési hálózat** (Search Partners KI, Display KI) |
 | Ajánlattétel | **Kattintások maximalizálása** — CPC-plafon **levéve** (szabad licit, hogy belépjen az aukciókba) |
-| Napi keret | kis keret (~$6/nap — *pontosítandó*) |
+| Napi keret | **6,09 USD/nap** (megerősítve 2026-06-13) |
 | Eszközök | mind engedélyezve (a mobil **nem** lett kikapcsolva ezen a kampányon — a régi, szüneteltetett PMax kampányon volt) |
 
 ### A.2 Kulcsszavak (mind Phrase/Exact — NINCS broad)
@@ -86,7 +86,8 @@ Bővítve **6 angol nyelvű országra** (mind **Ország** szinten, **Jelenlét/P
 ### A.7 Korai optimalizálás (2026-06-13 hajnal)
 
 - **Kizáró kulcsszavak hozzáadva** (szkennelő/OCR kategória kiszűrése, a `receipt` szándék bántása nélkül): `snapping`, `snap`, `scanner`, `scanning`, `scan`, `ocr`.
-- **CÉLOLDAL-DÖNTÉS:** a hirdetés Végső URL-je **`petty-cash-software` → `https://spendnote.app/` (főoldal)**. Indok: a főoldal **bizonyítottan konvertál** (organikus regisztrációk), **petty-cash-releváns** (QS OK), és **minden angle-t lefed** (software/app/receipt/handoff) — tehát a sokféle kulcsszónak egyszerre releváns. A `petty-cash-software` / `petty-cash-receipt-generator` stb. a 2. fázisú intent-szerinti ad group landingjei lesznek.
+- **CÉLOLDAL-DÖNTÉS:** a hirdetés Végső URL-je **`petty-cash-software` → `https://spendnote.app/` (főoldal)**. Indok: a főoldal **bizonyítottan konvertál** (organikus regisztrációk), **petty-cash-releváns** (QS OK), és **minden angle-t lefed** (software/app/receipt/handoff) — tehát a sokféle kulcsszónak egyszerre releváns. A `petty-cash-software` / `petty-cash-receipt-generator` stb. a 2. fázisú intent-szerinti ad group landingjei lesznek. *(Megj.: az URL-átállítás a Google Ads UI-ban még elvégzendő — Hirdetések → Szerkesztés → Végső URL.)*
+- **POLICY-EPIZÓD:** a logó hozzáadása utáni újra-ellenőrzés tévesen az **„Ingyenes asztali szoftver" (Free desktop software)** irányelv alá sorolta a hirdetést (false positive — a SpendNote böngészős SaaS, nincs letöltés). **Fellebbezés** („Döntés vitatása", kampány-szint) beküldve → **elfogadva**, kampány állapota „Használható (tanulás)". Ha a jövőben visszatérne: a „free + software" szókombináció tompítása a hirdetésszövegben a kerülőút.
 
 ---
 
