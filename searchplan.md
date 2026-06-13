@@ -93,6 +93,13 @@ Bővítve **6 angol nyelvű országra** (mind **Ország** szinten, **Jelenlét/P
 
 ---
 
+### A.8 Geo + bid + keret finomítás (2026-06-13 este, 141 megj / 4 klikk után)
+
+- **Geo:** Ausztrália **marad** (nem megyünk USA-only — az USA a legdrágább B2B-piac, US-only emelné a CPC-t). A drága klikkeket inkább **licit-korláttal** kezeljük.
+- **Licit-korlát:** „Kattintások maximalizálása" mellé **max CPC-ajánlatkorlát ~$4** (az átlag $3,04 fölött → csak a drága farkat vágja, nem esik vissza 0-megjelenésbe). Finomhangolás: ha tartja a megjelenést → le $3,50-re; ha beesik → fel $4,50-5-re.
+- **Keret:** átmeneti hétvégi **kis emelés** (~$6 → ~$8-10) gyorsabb adatért; **hétfőn vissza**.
+- ⚠️ Megj.: a bid-korlát + keret-változás újraindítja a tanulási fázist — kerüljük a gyakori yo-yózást.
+
 ## B. NYITOTT TAKARÍTÁSI TEENDŐK (nem sürgős — Maximize Clicks nem használ konverzióadatot a licithez)
 
 | # | Teendő | Megjegyzés |
