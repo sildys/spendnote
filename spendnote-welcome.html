@@ -269,6 +269,10 @@
         .tip-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; padding-top: 6px; }
         .tip-text strong { color: var(--text); }
     </style>
+    <!-- Microsoft Advertising UET tag -->
+    <script>
+        (function(w,d,t,u,o){w[u]=w[u]||[],o.ts=(new Date).getTime();var n=d.createElement(t);n.src="https://bat.bing.net/bat.js?ti="+o.ti+("uetq"!=u?"&q="+u:""),n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&"loaded"!==s&&"complete"!==s||(o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad"),n.onload=n.onreadystatechange=null)};var i=d.getElementsByTagName(t)[0];i.parentNode.insertBefore(n,i)})(window,document,"script","uetq",{ti:"343258687",enableAutoSpaTracking:true});
+    </script>
 </head>
 <body>
 
@@ -636,6 +640,12 @@ async function saveSetup() {
                     // this named event routes the conversion to Google Ads without a separate AW- tag.
                     gtag('event', 'conversion_event_signup', { method: signupMethod });
                 }
+                // Microsoft Advertising (Bing) conversion. Fires a custom UET "signup" event;
+                // the Bing conversion goal is an Event goal matching action = "signup".
+                try {
+                    window.uetq = window.uetq || [];
+                    window.uetq.push('event', 'signup', { event_category: 'account', event_label: signupMethod });
+                } catch (_) {}
                 try { localStorage.setItem(convKey, '1'); } catch (_) {}
             }
         } catch (_) {}
