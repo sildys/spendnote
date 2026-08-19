@@ -4,7 +4,66 @@
 
 ---
 
-## ⭐ HOL TARTUNK MOST (2026-06-13 este)
+## ⭐ HOL TARTUNK MOST (2026-08-19) — ÚJRAINDÍTÁS (szűk, vevő-szándékú)
+
+**Kontextus:** A júniusi kampány szünetel (drága, generikus szavak, 0 konverzió). Közben: **Microsoft Ads véglegesen kitiltott** (multi-account fraud flag, fellebbezés nélkül); a **Google organikus a May 2026 core update után beesett** (~10 megj/nap, tekintély-hiány — a főoldal viszont 7. pozíció, 20,8% CTR). **Új terv: ultra-szűk, vevő-szándékú Google Search kampány — kis keret, magas relevancia, fizetős user validáció.**
+
+**Vezető insight (2026-08 GSC + Bing adatból):** a forgalom nagy része **információs** (`how to`, `what is`, `template`) → nem konvertál. A **vevő-szándékú** keresések (`...app`, `...system`, `...tracking`, `cash handover app`) ritkábbak, DE ezek a valódi arany — ÉS a Google pont ezekre temet el (pl. `petty cash management app` → Google **61. pozíció**). **Fizetős user = ezekre kell fizetve megjelenni.** (A Bing organikusan az 1. oldalra teszi ugyanezt a tartalmat → a tartalom jó, a Google-lel tekintély a baj.)
+
+**A kampány célja:** NEM volumen. Kideríteni: **a magas-szándékú kereső regisztrál-e** (és később fizet-e), olcsón.
+
+### Beállítások
+| Elem | Érték |
+|---|---|
+| Kampánytípus | **Search only** (Search Partners KI, Display KI) |
+| Ajánlattétel | **Kattintások maximalizálása + max CPC $2,00** (szűk long-tail → olcsóbb; ha pár nap után ~0 megjelenés → emeld $3-ra) |
+| Napi keret | **$5/nap** (2× over-delivery plafon = $10) |
+| Geo | **USA + Kanada**, **Jelenlét (presence)** célzás |
+| Nyelv | Angol |
+| Ütemezés | 24/7 (a geo kezeli az időzónát) |
+| Eszközök | mind (a web-app mobilbarát; a forgalom ~96% mobil) |
+| Céloldal | `https://spendnote.app/` (bizonyítottan konvertál, minden angle-t fed, organikusan is 7. pozíció) |
+| Konverzió | **SIGNUP** (GA4-forrású, MÁR bekötve — `A.3`) |
+
+### Egyetlen szűk hirdetéscsoport: „Buyer intent — cash app/handover"
+**Kulcsszavak (Exact `[]` + Phrase `""`, CSAK vevő-szándék):**
+- `[petty cash app]`, `[petty cash software]`
+- `"petty cash management app"`, `"petty cash tracking app"`, `"petty cash tracking system"`, `"petty cash book app"`, `"cash log app"`
+- `"cash handover app"`, `"cash handover log"`, `"app to track cash"`, `"track who has the cash"`
+
+> ⚠️ Több long-tail „Alacsony keresési arány" státuszba kerül — **normális** (kis niche), ne töröld.
+
+**Hirdetés (RSA) — címsorok (SEMMI „Free" → a júniusi policy-trigger elkerülése, lásd `A.7`):**
+`Petty Cash Tracking App` · `Know Who Took the Cash` · `Log Every Cash Handover` · `Cash Handoff Receipts Fast` · `Track Petty Cash Online` · `See Who Has the Cash Now` · `Proof for Every Handover` · `Petty Cash App for Teams` · `14-Day Trial, No Card` · `Cash In, Cash Out, Tracked` · `Stop Losing Track of Cash` · `Built for Small Teams`
+
+**Leírások:**
+1. Record who took cash, how much, when, and what for. A clear history for your whole team.
+2. Printable cash handoff receipts and a searchable log. Know where every dollar went.
+3. Replace paper cash sheets with one simple online log. Set up in minutes.
+4. See who has the cash right now. Built for teams that handle cash every day.
+
+**Sitelinkek:** Pricing · Petty Cash App · Receipt Generator · Who Has the Cash
+
+### Kizáró kulcsszavak (induló lista)
+- **Ingyenes-válasz zaj:** `template`, `printable`, `pdf`, `word`, `excel`, `sample`, `example`, `format`, `meaning`, `definition`, `how to`, `what is`
+- **Budgeting / personal finance:** `budget`, `budgeting`, `net worth`, `expense tracker`, `spending tracker`, `bill tracker`, `money manager`, `rocket money`, `every dollar`, `cleo`, `cash back`
+- **Scanner / OCR:** `scanner`, `scanning`, `scan`, `ocr`, `receipt maker`, `receipt scanner`, `snapping`, `snap`
+- **Egyéb:** `jobs`, `salary`, `payslip`
+
+> ⚠️ `free` **SZÁNDÉKOSAN NEM** negatív (ingyenes próba = ideális intent — lásd `A.9`).
+
+### Reális elvárás
+- **Csöpögés, nem áradat** (heti pár kattintás). A szűk = olcsó + releváns, cserébe kis volumen.
+- **Fizetős user = 2 lépés:** kattintás → **regisztráció** (trial) → **fizetés**. Először regisztrációt várj.
+- **Döntési pont (~3-4 hét / 100+ megj után):** regisztrálnak-e a kattintók? Ha **jönnek, de nem regisztrálnak** → a **landing/termék** a gond, nem a hirdetés.
+
+### Teendő a fiókban
+1. A régi `Search – Petty Cash Software` kampányt **hagyd szüneteltetve** (ne töröld — history). Indíts **új** kampányt a fenti spec szerint (vagy állítsd át a régit: kulcsszavak cseréje, keret $5, CPC $2, negatívok frissítése).
+2. ⚠️ Az **„Oldalmegtekintés" konverzió** még lehet Elsődleges+Aktív → állítsd **Másodlagosra/töröld**, hogy tiszta legyen a SIGNUP-riport (`B/1`).
+
+---
+
+## 🗄️ KORÁBBI ÁLLAPOT (2026-06-13 este) — történeti
 
 - **Státusz:** A `Search – Petty Cash Software` kampány **ÉL és kiszolgál** — 2. nap: **141 megjelenítés, 4 kattintás, $12,18 költség** (a $6 keret 2×-ese → délutánra leállt, lásd lent).
 - **Konverziókövetés:** bekötve és tiszta (lásd `A.3`). A SIGNUP konverzió Adsben **Aktív**. Konverzió eddig: **0**.
