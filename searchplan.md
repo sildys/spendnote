@@ -25,13 +25,18 @@
 | Céloldal | `https://spendnote.app/` (bizonyítottan konvertál, minden angle-t fed, organikusan is 7. pozíció) |
 | Konverzió | **SIGNUP** (GA4-forrású, MÁR bekötve — `A.3`) |
 
-### Egyetlen szűk hirdetéscsoport: „Buyer intent — cash app/handover"
-**Kulcsszavak (Exact `[]` + Phrase `""`, CSAK vevő-szándék):**
-- `[petty cash app]`, `[petty cash software]`
-- `"petty cash management app"`, `"petty cash tracking app"`, `"petty cash tracking system"`, `"petty cash book app"`, `"cash log app"`
-- `"cash handover app"`, `"cash handover log"`, `"app to track cash"`, `"track who has the cash"`
+### DIAGNÓZIS (2026-08-19): a landing NEM a szűk keresztmetszet
+A főoldal **bizonyítottan konvertál** (organikus: 7. pozíció, 20,8% CTR, valódi regisztrációk „ha látják"). Tehát a **júniusi 0 konverzió oka a forgalom minősége volt**, nem a landing. Következmény: a **generikus** `petty cash app/software/tracker/management` klasztert **TELJESEN ELDOBJUK** (ezt már letesztelte a június: kattintás igen, regisztráció 0). A tét: **jó embert terelni a működő főoldalra.**
 
-> ⚠️ Több long-tail „Alacsony keresési arány" státuszba kerül — **normális** (kis niche), ne töröld.
+### Egyetlen szűk hirdetéscsoport: „Differentiated intent — handover / who has the cash"
+**Kulcsszavak (Exact `[]` + Phrase `""`, CSAK a SpendNote egyedi értékét fedő, magas-szándékú szavak — SEMMI generikus „petty cash app"):**
+- `"cash handover app"`, `"cash handover log"`, `"cash handoff app"`, `"cash handover receipt"`
+- `[who took money from cash box]`, `"track who has the cash"`, `"app to track cash handovers"`
+- `"cash accountability app"`, `"team cash tracking app"`, `"cash box tracking app"`
+- `"cash count app with signatures"`, `"dual control cash count"` (eseményes/nonprofit/több-aláírásos igényre — a Bing-adatból)
+
+> ⚠️ **Ezek egy része „Alacsony keresési arány" lesz** (ultra-niche) — ez a differenciált stratégia ára: kevés, de PONTOS forgalom. Ne töröld őket.
+> ⚠️ **Ha pár nap után szinte 0 megjelenés** → óvatosan adj hozzá 1-2 „on-message", de kicsit tágabb szót (`"petty cash app for teams"`, `"cash log app for business"`) — DE generikus `petty cash app`-ot NE.
 
 **Hirdetés (RSA) — címsorok (SEMMI „Free" → a júniusi policy-trigger elkerülése, lásd `A.7`):**
 `Petty Cash Tracking App` · `Know Who Took the Cash` · `Log Every Cash Handover` · `Cash Handoff Receipts Fast` · `Track Petty Cash Online` · `See Who Has the Cash Now` · `Proof for Every Handover` · `Petty Cash App for Teams` · `14-Day Trial, No Card` · `Cash In, Cash Out, Tracked` · `Stop Losing Track of Cash` · `Built for Small Teams`
