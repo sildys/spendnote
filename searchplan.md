@@ -4,6 +4,52 @@
 
 ---
 
+## 🟢 ÉLESÍTVE (2026-08-30) — a szűk „handover/accountability" kampány elindult
+
+**Státusz:** Az új kampány **közzétéve és fut** (a fiók egy Google-oldali reaktivációs fizetési hurok után feloldva). A `2026-08-19`-i spec szerint épült fel, a főoldalra terelve.
+
+### Élő kampány-paraméterek (megerősítve a felületen)
+| Elem | Érték |
+|---|---|
+| Kampány neve | **Search – Online Petty Cash Book** |
+| Típus | Search only (**Search Partners KI, Display KI**) |
+| Ajánlattétel | **Kattintások maximalizálása + max CPC $2,00** |
+| Napi keret | **$5,00/nap** |
+| Geo | **USA + Kanada**, **Jelenlét** célzás |
+| Nyelv | **Angol** |
+| AI Max | **KI** (szöveg-személyreszabás KI, **Végső URL kibontása KI**) |
+| Céloldal | `https://spendnote.app/` |
+| Vállalkozás neve (brand) | **SpendNote** (a domainnel egyezik; jogi entitás marad Sildsys, LLC) |
+| Konverzió | SIGNUP (GA4-forrású, meglévő `G-QPFM30F86Q` címkén át) |
+
+### Kulcsszavak (12 — Exact `[]` / Phrase `""`)
+`"cash handover app"`, `"cash handover log"`, `"cash handoff app"`, `"cash handover receipt"`, `[who took money from cash box]`, `"track who has the cash"`, `"app to track cash handovers"`, `"cash accountability app"`, `"team cash tracking app"`, `"cash box tracking app"`, `"cash count app with signatures"`, `"dual control cash count"`
+
+### RSA
+- **Címsorok (12):** `Petty Cash Tracking App` · `Know Who Took the Cash` · `Log Every Cash Handover` · `Cash Handoff Receipts Fast` · `Track Petty Cash Online` · `See Who Has the Cash Now` · `Proof for Every Handover` · `Petty Cash App for Teams` · `14-Day Trial, No Card` · `Cash In, Cash Out, Tracked` · `Stop Losing Track of Cash` · `Built for Small Teams` (⚠️ SEMMI „Free")
+- **Leírások (4):** lásd `2026-08-19` szekció.
+- **Útvonal:** `petty-cash` / `tracker`
+- **Kiemelések (callouts):** `No Credit Card Needed`, `14-Day Trial`, `Set Up in Minutes`, `Built for Small Teams`, `Printable Receipts`, `Cancel Anytime`
+
+### Sitelinkek (7)
+Pricing · Petty Cash App · Receipt Generator · Who Has the Cash · Petty Cash vs Excel · FAQ · Two-Person Cash Count
+
+### Kizáró kulcsszavak (kampány-szinten bemásolva)
+`template`, `printable`, `pdf`, `word`, `excel`, `sample`, `example`, `format`, `meaning`, `definition`, `how to`, `what is`, `budget`, `budgeting`, `net worth`, `expense tracker`, `spending tracker`, `bill tracker`, `money manager`, `rocket money`, `every dollar`, `everydollar`, `cleo`, `cash back`, `scanner`, `scanning`, `scan`, `ocr`, `receipt maker`, `receipt scanner`, `snapping`, `snap`, `jobs`, `salary`, `payslip`
+> ⚠️ `free` **SZÁNDÉKOSAN NEM** negatív. A negatívok direkt úgy vannak összeállítva, hogy ne ütközzenek a 12 kulcsszóval (nincs önálló `count`/`receipt`/`handover`).
+
+### Számlázási epizód (2026-08-30) — dokumentálva
+A fiók **„szünetel"** állapotba került (reaktivációs/igazolási fizetési feladat, NEM egyenleghiány — a személyazonosság már júniusban igazolva). A jóváírt egyenleg megjelenése és a reaktiváció **erős UI-késéssel** ment; végül egy reaktivációs befizetés oldotta fel (e-mail: „Fiókja szüneteltetését feloldottuk"). **Egyenleg ~\$130 (elkölthető hirdetésre / visszatéríthető).** Tanulság: a jóváírás önmagában nem oldja fel a szünetet, a Google a „Fizessen a fizetési móddal" feladatot külön kéri.
+
+### Teendő ha nem válik be / leállítás
+Fel nem használt egyenleg **visszatéríthető** (Számlázás → fizetési profil → visszatérítés kérése).
+
+### Következő lépések (nyitott)
+1. **Konverzió-takarítás (B/1):** a régi „Oldalmegtekintés" konverziót **Másodlagosra** állítani, hogy a SIGNUP legyen az egyetlen tiszta jel.
+2. **~3-4 hét adatgyűjtés után:** Keresési kifejezések → negatívok bővítése; döntés a bővítésről (C. fázisok).
+
+---
+
 ## ⭐ HOL TARTUNK MOST (2026-08-19) — ÚJRAINDÍTÁS (szűk, vevő-szándékú)
 
 **Kontextus:** A júniusi kampány szünetel (drága, generikus szavak, 0 konverzió). Közben: **Microsoft Ads véglegesen kitiltott** (multi-account fraud flag, fellebbezés nélkül); a **Google organikus a May 2026 core update után beesett** (~10 megj/nap, tekintély-hiány — a főoldal viszont 7. pozíció, 20,8% CTR). **Új terv: ultra-szűk, vevő-szándékú Google Search kampány — kis keret, magas relevancia, fizetős user validáció.**
