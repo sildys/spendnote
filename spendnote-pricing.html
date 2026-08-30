@@ -715,11 +715,11 @@
             </div>
 
             <div class="pricing-toggle">
-                <span class="toggle-label" id="monthlyLabel">Monthly</span>
-                <div class="toggle-switch active" id="pricingToggle">
+                <span class="toggle-label active" id="monthlyLabel">Monthly</span>
+                <div class="toggle-switch" id="pricingToggle">
                     <div class="toggle-slider"></div>
                 </div>
-                <span class="toggle-label active" id="yearlyLabel">
+                <span class="toggle-label" id="yearlyLabel">
                     Yearly <span class="save-badge">2 months free</span>
                 </span>
             </div>
@@ -844,13 +844,12 @@
                 free: { 
                     price: '$0', 
                     period: 'Try it out',
-                    bestFor: '14 days or 20 transactions',
+                    bestFor: 'Full access for 14 days',
                     features: [
-                        '1 Cash Box',
-                        '1 user',
-                        '20 transactions (or 14 days)',
-                        'Basic receipt template',
-                        'Basic PDF report'
+                        'All features unlocked',
+                        'Unlimited cash boxes',
+                        'Unlimited transactions',
+                        'No credit card required'
                     ] 
                 },
                 standard: { 
@@ -892,13 +891,12 @@
                 free: { 
                     price: '$0', 
                     period: 'Try it out',
-                    bestFor: '14 days or 20 transactions',
+                    bestFor: 'Full access for 14 days',
                     features: [
-                        '1 Cash Box',
-                        '1 user',
-                        '20 transactions (or 14 days)',
-                        'Basic receipt template',
-                        'Basic PDF report'
+                        'All features unlocked',
+                        'Unlimited cash boxes',
+                        'Unlimited transactions',
+                        'No credit card required'
                     ] 
                 },
                 standard: { 
@@ -936,7 +934,7 @@
             }
         };
 
-        let isYearly = true;
+        let isYearly = false;
         let currentPlan = ''; // '', 'free', 'preview', 'standard', 'pro'
         let currentCycle = ''; // '', 'monthly', 'yearly'
         let hasActiveSubscription = false;
@@ -1222,7 +1220,7 @@
             }
         });
 
-        renderPricing('yearly');
+        renderPricing('monthly');
 
         // Scroll Progress Bar
         const scrollProgress = document.getElementById('scrollProgress');

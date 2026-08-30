@@ -1774,11 +1774,11 @@
 
         
         <div class="pricing-toggle">
-            <span class="toggle-label" id="monthlyLabel">Monthly</span>
-            <div class="toggle-switch active" id="pricingToggle">
+            <span class="toggle-label active" id="monthlyLabel">Monthly</span>
+            <div class="toggle-switch" id="pricingToggle">
                 <div class="toggle-slider"></div>
             </div>
-            <span class="toggle-label active" id="yearlyLabel">
+            <span class="toggle-label" id="yearlyLabel">
                 Yearly <span class="save-badge">2 months free</span>
             </span>
         </div>
@@ -2042,9 +2042,9 @@
         yearly: {
             trial: { 
                 price: '$0', 
-                period: '14 days or 20 transactions',
-                bestFor: 'Try it out',
-                features: ['1 Cash Box', '1 user', '20 transactions (or 14 days)', 'Basic receipt template', 'Basic PDF report'] 
+                period: '14 days, full access',
+                bestFor: 'Try everything',
+                features: ['All features unlocked', 'Unlimited cash boxes', 'Unlimited transactions', 'No credit card required'] 
             },
             starter: { 
                 price: '$15.83', 
@@ -2067,9 +2067,9 @@
         monthly: {
             trial: { 
                 price: '$0', 
-                period: '14 days or 20 transactions',
-                bestFor: 'Try it out',
-                features: ['1 Cash Box', '1 user', '20 transactions (or 14 days)', 'Basic receipt template', 'Basic PDF report'] 
+                period: '14 days, full access',
+                bestFor: 'Try everything',
+                features: ['All features unlocked', 'Unlimited cash boxes', 'Unlimited transactions', 'No credit card required'] 
             },
             starter: { 
                 price: '$19', 
@@ -2089,7 +2089,7 @@
         }
     };
 
-    let isYearly = true;
+    let isYearly = false;
 
     function renderPricing(type) {
         const data = pricingData[type];
@@ -2161,7 +2161,7 @@
         }
     });
 
-    renderPricing('yearly');
+    renderPricing('monthly');
 
     // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
