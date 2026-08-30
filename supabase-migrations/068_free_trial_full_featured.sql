@@ -1,8 +1,19 @@
--- 051: Make the free 14-day trial full-featured.
--- Removes the free-tier 20-transaction cap so trial users can experience the full
--- product (multiple cash boxes + all features) during their 14 days. The 14-day
--- expiry (server-enforced) and the preview 200-cap are kept unchanged.
--- Based on 050; only the free transaction-cap block is removed.
+-- 068: Make the free 14-day trial full-featured (correct, cumulative version).
+--
+-- IMPORTANT: This supersedes the earlier 051_free_trial_full_featured.sql, which
+-- was based on the older 050 function body and therefore accidentally reverted
+-- migrations 052 (org members can create transactions), 064 (receipt snapshots)
+-- and 066 (transactions_blocked downgrade lock) when applied last.
+--
+-- This migration takes the full function body from 066 verbatim and removes ONLY
+-- the free-tier 20-transaction cap block, so trial users get the whole product
+-- (multiple cash boxes + all features + unlimited transactions) during their
+-- 14 days, while every later fix is preserved:
+--   * 14-day trial expiry (server-enforced) — KEPT
+--   * preview 200-transaction cap — KEPT
+--   * transactions_blocked cash box lock (downgrade path) — KEPT
+--   * org / cash box member authorization — KEPT
+--   * receipt display snapshots on each transaction — KEPT
 
 BEGIN;
 
@@ -99,8 +110,30 @@ BEGIN
     RAISE EXCEPTION 'Cash box not found';
   END IF;
 
-  IF v_cb.user_id <> v_actor THEN
-    RAISE EXCEPTION 'Not authorized';
+  IF coalesce(v_cb.transactions_blocked, false) THEN
+    RAISE EXCEPTION 'CASH_BOX_TRANSACTIONS_BLOCKED';
+  END IF;
+
+  IF v_cb.user_id IS DISTINCT FROM v_actor THEN
+    IF v_cb.org_id IS NULL THEN
+      RAISE EXCEPTION 'Not authorized';
+    END IF;
+
+    IF NOT EXISTS (
+      SELECT 1
+      FROM public.org_memberships m
+      WHERE m.org_id = v_cb.org_id
+        AND m.user_id = v_actor
+        AND lower(coalesce(m.role, '')) IN ('owner', 'admin')
+    )
+    AND NOT EXISTS (
+      SELECT 1
+      FROM public.cash_box_memberships c
+      WHERE c.cash_box_id = v_cash_box_id
+        AND c.user_id = v_actor
+    ) THEN
+      RAISE EXCEPTION 'Not authorized';
+    END IF;
   END IF;
 
   IF v_type = 'expense' THEN
@@ -136,7 +169,23 @@ BEGIN
     sender_company_name_snapshot,
     sender_address_snapshot,
     sender_phone_snapshot,
-    sender_profile_logo_url_snapshot
+    sender_profile_logo_url_snapshot,
+    receipt_show_logo,
+    receipt_show_addresses,
+    receipt_show_tracking,
+    receipt_show_additional,
+    receipt_show_note,
+    receipt_show_signatures,
+    receipt_title,
+    receipt_total_label,
+    receipt_from_label,
+    receipt_to_label,
+    receipt_description_label,
+    receipt_amount_label,
+    receipt_notes_label,
+    receipt_issued_by_label,
+    receipt_received_by_label,
+    receipt_footer_note
   ) VALUES (
     v_actor,
     v_cash_box_id,
@@ -167,7 +216,23 @@ BEGIN
     NULLIF(p_tx->>'sender_company_name_snapshot', ''),
     NULLIF(p_tx->>'sender_address_snapshot', ''),
     NULLIF(p_tx->>'sender_phone_snapshot', ''),
-    NULLIF(p_tx->>'sender_profile_logo_url_snapshot', '')
+    NULLIF(p_tx->>'sender_profile_logo_url_snapshot', ''),
+    coalesce(v_cb.receipt_show_logo, true),
+    coalesce(v_cb.receipt_show_addresses, true),
+    coalesce(v_cb.receipt_show_tracking, true),
+    coalesce(v_cb.receipt_show_additional, false),
+    coalesce(v_cb.receipt_show_note, false),
+    coalesce(v_cb.receipt_show_signatures, true),
+    NULLIF(trim(v_cb.receipt_title), ''),
+    NULLIF(trim(v_cb.receipt_total_label), ''),
+    NULLIF(trim(v_cb.receipt_from_label), ''),
+    NULLIF(trim(v_cb.receipt_to_label), ''),
+    NULLIF(trim(v_cb.receipt_description_label), ''),
+    NULLIF(trim(v_cb.receipt_amount_label), ''),
+    NULLIF(trim(v_cb.receipt_notes_label), ''),
+    NULLIF(trim(v_cb.receipt_issued_by_label), ''),
+    NULLIF(trim(v_cb.receipt_received_by_label), ''),
+    NULLIF(trim(v_cb.receipt_footer_note), '')
   )
   RETURNING id INTO v_tx_id;
 
