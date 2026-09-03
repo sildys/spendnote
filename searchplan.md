@@ -4,6 +4,40 @@
 
 ---
 
+## 🟢 FRISSÍTÉS (2026-09-03) — 2. hirdetéscsoport (Cash Up) + karbantartás
+
+**Státusz:** A kampány (a felületen most **`Search – SpendNote`** néven) fut, **első kattintás beérkezett**: `"cash handover receipt"` (kifejezés), **$2,64, 50% CTR** — releváns jel, de statisztikailag még nulla. Konverzió: **0** eddig.
+
+### Új: Cash Up hirdetéscsoport (a halott „multi-location" csoportból átalakítva)
+- **Indok:** a Keyword Planner szerint a **`cash up app` = 1 000–10 000 keresés/hó**, közepes verseny, **$0,83** alsó licit — messze a legnagyobb volumenű, tiszta szándékú szavunk (a többi ~300 tesztelt kulcsszó `—` vagy 10–100 volt). Ráadásul **olcsóbb** is, mint a handover ($2,64) → több kattintás ugyanabból az $5-ból.
+- **Kulcsszavak:** `[cash up app]`, `"cash up app"`, `[cash up sheet]`, `[cash up sheets end of day]` (alacsony), `[takings sheet]`, `[daily takings log]` (alacsony). A 4 fő **Jogosult**.
+- **RSA-irány:** `Digital Cash Up Sheet` / `Online Cash Up App` (pin H1) / `Cash Up in Minutes` / `End-of-Day Cash, Sorted` … Landing: főoldal.
+- **Csoport-negatívok (POS-zaj ellen):** `pos system`, `epos`, `cash register`, `till system`, `machine`, `hardware`, `printer`, `drawer`, `buy`, `for sale`, `price`.
+
+### Handover & Sign-Out csoporthoz javasolt bővítés (van mérhető volumen)
+1. szint: `[petty cash voucher]` (**100–1 000, $0,66** — 2. legjobb szó!), `[petty cash receipt]` (100–1 000, $1,46), `[cash received receipt]` ($1,35).
+2. szint (10–100, olcsó): `[petty cash slip]`, `[cash handover form]`, `[cash handover sheet]`, `[petty cash sign out sheet]`, `[paid out slip]`, `[cash receipt acknowledgement]`.
+> Ha a voucher/receipt szavak megjelenést hoznak → külön **Voucher & Receipt** csoport saját copyval (jobb QS).
+
+### ⚠️ ELVETETT szavak (dokumentálva, hogy ne térjünk vissza rájuk)
+- **`pettycash` (egybeírt, 12 100/hó):** magas volumen + alacsony verseny = **navigációs/márka + budgeting zaj** (versenytárs appok: `pettycash.app` = envelope budgeting, `usepetty.cash` = petty cash team app). NEM tiszta kereslet ránk. Az elgépelt variánsokat (`petticash`, `petycash`) a Google **közeli változatként** amúgy is kezeli.
+- **`tea fund`, `petty cash register`, `undeposited cash`, `drawer short`, `iou book`** stb.: vegyes/rossz szándék.
+- **Pánik-mondatok** (`money missing from cash box`, `petty cash never balances`, `who took petty cash`) és **vertikálisok** (`church petty cash`, `pta cash box`): Plannerben `—` → **fizetve halott, SEO-anyag.**
+
+### Karbantartási epizódok (2026-09-03)
+- **Negatív lista véletlen felülírás:** a felhasználó a Cash Up nézetben törölte a **kampány-szintű** negatívokat (azt hitte, csak a csoportra vonatkozik). Visszaállítva a `searchplan.md` + `Kizáró kulcsszavak jelentése.csv` alapján.
+- **Sitelinkek HIÁNYOZTAK:** az Eszközök → Belső link fül **üres volt** — a dokumentált 7 sitelink sosem mentődött el (vagy elveszett). **Újra hozzáadva kampány-szinten** a 7 (Pricing, Petty Cash App, Receipt Generator, Who Has the Cash, Petty Cash vs Excel, FAQ, Two-Person Cash Count) valódi URL-ekkel + 2-2 leírássorral.
+- **Bid finomítás:** a Cash Up-nál a max CPC-t **$2**-re állítva (a `cash up app` $0,83-tól indul, van volumen → elbírja; a handover kicsit beszorulhat, elfogadható). Maximize Clicks stratégiánál **csak kampány-szintű** max CPC van (nincs kulcsszó-szintű felülírás).
+
+### ChatGPT-vita eldöntve (cash up jó vagy rossz?)
+ChatGPT szerint a `cash up` rossz szándék (kasszazáró ≠ petty cash). **Cáfolat a saját organikus adatból:** a Search Console szerint a SpendNote-ot **már most is** cash-up közeli keresések hozzák (`cash up sheets end of day` 12 megj, `daily cash report` 43, `end of day cash report`…). → A cash up **illik** a termékhez. **Döntőbíró: a Keresési kifejezések jelentés** 3-4 nap múlva, nem az elmélet.
+
+### Következő lépés (2026-09-03 után)
+- **NE nyúlj semmihez 3-4 napig.** Utána: Kulcsszavak → **Keresési kifejezések jelentés** → ha a cash up klikkek POS/hardver-zaj → szüneteltetés; ha `cash up sheet`/`daily cash up` → marad.
+- Budget-emelés ($10) **csak** ha: (1) a `cash up app` jön elfogadható CPC-n **és** (2) a keret rendszeresen elfogy.
+
+---
+
 ## 🟢 ÉLESÍTVE (2026-08-30) — a szűk „handover/accountability" kampány elindult
 
 **Státusz:** Az új kampány **közzétéve és fut** (a fiók egy Google-oldali reaktivációs fizetési hurok után feloldva). A `2026-08-19`-i spec szerint épült fel, a főoldalra terelve.
