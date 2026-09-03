@@ -2186,6 +2186,19 @@
                 // --- Count transactions for this user (reuse query if already loaded for currency skip) ---
                 await loadTxCountOnce();
 
+                // --- Onboarding routing helper ---
+                // On phones the first-transaction flow lives on a dedicated page
+                // (spendnote-new-transaction.html), NOT the desktop modal. Onboarding
+                // CTAs must respect this or mobile users get dumped into the wrong UI.
+                const snIsPhone = () => { try { return window.matchMedia('(max-width: 768px)').matches; } catch (_) { return false; } };
+                window.snStartFirstTx = () => {
+                    if (snIsPhone()) {
+                        window.location.href = 'spendnote-new-transaction.html#new-transaction';
+                    } else if (typeof window.openModal === 'function') {
+                        window.openModal({ direction: 'in' });
+                    }
+                };
+
                 // --- Checklist Banner ---
                 const checklist = document.getElementById('onboardingChecklist');
                 const checklistDoneKey = `sn.onboardingDone.${uid}`;
@@ -2200,9 +2213,7 @@
                     if (txCount === 0) {
                         checklist.style.display = 'flex';
                         document.getElementById('checklistCtaBtn')?.addEventListener('click', () => {
-                            if (typeof window.openModal === 'function') {
-                                window.openModal({ direction: 'in' });
-                            }
+                            window.snStartFirstTx();
                         });
                     } else if (txCount >= 1) {
                         const step2 = document.getElementById('checkStep2');
@@ -2252,7 +2263,7 @@
                                 </div>
                                 <h3>If cash moves and you don't record it,<br>you lose track.</h3>
                                 <p>Right now, you have no record of it.</p>
-                                <button class="sn-empty-cta sn-pulse" id="snMainCta" onclick="if(typeof window.openModal==='function')window.openModal({direction:'in'})">
+                                <button class="sn-empty-cta sn-pulse" id="snMainCta" onclick="window.snStartFirstTx&&window.snStartFirstTx()">
                                     Start tracking your cash <span class="sn-cta-time">— 30 sec</span>
                                 </button>
                                 <button class="sn-empty-skip" id="snSkipOnboarding">I'll do it later</button>
@@ -2270,9 +2281,11 @@
                         });
                     }
 
-                    // 4. Auto-open tx modal only if currency dialog did NOT run this load (avoids stacked modals)
+                    // 4. Auto-open tx modal (DESKTOP ONLY) if currency dialog did NOT run this load.
+                    //    Never auto-open on phones: the modal isn't the mobile flow, and auto-
+                    //    navigating to another page would be jarring — the prominent CTA suffices.
                     const autoOpenKey = `sn.autoOpened.${uid}`;
-                    if (!currencyModalRanThisLoad && !localStorage.getItem(autoOpenKey)) {
+                    if (!snIsPhone() && !currencyModalRanThisLoad && !localStorage.getItem(autoOpenKey)) {
                         localStorage.setItem(autoOpenKey, '1');
                         setTimeout(() => {
                             if (document.querySelector('.sn-dialog-overlay')) return;
