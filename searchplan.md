@@ -27,6 +27,12 @@ A 30 napos jelentésben kb. $20 / $112 ment „pénzt a blokkokért" és túl á
 `"rewards"`, `"reward"`, `"cashback"`, `"money back"`, `"cash for receipts"`, `"money for receipts"`, `"get money"`, `"earn"`, `"old receipts"`, `"apps that pay"`, `"pay you"`, `"turn receipts"`, `"receipt of payment"`, `"payment receipt"`, `[receipt]`.
 Figyelendő: `[petty cash receipt]` / `[petty cash receipts]` (sablonkeresők) — ha 2–3 nap után sok ilyen kifejezés jön konverzió nélkül, szüneteltetni.
 
+### Új kulcsszavak (2026-10-11 délelőtt)
+Az első 6 órában 0 megjelenés (US éjszaka + URL-csere utáni újraellenőrzés). A régi kampány keresési kifejezéseiből bizonyítottan releváns, eddig hiányzó szavak, mind Exact:
+- Cash Receipt: `[cash receipt]`, `[receipt for cash]`, `[receipt for money]`
+- Receipt Generator: `[petty cash log]`, `[petty cash sheet]`, `[petty cash voucher]`
+Alacsony keresési arány miatt nem jogosult: `"cash handover log"`, `[petty cash receipt generator]` (maradnak).
+
 ### Landing oldalak (2026-10-11)
 A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre: `/lp/cash-receipt`, `/lp/cash-handover`, `/lp/receipt-generator`. A SEO oldalak átalakítása a landingek 2–3 hetes eredményéig várakozik.
 
