@@ -46,6 +46,9 @@ A volumen a szűk keresztmetszet, és van svájci regisztráló. Ads Editor-impo
 +9 ország (`SpendNote-Receipts-locations-2.csv`): Magyarország, Lengyelország, Csehország, Szlovákia, Szlovénia, Észtország, Lettország, Litvánia, Finnország → összesen 25. Indok: az alapító maga is angolul kereste az ilyen eszközt Magyarországról; pontos egyezés + negatívok mellett csak a valódi angol nyelvű keresések hoznak költést. Ukrajna utólag bekerült (`SpendNote-Receipts-locations-4.csv`): erősen készpénzes gazdaság, sok üzleti tevékenység angolul; a Stripe elfogadja az ukrán kártyákat (csak a szankcionált megszállt területeket blokkolja).
 +10 ország (`SpendNote-Receipts-locations-3.csv`): Spanyolország, Olaszország, Franciaország, Portugália, Görögország, Horvátország, Románia, Bulgária, Ciprus, Málta → összesen 35 (a teljes EU + UK, CH, NO, US, CA, AU, NZ, SG); Ukrajnával 36. Novemberben országonkénti bontásban értékelni.
 
+### Hirdetésszöveg-javítás: kézi aláírás (2026-10-11 14:15)
+Az app csak nyomtatható aláírásvonalakat ad, digitális aláírást nem. A „Signed by Both Sides" / „Signed Cash Handoff Receipt" / „signed receipt" szövegek online aláírást sugalltak. `SpendNote-Receipts-ads-fix.csv`: a Cash Receipt és a Handover Receipt RSA régi változata szüneteltetve, új változat: `Signature Lines Included`, `Printable Cash Handoff Receipt`, „printable receipt with signature lines", „Print it, both sides sign…". A Receipt Generator hirdetés változatlan. A landing oldalak szövege ugyanígy javítva (7e8df32).
+
 ### Landing oldalak (2026-10-11)
 A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre: `/lp/cash-receipt`, `/lp/cash-handover`, `/lp/receipt-generator`. A SEO oldalak átalakítása a landingek 2–3 hetes eredményéig várakozik.
 
