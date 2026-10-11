@@ -4,6 +4,35 @@
 
 ---
 
+## 🟢 ÚJRAÉPÍTÉS (2026-10-11) — `Search - Receipts`: 3 csoport, mindegyik saját landing oldalra
+
+**Státusz:** a régi `Search – SpendNote` **szüneteltetve** (érintetlen). Az új `Search - Receipts` kampány Ads Editor-importtal felkerült és **engedélyezve**.
+
+### Miért (a 2026-08-25 – 09-23 közötti 30 nap alapján)
+- **Eredmény:** $112,52, 797 megjelenés, 46 kattintás, átlag CPC $2,45 (a $2,50-es plafonon), 2 kétes konverzió (az egyik a `receipts rewards app` keresésre).
+- **A megjelenési részesedés valójában <10%, a rangsor miatt elvesztett arány >90%.** A szeptember 4-i „>90% IS, a licit rendben" olvasat FORDÍTOTT volt. A kevés megjelenés oka a gyenge Ad Rank (alacsony QS × plafonon lévő licit), nem a niche kis volumene.
+- **QS 4–5, a landing page élmény mindenhol „Below average"**, mert minden hirdetés a főoldalra vitt. Ez felülírja a 2026-08-19-i diagnózist („a landing NEM a szűk keresztmetszet"): organikusan a főoldal konvertál, a fizetett receipt-szándékú kulcsszavaknál viszont a Google nem tartja relevánsnak.
+- A konvertáló kulcsszavak receipt-szándékúak voltak, a hirdetések viszont „who took the cash / team" üzenetűek, ezért az ad relevance csak „Average".
+- Cash Up csoport: QS 5, Cash App-zaj, `"cash up"` kifejezésre $21,98 költés 0 konverzióval → kikerült.
+
+### Új struktúra (napi $5, Maximize Clicks, $2,50-es plafon, US/CA/UK/IE, en, broad és AI Max kikapcsolva)
+- **Cash Receipt** → `/cash-payment-received-proof`: `[receipts for cash]`, `[cash received receipt]`, `[proof of cash payment]`, `"proof of cash payment"`, `[cash acknowledgement receipt]`, `[receipt for cash payment]`, `[cash payment receipt]`, `[simple receipt for cash payment]`, `[receipt for cash received]`
+- **Handover Receipt** → `/cash-handoff-receipt`: `[cash handover receipt]`, `"cash handover receipt"`, `[cash handover form]`, `[cash handover sheet]`, `[cash handover]`, `"cash handover log"`
+- **Receipt Generator** → `/petty-cash-receipt-generator`: `[cash receipt generator]`, `[petty cash receipt generator]`, `[petty cash receipt]`, `[petty cash receipts]`, `[petty cash slip]`, `[paid out slip]`
+- Csoportonként 1 RSA: 12 címsor, 4 leírás, a csoport kulcsszavait ismétlik.
+- A 78 kampányszintű negatív kulcsszó egy az egyben átvéve. Sitelinkek és callout-ok fiókszinten maradtak.
+
+### Ads Editor import tanulság
+A PowerShell `ConvertTo-Csv` minden mezőt idézőjelbe tesz, az üreseket is (`""`). Az Editor ettől a kulcsszó-, negatív- és helyszínsorokat „Többértelmű sortípus" hibával dobja el. Az importfájl legyen **UTF-16, tabulátoros, idézőjelek nélkül** (mint az Editor saját exportja).
+
+### Következő lépések
+1. **GA4 → Ads konverzióimport:** `sign_up` elsődleges, `first_transaction_created` másodlagos (a jelenlegi fiókszintű cél túl laza).
+2. **2–3 nap múlva:** keresési kifejezések jelentés → negatívok pótlása.
+3. **1 hét múlva:** QS ellenőrzés. Ha 6–7 → plafon $2,50 → **$1,80**. Ha 4–5 marad, a plafon csökkentése nem segít (csak a megjelenést fojtja el). Spórolni a napi kerettel lehet, nem a CPC-plafonnal.
+4. A duplikált `.html` sitelinkek („Under review") törlése.
+
+---
+
 ## 🟢 FRISSÍTÉS (2026-09-03) — 2. hirdetéscsoport (Cash Up) + karbantartás
 
 **Státusz:** A kampány (a felületen most **`Search – SpendNote`** néven) fut, **első kattintás beérkezett**: `"cash handover receipt"` (kifejezés), **$2,64, 50% CTR** — releváns jel, de statisztikailag még nulla. Konverzió: **0** eddig.
