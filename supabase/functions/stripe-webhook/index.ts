@@ -246,6 +246,7 @@ const sendDowngradeEmail = async (
   userId: string,
   oldTier: string,
   newTier: string,
+  subscriptionId: string,
 ) => {
   try {
     const resendApiKey = Deno.env.get("RESEND_API_KEY") || "";
@@ -294,7 +295,11 @@ const sendDowngradeEmail = async (
 
     await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: { Authorization: `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": `downgrade-${userId}-${subscriptionId}-${newTier}`,
+      },
       body: JSON.stringify({ from, to: [email], subject: tpl.subject, html: tpl.html, text: tpl.text }),
     });
   } catch (_) {
@@ -330,7 +335,6 @@ const sendUpgradeEmail = async (
       dashboardUrl: "https://spendnote.app/",
     });
 
-    // created/updated webhooks for the same subscription can race; Resend drops repeats of the same key for 24h.
     await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -348,6 +352,7 @@ const sendUpgradeEmail = async (
 const sendPaymentFailedEmail = async (
   supabaseAdmin: ReturnType<typeof createClient>,
   customerId: string,
+  idempotencyKey: string,
 ) => {
   try {
     const resendApiKey = Deno.env.get("RESEND_API_KEY") || "";
@@ -374,7 +379,11 @@ const sendPaymentFailedEmail = async (
 
     await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: { Authorization: `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": idempotencyKey,
+      },
       body: JSON.stringify({ from, to: [email], subject: tpl.subject, html: tpl.html, text: tpl.text }),
     });
   } catch (_) {
@@ -387,6 +396,7 @@ const sendSubscriptionCanceledEmail = async (
   userId: string,
   tier: string,
   periodEnd: number | null,
+  subscriptionId: string,
 ) => {
   try {
     const resendApiKey = Deno.env.get("RESEND_API_KEY") || "";
@@ -417,12 +427,44 @@ const sendSubscriptionCanceledEmail = async (
 
     await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: { Authorization: `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": `canceled-${userId}-${subscriptionId}-${periodEnd || 0}`,
+      },
       body: JSON.stringify({ from, to: [email], subject: tpl.subject, html: tpl.html, text: tpl.text }),
     });
   } catch (_) {
     // non-critical
   }
+};
+
+// Stripe fires several events at once (checkout, subscription created/updated, invoice paid) and any of
+// them may be the one that writes the new tier, so every tier writer calls this; the Resend
+// idempotency keys in the senders collapse the concurrent calls into one email.
+const handleTierChange = async (
+  supabaseAdmin: ReturnType<typeof createClient>,
+  userId: string,
+  oldTier: string,
+  newTier: string,
+  subscriptionId: string,
+) => {
+  if (subscriptionTierRank(newTier) < subscriptionTierRank(oldTier)) {
+    await applyCashBoxTierDowngrade(supabaseAdmin, userId, newTier);
+    await sendDowngradeEmail(supabaseAdmin, userId, oldTier, newTier, subscriptionId);
+  } else if (subscriptionTierRank(newTier) > subscriptionTierRank(oldTier)) {
+    await clearCashBoxTierLocks(supabaseAdmin, userId);
+    await sendUpgradeEmail(supabaseAdmin, userId, newTier, subscriptionId);
+  }
+};
+
+const readTier = async (supabaseAdmin: ReturnType<typeof createClient>, userId: string): Promise<string> => {
+  const { data } = await supabaseAdmin
+    .from("profiles")
+    .select("subscription_tier")
+    .eq("id", userId)
+    .maybeSingle();
+  return String(data?.subscription_tier || "free").toLowerCase();
 };
 
 Deno.serve(async (req: Request) => {
@@ -491,7 +533,9 @@ Deno.serve(async (req: Request) => {
         if (userId && subscriptionId) {
           try {
             const sub = await stripe.subscriptions.retrieve(subscriptionId);
+            const oldTier = await readTier(supabaseAdmin, userId);
             await upsertProfileSubscription(supabaseAdmin, userId, sub);
+            await handleTierChange(supabaseAdmin, userId, oldTier, await readTier(supabaseAdmin, userId), subscriptionId);
 
             // If Stripe returned "incomplete" but checkout completed, override to "active"
             const subStatus = String(sub.status || "").toLowerCase();
@@ -530,42 +574,16 @@ Deno.serve(async (req: Request) => {
         if (!userId) break;
         const { data: prevRow } = await supabaseAdmin
           .from("profiles")
-          .select("subscription_tier, stripe_cancel_at_period_end, pending_subscription_tier, pending_tier_effective_date")
+          .select("subscription_tier, stripe_cancel_at_period_end")
           .eq("id", userId)
           .maybeSingle();
         const oldTier = String(prevRow?.subscription_tier || "free").toLowerCase();
         const wasCanceling = Boolean(prevRow?.stripe_cancel_at_period_end);
-        const pendingTier = String(prevRow?.pending_subscription_tier || "").trim().toLowerCase();
-        const pendingEffective = prevRow?.pending_tier_effective_date
-          ? new Date(prevRow.pending_tier_effective_date).getTime()
-          : 0;
-        const now = Date.now();
 
+        // A deferred downgrade keeps the old tier until renewal, so it only shows up here as a tier change then.
         await upsertProfileSubscription(supabaseAdmin, userId, sub);
-
-        const { data: nextRow } = await supabaseAdmin
-          .from("profiles")
-          .select("subscription_tier, pending_subscription_tier")
-          .eq("id", userId)
-          .maybeSingle();
-        const newTier = String(nextRow?.subscription_tier || oldTier).toLowerCase();
-
-        if (pendingTier && pendingEffective > now) {
-          // Deferred downgrade still active — tier was kept, skip emails
-        } else if (pendingTier && pendingEffective <= now) {
-          // Deferred downgrade just took effect at period renewal
-          await applyCashBoxTierDowngrade(supabaseAdmin, userId, newTier);
-          await sendDowngradeEmail(supabaseAdmin, userId, oldTier, newTier);
-        } else {
-          // No pending downgrade — normal upgrade/downgrade detection
-          if (subscriptionTierRank(newTier) < subscriptionTierRank(oldTier)) {
-            await applyCashBoxTierDowngrade(supabaseAdmin, userId, newTier);
-            await sendDowngradeEmail(supabaseAdmin, userId, oldTier, newTier);
-          } else if (subscriptionTierRank(newTier) > subscriptionTierRank(oldTier)) {
-            await clearCashBoxTierLocks(supabaseAdmin, userId);
-            await sendUpgradeEmail(supabaseAdmin, userId, newTier, String(sub.id || ""));
-          }
-        }
+        const newTier = await readTier(supabaseAdmin, userId);
+        await handleTierChange(supabaseAdmin, userId, oldTier, newTier, String(sub.id || ""));
 
         // Detect cancel_at_period_end becoming true (user canceled but still active)
         if (sub.cancel_at_period_end && !wasCanceling && sub.status === "active") {
@@ -574,6 +592,7 @@ Deno.serve(async (req: Request) => {
             userId,
             oldTier || newTier,
             sub.current_period_end || null,
+            String(sub.id || ""),
           );
         }
         break;
@@ -612,7 +631,9 @@ Deno.serve(async (req: Request) => {
             })
             .eq("id", userId);
           await applyCashBoxTierDowngrade(supabaseAdmin, userId, "free");
-          await sendDowngradeEmail(supabaseAdmin, userId, deletedOldTier, "free");
+          if (deletedOldTier !== "free") {
+            await sendDowngradeEmail(supabaseAdmin, userId, deletedOldTier, "free", deletedSubId);
+          }
         }
         break;
       }
@@ -625,7 +646,11 @@ Deno.serve(async (req: Request) => {
             .from("profiles")
             .update({ billing_status: "past_due" })
             .eq("stripe_customer_id", customerId);
-          await sendPaymentFailedEmail(supabaseAdmin, customerId);
+          await sendPaymentFailedEmail(
+            supabaseAdmin,
+            customerId,
+            `payment-failed-${invoice.id}-${invoice.attempt_count || 0}`,
+          );
         }
         break;
       }
@@ -639,7 +664,9 @@ Deno.serve(async (req: Request) => {
             const sub = await stripe.subscriptions.retrieve(invoiceSubId);
             const userId = await findUserIdFromSubscription(supabaseAdmin, sub);
             if (userId) {
+              const oldTier = await readTier(supabaseAdmin, userId);
               await upsertProfileSubscription(supabaseAdmin, userId, sub);
+              await handleTierChange(supabaseAdmin, userId, oldTier, await readTier(supabaseAdmin, userId), invoiceSubId);
             }
           } catch (_) {
             await supabaseAdmin
