@@ -36,30 +36,71 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    <link rel="stylesheet" href="/assets/css/lp.css?v=4">
+    <link rel="stylesheet" href="/assets/css/main.css?v=23">
+    <link rel="stylesheet" href="/assets/css/lp.css?v=8">
 </head>
 <body data-lp="receipt-generator">
 
-<nav class="lp-nav">
-    <div class="wrap">
-        <a href="/" class="lp-logo" aria-label="SpendNote home">
-            <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#lp-logo-g)"/>
+<nav class="site-nav">
+    <div class="nav-container">
+        <a href="/" class="logo">
+            <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#nav-logo-gradient)"/>
                 <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
                 <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
                 <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
                 <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
                 <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
-                <defs><linearGradient id="lp-logo-g" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs>
+                <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs>
+                    <linearGradient id="nav-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#059669"/>
+                        <stop offset="100%" stop-color="#10b981"/>
+                    </linearGradient>
+                </defs>
             </svg>
-            SpendNote
+            <span>SpendNote</span>
         </a>
-        <div class="lp-nav-right">
-            <a href="/spendnote-login" class="login">Log in</a>
-            <a href="/spendnote-signup" class="btn btn-go" data-cta="nav">Start free</a>
-        </div>
+        <button class="nav-hamburger" id="landingNavHamburger" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="landingNavLinks">
+            <li><a href="/">Home</a></li>
+            <li><a href="/spendnote-pricing">Pricing</a></li>
+            <li><a href="/spendnote-faq">FAQ</a></li>
+            <li><a href="/spendnote-login" class="btn btn-secondary">Log in</a></li>
+            <li><a href="/spendnote-signup" class="btn btn-primary" data-cta="nav">Sign up</a></li>
+        </ul>
     </div>
 </nav>
+<script>
+(function() {
+    var btn = document.getElementById('landingNavHamburger');
+    var links = document.getElementById('landingNavLinks');
+    if (!btn || !links) return;
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = links.classList.toggle('nav-open');
+        btn.classList.toggle('nav-hamburger--open', isOpen);
+        btn.setAttribute('aria-expanded', String(isOpen));
+    });
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.site-nav') && links.classList.contains('nav-open')) {
+            links.classList.remove('nav-open');
+            btn.classList.remove('nav-hamburger--open');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+    });
+    links.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() {
+            links.classList.remove('nav-open');
+            btn.classList.remove('nav-hamburger--open');
+            btn.setAttribute('aria-expanded', 'false');
+        });
+    });
+})();
+</script>
 
 <main>
 <section class="hero">
@@ -82,33 +123,11 @@
             </div>
         </div>
 
-        <div class="stage" aria-hidden="true">
-            <div class="receipt">
-                <div class="r-head">
-                    <div>
-                        <div class="r-title">Petty Cash Slip</div>
-                        <div class="r-date">Date: 10/11/2026</div>
-                    </div>
-                    <div class="r-meta">Cash Box: Office Petty Cash<br>Receipt: SN3-094</div>
-                </div>
-                <div class="r-rule"></div>
-                <div class="r-parties">
-                    <div><div class="r-label">Paid out from</div>Office Petty Cash</div>
-                    <div><div class="r-label">Paid to</div>Dave Miller</div>
-                </div>
-                <div class="r-line"><span>Coffee, milk &amp; snacks</span><span>$18.40</span></div>
-                <div class="r-line"><span>Printer paper</span><span>$12.99</span></div>
-                <div class="r-total"><span>Total paid out</span><span class="amt">$31.39</span></div>
-                <div class="r-sign">
-                    <div class="sig"><svg viewBox="0 0 130 40"><path d="M4 30 C14 8 22 38 32 20 S48 6 56 26 S74 34 84 14 S104 30 126 18"/></svg><small>Issued by</small></div>
-                    <div class="sig"><svg viewBox="0 0 130 40"><path d="M6 24 C18 34 26 6 40 22 S60 36 70 16 S92 10 100 28 S118 22 124 12"/></svg><small>Received by</small></div>
-                </div>
-                <div class="r-foot">Generated by SpendNote &middot; Proof of cash handoff</div>
-                <div class="stamp">SIGNED</div>
-            </div>
-            <div class="chip chip-1"><span class="ic"><i class="fas fa-file-pdf"></i></span><span>PDF ready<small>print or email</small></span></div>
-            <div class="chip chip-3"><span class="ic"><i class="fas fa-image"></i></span><span>Your logo<small>on every slip</small></span></div>
-            <div class="chip chip-2"><span class="ic"><i class="fas fa-wallet"></i></span><span>Petty cash left<small>$268.61 of $300</small></span></div>
+        <div class="stage">
+            <div class="shot shot-back"><img src="/assets/images/seo/petty-cash-receipt-generator/pdf-receipt-example.png" alt="SpendNote PDF cash receipt with From, To, amount and signature lines" width="810" height="1050" fetchpriority="high" decoding="async"></div>
+            <div class="shot shot-front"><img src="/assets/images/spendnote-receipt.png" alt="SpendNote printable cash receipt with Issued by and Received by signature lines" width="1832" height="1223" fetchpriority="high" decoding="async"></div>            <div class="chip chip-1"><span class="ic"><i class="fas fa-file-pdf"></i></span><span>PDF ready<small>print or email</small></span></div>
+            <div class="chip chip-3"><span class="ic"><i class="fas fa-image"></i></span><span>Your logo<small>on every receipt</small></span></div>
+            <div class="chip chip-2"><span class="ic"><i class="fas fa-wallet"></i></span><span>Balance updated<small>petty cash box total</small></span></div>
         </div>
     </div>
 </section>
@@ -194,7 +213,7 @@
         </div>
         <div class="browser rv">
             <div class="browser-bar"><i></i><i></i><i></i><span>spendnote.app/dashboard</span></div>
-            <img src="/assets/images/spendnote-dashboard-1280.jpg" srcset="/assets/images/spendnote-dashboard-960.jpg 960w, /assets/images/spendnote-dashboard-1280.jpg 1280w" sizes="(max-width: 980px) 100vw, 640px" alt="SpendNote dashboard with cash boxes and recent cash receipts" width="1280" height="720" loading="lazy" decoding="async">
+            <img src="/assets/images/spendnote-dashboard-1280.jpg" srcset="/assets/images/spendnote-dashboard-960.jpg 960w, /assets/images/spendnote-dashboard-1280.jpg 1280w" sizes="(max-width: 980px) 100vw, 640px" alt="SpendNote dashboard with cash boxes and recent cash receipts" width="1280" height="881" loading="lazy" decoding="async">
         </div>
     </div>
 </section>
@@ -290,10 +309,62 @@
 </section>
 </main>
 
-<footer class="lp-foot">
-    <div class="wrap">
-        <span>&copy; 2026 SpendNote &middot; Proof of cash handoff, not a tax tool.</span>
-        <span><a href="/spendnote-pricing">Pricing</a><a href="/spendnote-faq">FAQ</a><a href="/spendnote-privacy">Privacy</a><a href="/spendnote-terms">Terms</a></span>
+<!-- Footer -->
+<footer class="app-footer">
+    <div class="app-footer-container">
+        <!-- Top Row -->
+        <div class="app-footer-top">
+            <!-- Left: Brand Section -->
+            <div class="app-footer-brand">
+                <a href="/" class="app-footer-brand-logo">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#footer-logo-gradient)"/>
+                        <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                        <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                        <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                        <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                        <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                        <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                        <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="footer-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#059669"/>
+                                <stop offset="100%" stop-color="#10b981"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>SpendNote</span>
+                </a>
+                <p class="app-footer-brand-desc">
+                    Complete cash visibility for your team.<br>Instant receipts, full history.
+                </p>
+            </div>
+            
+            <!-- Right: Links + Disclaimer -->
+            <div class="app-footer-right">
+                <div class="app-footer-links-simple">
+                    <a href="/#features">Features</a>
+                    <a href="/spendnote-pricing">Pricing</a>
+                    <a href="/spendnote-faq">FAQ</a>
+                    <a href="/spendnote-resources">Resources</a>
+                    <a href="/spendnote-terms">Terms</a>
+                    <a href="/spendnote-privacy">Privacy</a>
+                </div>
+                
+                <!-- Disclaimer on right side -->
+                <div class="app-footer-brand-disclaimer">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Cash handoff documentation only. Not a tax or accounting tool.</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Row -->
+        <div class="app-footer-bottom">
+            <div class="app-footer-copyright">
+                2026 SpendNote. All rights reserved.
+            </div>
+        </div>
     </div>
 </footer>
 
