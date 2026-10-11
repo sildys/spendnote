@@ -225,6 +225,26 @@ main .btn-big, .m-cta .btn-big { padding: 1.15rem 2.1rem; font-size: 1.15rem; }
 .sig-2 path { animation-delay: 2.1s; }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 
+.stamp {
+    position: absolute;
+    right: 12%;
+    top: 47%;
+    border: 3px solid var(--g);
+    color: var(--g);
+    font-weight: 900;
+    font-size: clamp(0.75rem, 1.4vw, 1.05rem);
+    letter-spacing: 0.12em;
+    padding: 0.3em 0.75em;
+    border-radius: 8px;
+    background: rgba(236, 253, 245, 0.9);
+    transform: rotate(-12deg) scale(2.2);
+    opacity: 0;
+    animation: stamp 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) 3.2s forwards;
+}
+@keyframes stamp {
+    to { opacity: 1; transform: rotate(-12deg) scale(1); }
+}
+
 .chip {
     position: absolute;
     display: inline-flex;
@@ -558,5 +578,6 @@ main .btn-big, .m-cta .btn-big { padding: 1.15rem 2.1rem; font-size: 1.15rem; }
     .shot-back { transform: rotate(-4deg) !important; }
     .shot-front { transform: rotate(1.5deg) !important; }
     .sig path { stroke-dashoffset: 0 !important; }
+    .stamp { opacity: 1 !important; transform: rotate(-12deg) !important; }
     .js .rv { opacity: 1; transform: none; }
 }
