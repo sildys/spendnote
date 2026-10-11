@@ -36,6 +36,11 @@ Alacsony keresési arány miatt nem jogosult: `"cash handover log"`, `[petty cas
 ### CPC-plafon emelés (2026-10-11 11:52)
 Az előnézeti diagnosztika minden tesztkeresésre (US + UK, mindhárom csoport) „nem jelenik meg / nem tudjuk, miért" — gyakorlatilag elvesztett aukció (rangsor), összhangban a régi <10%-os megjelenési részesedéssel. Plafon **$2,50 → $3,00**. Visszavenni, ha a QS javul (landingek) és a megjelenések beindulnak.
 
+### Ütköző negatívok javítva (2026-10-11 12:10)
+A Google jelezte, hogy egy tág egyezésű `cash for receipts` negatív blokkolja a `[receipts for cash]` kulcsszót (tág negatív = minden szó, bármilyen sorrendben). A `"payment receipt"` kifejezés-negatív pedig a `[cash payment receipt]`-et blokkolta. Mindkettő törölve, helyettük `[cash for receipts]` és `[payment receipt]` pontos negatív.
+Ads Editor-exporttal ellenőrizve: 27 kulcsszó × 88 negatív, **0 ütközés**; a 3 RSA `Approved`, végső URL-ek a `/lp/` oldalak.
+**Szabály új negatívnál:** egyszavas vagy tág negatívot mindig vessünk össze a kulcsszólistával; a kulcsszavakban szereplő szavakból csak pontos (`[...]`) negatív legyen.
+
 ### Landing oldalak (2026-10-11)
 A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre: `/lp/cash-receipt`, `/lp/cash-handover`, `/lp/receipt-generator`. A SEO oldalak átalakítása a landingek 2–3 hetes eredményéig várakozik.
 
