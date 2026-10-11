@@ -390,6 +390,7 @@ main .btn-big, .m-cta .btn-big { padding: 1.15rem 2.1rem; font-size: 1.15rem; }
 .tile h3 { margin: 0 0 0.45rem; font-size: 1.15rem; letter-spacing: -0.02em; }
 .tile p { margin: 0; color: var(--muted); }
 .tile-wide { grid-column: span 2; display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center; background: linear-gradient(140deg, #0b1220, #12352b); border: none; color: #fff; }
+.tile-wide h3 { color: #fff; }
 .tile-wide p { color: rgba(255, 255, 255, 0.75); }
 .tile-wide .ti { background: rgba(255, 255, 255, 0.12); color: #6ee7b7; }
 .t-green { background: var(--g-soft); color: var(--g-dark); }
