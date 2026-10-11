@@ -306,6 +306,7 @@ const sendUpgradeEmail = async (
   supabaseAdmin: ReturnType<typeof createClient>,
   userId: string,
   newTier: string,
+  subscriptionId: string,
 ) => {
   try {
     const resendApiKey = Deno.env.get("RESEND_API_KEY") || "";
@@ -329,9 +330,14 @@ const sendUpgradeEmail = async (
       dashboardUrl: "https://spendnote.app/",
     });
 
+    // created/updated webhooks for the same subscription can race; Resend drops repeats of the same key for 24h.
     await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: { Authorization: `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": `upgrade-${userId}-${subscriptionId}-${newTier}`,
+      },
       body: JSON.stringify({ from, to: [email], subject: tpl.subject, html: tpl.html, text: tpl.text }),
     });
   } catch (_) {
@@ -557,7 +563,7 @@ Deno.serve(async (req: Request) => {
             await sendDowngradeEmail(supabaseAdmin, userId, oldTier, newTier);
           } else if (subscriptionTierRank(newTier) > subscriptionTierRank(oldTier)) {
             await clearCashBoxTierLocks(supabaseAdmin, userId);
-            await sendUpgradeEmail(supabaseAdmin, userId, newTier);
+            await sendUpgradeEmail(supabaseAdmin, userId, newTier, String(sub.id || ""));
           }
         }
 

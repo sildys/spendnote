@@ -98,12 +98,13 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const sendViaResend = async (to: string[], subject: string, html: string, text: string) => {
+    const sendViaResend = async (to: string[], subject: string, html: string, text: string, idempotencyKey?: string) => {
       const resendResp = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${resendApiKey}`,
           "Content-Type": "application/json",
+          ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}),
         },
         body: JSON.stringify({ from, to, subject, html, text }),
       });
@@ -170,7 +171,13 @@ Deno.serve(async (req: Request) => {
               role: mRoleLabel,
               dashboardUrl: "https://spendnote.app/",
             });
-            const invitedData = await sendViaResend([userEmail], invitedRendered.subject, invitedRendered.html, invitedRendered.text);
+            const invitedData = await sendViaResend(
+              [userEmail],
+              invitedRendered.subject,
+              invitedRendered.html,
+              invitedRendered.text,
+              `welcome-invited-${user.id}`,
+            );
             return new Response(
               JSON.stringify({ success: true, data: invitedData, type: "welcome_invited_member" }),
               {
@@ -186,7 +193,7 @@ Deno.serve(async (req: Request) => {
         fullName: userName,
         loginUrl: "https://spendnote.app/",
       });
-      const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text);
+      const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text, `welcome-${user.id}`);
       return new Response(JSON.stringify({ success: true, data }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
