@@ -59,7 +59,7 @@ A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre:
 A PowerShell `ConvertTo-Csv` minden mezőt idézőjelbe tesz, az üreseket is (`""`). Az Editor ettől a kulcsszó-, negatív- és helyszínsorokat „Többértelmű sortípus" hibával dobja el. Az importfájl legyen **UTF-16, tabulátoros, idézőjelek nélkül** (mint az Editor saját exportja).
 
 ### Következő lépések
-1. **GA4 → Ads konverzióimport:** `sign_up` elsődleges, `first_transaction_created` másodlagos (a jelenlegi fiókszintű cél túl laza).
+1. ✅ **GA4 → Ads konverzióimport kész (2026-10-10):** `sign_up` a welcome oldalon, userenként egyszer; Ads-be importálva.
 2. **2–3 nap múlva:** keresési kifejezések jelentés → negatívok pótlása.
 3. **1 hét múlva:** QS ellenőrzés. Ha 6–7 → plafon $2,50 → **$1,80**. Ha 4–5 marad, a plafon csökkentése nem segít (csak a megjelenést fojtja el). Spórolni a napi kerettel lehet, nem a CPC-plafonnal.
 4. A duplikált `.html` sitelinkek („Under review") törlése.
