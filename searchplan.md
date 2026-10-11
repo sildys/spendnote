@@ -41,6 +41,10 @@ A Google jelezte, hogy egy tág egyezésű `cash for receipts` negatív blokkolj
 Ads Editor-exporttal ellenőrizve: 27 kulcsszó × 88 negatív, **0 ütközés**; a 3 RSA `Approved`, végső URL-ek a `/lp/` oldalak.
 **Szabály új negatívnál:** egyszavas vagy tág negatívot mindig vessünk össze a kulcsszólistával; a kulcsszavakban szereplő szavakból csak pontos (`[...]`) negatív legyen.
 
+### Helyek bővítése (2026-10-11 12:17)
+A volumen a szűk keresztmetszet, és van svájci regisztráló. Ads Editor-importtal (`SpendNote-Receipts-locations.csv`, ország-ID alapján) +12 ország: Ausztrália, Új-Zéland, Szingapúr, Svájc, Hollandia, Németország, Ausztria, Belgium, Luxemburg, Svédország, Dánia, Norvégia → összesen 16. Nyelv továbbra is `en` (nem angol országban csak angolul keresők/angol beállításúak). Alacsony jövedelmű országok szándékosan kimaradtak (olcsó kattintás, kicsi esély a $19-es előfizetésre).
+Közép-Kelet-Európa (HU, PL, CZ, UA) egyelőre kimarad: ott helyi nyelven keresnek, angol volumen alig van. Ha a nem angol nyelvű országok (CH/NL/DE/Nordics) hoznak kattintást vagy regisztrációt, akkor angol tesztként jöhet PL, CZ, HU, a balti államok.
+
 ### Landing oldalak (2026-10-11)
 A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre: `/lp/cash-receipt`, `/lp/cash-handover`, `/lp/receipt-generator`. A SEO oldalak átalakítása a landingek 2–3 hetes eredményéig várakozik.
 
