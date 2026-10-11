@@ -49,6 +49,9 @@ A volumen a szűk keresztmetszet, és van svájci regisztráló. Ads Editor-impo
 ### Hirdetésszöveg-javítás: kézi aláírás (2026-10-11 14:15)
 Az app csak nyomtatható aláírásvonalakat ad, digitális aláírást nem. A „Signed by Both Sides" / „Signed Cash Handoff Receipt" / „signed receipt" szövegek online aláírást sugalltak. `SpendNote-Receipts-ads-fix.csv`: a Cash Receipt és a Handover Receipt RSA régi változata szüneteltetve, új változat: `Signature Lines Included`, `Printable Cash Handoff Receipt`, „printable receipt with signature lines", „Print it, both sides sign…". A Receipt Generator hirdetés változatlan. A landing oldalak szövege ugyanígy javítva (7e8df32).
 
+### Általános „receipt generator" változatok kizárva (2026-10-11 20:20)
+Az első esti órákban a teljes $6,29 a `[cash receipt generator]` „cash" nélküli közeli változataira ment (`custom receipt` $2,55, `free receipt generator` $1,85, `receipt make` $1,20, `receipt generator` $0,69), mellettük `fake receipt generator`, `online receipt generator`, `receipt online maker`, `templates for receipts` megjelenések. Ezek egyszeri magán-nyugtakeresők. Kampányszintű negatívok: `"free"`, `"fake"`, `"custom"`, `"template"`, `"templates"`, `"online"`, `"maker"`, `"make"`, `"create"`, `"quick"` (egyik sem szerepel kulcsszóban, ezért kifejezés-negatívként biztonságos), plusz `[receipt generator]` pontos negatív (a „receipt generator" szavak a kulcsszóban is benne vannak).
+
 ### Landing oldalak (2026-10-11)
 A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre: `/lp/cash-receipt`, `/lp/cash-handover`, `/lp/receipt-generator`. A SEO oldalak átalakítása a landingek 2–3 hetes eredményéig várakozik.
 
