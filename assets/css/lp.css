@@ -186,6 +186,7 @@ main .btn-big, .m-cta .btn-big { padding: 1.15rem 2.1rem; font-size: 1.15rem; }
     animation: shotBack 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .shot-front {
+    container-type: inline-size;
     width: 88%;
     right: 0;
     bottom: 2%;
@@ -233,6 +234,7 @@ main .btn-big, .m-cta .btn-big { padding: 1.15rem 2.1rem; font-size: 1.15rem; }
     color: var(--g);
     font-weight: 900;
     font-size: clamp(0.75rem, 1.4vw, 1.05rem);
+    font-size: clamp(0.5rem, 3.6cqw, 1.05rem);
     letter-spacing: 0.12em;
     padding: 0.3em 0.75em;
     border-radius: 8px;
@@ -556,7 +558,8 @@ main .btn-big, .m-cta .btn-big { padding: 1.15rem 2.1rem; font-size: 1.15rem; }
     .chip .ic { width: 26px; height: 26px; font-size: 0.75rem; }
     .chip-3 { display: none; }
     .chip-1 { top: 0; right: 0; }
-    .chip-2 { bottom: -0.4rem; left: 0; }
+    .chip-2 { bottom: -10%; left: 0; }
+    .stage { margin-bottom: 2.5rem; }
     .m-cta {
         display: block;
         position: fixed;
