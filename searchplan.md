@@ -22,6 +22,14 @@
 - Csoportonként 1 RSA: 12 címsor, 4 leírás, a csoport kulcsszavait ismétlik.
 - A 78 kampányszintű negatív kulcsszó egy az egyben átvéve. Sitelinkek és callout-ok fiókszinten maradtak.
 
+### Kiegészítő negatívok (2026-10-11, kampányszint)
+A 30 napos jelentésben kb. $20 / $112 ment „pénzt a blokkokért" és túl általános közeli változatokra (`receipt`, `receipts rewards app`, `get money from receipts`, `old receipts for cash`, `cashback with receipts`, `receipt of payment`), főleg a `[receipts for cash]` alól. Hozzáadva:
+`"rewards"`, `"reward"`, `"cashback"`, `"money back"`, `"cash for receipts"`, `"money for receipts"`, `"get money"`, `"earn"`, `"old receipts"`, `"apps that pay"`, `"pay you"`, `"turn receipts"`, `"receipt of payment"`, `"payment receipt"`, `[receipt]`.
+Figyelendő: `[petty cash receipt]` / `[petty cash receipts]` (sablonkeresők) — ha 2–3 nap után sok ilyen kifejezés jön konverzió nélkül, szüneteltetni.
+
+### Landing oldalak (2026-10-11)
+A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre: `/lp/cash-receipt`, `/lp/cash-handover`, `/lp/receipt-generator`. A SEO oldalak átalakítása a landingek 2–3 hetes eredményéig várakozik.
+
 ### Ads Editor import tanulság
 A PowerShell `ConvertTo-Csv` minden mezőt idézőjelbe tesz, az üreseket is (`""`). Az Editor ettől a kulcsszó-, negatív- és helyszínsorokat „Többértelmű sortípus" hibával dobja el. Az importfájl legyen **UTF-16, tabulátoros, idézőjelek nélkül** (mint az Editor saját exportja).
 
