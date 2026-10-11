@@ -43,7 +43,7 @@ Ads Editor-exporttal ellenőrizve: 27 kulcsszó × 88 negatív, **0 ütközés**
 
 ### Helyek bővítése (2026-10-11 12:17)
 A volumen a szűk keresztmetszet, és van svájci regisztráló. Ads Editor-importtal (`SpendNote-Receipts-locations.csv`, ország-ID alapján) +12 ország: Ausztrália, Új-Zéland, Szingapúr, Svájc, Hollandia, Németország, Ausztria, Belgium, Luxemburg, Svédország, Dánia, Norvégia → összesen 16. Nyelv továbbra is `en` (nem angol országban csak angolul keresők/angol beállításúak). Alacsony jövedelmű országok szándékosan kimaradtak (olcsó kattintás, kicsi esély a $19-es előfizetésre).
-Közép-Kelet-Európa (HU, PL, CZ, UA) egyelőre kimarad: ott helyi nyelven keresnek, angol volumen alig van. Ha a nem angol nyelvű országok (CH/NL/DE/Nordics) hoznak kattintást vagy regisztrációt, akkor angol tesztként jöhet PL, CZ, HU, a balti államok.
++9 ország (`SpendNote-Receipts-locations-2.csv`): Magyarország, Lengyelország, Csehország, Szlovákia, Szlovénia, Észtország, Lettország, Litvánia, Finnország → összesen 25. Indok: az alapító maga is angolul kereste az ilyen eszközt Magyarországról; pontos egyezés + negatívok mellett csak a valódi angol nyelvű keresések hoznak költést. Ukrajna kimarad (fizetési/előfizetési bizonytalanság).
 
 ### Landing oldalak (2026-10-11)
 A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre: `/lp/cash-receipt`, `/lp/cash-handover`, `/lp/receipt-generator`. A SEO oldalak átalakítása a landingek 2–3 hetes eredményéig várakozik.
