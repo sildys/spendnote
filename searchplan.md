@@ -33,6 +33,9 @@ Az első 6 órában 0 megjelenés (US éjszaka + URL-csere utáni újraellenőrz
 - Receipt Generator: `[petty cash log]`, `[petty cash sheet]`, `[petty cash voucher]`
 Alacsony keresési arány miatt nem jogosult: `"cash handover log"`, `[petty cash receipt generator]` (maradnak).
 
+### CPC-plafon emelés (2026-10-11 11:52)
+Az előnézeti diagnosztika minden tesztkeresésre (US + UK, mindhárom csoport) „nem jelenik meg / nem tudjuk, miért" — gyakorlatilag elvesztett aukció (rangsor), összhangban a régi <10%-os megjelenési részesedéssel. Plafon **$2,50 → $3,00**. Visszavenni, ha a QS javul (landingek) és a megjelenések beindulnak.
+
 ### Landing oldalak (2026-10-11)
 A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre: `/lp/cash-receipt`, `/lp/cash-handover`, `/lp/receipt-generator`. A SEO oldalak átalakítása a landingek 2–3 hetes eredményéig várakozik.
 
