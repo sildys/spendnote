@@ -1457,11 +1457,25 @@ const initUserSettingsPage = async () => {
             showAlert('Only Owner/Admin can invite team members.', { iconType: 'warning' });
             return;
         }
+        const submitBtn = document.getElementById('inviteModalSubmit');
+        if (submitBtn?.dataset.inviting === '1') return;
         const email = document.getElementById('inviteEmail')?.value?.trim();
         const role = document.getElementById('inviteRole')?.value;
         if (!email) { showAlert('Email is required.', { iconType: 'warning' }); return; }
         if (!window.db?.teamMembers?.invite) { showAlert('Team feature not available.', { iconType: 'error' }); return; }
-        const result = await window.db.teamMembers.invite(email, role);
+        if (submitBtn) {
+            submitBtn.dataset.inviting = '1';
+            submitBtn.disabled = true;
+        }
+        let result;
+        try {
+            result = await window.db.teamMembers.invite(email, role);
+        } finally {
+            if (submitBtn) {
+                submitBtn.dataset.inviting = '';
+                submitBtn.disabled = false;
+            }
+        }
         if (!result?.success) { showAlert(result?.error || 'Failed to invite.', { iconType: 'error' }); return; }
         inviteModal?.classList.remove('active');
         document.getElementById('inviteEmail').value = '';

@@ -594,6 +594,8 @@ const initTeamPage = async () => {
     document.getElementById('inviteModalCancel')?.addEventListener('click', () => inviteModal?.classList.remove('active'));
     document.getElementById('inviteModalSubmit')?.addEventListener('click', async () => {
         if (!canManage()) return;
+        const submitBtn = document.getElementById('inviteModalSubmit');
+        if (submitBtn?.dataset.inviting === '1') return;
         if (!String(currentOrgName || '').trim()) {
             showAlert('Set a Team name first so members can select it during sign in.', { iconType: 'warning' });
             return;
@@ -604,7 +606,19 @@ const initTeamPage = async () => {
 
         if (!window.db?.teamMembers?.invite) { showAlert('Team feature not available.', { iconType: 'error' }); return; }
         const preGrantCbIds = (role === 'user') ? getSelectedInviteCashBoxIds() : [];
-        const result = await window.db.teamMembers.invite(email, role, preGrantCbIds);
+        if (submitBtn) {
+            submitBtn.dataset.inviting = '1';
+            submitBtn.disabled = true;
+        }
+        let result;
+        try {
+            result = await window.db.teamMembers.invite(email, role, preGrantCbIds);
+        } finally {
+            if (submitBtn) {
+                submitBtn.dataset.inviting = '';
+                submitBtn.disabled = false;
+            }
+        }
         if (!result?.success) { showAlert(result?.error || 'Failed to invite.', { iconType: 'error' }); return; }
 
         inviteModal?.classList.remove('active');

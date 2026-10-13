@@ -14,8 +14,8 @@ const corsHeaders: Record<string, string> = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-const INVITE_RATE_LIMIT_WINDOW_SECONDS = 600;
-const INVITE_RATE_LIMIT_PER_TARGET = 3;
+const INVITE_RATE_LIMIT_WINDOW_SECONDS = 120;
+const INVITE_RATE_LIMIT_PER_TARGET = 1;
 const INVITE_RATE_LIMIT_PER_CALLER = 12;
 
 Deno.serve(async (req: Request) => {
@@ -217,7 +217,7 @@ Deno.serve(async (req: Request) => {
       const retryAfter = Math.max(targetBucket.retry_after_seconds || 0, 1);
       return new Response(JSON.stringify({
         error: "Rate limit exceeded",
-        detail: "Too many invite retries for this email. Please retry later.",
+        detail: "An invite was just sent to this address. Wait 2 minutes before sending another.",
         retry_after_seconds: retryAfter,
       }), {
         status: 429,
@@ -283,6 +283,7 @@ Deno.serve(async (req: Request) => {
       headers: {
         Authorization: `Bearer ${resendApiKey}`,
         "Content-Type": "application/json",
+        "Idempotency-Key": `invite-${inviteRow.id}`,
       },
       body: JSON.stringify({
         from,
