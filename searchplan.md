@@ -61,6 +61,9 @@ Két nap alatt a teljes költés (~$10,8) a „cash" nélküli közeli változat
 ### Új kulcsszavak a korábbi on-target jelek alapján (2026-10-13 02:25)
 A generátor-szivárgás elzárása után a maradék kulcsszavakra kevés a keresés. `SpendNote-Receipts-new-keywords.csv`: Cash Receipt ← `[cash receipt app]`, `"cash receipt app"` (júniusban 2 célzott klikk); Receipt Generator ← `[petty cash book]` (júniusban `petty cash book` / `petty cash book format` releváns klikkek), `[digital petty cash book]` (saját SEO-oldal). Negatív-ütközés ellenőrizve: nincs (a `cash app` tegnap óta csak pontos/„cash app receipt|payment"). Tudatosan kihagyva: generikus `petty cash app/software` (június: 0 regisztráció), `cash up app` (szept.: $22, 0 konverzió, Cash App-zaj).
 
+### Handover csoport: US slang = handoff (2026-10-13 23:35)
+A Handover csoport 1 megjelenést hozott, mert csak `handover` kulcsszavak futnak. A `/cash-handoff-receipt` SEO-oldal FAQ-ja: *handoff* = US, *handover* = UK/global. `SpendNote-Receipts-handoff-keywords.csv`: `[cash handoff receipt]`, `"cash handoff receipt"`, `[cash handoff form]`, `[cash handoff sheet]`, `[cash handoff]`, `"cash handoff log"`, `[petty cash sign out sheet]`. Nem `handing`.
+
 ### Landing oldalak (2026-10-11)
 A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre: `/lp/cash-receipt`, `/lp/cash-handover`, `/lp/receipt-generator`. A SEO oldalak átalakítása a landingek 2–3 hetes eredményéig várakozik.
 
