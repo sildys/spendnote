@@ -58,6 +58,9 @@ Felülvizsgálat (ChatGPT-észrevétel alapján): az egyszavas `"online"`, `"cre
 ### `[cash receipt generator]` szüneteltetve (2026-10-12 16:55)
 Két nap alatt a teljes költés (~$10,8) a „cash" nélküli közeli változataira ment (ma: `receipt generator` $2,34, `receipt form` $1,54, + `create receipt`, `home made receipt`, `transaction maker`, `proof of purchase receipt generator` megjelenések); a Receipt Generator csoport már délelőtt elvitte a napi keretet, a Cash Receipt / Handover csoport alig kapott megjelenést. Egyenkénti kizárással nem zárható el (mindig jön új változat), ezért `SpendNote-Receipts-generator-leak.csv`: a kulcsszó szüneteltetve + a látott kifejezések pontos negatívként, `"how do you"` kifejezés-negatív. Keretemelés ($10) csak akkor, ha a maradék kulcsszavak forgalma releváns.
 
+### Új kulcsszavak a korábbi on-target jelek alapján (2026-10-13 02:25)
+A generátor-szivárgás elzárása után a maradék kulcsszavakra kevés a keresés. `SpendNote-Receipts-new-keywords.csv`: Cash Receipt ← `[cash receipt app]`, `"cash receipt app"` (júniusban 2 célzott klikk); Receipt Generator ← `[petty cash book]` (júniusban `petty cash book` / `petty cash book format` releváns klikkek), `[digital petty cash book]` (saját SEO-oldal). Negatív-ütközés ellenőrizve: nincs (a `cash app` tegnap óta csak pontos/„cash app receipt|payment"). Tudatosan kihagyva: generikus `petty cash app/software` (június: 0 regisztráció), `cash up app` (szept.: $22, 0 konverzió, Cash App-zaj).
+
 ### Landing oldalak (2026-10-11)
 A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre: `/lp/cash-receipt`, `/lp/cash-handover`, `/lp/receipt-generator`. A SEO oldalak átalakítása a landingek 2–3 hetes eredményéig várakozik.
 
