@@ -86,8 +86,8 @@ Deno.serve(async (req: Request) => {
 
     const body = (await req.json()) as PortalBody;
     const defaultReturn = appBaseUrl
-      ? `${appBaseUrl.replace(/\/$/, "")}/?billing=portal`
-      : "https://spendnote.app/?billing=portal";
+      ? `${appBaseUrl.replace(/\/$/, "")}/spendnote-user-settings?billing=portal`
+      : "https://spendnote.app/spendnote-user-settings?billing=portal";
     const returnUrl = normalizeReturnUrl(body?.returnUrl, defaultReturn, appBaseUrl);
 
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);

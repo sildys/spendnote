@@ -169,7 +169,7 @@ Deno.serve(async (req: Request) => {
               inviterName: mInviterName,
               orgName: mOrgName,
               role: mRoleLabel,
-              dashboardUrl: "https://spendnote.app/",
+              dashboardUrl: "https://spendnote.app/dashboard",
             });
             const invitedData = await sendViaResend(
               [userEmail],
@@ -191,7 +191,7 @@ Deno.serve(async (req: Request) => {
 
       const rendered = renderWelcomeAccountCreatedTemplate({
         fullName: userName,
-        loginUrl: "https://spendnote.app/",
+        loginUrl: "https://spendnote.app/spendnote-login",
       });
       const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text, `welcome-${user.id}`);
       return new Response(JSON.stringify({ success: true, data }), {
@@ -242,7 +242,7 @@ Deno.serve(async (req: Request) => {
         inviterName,
         orgName,
         role: roleLabel,
-        dashboardUrl: "https://spendnote.app/",
+        dashboardUrl: "https://spendnote.app/dashboard",
       });
       const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text);
       return new Response(JSON.stringify({ success: true, data }), {
@@ -355,7 +355,7 @@ Deno.serve(async (req: Request) => {
           acceptedUserName: userName || "A user",
           acceptedUserEmail: userEmail,
           orgName,
-          teamUrl: "https://spendnote.app/",
+          teamUrl: "https://spendnote.app/spendnote-team",
         });
         const sent = await sendViaResend([recipient.email], rendered.subject, rendered.html, rendered.text);
         sends.push(sent);
@@ -405,11 +405,11 @@ Deno.serve(async (req: Request) => {
         ? renderFirstTransactionTeamTemplate({
             fullName: userName,
             orgName: ftOrgName,
-            dashboardUrl: "https://spendnote.app/",
+            dashboardUrl: "https://spendnote.app/dashboard",
           })
         : renderFirstTransactionTemplate({
             fullName: userName,
-            dashboardUrl: "https://spendnote.app/",
+            dashboardUrl: "https://spendnote.app/dashboard",
           });
       const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text);
       return new Response(JSON.stringify({ success: true, data, type: isInvitedMember ? "first_tx_team" : "first_tx_solo" }), {
@@ -423,7 +423,7 @@ Deno.serve(async (req: Request) => {
       const rendered = renderTrialExpiryWarningTemplate({
         fullName: userName,
         daysLeft,
-        pricingUrl: "https://spendnote.app/",
+        pricingUrl: "https://spendnote.app/spendnote-pricing",
         txCount,
       });
       const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text);
@@ -437,7 +437,7 @@ Deno.serve(async (req: Request) => {
       const rendered = renderUpgradeConfirmedTemplate({
         fullName: userName,
         plan,
-        dashboardUrl: "https://spendnote.app/",
+        dashboardUrl: "https://spendnote.app/dashboard",
       });
       const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text);
       return new Response(JSON.stringify({ success: true, data }), {
