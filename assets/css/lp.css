@@ -772,6 +772,10 @@ main .btn-big, .m-cta .btn-big { padding: 1.15rem 2.1rem; font-size: 1.15rem; }
 .who-list { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: 0.5rem; }
 .who-list li { display: flex; gap: 0.55rem; align-items: flex-start; font-weight: 600; color: var(--ink-2); font-size: 0.95rem; }
 .who-list i { color: var(--g); margin-top: 0.22rem; flex: 0 0 auto; }
+.bento .tile-full { grid-column: 1 / -1; }
+.tile-wide .who-list { margin: 0; }
+.tile-wide .who-list li { color: #fff; }
+.tile-wide .who-list i { color: #6ee7b7; }
 
 /* Sticky mobile CTA */
 .m-cta { display: none; }
