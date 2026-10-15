@@ -649,6 +649,130 @@ main .btn-big, .m-cta .btn-big { padding: 1.15rem 2.1rem; font-size: 1.15rem; }
 @keyframes snip { 0%, 100% { translate: 0 0; } 50% { translate: 14px 0; } }
 .show-rev > :first-child { order: 2; }
 
+/* ---------- Team cash page ---------- */
+.shot-phone {
+    width: 30%;
+    right: 1%;
+    top: 4%;
+    z-index: 1;
+    border: 7px solid #0f172a;
+    border-radius: 30px;
+    transform: rotate(-4deg);
+    animation: shotBack 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+[data-lp="team-cash"] .shot-front { width: 62%; right: 5%; bottom: 3%; animation-delay: 0.7s; }
+[data-lp="team-cash"] .chip-1 { top: auto; bottom: 36%; right: -3%; }
+[data-lp="team-cash"] .chip-3 { top: auto; bottom: -3%; right: -2%; }
+[data-lp="team-cash"] .chip-2 { bottom: -5%; left: 30%; }
+
+/* The old way: crumpled note, notebook page, broken spreadsheet (sizes in cqw of the stage) */
+[data-lp="team-cash"] .stage { container-type: inline-size; }
+.mess {
+    position: absolute;
+    box-shadow: var(--shadow-md);
+    transform: rotate(var(--r));
+    animation: messIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes messIn {
+    from { opacity: 0; transform: translateY(24px) rotate(calc(var(--r) - 5deg)); }
+    to { opacity: 1; transform: rotate(var(--r)); }
+}
+.mess-book {
+    --r: 5deg;
+    top: 0;
+    left: 30%;
+    width: 38%;
+    padding: 4cqw 3cqw 5.3cqw 8cqw;
+    border-radius: 4px;
+    background:
+        linear-gradient(90deg, transparent calc(13% - 1px), rgba(239, 68, 68, 0.55) calc(13% - 1px), rgba(239, 68, 68, 0.55) 13%, transparent 13%),
+        repeating-linear-gradient(180deg, #fff 0, #fff calc(4cqw - 1px), #bfdbfe calc(4cqw - 1px), #bfdbfe 4cqw);
+    font-family: 'Caveat', 'Segoe Print', 'Comic Sans MS', cursive;
+    color: #1e3a8a;
+    font-size: 3.3cqw;
+    line-height: 4cqw;
+    animation-delay: 0.1s;
+}
+.mb-row { display: grid; grid-template-columns: 1fr 2.1fr 1fr; }
+.mb-row span:last-child { text-align: right; }
+.mb-head { font-weight: 700; color: #475569; }
+.mb-x { text-decoration: line-through; text-decoration-color: #dc2626; text-decoration-thickness: 2px; }
+.mb-stain {
+    position: absolute;
+    left: 8%;
+    bottom: 4%;
+    width: 30%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 5px solid rgba(146, 64, 14, 0.14);
+    box-shadow: inset 0 0 10px rgba(146, 64, 14, 0.1);
+}
+.mess-note {
+    --r: -8deg;
+    top: 3%;
+    left: 0;
+    width: 34%;
+    padding: 2.9cqw 2.9cqw 3.2cqw;
+    border-radius: 3px 8px 4px 10px;
+    background:
+        linear-gradient(118deg, rgba(0, 0, 0, 0.05) 0 28%, transparent 28.5%),
+        linear-gradient(205deg, transparent 0 52%, rgba(0, 0, 0, 0.06) 52.5% 68%, transparent 68.5%),
+        linear-gradient(32deg, transparent 0 60%, rgba(255, 255, 255, 0.7) 60.5% 62%, transparent 62.5%),
+        linear-gradient(160deg, transparent 0 34%, rgba(0, 0, 0, 0.04) 34.5% 47%, transparent 47.5%),
+        radial-gradient(circle at 30% 20%, #fffef8, #efe9d8);
+    font-family: 'Caveat', 'Segoe Print', 'Comic Sans MS', cursive;
+    color: #374151;
+    font-size: 3.8cqw;
+    line-height: 1.15;
+    animation-delay: 0.25s;
+}
+.mess-note p { margin: 0 0 4%; }
+.mess-note s { text-decoration-color: #374151; text-decoration-thickness: 2px; }
+.mn-circle {
+    display: inline-block;
+    color: #dc2626;
+    border: 2px solid #dc2626;
+    border-radius: 50%;
+    padding: 0 0.3em;
+    transform: rotate(-5deg);
+}
+.mess-xls {
+    --r: -4deg;
+    left: 0;
+    top: 52%;
+    width: 40%;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-top: 5px solid #107c41;
+    border-radius: 4px;
+    font-size: 2.1cqw;
+    color: #374151;
+    overflow: hidden;
+    animation-delay: 0.4s;
+}
+.mx-bar { display: flex; gap: 5%; padding: 2.5% 4%; background: #f9fafb; border-bottom: 1px solid #e5e7eb; color: #6b7280; font-family: ui-monospace, monospace; }
+.mx-bar span:first-child { font-style: italic; font-weight: 700; }
+.mx-grid { display: grid; grid-template-columns: 9% 31% 32% 28%; }
+.mx-grid span { padding: 2.5% 4%; border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; min-height: 1.6em; white-space: nowrap; overflow: hidden; }
+.mx-h { background: #f3f4f6; color: #9ca3af; text-align: center; font-weight: 700; }
+.mx-err { color: #dc2626; font-weight: 800; background: #fef2f2; }
+.mess-cross { position: absolute; top: 4%; left: 3%; width: 62%; height: 48%; overflow: visible; }
+.mess-cross path {
+    fill: none;
+    stroke: #dc2626;
+    stroke-width: 7;
+    stroke-linecap: round;
+    opacity: 0.85;
+    stroke-dasharray: 240;
+    stroke-dashoffset: 240;
+    animation: draw 0.5s ease forwards;
+}
+.mess-cross path:nth-child(1) { animation-delay: 1s; }
+.mess-cross path:nth-child(2) { animation-delay: 1.35s; }
+.who-list { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: 0.5rem; }
+.who-list li { display: flex; gap: 0.55rem; align-items: flex-start; font-weight: 600; color: var(--ink-2); font-size: 0.95rem; }
+.who-list i { color: var(--g); margin-top: 0.22rem; flex: 0 0 auto; }
+
 /* Sticky mobile CTA */
 .m-cta { display: none; }
 
@@ -686,6 +810,7 @@ main .btn-big, .m-cta .btn-big { padding: 1.15rem 2.1rem; font-size: 1.15rem; }
     .vs-headrow > div { font-size: 0.78rem; letter-spacing: 0.03em; }
     .vs-headrow i { display: none; }
     .sheet-stage { max-width: 320px; }
+    .shot-phone { border-width: 5px; border-radius: 20px; }
     .m-cta {
         display: block;
         position: fixed;
@@ -704,9 +829,10 @@ main .btn-big, .m-cta .btn-big { padding: 1.15rem 2.1rem; font-size: 1.15rem; }
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
     .shot, .chip { opacity: 1 !important; }
-    .shot-back { transform: rotate(-4deg) !important; }
+    .shot-back, .shot-phone { transform: rotate(-4deg) !important; }
     .shot-front { transform: rotate(1.5deg) !important; }
-    .sig path, .ps-cross path { stroke-dashoffset: 0 !important; }
+    .sig path, .ps-cross path, .mess-cross path { stroke-dashoffset: 0 !important; }
+    .mess { opacity: 1 !important; transform: rotate(var(--r)) !important; }
     .stamp { opacity: 1 !important; transform: rotate(-12deg) !important; }
     .js .rv { opacity: 1; transform: none; }
 }

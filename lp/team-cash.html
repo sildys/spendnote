@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, follow">
+    <title>Team Cash Tracking &mdash; Simple Cash App for Crews, Teams &amp; Clubs | SpendNote</title>
+    <meta name="description" content="Easy cash tracking for crews, teams and clubs. Anyone logs money in, money out or a handover in 30 seconds on their phone. See who has the cash. 14-day free trial, no card.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QPFM30F86Q"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-QPFM30F86Q');
+    </script>
+    <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vqin4v9ift");
+    </script>
+    <script>
+        (function(w,d,t,u,o){w[u]=w[u]||[],o.ts=(new Date).getTime();var n=d.createElement(t);n.src="https://bat.bing.net/bat.js?ti="+o.ti+("uetq"!=u?"&q="+u:""),n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&"loaded"!==s&&"complete"!==s||(o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad"),n.onload=n.onreadystatechange=null)};var i=d.getElementsByTagName(t)[0];i.parentNode.insertBefore(n,i)})(window,document,"script","uetq",{ti:"343258687",enableAutoSpaTracking:true});
+    </script>
+    <script>document.documentElement.classList.add('js');</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <link rel="stylesheet" href="/assets/css/main.css?v=23">
+    <link rel="stylesheet" href="/assets/css/lp.css?v=16">
+</head>
+<body data-lp="team-cash">
+
+<nav class="site-nav">
+    <div class="nav-container">
+        <a href="/" class="logo">
+            <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#nav-logo-gradient)"/>
+                <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs>
+                    <linearGradient id="nav-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#059669"/>
+                        <stop offset="100%" stop-color="#10b981"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>SpendNote</span>
+        </a>
+        <button class="nav-hamburger" id="landingNavHamburger" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="landingNavLinks">
+            <li><a href="/">Home</a></li>
+            <li><a href="/spendnote-pricing">Pricing</a></li>
+            <li><a href="/spendnote-faq">FAQ</a></li>
+            <li><a href="/spendnote-login" class="btn btn-secondary">Log in</a></li>
+            <li><a href="/spendnote-signup" class="btn btn-primary" data-cta="nav">Sign up</a></li>
+        </ul>
+    </div>
+</nav>
+<script>
+(function() {
+    var btn = document.getElementById('landingNavHamburger');
+    var links = document.getElementById('landingNavLinks');
+    if (!btn || !links) return;
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = links.classList.toggle('nav-open');
+        btn.classList.toggle('nav-hamburger--open', isOpen);
+        btn.setAttribute('aria-expanded', String(isOpen));
+    });
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.site-nav') && links.classList.contains('nav-open')) {
+            links.classList.remove('nav-open');
+            btn.classList.remove('nav-hamburger--open');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+    });
+    links.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() {
+            links.classList.remove('nav-open');
+            btn.classList.remove('nav-hamburger--open');
+            btn.setAttribute('aria-expanded', 'false');
+        });
+    });
+})();
+</script>
+
+<main>
+<section class="hero">
+    <div class="wrap">
+        <div>
+            <div class="eyebrow"><span class="pill">Easy</span> No training. No spreadsheets. No accountant.</div>
+            <h1>
+                <span class="kw">Team Cash Tracking</span>
+                Everyone touches the cash. <span class="mark">Now it adds up.</span>
+            </h1>
+            <p class="hero-lead">One simple place for your crew's, team's or club's cash. Anyone can log <strong>money in, money out or a handover in about 30 seconds</strong> on their own phone &mdash; and you always see who has the cash and where it went.</p>
+            <div class="hero-cta">
+                <a href="/spendnote-signup" class="btn btn-go btn-big" data-cta="hero">Set up my team <i class="fas fa-arrow-right"></i></a>
+                <a href="#how" class="btn btn-ghost btn-big">See how easy it is</a>
+            </div>
+            <div class="micro">
+                <span><i class="fas fa-check-circle"></i> 14 days free</span>
+                <span><i class="fas fa-check-circle"></i> No credit card</span>
+                <span><i class="fas fa-check-circle"></i> Nothing to install</span>
+            </div>
+        </div>
+
+        <div class="stage">
+            <div class="mess mess-book" aria-hidden="true">
+                <div class="mb-row mb-head"><span>Date</span><span>Who</span><span>$</span></div>
+                <div class="mb-row"><span>Fri</span><span>Jose</span><span>-80</span></div>
+                <div class="mb-row"><span>Sat</span><span>Mike (gas)</span><span>-45</span></div>
+                <div class="mb-row"><span>Sat</span><span class="mb-x">Ana</span><span>+60?</span></div>
+                <div class="mb-row"><span>Mon</span><span>???</span><span>-120</span></div>
+                <div class="mb-stain"></div>
+            </div>
+            <div class="mess mess-note" aria-hidden="true">
+                <p>Tom has $200 ??</p>
+                <p><s>lumber 312</s> 318</p>
+                <p>Ana owes 60</p>
+                <p class="mn-circle">receipt??</p>
+            </div>
+            <div class="mess mess-xls" aria-hidden="true">
+                <div class="mx-bar"><span>fx</span><span>=SUM(C2:C9</span></div>
+                <div class="mx-grid">
+                    <span class="mx-h"></span><span class="mx-h">A</span><span class="mx-h">B</span><span class="mx-h">C</span>
+                    <span class="mx-h">1</span><span>Name</span><span>For</span><span>Amt</span>
+                    <span class="mx-h">2</span><span>Jose</span><span>tools</span><span>80</span>
+                    <span class="mx-h">3</span><span>Mike</span><span>gas</span><span>45</span>
+                    <span class="mx-h">4</span><span>??</span><span></span><span class="mx-err">#REF!</span>
+                </div>
+            </div>
+            <svg class="mess-cross" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><path d="M18 22 L182 178"/><path d="M182 26 L20 174"/></svg>
+            <div class="shot shot-phone"><img src="/assets/images/spendnote-mobile-new-transaction.jpg" alt="SpendNote New Transaction screen on a phone with money in, name and amount" width="520" height="956" fetchpriority="high" decoding="async"></div>
+            <div class="shot shot-front"><img src="/assets/images/spendnote-new-transaction-modal-1280.jpg" alt="SpendNote dashboard with the New Transaction form open: name, description, amount and Done &amp; Print" width="1280" height="848" fetchpriority="high" decoding="async"></div>
+            <div class="chip chip-1"><span class="ic"><i class="fas fa-bolt"></i></span><span>30 seconds<small>per entry, on any phone</small></span></div>
+            <div class="chip chip-3"><span class="ic"><i class="fas fa-user-check"></i></span><span>Who did what<small>on every entry</small></span></div>
+            <div class="chip chip-2"><span class="ic"><i class="fas fa-wallet"></i></span><span>Always balanced<small>per cash box, live</small></span></div>
+        </div>
+    </div>
+</section>
+
+<div class="strip" aria-label="Who uses SpendNote">
+    <div class="strip-track">
+        <span class="strip-lead">Made for:</span>
+        <span><i class="fas fa-helmet-safety"></i> Construction crews</span>
+        <span><i class="fas fa-broom"></i> Cleaning crews</span>
+        <span><i class="fas fa-seedling"></i> Landscaping crews</span>
+        <span><i class="fas fa-truck-moving"></i> Moving teams</span>
+        <span><i class="fas fa-mug-hot"></i> Shops &amp; caf&eacute;s</span>
+        <span><i class="fas fa-ticket"></i> Event organizers</span>
+        <span><i class="fas fa-utensils"></i> Caterers</span>
+        <span><i class="fas fa-people-group"></i> Clubs &amp; associations</span>
+        <span><i class="fas fa-futbol"></i> Sports teams</span>
+        <span><i class="fas fa-hands-holding-circle"></i> Churches &amp; charities</span>
+        <span class="strip-lead">Made for:</span>
+        <span><i class="fas fa-helmet-safety"></i> Construction crews</span>
+        <span><i class="fas fa-broom"></i> Cleaning crews</span>
+        <span><i class="fas fa-seedling"></i> Landscaping crews</span>
+        <span><i class="fas fa-truck-moving"></i> Moving teams</span>
+        <span><i class="fas fa-mug-hot"></i> Shops &amp; caf&eacute;s</span>
+        <span><i class="fas fa-ticket"></i> Event organizers</span>
+        <span><i class="fas fa-utensils"></i> Caterers</span>
+        <span><i class="fas fa-people-group"></i> Clubs &amp; associations</span>
+        <span><i class="fas fa-futbol"></i> Sports teams</span>
+        <span><i class="fas fa-hands-holding-circle"></i> Churches &amp; charities</span>
+    </div>
+</div>
+
+<section class="sec">
+    <div class="wrap">
+        <div class="sec-head rv">
+            <span class="kicker">Sound familiar?</span>
+            <h2>&ldquo;Who took the $200?&rdquo; &ldquo;Not me.&rdquo;</h2>
+            <p>When cash passes through many hands with no record, the gap always belongs to nobody &mdash; and you end up covering it.</p>
+        </div>
+        <div class="ba">
+            <div class="ba-card ba-before rv">
+                <h3><i class="fas fa-face-frown"></i> Scribbled notes, notebooks &amp; spreadsheets</h3>
+                <ul>
+                    <li><i class="fas fa-xmark"></i> &ldquo;Tom has $200??&rdquo; on a crumpled note</li>
+                    <li><i class="fas fa-xmark"></i> Receipts in pockets, glove boxes and the trash</li>
+                    <li><i class="fas fa-xmark"></i> &ldquo;I'll write it down later&rdquo; &mdash; and nobody does</li>
+                    <li><i class="fas fa-xmark"></i> Nobody knows who's holding the money right now</li>
+                    <li><i class="fas fa-xmark"></i> Friday night spent adding it all up by hand</li>
+                    <li><i class="fas fa-xmark"></i> Awkward questions when the numbers don't match</li>
+                </ul>
+            </div>
+            <div class="ba-card ba-after rv">
+                <h3><i class="fas fa-face-smile"></i> SpendNote</h3>
+                <ul>
+                    <li><i class="fas fa-check"></i> Every entry logged on the spot, from any phone</li>
+                    <li><i class="fas fa-check"></i> Each person's name on everything they log</li>
+                    <li><i class="fas fa-check"></i> Signed receipt for every handover</li>
+                    <li><i class="fas fa-check"></i> Balance per cash box, always up to date</li>
+                    <li><i class="fas fa-check"></i> No arguments &mdash; just look it up</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="sec sec-alt">
+    <div class="wrap">
+        <div class="sec-head rv">
+            <span class="kicker">Who it's for</span>
+            <h2>Crews, teams and clubs.</h2>
+            <p>Anywhere more than one person handles the money.</p>
+        </div>
+        <div class="bento">
+            <div class="tile rv">
+                <div class="ti t-orange"><i class="fas fa-helmet-safety"></i></div>
+                <h3>Crews</h3>
+                <p>Construction, cleaning, landscaping, moving.</p>
+                <ul class="who-list">
+                    <li><i class="fas fa-check"></i> Cash advances for materials and fuel</li>
+                    <li><i class="fas fa-check"></i> Day-labor payouts with a signed receipt</li>
+                    <li><i class="fas fa-check"></i> A separate cash box per job or crew</li>
+                </ul>
+            </div>
+            <div class="tile rv">
+                <div class="ti t-blue"><i class="fas fa-cash-register"></i></div>
+                <h3>Teams</h3>
+                <p>Event organizers, caterers, shops, caf&eacute;s, food trucks.</p>
+                <ul class="who-list">
+                    <li><i class="fas fa-check"></i> Signed cash handovers between shifts</li>
+                    <li><i class="fas fa-check"></i> Paid-outs from the register, logged</li>
+                    <li><i class="fas fa-check"></i> A cash box per event, register or location</li>
+                </ul>
+            </div>
+            <div class="tile rv">
+                <div class="ti t-violet"><i class="fas fa-people-group"></i></div>
+                <h3>Clubs &amp; groups</h3>
+                <p>Associations, sports teams, churches, charities.</p>
+                <ul class="who-list">
+                    <li><i class="fas fa-check"></i> Dues and donations with a receipt</li>
+                    <li><i class="fas fa-check"></i> Expenses the treasurer can show anyone</li>
+                    <li><i class="fas fa-check"></i> Clean handover to the next treasurer</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="sec" id="how">
+    <div class="wrap">
+        <div class="sec-head rv">
+            <span class="kicker">Easy &amp; simple</span>
+            <h2>If they can send a text, they can use it.</h2>
+            <p>No training, no accounting words, no app to download. Just a short form.</p>
+        </div>
+        <div class="steps">
+            <div class="step rv"><span class="time">5 sec</span><h3>Tap In or Out</h3><p>Money came in or went out? One tap. Pick the cash box.</p></div>
+            <div class="step rv"><span class="time">20 sec</span><h3>Name, amount, what for</h3><p>Three fields. That's the whole form. Print or email the receipt if needed.</p></div>
+            <div class="step rv"><span class="time">0 sec</span><h3>The rest is automatic</h3><p>Numbered, saved, signed by name and added to the balance.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="sec sec-alt">
+    <div class="wrap show">
+        <div class="rv">
+            <span class="kicker">For you, the boss or treasurer</span>
+            <h2>See who has the cash. Right now.</h2>
+            <p>Every entry shows who logged it, when and from which cash box. Filter by person, date or amount and the answer is there in seconds.</p>
+            <ul class="ticks">
+                <li><i class="fas fa-check-circle"></i> Money in, money out and handovers in one list</li>
+                <li><i class="fas fa-check-circle"></i> Live balance for every cash box</li>
+                <li><i class="fas fa-check-circle"></i> Export to CSV or PDF whenever you need it</li>
+            </ul>
+            <a href="/spendnote-signup" class="btn btn-go" data-cta="history">Try it free for 14 days <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="browser rv">
+            <div class="browser-bar"><i></i><i></i><i></i><span>spendnote.app/transactions</span></div>
+            <img src="/assets/images/spendnote-transaction-history-1280.jpg" srcset="/assets/images/spendnote-transaction-history-960.jpg 960w, /assets/images/spendnote-transaction-history-1280.jpg 1280w" sizes="(max-width: 980px) 100vw, 640px" alt="SpendNote transaction history showing every cash entry with cash box, contact, amount and who created it" width="1280" height="910" loading="lazy" decoding="async">
+        </div>
+    </div>
+</section>
+
+<section class="sec">
+    <div class="wrap show show-rev">
+        <div class="rv">
+            <span class="kicker">Handovers</span>
+            <h2>Cash changes hands. Both sides sign.</h2>
+            <p>When cash moves from one person to another, print a receipt with two copies on one page. Both sign, each keeps a copy, and the handover is saved in SpendNote.</p>
+            <ul class="ticks">
+                <li><i class="fas fa-check-circle"></i> Issued by &amp; Received by signature lines</li>
+                <li><i class="fas fa-check-circle"></i> &ldquo;Cut here&rdquo; line between the two copies</li>
+                <li><i class="fas fa-check-circle"></i> Receipt number and your logo on both</li>
+            </ul>
+        </div>
+        <div class="sheet-stage rv">
+            <div class="sheet"><img src="/assets/images/seo/petty-cash-receipt-generator/print-two-copy-receipt.png" alt="SpendNote printed page with two copies of the same cash receipt separated by a cut-here line" width="923" height="1302" loading="lazy" decoding="async"></div>
+            <span class="scissors" aria-hidden="true"><i class="fas fa-scissors"></i></span>
+        </div>
+    </div>
+</section>
+
+<section class="sec sec-alt">
+    <div class="wrap">
+        <div class="sec-head rv">
+            <span class="kicker">Simple control</span>
+            <h2>Everyone sees only what they need.</h2>
+        </div>
+        <div class="bento">
+            <div class="tile rv"><div class="ti t-green"><i class="fas fa-user-plus"></i></div><h3>Invite by email</h3><p>Add your people in a minute. They sign in and start logging &mdash; nothing to install.</p></div>
+            <div class="tile rv"><div class="ti t-blue"><i class="fas fa-box-archive"></i></div><h3>A cash box per job or crew</h3><p>Each with its own balance and receipt numbering. Give each person access only to their boxes.</p></div>
+            <div class="tile rv"><div class="ti t-orange"><i class="fas fa-user-shield"></i></div><h3>Admins see everything</h3><p>You and your admins see every cash box and every entry. Users see only theirs.</p></div>
+            <div class="tile rv"><div class="ti t-violet"><i class="fas fa-mobile-screen"></i></div><h3>Phone, tablet, desktop</h3><p>Runs in the browser. Log it on the job site, check it from the office.</p></div>
+            <div class="tile rv"><div class="ti t-pink"><i class="fas fa-envelope-open-text"></i></div><h3>Email the receipt</h3><p>No printer nearby? Send the receipt straight to their inbox.</p></div>
+            <div class="tile rv"><div class="ti t-green"><i class="fas fa-file-csv"></i></div><h3>Ready for your bookkeeper</h3><p>Export to CSV or PDF anytime. SpendNote tracks the cash; your accountant does the rest.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="sec">
+    <div class="wrap">
+        <div class="sec-head rv">
+            <span class="kicker">Pricing</span>
+            <h2>Try it with your whole team. Free for 14 days.</h2>
+        </div>
+        <div class="price-card rv">
+            <div class="price-free">
+                <div>Free trial</div>
+                <div class="big">$0</div>
+                <p>14 days, every feature.<br>No credit card needed.</p>
+                <a href="/spendnote-signup" class="btn btn-white" data-cta="pricing">Start free <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="price-after">
+                <h3>Then, for teams</h3>
+                <div class="big">$29 <small>/ month</small></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> 3 users included, +$5/month per extra user</li>
+                    <li><i class="fas fa-check"></i> Unlimited cash boxes and entries</li>
+                    <li><i class="fas fa-check"></i> Roles and per-cash-box access</li>
+                </ul>
+                <div class="note">Or $24.17/mo billed yearly. Just you? Standard from $19/month. <a href="/spendnote-pricing">All plans</a></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="sec sec-alt">
+    <div class="wrap">
+        <div class="sec-head rv">
+            <span class="kicker">Questions</span>
+            <h2>Quick answers.</h2>
+        </div>
+        <div class="faq">
+            <details>
+                <summary>Is it hard to learn?</summary>
+                <p>No. Logging cash is one short form: in or out, name, amount, what for. Most people get it on their first try, without any training.</p>
+            </details>
+            <details>
+                <summary>Does my team need to download an app?</summary>
+                <p>No. SpendNote runs in the browser on any phone, tablet or computer. You invite them by email, they sign in and start logging.</p>
+            </details>
+            <details>
+                <summary>How many people can use it?</summary>
+                <p>The Pro plan includes 3 users for $29/month, and each extra user is $5/month. You can add or remove people anytime. During the 14-day trial, everything is unlocked.</p>
+            </details>
+            <details>
+                <summary>Can each person see only their own cash box?</summary>
+                <p>Yes. Admins see every cash box. Regular users only see the cash boxes you give them access to.</p>
+            </details>
+            <details>
+                <summary>Is this accounting software?</summary>
+                <p>No. SpendNote records who handled the cash, when and why &mdash; with receipts. It's not a tax or accounting tool, but you can export everything to CSV or PDF for your bookkeeper.</p>
+            </details>
+            <details>
+                <summary>What happens after the 14 days?</summary>
+                <p>Nothing automatic &mdash; we never asked for your card. If SpendNote works for your team, pick a plan. If not, just walk away.</p>
+            </details>
+        </div>
+    </div>
+</section>
+
+<section class="final">
+    <div class="wrap rv">
+        <h2>Easy for the crew. Clear for you.</h2>
+        <p>Set up in two minutes. Invite your people. Never wonder where the cash went again.</p>
+        <a href="/spendnote-signup" class="btn btn-white btn-big" data-cta="final">Set up my team &mdash; free <i class="fas fa-arrow-right"></i></a>
+        <div class="micro">
+            <span><i class="fas fa-star"></i> 14 days free</span>
+            <span><i class="fas fa-star"></i> No credit card</span>
+            <span><i class="fas fa-star"></i> Cancel anytime</span>
+        </div>
+    </div>
+</section>
+</main>
+
+<!-- Footer -->
+<footer class="app-footer">
+    <div class="app-footer-container">
+        <!-- Top Row -->
+        <div class="app-footer-top">
+            <!-- Left: Brand Section -->
+            <div class="app-footer-brand">
+                <a href="/" class="app-footer-brand-logo">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4 C10.895 4 10 4.895 10 6 L10 38 L12 36 L14 38 L16 36 L18 38 L20 36 L22 38 L24 36 L26 38 L28 36 L30 38 L32 36 L34 38 L36 36 L38 38 L38 6 C38 4.895 37.105 4 36 4 Z" fill="url(#footer-logo-gradient)"/>
+                        <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
+                        <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
+                        <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                        <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                        <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+                        <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                        <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="footer-logo-gradient" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#059669"/>
+                                <stop offset="100%" stop-color="#10b981"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>SpendNote</span>
+                </a>
+                <p class="app-footer-brand-desc">
+                    Complete cash visibility for your team.<br>Instant receipts, full history.
+                </p>
+            </div>
+            
+            <!-- Right: Links + Disclaimer -->
+            <div class="app-footer-right">
+                <div class="app-footer-links-simple">
+                    <a href="/#features">Features</a>
+                    <a href="/spendnote-pricing">Pricing</a>
+                    <a href="/spendnote-faq">FAQ</a>
+                    <a href="/spendnote-resources">Resources</a>
+                    <a href="/spendnote-terms">Terms</a>
+                    <a href="/spendnote-privacy">Privacy</a>
+                </div>
+                
+                <!-- Disclaimer on right side -->
+                <div class="app-footer-brand-disclaimer">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Cash handoff documentation only. Not a tax or accounting tool.</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Row -->
+        <div class="app-footer-bottom">
+            <div class="app-footer-copyright">
+                2026 SpendNote. All rights reserved.
+            </div>
+        </div>
+    </div>
+</footer>
+
+<div class="m-cta" id="mCta"><a href="/spendnote-signup" class="btn btn-go btn-big" data-cta="sticky">Set up my team &mdash; free</a></div>
+
+<script src="/assets/js/lp.js?v=1" defer></script>
+</body>
+</html>
