@@ -79,7 +79,7 @@
     --max-width-form: 1000px;
     --page-gutter: 3rem;
 
-    --logo-optical-offset: -8px;
+    --logo-optical-offset: 0px;
 }
 
 @media (max-width: 768px) {
@@ -155,7 +155,7 @@ body {
 .site-nav .logo {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 10px;
     text-decoration: none;
     transition: transform 0.2s ease;
 }
@@ -165,8 +165,8 @@ body {
 }
 
 .site-nav .logo svg {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
     margin-left: var(--logo-optical-offset);
 }
@@ -451,14 +451,14 @@ label {
 .app-footer-brand-logo {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 10px;
     text-decoration: none;
     margin-bottom: var(--space-md);
 }
 
 .app-footer-brand-logo svg {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     opacity: 1;
     margin-left: var(--logo-optical-offset);
     filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.3));

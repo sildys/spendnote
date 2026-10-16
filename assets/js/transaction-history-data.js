@@ -1152,22 +1152,7 @@
                     <div style="background:#fff;padding:24px 32px;border-bottom:2px solid #e2e8f0;">
                       <div style="display:flex;align-items:center;justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:12px;">
-                          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#pdfLogoGrad)"/>
-                            <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
-                            <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
-                            <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-                            <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
-                            <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-                            <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
-                            <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                            <defs>
-                              <linearGradient id="pdfLogoGrad" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#059669"/>
-                                <stop offset="100%" stop-color="#10b981"/>
-                              </linearGradient>
-                            </defs>
-                          </svg>
+                          <svg width="43" height="43" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#059669"/><path d="M32 12c-2.2 0-4 1.8-4 4v2h-6c-2.2 0-4 1.8-4 4v24c0 2.2 1.8 4 4 4h20c2.2 0 4-1.8 4-4V22c0-2.2-1.8-4-4-4h-6v-2c0-2.2-1.8-4-4-4zm0 3c.6 0 1 .4 1 1v3h-2v-3c0-.6.4-1 1-1zm-10 6h20c.6 0 1 .4 1 1v24c0 .6-.4 1-1 1H22c-.6 0-1-.4-1-1V22c0-.6.4-1 1-1z" fill="#fff"/><rect x="25" y="27" width="14" height="2" rx="1" fill="#fff"/><rect x="25" y="32" width="10" height="2" rx="1" fill="#fff"/><rect x="25" y="37" width="12" height="2" rx="1" fill="#fff"/></svg>
                           <div>
                             <div style="font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-0.02em;">SpendNote</div>
                             <div style="font-size:12px;color:#64748b;font-weight:600;margin-top:1px;">Transaction Report</div>
@@ -1223,22 +1208,7 @@
                     <!-- Footer -->
                     <div id="${overlayId}Footer" style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;">
                       <div style="display:flex;align-items:center;gap:10px;">
-                        <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M10 6 C10 4.89543 10.8954 4 12 4 L36 4 C37.1046 4 38 4.89543 38 6 L38 38 L36 40 L34 38 L32 40 L30 38 L28 40 L26 38 L24 40 L22 38 L20 40 L18 38 L16 40 L14 38 L12 40 L10 38 Z" fill="url(#pdfFooterGrad)"/>
-                          <path d="M32 4 L38 10 L32 10 Z" fill="#000000" opacity="0.25"/>
-                          <path d="M32 4 L32 10 L38 10" stroke="#047857" stroke-width="1.5" stroke-linejoin="round"/>
-                          <line x1="14" y1="14" x2="30" y2="14" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-                          <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
-                          <line x1="14" y1="24" x2="30" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-                          <line x1="14" y1="29" x2="22" y2="29" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
-                          <path d="M10 36 L12 38 L14 36 L16 38 L18 36 L20 38 L22 36 L24 38 L26 36 L28 38 L30 36 L32 38 L34 36 L36 38 L38 36" stroke="#047857" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                          <defs>
-                            <linearGradient id="pdfFooterGrad" x1="24" y1="4" x2="24" y2="40" gradientUnits="userSpaceOnUse">
-                              <stop offset="0%" stop-color="#059669"/>
-                              <stop offset="100%" stop-color="#10b981"/>
-                            </linearGradient>
-                          </defs>
-                        </svg>
+                        <svg width="25" height="25" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#059669"/><path d="M32 12c-2.2 0-4 1.8-4 4v2h-6c-2.2 0-4 1.8-4 4v24c0 2.2 1.8 4 4 4h20c2.2 0 4-1.8 4-4V22c0-2.2-1.8-4-4-4h-6v-2c0-2.2-1.8-4-4-4zm0 3c.6 0 1 .4 1 1v3h-2v-3c0-.6.4-1 1-1zm-10 6h20c.6 0 1 .4 1 1v24c0 .6-.4 1-1 1H22c-.6 0-1-.4-1-1V22c0-.6.4-1 1-1z" fill="#fff"/><rect x="25" y="27" width="14" height="2" rx="1" fill="#fff"/><rect x="25" y="32" width="10" height="2" rx="1" fill="#fff"/><rect x="25" y="37" width="12" height="2" rx="1" fill="#fff"/></svg>
                         <div>
                           <div style="font-size:13px;font-weight:700;color:#0f172a;">SpendNote</div>
                           <div style="font-size:10px;color:#64748b;margin-top:-1px;">Cash management made simple</div>

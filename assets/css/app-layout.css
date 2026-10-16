@@ -44,7 +44,7 @@ body {
 .site-nav .logo {
     display: flex;
     align-items: center;
-    gap: 4px; /* Space between SVG and text */
+    gap: 10px; /* Space between SVG and text */
     text-decoration: none;
     transition: transform 0.2s ease;
 }
@@ -54,8 +54,8 @@ body {
 }
 
 .site-nav .logo svg {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
     margin-left: var(--logo-optical-offset);
 }
