@@ -2116,11 +2116,14 @@
 
         const hasAnyActiveFilter = (ctx) => {
             const f = ctx?.filters || {};
-            const hasCashBox = Boolean(f.cashBoxId || f.cashBoxQuery);
-            const hasCurrency = Boolean(f.currency);
+            // Single-option filters are auto-filled on load (see applyAutoDefaults) and don't narrow anything.
+            const currencyCount = new Set(state.cashBoxes.map((cb) => safeText(cb?.currency, '').trim().toUpperCase()).filter(Boolean)).size;
+            const creatorCount = qsa('option', qs('#filterCreatedBy') || document.createElement('select')).filter((o) => safeText(o.value, '')).length;
+            const hasCashBox = Boolean(f.cashBoxId || f.cashBoxQuery) && state.cashBoxes.length > 1;
+            const hasCurrency = Boolean(f.currency) && currencyCount > 1;
             const hasDir = Boolean(f.direction && f.direction !== 'all');
             const hasText = Boolean(f.txIdQuery || f.contactQuery);
-            const hasCreated = Boolean(f.createdById);
+            const hasCreated = Boolean(f.createdById) && creatorCount > 1;
             const hasDates = Boolean(f.dateFrom || f.dateTo);
             const hasAmount = (f.amountMin !== null && f.amountMin !== undefined) || (f.amountMax !== null && f.amountMax !== undefined);
             return hasCashBox || hasCurrency || hasDir || hasText || hasCreated || hasDates || hasAmount;
