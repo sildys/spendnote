@@ -624,6 +624,29 @@ function finalizeAutoDownload() {
   }, 220);
 }
 
+function fitReceiptPreview() {
+  const el = document.querySelector('.receipt');
+  if (!el) return;
+  const available = window.innerWidth - 24;
+  const embedded = window.self !== window.top;
+  if (embedded || available >= 800 || document.body.classList.contains('exporting')) {
+    el.style.width = '';
+    el.style.maxWidth = '';
+    el.style.zoom = '';
+    document.body.style.padding = '';
+    return;
+  }
+  el.style.width = '800px';
+  el.style.maxWidth = 'none';
+  el.style.zoom = String(available / 800);
+  document.body.style.padding = '12px';
+}
+
+try {
+  fitReceiptPreview();
+  window.addEventListener('resize', fitReceiptPreview);
+} catch (_) {}
+
 async function downloadReceiptPdf() {
   const receiptEl = document.querySelector('.receipt');
   if (!receiptEl) return;
@@ -651,6 +674,7 @@ async function downloadReceiptPdf() {
 
     document.body.classList.remove('download-mode');
     document.body.classList.add('exporting');
+    fitReceiptPreview();
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 
     const canvas = await window.html2canvas(receiptEl, {
@@ -697,6 +721,7 @@ async function downloadReceiptPdf() {
     showAlert('Could not generate PDF.', { iconType: 'error' });
   } finally {
     document.body.classList.remove('exporting');
+    fitReceiptPreview();
     if (btn) {
       btn.textContent = prevText;
       btn.disabled = false;
