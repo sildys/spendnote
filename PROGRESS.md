@@ -98,6 +98,42 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
+## Where we are now (last updated: 2026-10-16 — mobil app javítások, PWA install, signup mobil, árkapcsoló, Google Play/MS Store előkészítés, Ads finomhangolás)
+
+### Ma élesítve (commitok a main-en)
+- **Transaction history összesítők** (`assets/js/transaction-history-data.js`): a Cash Boxes számláló 1 helyett mindet mutatja; Total In / Total Out / Net Balance ismét kitöltve (egypénznemes fallback + a currency-inferencia mindig lefut). Script verzió: `?v=20261016-totals3`. Commitok: 44daa2e, 63c5960, 31d8802, 5a6810b (BOM-javítás).
+- **Footer logó / régi asset a mobilon:** az oka a Cloudflare edge volt, ami az új `?v=` kulcs alatt régi `main.js` / `app-layout.css` másolatot tartott, `immutable` miatt egy évig. 29 HTML-en az asset verzió `20261016-logo2` lett (56303ca). A `_headers` (a920a32): `/assets/*` most `max-age=3600`, nem immutable; a `nav-loader.js`, `auth-guard.js` és `supabase-config.js` `max-age=0, must-revalidate`. **Deploy után előbb a HTML-ben kell ellenőrizni az új verziót, csak utána az asset URL-eket**, különben az edge újra beragad.
+- **PWA „Install app”** (`assets/js/nav-loader.js`, 8d1fedf): a user dropdownban „Install app” menüpont jelenik meg, ha telepíthető, és mobilon a dashboardon banner jön a 2. látogatástól (elrejthető, localStorage). iOS Safari-n Share → Add to Home Screen súgó.
+- **Signup mobilon** (`spendnote-signup.html`, 0fd5d16): ≤960px alatt az űrlap van legfelül (`order:-1`), a marketing szöveg alatta. A home FAB marad (c9a55b5), a felhasználó kérésére, mert különben nincs kijárat az oldalról. A marketing oldalak CTA linkjei ellenőrizve, működnek.
+- **Főoldali árkapcsoló** (`index.html`, 0aec606): kattintható Monthly / Yearly („2 months free”) gombok a régi csúszka helyett. Éves módban a fő ár $190/év és $290/év, alatta a havi egyenérték. A „Starter” átnevezve „Standard”-ra (egyezik a pricing oldallal, az appal és a JSON-LD-vel).
+
+### Google Play (TWA) — folyamatban
+- Szervezeti fiókhoz **D-U-N-S** kell: igényelve a Sildsys, LLC névre (D&B, akár 30 munkanap). Bejegyzési cím: registered agent Legalinc, 131 Continental Dr Suite 305, Newark DE 19713.
+- **Amerikai telefonszám:** Quo (aktív). Az üzenetrögzítő emailben értesít a hello@sildsys.com címre. **Az előfizetést kb. 10-23-ig rendezni kell.**
+- A D-U-N-S megérkezése után: PWABuilder csomag, `/.well-known/assetlinks.json`, a fizetési UI elrejtése a TWA-ban (a Play Billing 15% előfizetésnél), listing szövegek és képernyőképek.
+- Az Operating Agreement-et (személyes adatok) **sehova ne töltsük fel**.
+
+### Microsoft Store
+- PWABuilder + Partner Center, Stripe használható, D-U-N-S nem kell. Új Microsoft fiók létrehozása blokkolva lett, ezért **ne hozzunk létre több fiókot**. A meglévő sildsys@gmail.com Microsoft fiókkal kell próbálni (a Microsoft Ads tiltást nem kerüljük meg).
+
+### Google Ads (állapot 10-16 este)
+- **Search - Receipts:** $15/nap. Ma 7 kattintás, $11.85, 0 regisztráció. Releváns kattintó kifejezések: cash receipt, petty cash voucher, receipt for cash payment, cash payment receipt.
+- Kampányszintű kizárók hozzáadva (kifejezésegyezés): "mobile money", "contoh", "gaji", "deposit slip", "deposit slips", "denomination", "memo", "handwritten".
+- Országcélzás: 56 országról visszaállítás USA-ra / angol nyelvű országokra (a felhasználó döntése, hogy a keret az amerikai munkaidőre jusson).
+- **Search - Crews & Teams:** $4/nap, 0 megjelenés, a réses kulcsszavak valószínűleg „alacsony keresési volumen” státuszúak. Javaslat: szüneteltetni, a keretet a Receipts kampányra hagyni. A „Cash Advances” csoport eltávolítva (a „cash advance” kifejezést hirdetésben nem használjuk).
+- Az első hirdetési látogató eljutott a `/lp/cash-receipt` oldalról a `/spendnote-signup` oldalra, de nem regisztrált.
+
+### SEO
+- A GSC megjelenések erősen visszaestek (7 nap: 1 kattintás, 37 megjelenés, a kattintás márkanévre jött Fehéroroszországból). Technikai hiba nincs, az indexelés stabil. Az ok: alacsony autoritás, csak 7 külső link. Főoldal újraindexelése kérve 10-16-án.
+- Nagy SEO tartalom-átírás most nincs napirenden.
+
+### Következő lépések
+1. **Holnap:** linképítés oldalanként, képernyőképekkel. Előbb megkérdezni, melyik email címmel volt a regisztráció a G2-n és a Capterrán, és megírni az angol listing szövegeket.
+2. **Hétfő:** Ads átnézése: helyjelentés, keresési kifejezések, megjelenési arány, Clarity felvételek a signup oldalról. Ellenőrizni, hogy a GA4 sign_up konverzió aktív-e a Google Adsben. Szükség esetén a keret csökkentése.
+3. Win-back email + trial reset a korábbi regisztrálóknak: a trial vegye figyelembe a `profiles.trial_ends_at` mezőt (migráció + `supabase-config.js` + dashboard banner), SQL a 14 napos resethez, egyszeri küldés Resenden keresztül.
+4. Köszönő email (EN/RU) a fehérorosz fizetős ügyfélnek (felajánlva).
+5. A D-U-N-S után: Android TWA csomag (lásd fent).
+
 ## Where we are now (last updated: 2026-06-06 15:20 — D12 UTOLSÓ DRAFT ÉLESÍTVE → **mind az 50 SEO-oldal LIVE, 0 draft maradt a `drafts/page-rewrites/`-ben**. **Felhasználói döntés:** a `/petty-cash-how-much-to-keep` korábban védett TOP3 pozíciója elveszett (core update 06-02 + AI Overview), így a pozíció-védő halasztásnak nincs értelme — élesítve. A draft MÁR tartalmazta a Quick Answer-blokkot (float-formula + $ sizing, ~70 szó), `index,follow`, sitemap lastmod-bump 06-06, 0 BOM/mojibake, DOCTYPE ✓. **Fontos kontextus (felhasználónak megírva):** a "minden eltűnt" érzés 4 nappal a core update lezárása (06-02) után tipikusan volatilitás/újrarendeződés, NEM feltétlenül végleges — a tiszta GSC-olvasat 06-09-től érvényes; friss GSC-exportból meg tudom nézni mi tűnt el ténylegesen vs. mi csak ingadozik. A halasztás visszavonása akkor is helyes, ha a pozíció végleg elment (nincs mit védeni) ÉS akkor is, ha átmeneti (a jobb tartalom a visszaépülést segíti). **2026-06-06 15:20:** D12 deploy (cleanup + UTF8NoBom move + sitemap bump + seoplan J.16.6 D12 LIVE-marker), külön commit. Ezzel a teljes page-rewrite program (J.16) lezárult: 50/50 SEO-oldal a doctrine-tartalmon, csak GSC-retro (06-09) + V1 #8 GA4 / #6 CAN-SPAM maradt.):
 
 **2026-06-06 15:20 D12 ÉLESÍTVE — a page-rewrite program kész (50/50):** Az utolsó visszatartott draft (`petty-cash-how-much-to-keep`, az egyetlen védett TOP3-pozíciós oldal) is élesítve a felhasználó döntésére, miután a pozíció elveszett. A drafts mappa most üres. Innentől a fókusz a 06-09 GSC-retróra és a maradék V1-tételekre tolódik.
