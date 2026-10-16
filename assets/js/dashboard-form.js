@@ -499,8 +499,8 @@ function initTransactionForm() {
                 window.__spendnoteExitAggressiveOnboarding();
             }
 
-            // Reload dashboard data
-            if (typeof loadDashboardData === 'function') {
+            // The standalone mobile page overrides loadDashboardData with a redirect, which would cancel the receipt.
+            if (typeof loadDashboardData === 'function' && !(wantsReceipt && receiptInSameTab)) {
                 await loadDashboardData();
             }
 
@@ -526,7 +526,8 @@ function initTransactionForm() {
                     if (format === 'receipt-print-two-copies') {
                         params.set('autoPrint', '1');
                         try {
-                            params.set('returnTo', window.location.href);
+                            const onStandaloneForm = /spendnote-new-transaction/.test(window.location.pathname);
+                            params.set('returnTo', onStandaloneForm ? new URL('dashboard.html', window.location.href).href : window.location.href);
                         } catch (_) {
 
                         }
