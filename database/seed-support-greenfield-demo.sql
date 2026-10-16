@@ -1,6 +1,7 @@
 -- Greenfield Studio demo seed for support@spendnote.app
 -- Purpose: realistic screenshot data for SEO pages
 -- Safe to re-run: uses fixed IDs and cleans only this demo org's seeded records.
+-- Do not use this file to reset the babysitter data. Use seed-support-greenfield-pro-demo.sql.
 
 DO $$
 DECLARE
