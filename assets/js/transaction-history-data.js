@@ -2229,6 +2229,13 @@
                 }
             }
 
+            if (!currency) {
+                const allCurrencies = new Set(state.cashBoxes.map((cb) => safeText(cb?.currency, '').trim().toUpperCase()).filter(Boolean));
+                if (allCurrencies.size === 1) {
+                    currency = Array.from(allCurrencies)[0];
+                }
+            }
+
             if (!currency && hasAnyActiveFilter(serverCtx)) {
                 try {
                     const ids = await scanFilteredCashBoxIds(serverCtx);
