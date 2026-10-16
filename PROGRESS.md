@@ -127,12 +127,20 @@ If a chat thread freezes / context is lost: in the new thread say:
 - A GSC megjelenések erősen visszaestek (7 nap: 1 kattintás, 37 megjelenés, a kattintás márkanévre jött Fehéroroszországból). Technikai hiba nincs, az indexelés stabil. Az ok: alacsony autoritás, csak 7 külső link. Főoldal újraindexelése kérve 10-16-án.
 - Nagy SEO tartalom-átírás most nincs napirenden.
 
+### Bemutató fiók (holnap, a felhasználó elfáradt 10-16 este)
+- Fiók: `support@spendnote.app` megvan, de babysitteres adat van rajta (Emma Taylor, családok, Babysitting pénztár).
+- A `database/seed-support-greenfield-demo.sql` csak a három Greenfield pénztár-ID-t cseréli, a babysitteres sorokat nem törli. Holnapi szkript: előbb ennek az egy fióknak a pénztárait, tranzakcióit és partnereit törölni, aztán Greenfield Studio (Daniel Reed, Austin, Office Petty Cash / Event Float / Coffee Fund).
+- Pro: `subscription_tier = pro`, `billing_status = active`, `billing_cycle = yearly`, `seat_count = 3`, megújulás egy év múlva. Stripe-azonosítót ne írjunk be, különben a Manage Billing üres portált nyitna.
+- Csapat: második belépő `emma.collins@spendnote.app`. A Supabase Authentication → Add user hozza létre (email confirmed). A szkript utána adminná teszi és mindhárom pénztárhoz adja. Innen nincs service role kulcs, az SQL-t a felhasználó futtatja az SQL Editorban.
+- Logó megvan, git-en kívül: `C:\SpendNote projekt\AdobeStock_1019486181 (1).jpeg` (három zöld levél + GreenField). Feltöltés a Settings → Receipt Logo mezőben, nem SQL-ből.
+
 ### Következő lépések
-1. **Holnap:** linképítés oldalanként, képernyőképekkel. Előbb megkérdezni, melyik email címmel volt a regisztráció a G2-n és a Capterrán, és megírni az angol listing szövegeket.
-2. **Hétfő:** Ads átnézése: helyjelentés, keresési kifejezések, megjelenési arány, Clarity felvételek a signup oldalról. Ellenőrizni, hogy a GA4 sign_up konverzió aktív-e a Google Adsben. Szükség esetén a keret csökkentése.
-3. Win-back email + trial reset a korábbi regisztrálóknak: a trial vegye figyelembe a `profiles.trial_ends_at` mezőt (migráció + `supabase-config.js` + dashboard banner), SQL a 14 napos resethez, egyszeri küldés Resenden keresztül.
-4. Köszönő email (EN/RU) a fehérorosz fizetős ügyfélnek (felajánlva).
-5. A D-U-N-S után: Android TWA csomag (lásd fent).
+1. **Holnap:** a fenti bemutató fiók (takarítás, Pro, Emma, logó), utána belépés és ellenőrzés.
+2. **Holnap:** linképítés oldalanként, képernyőképekkel. Előbb megkérdezni, melyik email címmel volt a regisztráció a G2-n és a Capterrán, és megírni az angol listing szövegeket.
+3. **Hétfő:** Ads átnézése: helyjelentés, keresési kifejezések, megjelenési arány, Clarity felvételek a signup oldalról. Ellenőrizni, hogy a GA4 sign_up konverzió aktív-e a Google Adsben. Szükség esetén a keret csökkentése.
+4. Win-back email + trial reset a korábbi regisztrálóknak: a trial vegye figyelembe a `profiles.trial_ends_at` mezőt (migráció + `supabase-config.js` + dashboard banner), SQL a 14 napos resethez, egyszeri küldés Resenden keresztül.
+5. Köszönő email (EN/RU) a fehérorosz fizetős ügyfélnek (felajánlva).
+6. A D-U-N-S után: Android TWA csomag (lásd fent).
 
 ## Where we are now (last updated: 2026-06-06 15:20 — D12 UTOLSÓ DRAFT ÉLESÍTVE → **mind az 50 SEO-oldal LIVE, 0 draft maradt a `drafts/page-rewrites/`-ben**. **Felhasználói döntés:** a `/petty-cash-how-much-to-keep` korábban védett TOP3 pozíciója elveszett (core update 06-02 + AI Overview), így a pozíció-védő halasztásnak nincs értelme — élesítve. A draft MÁR tartalmazta a Quick Answer-blokkot (float-formula + $ sizing, ~70 szó), `index,follow`, sitemap lastmod-bump 06-06, 0 BOM/mojibake, DOCTYPE ✓. **Fontos kontextus (felhasználónak megírva):** a "minden eltűnt" érzés 4 nappal a core update lezárása (06-02) után tipikusan volatilitás/újrarendeződés, NEM feltétlenül végleges — a tiszta GSC-olvasat 06-09-től érvényes; friss GSC-exportból meg tudom nézni mi tűnt el ténylegesen vs. mi csak ingadozik. A halasztás visszavonása akkor is helyes, ha a pozíció végleg elment (nincs mit védeni) ÉS akkor is, ha átmeneti (a jobb tartalom a visszaépülést segíti). **2026-06-06 15:20:** D12 deploy (cleanup + UTF8NoBom move + sitemap bump + seoplan J.16.6 D12 LIVE-marker), külön commit. Ezzel a teljes page-rewrite program (J.16) lezárult: 50/50 SEO-oldal a doctrine-tartalmon, csak GSC-retro (06-09) + V1 #8 GA4 / #6 CAN-SPAM maradt.):
 
