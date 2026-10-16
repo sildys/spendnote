@@ -851,9 +851,45 @@
                 display: flex;
             }
 
+            .pagination {
+                padding: 12px 14px;
+                gap: 10px;
+            }
+
+            .pagination-info {
+                font-size: 13px;
+                color: var(--text-muted);
+            }
+
+            .pagination-info select,
+            .pagination-word {
+                display: none;
+            }
+
             .pagination-controls {
-                flex-wrap: wrap;
-                gap: 8px;
+                flex-wrap: nowrap;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .pagination-btn:not(:first-child):not(:last-child):not(.active) {
+                display: none;
+            }
+
+            .pagination-btn.active {
+                width: auto;
+                padding: 0 10px;
+                border-color: transparent;
+                background: transparent;
+                color: var(--text);
+                cursor: default;
+            }
+
+            .pagination-btn.active::after {
+                content: " / " attr(data-total);
+                white-space: pre;
+                color: var(--text-muted);
+                font-weight: 500;
             }
 
             .filter-section {
@@ -1131,6 +1167,6 @@
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=46"></script>
     <script>if (typeof showPageTip === 'function') showPageTip('tx-history', 'View and filter all your transactions. <strong>Export as CSV</strong> for your records.');</script>
-    <script src="assets/js/transaction-history-data.js?v=20260405-void-solo-owner"></script>
+    <script src="assets/js/transaction-history-data.js?v=20261016-compact-pager"></script>
 </body>
 </html>

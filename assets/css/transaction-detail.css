@@ -1250,6 +1250,15 @@
                 padding-bottom: 16px;
             }
 
+            .tx-void-meta {
+                position: static;
+                order: 10;
+                max-width: none;
+                margin-top: -6px;
+                text-align: center;
+                font-weight: 600;
+            }
+
             /* Action buttons: 2x2 grid */
             .tx-actions-row {
                 display: grid !important;

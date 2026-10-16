@@ -896,7 +896,7 @@
 
             const labelEl = qs('#paginationText', infoEl);
             if (labelEl) {
-                labelEl.textContent = text;
+                labelEl.innerHTML = `<span class="pagination-word">Showing </span>${from}-${to} of ${totalCount}`;
             } else {
                 infoEl.textContent = text;
                 const select = qs('#perPageSelect');
@@ -919,7 +919,10 @@
             } else {
                 btn.textContent = label;
             }
-            if (opts?.active) btn.classList.add('active');
+            if (opts?.active) {
+                btn.classList.add('active');
+                btn.dataset.total = String(totalPages);
+            }
             if (opts?.disabled) btn.disabled = true;
             btn.addEventListener('click', () => {
                 if (btn.disabled) return;
