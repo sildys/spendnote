@@ -67,6 +67,10 @@ const NAV_HTML = `
                             <i class="fas fa-cog"></i>
                             Settings
                         </a>
+                        <a href="#" class="user-dropdown-item" id="dropdownInstallApp" data-action="install-app" style="display:none;">
+                            <i class="fas fa-download"></i>
+                            Install app
+                        </a>
                         <div class="user-dropdown-divider"></div>
                         <a href="#" class="user-dropdown-item" data-action="logout">
                             <i class="fas fa-sign-out-alt"></i>
@@ -96,6 +100,7 @@ function renderAppNav(container, options = {}) {
 
     highlightCurrentPage();
     initNavEvents();
+    appInstall.refresh();
 
     // Ensure avatar/identity gets refreshed even if main.js loads after nav.
     (function scheduleIdentityRefresh() {
@@ -410,6 +415,139 @@ function highlightCurrentPage() {
         if (isActive) link.classList.add('active');
     });
 }
+
+// "Install app" entry points: profile menu item (all app pages) + mobile banner (dashboard only)
+const appInstall = (() => {
+    const DISMISS_KEY = 'spendnote.installBanner.dismissed.v1';
+    const VISITS_KEY = 'spendnote.dashboardVisits.v1';
+    const BANNER_ID = 'snInstallBanner';
+    let deferredPrompt = null;
+
+    const ua = navigator.userAgent || '';
+    const isIOS = /iphone|ipad|ipod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    const isIOSSafari = isIOS && !/crios|fxios|edgios/i.test(ua);
+
+    const isStandalone = () => (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+        || window.navigator.standalone === true;
+    const canInstall = () => !isStandalone() && (Boolean(deferredPrompt) || isIOSSafari);
+
+    const lsGet = (key) => { try { return localStorage.getItem(key); } catch (_) { return null; } };
+    const lsSet = (key, value) => { try { localStorage.setItem(key, value); } catch (_) { /* ignore */ } };
+
+    const isDashboard = () => {
+        const file = (window.location.pathname.split('/').filter(Boolean).pop() || '').toLowerCase();
+        return file === 'dashboard' || file === 'dashboard.html';
+    };
+
+    const showIOSHelp = () => {
+        const msg = 'Tap the Share button at the bottom of Safari, then choose "Add to Home Screen". SpendNote will open like a regular app.';
+        if (typeof window.showAlert === 'function') {
+            window.showAlert(msg, { title: 'Install SpendNote', iconType: 'info', okLabel: 'Got it' });
+        } else {
+            window.alert(msg);
+        }
+    };
+
+    const install = async () => {
+        if (deferredPrompt) {
+            const evt = deferredPrompt;
+            deferredPrompt = null;
+            try {
+                evt.prompt();
+                await evt.userChoice;
+            } catch (_) { /* ignore */ }
+            refresh();
+            return;
+        }
+        if (isIOSSafari) showIOSHelp();
+    };
+
+    const injectStyles = () => {
+        if (document.getElementById('snInstallStyles')) return;
+        const style = document.createElement('style');
+        style.id = 'snInstallStyles';
+        style.textContent = `
+            .sn-install-banner { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; padding: 12px 12px 12px 14px;
+                background: #fff; border: 1px solid #d1fae5; border-left: 4px solid #059669; border-radius: 14px;
+                box-shadow: 0 4px 14px rgba(5, 150, 105, 0.08); }
+            .sn-install-banner svg { flex: 0 0 auto; width: 36px; height: 36px; }
+            .sn-install-text { flex: 1 1 auto; min-width: 0; line-height: 1.3; }
+            .sn-install-text strong { display: block; font-size: 0.95rem; color: #0f172a; }
+            .sn-install-text span { display: block; font-size: 0.8rem; color: #64748b; }
+            .sn-install-btn { flex: 0 0 auto; border: 0; border-radius: 10px; padding: 9px 14px; background: #059669; color: #fff;
+                font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+            .sn-install-close { flex: 0 0 auto; border: 0; background: transparent; color: #94a3b8; font-size: 1.25rem;
+                line-height: 1; padding: 4px 2px; cursor: pointer; }
+            @media (min-width: 769px) { .sn-install-banner { display: none; } }
+        `;
+        document.head.appendChild(style);
+    };
+
+    const removeBanner = () => {
+        const el = document.getElementById(BANNER_ID);
+        if (el) el.remove();
+    };
+
+    const renderBanner = () => {
+        if (!isDashboard() || !canInstall() || lsGet(DISMISS_KEY) || window.innerWidth > 768) {
+            removeBanner();
+            return;
+        }
+        if (Number(lsGet(VISITS_KEY) || 0) < 2) return;
+        if (document.getElementById(BANNER_ID)) return;
+
+        const header = document.querySelector('.main-content .page-header');
+        if (!header) return;
+
+        injectStyles();
+        const banner = document.createElement('div');
+        banner.id = BANNER_ID;
+        banner.className = 'sn-install-banner';
+        banner.innerHTML = `
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#059669"/><path d="M32 12c-2.2 0-4 1.8-4 4v2h-6c-2.2 0-4 1.8-4 4v24c0 2.2 1.8 4 4 4h20c2.2 0 4-1.8 4-4V22c0-2.2-1.8-4-4-4h-6v-2c0-2.2-1.8-4-4-4zm0 3c.6 0 1 .4 1 1v3h-2v-3c0-.6.4-1 1-1zm-10 6h20c.6 0 1 .4 1 1v24c0 .6-.4 1-1 1H22c-.6 0-1-.4-1-1V22c0-.6.4-1 1-1z" fill="#fff"/><rect x="25" y="27" width="14" height="2" rx="1" fill="#fff"/><rect x="25" y="32" width="10" height="2" rx="1" fill="#fff"/><rect x="25" y="37" width="12" height="2" rx="1" fill="#fff"/></svg>
+            <div class="sn-install-text">
+                <strong>Install SpendNote</strong>
+                <span>Opens like a real app from your home screen.</span>
+            </div>
+            <button type="button" class="sn-install-btn">Install</button>
+            <button type="button" class="sn-install-close" aria-label="Dismiss">&times;</button>
+        `;
+        banner.querySelector('.sn-install-btn').addEventListener('click', install);
+        banner.querySelector('.sn-install-close').addEventListener('click', () => {
+            lsSet(DISMISS_KEY, '1');
+            removeBanner();
+        });
+        header.insertAdjacentElement('afterend', banner);
+    };
+
+    const refresh = () => {
+        const item = document.getElementById('dropdownInstallApp');
+        if (item) item.style.display = canInstall() ? '' : 'none';
+        renderBanner();
+    };
+
+    if (isDashboard()) lsSet(VISITS_KEY, String(Number(lsGet(VISITS_KEY) || 0) + 1));
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        refresh();
+    });
+
+    window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        refresh();
+    });
+
+    document.addEventListener('click', (e) => {
+        const link = e.target && e.target.closest ? e.target.closest('[data-action="install-app"]') : null;
+        if (!link) return;
+        e.preventDefault();
+        install();
+    });
+
+    return { refresh, install };
+})();
 
 // Export
 window.loadNav = loadNav;
