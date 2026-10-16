@@ -6,7 +6,8 @@
 --
 -- HOW TO RUN (Supabase SQL Editor):
 --   1. Leave v_apply = false and run. It prints counts and writes nothing.
---   2. Read the error text. It must mention only support@spendnote.app.
+--   2. Read the error text (a red "error" here is expected). The member list must
+--      contain only test logins, never a paying customer.
 --   3. Create emma.collins@spendnote.app in Authentication → Add user
 --      (email confirmed) if she should appear as a teammate.
 --   4. Set v_apply = true and run again.
@@ -28,6 +29,7 @@ DECLARE
     v_box_count integer;
     v_tx_count integer;
     v_contact_count integer;
+    v_other_members text;
     v_box_ids uuid[];
 
     v_office_cash_box_id constant uuid := '4f8c1df6-6b8f-4fdb-97ef-78bd2f38f301';
@@ -101,10 +103,19 @@ BEGIN
     WHERE c.org_id IN (SELECT o.id FROM public.orgs o WHERE o.owner_user_id = v_owner_id)
        OR (c.user_id = v_owner_id AND c.org_id IS NULL);
 
+    -- Removing these members fires cleanup_after_org_member_remove, which also
+    -- deletes each removed member's own empty, transaction-less personal cash boxes.
+    SELECT COALESCE(string_agg(DISTINCT p.email, ', '), 'none')
+    INTO v_other_members
+    FROM public.org_memberships m
+    JOIN public.profiles p ON p.id = m.user_id
+    WHERE m.org_id IN (SELECT o.id FROM public.orgs o WHERE o.owner_user_id = v_owner_id)
+      AND m.user_id <> v_owner_id;
+
     IF NOT v_apply THEN
         RAISE EXCEPTION
-            'PREVIEW ONLY. Nothing was written. Account support@spendnote.app would lose % org(s), % cash box(es), % transaction(s), % contact(s). Other accounts are not in this count. If those numbers are the babysitter test data, set v_apply := true at the top of this script and run it again.',
-            v_org_count, v_box_count, v_tx_count, v_contact_count;
+            'PREVIEW ONLY. Nothing was written. Account support@spendnote.app would lose % org(s), % cash box(es), % transaction(s), % contact(s). Members removed from its team: %. Each removed member also loses their own empty personal cash boxes. If every email above is a test login, set v_apply := true and run again.',
+            v_org_count, v_box_count, v_tx_count, v_contact_count, v_other_members;
     END IF;
 
     RAISE NOTICE 'Applying Greenfield reset for support@spendnote.app. Replacing % org(s), % cash box(es), % transaction(s), % contact(s).',
