@@ -1346,7 +1346,19 @@ body {
                 bar.querySelector('.sn-print-home').addEventListener('click', (e) => { e.preventDefault(); window.location.replace('dashboard.html'); });
                 bar.querySelector('.sn-print-go').addEventListener('click', () => { try { window.print(); } catch (_) {} });
                 document.body.appendChild(bar);
-                document.body.style.paddingBottom = 'calc(88px + env(safe-area-inset-bottom))';
+                // No mobile viewport meta here (the receipt keeps its desktop layout), so the browser shrinks
+                // the whole page; scale the bar back up to real device size.
+                const fitBar = () => {
+                  const sw = window.screen ? window.screen.width : 0;
+                  const sh = window.screen ? window.screen.height : 0;
+                  const landscape = window.matchMedia && window.matchMedia('(orientation: landscape)').matches;
+                  const deviceW = landscape ? Math.max(sw, sh) : Math.min(sw, sh);
+                  const factor = deviceW ? Math.max(1, document.documentElement.clientWidth / deviceW) : 1;
+                  bar.style.zoom = String(factor);
+                  document.body.style.paddingBottom = 'calc((88px + env(safe-area-inset-bottom)) * ' + factor + ')';
+                };
+                fitBar();
+                window.addEventListener('resize', fitBar);
                 setTimeout(() => {
                   try { window.print(); } catch (_) {}
                 }, 150);
