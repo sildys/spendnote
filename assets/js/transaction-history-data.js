@@ -2236,7 +2236,7 @@
                 }
             }
 
-            if (!currency && hasAnyActiveFilter(serverCtx)) {
+            if (!currency) {
                 try {
                     const ids = await scanFilteredCashBoxIds(serverCtx);
                     if (ids && ids.size) {
