@@ -89,6 +89,10 @@ Okt 11–15: 191 megjelenés, 13 klikk, $19,24; a Receipt Book csoport ~37 megje
 ### Landing oldalak (2026-10-11)
 A három hirdetés végső URL-je átállítva a dedikált, noindex landingekre: `/lp/cash-receipt`, `/lp/cash-handover`, `/lp/receipt-generator`. A SEO oldalak átalakítása a landingek 2–3 hetes eredményéig várakozik.
 
+**Webhelylinkek a landingekre (2026-10-16 02:20):** `SpendNote-sitelinks-to-lp.csv`. Receipts: Proof of Cash Payment → `/lp/cash-receipt`, Cash Handover Receipt → `/lp/cash-handover`, Receipt Generator → `/lp/receipt-generator` (2. sor e-mail nélkül, mert az csak Pro), Digital Cash Book helyett Digital Receipt Book → `/lp/receipt-book`, új Deposit Receipt → `/lp/deposit-receipt`. Crews & Teams: Cash Handover Receipt → `/lp/cash-handover`. Marad SEO-oldalon (nincs landing): Pricing, FAQ, Custom Receipt with Logo, Who Has the Cash, Petty Cash vs Excel, Two-Person Cash Count.
+
+**Terv: SEO-oldalak landing-dizájnra (később, a felhasználó döntése):** szöveg és szerkezet változatlan, csak a design (lp.css-elemek: hős-kép, előtte/utána, lépések) és képek. Nem változhat: URL, title, meta description, H1/H2, canonical, FAQ-schema, belső linkek; **noindex tilos** (a landingeken van, ide nem kerülhet). Képek WebP, lazy, megadott mérettel. Fokozatosan: először a landing-párral rendelkezők (`cash-handoff-receipt`, `petty-cash-receipt-generator`, `cash-payment-received-proof`, `cash-deposit-receipt`), 2–4 hét Search Console-figyelés (helyezés, CTR), csak utána a többi.
+
 ### Ads Editor import tanulság
 A PowerShell `ConvertTo-Csv` minden mezőt idézőjelbe tesz, az üreseket is (`""`). Az Editor ettől a kulcsszó-, negatív- és helyszínsorokat „Többértelmű sortípus" hibával dobja el. Az importfájl legyen **UTF-16, tabulátoros, idézőjelek nélkül** (mint az Editor saját exportja).
 
