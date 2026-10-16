@@ -308,23 +308,60 @@ body {
   bottom: 0;
   z-index: 50;
   display: flex;
-  gap: 10px;
-  padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+  align-items: center;
+  justify-content: space-around;
+  height: calc(64px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
   background: rgba(255, 255, 255, 0.96);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
   border-top: 1px solid #e2e8f0;
-  box-shadow: 0 -6px 20px rgba(15, 23, 42, 0.08);
-  font-family: system-ui, -apple-system, sans-serif;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
+.sn-print-bar a,
 .sn-print-bar button {
   flex: 1;
-  padding: 14px 12px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 700;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 0 0;
+  border: 0;
+  background: none;
+  color: #64748b;
+  font: 500 10px/1 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  letter-spacing: 0.01em;
+  text-decoration: none;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-.sn-print-bar .sn-print-go { background: #059669; border: 1px solid #059669; color: #fff; }
-.sn-print-bar .sn-print-back { background: #fff; border: 1px solid #cbd5e1; color: #0f172a; }
+.sn-print-bar a:active,
+.sn-print-bar button:active { opacity: 0.7; }
+.sn-print-bar .sn-ic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+}
+.sn-print-bar svg { width: 20px; height: 20px; fill: currentColor; }
+.sn-print-bar .sn-fab { flex: 0 0 72px; margin-top: -20px; color: #059669; font-weight: 700; }
+.sn-print-bar .sn-fab .sn-ic {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #059669;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.45);
+  transition: transform 0.18s ease;
+}
+.sn-print-bar .sn-fab:active .sn-ic { transform: scale(0.92); }
+.sn-print-bar .sn-fab svg { width: 24px; height: 24px; }
 
 .sn-logo{
   display:inline-flex;
@@ -1301,11 +1338,15 @@ body {
               if (!window.opener) {
                 const bar = document.createElement('div');
                 bar.className = 'sn-print-bar';
-                bar.innerHTML = '<button type="button" class="sn-print-back">Back to SpendNote</button><button type="button" class="sn-print-go">Print</button>';
-                bar.querySelector('.sn-print-back').addEventListener('click', () => { window.location.replace(returnToUrl); });
+                bar.setAttribute('aria-label', 'Receipt actions');
+                bar.innerHTML =
+                  '<a href="#" class="sn-print-home"><span class="sn-ic"><svg viewBox="0 0 576 512" aria-hidden="true"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c.2 35.5-28.5 64.3-64 64.3H128.1c-35.3 0-64-28.7-64-64V287.6H32c-18 0-32-14-32-32.1 0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg></span>Home</a>' +
+                  '<button type="button" class="sn-fab sn-print-go"><span class="sn-ic"><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64h226.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zM432 248a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/></svg></span>Print</button>' +
+                  '<a href="spendnote-new-transaction.html" class="sn-print-new"><span class="sn-ic"><svg viewBox="0 0 448 512" aria-hidden="true"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg></span>New</a>';
+                bar.querySelector('.sn-print-home').addEventListener('click', (e) => { e.preventDefault(); window.location.replace('dashboard.html'); });
                 bar.querySelector('.sn-print-go').addEventListener('click', () => { try { window.print(); } catch (_) {} });
                 document.body.appendChild(bar);
-                document.body.style.paddingBottom = '96px';
+                document.body.style.paddingBottom = 'calc(88px + env(safe-area-inset-bottom))';
                 setTimeout(() => {
                   try { window.print(); } catch (_) {}
                 }, 150);
