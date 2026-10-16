@@ -96,6 +96,8 @@ function initTransactionForm() {
         const wantsReceipt = action === 'done-receipt';
 
         let preopenedReceiptWindow = null;
+        // Mobile browsers freeze the opener tab once a new tab takes focus, so the save never finishes there.
+        const receiptInSameTab = Boolean(window.matchMedia && window.matchMedia('(max-width: 768px), (pointer: coarse)').matches);
 
         const triggerHiddenPdfDownload = (url) => {
             try {
@@ -126,7 +128,7 @@ function initTransactionForm() {
         };
 
         if (wantsReceipt) {
-            preopenedReceiptWindow = window.open('about:blank', '_blank');
+            preopenedReceiptWindow = receiptInSameTab ? null : window.open('about:blank', '_blank');
             if (preopenedReceiptWindow) {
                 try {
                     preopenedReceiptWindow.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Opening receipt…</title></head><body style="font-family:system-ui,-apple-system,sans-serif;padding:16px;color:#334155">Opening receipt…</body></html>');
@@ -628,6 +630,11 @@ function initTransactionForm() {
                 const receipt = await buildReceiptUrl();
                 const url = receipt?.url;
                 const finalFormat = receipt?.format || 'receipt-print-two-copies';
+
+                if (receiptInSameTab && url) {
+                    window.location.href = url;
+                    return;
+                }
 
                 if (finalFormat === 'pdf') {
                     if (preopenedReceiptWindow && !preopenedReceiptWindow.closed) {

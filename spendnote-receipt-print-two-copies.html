@@ -297,7 +297,34 @@ body {
     margin: 0;
     overflow: hidden;
   }
+
+  .sn-print-bar { display: none !important; }
 }
+
+.sn-print-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 -6px 20px rgba(15, 23, 42, 0.08);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+.sn-print-bar button {
+  flex: 1;
+  padding: 14px 12px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.sn-print-bar .sn-print-go { background: #059669; border: 1px solid #059669; color: #fff; }
+.sn-print-bar .sn-print-back { background: #fff; border: 1px solid #cbd5e1; color: #0f172a; }
 
 .sn-logo{
   display:inline-flex;
@@ -1270,6 +1297,20 @@ body {
                   return 'dashboard.html';
                 }
               })();
+
+              if (!window.opener) {
+                const bar = document.createElement('div');
+                bar.className = 'sn-print-bar';
+                bar.innerHTML = '<button type="button" class="sn-print-back">Back to SpendNote</button><button type="button" class="sn-print-go">Print</button>';
+                bar.querySelector('.sn-print-back').addEventListener('click', () => { window.location.replace(returnToUrl); });
+                bar.querySelector('.sn-print-go').addEventListener('click', () => { try { window.print(); } catch (_) {} });
+                document.body.appendChild(bar);
+                document.body.style.paddingBottom = '96px';
+                setTimeout(() => {
+                  try { window.print(); } catch (_) {}
+                }, 150);
+                return;
+              }
 
               // Track when print started - don't allow close until user has had time to interact
               const printStartTime = Date.now();

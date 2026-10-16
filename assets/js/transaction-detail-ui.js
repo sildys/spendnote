@@ -694,6 +694,18 @@ html, body { height: auto !important; overflow: auto !important; }
             }
         };
 
+        // Mobile browsers freeze this tab once a new tab takes focus, so open receipts in place there.
+        const receiptInSameTab = Boolean(window.matchMedia && window.matchMedia('(max-width: 768px), (pointer: coarse)').matches);
+
+        const openReceiptInSameTab = async (url) => {
+            try {
+                if (typeof window.writeBootstrapSession === 'function') {
+                    await window.writeBootstrapSession();
+                }
+            } catch (_) {}
+            window.location.href = url;
+        };
+
         const openReceiptPlaceholder = () => {
             const w = window.open('about:blank', '_blank');
             if (!w) return null;
@@ -708,6 +720,10 @@ html, body { height: auto !important; overflow: auto !important; }
 
         if (printBtn) {
             printBtn.addEventListener('click', async () => {
+                if (receiptInSameTab) {
+                    await openReceiptInSameTab(buildReceiptUrl('receipt-print-two-copies', { autoPrint: '1' }));
+                    return;
+                }
                 const opened = openReceiptPlaceholder();
                 if (!opened) {
                     showAlert('Popup blocked. Please allow popups to print receipts.', { iconType: 'warning' });
@@ -736,6 +752,10 @@ html, body { height: auto !important; overflow: auto !important; }
             pdfBtn.addEventListener('click', async () => {
                 if (!await window.SpendNoteFeatures?.can('can_export_pdf')) {
                     window.SpendNoteUpgrade?.showPdfUpgrade?.();
+                    return;
+                }
+                if (receiptInSameTab) {
+                    await openReceiptInSameTab(buildReceiptUrl('pdf', { download: '1' }));
                     return;
                 }
                 const opened = openReceiptPlaceholder();
