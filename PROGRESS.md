@@ -98,6 +98,32 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [ ] **AUDIT-L6** Sentry environment tagging és release címkézés finomítása.
 - [ ] **AUDIT-L7** Contact list pagination nagy adathalmazra.
 
+## Where we are now (last updated: 2026-10-17 — ingyenes nyugtakitöltő, logócsere, Ads 10 USD/nap, schema, YouTube, termékfrissítő levél)
+
+### Ma élesítve (commitok a main-en)
+- **Ingyenes, regisztráció nélküli nyugtakitöltő** (`assets/js/free-receipt.js`) a 4 receipt landingon (`/lp/*`, noindex) és 13 indexelt SEO-oldalon; GA4 esemény: `free_receipt_print`. Az indexelt SEO-oldalak ad-landing dizájnt kaptak (cc29d5c), a főoldali hero helyén autoplay demóklip (asztalon fekvő, mobilon álló).
+- **Logó:** 22 képernyőkép újrafotózva az új logóval (065f801); email-logó PNG újrarajzolva (315f8ab), Supabase Auth sablonok API-n patchelve. Még régi logós: `assets/images/seo/contractor/*`, `seo/babysitter/*`.
+- **Schema:** `WebApplication` (ingyenes kitöltő, price 0) a 13 kitöltős oldalon + `dateModified` 2026-10-17 (a230466); főoldalon YouTube `sameAs` + `VideoObject` (92866f9).
+- **Bing-hibák:** 160 karakter feletti meta description-ök rövidítve 12 oldalon (225cc9b), egy 70 feletti title (44fa5c2). Most minden indexelt oldal belül van a határokon.
+- **Termékfrissítő levél** (mobil javítások, telepíthető app, új logó): új `send-announcement` edge function (7cbc32a; csak service-role kulccsal hívható, test/dry_run/all+SEND_ALL, idempotens batchek). 2026-10-17-én kiment 27 megerősített felhasználónak. Hívó szkript a repón kívül: `demo-recorder/announce.ps1`.
+
+### Google Ads állapot (2026-10-17 este)
+- **Search - Receipts:** 10 USD/nap, Maximize clicks, max CPC 1,50. Fut: **Receipt Generator** (kitöltős kulcsszavak, exact) + **Receipt Book**. Szünetel: Cash Receipt, Deposit Receipt, Handover Receipt. **Crews & Teams kampány szünetel.**
+- A free/template/printable/receipt generator kampányszintű kizárások törölve; új kizárás: "invoice book", "receipts for sale". A két futó csoport hirdetése kitöltős szöveget kapott.
+- Az Editor import a vegyes típusú CSV-ből és az új elemekből sokat kihagyott; a kulcsszavakat a felhasználó kézzel vette fel a webes felületen.
+- **Döntési szabály:** 1 hét után keresési kifejezések tisztítása; ~2 hét / 100–140 USD után döntés (0 regisztráció → leállítás vagy 3–5 USD/nap). Ha 2–3 nap után alig van megjelenés, max CPC 2,00-ra.
+
+### YouTube
+- Csatorna: `@SpendNote` (márkacsatorna a felhasználó Gmail-fiókja alatt, igazolva). Fő videó: https://youtu.be/R3QuWm1g-zY (16 mp-es hero klip), Short: https://youtube.com/shorts/8mYG7g5iRC0. Csatornaképek, szövegek: `screenshots/yt/` (nem repó).
+
+### Nyitott teendők
+1. **Külső linkek:** a meglévő listázások frissítése (G2, SourceForge, SaaSHub, websitelaunches: új logó, képek, kitöltő, videó) + új helyek (Capterra, AlternativeTo, free tools listák); a kitöltő a fő linkszerző eszköz.
+2. **Email sötét mód:** a logó átlátszó PNG sötét felirattal, sötét módban alig látszik → fehér hátterű email-logóváltozat kell (`_shared/email-templates.ts` LOGO_HTML, `supabase/email-templates/*.html`, `delete-account`, Auth sablonok).
+3. GA4 `free_receipt_print` importja másodlagos konverzióként a Google Ads-be.
+4. `www.spendnote.app` → 301 a gyökérre (Cloudflare Redirect Rule; most 200-at ad, a canonical véd).
+5. Contractor/babysitter képek cseréje, utána újraindexelés.
+6. Opcionális: noindex a belső nyugtasablonokra (`spendnote-pdf-receipt`, `spendnote-email-receipt`, `spendnote-receipt-print-two-copies`; nincsenek a sitemapben).
+
 ## Where we are now (last updated: 2026-10-16 — mobil app javítások, PWA install, signup mobil, árkapcsoló, Google Play/MS Store előkészítés, Ads finomhangolás)
 
 ### Ma élesítve (commitok a main-en)
