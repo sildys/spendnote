@@ -37,7 +37,7 @@
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     <link rel="stylesheet" href="/assets/css/main.css?v=20261016-logo">
-    <link rel="stylesheet" href="/assets/css/lp.css?v=18">
+    <link rel="stylesheet" href="/assets/css/lp.css?v=19">
 </head>
 <body data-lp="team-cash">
 
@@ -108,37 +108,18 @@
             </div>
         </div>
 
-        <div class="stage">
-            <div class="mess mess-book" aria-hidden="true">
-                <div class="mb-row mb-head"><span>Date</span><span>Who</span><span>$</span></div>
-                <div class="mb-row"><span>Fri</span><span>Jose</span><span>-80</span></div>
-                <div class="mb-row"><span>Sat</span><span>Mike (gas)</span><span>-45</span></div>
-                <div class="mb-row"><span>Sat</span><span class="mb-x">Ana</span><span>+60?</span></div>
-                <div class="mb-row"><span>Mon</span><span>???</span><span>-120</span></div>
-                <div class="mb-stain"></div>
-            </div>
-            <div class="mess mess-note" aria-hidden="true">
-                <p>Tom has $200 ??</p>
-                <p><s>lumber 312</s> 318</p>
-                <p>Ana owes 60</p>
-                <p class="mn-circle">receipt??</p>
-            </div>
-            <div class="mess mess-xls" aria-hidden="true">
-                <div class="mx-bar"><span>fx</span><span>=SUM(C2:C9</span></div>
-                <div class="mx-grid">
-                    <span class="mx-h"></span><span class="mx-h">A</span><span class="mx-h">B</span><span class="mx-h">C</span>
-                    <span class="mx-h">1</span><span>Name</span><span>For</span><span>Amt</span>
-                    <span class="mx-h">2</span><span>Jose</span><span>tools</span><span>80</span>
-                    <span class="mx-h">3</span><span>Mike</span><span>gas</span><span>45</span>
-                    <span class="mx-h">4</span><span>??</span><span></span><span class="mx-err">#REF!</span>
-                </div>
-            </div>
-            <svg class="mess-cross" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true"><path d="M18 22 L182 178"/><path d="M182 26 L20 174"/></svg>
-            <div class="shot shot-phone"><img src="/assets/images/spendnote-mobile-new-transaction.jpg" alt="SpendNote New Transaction screen on a phone with money in, name and amount" width="520" height="956" fetchpriority="high" decoding="async"></div>
-            <div class="shot shot-front"><img src="/assets/images/spendnote-new-transaction-modal-1280.jpg" alt="SpendNote dashboard with the New Transaction form open: name, description, amount and Done &amp; Print" width="1280" height="848" fetchpriority="high" decoding="async"></div>
-            <div class="chip chip-1"><span class="ic"><i class="fas fa-bolt"></i></span><span>30 seconds<small>per entry, on any phone</small></span></div>
-            <div class="chip chip-3"><span class="ic"><i class="fas fa-user-check"></i></span><span>Who did what<small>on every entry</small></span></div>
-            <div class="chip chip-2"><span class="ic"><i class="fas fa-wallet"></i></span><span>Always balanced<small>per cash box, live</small></span></div>
+        <div class="lp-hero-clip">
+            <video class="lp-video" id="lpHeroClip" autoplay muted loop playsinline preload="auto" width="1152" height="720" poster="/assets/video/spendnote-hero-poster.jpg" aria-label="SpendNote in 15 seconds: from messy IOUs and spreadsheets to a shared cash box, a new transaction and a signed cash receipt">
+                <source src="/assets/video/spendnote-hero-vertical.mp4" type="video/mp4" media="(max-width: 768px)">
+                <source src="/assets/video/spendnote-hero.mp4" type="video/mp4">
+            </video>
+            <script>
+                (function () {
+                    var v = document.getElementById('lpHeroClip');
+                    if (window.matchMedia('(max-width: 768px)').matches) v.poster = '/assets/video/spendnote-hero-poster-vertical.jpg';
+                    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { v.removeAttribute('autoplay'); v.pause(); v.controls = true; }
+                })();
+            </script>
         </div>
     </div>
 </section>
@@ -453,6 +434,6 @@
 
 <div class="m-cta" id="mCta"><a href="/spendnote-signup" class="btn btn-go btn-big" data-cta="sticky">Set up my team &mdash; free</a></div>
 
-<script src="/assets/js/lp.js?v=1" defer></script>
+<script src="/assets/js/lp.js?v=2" defer></script>
 </body>
 </html>
