@@ -170,7 +170,8 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    <link rel="preload" as="image" href="assets/images/spendnote-dashboard-1280.jpg" imagesrcset="assets/images/spendnote-dashboard-960.jpg 960w, assets/images/spendnote-dashboard-1280.jpg 1280w" imagesizes="(max-width: 768px) 100vw, 50vw" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/video/spendnote-hero-poster.jpg" media="(min-width: 769px)" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/video/spendnote-hero-poster-vertical.jpg" media="(max-width: 768px)" fetchpriority="high">
     <link rel="stylesheet" href="assets/css/main.css?v=20261016-logo">
     <script>
     (function () {
@@ -503,16 +504,24 @@
             opacity: 1;
         }
 
-        /* BROWSER MOCKUP */
-        .browser-mockup {
-            border-radius: 12px;
+        /* HERO VIDEO */
+        .hero-video {
+            border-radius: 14px;
             overflow: hidden;
             box-shadow: 0 8px 16px rgba(0,0,0,0.08), 0 24px 64px rgba(0,0,0,0.14);
             border: 1px solid #d1d5db;
-            background: #ffffff;
+            background: #c9f3df;
             width: 100%;
             margin-top: 4.5rem;
             animation: mockupSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .hero-clip {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 10;
+            object-fit: cover;
         }
 
         @keyframes mockupSlideIn {
@@ -524,142 +533,6 @@
                 opacity: 1;
                 transform: translateX(0) translateY(0);
             }
-        }
-
-        .browser-bar {
-            background: #f1f3f5;
-            border-bottom: 1px solid #d1d5db;
-            padding: 9px 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .browser-dots {
-            display: flex;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-
-        .browser-dot {
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-        }
-
-        .browser-dot:nth-child(1) { background: #ff5f57; }
-        .browser-dot:nth-child(2) { background: #febc2e; }
-        .browser-dot:nth-child(3) { background: #28c840; }
-
-        .browser-url {
-            flex: 1;
-            background: #ffffff;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            padding: 3px 10px;
-            font-size: 0.72rem;
-            color: #6b7280;
-            font-family: monospace;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* CAROUSEL */
-        .hero-carousel {
-            background: #ffffff;
-        }
-
-        .carousel-track {
-            position: relative;
-        }
-
-        .carousel-slide {
-            display: none;
-        }
-
-        .carousel-slide.active {
-            display: block;
-            animation: cFadeIn 0.6s ease;
-        }
-
-        @keyframes cFadeIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-
-        .screenshot-slide img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .screenshot-slide {
-            aspect-ratio: 16 / 10;
-            background: #f8fafc;
-        }
-
-        .screenshot-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #ffffff;
-        }
-
-        .carousel-slide:first-child .screenshot-slide img {
-            object-position: center 47%;
-            clip-path: inset(3px 0 0 0);
-        }
-
-        .slide-caption-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.6rem 1.25rem;
-            background: #f8fafc;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .slide-caption {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            color: #475569;
-            font-size: 0.82rem;
-            font-weight: 600;
-            letter-spacing: 0.1px;
-        }
-
-        .slide-caption i {
-            color: var(--primary);
-            font-size: 0.75rem;
-        }
-
-        .carousel-dots {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #cbd5e1;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            flex-shrink: 0;
-        }
-
-        .dot:hover {
-            background: #94a3b8;
-        }
-
-        .dot.active {
-            background: var(--primary);
-            width: 18px;
-            border-radius: 3px;
         }
 
         /* FEATURES SECTION */
@@ -896,6 +769,7 @@
             height: 10px;
             border-radius: 50%;
             display: inline-block;
+            flex-shrink: 0;
         }
 
         .dot-green { background: var(--primary); }
@@ -1287,17 +1161,14 @@
                 gap: 2rem;
             }
 
-            .browser-mockup {
-                margin-top: 0;
+            .hero-video {
+                margin: 0 auto;
+                width: min(100%, 400px, calc(78vh * 9 / 16));
+                justify-self: center;
             }
 
-            .screenshot-slide {
-                aspect-ratio: 16 / 10;
-            }
-
-            .screenshot-slide img {
-                object-fit: contain;
-                background: #ffffff;
+            .hero-clip {
+                aspect-ratio: 9 / 16;
             }
 
             .features-grid {
@@ -1356,25 +1227,8 @@
                 text-align: center;
             }
 
-            .browser-mockup {
-                border-radius: 10px;
-            }
-
-            .browser-bar {
-                padding: 7px 10px;
-            }
-
-            .browser-dot {
-                width: 9px;
-                height: 9px;
-            }
-
-            .browser-url {
-                font-size: 0.65rem;
-            }
-
-            .screenshot-slide {
-                aspect-ratio: 16 / 10;
+            .hero-video {
+                border-radius: 12px;
             }
 
             .feature-item {
@@ -1590,51 +1444,27 @@
         </div>
     </div>
 
-    <!-- BROWSER MOCKUP -->
-    <div class="browser-mockup">
-        <div class="browser-bar">
-            <div class="browser-dots">
-                <span class="browser-dot"></span>
-                <span class="browser-dot"></span>
-                <span class="browser-dot"></span>
-            </div>
-            <div class="browser-url" id="browserUrl">app.spendnote.app/dashboard</div>
-        </div>
-        <div class="hero-carousel">
-        <div class="carousel-track">
-            <!-- Slide 1: Dashboard -->
-            <div class="carousel-slide active">
-                <div class="screenshot-slide">
-                    <img src="assets/images/spendnote-dashboard-1280.jpg" srcset="assets/images/spendnote-dashboard-960.jpg 960w, assets/images/spendnote-dashboard-1280.jpg 1280w" sizes="(max-width: 768px) 100vw, 50vw" alt="SpendNote dashboard screenshot showing team cash visibility" title="SpendNote dashboard screenshot" loading="eager" fetchpriority="high" decoding="async" width="1600" height="900">
-                </div>
-            </div>
-
-            <!-- Slide 2: Transaction History -->
-            <div class="carousel-slide">
-                <div class="screenshot-slide">
-                    <img src="assets/images/spendnote-transaction-history-1280.jpg" srcset="assets/images/spendnote-transaction-history-960.jpg 960w, assets/images/spendnote-transaction-history-1280.jpg 1280w" sizes="(max-width: 768px) 100vw, 50vw" alt="SpendNote transaction history screenshot with searchable records" title="SpendNote transaction history screenshot" loading="lazy" decoding="async" width="1600" height="900">
-                </div>
-            </div>
-
-            <!-- Slide 3: Receipt -->
-            <div class="carousel-slide">
-                <div class="screenshot-slide">
-                    <img src="assets/images/spendnote-receipt.png" alt="SpendNote cash receipt screenshot for print and sharing" title="SpendNote cash receipt screenshot" loading="lazy" decoding="async" width="1600" height="900">
-                </div>
-            </div>
-        </div>
-
-        <!-- Caption bar with dots on right -->
-        <div class="slide-caption-bar">
-            <span class="slide-caption" id="carouselCaption"><i class="fas fa-edit"></i> Add cash movement &mdash; your team records it from anywhere.</span>
-            <div class="carousel-dots">
-                <span class="dot active" data-slide="0"></span>
-                <span class="dot" data-slide="1"></span>
-                <span class="dot" data-slide="2"></span>
-            </div>
-        </div>
-        </div><!-- /.hero-carousel -->
-    </div><!-- /.browser-mockup -->
+    <!-- HERO VIDEO -->
+    <div class="hero-video">
+        <video class="hero-clip" id="heroClip" autoplay muted loop playsinline preload="auto" width="1152" height="720" poster="assets/video/spendnote-hero-poster.jpg" aria-label="SpendNote in 15 seconds: from messy IOUs and spreadsheets to a shared cash box, a new transaction and a signed cash receipt with your logo">
+            <source src="assets/video/spendnote-hero-vertical.mp4" type="video/mp4" media="(max-width: 768px)">
+            <source src="assets/video/spendnote-hero.mp4" type="video/mp4">
+        </video>
+        <script>
+            (function () {
+                var v = document.getElementById('heroClip');
+                if (!v) return;
+                if (window.matchMedia('(max-width: 768px)').matches) {
+                    v.poster = 'assets/video/spendnote-hero-poster-vertical.jpg';
+                }
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    v.removeAttribute('autoplay');
+                    v.pause();
+                    v.controls = true;
+                }
+            })();
+        </script>
+    </div>
 </section>
 
 <!-- FEATURES -->
@@ -1949,65 +1779,6 @@
             }
         } catch (_) {}
     })();
-
-    // CAROUSEL
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dots = document.querySelectorAll('.dot');
-    let autoplayInterval;
-
-    const captions = [
-        '<i class="fas fa-edit"></i> Add cash movement &mdash; your team records it from anywhere.',
-        '<i class="fas fa-history"></i> Full transaction history',
-        '<i class="fas fa-file-pdf"></i> Receipt in seconds'
-    ];
-    const urlLabels = [
-        'app.spendnote.app/dashboard',
-        'app.spendnote.app/transactions',
-        'app.spendnote.app/receipt/SN4-005'
-    ];
-    const captionEl = document.getElementById('carouselCaption');
-    const browserUrlEl = document.getElementById('browserUrl');
-
-    function showSlide(n) {
-        slides.forEach(s => s.classList.remove('active'));
-        dots.forEach(d => d.classList.remove('active'));
-
-        currentSlide = (n + slides.length) % slides.length;
-
-        slides[currentSlide].classList.add('active');
-        dots[currentSlide].classList.add('active');
-        if (captionEl) captionEl.innerHTML = captions[currentSlide];
-        if (browserUrlEl) browserUrlEl.textContent = urlLabels[currentSlide];
-    }
-
-    function nextSlide() {
-        showSlide(currentSlide + 1);
-    }
-
-    function startAutoplay() {
-        autoplayInterval = setInterval(nextSlide, 7000);
-    }
-
-    function stopAutoplay() {
-        clearInterval(autoplayInterval);
-    }
-
-    // Dot navigation
-    dots.forEach((dot, i) => {
-        dot.addEventListener('click', () => {
-            stopAutoplay();
-            showSlide(i);
-            startAutoplay();
-        });
-    });
-
-    // Start autoplay
-    startAutoplay();
-
-    // Pause on hover
-    document.querySelector('.hero-carousel').addEventListener('mouseenter', stopAutoplay);
-    document.querySelector('.hero-carousel').addEventListener('mouseleave', startAutoplay);
 
     // PRICING
     const pricingData = {
