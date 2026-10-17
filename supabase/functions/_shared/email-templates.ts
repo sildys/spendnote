@@ -598,3 +598,42 @@ export const renderSubscriptionDowngradedTemplate = (args: {
   const text = `Your SpendNote plan was downgraded to ${args.newPlan}\n\nHi ${args.fullName || "there"},\n${needsCashBoxAction ? `You currently have ${total} cash boxes, but your new plan allows only ${max}.\nThe others will stop recording new transactions and become read-only.` : "Your cash boxes fit within the new limit."}${teamText}\n\nKeep all cash boxes active: ${pricingUrl}\n${needsCashBoxAction ? `Choose which to keep: ${args.dashboardUrl}\n` : ""}\nYour data is safe — nothing will be deleted.`;
   return { subject, html, text };
 };
+
+// ─── Product update: mobile + installable app (2026-10) ─────────────────────────
+
+export const renderProductUpdateMobileTemplate = (args: {
+  fullName?: string;
+}): BaseEmailTemplate => {
+  const name = esc(String(args.fullName || "there").trim() || "there");
+  const dashboardUrl = "https://spendnote.app/dashboard";
+  const subject = "SpendNote now works better on your phone, and you can install it";
+
+  const html = appCard(
+    "A better SpendNote on your phone",
+    "Mobile improvements, and you can now install the app.",
+    `
+      <p style="margin:0 0 10px;">Hi ${name},</p>
+      <p style="margin:0 0 10px;">A quick update from SpendNote. We've made a round of improvements to how SpendNote works on mobile:</p>
+      <ul style="margin:0 0 14px;padding-left:18px;">
+        <li>Smoother layout on phones, from sign-in to the dashboard</li>
+        <li>Cash box and transaction totals now always show the right currency</li>
+        <li>Faster loading, so the latest version is there as soon as you open it</li>
+      </ul>
+      <p style="margin:0 0 6px;"><strong>You can also install SpendNote</strong> on your phone or computer, so it opens like a regular app from your home screen:</p>
+      <ul style="margin:0 0 14px;padding-left:18px;">
+        <li><strong>Android (Chrome):</strong> open SpendNote, tap the menu with your name in the top right and choose &ldquo;Install app&rdquo;</li>
+        <li><strong>iPhone (Safari):</strong> tap the Share button, then &ldquo;Add to Home Screen&rdquo;</li>
+        <li><strong>Computer (Chrome or Edge):</strong> click the install icon in the address bar, or use &ldquo;Install app&rdquo; in your user menu</li>
+      </ul>
+      <p style="margin:0 0 14px;">You'll also notice our new logo, on the app, your emails and every receipt footer.</p>
+      <div style="margin:18px 0 16px;">
+        <a href="${dashboardUrl}" style="${CTA_STYLE}">Open SpendNote &rarr;</a>
+      </div>
+      <p style="margin:0 0 10px;">If anything doesn't look right on your device, just reply to this email. We read every message.</p>
+      <p style="margin:0;">Thanks for using SpendNote,<br>The SpendNote team</p>
+    `,
+  );
+
+  const text = `${subject}\n\nHi ${args.fullName || "there"},\n\nA quick update from SpendNote. We've made a round of improvements to how SpendNote works on mobile:\n\n- Smoother layout on phones, from sign-in to the dashboard\n- Cash box and transaction totals now always show the right currency\n- Faster loading, so the latest version is there as soon as you open it\n\nYou can also install SpendNote on your phone or computer, so it opens like a regular app from your home screen:\n\n- Android (Chrome): open SpendNote, tap the menu with your name in the top right and choose "Install app"\n- iPhone (Safari): tap the Share button, then "Add to Home Screen"\n- Computer (Chrome or Edge): click the install icon in the address bar, or use "Install app" in your user menu\n\nYou'll also notice our new logo, on the app, your emails and every receipt footer.\n\nOpen SpendNote: ${dashboardUrl}\n\nIf anything doesn't look right on your device, just reply to this email. We read every message.\n\nThanks for using SpendNote,\nThe SpendNote team`;
+  return { subject, html, text };
+};
