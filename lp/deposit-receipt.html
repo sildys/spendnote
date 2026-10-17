@@ -38,6 +38,7 @@
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     <link rel="stylesheet" href="/assets/css/main.css?v=20261016-logo">
     <link rel="stylesheet" href="/assets/css/lp.css?v=18">
+    <link rel="stylesheet" href="/assets/css/free-receipt.css?v=1">
 </head>
 <body data-lp="deposit-receipt">
 
@@ -98,8 +99,8 @@
             </h1>
             <p class="hero-lead">Security deposit, rent deposit, down payment or booking deposit &mdash; when it's paid in cash, write the receipt on your phone: <strong>who paid, how much, what for, and both signatures</strong>. Print two copies or save a PDF. When the deposit goes back, that's on record too.</p>
             <div class="hero-cta">
-                <a href="/spendnote-signup" class="btn btn-go btn-big" data-cta="hero">Write my first deposit receipt <i class="fas fa-arrow-right"></i></a>
-                <a href="#how" class="btn btn-ghost btn-big">See how it works</a>
+                <a href="#maker" class="btn btn-go btn-big" data-cta="hero-maker">Write a free deposit receipt <i class="fas fa-arrow-down"></i></a>
+                <a href="/spendnote-signup" class="btn btn-ghost btn-big" data-cta="hero">Try SpendNote free</a>
             </div>
             <div class="micro">
                 <span><i class="fas fa-check-circle"></i> 14 days free</span>
@@ -129,6 +130,18 @@
             <div class="chip chip-3"><span class="ic"><i class="fas fa-rotate-left"></i></span><span>Cash in &amp; cash back<small>deposit and return logged</small></span></div>
             <div class="chip chip-2"><span class="ic"><i class="fas fa-magnifying-glass"></i></span><span>Find it in seconds<small>even a year later</small></span></div>
         </div>
+    </div>
+</section>
+
+<section class="fr-sec" id="maker">
+    <div class="wrap">
+        <div class="fr-head">
+            <span class="kicker">Free tool &middot; no sign-up</span>
+            <h2>Write a deposit receipt right now</h2>
+            <p>Fill in the fields, then print two copies or save it as a PDF. Free, no account, nothing to install.</p>
+        </div>
+        <div id="freeReceipt" data-kind="deposit"></div>
+        <noscript><p style="text-align:center">Turn on JavaScript to use the free receipt maker.</p></noscript>
     </div>
 </section>
 
@@ -378,6 +391,7 @@
 
 <div class="m-cta" id="mCta"><a href="/spendnote-signup" class="btn btn-go btn-big" data-cta="sticky">Write a deposit receipt &mdash; free</a></div>
 
+<script src="/assets/js/free-receipt.js?v=1" defer></script>
 <script src="/assets/js/lp.js?v=1" defer></script>
 </body>
 </html>

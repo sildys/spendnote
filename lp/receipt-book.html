@@ -38,6 +38,7 @@
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     <link rel="stylesheet" href="/assets/css/main.css?v=20261016-logo">
     <link rel="stylesheet" href="/assets/css/lp.css?v=15">
+    <link rel="stylesheet" href="/assets/css/free-receipt.css?v=1">
 </head>
 <body data-lp="receipt-book">
 
@@ -98,8 +99,8 @@
             </h1>
             <p class="hero-lead">Write a cash receipt on your phone in seconds, then <strong>print two copies, save a PDF or email it</strong>. Every receipt is also saved, numbered and searchable &mdash; find or reprint any of them in seconds.</p>
             <div class="hero-cta">
-                <a href="/spendnote-signup" class="btn btn-go btn-big" data-cta="hero">Start my receipt book <i class="fas fa-arrow-right"></i></a>
-                <a href="#compare" class="btn btn-ghost btn-big">Paper vs. SpendNote</a>
+                <a href="#maker" class="btn btn-go btn-big" data-cta="hero-maker">Write a free receipt now <i class="fas fa-arrow-down"></i></a>
+                <a href="/spendnote-signup" class="btn btn-ghost btn-big" data-cta="hero">Start my receipt book</a>
             </div>
             <div class="micro">
                 <span><i class="fas fa-check-circle"></i> 14 days free</span>
@@ -129,6 +130,18 @@
             <div class="chip chip-3"><span class="ic"><i class="fas fa-infinity"></i></span><span>Never runs out<small>no more reordering</small></span></div>
             <div class="chip chip-2"><span class="ic"><i class="fas fa-magnifying-glass"></i></span><span>Every receipt saved<small>search it in seconds</small></span></div>
         </div>
+    </div>
+</section>
+
+<section class="fr-sec" id="maker">
+    <div class="wrap">
+        <div class="fr-head">
+            <span class="kicker">Free tool &middot; no sign-up</span>
+            <h2>Need one receipt right now? Write it here.</h2>
+            <p>No book, no carbon paper. Fill in the fields, then print two copies or save a PDF. Free, no account.</p>
+        </div>
+        <div id="freeReceipt" data-kind="cash"></div>
+        <noscript><p style="text-align:center">Turn on JavaScript to use the free receipt maker.</p></noscript>
     </div>
 </section>
 
@@ -432,6 +445,7 @@
 
 <div class="m-cta" id="mCta"><a href="/spendnote-signup" class="btn btn-go btn-big" data-cta="sticky">Start my receipt book &mdash; free</a></div>
 
+<script src="/assets/js/free-receipt.js?v=1" defer></script>
 <script src="/assets/js/lp.js?v=1" defer></script>
 </body>
 </html>

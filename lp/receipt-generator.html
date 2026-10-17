@@ -38,6 +38,7 @@
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     <link rel="stylesheet" href="/assets/css/main.css?v=20261016-logo">
     <link rel="stylesheet" href="/assets/css/lp.css?v=14">
+    <link rel="stylesheet" href="/assets/css/free-receipt.css?v=1">
 </head>
 <body data-lp="receipt-generator">
 
@@ -98,8 +99,8 @@
             </h1>
             <p class="hero-lead">Fill one short form and get a clean petty cash receipt with <strong>your logo</strong> &mdash; ready to print, save as PDF or email. Your petty cash balance updates itself.</p>
             <div class="hero-cta">
-                <a href="/spendnote-signup" class="btn btn-go btn-big" data-cta="hero">Generate my first receipt <i class="fas fa-arrow-right"></i></a>
-                <a href="#how" class="btn btn-ghost btn-big">How it works</a>
+                <a href="#maker" class="btn btn-go btn-big" data-cta="hero-maker">Generate a free receipt now <i class="fas fa-arrow-down"></i></a>
+                <a href="/spendnote-signup" class="btn btn-ghost btn-big" data-cta="hero">Try SpendNote free</a>
             </div>
             <div class="micro">
                 <span><i class="fas fa-check-circle"></i> 14 days free</span>
@@ -119,6 +120,18 @@
             <div class="chip chip-3"><span class="ic"><i class="fas fa-image"></i></span><span>Your logo<small>on every receipt</small></span></div>
             <div class="chip chip-2"><span class="ic"><i class="fas fa-wallet"></i></span><span>Balance updated<small>petty cash box total</small></span></div>
         </div>
+    </div>
+</section>
+
+<section class="fr-sec" id="maker">
+    <div class="wrap">
+        <div class="fr-head">
+            <span class="kicker">Free tool &middot; no sign-up</span>
+            <h2>Generate a petty cash receipt right now</h2>
+            <p>Fill in the fields, then print it or save it as a PDF. Free, no account, nothing to install.</p>
+        </div>
+        <div id="freeReceipt" data-kind="petty"></div>
+        <noscript><p style="text-align:center">Turn on JavaScript to use the free receipt maker.</p></noscript>
     </div>
 </section>
 
@@ -345,6 +358,7 @@
 
 <div class="m-cta" id="mCta"><a href="/spendnote-signup" class="btn btn-go btn-big" data-cta="sticky">Generate my first receipt &mdash; free</a></div>
 
+<script src="/assets/js/free-receipt.js?v=1" defer></script>
 <script src="/assets/js/lp.js?v=1" defer></script>
 </body>
 </html>
