@@ -505,6 +505,16 @@
         }
 
         /* HERO VIDEO */
+        .hero-media {
+            margin-top: 4.5rem;
+            animation: mockupSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .hero-media .reassurance-note {
+            margin-top: 1.5rem;
+            max-width: none;
+        }
+
         .hero-video {
             border-radius: 14px;
             overflow: hidden;
@@ -512,8 +522,6 @@
             border: 1px solid #d1d5db;
             background: #c9f3df;
             width: 100%;
-            margin-top: 4.5rem;
-            animation: mockupSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         .hero-clip {
@@ -1161,10 +1169,15 @@
                 gap: 2rem;
             }
 
-            .hero-video {
-                margin: 0 auto;
+            .hero-media {
+                margin-top: 0;
+            }
+
+            .hero-video,
+            .hero-media .reassurance-note {
+                margin-left: auto;
+                margin-right: auto;
                 width: min(100%, 400px, calc(78vh * 9 / 16));
-                justify-self: center;
             }
 
             .hero-clip {
@@ -1438,13 +1451,10 @@
             </span>
             <span><i class="fas fa-times-circle"></i> Cancel Anytime</span>
         </div>
-        <div class="reassurance-note">
-            <i class="fas fa-info-circle"></i>
-            <span>For petty cash tracking only (not a tax tool)</span>
-        </div>
     </div>
 
     <!-- HERO VIDEO -->
+    <div class="hero-media">
     <div class="hero-video">
         <video class="hero-clip" id="heroClip" autoplay muted loop playsinline preload="auto" width="1152" height="720" poster="assets/video/spendnote-hero-poster.jpg" aria-label="SpendNote in 15 seconds: from messy IOUs and spreadsheets to a shared cash box, a new transaction and a signed cash receipt with your logo">
             <source src="assets/video/spendnote-hero-vertical.mp4" type="video/mp4" media="(max-width: 768px)">
@@ -1465,6 +1475,11 @@
             })();
         </script>
     </div>
+    <div class="reassurance-note">
+        <i class="fas fa-info-circle"></i>
+        <span>For petty cash tracking only (not a tax tool)</span>
+    </div>
+    </div><!-- /.hero-media -->
 </section>
 
 <!-- FEATURES -->
