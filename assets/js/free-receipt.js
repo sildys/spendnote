@@ -5,7 +5,7 @@
     var lp = document.body.getAttribute('data-lp') || 'unknown';
     var STORE = 'sn_free_receipt_v1';
     var titles = { cash: 'Cash Receipt', deposit: 'Deposit Receipt', petty: 'Petty Cash Receipt' };
-    var defaultTitle = titles[root.getAttribute('data-kind')] || titles.cash;
+    var defaultTitle = root.getAttribute('data-title') || titles[root.getAttribute('data-kind')] || titles.cash;
 
     function track(name, params) {
         if (typeof gtag === 'function') {
