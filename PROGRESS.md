@@ -116,6 +116,13 @@ If a chat thread freezes / context is lost: in the new thread say:
 ### YouTube
 - Csatorna: `@SpendNote` (márkacsatorna a felhasználó Gmail-fiókja alatt, igazolva). Fő videó: https://youtu.be/R3QuWm1g-zY (16 mp-es hero klip), Short: https://youtube.com/shorts/8mYG7g5iRC0. Csatornaképek, szövegek: `screenshots/yt/` (nem repó).
 
+### Külső linkek — 2026-10-18 állapot
+- **SaaSHub** (support@spendnote.app): frissítve és újra ellenőrizve. Új tagline, leírás (benne az ingyenes kitöltő), 7 funkció, 9 új kép, videó, platformok, Q&A (sztori + technológia), versenytársak (Petty Cash App, Excel, Google Sheets, Expensify Cash, Zoho Expense, Zyno Expenz, Spendesk), kategóriák (Digital Receipts App elöl). A verifikáció negyedévente lejár → következő: ~2027-01-18. Featured listing (99 USD/hó) nem kell. Apróság: Details-ben a hely Dover → Newark, „founded by” → Sildsys, LLC.
+- **Ingyenes kitöltő** linkje bekerült minden oldal láblécébe („Free Receipt Maker”, 46a332a), a `/lp/` oldalak kivételével.
+- **SourceForge:** él, de elavult ($19, minden funkció „Not Supported”, nincs kitöltő/videó). Ebből készül a Slashdot és a topbusinesssoftware.com oldal is. Következő lépés.
+- **WebsiteLaunches:** él, tulajdonos igazolva, „No social profiles” → YouTube beírása.
+- **G2:** belépve ellenőrizni. **AlternativeTo, Capterra:** nincs nyilvános oldal, újra beküldeni (a kitöltőt free toolként).
+
 ### Nyitott teendők
 1. **Külső linkek:** a meglévő listázások frissítése (G2, SourceForge, SaaSHub, websitelaunches: új logó, képek, kitöltő, videó) + új helyek (Capterra, AlternativeTo, free tools listák); a kitöltő a fő linkszerző eszköz.
 2. **Email sötét mód:** a logó átlátszó PNG sötét felirattal, sötét módban alig látszik → fehér hátterű email-logóváltozat kell (`_shared/email-templates.ts` LOGO_HTML, `supabase/email-templates/*.html`, `delete-account`, Auth sablonok).
