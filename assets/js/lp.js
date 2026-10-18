@@ -43,11 +43,15 @@
     var mCta = document.getElementById('mCta');
     var hero = document.querySelector('.hero');
     var final = document.querySelector('.final');
+    var mLink = mCta && mCta.querySelector('a[href^="#"]');
+    var mTarget = mLink && document.querySelector(mLink.getAttribute('href'));
     if (mCta && hero) {
         var onScroll = function () {
             var pastHero = hero.getBoundingClientRect().bottom < 0;
             var atFinal = final && final.getBoundingClientRect().top < window.innerHeight;
-            mCta.classList.toggle('show-it', pastHero && !atFinal);
+            var t = mTarget && mTarget.getBoundingClientRect();
+            var atTarget = t && t.top < window.innerHeight && t.bottom > 0;
+            mCta.classList.toggle('show-it', pastHero && !atFinal && !atTarget);
         };
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
