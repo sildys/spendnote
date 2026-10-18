@@ -117,10 +117,10 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Csatorna: `@SpendNote` (márkacsatorna a felhasználó Gmail-fiókja alatt, igazolva). Fő videó: https://youtu.be/R3QuWm1g-zY (16 mp-es hero klip), Short: https://youtube.com/shorts/8mYG7g5iRC0. Csatornaképek, szövegek: `screenshots/yt/` (nem repó).
 
 ### Külső linkek — 2026-10-18 állapot
-- **SaaSHub** (support@spendnote.app): frissítve és újra ellenőrizve. Új tagline, leírás (benne az ingyenes kitöltő), 7 funkció, 9 új kép, videó, platformok, Q&A (sztori + technológia), versenytársak (Petty Cash App, Excel, Google Sheets, Expensify Cash, Zoho Expense, Zyno Expenz, Spendesk), kategóriák (Digital Receipts App elöl). A verifikáció negyedévente lejár → következő: ~2027-01-18. Featured listing (99 USD/hó) nem kell. Apróság: Details-ben a hely Dover → Newark, „founded by” → Sildsys, LLC.
+- **SaaSHub** (support@spendnote.app): frissítve és újra ellenőrizve. Új tagline, leírás (benne az ingyenes kitöltő), 7 funkció, 9 új kép, videó, platformok, Q&A (sztori + technológia), versenytársak (Petty Cash App, Excel, Google Sheets, Expensify Cash, Zoho Expense, Zyno Expenz, Spendesk), kategóriák (Digital Receipts App elöl). A verifikáció negyedévente lejár → következő: ~2027-01-18. Featured listing (99 USD/hó) nem kell. Apróság: Details-ben „founded by” → Sildsys, LLC (a hely Dover marad — az a cégcím, Newark csak a registered agent).
 - **Ingyenes kitöltő** linkje bekerült minden oldal láblécébe („Free Receipt Maker”, 46a332a), a `/lp/` oldalak kivételével.
 - **SourceForge:** él, de elavult ($19, minden funkció „Not Supported”, nincs kitöltő/videó). Ebből készül a Slashdot és a topbusinesssoftware.com oldal is. Következő lépés.
-- **WebsiteLaunches:** él, tulajdonos igazolva, „No social profiles” → YouTube beírása.
+- **WebsiteLaunches:** él, tulajdonos igazolva; cím, leírás és új képernyőkép frissítve. A „Complete Listing” (39 USD) nem kell. A „Trust evidence” az oldalról crawlol → minden láblécben About (`/spendnote-about`, új oldal, sitemapben) + YouTube (`rel="me"`) link. Néhány nap múlva ellenőrizni, hogy felismerte-e.
 - **G2:** belépve ellenőrizni. **AlternativeTo, Capterra:** nincs nyilvános oldal, újra beküldeni (a kitöltőt free toolként).
 
 ### Nyitott teendők
