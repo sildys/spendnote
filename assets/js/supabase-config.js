@@ -13,8 +13,70 @@ try {
     // ignore
 }
 
+// Android app (Trusted Web Activity) mode. Google Play forbids selling the subscription
+// outside Play Billing inside the app, so all purchase UI is hidden there. The TWA launches
+// /dashboard?source=twa; the flag lives in sessionStorage because the TWA shares Chrome's
+// localStorage, and a persistent flag would hide billing in the regular browser too.
+window.SpendNoteTWA = (() => {
+    const KEY = 'sn.twa';
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const fromTwa = params.get('source') === 'twa'
+            || String(document.referrer || '').startsWith('android-app://');
+        if (fromTwa) sessionStorage.setItem(KEY, '1');
+        return sessionStorage.getItem(KEY) === '1';
+    } catch (_) {
+        return false;
+    }
+})();
+
+if (window.SpendNoteTWA) {
+    try {
+        const path = String(window.location.pathname || '').replace(/\.html$/, '').replace(/\/+$/, '');
+        if (path === '' || path === '/index' || path === '/spendnote-pricing') {
+            window.location.replace('/dashboard');
+        }
+    } catch (_) {
+        // ignore
+    }
+
+    document.documentElement.classList.add('sn-twa');
+    const twaStyle = document.createElement('style');
+    twaStyle.textContent = [
+        'html.sn-twa a[href*="spendnote-pricing"]',
+        'html.sn-twa #changePlanBtn',
+        'html.sn-twa #manageBillingBtn',
+        'html.sn-twa #cancelSubscriptionBtn',
+        'html.sn-twa #trialExpiryBanner',
+        'html.sn-twa #tierCashBoxModalTeamWarn span'
+    ].join(',') + '{display:none !important;}';
+    document.head.appendChild(twaStyle);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const upgrade = window.SpendNoteUpgrade;
+        if (!upgrade) return;
+
+        const notice = (title, message, onClose) => {
+            document.getElementById(upgrade._overlayId)?.remove();
+            const done = typeof window.showAlert === 'function'
+                ? window.showAlert(message, { title, iconType: 'info', okLabel: 'OK' })
+                : Promise.resolve(window.alert(message));
+            Promise.resolve(done).then(() => { if (typeof onClose === 'function') onClose(); });
+        };
+        const notIncluded = (onClose) => notice('Not on your plan', 'This feature isn\u2019t included in your current plan.', onClose);
+
+        Object.keys(upgrade).forEach((name) => {
+            if (name === 'showLockOverlay' || /^show\w+Upgrade$/.test(name)) {
+                upgrade[name] = (arg) => notIncluded(name === 'showCashBoxUpgrade' ? arg : null);
+            }
+        });
+        upgrade.showTrialExpiredUpgrade = () => notice('Trial ended', 'Your free trial has ended, so new transactions can\u2019t be added right now.');
+        upgrade.showTransactionLimitUpgrade = () => notice('Limit reached', 'You\u2019ve reached the transaction limit of your current plan.');
+    });
+}
+
 if (window.SpendNoteDebug) console.log('SpendNote supabase-config.js build 20260301-2141');
-window.__spendnoteSupabaseConfigBuild = '20260407-stripe-live';
+window.__spendnoteSupabaseConfigBuild = '20261018-twa';
 
 const __spendnoteGetResponseRequestId = (resp) => {
     try {
@@ -577,6 +639,9 @@ window.SpendNoteStripe = {
     async _invoke(functionName, payload, defaultMessage) {
         if (!STRIPE_LIVE) {
             return { success: false, error: 'Billing is not yet available. We\'re launching soon!' };
+        }
+        if (window.SpendNoteTWA) {
+            return { success: false, error: 'Plan changes aren\'t available in the Android app.' };
         }
         try {
             const { data: { session }, error: sessErr } = await supabaseClient.auth.getSession();

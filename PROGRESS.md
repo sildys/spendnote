@@ -134,6 +134,8 @@ If a chat thread freezes / context is lost: in the new thread say:
 - **Főoldali árkapcsoló** (`index.html`, 0aec606): kattintható Monthly / Yearly („2 months free”) gombok a régi csúszka helyett. Éves módban a fő ár $190/év és $290/év, alatta a havi egyenérték. A „Starter” átnevezve „Standard”-ra (egyezik a pricing oldallal, az appal és a JSON-LD-vel).
 
 ### Google Play (TWA) — folyamatban
+- **2026-10-18: a D-U-N-S megérkezett.** A felhasználó indítja a Play Console szervezeti fiók regisztrációt (Organization, 25 USD; szervezeti fióknál nincs 12 tesztelős zárt teszt).
+- **Android-app mód kész** (`assets/js/supabase-config.js` eleje): a TWA a `/dashboard?source=twa` címmel induljon (PWABuilderben ez legyen a start URL!). Ilyenkor `sessionStorage` `sn.twa` jelző, `html.sn-twa` osztály; a pricing és a főoldal a dashboardra irányít, a pricing linkek, a Settings billing gombjai és a próbaidő-banner rejtve, az upgrade felugrók semleges „nincs benne a csomagban” üzenetre cserélve, a Stripe-hívások tiltva. Weben semmi nem változik (headless Chrome-mal ellenőrizve).
 - Szervezeti fiókhoz **D-U-N-S** kell: igényelve a Sildsys, LLC névre (D&B, akár 30 munkanap). Bejegyzési cím: registered agent Legalinc, 131 Continental Dr Suite 305, Newark DE 19713.
 - **Amerikai telefonszám:** Quo (aktív). Az üzenetrögzítő emailben értesít a hello@sildsys.com címre. **Az előfizetést kb. 10-23-ig rendezni kell.**
 - A D-U-N-S megérkezése után: PWABuilder csomag, `/.well-known/assetlinks.json`, a fizetési UI elrejtése a TWA-ban (a Play Billing 15% előfizetésnél), listing szövegek és képernyőképek.
