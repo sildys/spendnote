@@ -177,64 +177,64 @@
         /* TOGGLE */
         .pricing-toggle {
             display: flex;
-            justify-content: center;
+            width: fit-content;
+            max-width: 100%;
+            margin: 0 auto 3rem;
+            padding: 4px;
+            gap: 4px;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+        }
+
+        .billing-option {
+            display: inline-flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-        }
-
-        .toggle-label {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-muted);
+            gap: 0.5rem;
+            padding: 0.6rem 1.3rem;
+            border: 0;
+            border-radius: 100px;
+            background: transparent;
+            color: #475569;
+            font: inherit;
+            font-weight: 700;
+            font-size: 1rem;
+            white-space: nowrap;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
         }
 
-        .toggle-label.active {
-            color: var(--text);
+        .billing-option:hover {
+            color: #0f172a;
         }
 
-        .toggle-switch {
-            width: 60px;
-            height: 32px;
-            background: #e5e7eb;
-            border-radius: 32px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .toggle-switch.active {
-            background: var(--primary);
-        }
-
-        .toggle-slider {
-            width: 24px;
-            height: 24px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            transition: transform 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .toggle-switch.active .toggle-slider {
-            transform: translateX(28px);
+        .billing-option.active {
+            background: #059669;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
         }
 
         .save-badge {
-            background: var(--orange);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-left: 6px;
+            display: inline-block;
+            background: #d1fae5;
+            color: #047857;
+            padding: 0.2rem 0.6rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .billing-option.active .save-badge {
+            background: rgba(255, 255, 255, 0.22);
+            color: #ffffff;
+        }
+
+        @media (max-width: 400px) {
+            .billing-option {
+                padding: 0.55rem 0.9rem;
+                font-size: 0.95rem;
+            }
         }
 
         /* PRICING GRID */
@@ -631,18 +631,6 @@
                 font-size: 1rem;
             }
 
-            .pricing-toggle {
-                gap: 0.5rem;
-                flex-wrap: wrap;
-                justify-content: flex-start;
-            }
-
-            .save-badge {
-                margin-left: 0;
-                margin-top: 0.35rem;
-                display: inline-flex;
-            }
-
             .pricing-card {
                 padding: 2rem 1.25rem;
                 border-radius: 18px;
@@ -707,14 +695,11 @@
                 <div class="pricing-reassurance-item"><i class="fas fa-bolt"></i><span>Designed for speed: one form &rarr; PDF &rarr; done.</span></div>
             </div>
 
-            <div class="pricing-toggle">
-                <span class="toggle-label active" id="monthlyLabel">Monthly</span>
-                <div class="toggle-switch" id="pricingToggle">
-                    <div class="toggle-slider"></div>
-                </div>
-                <span class="toggle-label" id="yearlyLabel">
+            <div class="pricing-toggle" role="group" aria-label="Billing period">
+                <button type="button" class="billing-option active" data-billing="monthly" aria-pressed="true">Monthly</button>
+                <button type="button" class="billing-option" data-billing="yearly" aria-pressed="false">
                     Yearly <span class="save-badge">2 months free</span>
-                </span>
+                </button>
             </div>
 
             <div class="pricing-grid" id="pricingCards">
@@ -831,10 +816,10 @@
                     ] 
                 },
                 standard: { 
-                    price: '$15.83', 
-                    breakdown: 'billed annually — $190/yr',
+                    price: '$190', 
+                    breakdown: 'just $15.83/month, billed once a year',
                     savings: 'Save $38 vs paying monthly',
-                    period: '/month',
+                    period: 'per year',
                     bestFor: 'Solo users & small teams',
                     features: [
                         '2 Cash Boxes',
@@ -848,10 +833,10 @@
                     popular: true
                 },
                 pro: { 
-                    price: '$24.17', 
-                    breakdown: 'billed annually — $290/yr',
+                    price: '$290', 
+                    breakdown: 'just $24.17/month, billed once a year',
                     savings: 'Save $58 vs paying monthly',
-                    period: '/month',
+                    period: 'per year',
                     bestFor: 'Growing teams',
                     features: [
                         'Customizable text & labels (localization)',
@@ -1175,27 +1160,25 @@
             applyRecommendedPlanHint();
         }
 
-        function switchToYearly(e) {
-            e.preventDefault();
-            document.getElementById('pricingToggle').click();
+        function setBilling(type) {
+            isYearly = type === 'yearly';
+            document.querySelectorAll('.billing-option').forEach(function(btn) {
+                const on = btn.dataset.billing === type;
+                btn.classList.toggle('active', on);
+                btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+            renderPricing(type);
         }
 
-        document.getElementById('pricingToggle').addEventListener('click', function() {
-            isYearly = !isYearly;
-            this.classList.toggle('active');
-            
-            const monthlyLabel = document.getElementById('monthlyLabel');
-            const yearlyLabel = document.getElementById('yearlyLabel');
-            
-            if (isYearly) {
-                monthlyLabel.classList.remove('active');
-                yearlyLabel.classList.add('active');
-                renderPricing('yearly');
-            } else {
-                monthlyLabel.classList.add('active');
-                yearlyLabel.classList.remove('active');
-                renderPricing('monthly');
-            }
+        function switchToYearly(e) {
+            e.preventDefault();
+            setBilling('yearly');
+        }
+
+        document.querySelectorAll('.billing-option').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                setBilling(btn.dataset.billing);
+            });
         });
 
         renderPricing('monthly');
