@@ -121,7 +121,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - **Ingyenes kitöltő** linkje bekerült minden oldal láblécébe („Free Receipt Maker”, 46a332a), a `/lp/` oldalak kivételével.
 - **SourceForge:** él, de elavult ($19, minden funkció „Not Supported”, nincs kitöltő/videó). Ebből készül a Slashdot és a topbusinesssoftware.com oldal is. Következő lépés.
 - **WebsiteLaunches:** él, tulajdonos igazolva; cím, leírás és új képernyőkép frissítve. A „Complete Listing” (39 USD) nem kell. A „Trust evidence” az oldalról crawlol → minden láblécben About (`/spendnote-about`, új oldal, sitemapben) + YouTube (`rel="me"`) link. Néhány nap múlva ellenőrizni, hogy felismerte-e.
-- **G2:** belépve ellenőrizni. **AlternativeTo, Capterra:** nincs nyilvános oldal, újra beküldeni (a kitöltőt free toolként).
+- **G2** (my.g2.com, admin, „Claimed”): 2026-10-18 frissítve. Új leírás, 6 új kép (ennyi a maximum; a régi márciusiak törölve), árazás 3 csomaggal (Free Trial, Standard $19, Pro $29) + pricing leírás. A banner, a CTA és a videó csak a fizetős Starterben érhető el, ezeket kihagytuk. G2 Coins: a „Review Incentive Credits” (75 coin) 100 USD-nyi, G2 által adott ajándékkártya az értékelőknek. Akkor váltsuk be, amikor 2–3 valódi felhasználót meg tudunk kérni értékelésre; a kredit lejár. **AlternativeTo, Capterra:** nincs nyilvános oldal, újra beküldeni (a kitöltőt free toolként).
 
 ### Nyitott teendők
 1. **Külső linkek:** a meglévő listázások frissítése (G2, SourceForge, SaaSHub, websitelaunches: új logó, képek, kitöltő, videó) + új helyek (Capterra, AlternativeTo, free tools listák); a kitöltő a fő linkszerző eszköz.
