@@ -108,7 +108,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - **Termékfrissítő levél** (mobil javítások, telepíthető app, új logó): új `send-announcement` edge function (7cbc32a; csak service-role kulccsal hívható, test/dry_run/all+SEND_ALL, idempotens batchek). 2026-10-17-én kiment 27 megerősített felhasználónak. Hívó szkript a repón kívül: `demo-recorder/announce.ps1`.
 
 ### Google Ads állapot (2026-10-18 este): **a Search - Receipts kampány szüneteltetve**
-- 10-18: 13 kattintás és 15,90 USD (Receipt Generator csoport), 0 regisztráció, 1 `free_receipt_start`, 0 `free_receipt_print`. Az LP-n a GA4 nem vár consentre, tehát a mérés nem hiányos. Újraindítás előtt át kell nézni a keresési kifejezéseket (rossz szándékú keresések → kizárások) és a Clarity felvételeit a `/lp/receipt-generator` oldalról (megértik-e, hogy ott azonnal kitölthetnek egy nyugtát).
+- 10-18: 13 kattintás és 15,90 USD (Receipt Generator csoport), 0 regisztráció, 1 `free_receipt_start`, 0 `free_receipt_print`. Az LP-n a GA4 nem vár consentre, tehát a mérés nem hiányos. Újraindítás előtt át kell nézni a keresési kifejezéseket (rossz szándékú keresések → kizárások) és a Clarity felvételeit a `/lp/receipt-generator` oldalról (megértik-e, hogy ott azonnal kitölthetnek egy nyugtát). Terv: hétköznapi újrapróba, de előbb a keresési kifejezések tisztítása, és hirdetésütemezés H–P, amerikai munkaidő (ET 9–17 = magyar idő szerint 15–23).
 
 ### Google Ads állapot (2026-10-17 este)
 - **Search - Receipts:** 10 USD/nap, Maximize clicks, max CPC 1,50. Fut: **Receipt Generator** (kitöltős kulcsszavak, exact) + **Receipt Book**. Szünetel: Cash Receipt, Deposit Receipt, Handover Receipt. **Crews & Teams kampány szünetel.**
