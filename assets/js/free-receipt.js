@@ -39,7 +39,6 @@
                     '</div></div>' +
                     '<div class="fr-field"><label for="fr-date">Date</label><input id="fr-date" name="date" type="date"></div>' +
                 '</div>' +
-                '<div class="fr-field"><label for="fr-method">Paid in</label><select id="fr-method" name="method"><option>Cash</option><option>Check</option><option>Bank transfer</option><option>Card</option><option>Other</option></select></div>' +
                 '<label class="fr-check"><input type="checkbox" id="fr-two" name="two" checked> Print 2 copies on one page (one for each side)</label>' +
                 '<div class="fr-actions">' +
                     '<button type="submit" class="btn btn-go btn-big" id="frPrintBtn"><i class="fas fa-print"></i> Print or save as PDF</button>' +
@@ -150,7 +149,7 @@
         total.appendChild(el('span', null, 'Total received'));
         total.appendChild(el('strong', null, amountText || '________'));
         r.appendChild(total);
-        r.appendChild(el('div', 'fr-r-method', 'Paid in: ' + (d.method || 'Cash')));
+        r.appendChild(el('div', 'fr-r-method', 'Paid in: Cash'));
 
         var sigs = el('div', 'fr-r-sigs');
         sigs.appendChild(el('div', 'fr-r-sig', 'Paid by (signature)'));
@@ -169,7 +168,7 @@
         return {
             title: f.title.value.trim(), no: f.no.value.trim(), from: f.from.value.trim(), to: f.to.value.trim(),
             for: f['for'].value.trim(), cur: f.cur.value, amount: f.amount.value.trim(), date: f.date.value,
-            method: f.method.value, two: f.two.checked
+            two: f.two.checked
         };
     }
 
@@ -192,7 +191,6 @@
         f['for'].value = '';
         f.amount.value = '';
         if (s && s.cur != null) f.cur.value = s.cur;
-        if (s && s.method) f.method.value = s.method;
         f.two.checked = !s || s.two !== false;
         f.date.value = today();
     }
