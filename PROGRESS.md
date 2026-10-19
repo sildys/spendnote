@@ -152,8 +152,28 @@ If a chat thread freezes / context is lost: in the new thread say:
 - **WebsiteLaunches:** él, tulajdonos igazolva; cím, leírás és új képernyőkép frissítve. A „Complete Listing” (39 USD) nem kell. A „Trust evidence” az oldalról crawlol → minden láblécben About (`/spendnote-about`, új oldal, sitemapben) + YouTube (`rel="me"`) link. Néhány nap múlva ellenőrizni, hogy felismerte-e.
 - **G2** (my.g2.com, admin, „Claimed”): 2026-10-18 frissítve. Új leírás, 6 új kép (ennyi a maximum; a régi márciusiak törölve), árazás 3 csomaggal (Free Trial, Standard $19, Pro $29) + pricing leírás. A banner, a CTA és a videó csak a fizetős Starterben érhető el, ezeket kihagytuk. G2 Coins: a „Review Incentive Credits” (75 coin) 100 USD-nyi, G2 által adott ajándékkártya az értékelőknek. Akkor váltsuk be, amikor 2–3 valódi felhasználót meg tudunk kérni értékelésre; a kredit lejár. **AlternativeTo, Capterra:** nincs nyilvános oldal, újra beküldeni (a kitöltőt free toolként).
 
+### Hétvége 2026-10-24/25 — katalógusok (a felhasználó csinálja)
+A Bing egyetlen külső linket sem lát. A közönséges link (nincs rajta `nofollow` / `ugc` / `sponsored`) számít; a saját közösségi profil és a komment nem. A „free dofollow backlink” hirdetésű linkgyűjtő oldalakat (directory-index, seolisting, gsdirectory) kihagyni. AI-katalógusokat is (a SpendNote nem AI-eszköz). Uneed ingyenes sora bezárt, BetaList fizetős: mindkettő kimarad. Legfeljebb egy jelvény a láblécben. Mindenhol ugyanaz a leírás, céges email: `support@spendnote.app`. Beadás előtt egy élő listázáson a weboldal-link `rel` mezője: ha `nofollow`, az a helyezés miatt kihagyható. A link típusa 2026. szeptember–októberi ellenőrzés, nem friss mérés.
+
+**Már fent van, csak frissíteni**
+- SaaSHub: a domain-emailes ellenőrzés éljen (negyedévente lejár, következő ~2027-01-18). A felső gomb a közönséges link.
+- SourceForge: elavult ($19, funkciók „Not Supported”, nincs kitöltő). Ebből készül a Slashdot. A link maga gyakran nofollow, emberek miatt kell.
+- G2: kész, weboldal-link nincs is. WebsiteLaunches: kész.
+
+**Ingyenes, vevők nézik (a link gyakran nofollow)**
+- Capterra (vendors.capterra.com), GetApp, Software Advice: egy család, egy leírás mindháromra.
+- AlternativeTo: Excel, Google Sheets és a petty cash appok mellé. Új listázás nofollow.
+- alternative.me, Crozdesk, SaaSworthy, SaaSGenius, TrustRadius, Clutch.
+- Crunchbase (nofollow, cégkeresésnél nézik), F6S, Product Hunt (nofollow, egy nap forgalom).
+
+**Ingyenes, a linket közönségesnek mérték**
+- MicroLaunch (siettetés 39 USD, nem kell), Awesome Indie, PitchWall (~30 nap), Launching Next, Indie Hackers (a saját bejegyzésben lévő link számít), Brick Launch, PeerPush, DodoDirectory.
+
+**Közönséges link, cserébe jelvény vagy lábléc-link.** Ha egyet választunk: Fazier vagy Startup Fame.
+- Fazier (kiemelés 29 USD-tól, nem kell), Startup Fame, Twelve Tools (72 óra), Findly.tools, Turbo0 (~2 hét), ScrollLaunch (a link csak addig él, amíg a jelvény fent van).
+
 ### Nyitott teendők
-1. **Külső linkek:** a meglévő listázások frissítése (G2, SourceForge, SaaSHub, websitelaunches: új logó, képek, kitöltő, videó) + új helyek (Capterra, AlternativeTo, free tools listák); a kitöltő a fő linkszerző eszköz.
+1. **Külső linkek:** hétvége 2026-10-24/25, a fenti katalóguslista. A meglévő listázások frissítése (SourceForge) ugyanebben a körben.
 2. **Email sötét mód:** a logó átlátszó PNG sötét felirattal, sötét módban alig látszik → fehér hátterű email-logóváltozat kell (`_shared/email-templates.ts` LOGO_HTML, `supabase/email-templates/*.html`, `delete-account`, Auth sablonok).
 3. GA4 `free_receipt_print` importja másodlagos konverzióként a Google Ads-be.
 4. `www.spendnote.app` → 301 a gyökérre (Cloudflare Redirect Rule; most 200-at ad, a canonical véd).
