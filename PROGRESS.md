@@ -121,6 +121,11 @@ If a chat thread freezes / context is lost: in the new thread say:
 ### YouTube
 - Csatorna: `@SpendNote` (márkacsatorna a felhasználó Gmail-fiókja alatt, igazolva). Fő videó: https://youtu.be/R3QuWm1g-zY (16 mp-es hero klip), Short: https://youtube.com/shorts/8mYG7g5iRC0. Csatornaképek, szövegek: `screenshots/yt/` (nem repó).
 
+### IndexNow (2026-10-19)
+- A Cloudflare Crawler Hints csak képeket, videókat, faviconokat és a robots.txt-t küldte be, **HTML-oldalt soha**, ezért a Bing nem kapott értesítést az oldalváltozásokról.
+- Megoldás (1df3c09): kulcsfájl a gyökérben (`17911d06878280c42f2657255cffaab6.txt`) és `scripts/indexnow.mjs`. **Minden indexelt oldalt érintő deploy után futtatni:** `node scripts/indexnow.mjs` (az egész sitemap) vagy `node scripts/indexnow.mjs /oldal1 /oldal2`.
+- 10-19 02:40: mind az 51 sitemap-URL beküldve, HTTP 202.
+
 ### Külső linkek — 2026-10-18 állapot
 - **SaaSHub** (support@spendnote.app): frissítve és újra ellenőrizve. Új tagline, leírás (benne az ingyenes kitöltő), 7 funkció, 9 új kép, videó, platformok, Q&A (sztori + technológia), versenytársak (Petty Cash App, Excel, Google Sheets, Expensify Cash, Zoho Expense, Zyno Expenz, Spendesk), kategóriák (Digital Receipts App elöl). A verifikáció negyedévente lejár → következő: ~2027-01-18. Featured listing (99 USD/hó) nem kell. Apróság: Details-ben „founded by” → Sildsys, LLC (a hely Dover marad — az a cégcím, Newark csak a registered agent).
 - **Ingyenes kitöltő** linkje bekerült minden oldal láblécébe („Free Receipt Maker”, 46a332a), a `/lp/` oldalak kivételével.
