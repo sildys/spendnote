@@ -1303,7 +1303,23 @@
 
             if (summaryEl) {
                 const lines = Array.isArray(summaryLines) ? summaryLines : [];
-                const closingHtml = balance ? balanceRow(balance.closingLabel, balance.closingText, 'margin-top:12px;background:#ecfdf5;border-color:#a7f3d0;') : '';
+                const blankLine = (label) => `
+                        <div style="display:flex;align-items:flex-end;gap:12px;">
+                          <span style="font-size:12px;font-weight:700;color:#0f172a;white-space:nowrap;">${escapeHtml(label)}</span>
+                          <span style="flex:1;border-bottom:1px solid #94a3b8;height:22px;"></span>
+                        </div>`;
+                const countHtml = balance ? `
+                      <div style="margin-top:12px;border:1px dashed #94a3b8;border-radius:10px;padding:14px 16px;page-break-inside:avoid;">
+                        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:10px;">Cash count (fill in by hand)</div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;">
+                          ${blankLine('Cash counted')}
+                          ${blankLine('Over / (short)')}
+                          ${blankLine('Counted by')}
+                          ${blankLine('Verified by')}
+                        </div>
+                        <div style="font-size:11px;color:#64748b;margin-top:10px;">Record any difference in SpendNote as a cash in or cash out so the balance matches the cash on hand.</div>
+                      </div>` : '';
+                const closingHtml = balance ? balanceRow(balance.closingLabel, balance.closingText, 'margin-top:12px;background:#ecfdf5;border-color:#a7f3d0;') + countHtml : '';
                 if (!lines.length) {
                     summaryEl.innerHTML = closingHtml;
                 } else {
