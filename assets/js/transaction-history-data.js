@@ -1140,7 +1140,7 @@
         const overlayId = 'spendnoteBulkPdfOverlay';
         const printStyleId = 'spendnoteBulkPdfPrintStyle';
 
-        function showPdfOverlay(rowsForPdf, title, summaryLines, metaText) {
+        function showPdfOverlay(rowsForPdf, title, summaryLines, metaText, balance) {
             let overlay = document.getElementById(overlayId);
             if (!overlay) {
                 overlay = document.createElement('div');
@@ -1188,6 +1188,7 @@
                     </div>
                     <!-- Table -->
                     <div id="${overlayId}Content" style="padding:24px 32px;max-height:55vh;overflow:auto;background:#fff;">
+                      <div id="${overlayId}Opening"></div>
                       <table style="width:100%;border-collapse:collapse;">
                         <thead>
                           <tr style="background:#f1f5f9;border-radius:8px;">
@@ -1289,10 +1290,22 @@
                 }).join('');
             }
 
+            const balanceRow = (label, value, extraStyle) => `
+                      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 16px;${extraStyle || ''}">
+                        <span style="font-size:13px;font-weight:700;color:#0f172a;">${escapeHtml(label)}</span>
+                        <span style="font-size:15px;font-weight:800;color:#0f172a;">${escapeHtml(value)}</span>
+                      </div>`;
+
+            const openingEl = document.getElementById(`${overlayId}Opening`);
+            if (openingEl) {
+                openingEl.innerHTML = balance ? balanceRow(balance.openingLabel, balance.openingText, 'margin-bottom:16px;') : '';
+            }
+
             if (summaryEl) {
                 const lines = Array.isArray(summaryLines) ? summaryLines : [];
+                const closingHtml = balance ? balanceRow(balance.closingLabel, balance.closingText, 'margin-top:12px;background:#ecfdf5;border-color:#a7f3d0;') : '';
                 if (!lines.length) {
-                    summaryEl.innerHTML = '';
+                    summaryEl.innerHTML = closingHtml;
                 } else {
                     summaryEl.innerHTML = `
                       <div style="background:linear-gradient(135deg,#f0fdf4 0%,#ecfeff 100%);border:1px solid #d1fae5;border-radius:12px;padding:18px 20px;">
@@ -1318,6 +1331,7 @@
                           </tbody>
                         </table>
                       </div>
+                      ${closingHtml}
                     `;
                 }
             }
@@ -1413,6 +1427,69 @@
                 }));
 
             showPdfOverlay(rows, 'Selected transactions');
+        }
+
+        async function sumNetForCashBox(cashBoxId, startDate, endDate) {
+            const perPage = 1000;
+            let net = 0;
+            for (let page = 1; page <= 200; page += 1) {
+                const res = await window.db.transactions.getPage({
+                    select: 'id, type, amount, status',
+                    page,
+                    perPage,
+                    cashBoxIds: [cashBoxId],
+                    startDate: startDate || null,
+                    endDate: endDate || null
+                });
+                if (res?.error) throw new Error(res.error);
+                const rows = Array.isArray(res?.data) ? res.data : [];
+                rows.forEach((tx) => {
+                    if (safeText(tx?.status, 'active').toLowerCase() === 'voided') return;
+                    const amt = Number(tx?.amount);
+                    if (!Number.isFinite(amt)) return;
+                    const t = safeText(tx?.type, '').toLowerCase();
+                    if (t === 'income') net += amt;
+                    if (t === 'expense') net -= amt;
+                });
+                if (rows.length < perPage) break;
+            }
+            return net;
+        }
+
+        // Opening/closing balances only reconcile with the report when it covers every transaction of one cash box.
+        async function computeReportBalances(serverCtx) {
+            const ids = Array.isArray(serverCtx?.cashBoxIds) ? serverCtx.cashBoxIds : null;
+            if (!ids || ids.length !== 1 || !window.db?.cashBoxes?.getById) return null;
+            const f = serverCtx.filters || {};
+            const createdByOptions = qsa('option', qs('#filterCreatedBy') || document.createElement('select')).filter((o) => safeText(o.value, ''));
+            const narrowedByCreator = f.createdById && createdByOptions.length > 1;
+            if (serverCtx.type || narrowedByCreator || f.txIdQuery || f.contactQuery
+                || (f.amountMin !== null && f.amountMin !== undefined)
+                || (f.amountMax !== null && f.amountMax !== undefined)) return null;
+
+            const cb = await window.db.cashBoxes.getById(ids[0]);
+            const current = Number(cb?.current_balance);
+            if (!cb || !Number.isFinite(current)) return null;
+
+            const nextDay = (iso) => {
+                const [y, m, d] = String(iso).split('-').map(Number);
+                return new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
+            };
+            const afterNet = f.dateTo ? await sumNetForCashBox(ids[0], nextDay(f.dateTo), null) : 0;
+            const closing = current - afterNet;
+            const periodNet = await sumNetForCashBox(ids[0], f.dateFrom, f.dateTo);
+            const opening = closing - periodNet;
+
+            const currency = safeText(cb.currency, 'USD');
+            const fmt = (n) => `${n < -0.004 ? '-' : ''}${Math.abs(n).toFixed(2)} ${currency}`;
+            const from = formatFilterDate(f.dateFrom || '');
+            const to = formatFilterDate(f.dateTo || '');
+            return {
+                openingLabel: from ? `Opening balance (start of ${from})` : 'Opening balance',
+                openingText: fmt(opening),
+                closingLabel: to ? `Closing balance (end of ${to})` : 'Closing balance (now)',
+                closingText: fmt(closing)
+            };
         }
 
         async function exportFilteredPdf() {
@@ -1605,11 +1682,19 @@
                     `Amount range: ${amountText}`
                 ];
 
+                let balance = null;
+                try {
+                    balance = await computeReportBalances(serverCtx);
+                } catch (err) {
+                    console.warn('[TxHistory] Could not compute report balances:', err);
+                }
+
                 showPdfOverlay(
                     rowsForPdf,
                     `Filtered transactions (${rowsForPdf.length})`,
                     summaryLines,
-                    metaLines.join('\n')
+                    metaLines.join('\n'),
+                    balance
                 );
             } finally {
                 if (btn) btn.disabled = false;
