@@ -1,0 +1,48 @@
+/* Free no-signup daily cash report maker. Builds on free-receipt.css (fr-* layout, #frPrint print rules). */
+.cr-group { border: 1px solid var(--line, #e5e7eb); border-radius: 12px; padding: 0.8rem 0.8rem 0.5rem; margin-bottom: 0.9rem; background: #fcfdfc; }
+.cr-group-head { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; font-weight: 800; color: var(--ink-2, #1f2937); margin-bottom: 0.55rem; }
+.cr-group-head i { color: var(--g, #059669); margin-right: 0.3rem; }
+.cr-sum { color: var(--g-dark, #047857); }
+.cr-line { display: grid; grid-template-columns: minmax(0, 1fr) 6.5rem 2.2rem; gap: 0.45rem; margin-bottom: 0.45rem; }
+.cr-line input {
+    font: inherit; font-size: 0.95rem; padding: 0.55rem 0.65rem; border: 1.5px solid #d1d5db; border-radius: 9px;
+    background: #fff; color: var(--ink, #0b1220); width: 100%; min-width: 0; box-sizing: border-box;
+}
+.cr-line input:focus { outline: none; border-color: var(--g, #059669); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15); }
+.cr-line .cr-amt { text-align: right; }
+main .cr-del { background: none; border: none; color: #9ca3af; cursor: pointer; border-radius: 8px; padding: 0; box-shadow: none; }
+main .cr-del:hover { color: #dc2626; background: #fef2f2; }
+main .cr-add { background: none; border: none; color: var(--g-dark, #047857); font-weight: 700; font-size: 0.88rem; padding: 0.35rem 0; cursor: pointer; box-shadow: none; }
+main .cr-add i { margin-right: 0.3rem; }
+
+/* ---------- The report sheet (screen preview + print) ---------- */
+.cr-r-sub { font-size: 12px; color: #4b5563; margin-top: 0.15rem; }
+.cr-r-open { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-weight: 700; padding: 0.2rem 0 0.7rem; }
+.cr-r-open .cr-blank { width: 8rem; }
+.cr-r-strong { font-weight: 800; }
+.cr-r-block { margin-bottom: 0.8rem; }
+.cr-r-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.cr-r-table th { text-align: left; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; border-bottom: 1.5px solid #111827; padding: 0.3rem 0.2rem; }
+.cr-r-table td { border-bottom: 1px solid #e5e7eb; padding: 0.38rem 0.2rem; word-break: break-word; }
+.cr-r-table .cr-r-empty td { height: 1.75em; border-bottom-color: #c4c9d0; }
+.cr-r-table .cr-r-num { text-align: right; width: 7.5rem; white-space: nowrap; }
+.cr-r-table .cr-r-total-row td { font-weight: 800; border-bottom: none; border-top: 1.5px solid #111827; }
+.cr-r-summary { border: 1.5px solid #111827; border-radius: 8px; padding: 0.55rem 0.8rem; margin: 0.9rem 0 0.8rem; }
+.cr-r-sum-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.22rem 0; }
+.cr-r-sum-row.cr-r-key { font-weight: 800; border-top: 1px solid #e5e7eb; margin-top: 0.15rem; padding-top: 0.35rem; }
+.cr-r-sum-row .cr-blank-num { width: 7rem; display: inline-block; }
+.cr-r-sum-row.cr-ok b { color: #047857; }
+.cr-r-sum-row.cr-warn b { color: #b45309; }
+.cr-r-sum-row.cr-bad b { color: #b91c1c; }
+.cr-r-notes-k { margin-top: 0.4rem; }
+.cr-r-notes { min-height: 2.6em; font-size: 12.5px; word-break: break-word; }
+.cr-r-notes .fr-blank { margin-bottom: 0.45rem; }
+
+@media (max-width: 520px) {
+    .cr-line { grid-template-columns: minmax(0, 1fr) 5.6rem 2rem; }
+    .cr-r-table .cr-r-num { width: 6rem; }
+}
+
+@media print {
+    #frPrint .cr-report { border: none; padding: 0; font-size: 12.5px; }
+}
