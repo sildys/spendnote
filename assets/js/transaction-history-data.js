@@ -1576,7 +1576,8 @@
                   ${blank('Verified by')}
                 </div>
                 <div style="font-size:11px;color:#64748b;margin-top:14px;">Record any over / short in SpendNote as a cash in or cash out, so tomorrow's opening balance matches the cash on hand.</div>
-              </div>`;
+              </div>
+              <div style="font-size:10px;color:#94a3b8;text-align:center;margin-top:14px;">Internal record &mdash; not an accounting or tax document.</div>`;
         }
 
         function openDailyCashReport() {
