@@ -1415,9 +1415,11 @@
             showPdfOverlay(rows, 'Selected transactions');
         }
 
-        async function sumNetForCashBox(cashBoxId, startDate, endDate) {
+        async function sumNetCentsForCashBox(cashBoxId, startDate, endDate) {
             const perPage = 1000;
-            let net = 0;
+            let netCents = 0;
+            let fetched = 0;
+            let total = 0;
             for (let page = 1; page <= 200; page += 1) {
                 const res = await window.db.transactions.getPage({
                     select: 'id, type, amount, status',
@@ -1425,21 +1427,26 @@
                     perPage,
                     cashBoxIds: [cashBoxId],
                     startDate: startDate || null,
-                    endDate: endDate || null
+                    endDate: endDate || null,
+                    sortKey: 'id',
+                    sortDir: 'asc'
                 });
                 if (res?.error) throw new Error(res.error);
                 const rows = Array.isArray(res?.data) ? res.data : [];
+                total = Number(res?.count) || 0;
+                fetched += rows.length;
                 rows.forEach((tx) => {
                     if (safeText(tx?.status, 'active').toLowerCase() === 'voided') return;
                     const amt = Number(tx?.amount);
                     if (!Number.isFinite(amt)) return;
                     const t = safeText(tx?.type, '').toLowerCase();
-                    if (t === 'income') net += amt;
-                    if (t === 'expense') net -= amt;
+                    if (t === 'income') netCents += Math.round(amt * 100);
+                    if (t === 'expense') netCents -= Math.round(amt * 100);
                 });
                 if (rows.length < perPage) break;
             }
-            return net;
+            if (fetched < total) throw new Error('Not every transaction could be loaded.');
+            return netCents;
         }
 
         const dailyOverlayId = 'spendnoteDailyCashReport';
@@ -1455,13 +1462,17 @@
         }
 
         // Balances are derived backwards from the live cash box balance, so voided pairs and later days net out exactly.
+        // Sums run in whole cents: adding cents as floats can land a hair below zero and print as -$0.00.
         async function loadDailyCashReport(cashBoxId, dateIso) {
             const cb = await window.db.cashBoxes.getById(cashBoxId);
             const current = Number(cb?.current_balance);
             if (!cb || !Number.isFinite(current)) throw new Error('Cash box not found.');
 
-            const afterNet = await sumNetForCashBox(cashBoxId, nextIsoDate(dateIso), null);
-            const closing = current - afterNet;
+            const toCents = (v) => Math.round((Number(v) || 0) * 100);
+            const fromCents = (c) => c / 100 + 0;
+
+            const afterCents = await sumNetCentsForCashBox(cashBoxId, nextIsoDate(dateIso), null);
+            const closingCents = toCents(current) - afterCents;
 
             const res = await window.db.transactions.getPage({
                 select: txSelect,
@@ -1474,20 +1485,25 @@
                 sortDir: 'asc'
             });
             if (res?.error) throw new Error(res.error);
-            const txs = (Array.isArray(res?.data) ? res.data : [])
-                .filter((tx) => safeText(tx?.status, 'active').toLowerCase() !== 'voided');
+            const dayRows = Array.isArray(res?.data) ? res.data : [];
+            if ((Number(res?.count) || 0) > dayRows.length) throw new Error('Not every transaction could be loaded.');
+            const txs = dayRows.filter((tx) => safeText(tx?.status, 'active').toLowerCase() !== 'voided');
 
             const currency = safeText(cb.currency, 'USD');
-            const toLine = (tx) => ({
-                id: getDisplayId(tx),
-                contact: safeText(tx?.contact?.name || tx?.contact_name, ''),
-                description: safeText(tx?.description, ''),
-                amount: Number(tx?.amount) || 0
-            });
+            const toLine = (tx) => {
+                const cents = toCents(tx?.amount);
+                return {
+                    id: getDisplayId(tx),
+                    contact: safeText(tx?.contact?.name || tx?.contact_name, ''),
+                    description: safeText(tx?.description, ''),
+                    cents,
+                    amount: fromCents(cents)
+                };
+            };
             const ins = txs.filter((tx) => safeText(tx?.type, '').toLowerCase() === 'income').map(toLine);
             const outs = txs.filter((tx) => safeText(tx?.type, '').toLowerCase() === 'expense').map(toLine);
-            const totalIn = ins.reduce((s, l) => s + l.amount, 0);
-            const totalOut = outs.reduce((s, l) => s + l.amount, 0);
+            const inCents = ins.reduce((s, l) => s + l.cents, 0);
+            const outCents = outs.reduce((s, l) => s + l.cents, 0);
 
             return {
                 cashBoxName: safeText(cb.name, 'Cash box'),
@@ -1495,10 +1511,10 @@
                 dateIso,
                 ins,
                 outs,
-                totalIn,
-                totalOut,
-                opening: closing - (totalIn - totalOut),
-                closing
+                totalIn: fromCents(inCents),
+                totalOut: fromCents(outCents),
+                opening: fromCents(closingCents - (inCents - outCents)),
+                closing: fromCents(closingCents)
             };
         }
 
