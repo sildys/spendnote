@@ -126,6 +126,12 @@ If a chat thread freezes / context is lost: in the new thread say:
 ### YouTube
 - Csatorna: `@SpendNote` (márkacsatorna a felhasználó Gmail-fiókja alatt, igazolva). Fő videó: https://youtu.be/R3QuWm1g-zY (16 mp-es hero klip), Short: https://youtube.com/shorts/8mYG7g5iRC0. Csatornaképek, szövegek: `screenshots/yt/` (nem repó).
 
+### Bing-kulcsszavak (export 2026-10-19, `spendnote.app_KeywordReport_10_19_2026.csv`)
+- Összesen 664 kulcsszó, 2017 megjelenés, 77 kattintás. A kattintások hosszú kérdésekből jönnek az 1–5. helyen (voucher, paid out log, custodian, float, márkanév).
+- **Első oldalas, de 0 kattintásos nagy kifejezések:** daily cash report (301 megj., 7,9. hely), cash handover (164; 8,8), petty cash float (94; 5,5), end of day sheet (81; 7,7), cash up sheets end of day (57; 7,8), petty cash receipt (47; 7,3), cash count sheet (26; 7,8). A „daily / end of day / cash up” téma összesen 663 megjelenés, 8 kattintás.
+- Ok: kitölthető, nyomtatható lapot keresnek, a `daily-cash-report-template` és a `cash-count-sheet-template` viszont csak magyarázó cikk.
+- **Terv:** ingyenes, regisztráció nélküli **napi pénztárjelentés-kitöltő** és **címletszámoló** (összeadás, eltérés a várt egyenlegtől, nyomtatás/PDF) erre a két oldalra, „Free … Template — Fill In & Print” címmel, a nyugtakitöltő mintájára; utána IndexNow-beküldés.
+
 ### IndexNow (2026-10-19)
 - A Cloudflare Crawler Hints csak képeket, videókat, faviconokat és a robots.txt-t küldte be, **HTML-oldalt soha**, ezért a Bing nem kapott értesítést az oldalváltozásokról.
 - Megoldás (1df3c09): kulcsfájl a gyökérben (`17911d06878280c42f2657255cffaab6.txt`) és `scripts/indexnow.mjs`. **Minden indexelt oldalt érintő deploy után futtatni:** `node scripts/indexnow.mjs` (az egész sitemap) vagy `node scripts/indexnow.mjs /oldal1 /oldal2`.
