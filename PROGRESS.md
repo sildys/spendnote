@@ -132,6 +132,14 @@ If a chat thread freezes / context is lost: in the new thread say:
 - Ok: kitölthető, nyomtatható lapot keresnek, a `daily-cash-report-template` és a `cash-count-sheet-template` viszont csak magyarázó cikk.
 - **Terv:** ingyenes, regisztráció nélküli **napi pénztárjelentés-kitöltő** és **címletszámoló** (összeadás, eltérés a várt egyenlegtől, nyomtatás/PDF) erre a két oldalra, „Free … Template — Fill In & Print” címmel, a nyugtakitöltő mintájára; utána IndexNow-beküldés.
 
+### Google Search Console, 3 hónap (export 2026-10-19, kicsomagolva: `tmp/gsc-2026-10-19/`)
+- Átlagos helyezés: július–augusztusban 50–70, szeptember végétől 15–30 (10-08: 8). A megjelenés napi 5–14, nem nőtt. Kattintás 14, mind a márkanévre (főoldal, 7,5. hely).
+- `daily-cash-report-template`: 68 megjelenés, ~51. hely (daily cash position report, daily cash report, daily cash log, sample, cash summary report) → a Bing mellett ez is a napi pénztárjelentés-kitöltőt támasztja alá.
+- 1. hely, 0 kattintás (valószínűleg AI Overview-idézet): cash payment receipt, handover receipt, cash handover format, receipt of cash payment, cash received receipt, petty cash receipt pdf, handyman receipt.
+- Közel az első oldalhoz: cash-handoff-receipt (13,6; 44 megj.), custom-cash-receipt-with-logo (10,4), handyman-cash-payment-receipt (9,1), cash-deposit-receipt (9), cash-box-request-form (8,3).
+- Nem érdemes erőltetni: reconciliation / replenishment (80–98. hely), receipt book (papír nyugtatömböt keresnek).
+- **Sorrend:** (1) napi pénztárjelentés-kitöltő a `daily-cash-report-template`-re; (2) „Free tools” blokk a főoldalra a kitöltős oldalakra mutató linkekkel.
+
 ### IndexNow (2026-10-19)
 - A Cloudflare Crawler Hints csak képeket, videókat, faviconokat és a robots.txt-t küldte be, **HTML-oldalt soha**, ezért a Bing nem kapott értesítést az oldalváltozásokról.
 - Megoldás (1df3c09): kulcsfájl a gyökérben (`17911d06878280c42f2657255cffaab6.txt`) és `scripts/indexnow.mjs`. **Minden indexelt oldalt érintő deploy után futtatni:** `node scripts/indexnow.mjs` (az egész sitemap) vagy `node scripts/indexnow.mjs /oldal1 /oldal2`.
