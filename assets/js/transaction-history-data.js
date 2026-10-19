@@ -1140,7 +1140,7 @@
         const overlayId = 'spendnoteBulkPdfOverlay';
         const printStyleId = 'spendnoteBulkPdfPrintStyle';
 
-        function showPdfOverlay(rowsForPdf, title, summaryLines, metaText, balance) {
+        function showPdfOverlay(rowsForPdf, title, summaryLines, metaText) {
             let overlay = document.getElementById(overlayId);
             if (!overlay) {
                 overlay = document.createElement('div');
@@ -1188,7 +1188,6 @@
                     </div>
                     <!-- Table -->
                     <div id="${overlayId}Content" style="padding:24px 32px;max-height:55vh;overflow:auto;background:#fff;">
-                      <div id="${overlayId}Opening"></div>
                       <table style="width:100%;border-collapse:collapse;">
                         <thead>
                           <tr style="background:#f1f5f9;border-radius:8px;">
@@ -1229,8 +1228,8 @@
                 printStyle.textContent = `
                   @media print {
                     @page { margin: 10mm; size: A4; }
-                    body > *:not(#${overlayId}) { display: none !important; }
-                    #${overlayId} { display: block !important; position: static !important; inset: auto !important; background: #fff !important; padding: 0 !important; overflow: visible !important; }
+                    body.spendnote-bulk-pdf-open > *:not(#${overlayId}) { display: none !important; }
+                    body.spendnote-bulk-pdf-open #${overlayId} { display: block !important; position: static !important; inset: auto !important; background: #fff !important; padding: 0 !important; overflow: visible !important; }
                     #${overlayId}Panel { box-shadow: none !important; border-radius: 0 !important; max-width: none !important; }
                     #${overlayId}Content { max-height: none !important; overflow: visible !important; padding-bottom: 12px !important; }
                     #${overlayId}Hint, #${overlayId}Actions { display: none !important; }
@@ -1290,38 +1289,10 @@
                 }).join('');
             }
 
-            const balanceRow = (label, value, extraStyle) => `
-                      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 16px;${extraStyle || ''}">
-                        <span style="font-size:13px;font-weight:700;color:#0f172a;">${escapeHtml(label)}</span>
-                        <span style="font-size:15px;font-weight:800;color:#0f172a;">${escapeHtml(value)}</span>
-                      </div>`;
-
-            const openingEl = document.getElementById(`${overlayId}Opening`);
-            if (openingEl) {
-                openingEl.innerHTML = balance ? balanceRow(balance.openingLabel, balance.openingText, 'margin-bottom:16px;') : '';
-            }
-
             if (summaryEl) {
                 const lines = Array.isArray(summaryLines) ? summaryLines : [];
-                const blankLine = (label) => `
-                        <div style="display:flex;align-items:flex-end;gap:12px;">
-                          <span style="font-size:12px;font-weight:700;color:#0f172a;white-space:nowrap;">${escapeHtml(label)}</span>
-                          <span style="flex:1;border-bottom:1px solid #94a3b8;height:22px;"></span>
-                        </div>`;
-                const countHtml = balance ? `
-                      <div style="margin-top:12px;border:1px dashed #94a3b8;border-radius:10px;padding:14px 16px;page-break-inside:avoid;">
-                        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:10px;">Cash count (fill in by hand)</div>
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;">
-                          ${blankLine('Cash counted')}
-                          ${blankLine('Over / (short)')}
-                          ${blankLine('Counted by')}
-                          ${blankLine('Verified by')}
-                        </div>
-                        <div style="font-size:11px;color:#64748b;margin-top:10px;">Record any difference in SpendNote as a cash in or cash out so the balance matches the cash on hand.</div>
-                      </div>` : '';
-                const closingHtml = balance ? balanceRow(balance.closingLabel, balance.closingText, 'margin-top:12px;background:#ecfdf5;border-color:#a7f3d0;') + countHtml : '';
                 if (!lines.length) {
-                    summaryEl.innerHTML = closingHtml;
+                    summaryEl.innerHTML = '';
                 } else {
                     summaryEl.innerHTML = `
                       <div style="background:linear-gradient(135deg,#f0fdf4 0%,#ecfeff 100%);border:1px solid #d1fae5;border-radius:12px;padding:18px 20px;">
@@ -1347,7 +1318,6 @@
                           </tbody>
                         </table>
                       </div>
-                      ${closingHtml}
                     `;
                 }
             }
@@ -1472,40 +1442,232 @@
             return net;
         }
 
-        // Opening/closing balances only reconcile with the report when it covers every transaction of one cash box.
-        async function computeReportBalances(serverCtx) {
-            const ids = Array.isArray(serverCtx?.cashBoxIds) ? serverCtx.cashBoxIds : null;
-            if (!ids || ids.length !== 1 || !window.db?.cashBoxes?.getById) return null;
-            const f = serverCtx.filters || {};
-            const createdByOptions = qsa('option', qs('#filterCreatedBy') || document.createElement('select')).filter((o) => safeText(o.value, ''));
-            const narrowedByCreator = f.createdById && createdByOptions.length > 1;
-            if (serverCtx.type || narrowedByCreator || f.txIdQuery || f.contactQuery
-                || (f.amountMin !== null && f.amountMin !== undefined)
-                || (f.amountMax !== null && f.amountMax !== undefined)) return null;
+        const dailyOverlayId = 'spendnoteDailyCashReport';
 
-            const cb = await window.db.cashBoxes.getById(ids[0]);
+        function localIsoDate(d) {
+            const pad2 = (n) => String(n).padStart(2, '0');
+            return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+        }
+
+        function nextIsoDate(iso) {
+            const [y, m, d] = String(iso).split('-').map(Number);
+            return new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
+        }
+
+        // Balances are derived backwards from the live cash box balance, so voided pairs and later days net out exactly.
+        async function loadDailyCashReport(cashBoxId, dateIso) {
+            const cb = await window.db.cashBoxes.getById(cashBoxId);
             const current = Number(cb?.current_balance);
-            if (!cb || !Number.isFinite(current)) return null;
+            if (!cb || !Number.isFinite(current)) throw new Error('Cash box not found.');
 
-            const nextDay = (iso) => {
-                const [y, m, d] = String(iso).split('-').map(Number);
-                return new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
-            };
-            const afterNet = f.dateTo ? await sumNetForCashBox(ids[0], nextDay(f.dateTo), null) : 0;
+            const afterNet = await sumNetForCashBox(cashBoxId, nextIsoDate(dateIso), null);
             const closing = current - afterNet;
-            const periodNet = await sumNetForCashBox(ids[0], f.dateFrom, f.dateTo);
-            const opening = closing - periodNet;
+
+            const res = await window.db.transactions.getPage({
+                select: txSelect,
+                page: 1,
+                perPage: 1000,
+                cashBoxIds: [cashBoxId],
+                startDate: dateIso,
+                endDate: dateIso,
+                sortKey: 'date',
+                sortDir: 'asc'
+            });
+            if (res?.error) throw new Error(res.error);
+            const txs = (Array.isArray(res?.data) ? res.data : [])
+                .filter((tx) => safeText(tx?.status, 'active').toLowerCase() !== 'voided');
 
             const currency = safeText(cb.currency, 'USD');
-            const fmt = (n) => `${n < -0.004 ? '-' : ''}${Math.abs(n).toFixed(2)} ${currency}`;
-            const from = formatFilterDate(f.dateFrom || '');
-            const to = formatFilterDate(f.dateTo || '');
+            const toLine = (tx) => ({
+                id: getDisplayId(tx),
+                contact: safeText(tx?.contact?.name || tx?.contact_name, ''),
+                description: safeText(tx?.description, ''),
+                amount: Number(tx?.amount) || 0
+            });
+            const ins = txs.filter((tx) => safeText(tx?.type, '').toLowerCase() === 'income').map(toLine);
+            const outs = txs.filter((tx) => safeText(tx?.type, '').toLowerCase() === 'expense').map(toLine);
+            const totalIn = ins.reduce((s, l) => s + l.amount, 0);
+            const totalOut = outs.reduce((s, l) => s + l.amount, 0);
+
             return {
-                openingLabel: from ? `Opening balance (start of ${from})` : 'Opening balance',
-                openingText: fmt(opening),
-                closingLabel: to ? `Closing balance (end of ${to})` : 'Closing balance (now)',
-                closingText: fmt(closing)
+                cashBoxName: safeText(cb.name, 'Cash box'),
+                currency,
+                dateIso,
+                ins,
+                outs,
+                totalIn,
+                totalOut,
+                opening: closing - (totalIn - totalOut),
+                closing
             };
+        }
+
+        function renderDailyCashReport(r) {
+            const money = (n) => formatCurrency(n, r.currency);
+            const [y, m, d] = r.dateIso.split('-').map(Number);
+            const longDate = new Date(y, m - 1, d).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const th = 'text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;padding:8px 10px;border-bottom:1.5px solid #0f172a;';
+            const td = 'padding:8px 10px;border-bottom:1px solid #e2e8f0;font-size:12px;color:#0f172a;';
+            const table = (label, lines, total) => `
+                <div style="margin-bottom:18px;page-break-inside:avoid;">
+                  <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
+                    <thead><tr>
+                      <th style="${th}width:20%;">${escapeHtml(label)}</th>
+                      <th style="${th}width:28%;">Contact</th>
+                      <th style="${th}">Description</th>
+                      <th style="${th}width:18%;text-align:right;">Amount</th>
+                    </tr></thead>
+                    <tbody>
+                      ${lines.length ? lines.map((l) => `
+                        <tr>
+                          <td style="${td}font-weight:600;white-space:nowrap;">${escapeHtml(l.id)}</td>
+                          <td style="${td}">${escapeHtml(l.contact || '—')}</td>
+                          <td style="${td}color:#475569;">${escapeHtml(l.description || '')}</td>
+                          <td style="${td}text-align:right;font-weight:700;white-space:nowrap;">${escapeHtml(money(l.amount))}</td>
+                        </tr>`).join('') : `<tr><td colspan="4" style="${td}color:#94a3b8;">None recorded</td></tr>`}
+                      <tr>
+                        <td colspan="3" style="padding:9px 10px;font-size:12.5px;font-weight:800;color:#0f172a;">Total ${escapeHtml(label.toLowerCase())}</td>
+                        <td style="padding:9px 10px;font-size:12.5px;font-weight:800;color:#0f172a;text-align:right;white-space:nowrap;">${escapeHtml(money(label === 'Cash in' ? r.totalIn : r.totalOut))}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>`;
+            const sumRow = (label, value, strong) => `
+                <div style="display:flex;justify-content:space-between;gap:16px;padding:5px 0;font-size:13px;${strong ? 'font-weight:800;border-top:1px solid #cbd5e1;margin-top:4px;padding-top:9px;' : ''}">
+                  <span>${escapeHtml(label)}</span><span style="font-weight:${strong ? 800 : 700};">${escapeHtml(value)}</span>
+                </div>`;
+            const blank = (label) => `
+                <div style="display:flex;align-items:flex-end;gap:12px;">
+                  <span style="font-size:12px;font-weight:700;color:#0f172a;white-space:nowrap;">${escapeHtml(label)}</span>
+                  <span style="flex:1;border-bottom:1px solid #64748b;height:24px;"></span>
+                </div>`;
+
+            return `
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:2px solid #0f172a;padding-bottom:14px;margin-bottom:16px;">
+                <div>
+                  <div style="font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-0.02em;">Daily Cash Report</div>
+                  <div style="font-size:13px;color:#475569;margin-top:3px;">${escapeHtml(r.cashBoxName)}</div>
+                </div>
+                <div style="text-align:right;font-size:12px;color:#475569;">
+                  <div style="font-size:14px;font-weight:700;color:#0f172a;">${escapeHtml(longDate)}</div>
+                  <div style="margin-top:3px;">Generated ${escapeHtml(localIsoDate(new Date()))} &middot; SpendNote</div>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:800;color:#0f172a;padding:4px 0 14px;">
+                <span>Opening balance</span><span>${escapeHtml(money(r.opening))}</span>
+              </div>
+              ${table('Cash in', r.ins)}
+              ${table('Cash out', r.outs)}
+              <div style="border:1.5px solid #0f172a;border-radius:10px;padding:10px 16px;margin-bottom:16px;page-break-inside:avoid;">
+                ${sumRow('Opening balance', money(r.opening))}
+                ${sumRow('+ Total cash in', money(r.totalIn))}
+                ${sumRow('− Total cash out', money(r.totalOut))}
+                ${sumRow('= Expected closing balance', money(r.closing), true)}
+              </div>
+              <div style="border:1px dashed #64748b;border-radius:10px;padding:14px 16px;page-break-inside:avoid;">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:12px;">Cash count &mdash; fill in by hand</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 28px;">
+                  ${blank('Cash counted')}
+                  ${blank('Over / (short)')}
+                </div>
+                <div style="margin-top:16px;">${blank('Notes')}</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 28px;margin-top:26px;">
+                  ${blank('Counted by')}
+                  ${blank('Verified by')}
+                </div>
+                <div style="font-size:11px;color:#64748b;margin-top:14px;">Record any over / short in SpendNote as a cash in or cash out, so tomorrow's opening balance matches the cash on hand.</div>
+              </div>`;
+        }
+
+        function openDailyCashReport() {
+            if (!window.db?.transactions?.getPage || !window.db?.cashBoxes?.getById) return;
+            const boxes = Array.isArray(state.cashBoxes) ? state.cashBoxes : [];
+            if (!boxes.length) {
+                showAlert('Create a cash box first.', { iconType: 'warning' });
+                return;
+            }
+
+            const ctx = buildServerQuery();
+            const f = ctx?.filters || {};
+            const ids = Array.isArray(ctx?.cashBoxIds) ? ctx.cashBoxIds : [];
+            const defaultBox = ids.length === 1 ? String(ids[0]) : String(boxes[0].id);
+            const defaultDate = (f.dateFrom && f.dateFrom === f.dateTo) ? f.dateFrom : localIsoDate(new Date());
+
+            let overlay = document.getElementById(dailyOverlayId);
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = dailyOverlayId;
+                overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,0.6);display:none;padding:20px;overflow-y:auto;';
+                overlay.innerHTML = `
+                  <div id="${dailyOverlayId}Panel" style="max-width:860px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,0.2);overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+                    <div id="${dailyOverlayId}Controls" style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;padding:18px 28px;background:#f8fafc;border-bottom:1px solid #e2e8f0;">
+                      <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Cash box
+                        <select id="${dailyOverlayId}Box" style="font:inherit;font-size:14px;text-transform:none;letter-spacing:0;padding:9px 10px;border:1px solid #cbd5e1;border-radius:8px;min-width:200px;color:#0f172a;"></select>
+                      </label>
+                      <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Date
+                        <input id="${dailyOverlayId}Date" type="date" style="font:inherit;font-size:14px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;color:#0f172a;">
+                      </label>
+                      <div style="flex:1;"></div>
+                      <button type="button" id="${dailyOverlayId}Print" style="appearance:none;border:none;background:#0f172a;color:#fff;border-radius:8px;padding:11px 20px;font-size:14px;font-weight:700;cursor:pointer;">Print / Save as PDF</button>
+                      <button type="button" id="${dailyOverlayId}Close" style="appearance:none;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:8px;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;">Close</button>
+                    </div>
+                    <div id="${dailyOverlayId}Body" style="padding:28px 32px;"></div>
+                  </div>`;
+                document.body.appendChild(overlay);
+
+                const style = document.createElement('style');
+                style.textContent = `
+                  @media print {
+                    @page { margin: 12mm; size: A4; }
+                    body.spendnote-daily-report-open > *:not(#${dailyOverlayId}) { display: none !important; }
+                    body.spendnote-daily-report-open #${dailyOverlayId} { display: block !important; position: static !important; background: #fff !important; padding: 0 !important; overflow: visible !important; }
+                    body.spendnote-daily-report-open #${dailyOverlayId}Panel { box-shadow: none !important; border-radius: 0 !important; max-width: none !important; }
+                    body.spendnote-daily-report-open #${dailyOverlayId}Controls { display: none !important; }
+                    body.spendnote-daily-report-open #${dailyOverlayId}Body { padding: 0 !important; }
+                  }`;
+                document.head.appendChild(style);
+            }
+
+            const boxSel = document.getElementById(`${dailyOverlayId}Box`);
+            const dateInp = document.getElementById(`${dailyOverlayId}Date`);
+            const body = document.getElementById(`${dailyOverlayId}Body`);
+            const printBtn = document.getElementById(`${dailyOverlayId}Print`);
+
+            boxSel.innerHTML = boxes.map((cb) => `<option value="${escapeHtml(cb.id)}">${escapeHtml(safeText(cb.name, 'Cash box'))}</option>`).join('');
+            boxSel.value = defaultBox;
+            dateInp.value = defaultDate;
+
+            let loadSeq = 0;
+            const load = async () => {
+                const seq = ++loadSeq;
+                printBtn.disabled = true;
+                body.innerHTML = '<div style="padding:40px 0;text-align:center;color:#64748b;font-size:14px;">Loading…</div>';
+                try {
+                    const report = await loadDailyCashReport(boxSel.value, dateInp.value || localIsoDate(new Date()));
+                    if (seq !== loadSeq) return;
+                    body.innerHTML = renderDailyCashReport(report);
+                    printBtn.disabled = false;
+                } catch (err) {
+                    if (seq !== loadSeq) return;
+                    console.error('[TxHistory] Daily cash report failed:', err);
+                    body.innerHTML = '<div style="padding:40px 0;text-align:center;color:#b91c1c;font-size:14px;">Could not load the report. Please try again.</div>';
+                }
+            };
+
+            const close = () => {
+                overlay.style.display = 'none';
+                document.body.classList.remove('spendnote-daily-report-open');
+            };
+
+            boxSel.onchange = load;
+            dateInp.onchange = load;
+            printBtn.onclick = () => window.print();
+            document.getElementById(`${dailyOverlayId}Close`).onclick = close;
+            overlay.onclick = (e) => { if (e.target === overlay) close(); };
+
+            overlay.style.display = 'block';
+            document.body.classList.add('spendnote-daily-report-open');
+            load();
         }
 
         async function exportFilteredPdf() {
@@ -1698,19 +1860,11 @@
                     `Amount range: ${amountText}`
                 ];
 
-                let balance = null;
-                try {
-                    balance = await computeReportBalances(serverCtx);
-                } catch (err) {
-                    console.warn('[TxHistory] Could not compute report balances:', err);
-                }
-
                 showPdfOverlay(
                     rowsForPdf,
                     `Filtered transactions (${rowsForPdf.length})`,
                     summaryLines,
-                    metaLines.join('\n'),
-                    balance
+                    metaLines.join('\n')
                 );
             } finally {
                 if (btn) btn.disabled = false;
@@ -2112,6 +2266,11 @@
             exportPdfBtn.addEventListener('click', () => {
                 exportFilteredPdf();
             });
+        }
+
+        const dailyReportBtn = qs('#dailyCashReport');
+        if (dailyReportBtn) {
+            dailyReportBtn.addEventListener('click', openDailyCashReport);
         }
 
         if (bulkDeleteBtn) {
