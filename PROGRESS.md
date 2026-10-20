@@ -142,7 +142,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 
 ### IndexNow (2026-10-19)
 - A Cloudflare Crawler Hints csak képeket, videókat, faviconokat és a robots.txt-t küldte be, **HTML-oldalt soha**, ezért a Bing nem kapott értesítést az oldalváltozásokról.
-- Megoldás (1df3c09): kulcsfájl a gyökérben (`17911d06878280c42f2657255cffaab6.txt`) és `scripts/indexnow.mjs`. **Minden indexelt oldalt érintő deploy után futtatni:** `node scripts/indexnow.mjs` (az egész sitemap) vagy `node scripts/indexnow.mjs /oldal1 /oldal2`.
+- Megoldás (1df3c09): kulcsfájl a gyökérben (`17911d06878280c42f2657255cffaab6.txt`) és `scripts/indexnow.mjs`. **Indexelt oldalt érintő deploy után csak a megváltozott címeket:** `node scripts/indexnow.mjs /oldal1 /oldal2`. Az egész sitemapet nem: a Bing (Fabrice Canel) kéri, hogy ne küldjük be tömbösen, a sitemapet naponta maga olvassa, a pontos `lastmod` számít. 2026-10-20 óta a szkript argumentum nélkül hibát ad; az egész sitemap csak `--all`-lal megy (pl. domainköltözésnél).
 - 10-19 02:40: mind az 51 sitemap-URL beküldve, HTTP 202.
 
 ### Külső linkek — 2026-10-18 állapot

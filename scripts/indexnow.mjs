@@ -1,9 +1,11 @@
 // Submit page URLs to IndexNow (Bing, Yandex, Seznam, Naver...).
 // Cloudflare Crawler Hints only reports cached static assets, never our HTML pages,
 // so page changes have to be pushed from here after a deploy.
+// Bing asks for the changed URLs only; it reads the sitemap itself every day,
+// and whole-sitemap batches are flagged as a problem in Bing Webmaster Tools.
 //
-//   node scripts/indexnow.mjs            -> every URL in sitemap.xml
-//   node scripts/indexnow.mjs /a /b ...  -> only the given paths
+//   node scripts/indexnow.mjs /a /b ...  -> only the given paths (normal use)
+//   node scripts/indexnow.mjs --all      -> every URL in sitemap.xml (one-off, e.g. a domain move)
 //   add --dry to print without sending
 
 import { readFileSync } from 'node:fs';
@@ -16,7 +18,14 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const args = process.argv.slice(2);
 const dry = args.includes('--dry');
-const paths = args.filter((a) => a !== '--dry');
+const all = args.includes('--all');
+const paths = args.filter((a) => a !== '--dry' && a !== '--all');
+
+if (!paths.length && !all) {
+    console.error('Give the changed paths, e.g. node scripts/indexnow.mjs /daily-cash-report-template');
+    console.error('Whole sitemap only with --all.');
+    process.exit(1);
+}
 
 const urls = paths.length
     ? paths.map((p) => new URL(p, `https://${HOST}/`).href)
