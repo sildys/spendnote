@@ -179,6 +179,7 @@ A Bing egyetlen külső linket sem lát. A közönséges link (nincs rajta `nofo
 4. `www.spendnote.app` → 301 a gyökérre (Cloudflare Redirect Rule; most 200-at ad, a canonical véd).
 5. Contractor/babysitter képek cseréje, utána újraindexelés.
 6. Opcionális: noindex a belső nyugtasablonokra (`spendnote-pdf-receipt`, `spendnote-email-receipt`, `spendnote-receipt-print-two-copies`; nincsenek a sitemapben).
+7. **App-átnézés Max módban, részenként (a felhasználó kérte, hogy ne felejtsük el).** 2026-10-20: a napi pénztárjelentés kész (baee3a4): egész centben számol (a „-$0.00” hiba javítva), csonka szerverválasznál nem nyomtat, a lapozás a kasszán belüli sorszám szerint megy. Teszt a repón kívül: `tmp/test-daily-math.cjs`. Rendben találva: sztornópár ugyanarra a napra esik, a „user” jogú tag a kiosztott kassza minden tételét látja, a tétel dátuma helyi idő. **Hátravan, ebben a sorrendben:** (a) pénzmozgás a szerveren: tétel rögzítése (`spendnote_create_transaction`, legutóbb 068), sztornó (038), egyenleg-trigger (`update_cash_box_balance`); (b) csapatjogok: ki mit lát, rögzít, sztornózhat (RLS, 058/059 és társai); (c) előfizetés és Stripe: webhook, csomagállapot, zárolás; (d) nyugták és PDF. A felhasználó még nem próbálta ki valódi kasszán a napi jelentést: a mai nap várható záróegyenlegének egyeznie kell a kassza mostani egyenlegével.
 
 ## Where we are now (last updated: 2026-10-16 — mobil app javítások, PWA install, signup mobil, árkapcsoló, Google Play/MS Store előkészítés, Ads finomhangolás)
 
