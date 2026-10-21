@@ -155,6 +155,8 @@ If a chat thread freezes / context is lost: in the new thread say:
 ### Hétvége 2026-10-24/25 — katalógusok (a felhasználó csinálja)
 A Bing egyetlen külső linket sem lát. A közönséges link (nincs rajta `nofollow` / `ugc` / `sponsored`) számít; a saját közösségi profil és a komment nem. A „free dofollow backlink” hirdetésű linkgyűjtő oldalakat (directory-index, seolisting, gsdirectory) kihagyni. AI-katalógusokat is (a SpendNote nem AI-eszköz). Uneed ingyenes sora bezárt, BetaList fizetős: mindkettő kimarad. Legfeljebb egy jelvény a láblécben. Mindenhol ugyanaz a leírás, céges email: `support@spendnote.app`. Beadás előtt egy élő listázáson a weboldal-link `rel` mezője: ha `nofollow`, az a helyezés miatt kihagyható. A link típusa 2026. szeptember–októberi ellenőrzés, nem friss mérés.
 
+**Egységes listázási szöveg:** `C:\SpendNote projekt\tmp\listing\listing-texts.md` (repón kívül, a képek mellett). 2026-10-21-én bekerült a napi pénztárjelentés (leírás + külön funkciópont) és a `/cash-receipt-template` mint ingyenes kitöltő. A meglévő listázásokba (SaaSHub, G2, WebsiteLaunches, SourceForge) is ezt kell átvezetni. Első új beküldés: Launching Next (10-21, szöveg kész).
+
 **Már fent van, csak frissíteni**
 - SaaSHub: a domain-emailes ellenőrzés éljen (negyedévente lejár, következő ~2027-01-18). A felső gomb a közönséges link.
 - SourceForge: elavult ($19, funkciók „Not Supported”, nincs kitöltő). Ebből készül a Slashdot. A link maga gyakran nofollow, emberek miatt kell.
