@@ -111,6 +111,14 @@
             transition: all 0.2s;
         }
         .dismiss-btn-compact:hover { background: rgba(0,0,0,0.05); color: var(--text); }
+        a.invite-btn-compact { text-decoration: none; white-space: nowrap; }
+        .review-ask-banner > i { color: #f59e0b; }
+        .review-ask-banner .dismiss-btn-compact { font-size: 14px; }
+        @media (max-width: 768px) {
+            .review-ask-banner { flex-wrap: wrap; gap: 8px 10px; }
+            .review-ask-banner span { flex: 1 1 calc(100% - 70px); }
+            .review-ask-banner a.invite-btn-compact { order: 2; }
+        }
         
         .nav-link {
             padding: 10px 20px;
