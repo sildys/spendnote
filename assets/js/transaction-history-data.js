@@ -1523,7 +1523,7 @@
             const [y, m, d] = r.dateIso.split('-').map(Number);
             const longDate = new Date(y, m - 1, d).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             const th = 'text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;padding:8px 10px;border-bottom:1.5px solid #0f172a;';
-            const td = 'padding:8px 10px;border-bottom:1px solid #e2e8f0;font-size:12px;color:#0f172a;';
+            const td = 'padding:8px 10px;border-bottom:1px solid #e2e8f0;font-size:12px;color:#0f172a;overflow-wrap:anywhere;word-break:break-word;';
             const table = (label, lines, total) => `
                 <div style="margin-bottom:18px;page-break-inside:avoid;">
                   <table class="sn-dcr-table" style="width:100%;border-collapse:collapse;table-layout:fixed;">
@@ -1634,7 +1634,7 @@
 
                 const style = document.createElement('style');
                 style.textContent = `
-                  @media screen and (max-width: 520px) {
+                  @media screen and (max-width: 640px) {
                     #${dailyOverlayId} { padding: 8px !important; }
                     #${dailyOverlayId}Controls { padding: 12px 14px !important; }
                     #${dailyOverlayId}Box { min-width: 0 !important; max-width: 100%; }
@@ -1642,11 +1642,11 @@
                     #${dailyOverlayId} .sn-dcr-head { flex-direction: column; gap: 8px !important; }
                     #${dailyOverlayId} .sn-dcr-head > div:last-child { text-align: left !important; }
                     #${dailyOverlayId} .sn-dcr-table th,
-                    #${dailyOverlayId} .sn-dcr-table td { padding: 7px 4px !important; font-size: 11px !important; overflow-wrap: anywhere; }
-                    #${dailyOverlayId} .sn-dcr-table th { font-size: 9px !important; letter-spacing: 0.02em !important; }
-                    #${dailyOverlayId} .sn-dcr-table th:nth-child(1) { width: 23% !important; }
-                    #${dailyOverlayId} .sn-dcr-table th:nth-child(2) { width: 25% !important; }
-                    #${dailyOverlayId} .sn-dcr-table th:nth-child(4) { width: 25% !important; }
+                    #${dailyOverlayId} .sn-dcr-table td { padding: 6px 3px !important; font-size: 10px !important; line-height: 1.3; }
+                    #${dailyOverlayId} .sn-dcr-table th { padding: 6px 3px !important; font-size: 8.5px !important; letter-spacing: 0 !important; }
+                    #${dailyOverlayId} .sn-dcr-table th:nth-child(1) { width: 22% !important; }
+                    #${dailyOverlayId} .sn-dcr-table th:nth-child(2) { width: 26% !important; }
+                    #${dailyOverlayId} .sn-dcr-table th:nth-child(4) { width: 23% !important; }
                     #${dailyOverlayId} .sn-dcr-grid2 { grid-template-columns: 1fr !important; }
                   }
                   @media print {
