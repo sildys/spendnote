@@ -94,7 +94,7 @@ if (window.SpendNoteTWA) {
                 upgrade[name] = (arg) => notIncluded(name === 'showCashBoxUpgrade' ? arg : null);
             }
         });
-        upgrade.showTrialExpiredUpgrade = () => notice('Trial ended', 'Your free trial has ended, so new transactions can\u2019t be added right now.');
+        upgrade.showTrialExpiredUpgrade = () => notice('Trial ended', 'Your free trial has ended, so new transactions can\u2019t be added right now. To continue, choose a plan on spendnote.app, then come back here \u2014 your data is all still here.');
         upgrade.showTransactionLimitUpgrade = () => notice('Limit reached', 'You\u2019ve reached the transaction limit of your current plan.');
     });
 }
