@@ -11,7 +11,7 @@
         gtag('config', 'G-QPFM30F86Q');
     </script>
     <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
+    if(!(function(){try{return /[?&]source=twa(&|$)/.test(location.search)||document.referrer.indexOf('android-app://')===0||sessionStorage.getItem('sn.twa')==='1'}catch(e){return false}})())(function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
@@ -306,7 +306,7 @@
         .sn-auth-nav-pending .site-nav { visibility: hidden; }
     </style>    <!-- Microsoft Advertising UET tag -->
     <script>
-        (function(w,d,t,u,o){w[u]=w[u]||[],o.ts=(new Date).getTime();var n=d.createElement(t);n.src="https://bat.bing.net/bat.js?ti="+o.ti+("uetq"!=u?"&q="+u:""),n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&"loaded"!==s&&"complete"!==s||(o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad"),n.onload=n.onreadystatechange=null)};var i=d.getElementsByTagName(t)[0];i.parentNode.insertBefore(n,i)})(window,document,"script","uetq",{ti:"343258687",enableAutoSpaTracking:true});
+        if(!(function(){try{return /[?&]source=twa(&|$)/.test(location.search)||document.referrer.indexOf('android-app://')===0||sessionStorage.getItem('sn.twa')==='1'}catch(e){return false}})())(function(w,d,t,u,o){w[u]=w[u]||[],o.ts=(new Date).getTime();var n=d.createElement(t);n.src="https://bat.bing.net/bat.js?ti="+o.ti+("uetq"!=u?"&q="+u:""),n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&"loaded"!==s&&"complete"!==s||(o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad"),n.onload=n.onreadystatechange=null)};var i=d.getElementsByTagName(t)[0];i.parentNode.insertBefore(n,i)})(window,document,"script","uetq",{ti:"343258687",enableAutoSpaTracking:true});
     </script>
 </head>
 <body>
@@ -344,7 +344,7 @@
     <section class="legal-hero">
         <div class="legal-hero-content">
             <h1>Privacy Policy</h1>
-            <p class="legal-meta">Last updated: <strong>March 13, 2026</strong></p>
+            <p class="legal-meta">Last updated: <strong>October 23, 2026</strong></p>
         </div>
     </section>
 
@@ -426,7 +426,7 @@
         </ul>
 
         <div class="highlight-box">
-            <p><i class="fas fa-ban"></i> <strong>We do NOT:</strong> Sell your data - Use it for advertising - Share with third parties for marketing</p>
+            <p><i class="fas fa-ban"></i> <strong>We do NOT:</strong> Sell your data - Share your receipts, transactions or contacts with advertisers - Show ads in the Service</p>
         </div>
 
         <h2 id="sharing">4. Information Sharing</h2>
@@ -467,16 +467,17 @@
             </tr>
             <tr>
                 <td>Google LLC</td>
-                <td>Analytics (Google Analytics), OAuth authentication</td>
+                <td>Analytics (Google Analytics), measuring sign-ups from our Google Ads, OAuth authentication</td>
                 <td>United States</td>
             </tr>
             <tr>
-                <td>Microsoft (Clarity)</td>
-                <td>Privacy-focused session analytics</td>
+                <td>Microsoft Corporation</td>
+                <td>Session analytics (Microsoft Clarity) and measuring sign-ups from our Microsoft Advertising ads (website only)</td>
                 <td>United States</td>
             </tr>
         </table>
         <p>Each service provider is contractually obligated to protect your data and use it only for the purposes described above.</p>
+        <p><strong>Android app:</strong> The SpendNote app on Google Play opens the same Service. Inside the app only Google Analytics runs; Microsoft Clarity and the Microsoft Advertising tag are not loaded.</p>
 
         <h2 id="security">5. Data Security</h2>
         <p>We implement industry-standard security measures:</p>
@@ -493,10 +494,19 @@
         <p>We retain your data as follows:</p>
         <ul>
             <li><strong>Active accounts:</strong> Data retained while account is active</li>
-            <li><strong>Account deletion:</strong> When you delete your account, all associated data (receipts, transactions, cash boxes, personal data) is permanently removed. We do not retain copies of deleted user data.</li>
+            <li><strong>Account deletion:</strong> When you delete your account, all associated data (receipts, transactions, cash boxes, contacts, personal data) is permanently removed from the Service. Copies in our encrypted backups are erased as those backups expire.</li>
             <li><strong>Payment processing records:</strong> Payment transaction records are stored by our payment processor (Stripe) in accordance with their own retention policies. We do not store your credit card details.</li>
             <li><strong>Legal requirements:</strong> Some data may be retained longer if required by law</li>
         </ul>
+
+        <h3 id="delete-account">6.1 How to Delete Your Account</h3>
+        <p>You can delete your SpendNote account yourself, on the website or in the Android app:</p>
+        <ol>
+            <li>Sign in and open <strong>Settings</strong> (your avatar in the top right corner).</li>
+            <li>Open <strong>Delete Account</strong>, review what will be removed, and confirm.</li>
+        </ol>
+        <p>Deletion is immediate and cannot be undone. Any active subscription is cancelled automatically. If you own a team, the team and its cash boxes, transactions and contacts are deleted with your account, and invited members lose access. If you were invited to someone else's team, the team owner first needs to remove your cash box access.</p>
+        <p>If you can no longer sign in, email <a href="mailto:support@spendnote.app">support@spendnote.app</a> from the email address of your account and ask us to delete it. We will confirm and delete the account and its data within 30 days.</p>
 
         <h2 id="international">7. International Data Transfers</h2>
         <p>Sildsys, LLC is based in the United States. If you are accessing the Service from outside the United States, please be aware that your data may be transferred to, stored, and processed in the United States and other countries where our service providers operate.</p>
