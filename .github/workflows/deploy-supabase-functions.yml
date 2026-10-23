@@ -75,3 +75,15 @@ jobs:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
         run: supabase functions deploy remove-org-member --project-ref "$SUPABASE_PROJECT_REF"
+
+      - name: Deploy delete-account
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: supabase functions deploy delete-account --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt
+
+      - name: Deploy send-announcement
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: supabase functions deploy send-announcement --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt
