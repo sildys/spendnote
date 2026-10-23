@@ -3843,25 +3843,9 @@ var db = {
                 const feats = await window.SpendNoteFeatures?.getAll?.();
                 const tier = feats?.tier || 'free';
                 const maxTx = feats?.max_transactions ?? Infinity;
-                const trialDays = feats?.trial_days ?? Infinity;
 
-                // Check trial expiry (free tier: 14 days from signup)
-                if (Number.isFinite(trialDays)) {
-                    try {
-                        const { data: { user } } = await supabaseClient.auth.getUser();
-                        if (user?.created_at) {
-                            const signupDate = new Date(user.created_at);
-                            const now = new Date();
-                            const daysSinceSignup = (now - signupDate) / (1000 * 60 * 60 * 24);
-                            if (daysSinceSignup >= trialDays) {
-                                return {
-                                    success: false,
-                                    error: 'FREE_TRIAL_EXPIRED'
-                                };
-                            }
-                        }
-                    } catch (_) {}
-                }
+                // Trial expiry is checked by spendnote_create_transaction against the
+                // cash box's billing owner; an invited member's own signup date is irrelevant.
 
                 // Check transaction count limit
                 if (Number.isFinite(maxTx)) {

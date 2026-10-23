@@ -20,6 +20,9 @@ let currentOrgName = '';
 let seatLimit = 1;
 let subscriptionTier = 'preview';
 
+const TRIAL_DAYS = 14;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 const show = (id) => { const el = document.getElementById(id); if (el) el.style.display = ''; };
 const hide = (id) => { const el = document.getElementById(id); if (el) el.style.display = 'none'; };
 
@@ -224,7 +227,7 @@ const updateSeatCounter = () => {
     const el = document.getElementById('seatCounter');
     if (!el) return;
 
-    if (subscriptionTier !== 'pro') {
+    if ((subscriptionTier !== 'pro' && subscriptionTier !== 'free') || currentRole === 'admin') {
         el.style.display = 'none';
         return;
     }
@@ -433,10 +436,11 @@ const initTeamPage = async () => {
         return;
     }
 
-    // Gate: only Pro (and preview) users can access Team page
+    // Gate: Pro, preview, an active 14-day trial, or an admin of someone else's team
     try {
         const { data: sessionData } = await window.supabaseClient.auth.getSession();
-        const uid = sessionData?.session?.user?.id;
+        const sessionUser = sessionData?.session?.user;
+        const uid = sessionUser?.id;
         if (uid) {
             const { data: gateProfile } = await window.supabaseClient
                 .from('profiles')
@@ -444,7 +448,18 @@ const initTeamPage = async () => {
                 .eq('id', uid)
                 .single();
             const tier = String(gateProfile?.subscription_tier || '').toLowerCase();
-            if (tier !== 'pro' && tier !== 'preview') {
+            let allowed = tier === 'pro' || tier === 'preview';
+            if (!allowed && tier === 'free') {
+                const signupMs = Date.parse(sessionUser?.created_at || '');
+                allowed = !Number.isFinite(signupMs) || (Date.now() - signupMs) < TRIAL_DAYS * DAY_MS;
+            }
+            if (!allowed) {
+                try {
+                    const gateRole = String(await window.db?.orgMemberships?.getMyRole?.() || '').toLowerCase();
+                    allowed = gateRole === 'admin';
+                } catch (_) {}
+            }
+            if (!allowed) {
                 if (window.SpendNoteUpgrade?.showTeamUpgrade) {
                     window.SpendNoteUpgrade.showTeamUpgrade();
                 } else {
@@ -515,6 +530,8 @@ const initTeamPage = async () => {
                 const sc = Number(profile.seat_count || 0);
                 if (subscriptionTier === 'pro') {
                     seatLimit = sc > 0 ? sc : 3;
+                } else if (subscriptionTier === 'free') {
+                    seatLimit = 3;
                 } else if (subscriptionTier === 'standard') {
                     seatLimit = 1;
                 } else {
@@ -571,7 +588,8 @@ const initTeamPage = async () => {
 
         const currentCount = teamMembers.filter(m => m.status === 'active' || m.status === 'pending').length;
         // Preview: unlimited team invites in product terms — do not show Pro seat paywall.
-        if (subscriptionTier !== 'preview' && currentCount >= seatLimit) {
+        // Admins don't see the owner's seat count; the server enforces it on invite.
+        if (subscriptionTier !== 'preview' && currentRole !== 'admin' && currentCount >= seatLimit) {
             if (typeof window.SpendNoteUpgrade?.showSeatLimitUpgrade === 'function') {
                 window.SpendNoteUpgrade.showSeatLimitUpgrade(seatLimit);
             } else if (window.SpendNoteUpgrade?.showLockOverlay) {
