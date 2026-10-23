@@ -30,10 +30,19 @@ window.SpendNoteTWA = (() => {
     }
 })();
 
+// Marketing pages show prices and lead to the web checkout, so the Android app never opens them.
+window.SpendNoteTWAIsMarketingPath = (path) => {
+    const p = String(path || '').replace(/\.html$/, '').replace(/\/+$/, '');
+    if (p === '' || p === '/index') return true;
+    if (p === '/dashboard' || p === '/invite' || p === '/offline' || p.startsWith('/assets/')) return false;
+    if (['/spendnote-pricing', '/spendnote-about', '/spendnote-faq', '/spendnote-resources'].includes(p)) return true;
+    return !p.startsWith('/spendnote-');
+};
+
 if (window.SpendNoteTWA) {
     try {
         const path = String(window.location.pathname || '').replace(/\.html$/, '').replace(/\/+$/, '');
-        if (path === '' || path === '/index' || path === '/spendnote-pricing') {
+        if (window.SpendNoteTWAIsMarketingPath(path)) {
             window.location.replace('/dashboard');
         }
     } catch (_) {
@@ -51,6 +60,21 @@ if (window.SpendNoteTWA) {
         'html.sn-twa #tierCashBoxModalTeamWarn span'
     ].join(',') + '{display:none !important;}';
     document.head.appendChild(twaStyle);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // The home page link stays: logos point there and it redirects to the dashboard.
+        document.querySelectorAll('a[href]').forEach((a) => {
+            try {
+                const u = new URL(a.getAttribute('href'), window.location.href);
+                if (u.origin !== window.location.origin) return;
+                if ((u.pathname === '/' && !u.hash) || !window.SpendNoteTWAIsMarketingPath(u.pathname)) return;
+                const item = a.parentElement && a.parentElement.tagName === 'LI' ? a.parentElement : a;
+                item.style.setProperty('display', 'none', 'important');
+            } catch (_) {
+                // ignore
+            }
+        });
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
         const upgrade = window.SpendNoteUpgrade;
