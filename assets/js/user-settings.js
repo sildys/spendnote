@@ -321,7 +321,7 @@ const renderBillingSummary = (billingState) => {
 
     if (planEl) {
         let html = planLabel;
-        if (price) html += ` <span style="color:var(--text-muted);font-weight:400;">— $${price}${cycleLabel}</span>`;
+        if (price) html += ` <span class="billing-plan-price" style="color:var(--text-muted);font-weight:400;">— $${price}${cycleLabel}</span>`;
         planEl.innerHTML = html;
     }
 
@@ -347,7 +347,7 @@ const renderBillingSummary = (billingState) => {
         } else if (status === 'canceled') {
             lines.push(periodEnds ? `Canceled. Access until ${periodEnds}.` : 'Subscription canceled.');
         } else if (status === 'free') {
-            lines.push('Free plan — upgrade anytime.');
+            if (!window.SpendNoteTWA) lines.push('Free plan — upgrade anytime.');
         }
 
         if (pendingTier && pendingDate && !cancelAtEnd) {

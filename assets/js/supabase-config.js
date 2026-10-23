@@ -57,8 +57,10 @@ if (window.SpendNoteTWA) {
         'html.sn-twa #manageBillingBtn',
         'html.sn-twa #cancelSubscriptionBtn',
         'html.sn-twa #trialExpiryBanner',
-        'html.sn-twa #tierCashBoxModalTeamWarn span'
-    ].join(',') + '{display:none !important;}';
+        'html.sn-twa #tierCashBoxModalTeamWarn span',
+        'html.sn-twa .billing-plan-price'
+    ].join(',') + '{display:none !important;}'
+        + 'html.sn-twa #twaBillingNote{display:block !important;}';
     document.head.appendChild(twaStyle);
 
     document.addEventListener('DOMContentLoaded', () => {
