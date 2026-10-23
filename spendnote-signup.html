@@ -1012,9 +1012,19 @@
                     if (typeof gtag === 'function') gtag('event', 'signup_attempt');
 
                     if (result.needsEmailConfirmation || !result.session) {
-                        successMessage.classList.add('show');
                         const emailSafe = String(email || '').trim();
-                        successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Account created. Please check your email to confirm your address, then come back to log in.';
+
+                        signupForm.style.display = 'none';
+                        document.querySelectorAll('.auth-card .divider, .auth-card .social-buttons').forEach((el) => { el.style.display = 'none'; });
+                        const titleEl = document.querySelector('.auth-title');
+                        const subtitleEl = document.querySelector('.auth-subtitle');
+                        if (titleEl) titleEl.textContent = 'Check your email';
+                        if (subtitleEl) subtitleEl.textContent = 'One more step to activate your account';
+
+                        successMessage.classList.add('show');
+                        successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Account created. We sent a confirmation link to <strong class="signup-sent-email"></strong>. Open it to activate your account, then log in. Not in your inbox? Check spam or promotions.';
+                        const sentEmailEl = successMessage.querySelector('.signup-sent-email');
+                        if (sentEmailEl) sentEmailEl.textContent = emailSafe;
 
                         const wrap = document.createElement('div');
                         wrap.style.marginTop = '10px';
@@ -1051,6 +1061,7 @@
                         successMessage.appendChild(wrap);
                         submitBtn.disabled = false;
                         submitBtn.textContent = 'Create account';
+                        revealMessage(document.querySelector('.auth-card') || successMessage);
                         return;
                     }
 
@@ -1080,6 +1091,10 @@
             }
         });
 
+        function revealMessage(el) {
+            try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (_) {}
+        }
+
         function showError(message) {
             errorMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + message;
             errorMessage.classList.add('show');
@@ -1088,6 +1103,7 @@
             const submitBtn = signupForm.querySelector('button[type="submit"]');
             submitBtn.disabled = false;
             submitBtn.textContent = 'Create account';
+            revealMessage(errorMessage);
         }
 
         function showExistingEmailError(email) {
@@ -1137,6 +1153,7 @@
             const submitBtn = signupForm.querySelector('button[type="submit"]');
             submitBtn.disabled = false;
             submitBtn.textContent = 'Create account';
+            revealMessage(errorMessage);
         }
 
         // Google sign up
