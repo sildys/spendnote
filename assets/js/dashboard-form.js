@@ -457,6 +457,10 @@ function initTransactionForm() {
                     window.SpendNoteUpgrade?.showTrialExpiredUpgrade?.();
                     return;
                 } else
+                if (lower.includes('team_requires_pro')) {
+                    showAlert('This team\u2019s plan no longer includes team members. Ask the account owner to upgrade to Pro so you can record transactions again.', { iconType: 'warning' });
+                    return;
+                } else
                 if (lower.includes('permission denied') || lower.includes('row level security') || lower.includes('rls')) {
                     msg = 'Permission denied (RLS). Please log out and log in again. If the problem persists, your profile row may be missing.';
                 } else if (lower.includes('foreign key') && (lower.includes('profiles') || lower.includes('user_id'))) {

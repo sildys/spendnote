@@ -8,7 +8,9 @@
 --    box owner), not on the person recording. Invited members sign up on the
 --    'free' tier with their own signup date; without this they were blocked
 --    14 days after joining even when the team owner pays for Pro.
---    Function body is 068 verbatim except for that expiry block.
+--    If the billing owner is on Standard (single user), other members get
+--    TEAM_REQUIRES_PRO, which covers both trial -> Standard and Pro -> Standard.
+--    Function body is 068 verbatim except for that block.
 
 BEGIN;
 
@@ -226,6 +228,11 @@ BEGIN
     IF v_created_at IS NOT NULL AND (now() - v_created_at) > interval '14 days' THEN
       RAISE EXCEPTION 'FREE_TRIAL_EXPIRED';
     END IF;
+  END IF;
+
+  -- Standard is a single-user plan: team members can no longer record.
+  IF v_owner_tier = 'standard' AND v_actor IS DISTINCT FROM v_billing_owner THEN
+    RAISE EXCEPTION 'TEAM_REQUIRES_PRO';
   END IF;
 
   IF v_type = 'expense' THEN
