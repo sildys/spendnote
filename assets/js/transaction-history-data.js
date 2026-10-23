@@ -1526,7 +1526,7 @@
             const td = 'padding:8px 10px;border-bottom:1px solid #e2e8f0;font-size:12px;color:#0f172a;';
             const table = (label, lines, total) => `
                 <div style="margin-bottom:18px;page-break-inside:avoid;">
-                  <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
+                  <table class="sn-dcr-table" style="width:100%;border-collapse:collapse;table-layout:fixed;">
                     <thead><tr>
                       <th style="${th}width:20%;">${escapeHtml(label)}</th>
                       <th style="${th}width:28%;">Contact</th>
@@ -1559,7 +1559,7 @@
                 </div>`;
 
             return `
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:2px solid #0f172a;padding-bottom:14px;margin-bottom:16px;">
+              <div class="sn-dcr-head" style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:2px solid #0f172a;padding-bottom:14px;margin-bottom:16px;">
                 <div>
                   <div style="font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-0.02em;">Daily Cash Report</div>
                   <div style="font-size:13px;color:#475569;margin-top:3px;">${escapeHtml(r.cashBoxName)}</div>
@@ -1582,12 +1582,12 @@
               </div>
               <div style="border:1px dashed #64748b;border-radius:10px;padding:14px 16px;page-break-inside:avoid;">
                 <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:12px;">Cash count &mdash; fill in by hand</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 28px;">
+                <div class="sn-dcr-grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px 28px;">
                   ${blank('Cash counted')}
                   ${blank('Over / (short)')}
                 </div>
                 <div style="margin-top:16px;">${blank('Notes')}</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 28px;margin-top:26px;">
+                <div class="sn-dcr-grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px 28px;margin-top:26px;">
                   ${blank('Counted by')}
                   ${blank('Verified by')}
                 </div>
@@ -1634,6 +1634,21 @@
 
                 const style = document.createElement('style');
                 style.textContent = `
+                  @media screen and (max-width: 520px) {
+                    #${dailyOverlayId} { padding: 8px !important; }
+                    #${dailyOverlayId}Controls { padding: 12px 14px !important; }
+                    #${dailyOverlayId}Box { min-width: 0 !important; max-width: 100%; }
+                    #${dailyOverlayId}Body { padding: 18px 14px !important; }
+                    #${dailyOverlayId} .sn-dcr-head { flex-direction: column; gap: 8px !important; }
+                    #${dailyOverlayId} .sn-dcr-head > div:last-child { text-align: left !important; }
+                    #${dailyOverlayId} .sn-dcr-table th,
+                    #${dailyOverlayId} .sn-dcr-table td { padding: 7px 4px !important; font-size: 11px !important; overflow-wrap: anywhere; }
+                    #${dailyOverlayId} .sn-dcr-table th { font-size: 9px !important; letter-spacing: 0.02em !important; }
+                    #${dailyOverlayId} .sn-dcr-table th:nth-child(1) { width: 23% !important; }
+                    #${dailyOverlayId} .sn-dcr-table th:nth-child(2) { width: 25% !important; }
+                    #${dailyOverlayId} .sn-dcr-table th:nth-child(4) { width: 25% !important; }
+                    #${dailyOverlayId} .sn-dcr-grid2 { grid-template-columns: 1fr !important; }
+                  }
                   @media print {
                     @page { margin: 12mm; size: A4; }
                     body.spendnote-daily-report-open > *:not(#${dailyOverlayId}) { display: none !important; }

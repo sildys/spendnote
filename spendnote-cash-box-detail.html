@@ -1085,8 +1085,45 @@
                 display: flex;
             }
 
-            .filter-section {
+            .filter-header {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 10px 12px;
+            }
+
+            .filter-tab {
+                padding: 6px 12px;
+            }
+
+            .filter-panel {
+                padding: 16px;
+            }
+
+            .filter-grid > .filter-group {
+                grid-column: 1 / -1 !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filter-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .filter-actions-spacer {
                 display: none;
+            }
+
+            .filter-actions .filter-btn {
+                flex: 1 1 calc(33.333% - 6px);
+                justify-content: center;
+                padding: 10px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .filter-actions .filter-btn {
+                flex-basis: calc(50% - 4px);
             }
         }
     </style>
@@ -1503,6 +1540,6 @@
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=20261016-logo2"></script>
     <script>if (typeof showPageTip === 'function') showPageTip('cashbox-detail', 'View all transactions for this cash box. Use <strong>filters</strong> to find specific entries or <strong>export</strong> them.');</script>
-    <script src="assets/js/transaction-history-data.js?v=20261020-daily3"></script>
+    <script src="assets/js/transaction-history-data.js?v=20261023-mobile1"></script>
 </body>
 </html>
