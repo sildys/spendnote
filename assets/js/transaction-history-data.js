@@ -1137,6 +1137,10 @@
             });
         }
 
+        const generatedStamp = () => new Date().toLocaleString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit'
+        });
+
         const overlayId = 'spendnoteBulkPdfOverlay';
         const printStyleId = 'spendnoteBulkPdfPrintStyle';
 
@@ -1260,10 +1264,7 @@
 
             const brandEl = document.getElementById(`${overlayId}Brand`);
             if (brandEl) {
-                const dt = new Date();
-                const pad2 = (n) => String(n).padStart(2, '0');
-                const stamp = `${dt.getFullYear()}-${pad2(dt.getMonth() + 1)}-${pad2(dt.getDate())} ${pad2(dt.getHours())}:${pad2(dt.getMinutes())}`;
-                brandEl.textContent = `Generated ${stamp}`;
+                brandEl.textContent = `Generated ${generatedStamp()}`;
             }
 
             const tbodyEl = document.getElementById(`${overlayId}Body`);
@@ -1566,7 +1567,7 @@
                 </div>
                 <div style="text-align:right;font-size:12px;color:#475569;">
                   <div style="font-size:14px;font-weight:700;color:#0f172a;">${escapeHtml(longDate)}</div>
-                  <div style="margin-top:3px;">Generated ${escapeHtml(localIsoDate(new Date()))} &middot; SpendNote</div>
+                  <div style="margin-top:3px;">Generated ${escapeHtml(generatedStamp())} &middot; SpendNote</div>
                 </div>
               </div>
               <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:800;color:#0f172a;padding:4px 0 14px;">
