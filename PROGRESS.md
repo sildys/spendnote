@@ -217,6 +217,16 @@ A Bing egyetlen külső linket sem lát. A közönséges link (nincs rajta `nofo
 - **Kész (2026-10-24):** a Beállítások „Subscription & Billing” kártyáján az appban (TWA) link nélküli mondat, a Disney+ mintájára: „Manage your subscription at spendnote.app.” A csomag neve marad, az ár (`.billing-plan-price`) és a „Free plan — upgrade anytime.” sor az appban rejtve. Weben nincs változás. Link nem lehet, mert a weboldal Beállításai a fizetéshez vezetnek (Google Payments policy).
 - **Következő:** lejárat napján szerveroldali e-mail, ha a felhasználó az utolsó 3 napban nem nyitotta meg az appot.
 
+### Hideg e-mail kísérlet — megbeszélve 2026-10-24, indulás novemberben
+- **Lista:** `C:\SpendNote projekt\us-small-offices-all.csv` (repón kívül; Grok gyűjtötte). 328 amerikai kiscég, 327 általános cím (`info@`/`office@`). Ellenőrizve: 321 cím tényleg ott van a forrásoldalon, 7 oldal nem engedte a lekérést, 3 domainnek nincs MX-e (`greenvillenailbar.com`, `resurrectedbarbershop.com`, `southfloridaautorepair.com` → kihagyni). Szkriptek: `tmp/list_check.py`, `tmp/list_verify.py`.
+- **Első kör:** csak a jól illő ~115 cég (templom, gondnok/takarító/kertész, ingatlankezelő, napközi, klub/harcművészet, korrepetálás). Közepes (~134: szalon, borbély, autószerviz, vegytisztító, autómosó, kisbolt) csak siker esetén; gyenge (~76: állatorvos, fogorvos, ügyvéd stb.) kimarad.
+- **Levél:** cégre szabott, ~80 szavas sima szöveg, egy link egy ingyenes eszközre (templom/klub/napközi: `/daily-cash-report-template`, „Prepared by / Verified by” aláírás; gondnok/takarító/ingatlankezelő/korrepetálás: a nyugtakitöltős oldalak, „Paid by / Received by”), UTM-mel. Személyes részlet csak a cég saját oldaláról ellenőrizve. Egy emlékeztető 1 hét múlva, utána vége. CAN-SPAM: cégnév, valódi postacím, leiratkozás.
+- **Küldés:** NEM Resend, NEM Brevo (mindkettő tiltja a legyűjtött listát), NEM `spendnote.app` és NEM `sildsys.com` (Mailgun, DMARC `p=reject`). Új domain (pl. `getspendnote.com`), Google Workspace-postafiók, SPF/DKIM/DMARC, 2–3 hét melegítés, utána max. 30 levél/nap.
+- **Szerepek:** Grok gyűjt (forrással) → agent ellenőriz és megírja a leveleket táblázatba → Grok küld, a leiratkozást és a visszapattanást intézi, minden emberi választ továbbít, magától nem válaszol; 2–3 visszapattanás egy napon → leáll és szól.
+- **A felhasználó dönt indulás előtt:** domain, aláírás neve (nem a teljes név), postacím (nem a magyar), válaszolhat-e Grok egyszerű kérdésekre.
+- **Elvárás:** 115 levélből 1–4 emberi válasz, max. 1 érdeklődő; előfizető ~500–2000 megkeresett cégenként egy (becslés, iparági átlagokból). Mérce: ha 115-ből egy érdemi válasz sincs, a csatornát lezárjuk; ha van, 2–3 postafiókra bővítünk.
+- **Előtte érdemesebb:** személyes levél a meglévő regisztrálóknak, és a regisztráció utáni lemorzsolódás megnézése (DB + GA4).
+
 ### Microsoft Store
 - PWABuilder + Partner Center, Stripe használható, D-U-N-S nem kell. Új Microsoft fiók létrehozása blokkolva lett, ezért **ne hozzunk létre több fiókot**. A meglévő sildsys@gmail.com Microsoft fiókkal kell próbálni (a Microsoft Ads tiltást nem kerüljük meg).
 
