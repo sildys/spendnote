@@ -217,6 +217,9 @@ A Bing egyetlen külső linket sem lát. A közönséges link (nincs rajta `nofo
 - **Kész (2026-10-24):** a Beállítások „Subscription & Billing” kártyáján az appban (TWA) link nélküli mondat, a Disney+ mintájára: „Manage your subscription at spendnote.app.” A csomag neve marad, az ár (`.billing-plan-price`) és a „Free plan — upgrade anytime.” sor az appban rejtve. Weben nincs változás. Link nem lehet, mert a weboldal Beállításai a fizetéshez vezetnek (Google Payments policy).
 - **Következő:** lejárat napján szerveroldali e-mail, ha a felhasználó az utolsó 3 napban nem nyitotta meg az appot.
 
+### SEO-terv 2026-11-23-tól (2026-10-25)
+- Két Grok SEO-terve (`C:\SpendNote projekt\seo-final-plan.md`) átnézve; a javított, végrehajtandó változat: `C:\SpendNote projekt\seo-terv-javitott.md` (repón kívül). **2026-11-22-ig a meglévő oldalakhoz nem nyúlunk** (csak újraindexelés-kérés, mérés, alapállapot-export). Első feladat 11-23-tól: A1 `/daily-cash-report-template` cím/meta „end of day / cash up”. Döntésre vár: D1 noindexes oldalak (policy, log, voucher), D2 főoldal pozicionálása, D3 forrásoldal-megkeresés.
+
 ### Hideg e-mail kísérlet — megbeszélve 2026-10-24, indulás novemberben
 - **Részletes terv és Grok-utasítás:** `C:\SpendNote projekt\email-kampany\` (repón kívül): `terv.md`, `grok-instructions-research.md`, `strong-fit-118.csv`.
 - **Lista:** `C:\SpendNote projekt\us-small-offices-all.csv` (repón kívül; Grok gyűjtötte). 328 amerikai kiscég, 327 általános cím (`info@`/`office@`). Ellenőrizve: 321 cím tényleg ott van a forrásoldalon, 7 oldal nem engedte a lekérést, 3 domainnek nincs MX-e (`greenvillenailbar.com`, `resurrectedbarbershop.com`, `southfloridaautorepair.com` → kihagyni). Szkriptek: `tmp/list_check.py`, `tmp/list_verify.py`.
