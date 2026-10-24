@@ -219,6 +219,7 @@ A Bing egyetlen külső linket sem lát. A közönséges link (nincs rajta `nofo
 
 ### SEO-terv 2026-11-23-tól (2026-10-25)
 - Két Grok SEO-terve (`C:\SpendNote projekt\seo-final-plan.md`) átnézve; a javított, végrehajtandó változat: `C:\SpendNote projekt\seo-terv-javitott.md` (repón kívül). **2026-11-22-ig a meglévő oldalakhoz nem nyúlunk** (csak újraindexelés-kérés, mérés, alapállapot-export). Első feladat 11-23-tól: A1 `/daily-cash-report-template` cím/meta „end of day / cash up”. Döntésre vár: D1 noindexes oldalak (policy, log, voucher), D2 főoldal pozicionálása, D3 forrásoldal-megkeresés.
+- Versenytárs-elemzés (Grok): `C:\SpendNote projekt\competitor-analysis.md`, szúrópróbával ellenőrizve; a tervbe átvett pontok a javított terv 5b részében. Grok feladatai 11-22-ig (csak kutatás és vázlat, oldalt nem módosít): `C:\SpendNote projekt\grok-tasks-2026-11.md` (versenytárs-hiányok, 40 forrásoldal a D3-hoz, treasurer checklist vázlat, kitöltött példák). Az eredményt élesítés előtt ellenőrizni kell.
 
 ### Hideg e-mail kísérlet — megbeszélve 2026-10-24, indulás novemberben
 - **Részletes terv és Grok-utasítás:** `C:\SpendNote projekt\email-kampany\` (repón kívül): `terv.md`, `grok-instructions-research.md`, `strong-fit-118.csv`.
