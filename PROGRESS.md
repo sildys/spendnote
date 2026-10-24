@@ -218,6 +218,7 @@ A Bing egyetlen külső linket sem lát. A közönséges link (nincs rajta `nofo
 - **Következő:** lejárat napján szerveroldali e-mail, ha a felhasználó az utolsó 3 napban nem nyitotta meg az appot.
 
 ### Hideg e-mail kísérlet — megbeszélve 2026-10-24, indulás novemberben
+- **Részletes terv és Grok-utasítás:** `C:\SpendNote projekt\email-kampany\` (repón kívül): `terv.md`, `grok-instructions-research.md`, `strong-fit-118.csv`.
 - **Lista:** `C:\SpendNote projekt\us-small-offices-all.csv` (repón kívül; Grok gyűjtötte). 328 amerikai kiscég, 327 általános cím (`info@`/`office@`). Ellenőrizve: 321 cím tényleg ott van a forrásoldalon, 7 oldal nem engedte a lekérést, 3 domainnek nincs MX-e (`greenvillenailbar.com`, `resurrectedbarbershop.com`, `southfloridaautorepair.com` → kihagyni). Szkriptek: `tmp/list_check.py`, `tmp/list_verify.py`.
 - **Első kör:** csak a jól illő ~115 cég (templom, gondnok/takarító/kertész, ingatlankezelő, napközi, klub/harcművészet, korrepetálás). Közepes (~134: szalon, borbély, autószerviz, vegytisztító, autómosó, kisbolt) csak siker esetén; gyenge (~76: állatorvos, fogorvos, ügyvéd stb.) kimarad.
 - **Levél:** cégre szabott, ~80 szavas sima szöveg, egy link egy ingyenes eszközre (templom/klub/napközi: `/daily-cash-report-template`, „Prepared by / Verified by” aláírás; gondnok/takarító/ingatlankezelő/korrepetálás: a nyugtakitöltős oldalak, „Paid by / Received by”), UTM-mel. Személyes részlet csak a cég saját oldaláról ellenőrizve. Egy emlékeztető 1 hét múlva, utána vége. CAN-SPAM: cégnév, valódi postacím, leiratkozás.
