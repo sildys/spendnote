@@ -1,0 +1,27 @@
+/* Free no-signup cash count sheet. Builds on free-receipt.css (fr-* layout, #frPrint) and free-cash-report.css (cr-* groups and sheet). */
+.cc-line { display: grid; grid-template-columns: minmax(0, 1fr) 5.5rem 6.5rem; gap: 0.6rem; align-items: center; margin-bottom: 0.4rem; }
+.cc-line label { font-size: 0.92rem; font-weight: 700; color: var(--ink-2, #1f2937); }
+.cc-line input {
+    font: inherit; font-size: 0.95rem; padding: 0.5rem 0.6rem; border: 1.5px solid #d1d5db; border-radius: 9px;
+    background: #fff; color: var(--ink, #0b1220); width: 100%; min-width: 0; box-sizing: border-box; text-align: right;
+}
+.cc-line input:focus { outline: none; border-color: var(--g, #059669); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15); }
+.cc-sub { text-align: right; font-size: 0.9rem; font-weight: 700; color: var(--g-dark, #047857); white-space: nowrap; }
+.cc-line-rolls { margin-top: 0.5rem; padding-top: 0.55rem; border-top: 1px dashed #d1d5db; }
+.cc-line-rolls label { font-weight: 600; }
+.cc-total { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 12px; padding: 0.75rem 0.95rem; margin-bottom: 1rem; font-weight: 800; color: var(--ink-2, #1f2937); }
+.cc-total b { font-size: 1.25rem; color: var(--g-dark, #047857); }
+
+.cc-r-table .cc-r-qty { text-align: center; width: 5rem; }
+.cc-sheet .cr-r-table td { padding: 0.3rem 0.2rem; }
+.cc-sheet .cr-r-table td:first-child { font-weight: 600; }
+
+@media (max-width: 520px) {
+    .cc-line { grid-template-columns: minmax(0, 1fr) 4.6rem 5.6rem; gap: 0.45rem; }
+    .cc-r-table .cc-r-qty { width: 3.6rem; }
+}
+
+@media print {
+    #frPrint .cc-r-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; align-items: start; }
+    #frPrint .cc-r-table .cr-r-num { width: auto; }
+}
