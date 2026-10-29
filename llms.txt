@@ -5,8 +5,8 @@
 Key facts:
 
 - Made by Sildsys, LLC. Contact: support@spendnote.app
-- Runs in the browser on phone, tablet and desktop, and can be installed as an app. There is no native iOS app.
-- Pricing: 14-day free trial with all features, no credit card. Standard $19/month ($190/year): 1 user, 2 cash boxes. Pro $29/month ($290/year): 3 users included, +$5/month per additional user, unlimited cash boxes, emailed receipts, role-based permissions, editable receipt labels (receipts in any language). There is no free plan. 30-day money-back guarantee.
+- Runs in the browser on phone, tablet and desktop. Android app on Google Play: https://play.google.com/store/apps/details?id=app.spendnote (same account and data as the web app). There is no native iOS app.
+- Pricing: 14-day free trial with all features, no credit card. Standard $19/month ($190/year): 1 user, 2 cash boxes. Pro $29/month ($290/year): 3 users included, +$5/month per additional user, unlimited cash boxes, emailed receipts, role-based permissions, editable receipt labels (receipts in any language). There is no free plan. 30-day money-back guarantee on the first paid charge if 20 or fewer transactions were recorded.
 - Features: numbered cash receipts with your logo, live balance per cash box, searchable transaction history showing who recorded each entry, daily cash report (opening balance, cash in and out, expected closing balance, cash count section to sign), CSV and PDF export. Mistakes are voided, not deleted.
 - SpendNote documents internal cash handoffs. It is not accounting, tax, payroll or invoicing software, and its receipts are not tax documents.
 - Data is hosted on EU servers and encrypted in transit and at rest.
