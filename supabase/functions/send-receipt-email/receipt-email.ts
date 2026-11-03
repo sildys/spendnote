@@ -124,112 +124,140 @@ export function isValidRecipient(email: string): boolean {
 }
 
 export function renderReceiptEmail(d: ReceiptEmailData): { subject: string; html: string; text: string } {
-  const subject = `Your Cash Receipt - ${d.receiptId}`;
+  const company = d.companyName.replace(/\s+/g, " ").trim();
+  const hasCompany = Boolean(company) && company !== "—";
+  const subject = hasCompany ? `Cash receipt ${d.receiptId} from ${company}` : `Cash receipt ${d.receiptId}`;
+  const preheader = [hasCompany ? company : "", d.total, `Receipt ${d.receiptId}`].filter(Boolean).join(" · ");
+
+  const label = (text: string) =>
+    `<div style="font-size:11px;line-height:1.4;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 6px 0;">${text}</div>`;
 
   const itemsHtml = d.items
     .map((it) =>
-      `<tr><td style="padding:10px 8px;font-size:13px;border-bottom:1px solid #f0f0f0;">${escapeHtml(it.description)}</td><td align="right" style="padding:10px 8px;font-size:13px;font-weight:700;border-bottom:1px solid #f0f0f0;">${escapeHtml(it.amount)}</td></tr>`
+      `<tr>
+                      <td style="padding:10px 0;font-size:14px;line-height:1.4;color:#111111;border-bottom:1px solid #eeeeee;">${escapeHtml(it.description)}</td>
+                      <td align="right" style="padding:10px 0 10px 12px;font-size:14px;line-height:1.4;color:#111111;border-bottom:1px solid #eeeeee;white-space:nowrap;">${escapeHtml(it.amount)}</td>
+                    </tr>`
     )
-    .join("");
-
-  const notesHtml = d.notes
-    ? `
-                <div style="margin-top:18px;background-color:#f0f9ff;border-left:4px solid #059669;padding:14px 12px;">
-                  <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#666666;margin-bottom:8px;">Notes</div>
-                  <div style="font-size:13px;color:#333333;line-height:1.6;">${escapeMultiline(d.notes)}</div>
-                </div>
-                `
-    : "";
+    .join("\n                    ");
 
   const voidHtml = d.isVoided
     ? `
-                <div style="margin-top:18px;color:#666666;font-size:12px;">This receipt is marked as VOID.</div>
-                `
+            <tr>
+              <td style="padding:0 32px 8px 32px;">
+                <div style="background-color:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;">This receipt is marked as VOID.</div>
+              </td>
+            </tr>`
     : "";
 
   const pdfButtonHtml = d.pdfUrl
     ? `
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;margin-top:24px;">
-                  <tr>
-                    <td align="center">
-                      <a href="${escapeHtml(d.pdfUrl)}" style="display:inline-block;background-color:#059669;color:#ffffff;text-decoration:none;padding:14px 22px;border-radius:8px;font-size:14px;font-weight:700;">Download PDF Receipt</a>
-                    </td>
-                  </tr>
-                </table>`
+            <tr>
+              <td align="center" style="padding:20px 32px 4px 32px;">
+                <a href="${escapeHtml(d.pdfUrl)}" style="display:inline-block;background-color:#059669;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:8px;font-size:15px;font-weight:700;">View &amp; download PDF</a>
+              </td>
+            </tr>`
     : "";
+
+  const notesHtml = d.notes
+    ? `
+            <tr>
+              <td style="padding:20px 32px 0 32px;">
+                ${label("Notes")}
+                <div style="background-color:#f9fafb;border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.6;color:#374151;">${escapeMultiline(d.notes)}</div>
+              </td>
+            </tr>`
+    : "";
+
+  const replyHint = hasCompany
+    ? `Questions about this receipt? Reply to this email to reach ${escapeHtml(company)}.`
+    : "Questions about this receipt? Reply to this email to reach the sender.";
 
   const html = `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta name="supported-color-schemes" content="light" />
     <title>Cash Receipt</title>
   </head>
-  <body style="margin:0;padding:0;background-color:#f5f5f5;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;">
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;background-color:#f5f5f5;">
+  <body style="margin:0;padding:0;background-color:#f4f5f7;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;color:#111111;">
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#f4f5f7;">${escapeHtml(preheader)}</div>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;background-color:#f4f5f7;">
       <tr>
         <td align="center" style="padding:32px 12px;">
-          <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;width:600px;max-width:600px;background-color:#ffffff;border-radius:12px;overflow:hidden;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:separate;width:100%;max-width:600px;background-color:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;">
             <tr>
-              <td align="center" style="padding:28px 24px;background-color:#059669;">
-                <div style="font-size:24px;line-height:1.2;font-weight:900;color:#ffffff;margin:0;">Cash Receipt</div>
-                <div style="font-size:14px;line-height:1.4;font-weight:500;color:#eafff7;margin-top:8px;">Your receipt is ready</div>
+              <td style="height:4px;line-height:4px;font-size:0;background-color:#059669;">&nbsp;</td>
+            </tr>
+            <tr>
+              <td style="padding:28px 32px 20px 32px;">
+                ${label("Cash receipt")}
+                <div style="font-size:22px;line-height:1.3;font-weight:700;color:#111111;">${escapeHtml(hasCompany ? company : "Your cash receipt")}</div>
+                <div style="font-size:14px;line-height:1.5;color:#4b5563;margin-top:4px;">${hasCompany ? "sent you a receipt for cash handed over." : "A receipt for cash handed over."}</div>
+              </td>
+            </tr>${voidHtml}
+            <tr>
+              <td style="padding:0 32px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:separate;background-color:#f8faf9;border:1px solid #e5e7eb;border-radius:10px;">
+                  <tr>
+                    <td valign="middle" style="padding:16px 18px;">
+                      ${label("Total handed over")}
+                      <div style="font-size:30px;line-height:1.1;font-weight:700;color:#047857;">${escapeHtml(d.total)}</div>
+                    </td>
+                    <td align="right" valign="middle" style="padding:16px 18px;font-size:13px;line-height:1.7;color:#4b5563;white-space:nowrap;">
+                      Date: <strong style="color:#111111;">${escapeHtml(d.dateStr)}</strong><br />
+                      Receipt ID: <strong style="color:#111111;">${escapeHtml(d.receiptId)}</strong><br />
+                      Cash Box ID: <strong style="color:#111111;">${escapeHtml(d.cashBoxCode)}</strong>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>${pdfButtonHtml}
+            <tr>
+              <td style="padding:24px 32px 0 32px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
+                  <tr>
+                    <td width="50%" valign="top" style="padding-right:12px;">
+                      ${label("From")}
+                      <div style="font-size:15px;line-height:1.4;font-weight:700;color:#111111;">${escapeHtml(d.companyName)}</div>
+                      <div style="font-size:13px;line-height:1.5;color:#4b5563;margin-top:2px;">${escapeMultiline(d.companyAddress)}</div>
+                    </td>
+                    <td width="50%" valign="top" style="padding-left:12px;">
+                      ${label("To")}
+                      <div style="font-size:15px;line-height:1.4;font-weight:700;color:#111111;">${escapeHtml(d.contactName)}</div>
+                      <div style="font-size:13px;line-height:1.5;color:#4b5563;margin-top:2px;">${escapeMultiline(d.contactAddress)}</div>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>
-              <td style="padding:28px 24px;">
+              <td style="padding:24px 32px 0 32px;">
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
                   <tr>
-                    <td style="font-size:12px;color:#666666;line-height:1.5;">
-                      <strong style="color:#000000;">Date:</strong> ${escapeHtml(d.dateStr)}
-                    </td>
-                    <td align="right" style="font-size:12px;color:#666666;line-height:1.5;">
-                      <strong style="color:#000000;">Cash Box ID:</strong> ${escapeHtml(d.cashBoxCode)}<br />
-                      <strong style="color:#000000;">Receipt ID:</strong> ${escapeHtml(d.receiptId)}
-                    </td>
+                    <td style="padding:0 0 8px 0;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid #d1d5db;">Description</td>
+                    <td align="right" style="padding:0 0 8px 12px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid #d1d5db;">Amount</td>
                   </tr>
-                </table>
-
-                <div style="height:2px;background-color:#000000;margin:16px 0 18px 0;"></div>
-
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
+                    ${itemsHtml}
                   <tr>
-                    <td width="50%" valign="top" style="padding-right:10px;">
-                      <div style="font-size:11px;font-weight:700;color:#999999;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">From</div>
-                      <div style="font-size:14px;font-weight:800;color:#000000;margin-bottom:4px;">${escapeHtml(d.companyName)}</div>
-                      <div style="font-size:13px;color:#666666;line-height:1.5;">${escapeMultiline(d.companyAddress)}</div>
-                    </td>
-                    <td width="50%" valign="top" style="padding-left:10px;">
-                      <div style="font-size:11px;font-weight:700;color:#999999;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">To</div>
-                      <div style="font-size:14px;font-weight:800;color:#000000;margin-bottom:4px;">${escapeHtml(d.contactName)}</div>
-                      <div style="font-size:13px;color:#666666;line-height:1.5;">${escapeMultiline(d.contactAddress)}</div>
-                    </td>
+                    <td style="padding:12px 0 0 0;font-size:14px;font-weight:700;color:#111111;border-top:2px solid #111111;">Total handed over</td>
+                    <td align="right" style="padding:12px 0 0 12px;font-size:16px;font-weight:700;color:#111111;border-top:2px solid #111111;white-space:nowrap;">${escapeHtml(d.total)}</td>
                   </tr>
                 </table>
-
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;margin-top:18px;border:1px solid #e0e0e0;border-radius:8px;">
-                  <tr>
-                    <td style="background-color:#f8fafc;padding:10px 8px;font-size:11px;font-weight:700;text-transform:uppercase;color:#666666;border-bottom:1px solid #e0e0e0;">Description</td>
-                    <td align="right" style="background-color:#f8fafc;padding:10px 8px;font-size:11px;font-weight:700;text-transform:uppercase;color:#666666;border-bottom:1px solid #e0e0e0;">Amount</td>
-                  </tr>
-                  ${itemsHtml}
-                </table>
-
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;margin-top:18px;">
-                  <tr>
-                    <td style="background-color:#059669;color:#ffffff;padding:14px 16px;border-radius:8px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Total handed over</td>
-                    <td align="right" style="background-color:#059669;color:#ffffff;padding:14px 16px;border-radius:8px;font-size:22px;font-weight:900;">${escapeHtml(d.total)}</td>
-                  </tr>
-                </table>
-${notesHtml}${voidHtml}${pdfButtonHtml}
+              </td>
+            </tr>${notesHtml}
+            <tr>
+              <td style="padding:28px 32px 28px 32px;">
+                <div style="font-size:13px;line-height:1.6;color:#4b5563;">${replyHint}</div>
               </td>
             </tr>
             <tr>
-              <td align="center" style="padding:22px 24px;background-color:#fafafa;border-top:1px solid #e0e0e0;">
-                <div style="font-size:14px;font-weight:700;color:#000000;margin-bottom:10px;">SpendNote</div>
-                <div style="font-size:12px;color:#999999;line-height:1.6;">
-                  Proof of cash handoff. Not a tax document.<br />
-                  2026 SpendNote. All rights reserved.
+              <td style="padding:18px 32px;background-color:#fafafa;border-top:1px solid #eeeeee;">
+                <div style="font-size:12px;line-height:1.6;color:#6b7280;">
+                  Sent with <a href="https://spendnote.app/" style="color:#047857;font-weight:700;text-decoration:none;">SpendNote</a> · Proof of cash handoff for teams · Not a tax document.<br />
+                  &copy; 2026 SpendNote
                 </div>
               </td>
             </tr>
@@ -241,11 +269,14 @@ ${notesHtml}${voidHtml}${pdfButtonHtml}
 </html>`;
 
   const textLines = [
-    "Cash Receipt",
+    hasCompany ? `Cash receipt from ${company}` : "Cash receipt",
     "",
+    `Total handed over: ${d.total}`,
     `Date: ${d.dateStr}`,
-    `Cash Box ID: ${d.cashBoxCode}`,
     `Receipt ID: ${d.receiptId}`,
+    `Cash Box ID: ${d.cashBoxCode}`,
+    ...(d.isVoided ? ["", "This receipt is marked as VOID."] : []),
+    ...(d.pdfUrl ? ["", `View & download PDF: ${d.pdfUrl}`] : []),
     "",
     `From: ${d.companyName}`,
     ...(d.companyAddress ? [d.companyAddress] : []),
@@ -253,12 +284,13 @@ ${notesHtml}${voidHtml}${pdfButtonHtml}
     ...(d.contactAddress ? [d.contactAddress] : []),
     "",
     ...d.items.map((it) => `${it.description}: ${it.amount}`),
-    `Total handed over: ${d.total}`,
     ...(d.notes ? ["", `Notes: ${d.notes}`] : []),
-    ...(d.isVoided ? ["", "This receipt is marked as VOID."] : []),
-    ...(d.pdfUrl ? ["", `Download PDF receipt: ${d.pdfUrl}`] : []),
     "",
-    "SpendNote - Proof of cash handoff. Not a tax document.",
+    hasCompany
+      ? `Questions about this receipt? Reply to this email to reach ${company}.`
+      : "Questions about this receipt? Reply to this email to reach the sender.",
+    "",
+    "Sent with SpendNote (https://spendnote.app) - Proof of cash handoff for teams. Not a tax document.",
   ];
 
   return { subject, html, text: textLines.join("\n") };
