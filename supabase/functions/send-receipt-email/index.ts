@@ -216,7 +216,7 @@ Deno.serve(async (req: Request) => {
       total: formatMoney(tx.amount, currency),
       notes: cleanText(tx.notes, 2000),
       isVoided: String(tx.status || "").toLowerCase() === "voided",
-      pdfUrl: normalizePdfUrl(body?.pdfUrl, tx.id) || "",
+      pdfUrl: normalizePdfUrl(body?.pdfUrl) || "",
     });
 
     const replyTo = String(user.email || "").trim();
