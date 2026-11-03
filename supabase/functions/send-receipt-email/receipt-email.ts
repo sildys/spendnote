@@ -100,7 +100,9 @@ export function buildLineItems(
 // Recipients have no SpendNote session: the page must render from the query
 // (demo mode), which it only does without txId. bootstrap and
 // previewLogoInject need a logged-in opener and would leave a blank page or
-// the placeholder logo.
+// the placeholder logo. download/returnTo make the page save the PDF and close
+// itself, which suits the in-app button but makes the receipt vanish for a
+// recipient; they get the receipt with its Download PDF button instead.
 export function normalizePdfUrl(raw: unknown): string | null {
   const value = String(raw ?? "").trim();
   if (!value || value.length > MAX_PDF_URL_LENGTH) return null;
@@ -112,7 +114,7 @@ export function normalizePdfUrl(raw: unknown): string | null {
   }
   if (!PDF_PATHS.has(parsed.pathname)) return null;
   const params = new URLSearchParams(parsed.search);
-  for (const key of ["txId", "bootstrap", "previewLogoInject"]) params.delete(key);
+  for (const key of ["txId", "bootstrap", "previewLogoInject", "download", "returnTo"]) params.delete(key);
   params.set("demo", "1");
   return `${APP_ORIGIN}/spendnote-pdf-receipt.html?${params.toString()}`;
 }
