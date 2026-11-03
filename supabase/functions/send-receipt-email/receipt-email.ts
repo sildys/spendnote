@@ -97,7 +97,11 @@ export function buildLineItems(
 
 // The link always points at the production receipt page, whatever origin the
 // caller sent, so the email can never carry a link to another site.
-export function normalizePdfUrl(raw: unknown, transactionId: string): string | null {
+// Recipients have no SpendNote session: the page must render from the query
+// (demo mode), which it only does without txId. bootstrap and
+// previewLogoInject need a logged-in opener and would leave a blank page or
+// the placeholder logo.
+export function normalizePdfUrl(raw: unknown): string | null {
   const value = String(raw ?? "").trim();
   if (!value || value.length > MAX_PDF_URL_LENGTH) return null;
   let parsed: URL;
@@ -108,7 +112,8 @@ export function normalizePdfUrl(raw: unknown, transactionId: string): string | n
   }
   if (!PDF_PATHS.has(parsed.pathname)) return null;
   const params = new URLSearchParams(parsed.search);
-  params.set("txId", transactionId);
+  for (const key of ["txId", "bootstrap", "previewLogoInject"]) params.delete(key);
+  params.set("demo", "1");
   return `${APP_ORIGIN}/spendnote-pdf-receipt.html?${params.toString()}`;
 }
 

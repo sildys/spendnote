@@ -593,6 +593,9 @@ if (window.self !== window.top) {
 }
 
 const urlParams = new URLSearchParams(window.location.search);
+window.spendnoteEscapeHtml = (value) => String(value ?? '')
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 const spendnotePreviewLogoPmEligible = () => {
   if (urlParams.get('previewLogoInject') !== '1') return false;
   if (urlParams.get('demo') === '1') return true;
@@ -782,7 +785,7 @@ if (isDemo) {
   setTextAll('.contact-name', demoContact);
 
   const addressToHtml = (raw) => {
-    const value = safeText(raw, '');
+    const value = spendnoteEscapeHtml(safeText(raw, ''));
     if (!value) return '';
     if (value.includes('|')) {
       const idx = value.indexOf('|');
@@ -848,7 +851,7 @@ if (isDemo) {
 
   const rows = rowsSource.map((it) => {
     const amount = Number.isFinite(Number(it.amount)) ? formatMoney(Number(it.amount), demoCurrency) : '';
-    return `<tr><td>${safeText(it.description, '&nbsp;')}</td><td class="amount">${amount}</td></tr>`;
+    return `<tr><td>${spendnoteEscapeHtml(safeText(it.description, '')) || '&nbsp;'}</td><td class="amount">${amount}</td></tr>`;
   });
 
   while (rows.length < 5) {
@@ -988,7 +991,7 @@ if (urlParams.get('signatures') === '0') {
         }
 
         function addressToHtml(raw) {
-          const value = safeText(raw, '');
+          const value = spendnoteEscapeHtml(safeText(raw, ''));
           if (!value) return '';
           if (value.includes('|')) {
             const idx = value.indexOf('|');
@@ -1064,7 +1067,7 @@ if (urlParams.get('signatures') === '0') {
           const rows = effective.slice(0, fillRows).map((it) => {
             const desc = safeText(it.description, '-');
             const amt = formatMoney(it.amount, currency);
-            return `<tr><td>${desc}</td><td class="amount">${amt}</td></tr>`;
+            return `<tr><td>${spendnoteEscapeHtml(desc)}</td><td class="amount">${amt}</td></tr>`;
           });
           while (rows.length < maxRows) {
             rows.push('<tr><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>');
