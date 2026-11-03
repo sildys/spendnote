@@ -822,28 +822,53 @@ html, body { height: auto !important; overflow: auto !important; }
                 emailBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
                 try {
-                    const emailHtml = await generateEmailHtml();
-                    if (!emailHtml) {
+                    const emailContent = await generateEmailHtml();
+                    if (!emailContent) {
                         throw new Error('Failed to generate email content');
                     }
 
                     const txTitle = document.getElementById('txTitle')?.textContent || 'Receipt';
                     const subject = `Your Cash Receipt - ${txTitle}`;
 
-                    const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpybm5oYXJ1ZGxneHV2ZXdxcnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyOTkxMDgsImV4cCI6MjA4Mjg3NTEwOH0.kQLRMVrl_uYYzZwX387uFs_BAXc9c5v7EhcvGhPR7v4';
+                    const getAccessToken = async (refresh) => {
+                        const client = window.supabaseClient;
+                        if (!client?.auth) return '';
+                        if (refresh) {
+                            try { await client.auth.refreshSession(); } catch (_) {}
+                        }
+                        const { data } = await client.auth.getSession();
+                        return String(data?.session?.access_token || '');
+                    };
 
-                    const res = await fetch('https://zrnnharudlgxuvewqryj.supabase.co/functions/v1/send-receipt-email', {
+                    const sendRequest = async (accessToken) => fetch(`${SUPABASE_URL}/functions/v1/send-receipt-email`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${anonKey}`
+                            'Authorization': `Bearer ${accessToken}`
                         },
                         body: JSON.stringify({
+                            transactionId: getCurrentTxId(),
                             to: email,
+                            pdfUrl: emailContent.pdfUrl,
+                            companyNameFallback: emailContent.companyName,
+                            companyAddressFallback: emailContent.companyAddress,
+                            // subject + html are only read by the pre-2026-11 function version (v22); drop once the new version is deployed.
                             subject: subject,
-                            html: emailHtml
+                            html: emailContent.html
                         })
                     });
+
+                    let accessToken = await getAccessToken(false);
+                    if (!accessToken) accessToken = await getAccessToken(true);
+                    if (!accessToken) {
+                        throw new Error('Your session has expired. Please log in again.');
+                    }
+
+                    let res = await sendRequest(accessToken);
+                    if (res.status === 401) {
+                        const refreshed = await getAccessToken(true);
+                        if (refreshed) res = await sendRequest(refreshed);
+                    }
 
                     if (!res.ok) {
                         const backend = window.SpendNoteBackendErrors;
@@ -870,8 +895,8 @@ html, body { height: auto !important; overflow: auto !important; }
                         }
 
                         const userMessage = backend?.buildUserMessage
-                            ? backend.buildUserMessage('Failed to send email', parsed)
-                            : `Failed to send email: ${parsed?.message || 'Unknown error'}`;
+                            ? backend.buildUserMessage('', parsed)
+                            : (parsed?.message || 'Unknown error');
 
                         throw new Error(userMessage);
                     }
@@ -1010,7 +1035,7 @@ html, body { height: auto !important; overflow: auto !important; }
                 const isVoided = tx.status === 'voided';
                 const voidWatermark = isVoided ? `<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:86px;font-weight:900;letter-spacing:4px;color:rgba(120,120,120,0.12);text-transform:uppercase;pointer-events:none;z-index:3;">VOID</div>` : '';
 
-                return `<!DOCTYPE html>
+                const html = `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -1116,6 +1141,12 @@ html, body { height: auto !important; overflow: auto !important; }
     </table>
   </body>
 </html>`;
+                return {
+                    html,
+                    pdfUrl,
+                    companyName: companyName === '—' ? '' : companyName,
+                    companyAddress
+                };
             } catch (err) {
                 console.error('Generate email HTML error:', err);
                 return null;
