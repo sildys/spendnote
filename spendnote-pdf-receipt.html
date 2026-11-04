@@ -78,7 +78,7 @@
       max-width: 800px;
       margin: 0 auto;
       background: white;
-      padding: 48px;
+      padding: 40px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.1);
       border-radius: 8px;
       position: relative;
@@ -106,8 +106,8 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      padding-bottom: 20px;
-      margin-bottom: 28px;
+      padding-bottom: 16px;
+      margin-bottom: 22px;
       border-bottom: 2px solid #111;
     }
     
@@ -158,7 +158,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 32px;
-      margin-bottom: 32px;
+      margin-bottom: 22px;
     }
     
     .party-label {
@@ -167,14 +167,14 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: #999;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     
     .party-name {
       font-size: 16px;
       font-weight: 800;
       color: #000;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
     
     .party-info {
@@ -232,7 +232,7 @@
 
     .table-section tbody td {
       padding: 0 16px;
-      height: 44px;
+      height: 34px;
       vertical-align: middle;
     }
     
@@ -241,10 +241,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px;
+      padding: 12px 16px;
       border-top: 2px solid #111;
       color: #111;
-      margin-bottom: 24px;
+      margin-bottom: 18px;
     }
     
     .total-label {
@@ -263,10 +263,10 @@
     
     /* NOTES */
     .notes {
-      padding: 14px 16px;
+      padding: 12px 16px;
       background: #f9fafb;
       border-radius: 8px;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
     
     .notes-label {
@@ -289,7 +289,7 @@
       display: flex;
       justify-content: space-between;
       gap: 48px;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
     
     .signature {
@@ -303,14 +303,14 @@
     }
     
     .signature-line {
-      height: 18mm;
+      height: 14mm;
       border-bottom: 1px solid #000;
     }
     
     /* FOOTER */
     .footer {
       border-top: 2px solid #e0e0e0;
-      padding-top: 24px;
+      padding-top: 16px;
       text-align: center;
       white-space: nowrap;
     }
@@ -396,7 +396,7 @@
       max-width: none;
       width: 800px;
       margin: 0;
-      padding: 48px;
+      padding: 40px;
     }
     
     body.download-mode .actions {
@@ -670,9 +670,10 @@ async function downloadReceiptPdf() {
     pdf.setFillColor(255, 255, 255);
     pdf.rect(0, 0, pageW, pageH, 'F');
 
-    const marginX = 10;
-    const marginTop = 10;
-    const marginBottom = 10;
+    // 28 mm puts the 30px title at the 17pt of the printed receipt.
+    const marginX = 28;
+    const marginTop = 14;
+    const marginBottom = 14;
     const targetW = pageW - marginX * 2;
     const targetH = pageH - marginTop - marginBottom;
 

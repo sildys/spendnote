@@ -169,10 +169,6 @@ export function renderReceiptEmail(d: ReceiptEmailData): { subject: string; html
             </tr>`
     : "";
 
-  const replyHint = hasCompany
-    ? `Questions about this receipt? Reply to this email to reach ${escapeHtml(company)}.`
-    : "Questions about this receipt? Reply to this email to reach the sender.";
-
   const html = `<!DOCTYPE html>
 <html>
   <head>
@@ -249,9 +245,7 @@ export function renderReceiptEmail(d: ReceiptEmailData): { subject: string; html
               </td>
             </tr>${notesHtml}
             <tr>
-              <td style="padding:28px 32px 28px 32px;">
-                <div style="font-size:13px;line-height:1.6;color:#4b5563;">${replyHint}</div>
-              </td>
+              <td style="height:28px;line-height:28px;font-size:0;">&nbsp;</td>
             </tr>
             <tr>
               <td style="padding:18px 32px;background-color:#fafafa;border-top:1px solid #eeeeee;">
@@ -285,10 +279,6 @@ export function renderReceiptEmail(d: ReceiptEmailData): { subject: string; html
     "",
     ...d.items.map((it) => `${it.description}: ${it.amount}`),
     ...(d.notes ? ["", `Notes: ${d.notes}`] : []),
-    "",
-    hasCompany
-      ? `Questions about this receipt? Reply to this email to reach ${company}.`
-      : "Questions about this receipt? Reply to this email to reach the sender.",
     "",
     "Sent with SpendNote (https://spendnote.app) - Proof of cash handoff for teams. Not a tax document.",
   ];
