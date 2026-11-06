@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=20261016-logo">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=20261016-logo2">
-    <link rel="stylesheet" href="assets/css/transaction-detail.css?v=5">
+    <link rel="stylesheet" href="assets/css/transaction-detail.css?v=6">
     <!-- Microsoft Advertising UET tag -->
     <script>
         if(!(function(){try{return /[?&]source=twa(&|$)/.test(location.search)||document.referrer.indexOf('android-app://')===0||sessionStorage.getItem('sn.twa')==='1'}catch(e){return false}})())(function(w,d,t,u,o){w[u]=w[u]||[],o.ts=(new Date).getTime();var n=d.createElement(t);n.src="https://bat.bing.net/bat.js?ti="+o.ti+("uetq"!=u?"&q="+u:""),n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&"loaded"!==s&&"complete"!==s||(o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad"),n.onload=n.onreadystatechange=null)};var i=d.getElementsByTagName(t)[0];i.parentNode.insertBefore(n,i)})(window,document,"script","uetq",{ti:"343258687",enableAutoSpaTracking:true});
@@ -128,6 +128,15 @@
                 </div>
             </div>
         </div>
+
+        <section class="tx-sign-card" id="txSignCard" aria-label="Signatures" hidden>
+            <div class="tx-sign-head">
+                <div class="info-card-title"><i class="fas fa-signature"></i> Signatures</div>
+                <span class="tx-sign-status" id="txSignStatus"></span>
+            </div>
+            <div class="tx-sign-slots" id="txSignSlots"></div>
+            <p class="tx-sign-foot">Optional. Signatures appear on the printed and PDF receipt and can't be changed once saved. Without them, sign the printed copy on paper.</p>
+        </section>
 
         <div class="tx-actions-row" aria-label="Receipt actions">
             <div class="left">
@@ -366,14 +375,16 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js?v=20261023-trial-team"></script>
+<script src="assets/js/supabase-config.js?v=20261107-signatures"></script>
 <script src="assets/js/auth-guard.js?v=20260207-2310"></script>
 <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
 <script src="assets/js/nav-loader.js?v=20261016-favicon-logo"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=20261016-logo2"></script>
 <script>if (typeof showPageTip === 'function') showPageTip('tx-detail', 'From here you can <strong>print, download as PDF, or email</strong> this receipt to your contact.');</script>
-<script src="assets/js/transaction-detail-ui.js?v=20261103-receipt-email"></script>
+<script src="assets/js/transaction-detail-ui.js?v=20261107-signatures"></script>
+<script src="assets/js/signature-pad.js?v=20261107-signatures"></script>
+<script src="assets/js/transaction-detail-signatures.js?v=20261107-signatures"></script>
 <script src="assets/js/transaction-detail-data.js?v=20260419-cb-logo-receipt"></script>
 <script>
 window.addEventListener('message', (event) => {

@@ -228,6 +228,30 @@ body {
   border-top: 0.25mm solid #000;
   margin-top: 10mm;
 }
+.signature.sn-signed {
+  position: relative;
+}
+.signature .sn-sig-img {
+  position: absolute;
+  left: 0;
+  bottom: 0.5mm;
+  max-height: 9.5mm;
+  max-width: 70%;
+  object-fit: contain;
+}
+.signature .sn-sig-meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  margin-top: 0.6mm;
+  font-size: 6.5pt;
+  line-height: 1.2;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* FOOTER */
 .footer {
@@ -952,9 +976,10 @@ body {
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20261023-trial-team"></script>
+    <script src="assets/js/supabase-config.js?v=20261107-signatures"></script>
     <script src="assets/js/auth-guard.js?v=20260207-2310"></script>
     <script src="assets/js/main.js?v=20261016-logo2"></script>
+    <script src="assets/js/receipt-signatures.js?v=20261107-signatures"></script>
 
     <script>
       (async function () {
@@ -1286,6 +1311,12 @@ body {
             setTextAll('.contact-id', '');
             document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = 'none'));
           }
+
+          try {
+            if (typeof window.spendnoteRenderReceiptSignatures === 'function') {
+              await window.spendnoteRenderReceiptSignatures(tx, { fromName, toName });
+            }
+          } catch (_) {}
 
           if (displayId) {
             document.title = displayId;

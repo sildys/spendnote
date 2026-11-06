@@ -3996,6 +3996,108 @@ var db = {
 
     },
 
+    // On-screen receipt signatures (070). Insert-only; side, org, time, signer
+    // and content hash are filled in by the database trigger.
+    signatures: {
+        _errorCode(error) {
+            const msg = String(error?.message || '');
+            const known = msg.match(/SIGNATURE_[A-Z_]+/);
+            if (known) return known[0];
+            if (String(error?.code || '') === '23505') return 'SIGNATURE_ALREADY_SIGNED';
+            if (String(error?.code || '') === '23514') return 'SIGNATURE_INVALID_IMAGE';
+            return 'SIGNATURE_FAILED';
+        },
+
+        async listForTransaction(transactionId) {
+            const txId = String(transactionId || '').trim();
+            if (!txId) return [];
+            const { data, error } = await supabaseClient
+                .from('transaction_signatures')
+                .select('id, transaction_id, side, party, method, signer_name, signature_png, signed_at, captured_by_user_id')
+                .eq('transaction_id', txId);
+            if (error) {
+                if (window.SpendNoteDebug) console.warn('[db.signatures.listForTransaction]', error);
+                return [];
+            }
+            return Array.isArray(data) ? data : [];
+        },
+
+        async create({ transactionId, party, method, signerName, signaturePng }) {
+            const row = {
+                transaction_id: String(transactionId || '').trim(),
+                party: party === 'contact' ? 'contact' : 'workspace',
+                method: ['drawn', 'saved', 'auto'].includes(method) ? method : 'drawn',
+                signer_name: String(signerName || '').trim().slice(0, 120),
+                // Placeholders: the trigger overwrites side / hash; saved methods replace the image.
+                side: 'from',
+                content_hash: 'pending',
+                signature_png: signaturePng || 'data:image/png;base64,AA==',
+                user_agent: String(navigator.userAgent || '').slice(0, 512)
+            };
+            try {
+                const user = await auth.getCurrentUser();
+                if (user?.id) row.captured_by_user_id = user.id;
+            } catch (_) {}
+            const { data, error } = await supabaseClient
+                .from('transaction_signatures')
+                .insert(row)
+                .select('id, transaction_id, side, party, method, signer_name, signature_png, signed_at, captured_by_user_id')
+                .single();
+            if (error) {
+                console.error('Error saving signature:', error);
+                return { success: false, code: this._errorCode(error), error: error.message };
+            }
+            return { success: true, data };
+        },
+
+        async getSaved() {
+            const user = await auth.getCurrentUser();
+            if (!user?.id) return null;
+            const { data, error } = await supabaseClient
+                .from('user_saved_signatures')
+                .select('signature_png, auto_sign, updated_at')
+                .eq('user_id', user.id)
+                .maybeSingle();
+            if (error) {
+                if (window.SpendNoteDebug) console.warn('[db.signatures.getSaved]', error);
+                return null;
+            }
+            return data || null;
+        },
+
+        async saveSaved({ signaturePng, autoSign }) {
+            const user = await auth.getCurrentUser();
+            if (!user?.id) return { success: false, error: 'Not signed in' };
+            const row = { user_id: user.id };
+            if (signaturePng !== undefined) row.signature_png = signaturePng;
+            if (autoSign !== undefined) row.auto_sign = Boolean(autoSign);
+            const { data, error } = await supabaseClient
+                .from('user_saved_signatures')
+                .upsert(row, { onConflict: 'user_id' })
+                .select('signature_png, auto_sign, updated_at')
+                .single();
+            if (error) {
+                console.error('Error saving own signature:', error);
+                return { success: false, error: error.message };
+            }
+            return { success: true, data };
+        },
+
+        async deleteSaved() {
+            const user = await auth.getCurrentUser();
+            if (!user?.id) return { success: false, error: 'Not signed in' };
+            const { error } = await supabaseClient
+                .from('user_saved_signatures')
+                .delete()
+                .eq('user_id', user.id);
+            if (error) {
+                console.error('Error deleting own signature:', error);
+                return { success: false, error: error.message };
+            }
+            return { success: true };
+        }
+    },
+
     // Profiles
     profiles: {
         async getCurrent() {

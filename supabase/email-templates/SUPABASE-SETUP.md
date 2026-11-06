@@ -7,7 +7,7 @@ Go to: **Supabase Dashboard -> Authentication -> Email Templates**
 ## 2) Template mapping
 
 - **Confirm signup**
-  - Subject: `Confirm your email — start tracking your cash`
+  - Subject: `Confirm your email to start using SpendNote`
   - Paste: `email-confirmation.html`
 
 - **Reset password**
@@ -59,7 +59,7 @@ Auth templates must keep Supabase variables intact:
 
 ## 7) Post-setup smoke test
 
-1. Sign up with new email -> confirmation email arrives (subject: "Confirm your email — start tracking your cash")
+1. Sign up with new email -> confirmation email arrives (subject: "Confirm your email to start using SpendNote")
 2. Confirm email and login -> welcome email arrives (subject: "{name}, your cash tracking starts now")
 3. Record first transaction -> first-tx email arrives (subject: "Your first transaction is on record")
 4. Invite a user from Team page -> invite email arrives (subject: "{inviter} invited you to SpendNote")
