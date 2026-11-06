@@ -1,4 +1,8 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient, type SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+// No generated DB types: without an explicit any schema, ReturnType<typeof createClient>
+// resolves table rows to never.
+type AdminClient = SupabaseClient<any, "public", any>;
 import Stripe from "https://esm.sh/stripe@14.25.0?target=deno";
 import {
   renderSubscriptionDowngradedTemplate,
@@ -53,7 +57,7 @@ const billingStatusFromStripe = (status: string): string => {
   return allowed.has(raw) ? raw : "active";
 };
 
-const findUserIdFromSubscription = async (supabaseAdmin: ReturnType<typeof createClient>, sub: Stripe.Subscription) => {
+const findUserIdFromSubscription = async (supabaseAdmin: AdminClient, sub: Stripe.Subscription) => {
   const metadataUserId = String(sub.metadata?.user_id || "").trim();
   if (metadataUserId) return metadataUserId;
 
@@ -88,7 +92,7 @@ const resolveSeatCount = (sub: Stripe.Subscription): number => {
   if (!extraSeatPriceId) return 0;
 
   const items = sub.items?.data || [];
-  const seatItem = items.find((item) => String(item.price?.id || "") === extraSeatPriceId);
+  const seatItem = items.find((item: Stripe.SubscriptionItem) => String(item.price?.id || "") === extraSeatPriceId);
   if (seatItem) {
     const extraSeats = Number(seatItem.quantity || 0);
     return 3 + extraSeats; // Pro base = 3 included
@@ -105,7 +109,7 @@ const resolveSeatCount = (sub: Stripe.Subscription): number => {
 };
 
 const upsertProfileSubscription = async (
-  supabaseAdmin: ReturnType<typeof createClient>,
+  supabaseAdmin: AdminClient,
   userId: string,
   sub: Stripe.Subscription,
 ) => {
@@ -184,7 +188,7 @@ const maxCashBoxesForTier = (tier: string): number => {
 };
 
 const collectCashBoxIdsForBillingUser = async (
-  supabaseAdmin: ReturnType<typeof createClient>,
+  supabaseAdmin: AdminClient,
   userId: string,
 ): Promise<string[]> => {
   const ids = new Set<string>();
@@ -209,7 +213,7 @@ const collectCashBoxIdsForBillingUser = async (
   return Array.from(ids);
 };
 
-const clearCashBoxTierLocks = async (supabaseAdmin: ReturnType<typeof createClient>, userId: string) => {
+const clearCashBoxTierLocks = async (supabaseAdmin: AdminClient, userId: string) => {
   const ids = await collectCashBoxIdsForBillingUser(supabaseAdmin, userId);
   if (ids.length) {
     await supabaseAdmin.from("cash_boxes").update({ transactions_blocked: false }).in("id", ids);
@@ -218,7 +222,7 @@ const clearCashBoxTierLocks = async (supabaseAdmin: ReturnType<typeof createClie
 };
 
 const applyCashBoxTierDowngrade = async (
-  supabaseAdmin: ReturnType<typeof createClient>,
+  supabaseAdmin: AdminClient,
   userId: string,
   newTier: string,
 ) => {
@@ -242,7 +246,7 @@ const applyCashBoxTierDowngrade = async (
 };
 
 const sendDowngradeEmail = async (
-  supabaseAdmin: ReturnType<typeof createClient>,
+  supabaseAdmin: AdminClient,
   userId: string,
   oldTier: string,
   newTier: string,
@@ -308,7 +312,7 @@ const sendDowngradeEmail = async (
 };
 
 const sendUpgradeEmail = async (
-  supabaseAdmin: ReturnType<typeof createClient>,
+  supabaseAdmin: AdminClient,
   userId: string,
   newTier: string,
   subscriptionId: string,
@@ -350,7 +354,7 @@ const sendUpgradeEmail = async (
 };
 
 const sendPaymentFailedEmail = async (
-  supabaseAdmin: ReturnType<typeof createClient>,
+  supabaseAdmin: AdminClient,
   customerId: string,
   idempotencyKey: string,
 ) => {
@@ -392,7 +396,7 @@ const sendPaymentFailedEmail = async (
 };
 
 const sendSubscriptionCanceledEmail = async (
-  supabaseAdmin: ReturnType<typeof createClient>,
+  supabaseAdmin: AdminClient,
   userId: string,
   tier: string,
   periodEnd: number | null,
@@ -443,7 +447,7 @@ const sendSubscriptionCanceledEmail = async (
 // them may be the one that writes the new tier, so every tier writer calls this; the Resend
 // idempotency keys in the senders collapse the concurrent calls into one email.
 const handleTierChange = async (
-  supabaseAdmin: ReturnType<typeof createClient>,
+  supabaseAdmin: AdminClient,
   userId: string,
   oldTier: string,
   newTier: string,
@@ -458,7 +462,7 @@ const handleTierChange = async (
   }
 };
 
-const readTier = async (supabaseAdmin: ReturnType<typeof createClient>, userId: string): Promise<string> => {
+const readTier = async (supabaseAdmin: AdminClient, userId: string): Promise<string> => {
   const { data } = await supabaseAdmin
     .from("profiles")
     .select("subscription_tier")

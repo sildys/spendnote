@@ -94,13 +94,14 @@ Deno.serve(async (req: Request) => {
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("");
 
-    let inviteRow: {
+    type InviteRow = {
       id: string;
       org_id: string;
       invited_email: string;
       role: string;
       status: string;
-    } | null = null;
+    };
+    let inviteRow: InviteRow | null = null;
 
     const byHash = await supabaseAdmin
       .from("invites")
@@ -109,7 +110,7 @@ Deno.serve(async (req: Request) => {
       .maybeSingle();
 
     if (!byHash.error && byHash.data) {
-      inviteRow = byHash.data as typeof inviteRow;
+      inviteRow = byHash.data as InviteRow;
     } else {
       // Legacy rows: token set but token_hash NULL (RPC did not populate hash)
       const byToken = await supabaseAdmin
@@ -118,7 +119,7 @@ Deno.serve(async (req: Request) => {
         .eq("token", inviteToken)
         .maybeSingle();
       if (!byToken.error && byToken.data) {
-        inviteRow = byToken.data as typeof inviteRow;
+        inviteRow = byToken.data as InviteRow;
       }
     }
 
