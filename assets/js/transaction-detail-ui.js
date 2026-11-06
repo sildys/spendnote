@@ -243,6 +243,11 @@ const QUICK_PRESET = {
         if (iframe) iframe.src = url;
     }
 
+    window.spendnoteTxReloadReceiptPreview = () => {
+        lastReceiptUrl = '';
+        requestReload(0);
+    };
+
     function requestReload(delayMs) {
         const delay = Number.isFinite(Number(delayMs)) ? Math.max(0, Number(delayMs)) : 0;
         if (reloadTimer) {

@@ -1311,3 +1311,103 @@
                 font-size: 16px !important;
             }
         }
+
+        /* Signatures card (on-screen receipt signatures) */
+        .tx-sign-card {
+            margin: 0 12px 14px 12px;
+            padding: 16px 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        .tx-sign-card[hidden] { display: none; }
+
+        .tx-sign-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .tx-sign-head .info-card-title { margin-bottom: 12px; }
+
+        .tx-sign-status {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin-bottom: 12px;
+        }
+
+        .tx-sign-status:empty { display: none; }
+        .tx-sign-status.full { background: #d1fae5; color: #047857; }
+        .tx-sign-status.partial { background: #fef3c7; color: #92400e; }
+
+        .tx-sign-slots {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .tx-sign-slot {
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-height: 120px;
+        }
+
+        .tx-sign-slot.signed {
+            border-style: solid;
+            border-color: #a7f3d0;
+            background: #f0fdf4;
+        }
+
+        .tx-sign-label {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .tx-sign-party { font-size: 14px; font-weight: 700; color: var(--text-primary, #111); }
+
+        .tx-sign-party-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: #047857;
+            background: #ecfdf5;
+            border-radius: 6px;
+            padding: 1px 6px;
+            margin-left: 4px;
+        }
+
+        .tx-sign-image {
+            background: #fff;
+            border-bottom: 1px solid #9ca3af;
+            height: 64px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .tx-sign-image img { max-height: 60px; max-width: 100%; object-fit: contain; }
+        .tx-sign-name { font-size: 13px; font-weight: 600; }
+        .tx-sign-meta { font-size: 12px; color: #047857; }
+        .tx-sign-empty { font-size: 13px; color: var(--text-muted); }
+        .tx-sign-btn { align-self: flex-start; margin-top: auto; }
+
+        .tx-sign-foot {
+            margin: 10px 0 0;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 640px) {
+            .tx-sign-slots { grid-template-columns: 1fr; }
+            .tx-sign-btn { align-self: stretch; justify-content: center; }
+        }

@@ -307,6 +307,23 @@
     .signature-line {
       height: 90px;
       border-bottom: 1px solid #000;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .sn-sig-img {
+      display: block;
+      max-height: 84px;
+      max-width: 75%;
+      object-fit: contain;
+      margin-bottom: 2px;
+    }
+
+    .sn-sig-meta {
+      font-size: 11px;
+      color: #374151;
+      margin-top: 6px;
+      line-height: 1.4;
     }
     
     /* FOOTER */
@@ -1054,9 +1071,10 @@ if (urlParams.get('signatures') === '0') {
   
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/supabase-config.js?v=20261023-trial-team"></script>
+  <script src="assets/js/supabase-config.js?v=20261107-signatures"></script>
   <script src="assets/js/auth-guard.js?v=20260207-2310"></script>
   <script src="assets/js/main.js?v=20261016-logo2"></script>
+  <script src="assets/js/receipt-signatures.js?v=20261107-signatures"></script>
 
   <script>
     (async function () {
@@ -1377,6 +1395,12 @@ if (urlParams.get('signatures') === '0') {
           setTextAll('.contact-id', '');
           document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = 'none'));
         }
+
+        try {
+          if (typeof window.spendnoteRenderReceiptSignatures === 'function') {
+            await window.spendnoteRenderReceiptSignatures(tx, { fromName, toName, imageInside: true });
+          }
+        } catch (_) {}
 
         if (displayId) {
           document.title = displayId;
