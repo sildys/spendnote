@@ -1418,3 +1418,49 @@ body {
         padding-top: 12px;
     }
 }
+
+/* My signature card */
+.my-sig-preview {
+    height: 96px;
+    border: 1px dashed var(--border, #e5e7eb);
+    border-radius: 10px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    margin-bottom: 12px;
+}
+
+.my-sig-preview img {
+    max-height: 80px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.my-sig-empty {
+    font-size: 13px;
+    color: var(--text-muted, #6b7280);
+}
+
+.my-sig-auto {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer;
+    margin-bottom: 4px;
+}
+
+.my-sig-auto input {
+    accent-color: #059669;
+    margin-top: 4px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.my-sig-auto input:disabled + span {
+    color: var(--text-muted, #6b7280);
+}

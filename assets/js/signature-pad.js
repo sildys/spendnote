@@ -96,7 +96,7 @@
       <div class="sn-sigpad-baseline"></div>
       <div class="sn-sigpad-hint">Sign above the line with your finger or mouse</div>
     </div>
-    <p class="sn-sigpad-note">By signing you confirm the amount and details above.${opts.privacyNote ? ' ' + esc(opts.privacyNote) : ''} A signature can't be changed after it is saved.</p>
+    <p class="sn-sigpad-note">${opts.noteText != null ? esc(opts.noteText) : `By signing you confirm the amount and details above.${opts.privacyNote ? ' ' + esc(opts.privacyNote) : ''} A signature can't be changed after it is saved.`}</p>
     <p class="sn-sigpad-error" role="alert"></p>
   </div>
   <div class="sn-sigpad-actions">

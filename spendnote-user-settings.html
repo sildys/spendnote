@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=20261016-logo">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=20261016-logo2">
-    <link rel="stylesheet" href="assets/css/user-settings.css?v=20260415-member-avatars">
+    <link rel="stylesheet" href="assets/css/user-settings.css?v=20261107-signatures">
     <!-- Microsoft Advertising UET tag -->
     <script>
         if(!(function(){try{return /[?&]source=twa(&|$)/.test(location.search)||document.referrer.indexOf('android-app://')===0||sessionStorage.getItem('sn.twa')==='1'}catch(e){return false}})())(function(w,d,t,u,o){w[u]=w[u]||[],o.ts=(new Date).getTime();var n=d.createElement(t);n.src="https://bat.bing.net/bat.js?ti="+o.ti+("uetq"!=u?"&q="+u:""),n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&"loaded"!==s&&"complete"!==s||(o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad"),n.onload=n.onreadystatechange=null)};var i=d.getElementsByTagName(t)[0];i.parentNode.insertBefore(n,i)})(window,document,"script","uetq",{ti:"343258687",enableAutoSpaTracking:true});
@@ -156,6 +156,27 @@
                             <button type="submit" class="btn btn-primary"><i class="fas fa-key"></i> Update Password</button>
                         </div>
                     </form>
+                </div>
+
+                <!-- MY SIGNATURE -->
+                <div class="settings-card" id="mySignatureCard">
+                    <div class="settings-card-header">
+                        <div>
+                            <div class="settings-card-title">My signature</div>
+                            <div class="settings-card-subtitle">Save it once and add it to your side of a receipt with one tap. Only you can use it; a contact always signs fresh.</div>
+                        </div>
+                    </div>
+                    <div class="my-sig-preview" id="mySignaturePreview">
+                        <span class="my-sig-empty">No saved signature yet.</span>
+                    </div>
+                    <label class="my-sig-auto" for="mySignatureAuto">
+                        <input type="checkbox" id="mySignatureAuto" disabled>
+                        <span>Add my signature automatically to receipts I record</span>
+                    </label>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="mySignatureDeleteBtn" style="display:none;color:#dc2626;border-color:rgba(239,68,68,0.3);"><i class="fas fa-trash"></i> Delete</button>
+                        <button type="button" class="btn btn-primary" id="mySignatureDrawBtn"><i class="fas fa-signature"></i> Draw signature</button>
+                    </div>
                 </div>
 
                 <!-- DELETE ACCOUNT (collapsible) -->
@@ -319,7 +340,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js?v=20261023-trial-team"></script>
+<script src="assets/js/supabase-config.js?v=20261107-signatures"></script>
 <script src="assets/js/auth-guard.js?v=20260223-1949"></script>
 <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
 <script src="assets/js/nav-loader.js?v=20261016-favicon-logo"></script>
@@ -327,6 +348,8 @@
 <script src="assets/js/main.js?v=20261016-logo2"></script>
 <script src="assets/js/logo-editor.js?v=20260405-db-logo-only"></script>
 <script src="assets/js/user-settings.js?v=20261024-twa-billing"></script>
+<script src="assets/js/signature-pad.js?v=20261107-signatures"></script>
+<script src="assets/js/user-settings-signature.js?v=20261107-signatures"></script>
 <script>if (typeof showPageTip === 'function') showPageTip('user-settings', 'Set your <strong>display name and logo</strong> — these appear on every receipt you print.');</script>
 </body>
 </html>

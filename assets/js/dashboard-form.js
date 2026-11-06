@@ -474,6 +474,24 @@ function initTransactionForm() {
 
             const createdId = result?.data?.id;
 
+            // "Add my signature automatically" (User settings): before any receipt opens.
+            try {
+                if (createdId && window.db?.signatures?.getSaved) {
+                    const savedSig = await window.db.signatures.getSaved();
+                    if (savedSig?.auto_sign && savedSig?.signature_png) {
+                        const me = await window.db.profiles?.getCurrent?.();
+                        await window.db.signatures.create({
+                            transactionId: createdId,
+                            party: 'workspace',
+                            method: 'auto',
+                            signerName: String(me?.full_name || '').trim() || 'Signed'
+                        });
+                    }
+                }
+            } catch (e) {
+                if (DEBUG) console.warn('[TxSave] auto signature failed', e);
+            }
+
             // GA4 conversion funnel events
             try {
                 const uid = (await supabaseClient?.auth?.getUser?.())?.data?.user?.id;
