@@ -4071,9 +4071,11 @@ var db = {
             const row = { user_id: user.id };
             if (signaturePng !== undefined) row.signature_png = signaturePng;
             if (autoSign !== undefined) row.auto_sign = Boolean(autoSign);
-            const { data, error } = await supabaseClient
-                .from('user_saved_signatures')
-                .upsert(row, { onConflict: 'user_id' })
+            // An upsert without the image fails the NOT NULL check before it reaches the update.
+            const query = signaturePng === undefined
+                ? supabaseClient.from('user_saved_signatures').update({ auto_sign: row.auto_sign }).eq('user_id', user.id)
+                : supabaseClient.from('user_saved_signatures').upsert(row, { onConflict: 'user_id' });
+            const { data, error } = await query
                 .select('signature_png, auto_sign, updated_at')
                 .single();
             if (error) {
