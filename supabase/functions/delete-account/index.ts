@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { renderAccountDeletedTemplate } from "../_shared/email-templates.ts";
 import Stripe from "https://esm.sh/stripe@14.25.0?target=deno";
 
 const corsHeaders: Record<string, string> = {
@@ -401,30 +402,7 @@ Deno.serve(async (req: Request) => {
     let emailSent = false;
     let emailError: string | null = null;
     try {
-      const subject = "Your SpendNote account has been deleted";
-      const html = `
-        <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#111;background:#f8fafc;padding:24px;">
-          <div style="max-width:560px;margin:0 auto;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;background:#ffffff;">
-            <div style="background:#ffffff;padding:8px 20px 6px;">
-              <img src="https://spendnote.app/assets/images/spendnote-logo-email.png?v=20261023" alt="SpendNote" width="140" style="display:block;height:auto;border:0;outline:none;text-decoration:none;"/>
-            </div>
-            <div style="background:linear-gradient(135deg,#059669,#10b981);padding:14px 20px;color:#fff;">
-              <div style="font-size:20px;font-weight:900;">Account deleted</div>
-              <div style="font-size:13px;opacity:0.95;margin-top:4px;">Your SpendNote account has been permanently removed</div>
-            </div>
-            <div style="padding:18px 20px;">
-              <p style="margin:0 0 10px;">Hi ${userName}, this is a confirmation that your SpendNote account was deleted successfully.</p>
-              <p style="margin:0 0 14px;">This email is for confirmation only. This mailbox is not monitored.</p>
-              <p style="margin:0;color:#6b7280;">If you need help, contact support at <a href="mailto:support@spendnote.app" style="color:#1d4ed8;">support@spendnote.app</a>.</p>
-            </div>
-            <div style="padding:14px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:12px;">
-              Cash handoff documentation only. Not a tax or accounting tool.<br>
-              © SpendNote • spendnote.app
-            </div>
-          </div>
-        </div>
-      `;
-      const text = `Your SpendNote account has been deleted\n\nHi ${userName}, this is a confirmation that your SpendNote account was deleted successfully.\nThis email is for confirmation only and is not monitored.\nIf you need help, contact support@spendnote.app.`;
+      const { subject, html, text } = renderAccountDeletedTemplate({ fullName: userName });
 
       const resendResp = await fetch("https://api.resend.com/emails", {
         method: "POST",
