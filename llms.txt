@@ -1,13 +1,13 @@
 # SpendNote
 
-> SpendNote is a browser-based petty cash app for small teams that handle physical cash. Each time cash changes hands, the team records who gave it, who received it, how much and why; every cash box keeps a live balance, and each entry produces a numbered cash receipt that can be printed (two copies on one page), saved as PDF, or emailed (Pro).
+> SpendNote is a browser-based petty cash app for small teams that handle physical cash. Each time cash changes hands, the team records who gave it, who received it, how much and why; every cash box keeps a live balance, and each entry produces a numbered cash receipt that both sides can sign on screen at the handoff, or print (two copies on one page) and sign on paper; it can also be saved as PDF, or emailed with the signed PDF attached (Pro).
 
 Key facts:
 
 - Made by Sildsys, LLC. Contact: support@spendnote.app
 - Runs in the browser on phone, tablet and desktop, and can be installed from the browser (Android, iPhone/iPad via Add to Home Screen, desktop). Android app on Google Play: https://play.google.com/store/apps/details?id=app.spendnote (same account and data as the web app). There is no native iOS app.
 - Pricing: 14-day free trial with all features, no credit card. Standard $19/month ($190/year): 1 user, 2 cash boxes. Pro $29/month ($290/year): 3 users included, +$5/month per additional user, unlimited cash boxes, emailed receipts, role-based permissions, editable receipt labels (receipts in any language). There is no free plan. 30-day money-back guarantee on the first paid charge if 20 or fewer transactions were recorded.
-- Features: numbered cash receipts with your logo, live balance per cash box, searchable transaction history showing who recorded each entry, daily cash report (opening balance, cash in and out, expected closing balance, cash count section to sign), CSV and PDF export. Mistakes are voided, not deleted.
+- Features: numbered cash receipts with your logo, on-screen signatures from both sides (shown on the PDF and the printed copy), live balance per cash box, searchable transaction history showing who recorded each entry, daily cash report (opening balance, cash in and out, expected closing balance, cash count section to sign), CSV and PDF export. Mistakes are voided, not deleted.
 - SpendNote documents internal cash handoffs. It is not accounting, tax, payroll or invoicing software, and its receipts are not tax documents.
 - Data is hosted on EU servers and encrypted in transit and at rest.
 
@@ -23,12 +23,13 @@ Key facts:
 
 - [Cash receipt template](https://spendnote.app/cash-receipt-template): fill in and print a cash receipt, two copies or PDF
 - [Petty cash receipt generator](https://spendnote.app/petty-cash-receipt-generator): free receipt maker for petty cash payouts
-- [Daily cash report template](https://spendnote.app/daily-cash-report-template): fill in a one-day cash report and print it
+- [Daily cash report template](https://spendnote.app/daily-cash-report-template): fill in a one-day cash report (end of day / cash up sheet) and print it
 - [Cash count sheet](https://spendnote.app/cash-count-sheet-template): count cash by denomination, get the total and the over/short against the expected balance
+- [Cash handover form](https://spendnote.app/cash-handoff-receipt): fill in and print a cash handover receipt for shift changes and float transfers, both sides sign
+- [Petty cash replenishment form](https://spendnote.app/petty-cash-replenishment-form): list the receipts, enter the cash counted, get the top-up amount and print the form for signatures
 
 ## Guides
 
-- [Cash handoff receipt](https://spendnote.app/cash-handoff-receipt): documenting cash passed between two people
 - [Cash drawer reconciliation](https://spendnote.app/cash-drawer-reconciliation): end-of-shift steps and handling shortages
 - [Petty cash reconciliation](https://spendnote.app/petty-cash-reconciliation): matching the box to the records
 - [How to start a petty cash box](https://spendnote.app/how-to-start-petty-cash-box): setting up a petty cash fund

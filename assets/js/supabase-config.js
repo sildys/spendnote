@@ -53,6 +53,8 @@ if (window.SpendNoteTWA) {
     const twaStyle = document.createElement('style');
     twaStyle.textContent = [
         'html.sn-twa a[href*="spendnote-pricing"]',
+        'html.sn-twa a[href*="play.google.com"]',
+        'html.sn-twa .sn-play-mention',
         'html.sn-twa #changePlanBtn',
         'html.sn-twa #manageBillingBtn',
         'html.sn-twa #cancelSubscriptionBtn',
