@@ -19,7 +19,8 @@ Deno.serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
     const resendApiKey = Deno.env.get("RESEND_API_KEY") || "";
-    const from = Deno.env.get("SPENDNOTE_EMAIL_FROM") || "SpendNote <no-reply@spendnote.app>";
+    // The update asks people to reply (questions, unsubscribe), so it must not come from no-reply.
+    const from = `SpendNote <${REPLY_TO}>`;
 
     if (!supabaseUrl || !serviceRoleKey || !resendApiKey) return json(500, { error: "Missing required secrets" });
 
