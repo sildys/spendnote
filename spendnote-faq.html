@@ -88,6 +88,30 @@
         },
         {
           "@type": "Question",
+          "name": "Can both sides sign a receipt on screen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Signing is optional and included on every plan, including the free trial. Choose Done & Sign right after saving a transaction, or open the transaction later and use the Signatures card. Both sides sign with a finger or a mouse, and each signature goes on the Issued by or Received by line of the printed and PDF receipt with the signer's name and the date and time. You can still print the receipt and sign it on paper instead."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can a signed receipt be changed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Transactions can't be edited after saving, and once a receipt is signed its layout is locked too, so the print, the PDF and the email always show what was signed. Signatures can't be replaced or removed in the app, and SpendNote stores a fingerprint of the receipt content at the moment of signing. If something was wrong, void the transaction and record a new one."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is an on-screen signature legally binding?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SpendNote records who signed, when, and what the receipt said at that moment, and keeps it unchanged, which makes it a clear signed record of the cash handoff. SpendNote is not a qualified electronic signature service, and whether a signed receipt is accepted as evidence depends on your local rules and the situation. For tax or legal requirements, check with your accountant or advisor."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "What happens if I downgrade?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -761,6 +785,7 @@
 
             <div class="popular-tags">
                 <div class="popular-tag" data-search="receipt">Receipt layouts</div>
+                <div class="popular-tag" data-search="sign">Signatures</div>
                 <div class="popular-tag" data-search="cash box">Cash Boxes</div>
                 <div class="popular-tag" data-search="team">Team invites</div>
                 <div class="popular-tag" data-search="export">Export data</div>
@@ -776,7 +801,7 @@
                     <i class="fas fa-question-circle"></i>
                 </div>
                 <div class="stat-badge-text">
-                    <span class="stat-badge-number">25</span>
+                    <span class="stat-badge-number">31</span>
                     <span class="stat-badge-label">Questions</span>
                 </div>
             </div>
@@ -785,7 +810,7 @@
                     <i class="fas fa-layer-group"></i>
                 </div>
                 <div class="stat-badge-text">
-                    <span class="stat-badge-number">6</span>
+                    <span class="stat-badge-number">7</span>
                     <span class="stat-badge-label">Categories</span>
                 </div>
             </div>
@@ -817,7 +842,12 @@
             <button class="category-tab" data-category="receipts">
                 <span class="category-tab-icon"><i class="fas fa-receipt"></i></span>
                 <span>Receipts</span>
-                <span class="category-tab-count">4</span>
+                <span class="category-tab-count">6</span>
+            </button>
+            <button class="category-tab" data-category="signatures">
+                <span class="category-tab-icon"><i class="fas fa-signature"></i></span>
+                <span>Signatures</span>
+                <span class="category-tab-count">6</span>
             </button>
             <button class="category-tab" data-category="team">
                 <span class="category-tab-icon"><i class="fas fa-users"></i></span>
@@ -827,7 +857,7 @@
             <button class="category-tab" data-category="billing">
                 <span class="category-tab-icon"><i class="fas fa-credit-card"></i></span>
                 <span>Billing</span>
-                <span class="category-tab-count">7</span>
+                <span class="category-tab-count">5</span>
             </button>
             <button class="category-tab" data-category="security">
                 <span class="category-tab-icon"><i class="fas fa-shield-alt"></i></span>
@@ -1035,7 +1065,7 @@
                                 <li><strong>Standard & Pro:</strong> Upload your company logo, choose Quick or Detailed layout, toggle fields (addresses, tracking details, signatures)</li>
                                 <li><strong>Pro only:</strong> Customize all text and labels (localization support) - perfect for non-English receipts or specific terminology</li>
                             </ul>
-                            The only element you cannot change is the mandatory legal disclaimer (required on all receipts).
+                            The only element you cannot change is the mandatory legal disclaimer (required on all receipts). Once a receipt is signed, its layout is locked so it keeps showing what was signed.
                         </div>
                     </div>
                 </div>
@@ -1055,7 +1085,8 @@
                             <ul>
                                 <li><strong>Print:</strong> Opens a print-ready Letter page with 2 copies</li>
                                 <li><strong>PDF:</strong> Downloads a Letter-size PDF (filename: SpendNote_SN3-007.pdf)</li>
-                                <li><strong>Email:</strong> Sends the receipt directly from Transaction Detail (includes a public PDF link for the recipient)</li>
+                                <li><strong>Email (Pro):</strong> Sends the receipt directly from Transaction Detail with a PDF link for the recipient. A signed receipt goes out with the signed PDF attached instead.</li>
+                                <li><strong>Share (on phones):</strong> Right after signing, send the signed PDF through your phone's share menu</li>
                                 <li><strong>Bulk Export:</strong> Export multiple transactions as CSV or PDF from Transaction History</li>
                             </ul>
                             See detailed format examples on our <a href="/petty-cash-receipt-generator">petty cash receipt generator</a> page.
@@ -1138,6 +1169,133 @@
                     <div class="faq-card-body">
                         <div class="faq-answer">
                             SpendNote runs in any modern browser on phone, tablet or computer, and you can install it from the browser to open it like an app: choose <strong>Install app</strong> in the profile menu (on iPhone and iPad, Safari's <strong>Add to Home Screen</strong>). On Android there is also the <a href="https://play.google.com/store/apps/details?id=app.spendnote" target="_blank" rel="noopener">SpendNote app on Google Play</a>. Every option opens the same account and the same data, so a team can mix devices. There is no native iOS app in the App Store.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signatures -->
+        <div class="category-section" id="signatures">
+            <div class="category-header">
+                <h2>Signatures</h2>
+                <p>Signing receipts on screen or on paper</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-card">
+                    <div class="faq-card-header">
+                        <div class="faq-icon"><i class="fas fa-signature"></i></div>
+                        <div class="faq-card-title">
+                            <div class="faq-question">Can both sides sign a receipt on screen?</div>
+                            <div class="faq-preview">Yes. Both sides can sign with a finger or a mouse at the handoff, on every plan...</div>
+                        </div>
+                        <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-card-body">
+                        <div class="faq-answer">
+                            <strong>Yes.</strong> Signing is optional and included on every plan, including the free trial. Sign with a finger on a phone or tablet, or with a mouse on a computer.
+                            <ul>
+                                <li><strong>Right after saving:</strong> choose <strong>Done &amp; Sign</strong> in the new transaction window (<strong>Save &amp; Sign</strong> on the full-page form). You sign first, then hand the device to the other person.</li>
+                                <li><strong>Later:</strong> open the transaction and use the <strong>Signatures</strong> card: <strong>Sign as</strong> your name for your side, and the contact signs on their side.</li>
+                            </ul>
+                            Each signature goes on the <strong>Issued by</strong> or <strong>Received by</strong> line of the printed and PDF receipt, with the signer's name and &ldquo;Signed on screen&rdquo; plus the date and time. The direction decides who signs where: on cash out you hand over the money (Issued by), on cash in the contact does. Voided transactions can't be signed. What we store with a signature is described in our <a href="/spendnote-privacy#signatures">Privacy Policy</a>.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <div class="faq-card-header">
+                        <div class="faq-icon"><i class="fas fa-print"></i></div>
+                        <div class="faq-card-title">
+                            <div class="faq-question">Can I still sign on paper?</div>
+                            <div class="faq-preview">Yes. Without an on-screen signature, the receipt keeps empty signature lines for a pen...</div>
+                        </div>
+                        <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-card-body">
+                        <div class="faq-answer">
+                            <strong>Yes.</strong> On-screen signing is optional. Without it, the receipt keeps empty <strong>Issued by</strong> and <strong>Received by</strong> lines: print two copies on one page, both sides sign by hand, and each keeps a copy. If only one side signed on screen, the other line stays empty for a pen.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <div class="faq-card-header">
+                        <div class="faq-icon"><i class="fas fa-lock"></i></div>
+                        <div class="faq-card-title">
+                            <div class="faq-question">Can a signed receipt be changed?</div>
+                            <div class="faq-preview">No. A signed receipt stays exactly as it was signed, layout included...</div>
+                        </div>
+                        <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-card-body">
+                        <div class="faq-answer">
+                            <strong>No.</strong> Transactions can't be edited after saving, and once a receipt has a signature, its layout is locked as well: Quick or Detailed mode, field toggles and labels stay as they were at signing, so the print, the PDF and the email always show what was signed.
+                            <ul>
+                                <li>A saved signature can't be replaced or removed</li>
+                                <li>SpendNote stores a fingerprint of the receipt content at the moment of signing</li>
+                                <li>If something was wrong, void the transaction and record a new one</li>
+                            </ul>
+                            If a signature has to be removed, for example at the signer's request, contact <a href="mailto:support@spendnote.app">support@spendnote.app</a>.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <div class="faq-card-header">
+                        <div class="faq-icon"><i class="fas fa-pen-nib"></i></div>
+                        <div class="faq-card-title">
+                            <div class="faq-question">Can I save my own signature?</div>
+                            <div class="faq-preview">Yes. Draw it once in Settings, then sign your side with one tap or automatically...</div>
+                        </div>
+                        <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-card-body">
+                        <div class="faq-answer">
+                            <strong>Yes.</strong> In <strong>Settings &rarr; My signature</strong>, draw your signature once and save it. Your side of a receipt then signs with one tap, without drawing. Turn on <strong>Add my signature automatically to receipts I record</strong> to add it every time you record a transaction.
+                            <ul>
+                                <li>Only you can use your saved signature, and only on your own side of a receipt</li>
+                                <li>The other person always signs fresh on screen</li>
+                                <li>You can replace or delete your saved signature at any time</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <div class="faq-card-header">
+                        <div class="faq-icon"><i class="fas fa-paper-plane"></i></div>
+                        <div class="faq-card-title">
+                            <div class="faq-question">How does the other person get the signed copy?</div>
+                            <div class="faq-preview">Email it with the signed PDF attached (Pro), share it from your phone, or print it...</div>
+                        </div>
+                        <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-card-body">
+                        <div class="faq-answer">
+                            Right after signing, SpendNote offers:
+                            <ul>
+                                <li><strong>Email (Pro and free trial):</strong> sends the receipt with the signed PDF attached. The contact's email address is filled in if you saved one.</li>
+                                <li><strong>Share (on phones):</strong> sends the signed PDF through your phone's share menu, for example to a messaging app.</li>
+                                <li><strong>Print:</strong> two copies on one page, one for each side.</li>
+                            </ul>
+                            Later you can print or download the signed receipt from the transaction page at any time, and on Pro email it from there too.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <div class="faq-card-header">
+                        <div class="faq-icon"><i class="fas fa-balance-scale"></i></div>
+                        <div class="faq-card-title">
+                            <div class="faq-question">Is an on-screen signature legally binding?</div>
+                            <div class="faq-preview">It is a clear signed record of the handoff. Whether it is accepted as evidence depends on your local rules...</div>
+                        </div>
+                        <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-card-body">
+                        <div class="faq-answer">
+                            SpendNote records who signed, when, and what the receipt said at that moment, and keeps it unchanged. That makes it a clear signed record of the cash handoff. SpendNote is not a qualified electronic signature service, and whether a signed receipt is accepted as evidence depends on your local rules and the situation. For tax or legal requirements, check with your accountant or advisor.
                         </div>
                     </div>
                 </div>
