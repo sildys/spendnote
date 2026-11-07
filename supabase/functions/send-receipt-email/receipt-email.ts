@@ -16,6 +16,8 @@ export type ReceiptEmailData = {
   isIncome: boolean;
   signatures: { label: string; signerName: string; partyName: string; signedAt: string }[];
   pdfUrl: string;
+  // The PDF rides along as a file; the link would open an unsigned copy, so it is left out.
+  pdfAttached?: boolean;
 };
 
 export const APP_ORIGIN = "https://spendnote.app";
@@ -169,7 +171,17 @@ export function renderReceiptEmail(d: ReceiptEmailData): { subject: string; html
             </tr>`
     : "";
 
-  const pdfButtonHtml = d.pdfUrl
+  const attachedText = d.signatures.length
+    ? "The signed PDF receipt is attached to this email."
+    : "The PDF receipt is attached to this email.";
+  const pdfButtonHtml = d.pdfAttached
+    ? `
+            <tr>
+              <td style="padding:16px 32px 0 32px;">
+                <div style="background-color:#ecfdf5;border:1px solid #a7f3d0;border-radius:8px;padding:10px 14px;font-size:14px;line-height:1.5;font-weight:700;color:#047857;">${escapeHtml(attachedText)}</div>
+              </td>
+            </tr>`
+    : d.pdfUrl
     ? `
             <tr>
               <td align="center" style="padding:20px 32px 4px 32px;">
@@ -309,7 +321,7 @@ export function renderReceiptEmail(d: ReceiptEmailData): { subject: string; html
     `Receipt ID: ${d.receiptId}`,
     `Cash Box ID: ${d.cashBoxCode}`,
     ...(d.isVoided ? ["", "This receipt is marked as VOID."] : []),
-    ...(d.pdfUrl ? ["", `View & download PDF: ${d.pdfUrl}`] : []),
+    ...(d.pdfAttached ? ["", attachedText] : d.pdfUrl ? ["", `View & download PDF: ${d.pdfUrl}`] : []),
     "",
     `From: ${fromName}`,
     ...(fromAddress ? [fromAddress] : []),

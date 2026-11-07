@@ -20,6 +20,8 @@ type ReceiptEmailBody = {
   timeZone?: string;
   // Render only: the transaction detail page shows the exact email without sending it.
   preview?: boolean;
+  // Base64 PDF rendered in the sender's browser (the signed copy after "Done & Sign").
+  pdfAttachment?: string;
 };
 
 type TxRow = {
@@ -66,6 +68,22 @@ const RATE_LIMITS = {
   perRecipient: { limit: 3, windowSeconds: 600 },
 };
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const MAX_PDF_ATTACHMENT_BYTES = 2 * 1024 * 1024;
+
+// Returns the cleaned base64 string, "" when absent, or null when it is not a PDF we accept.
+function readPdfAttachment(raw: unknown): string | null {
+  if (raw == null || raw === "") return "";
+  if (typeof raw !== "string") return null;
+  const b64 = raw.replace(/^data:application\/pdf;base64,/i, "").replace(/\s+/g, "");
+  if (!b64 || !/^[A-Za-z0-9+/]+={0,2}$/.test(b64)) return null;
+  if (Math.floor((b64.length * 3) / 4) > MAX_PDF_ATTACHMENT_BYTES) return null;
+  try {
+    if (!atob(b64.slice(0, 8)).startsWith("%PDF-")) return null;
+  } catch (_) {
+    return null;
+  }
+  return b64;
+}
 
 const json = (status: number, body: Record<string, unknown>, extraHeaders: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
@@ -123,6 +141,10 @@ Deno.serve(async (req: Request) => {
     }
     if (!isPreview && !isValidRecipient(to)) {
       return fail(400, "INVALID_RECIPIENT", "Please enter a valid email address.");
+    }
+    const pdfAttachment = isPreview ? "" : readPdfAttachment(body?.pdfAttachment);
+    if (pdfAttachment === null) {
+      return fail(400, "INVALID_ATTACHMENT", "The PDF could not be attached. Please try again.");
     }
 
     // Read through the caller's own RLS: no row means no access.
@@ -186,6 +208,7 @@ Deno.serve(async (req: Request) => {
       isIncome,
       signatures,
       pdfUrl: normalizePdfUrl(body?.pdfUrl) || "",
+      pdfAttached: Boolean(pdfAttachment),
     });
 
     if (isPreview) {
@@ -262,6 +285,9 @@ Deno.serve(async (req: Request) => {
         subject: rendered.subject,
         html: rendered.html,
         text: rendered.text,
+        attachments: pdfAttachment
+          ? [{ filename: `SpendNote_${receiptId.replace(/[^A-Za-z0-9_-]/g, "_") || "receipt"}.pdf`, content: pdfAttachment }]
+          : undefined,
         headers: { "X-Entity-Ref-ID": tx.id },
       }),
     });

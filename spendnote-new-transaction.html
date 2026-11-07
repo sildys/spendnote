@@ -207,11 +207,11 @@
         }
 
         #createTransactionModalContainer[data-mode="quick"] .nt-body {
-            padding-bottom: calc(92px + env(safe-area-inset-bottom));
+            padding-bottom: calc(146px + env(safe-area-inset-bottom));
         }
 
         #createTransactionModalContainer[data-mode="detailed"] .nt-body {
-            padding-bottom: calc(126px + env(safe-area-inset-bottom));
+            padding-bottom: calc(180px + env(safe-area-inset-bottom));
         }
 
         /* Fixed footer with save buttons */
@@ -234,6 +234,11 @@
             overflow-x: hidden;
             width: min(100%, 680px);
             max-width: min(100%, 680px);
+        }
+
+        .nt-footer .nt-sign-btn {
+            grid-column: 1 / -1;
+            order: -1;
         }
 
         .nt-footer .btn {
@@ -461,11 +466,11 @@
             }
 
             #createTransactionModalContainer[data-mode="quick"] .nt-body {
-                padding-bottom: calc(90px + env(safe-area-inset-bottom));
+                padding-bottom: calc(144px + env(safe-area-inset-bottom));
             }
 
             #createTransactionModalContainer[data-mode="detailed"] .nt-body {
-                padding-bottom: calc(122px + env(safe-area-inset-bottom));
+                padding-bottom: calc(176px + env(safe-area-inset-bottom));
             }
 
             .nt-footer {
@@ -718,6 +723,9 @@
             <button type="submit" form="modalTransactionForm" class="btn btn-primary" name="action" value="done">
                 <i class="fas fa-check"></i> Save
             </button>
+            <button type="submit" form="modalTransactionForm" class="btn btn-secondary nt-sign-btn" name="action" value="done-sign">
+                <i class="fas fa-signature"></i> Save & Sign
+            </button>
             <button type="submit" form="modalTransactionForm" class="btn btn-blue" name="action" value="done-receipt">
                 <i class="fas fa-print"></i> Save & Print
             </button>
@@ -735,7 +743,9 @@
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=20261016-logo2"></script>
 <script src="assets/js/dashboard-modal.js?v=20261107-desclimit"></script>
-<script src="assets/js/dashboard-form.js?v=20261107-signatures"></script>
+<script src="assets/js/signature-pad.js?v=20261107-sign3"></script>
+<script src="assets/js/transaction-sign-flow.js?v=20261107-sign4"></script>
+<script src="assets/js/dashboard-form.js?v=20261107-sign3"></script>
 
 <script>
 (function () {

@@ -86,6 +86,21 @@ function initTransactionForm() {
         });
     }
 
+    // Touch devices sign at the handoff, mouse users mostly print.
+    try {
+        if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+            document.querySelectorAll('button[type="submit"][name="action"]').forEach(function(btn) {
+                if (btn.value === 'done-sign') {
+                    btn.classList.remove('btn-secondary');
+                    btn.classList.add('btn-primary');
+                } else if (btn.classList.contains('btn-primary')) {
+                    btn.classList.remove('btn-primary');
+                    btn.classList.add('btn-blue');
+                }
+            });
+        }
+    } catch (_) {}
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -94,6 +109,7 @@ function initTransactionForm() {
         const actionBtn = e.submitter;
         const action = actionBtn ? actionBtn.value : 'done';
         const wantsReceipt = action === 'done-receipt';
+        const wantsSign = action === 'done-sign';
 
         let preopenedReceiptWindow = null;
         // Mobile browsers freeze the opener tab once a new tab takes focus, so the save never finishes there.
@@ -521,6 +537,142 @@ function initTransactionForm() {
                 window.__spendnoteExitAggressiveOnboarding();
             }
 
+            const buildReceiptUrl = async (format = 'receipt-print-two-copies', extraParams = {}) => {
+                const baseUrls = {
+                    'receipt-print-two-copies': 'spendnote-receipt-print-two-copies.html',
+                    pdf: 'spendnote-pdf-receipt.html',
+                    email: 'spendnote-email-receipt.html'
+                };
+
+                const params = new URLSearchParams();
+                params.set('v', 'print-20260405-db-logo-only');
+                if (createdId) params.set('txId', createdId);
+                params.set('bootstrap', '1');
+
+                params.set('itemsMode', mode === 'quick' ? 'single' : 'full');
+                params.set('recordedBy', '0');
+
+                let returnTo = '';
+                try {
+                    const onStandaloneForm = /spendnote-new-transaction/.test(window.location.pathname);
+                    returnTo = onStandaloneForm ? new URL('dashboard.html', window.location.href).href : window.location.href;
+                } catch (_) {
+
+                }
+
+                if (format === 'receipt-print-two-copies') {
+                    params.set('autoPrint', '1');
+                    if (returnTo) params.set('returnTo', returnTo);
+                }
+
+                if (format === 'pdf') {
+                    params.set('download', '1');
+                    if (returnTo) params.set('returnTo', returnTo);
+                }
+
+                Object.keys(extraParams || {}).forEach(function(key) {
+                    params.set(key, String(extraParams[key]));
+                });
+
+                let cb = null;
+                try {
+                    cb = createdId && payload.cash_box_id && window.db?.cashBoxes?.getById
+                        ? await window.db.cashBoxes.getById(payload.cash_box_id)
+                        : null;
+                } catch (_) {
+                    cb = null;
+                }
+
+                const cbIdForDefaults = String(payload.cash_box_id || '').trim();
+                const storedVisibility = {};
+                const storedReceiptText = {};
+
+                const normalizePrefix = (value) => {
+                    const raw = String(value || '').trim().toUpperCase();
+                    if (!raw) return '';
+                    return raw === 'REC-' ? 'SN' : raw;
+                };
+
+                const yn = (value, fallback) => {
+                    if (value === true) return '1';
+                    if (value === false) return '0';
+                    return fallback;
+                };
+
+                const resolveVisibility = (field, dbValue, fallbackBool) => {
+                    if (typeof dbValue === 'boolean') return dbValue;
+                    return fallbackBool;
+                };
+
+                const resolveText = (dbValue) => String(dbValue || '').trim();
+
+                const canUploadLogo = await window.SpendNoteFeatures?.can('can_upload_logo');
+                params.set('logo', canUploadLogo === false ? '0' : yn(resolveVisibility('logo', cb?.receipt_show_logo, true), '1'));
+                params.set('addresses', yn(resolveVisibility('addresses', cb?.receipt_show_addresses, true), '1'));
+                params.set('tracking', yn(resolveVisibility('tracking', cb?.receipt_show_tracking, true), '1'));
+                params.set('additional', yn(resolveVisibility('additional', cb?.receipt_show_additional, false), '0'));
+                params.set('note', yn(resolveVisibility('note', cb?.receipt_show_note, false), '0'));
+                params.set('signatures', yn(resolveVisibility('signatures', cb?.receipt_show_signatures, true), '1'));
+
+                const resolvedIdPrefix = normalizePrefix(cb?.id_prefix || '');
+                if (resolvedIdPrefix) {
+                    params.set('idPrefix', resolvedIdPrefix);
+                }
+
+                const receiptTitle = resolveText(cb?.receipt_title);
+                const totalLabel = resolveText(cb?.receipt_total_label);
+                const fromLabel = resolveText(cb?.receipt_from_label);
+                const toLabel = resolveText(cb?.receipt_to_label);
+                const descriptionLabel = resolveText(cb?.receipt_description_label);
+                const amountLabel = resolveText(cb?.receipt_amount_label);
+                const issuedByLabel = resolveText(cb?.receipt_issued_by_label);
+                const receivedByLabel = resolveText(cb?.receipt_received_by_label);
+                const footerNote = resolveText(cb?.receipt_footer_note);
+
+                if (receiptTitle) params.set('receiptTitle', receiptTitle);
+                if (totalLabel) params.set('totalLabel', totalLabel);
+                if (fromLabel) params.set('fromLabel', fromLabel);
+                if (toLabel) params.set('toLabel', toLabel);
+                if (descriptionLabel) params.set('descriptionLabel', descriptionLabel);
+                if (amountLabel) params.set('amountLabel', amountLabel);
+                if (issuedByLabel) params.set('issuedByLabel', issuedByLabel);
+                if (receivedByLabel) params.set('receivedByLabel', receivedByLabel);
+                if (footerNote) params.set('footerNote', footerNote);
+
+                try {
+                    const cbLogo = String(cb?.cash_box_logo_url || '').trim();
+                    if (cbLogo) params.set('logoUrl', cbLogo);
+
+                    const parseFinite = (v) => { const n = Number(v); return Number.isFinite(n) ? n : null; };
+                    const ls = cb?.logo_settings || null;
+                    const cbScale = parseFinite(ls?.scale);
+                    const cbX = parseFinite(ls?.x);
+                    const cbY = parseFinite(ls?.y);
+                    if (cbScale !== null && cbScale > 0) params.set('logoScale', String(cbScale));
+                    if (cbX !== null) params.set('logoX', String(cbX));
+                    if (cbY !== null) params.set('logoY', String(cbY));
+                } catch (_) {}
+
+                const baseUrl = baseUrls[format] || baseUrls['receipt-print-two-copies'];
+                return {
+                    url: `${baseUrl}?${params.toString()}`,
+                    format
+                };
+            };
+
+            if (wantsSign && createdId && window.SpendNoteSignFlow) {
+                try {
+                    await window.SpendNoteSignFlow.run({
+                        transactionId: createdId,
+                        receiptInSameTab,
+                        buildReceiptUrl: async (format, extraParams) => (await buildReceiptUrl(format, extraParams))?.url || ''
+                    });
+                } catch (signErr) {
+                    console.error('Signing flow failed:', signErr);
+                    await showAlert('The transaction is saved, but signing could not be completed. You can sign it later from the transaction list.', { iconType: 'warning' });
+                }
+            }
+
             // The standalone mobile page overrides loadDashboardData with a redirect, which would cancel the receipt.
             if (typeof loadDashboardData === 'function' && !(wantsReceipt && receiptInSameTab)) {
                 await loadDashboardData();
@@ -528,128 +680,6 @@ function initTransactionForm() {
 
             // Handle print receipt action
             if (action === 'done-receipt') {
-                const buildReceiptUrl = async () => {
-                    const baseUrls = {
-                        'receipt-print-two-copies': 'spendnote-receipt-print-two-copies.html',
-                        pdf: 'spendnote-pdf-receipt.html',
-                        email: 'spendnote-email-receipt.html'
-                    };
-
-                    const params = new URLSearchParams();
-                    params.set('v', 'print-20260405-db-logo-only');
-                    if (createdId) params.set('txId', createdId);
-                    params.set('bootstrap', '1');
-
-                    params.set('itemsMode', mode === 'quick' ? 'single' : 'full');
-                    params.set('recordedBy', '0');
-
-                    const format = 'receipt-print-two-copies';
-
-                    if (format === 'receipt-print-two-copies') {
-                        params.set('autoPrint', '1');
-                        try {
-                            const onStandaloneForm = /spendnote-new-transaction/.test(window.location.pathname);
-                            params.set('returnTo', onStandaloneForm ? new URL('dashboard.html', window.location.href).href : window.location.href);
-                        } catch (_) {
-
-                        }
-                    }
-
-                    if (format === 'pdf') {
-                        params.set('download', '1');
-                        try {
-                            params.set('returnTo', window.location.href);
-                        } catch (_) {
-
-                        }
-                    }
-
-                    let cb = null;
-                    try {
-                        cb = createdId && payload.cash_box_id && window.db?.cashBoxes?.getById
-                            ? await window.db.cashBoxes.getById(payload.cash_box_id)
-                            : null;
-                    } catch (_) {
-                        cb = null;
-                    }
-
-                    const cbIdForDefaults = String(payload.cash_box_id || '').trim();
-                    const storedVisibility = {};
-                    const storedReceiptText = {};
-
-                    const normalizePrefix = (value) => {
-                        const raw = String(value || '').trim().toUpperCase();
-                        if (!raw) return '';
-                        return raw === 'REC-' ? 'SN' : raw;
-                    };
-
-                    const yn = (value, fallback) => {
-                        if (value === true) return '1';
-                        if (value === false) return '0';
-                        return fallback;
-                    };
-
-                    const resolveVisibility = (field, dbValue, fallbackBool) => {
-                        if (typeof dbValue === 'boolean') return dbValue;
-                        return fallbackBool;
-                    };
-
-                    const resolveText = (dbValue) => String(dbValue || '').trim();
-
-                    const canUploadLogo = await window.SpendNoteFeatures?.can('can_upload_logo');
-                    params.set('logo', canUploadLogo === false ? '0' : yn(resolveVisibility('logo', cb?.receipt_show_logo, true), '1'));
-                    params.set('addresses', yn(resolveVisibility('addresses', cb?.receipt_show_addresses, true), '1'));
-                    params.set('tracking', yn(resolveVisibility('tracking', cb?.receipt_show_tracking, true), '1'));
-                    params.set('additional', yn(resolveVisibility('additional', cb?.receipt_show_additional, false), '0'));
-                    params.set('note', yn(resolveVisibility('note', cb?.receipt_show_note, false), '0'));
-                    params.set('signatures', yn(resolveVisibility('signatures', cb?.receipt_show_signatures, true), '1'));
-
-                    const resolvedIdPrefix = normalizePrefix(cb?.id_prefix || '');
-                    if (resolvedIdPrefix) {
-                        params.set('idPrefix', resolvedIdPrefix);
-                    }
-
-                    const receiptTitle = resolveText(cb?.receipt_title);
-                    const totalLabel = resolveText(cb?.receipt_total_label);
-                    const fromLabel = resolveText(cb?.receipt_from_label);
-                    const toLabel = resolveText(cb?.receipt_to_label);
-                    const descriptionLabel = resolveText(cb?.receipt_description_label);
-                    const amountLabel = resolveText(cb?.receipt_amount_label);
-                    const issuedByLabel = resolveText(cb?.receipt_issued_by_label);
-                    const receivedByLabel = resolveText(cb?.receipt_received_by_label);
-                    const footerNote = resolveText(cb?.receipt_footer_note);
-
-                    if (receiptTitle) params.set('receiptTitle', receiptTitle);
-                    if (totalLabel) params.set('totalLabel', totalLabel);
-                    if (fromLabel) params.set('fromLabel', fromLabel);
-                    if (toLabel) params.set('toLabel', toLabel);
-                    if (descriptionLabel) params.set('descriptionLabel', descriptionLabel);
-                    if (amountLabel) params.set('amountLabel', amountLabel);
-                    if (issuedByLabel) params.set('issuedByLabel', issuedByLabel);
-                    if (receivedByLabel) params.set('receivedByLabel', receivedByLabel);
-                    if (footerNote) params.set('footerNote', footerNote);
-
-                    try {
-                        const cbLogo = String(cb?.cash_box_logo_url || '').trim();
-                        if (cbLogo) params.set('logoUrl', cbLogo);
-
-                        const parseFinite = (v) => { const n = Number(v); return Number.isFinite(n) ? n : null; };
-                        const ls = cb?.logo_settings || null;
-                        const cbScale = parseFinite(ls?.scale);
-                        const cbX = parseFinite(ls?.x);
-                        const cbY = parseFinite(ls?.y);
-                        if (cbScale !== null && cbScale > 0) params.set('logoScale', String(cbScale));
-                        if (cbX !== null) params.set('logoX', String(cbX));
-                        if (cbY !== null) params.set('logoY', String(cbY));
-                    } catch (_) {}
-
-                    const baseUrl = baseUrls[format] || baseUrls['receipt-print-two-copies'];
-                    return {
-                        url: `${baseUrl}?${params.toString()}`,
-                        format
-                    };
-                };
-
                 const receipt = await buildReceiptUrl();
                 const url = receipt?.url;
                 const finalFormat = receipt?.format || 'receipt-print-two-copies';
