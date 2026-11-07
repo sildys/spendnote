@@ -424,5 +424,5 @@ body.modal-open>.sn-signflow-overlay{pointer-events:auto!important;user-select:a
         await showFinish(ctx, o);
     }
 
-    window.SpendNoteSignFlow = { run };
+    window.SpendNoteSignFlow = { run, preparePdf, fileToBase64 };
 })();

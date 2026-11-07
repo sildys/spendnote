@@ -287,7 +287,7 @@ const QUICK_PRESET = {
     async function loadEmailPreview() {
         const id = getCurrentTxId();
         const iframe = document.getElementById('receiptFrame');
-        const key = `email-preview:${id}`;
+        const key = `email-preview:${id}:${receiptLayoutLocked ? 'signed' : ''}`;
         if (!id || !iframe || key === lastReceiptUrl) return;
         lastReceiptUrl = key;
 
@@ -304,7 +304,7 @@ const QUICK_PRESET = {
             let timeZone = '';
             try { timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (_) {}
             const res = await window.supabaseClient.functions.invoke('send-receipt-email', {
-                body: { ...fields, transactionId: id, preview: true, timeZone }
+                body: { ...fields, transactionId: id, preview: true, timeZone, pdfAttached: receiptLayoutLocked }
             });
             if (lastReceiptUrl !== key) return;
             const html = String(res?.data?.html || '');
@@ -916,8 +916,17 @@ html, body { height: auto !important; overflow: auto !important; }
                         throw new Error('Failed to generate email content');
                     }
 
-                    const txTitle = document.getElementById('txTitle')?.textContent || 'Receipt';
-                    const subject = `Your Cash Receipt - ${txTitle}`;
+                    // Signed receipts travel as the signed PDF; the link would open an unsigned copy.
+                    let pdfAttachment = '';
+                    if (receiptLayoutLocked && window.SpendNoteSignFlow?.preparePdf) {
+                        emailBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing PDF...';
+                        try {
+                            if (typeof window.writeBootstrapSession === 'function') await window.writeBootstrapSession();
+                            const file = await window.SpendNoteSignFlow.preparePdf(buildReceiptUrl('pdf', { download: '1', deliver: 'parent' }));
+                            if (file) pdfAttachment = await window.SpendNoteSignFlow.fileToBase64(file);
+                        } catch (_) {}
+                        emailBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                    }
 
                     const getAccessToken = async (refresh) => {
                         const client = window.supabaseClient;
@@ -942,9 +951,7 @@ html, body { height: auto !important; overflow: auto !important; }
                             companyNameFallback: emailContent.companyName,
                             companyAddressFallback: emailContent.companyAddress,
                             timeZone: (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (_) { return ''; } })(),
-                            // subject + html are only read by the pre-2026-11 function version (v22); drop once the new version is deployed.
-                            subject: subject,
-                            html: emailContent.html
+                            ...(pdfAttachment ? { pdfAttachment } : {})
                         })
                     });
 

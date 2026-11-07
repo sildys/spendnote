@@ -22,6 +22,8 @@ type ReceiptEmailBody = {
   preview?: boolean;
   // Base64 PDF rendered in the sender's browser (the signed copy after "Done & Sign").
   pdfAttachment?: string;
+  // Preview only: render the email as it will look with the signed PDF attached.
+  pdfAttached?: boolean;
 };
 
 type TxRow = {
@@ -208,7 +210,7 @@ Deno.serve(async (req: Request) => {
       isIncome,
       signatures,
       pdfUrl: normalizePdfUrl(body?.pdfUrl) || "",
-      pdfAttached: Boolean(pdfAttachment),
+      pdfAttached: isPreview ? body?.pdfAttached === true : Boolean(pdfAttachment),
     });
 
     if (isPreview) {
