@@ -589,6 +589,8 @@ const spendnotePreviewLogoPmEligible = () => {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(tid);
 };
 const shouldShowAddresses = urlParams.get('addresses') !== '0';
+const shouldShowAdditional = urlParams.get('additional') !== '0';
+const shouldShowNote = urlParams.get('note') !== '0';
 const itemsMode = String(urlParams.get('itemsMode') || '').toLowerCase();
 const isItemsSingle = itemsMode === 'single';
 
@@ -1405,7 +1407,7 @@ if (urlParams.get('signatures') === '0') {
         const notesWrap = document.querySelector('.notes');
         const notesEl = document.querySelector('.notes-text');
         if (notesWrap) {
-          if (!notesText) {
+          if (!notesText || !shouldShowNote) {
             notesWrap.style.display = 'none';
           } else if (notesEl) {
             notesEl.textContent = notesText;
@@ -1413,7 +1415,7 @@ if (urlParams.get('signatures') === '0') {
           }
         }
 
-        if (fromOtherId) {
+        if (fromOtherId && shouldShowAdditional) {
           setTextAll('.company-id', fromOtherId);
           document.querySelectorAll('.company-id').forEach((el) => (el.style.display = ''));
         } else {
@@ -1421,7 +1423,7 @@ if (urlParams.get('signatures') === '0') {
           document.querySelectorAll('.company-id').forEach((el) => (el.style.display = 'none'));
         }
 
-        if (toOtherId) {
+        if (toOtherId && shouldShowAdditional) {
           setTextAll('.contact-id', toOtherId);
           document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = ''));
         } else {

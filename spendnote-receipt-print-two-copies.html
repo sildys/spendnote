@@ -635,6 +635,8 @@ body {
   };
   document.body.classList.add('two-copies');
   const shouldShowAddresses = urlParams.get('addresses') !== '0';
+  const shouldShowAdditional = urlParams.get('additional') !== '0';
+  const shouldShowNote = urlParams.get('note') !== '0';
   const itemsMode = String(urlParams.get('itemsMode') || '').toLowerCase();
   const isItemsSingle = itemsMode === 'single';
   const initialVoid = urlParams.get('void') === '1';
@@ -1270,7 +1272,7 @@ body {
             setHtmlAll('.company-address', '');
             document.querySelectorAll('.company-address').forEach((el) => (el.style.display = 'none'));
           }
-          if (fromOtherId) {
+          if (fromOtherId && shouldShowAdditional) {
             setTextAll('.company-id', fromOtherId);
             document.querySelectorAll('.company-id').forEach((el) => (el.style.display = ''));
           } else {
@@ -1282,7 +1284,7 @@ body {
 
           const notes = safeText(tx.notes, '');
           document.querySelectorAll('.notes').forEach((el) => {
-            if (!notes) {
+            if (!notes || !shouldShowNote) {
               el.style.display = 'none';
               return;
             }
@@ -1309,7 +1311,7 @@ body {
             document.querySelectorAll('.contact-address').forEach((el) => (el.style.display = 'none'));
           }
 
-          if (toOtherId) {
+          if (toOtherId && shouldShowAdditional) {
             setTextAll('.contact-id', toOtherId);
             document.querySelectorAll('.contact-id').forEach((el) => (el.style.display = ''));
           } else {
