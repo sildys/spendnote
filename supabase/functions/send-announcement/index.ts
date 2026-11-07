@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { renderProductUpdateMobileTemplate } from "../_shared/email-templates.ts";
+import { renderProductUpdateSigningTemplate } from "../_shared/email-templates.ts";
 
 type Body = {
   mode: "test" | "dry_run" | "all";
@@ -7,7 +7,7 @@ type Body = {
   confirm?: string;
 };
 
-const CAMPAIGN = "product-update-mobile-2026-10";
+const CAMPAIGN = "product-update-signing-2026-11";
 const REPLY_TO = "support@spendnote.app";
 const BATCH_SIZE = 100;
 
@@ -36,7 +36,7 @@ Deno.serve(async (req: Request) => {
 
     const sendBatch = async (items: Array<{ email: string; name: string }>, key: string) => {
       const payload = items.map((r) => {
-        const t = renderProductUpdateMobileTemplate({ fullName: r.name });
+        const t = renderProductUpdateSigningTemplate({ fullName: r.name });
         return { from, to: [r.email], reply_to: REPLY_TO, subject: t.subject, html: t.html, text: t.text };
       });
       const resp = await fetch("https://api.resend.com/emails/batch", {

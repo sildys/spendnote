@@ -668,3 +668,39 @@ export const renderProductUpdateMobileTemplate = (args: {
   const text = `${subject}\n\nHi ${args.fullName || "there"},\n\nA quick update from SpendNote. We've made a round of improvements to how SpendNote works on mobile:\n\n- Smoother layout on phones, from sign-in to the dashboard\n- Cash box and transaction totals now always show the right currency\n- Faster loading, so the latest version is there as soon as you open it\n\nYou can also install SpendNote on your phone or computer, so it opens like a regular app from your home screen:\n\n- Android (Chrome): open SpendNote, tap the menu with your name in the top right and choose "Install app"\n- iPhone (Safari): tap the Share button, then "Add to Home Screen"\n- Computer (Chrome or Edge): click the install icon in the address bar, or use "Install app" in your user menu\n\nYou'll also notice our new logo, on the app, your emails and every receipt footer.\n\nOpen SpendNote: ${dashboardUrl}\n\nIf anything doesn't look right on your device, just reply to this email. We read every message.\n\nThanks for using SpendNote,\nThe SpendNote team`;
   return { subject, html, text };
 };
+
+export const renderProductUpdateSigningTemplate = (args: {
+  fullName?: string;
+}): BaseEmailTemplate => {
+  const name = esc(String(args.fullName || "there").trim() || "there");
+  const dashboardUrl = "https://spendnote.app/dashboard";
+  const settingsUrl = "https://spendnote.app/spendnote-user-settings";
+  const playUrl = "https://play.google.com/store/apps/details?id=app.spendnote";
+  const subject = "New in SpendNote: sign receipts on screen, and our Android app";
+
+  const html = appCard(
+    "Sign receipts on screen",
+    "Both sides can now sign at the handoff, on every plan. Plus our Android app on Google Play.",
+    `
+      <p style="margin:0 0 10px;">Hi ${name},</p>
+      <p style="margin:0 0 10px;">A quick update from SpendNote. When cash changes hands, both people can now sign the receipt right on the screen, with a finger or a mouse. It's included on every plan.</p>
+      <ul style="margin:0 0 14px;padding-left:18px;">
+        <li><strong>Right after saving:</strong> choose <strong>Done &amp; Sign</strong> in the new transaction window. You sign first, then hand the device to the other person.</li>
+        <li><strong>Later:</strong> open the transaction and use the <strong>Signatures</strong> card.</li>
+        <li>Each signature goes on the <strong>Issued by</strong> or <strong>Received by</strong> line of the printed and PDF receipt, with the signer's name and the date and time.</li>
+        <li><strong>Sign your side with one tap:</strong> draw your signature once in <a href="${settingsUrl}" style="color:${LINK_COLOR};font-weight:700;text-decoration:none;">Settings &rarr; My signature</a>. You can also have it added automatically to every receipt you record.</li>
+      </ul>
+      <p style="margin:0 0 14px;">Prefer paper? Nothing changes: print the receipt and sign it as before.</p>
+      <p style="margin:0 0 14px;"><strong>SpendNote is now on Google Play.</strong> On Android, <a href="${playUrl}" style="color:${LINK_COLOR};font-weight:700;text-decoration:none;">install the app from Google Play</a> and sign in with your usual account. Your data is the same everywhere.</p>
+      <div style="margin:18px 0 16px;">
+        <a href="${dashboardUrl}" style="${CTA_STYLE}">Open SpendNote &rarr;</a>
+      </div>
+      <p style="margin:0 0 10px;">Questions or feedback? Just reply to this email. We read every message.</p>
+      <p style="margin:0 0 16px;">Thanks for using SpendNote,<br>The SpendNote team</p>
+      <p style="margin:0;font-size:12px;line-height:1.5;color:#6b7280;">You're receiving this because you have a SpendNote account. Don't want product updates? Reply "unsubscribe" and we won't send them again.<br>Sildsys LLC &middot; 1111B S Governors Ave #45989, Dover, DE 19904</p>
+    `,
+  );
+
+  const text = `${subject}\n\nHi ${args.fullName || "there"},\n\nA quick update from SpendNote. When cash changes hands, both people can now sign the receipt right on the screen, with a finger or a mouse. It's included on every plan.\n\n- Right after saving: choose "Done & Sign" in the new transaction window. You sign first, then hand the device to the other person.\n- Later: open the transaction and use the Signatures card.\n- Each signature goes on the "Issued by" or "Received by" line of the printed and PDF receipt, with the signer's name and the date and time.\n- Sign your side with one tap: draw your signature once in Settings > My signature (${settingsUrl}). You can also have it added automatically to every receipt you record.\n\nPrefer paper? Nothing changes: print the receipt and sign it as before.\n\nSpendNote is now on Google Play. On Android, install the app and sign in with your usual account. Your data is the same everywhere:\n${playUrl}\n\nOpen SpendNote: ${dashboardUrl}\n\nQuestions or feedback? Just reply to this email. We read every message.\n\nThanks for using SpendNote,\nThe SpendNote team\n\n--\nYou're receiving this because you have a SpendNote account. Don't want product updates? Reply "unsubscribe" and we won't send them again.\nSildsys LLC, 1111B S Governors Ave #45989, Dover, DE 19904`;
+  return { subject, html, text };
+};
