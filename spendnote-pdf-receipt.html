@@ -78,10 +78,13 @@
       max-width: 800px;
       margin: 0 auto;
       background: white;
-      padding: 40px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-      border-radius: 8px;
+      padding: 36px 40px 0 40px;
+      border: 1px solid #e5e7eb;
+      border-top: 5px solid #059669;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      border-radius: 12px;
       position: relative;
+      overflow: hidden;
     }
 
     /* VOID WATERMARK */
@@ -106,9 +109,9 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      padding-bottom: 16px;
-      margin-bottom: 22px;
-      border-bottom: 2px solid #111;
+      padding-bottom: 22px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #e5e7eb;
     }
     
     .header-left {
@@ -116,7 +119,7 @@
     }
     
     .title {
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 700;
       color: #111;
       letter-spacing: -0.02em;
@@ -125,7 +128,7 @@
     
     .meta {
       font-size: 14px;
-      color: #666;
+      color: #4b5563;
       line-height: 1.5;
     }
     
@@ -135,14 +138,15 @@
     
     .identifiers {
       font-size: 13px;
-      color: #666;
-      line-height: 1.5;
+      color: #111;
+      font-weight: 700;
+      line-height: 1.7;
       margin-bottom: 12px;
     }
     
     .identifiers strong {
-      color: #000;
-      font-weight: 700;
+      color: #4b5563;
+      font-weight: 400;
     }
     
     .logo {
@@ -162,30 +166,30 @@
     }
     
     .party-label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #999;
-      margin-bottom: 8px;
+      letter-spacing: 0.06em;
+      color: #6b7280;
+      margin-bottom: 6px;
     }
     
     .party-name {
       font-size: 16px;
-      font-weight: 800;
-      color: #000;
+      font-weight: 700;
+      color: #111;
       margin-bottom: 4px;
     }
     
     .party-info {
       font-size: 14px;
-      color: #666;
+      color: #4b5563;
       line-height: 1.6;
     }
     
     .party-id {
       font-size: 12px;
-      color: #666;
+      color: #4b5563;
       margin-top: 4px;
     }
     
@@ -205,12 +209,12 @@
     
     th {
       text-align: left;
-      padding: 0 16px 10px 16px;
-      font-size: 12px;
+      padding: 0 0 8px 0;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border-bottom: 1px solid #9ca3af;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid #d1d5db;
     }
     
     th.amount,
@@ -220,20 +224,26 @@
     }
     
     td {
-      padding: 12px 16px;
+      padding: 12px 0;
       font-size: 14px;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid #eeeeee;
     }
     
     td.amount {
       text-align: right;
       color: #111;
+      white-space: nowrap;
+      padding-left: 12px;
     }
 
     .table-section tbody td {
-      padding: 0 16px;
-      height: 34px;
+      height: 42px;
       vertical-align: middle;
+    }
+
+    /* Blank form rows are for the paper copy; on the PDF only real items show. */
+    .table-section tbody tr.empty-row {
+      display: none;
     }
     
     /* TOTAL */
@@ -241,21 +251,25 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 16px;
-      border-top: 2px solid #111;
+      padding: 16px 18px;
+      margin-top: 16px;
+      background: #f8faf9;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
       color: #111;
-      margin-bottom: 18px;
+      margin-bottom: 24px;
     }
     
     .total-label {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      color: #6b7280;
     }
     
     .total-amount {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 700;
       letter-spacing: -0.01em;
       color: #047857;
@@ -263,24 +277,24 @@
     
     /* NOTES */
     .notes {
-      padding: 12px 16px;
+      padding: 12px 14px;
       background: #f9fafb;
       border-radius: 8px;
       margin-bottom: 24px;
     }
     
     .notes-label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #666;
-      margin-bottom: 8px;
+      letter-spacing: 0.06em;
+      color: #6b7280;
+      margin-bottom: 6px;
     }
     
     .notes-text {
       font-size: 14px;
-      color: #333;
+      color: #374151;
       line-height: 1.6;
     }
     
@@ -290,7 +304,7 @@
       justify-content: space-between;
       gap: 48px;
       margin-top: 8px;
-      margin-bottom: 56px;
+      margin-bottom: 40px;
     }
     
     .signature {
@@ -298,15 +312,18 @@
     }
     
     .signature-label {
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6b7280;
+      margin-bottom: 4px;
     }
     
     /* Tall enough for the on-screen signature image (~18 mm in the PDF). */
     .signature-line {
       height: 90px;
-      border-bottom: 1px solid #000;
+      border-bottom: 1px solid #9ca3af;
       display: flex;
       align-items: flex-end;
     }
@@ -328,8 +345,10 @@
     
     /* FOOTER */
     .footer {
-      border-top: 1px solid #e5e7eb;
-      padding-top: 14px;
+      margin: 0 -40px;
+      padding: 16px 40px;
+      background: #fafafa;
+      border-top: 1px solid #eeeeee;
       text-align: center;
       white-space: nowrap;
     }
@@ -395,8 +414,14 @@
       .receipt {
         box-shadow: none;
         border-radius: 0;
+        border: 0;
         padding: 0;
         max-width: 100%;
+      }
+
+      .footer {
+        margin: 0;
+        padding: 16px 0;
       }
 
       .no-print {
@@ -411,11 +436,9 @@
 
     body.exporting .receipt {
       box-shadow: none;
-      border-radius: 0;
       max-width: none;
       width: 800px;
       margin: 0;
-      padding: 40px;
     }
     
     body.download-mode .actions {
@@ -571,6 +594,11 @@ const isItemsSingle = itemsMode === 'single';
 
 const shouldAutoDownload = urlParams.get('download') === '1' && urlParams.get('preview') !== '1';
 const returnToAfterDownload = String(urlParams.get('returnTo') || '').trim();
+// Share sheets need the file in the page the user tapped, so a hidden iframe hands the PDF back instead of saving it.
+const deliverToParent = urlParams.get('deliver') === 'parent' && window.parent !== window;
+const postPdfToParent = (message) => {
+  try { window.parent.postMessage(Object.assign({ spendnote: 'receiptPdf' }, message), window.location.origin); } catch (_) {}
+};
 
 const EMPTY_ROW_HTML = '<tr class="empty-row"><td>&nbsp;</td><td class="amount">&nbsp;</td></tr>';
 
@@ -711,11 +739,16 @@ async function downloadReceiptPdf() {
     const receiptId = receiptIdRaw && receiptIdRaw !== '-' ? receiptIdRaw : '';
     const baseName = receiptId ? `SpendNote_${receiptId}` : `SpendNote_${document.title || 'receipt'}`;
     const fileName = `${toSafeFileName(baseName)}.pdf`;
-    pdf.save(fileName);
+    if (deliverToParent) {
+      postPdfToParent({ fileName, buffer: pdf.output('arraybuffer') });
+    } else {
+      pdf.save(fileName);
+    }
     didSavePdf = true;
   } catch (e) {
     console.error(e);
-    showAlert('Could not generate PDF.', { iconType: 'error' });
+    if (deliverToParent) postPdfToParent({ error: true });
+    else showAlert('Could not generate PDF.', { iconType: 'error' });
   } finally {
     document.body.classList.remove('exporting');
     fitReceiptPreview();
@@ -723,7 +756,7 @@ async function downloadReceiptPdf() {
       btn.textContent = prevText;
       btn.disabled = false;
     }
-    if (shouldAutoDownload) {
+    if (shouldAutoDownload && !deliverToParent) {
       if (didSavePdf) {
         finalizeAutoDownload();
       } else {
