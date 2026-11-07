@@ -80,6 +80,8 @@
 .seo-x .seo-content th { background: #0b1220; color: #fff; font-weight: 800; text-align: left; padding: 0.75rem 0.9rem; }
 .seo-x .seo-content td { padding: 0.7rem 0.9rem; border-top: 1px solid var(--line); color: #374151; vertical-align: top; }
 .seo-x .seo-content tr:nth-child(even) td { background: #f9fafb; }
+.seo-x .seo-content .ex-slip th { width: 34%; background: #f3f4f6; color: #111827; border-top: 1px solid var(--line); font-weight: 700; }
+.seo-x .seo-content .ex-slip tr:first-child th { border-top: none; }
 
 /* In-article CTA */
 .seo-x .cta-box {
