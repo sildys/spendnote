@@ -12,6 +12,9 @@ export type ReceiptEmailData = {
   total: string;
   notes: string;
   isVoided: boolean;
+  // IN: the contact hands the cash over, so the receipt reads contact -> company.
+  isIncome: boolean;
+  signatures: { label: string; signerName: string; partyName: string; signedAt: string }[];
   pdfUrl: string;
 };
 
@@ -119,6 +122,22 @@ export function normalizePdfUrl(raw: unknown): string | null {
   return `${APP_ORIGIN}/spendnote-pdf-receipt.html?${params.toString()}`;
 }
 
+// The sender's browser time zone, so the email shows the same time as the receipt page.
+export function formatSignedAt(iso: unknown, timeZone: unknown): string {
+  const t = Date.parse(String(iso ?? ""));
+  if (!Number.isFinite(t)) return "";
+  const opts: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" };
+  const tz = cleanText(timeZone, 64);
+  if (tz) {
+    try {
+      return new Date(t).toLocaleString("en-US", { ...opts, timeZone: tz });
+    } catch (_) {
+      // unknown zone name: fall back to UTC below
+    }
+  }
+  return new Date(t).toLocaleString("en-US", { ...opts, timeZone: "UTC" }) + " UTC";
+}
+
 export function isValidRecipient(email: string): boolean {
   return email.length <= 254 && /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>"]+$/.test(email);
 }
@@ -156,6 +175,26 @@ export function renderReceiptEmail(d: ReceiptEmailData): { subject: string; html
               <td align="center" style="padding:20px 32px 4px 32px;">
                 <a href="${escapeHtml(d.pdfUrl)}" style="display:inline-block;background-color:#059669;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:8px;font-size:15px;font-weight:700;">View &amp; download PDF</a>
               </td>
+            </tr>`
+    : "";
+
+  const fromName = d.isIncome ? d.contactName : d.companyName;
+  const fromAddress = d.isIncome ? d.contactAddress : d.companyAddress;
+  const toName = d.isIncome ? d.companyName : d.contactName;
+  const toAddress = d.isIncome ? d.companyAddress : d.contactAddress;
+
+  const signatureLine = (s: ReceiptEmailData["signatures"][number]) => {
+    const forPart = s.partyName && s.partyName !== s.signerName ? ` · for ${s.partyName}` : "";
+    return `${s.label}: ${s.signerName}${forPart} · signed on screen${s.signedAt ? ` · ${s.signedAt}` : ""}`;
+  };
+  const signaturesHtml = d.signatures.length
+    ? `
+            <tr>
+              <td style="padding:20px 32px 0 32px;">
+                ${label("Signatures")}
+                ${d.signatures.map((s) =>
+                  `<div style="font-size:14px;line-height:1.6;color:#111111;"><span style="color:#059669;font-weight:700;">&#10003;</span> ${escapeHtml(signatureLine(s))}</div>`
+                ).join("\n                ")}              </td>
             </tr>`
     : "";
 
@@ -217,13 +256,13 @@ export function renderReceiptEmail(d: ReceiptEmailData): { subject: string; html
                   <tr>
                     <td width="50%" valign="top" style="padding-right:12px;">
                       ${label("From")}
-                      <div style="font-size:15px;line-height:1.4;font-weight:700;color:#111111;">${escapeHtml(d.companyName)}</div>
-                      <div style="font-size:13px;line-height:1.5;color:#4b5563;margin-top:2px;">${escapeMultiline(d.companyAddress)}</div>
+                      <div style="font-size:15px;line-height:1.4;font-weight:700;color:#111111;">${escapeHtml(fromName)}</div>
+                      <div style="font-size:13px;line-height:1.5;color:#4b5563;margin-top:2px;">${escapeMultiline(fromAddress)}</div>
                     </td>
                     <td width="50%" valign="top" style="padding-left:12px;">
                       ${label("To")}
-                      <div style="font-size:15px;line-height:1.4;font-weight:700;color:#111111;">${escapeHtml(d.contactName)}</div>
-                      <div style="font-size:13px;line-height:1.5;color:#4b5563;margin-top:2px;">${escapeMultiline(d.contactAddress)}</div>
+                      <div style="font-size:15px;line-height:1.4;font-weight:700;color:#111111;">${escapeHtml(toName)}</div>
+                      <div style="font-size:13px;line-height:1.5;color:#4b5563;margin-top:2px;">${escapeMultiline(toAddress)}</div>
                     </td>
                   </tr>
                 </table>
@@ -243,7 +282,7 @@ export function renderReceiptEmail(d: ReceiptEmailData): { subject: string; html
                   </tr>
                 </table>
               </td>
-            </tr>${notesHtml}
+            </tr>${signaturesHtml}${notesHtml}
             <tr>
               <td style="height:28px;line-height:28px;font-size:0;">&nbsp;</td>
             </tr>
@@ -272,12 +311,13 @@ export function renderReceiptEmail(d: ReceiptEmailData): { subject: string; html
     ...(d.isVoided ? ["", "This receipt is marked as VOID."] : []),
     ...(d.pdfUrl ? ["", `View & download PDF: ${d.pdfUrl}`] : []),
     "",
-    `From: ${d.companyName}`,
-    ...(d.companyAddress ? [d.companyAddress] : []),
-    `To: ${d.contactName}`,
-    ...(d.contactAddress ? [d.contactAddress] : []),
+    `From: ${fromName}`,
+    ...(fromAddress ? [fromAddress] : []),
+    `To: ${toName}`,
+    ...(toAddress ? [toAddress] : []),
     "",
     ...d.items.map((it) => `${it.description}: ${it.amount}`),
+    ...(d.signatures.length ? ["", ...d.signatures.map(signatureLine)] : []),
     ...(d.notes ? ["", `Notes: ${d.notes}`] : []),
     "",
     "Sent with SpendNote (https://spendnote.app) - Proof of cash handoff for teams. Not a tax document.",

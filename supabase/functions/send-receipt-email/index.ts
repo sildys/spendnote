@@ -5,6 +5,7 @@ import {
   cleanText,
   formatMoney,
   formatReceiptDate,
+  formatSignedAt,
   isValidRecipient,
   normalizePdfUrl,
   renderReceiptEmail,
@@ -16,6 +17,9 @@ type ReceiptEmailBody = {
   pdfUrl?: string;
   companyNameFallback?: string;
   companyAddressFallback?: string;
+  timeZone?: string;
+  // Render only: the transaction detail page shows the exact email without sending it.
+  preview?: boolean;
 };
 
 type TxRow = {
@@ -24,6 +28,7 @@ type TxRow = {
   user_id: string | null;
   cash_box_id: string;
   amount: number | string;
+  type: string | null;
   status: string | null;
   transaction_date: string | null;
   receipt_number: string | null;
@@ -41,7 +46,7 @@ type TxRow = {
 };
 
 const TX_COLUMNS = [
-  "id", "org_id", "user_id", "cash_box_id", "amount", "status", "transaction_date", "receipt_number",
+  "id", "org_id", "user_id", "cash_box_id", "amount", "type", "status", "transaction_date", "receipt_number",
   "cash_box_sequence", "tx_sequence_in_box", "cash_box_id_prefix_snapshot", "cash_box_currency_snapshot",
   "contact_name", "contact_address", "description", "notes", "line_items",
   "sender_company_name_snapshot", "sender_address_snapshot",
@@ -112,10 +117,11 @@ Deno.serve(async (req: Request) => {
 
     const transactionId = String(body?.transactionId || "").trim();
     const to = String(body?.to || "").trim().toLowerCase();
+    const isPreview = body?.preview === true;
     if (!UUID_RE.test(transactionId)) {
       return fail(400, "INVALID_TRANSACTION", "Missing transaction.");
     }
-    if (!isValidRecipient(to)) {
+    if (!isPreview && !isValidRecipient(to)) {
       return fail(400, "INVALID_RECIPIENT", "Please enter a valid email address.");
     }
 
@@ -138,6 +144,53 @@ Deno.serve(async (req: Request) => {
       .select("user_id, sequence_number, id_prefix, currency")
       .eq("id", tx.cash_box_id)
       .maybeSingle();
+
+    const { data: signatureRows } = await userClient
+      .from("transaction_signatures")
+      .select("side, party, signer_name, signed_at")
+      .eq("transaction_id", tx.id);
+
+    const isIncome = String(tx.type || "").toLowerCase() === "income";
+    const companyName = cleanText(tx.sender_company_name_snapshot, 200) || cleanText(body?.companyNameFallback, 200) || "—";
+    const contactName = cleanText(tx.contact_name, 200) || "—";
+    const signatures = (Array.isArray(signatureRows) ? signatureRows : [])
+      .sort((a, b) => (a.side === "from" ? 0 : 1) - (b.side === "from" ? 0 : 1))
+      .map((s) => ({
+        label: s.side === "from" ? "Issued by" : "Received by",
+        signerName: cleanText(s.signer_name, 120),
+        partyName: s.party === "workspace" ? companyName : contactName,
+        signedAt: formatSignedAt(s.signed_at, body?.timeZone),
+      }));
+
+    const currency = String(tx.cash_box_currency_snapshot || cashBox?.currency || "USD").trim().toUpperCase() || "USD";
+    const { receiptId, cashBoxCode } = buildReceiptIds({
+      cashBoxSequence: cashBox?.sequence_number || tx.cash_box_sequence,
+      txSequenceInBox: tx.tx_sequence_in_box,
+      snapshotPrefix: tx.cash_box_id_prefix_snapshot,
+      livePrefix: cashBox?.id_prefix,
+      receiptNumber: tx.receipt_number,
+    });
+
+    const rendered = renderReceiptEmail({
+      receiptId,
+      cashBoxCode,
+      dateStr: formatReceiptDate(tx.transaction_date),
+      companyName,
+      companyAddress: cleanText(tx.sender_address_snapshot, 500) || cleanText(body?.companyAddressFallback, 500),
+      contactName,
+      contactAddress: cleanText(tx.contact_address, 500),
+      items: buildLineItems(tx.line_items, tx.description, tx.amount, currency),
+      total: formatMoney(tx.amount, currency),
+      notes: cleanText(tx.notes, 2000),
+      isVoided: String(tx.status || "").toLowerCase() === "voided",
+      isIncome,
+      signatures,
+      pdfUrl: normalizePdfUrl(body?.pdfUrl) || "",
+    });
+
+    if (isPreview) {
+      return json(200, { success: true, subject: rendered.subject, html: rendered.html });
+    }
 
     const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } });
 
@@ -194,30 +247,6 @@ Deno.serve(async (req: Request) => {
         });
       }
     }
-
-    const currency = String(tx.cash_box_currency_snapshot || cashBox?.currency || "USD").trim().toUpperCase() || "USD";
-    const { receiptId, cashBoxCode } = buildReceiptIds({
-      cashBoxSequence: cashBox?.sequence_number || tx.cash_box_sequence,
-      txSequenceInBox: tx.tx_sequence_in_box,
-      snapshotPrefix: tx.cash_box_id_prefix_snapshot,
-      livePrefix: cashBox?.id_prefix,
-      receiptNumber: tx.receipt_number,
-    });
-
-    const rendered = renderReceiptEmail({
-      receiptId,
-      cashBoxCode,
-      dateStr: formatReceiptDate(tx.transaction_date),
-      companyName: cleanText(tx.sender_company_name_snapshot, 200) || cleanText(body?.companyNameFallback, 200) || "—",
-      companyAddress: cleanText(tx.sender_address_snapshot, 500) || cleanText(body?.companyAddressFallback, 500),
-      contactName: cleanText(tx.contact_name, 200) || "—",
-      contactAddress: cleanText(tx.contact_address, 500),
-      items: buildLineItems(tx.line_items, tx.description, tx.amount, currency),
-      total: formatMoney(tx.amount, currency),
-      notes: cleanText(tx.notes, 2000),
-      isVoided: String(tx.status || "").toLowerCase() === "voided",
-      pdfUrl: normalizePdfUrl(body?.pdfUrl) || "",
-    });
 
     const replyTo = String(user.email || "").trim();
     const resendResp = await fetch("https://api.resend.com/emails", {

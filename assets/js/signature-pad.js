@@ -32,7 +32,21 @@
 .sn-sigpad-btn.link{border-color:transparent;background:transparent;color:#047857;padding-left:8px;padding-right:8px;}
 .sn-sigpad-btn:disabled{opacity:.5;cursor:not-allowed;}
 @media (max-width:480px){.sn-sigpad-canvas{height:180px;}.sn-sigpad-actions .sn-sigpad-btn{flex:1 1 auto;}}
+body.modal-open>.sn-sigpad-overlay{pointer-events:auto!important;user-select:auto!important;}
 `;
+
+    const ERROR_MESSAGES = {
+        SIGNATURE_ALREADY_SIGNED: 'This side of the receipt is already signed.',
+        SIGNATURE_TX_NOT_SIGNABLE: 'Voided transactions cannot be signed.',
+        SIGNATURE_NO_SAVED_SIGNATURE: 'You have no saved signature yet. Please draw your signature.',
+        SIGNATURE_SAVED_ONLY_OWN_SIDE: 'A saved signature can only be used on your own side of the receipt.',
+        SIGNATURE_INVALID_IMAGE: 'The signature image could not be saved. Please try again.',
+        SIGNATURE_NOT_AUTHENTICATED: 'Your session has expired. Please sign in again.'
+    };
+
+    function errorMessage(code) {
+        return ERROR_MESSAGES[code] || 'The signature could not be saved. Please try again.';
+    }
 
     const esc = (v) => (typeof window.spendnoteEscapeHtml === 'function')
         ? window.spendnoteEscapeHtml(v)
@@ -101,7 +115,7 @@
   </div>
   <div class="sn-sigpad-actions">
     <button type="button" class="sn-sigpad-btn link" data-act="clear">Clear</button>
-    <button type="button" class="sn-sigpad-btn" data-act="cancel">Cancel</button>
+    <button type="button" class="sn-sigpad-btn" data-act="cancel">${esc(opts.cancelLabel || 'Cancel')}</button>
     <button type="button" class="sn-sigpad-btn primary" data-act="done" disabled>${esc(opts.doneLabel || 'Save signature')}</button>
   </div>
 </div>`;
@@ -240,5 +254,5 @@
         });
     }
 
-    window.SpendNoteSignaturePad = { open };
+    window.SpendNoteSignaturePad = { open, errorMessage };
 })();

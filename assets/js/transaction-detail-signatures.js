@@ -8,15 +8,6 @@
         ? window.spendnoteEscapeHtml(v)
         : String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-    const ERROR_MESSAGES = {
-        SIGNATURE_ALREADY_SIGNED: 'This side of the receipt is already signed.',
-        SIGNATURE_TX_NOT_SIGNABLE: 'Voided transactions cannot be signed.',
-        SIGNATURE_NO_SAVED_SIGNATURE: 'You have no saved signature yet. Please draw your signature.',
-        SIGNATURE_SAVED_ONLY_OWN_SIDE: 'A saved signature can only be used on your own side of the receipt.',
-        SIGNATURE_INVALID_IMAGE: 'The signature image could not be saved. Please try again.',
-        SIGNATURE_NOT_AUTHENTICATED: 'Your session has expired. Please sign in again.'
-    };
-
     const state = {
         tx: null,
         profile: null,
@@ -173,7 +164,7 @@
                 signaturePng: result.png
             });
             if (!res.success) {
-                const msg = ERROR_MESSAGES[res.code] || 'The signature could not be saved. Please try again.';
+                const msg = window.SpendNoteSignaturePad.errorMessage(res.code);
                 if (typeof showAlert === 'function') showAlert(msg, { iconType: 'warning' });
                 if (res.code === 'SIGNATURE_ALREADY_SIGNED') await reload();
                 return;

@@ -240,7 +240,46 @@ const QUICK_PRESET = {
         if (!url || url === lastReceiptUrl) return;
         lastReceiptUrl = url;
         const iframe = document.getElementById('receiptFrame');
-        if (iframe) iframe.src = url;
+        if (iframe) {
+            iframe.removeAttribute('srcdoc');
+            iframe.src = url;
+        }
+    }
+
+    // The email is built by send-receipt-email; preview mode returns that exact HTML without sending.
+    async function loadEmailPreview() {
+        const id = getCurrentTxId();
+        const iframe = document.getElementById('receiptFrame');
+        const key = `email-preview:${id}`;
+        if (!id || !iframe || key === lastReceiptUrl) return;
+        lastReceiptUrl = key;
+
+        const showMessage = (text) => {
+            iframe.removeAttribute('src');
+            iframe.srcdoc = `<!doctype html><html><body style="margin:0;padding:32px;font-family:Arial,sans-serif;font-size:15px;color:#6b7280;text-align:center;">${text}</body></html>`;
+        };
+        showMessage('Loading email preview…');
+
+        try {
+            const fields = typeof window.__spendnoteTxEmailRequestFields === 'function'
+                ? await window.__spendnoteTxEmailRequestFields()
+                : {};
+            let timeZone = '';
+            try { timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (_) {}
+            const res = await window.supabaseClient.functions.invoke('send-receipt-email', {
+                body: { ...fields, transactionId: id, preview: true, timeZone }
+            });
+            if (lastReceiptUrl !== key) return;
+            const html = String(res?.data?.html || '');
+            if (res?.error || !html) throw res?.error || new Error('empty preview');
+            iframe.removeAttribute('src');
+            iframe.srcdoc = html;
+        } catch (e) {
+            if (window.SpendNoteDebug) console.warn('[tx email preview] failed', e);
+            if (lastReceiptUrl !== key) return;
+            lastReceiptUrl = '';
+            showMessage('The email preview could not be loaded. Please try again.');
+        }
     }
 
     window.spendnoteTxReloadReceiptPreview = () => {
@@ -263,6 +302,10 @@ const QUICK_PRESET = {
                     await window.writeBootstrapSession();
                 }
             } catch (_) {}
+            if (currentFormat === 'email') {
+                await loadEmailPreview();
+                return;
+            }
             const extra = currentFormat === 'pdf' ? { preview: '1', download: '0' } : null;
             applyReceiptUrlIfChanged(buildReceiptUrl(currentFormat, extra));
         }, delay);
@@ -624,6 +667,8 @@ html, body { height: auto !important; overflow: auto !important; }
         const btn = document.querySelector(`.format-btn[data-format="${f}"]`);
         if (btn) btn.classList.add('active');
         currentFormat = f;
+        const emailNote = document.getElementById('txEmailFormatNote');
+        if (emailNote) emailNote.hidden = f !== 'email';
         requestReload(0);
     }
 
@@ -857,6 +902,7 @@ html, body { height: auto !important; overflow: auto !important; }
                             pdfUrl: emailContent.pdfUrl,
                             companyNameFallback: emailContent.companyName,
                             companyAddressFallback: emailContent.companyAddress,
+                            timeZone: (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (_) { return ''; } })(),
                             // subject + html are only read by the pre-2026-11 function version (v22); drop once the new version is deployed.
                             subject: subject,
                             html: emailContent.html
@@ -916,6 +962,13 @@ html, body { height: auto !important; overflow: auto !important; }
                 }
             });
         }
+
+        window.__spendnoteTxEmailRequestFields = async () => {
+            const content = await generateEmailHtml();
+            return content
+                ? { pdfUrl: content.pdfUrl, companyNameFallback: content.companyName, companyAddressFallback: content.companyAddress }
+                : {};
+        };
 
         async function generateEmailHtml() {
             try {
