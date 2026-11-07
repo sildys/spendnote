@@ -1,0 +1,13 @@
+/* Free no-signup petty cash replenishment form. Builds on free-receipt.css (fr-*, #frPrint) and free-cash-report.css (cr-* groups and sheet). */
+.cr-r-table .rp-r-no { width: 2rem; color: #6b7280; }
+.cr-r-sum-row.rp-r-topup { font-size: 1.08em; border-top: 1.5px solid #111827; }
+.cr-r-sum-row.rp-r-topup b { color: #047857; }
+.fr-r-sigs.rp-r-sigs { grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
+
+@media (max-width: 520px) {
+    .fr-r-sigs.rp-r-sigs { grid-template-columns: 1fr; gap: 1.6rem; }
+}
+
+@media print {
+    #frPrint .fr-r-sigs.rp-r-sigs { grid-template-columns: 1fr 1fr 1fr; }
+}
