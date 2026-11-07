@@ -98,8 +98,45 @@ const QUICK_PRESET = {
         return txId;
     }
 
+    // Signatures cannot be removed, so the lock only ever turns on (071 enforces it server-side).
+    let receiptLayoutLocked = false;
+    function lockSignedReceiptLayout() {
+        if (receiptLayoutLocked) return;
+        receiptLayoutLocked = true;
+        clearTimeout(receiptToggleSaveTimer);
+
+        const dim = (el) => {
+            if (!el) return;
+            el.style.opacity = '0.55';
+            el.style.cursor = 'not-allowed';
+        };
+        ['receiptModeQuick', 'receiptModeDetailed'].forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) el.disabled = true;
+        });
+        dim(document.querySelector('.mode-toggle'));
+        document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach((t) => { t.disabled = true; });
+        dim(document.getElementById('receiptDetailedToggles'));
+
+        ['txReceiptTitle', 'txTotalLabel', 'txFromLabel', 'txToLabel', 'txDescriptionLabel',
+            'txAmountLabel', 'txIssuedByLabel', 'txReceivedByLabel', 'txFooterNote'].forEach((id) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.readOnly = true;
+            dim(el);
+        });
+        const saveBtn = document.getElementById('txSaveLabelsBtn');
+        if (saveBtn) saveBtn.style.display = 'none';
+
+        ['txSignedLockNote', 'txProSignedLockNote'].forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) el.hidden = false;
+        });
+    }
+    window.spendnoteTxLockSignedReceipt = lockSignedReceiptLayout;
+
     function schedulePersistReceiptDisplayOptions() {
-        if (!hasInitializedFromTxData || currentTxIsVoided) return;
+        if (!hasInitializedFromTxData || currentTxIsVoided || receiptLayoutLocked) return;
         const currentTxId = getCurrentTxId();
         if (!currentTxId || !window.db?.transactions?.update) return;
 
@@ -312,6 +349,7 @@ const QUICK_PRESET = {
     }
 
     function applyReceiptMode(mode) {
+        if (receiptLayoutLocked) return;
         const m = mode === 'detailed' ? 'detailed' : 'quick';
         receiptMode = m;
 
@@ -395,6 +433,7 @@ const QUICK_PRESET = {
         const bindText = (el, key) => {
             if (!el) return;
             el.addEventListener('input', () => {
+                if (receiptLayoutLocked) return;
                 receiptText[key] = el.value;
                 requestReload(250);
             });
@@ -1314,7 +1353,7 @@ html, body { height: auto !important; overflow: auto !important; }
         document.querySelectorAll('.toggle-list input[type="checkbox"]').forEach(toggle => {
             toggle.addEventListener('change', function() {
                 const field = this.dataset.field;
-                if (field) {
+                if (field && !receiptLayoutLocked) {
                     displayOptions[field] = this.checked ? '1' : '0';
                     schedulePersistReceiptDisplayOptions();
                     requestReload(0);
@@ -1325,6 +1364,7 @@ html, body { height: auto !important; overflow: auto !important; }
         const saveLabelsBtn = document.getElementById('txSaveLabelsBtn');
         if (saveLabelsBtn) {
             saveLabelsBtn.addEventListener('click', async () => {
+                if (receiptLayoutLocked) return;
                 if (txProOptionsLockedForOrgUser) {
                     showTxProLabelsUserRoleMessage();
                     return;

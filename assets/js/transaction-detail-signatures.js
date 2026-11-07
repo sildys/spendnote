@@ -109,6 +109,7 @@
         if (!card || !state.tx) return;
         const slots = [slotFor('from'), slotFor('to')];
         const count = slots.filter((s) => s.signature).length;
+        if (count > 0 && typeof window.spendnoteTxLockSignedReceipt === 'function') window.spendnoteTxLockSignedReceipt();
 
         const status = document.getElementById('txSignStatus');
         if (status) {

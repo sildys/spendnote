@@ -203,6 +203,7 @@
                                 <input type="radio" name="receiptMode" id="receiptModeDetailed" value="detailed">
                                 <label for="receiptModeDetailed">Detailed</label>
                             </div>
+                            <p id="txSignedLockNote" hidden style="margin:8px 0 0;font-size:12px;line-height:1.5;color:var(--text-muted);"><i class="fas fa-lock" aria-hidden="true"></i> This receipt is signed, so its fields and labels are locked. It stays exactly as both parties signed it.</p>
                         </div>
 
                         <!-- Detailed Toggles -->
@@ -283,6 +284,9 @@
             <div class="collapsible-content" id="proSection">
                 <div id="txProOptionsUserRoleNote" class="settings-card-subtitle" style="display:none;color:var(--text-muted);padding:0 16px 12px;line-height:1.55;">
                     Pro receipt labels are managed by your team <strong>owner</strong> or an <strong>admin</strong>. Ask them if the wording needs to change.
+                </div>
+                <div id="txProSignedLockNote" class="settings-card-subtitle" hidden style="color:var(--text-muted);padding:0 16px 12px;line-height:1.55;">
+                    <i class="fas fa-lock" aria-hidden="true"></i> This receipt is signed, so its labels can no longer change.
                 </div>
                 <div class="pro-content" id="txProOptionsContent" style="position:relative;">
                     <div id="txProOptionsUserRoleOverlay" style="display:none;position:absolute;inset:0;z-index:3;box-sizing:border-box;align-items:center;justify-content:center;padding:24px;text-align:center;background:rgba(248,250,252,0.93);backdrop-filter:blur(2px);border-radius:10px;font-size:14px;font-weight:600;color:var(--text-muted);line-height:1.55;">
@@ -383,9 +387,9 @@
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=20261016-logo2"></script>
 <script>if (typeof showPageTip === 'function') showPageTip('tx-detail', 'From here you can <strong>print, download as PDF, or email</strong> this receipt to your contact.');</script>
-<script src="assets/js/transaction-detail-ui.js?v=20261107-emailpreview"></script>
+<script src="assets/js/transaction-detail-ui.js?v=20261107-signlock"></script>
 <script src="assets/js/signature-pad.js?v=20261107-sign3"></script>
-<script src="assets/js/transaction-detail-signatures.js?v=20261107-sign3"></script>
+<script src="assets/js/transaction-detail-signatures.js?v=20261107-signlock"></script>
 <script src="assets/js/transaction-detail-data.js?v=20260419-cb-logo-receipt"></script>
 <script>
 window.addEventListener('message', (event) => {
