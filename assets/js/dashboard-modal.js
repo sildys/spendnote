@@ -11,6 +11,8 @@ let isModalSubmitting = false;
 window.isModalSubmitting = false;
 let modalLineItemCount = 0;
 const maxModalLineItems = 4;
+// One line of the two-copy print's fixed-height item table.
+const MAX_ITEM_DESCRIPTION_LENGTH = 60;
 let modalItemsExpanded = false;
 let modalCashBoxes = [];
 let modalCashBoxIndex = 0;
@@ -240,7 +242,7 @@ function renderDetailedExtraItems(count) {
         const div = document.createElement('div');
         div.className = 'form-row-line-item';
         div.style.marginBottom = '10px';
-        div.innerHTML = '<div class="form-group"><input type="text" class="form-input line-item-input" placeholder="Item description" autocomplete="off" data-item-index="' + modalLineItemCount + '"></div><div class="form-group"><div class="input-with-prefix"><span class="input-prefix">' + currencySymbol + '</span><input type="number" class="form-input line-item-input line-item-amount" placeholder="0.00" step="0.01" min="0" data-amount-index="' + modalLineItemCount + '"></div></div>';
+        div.innerHTML = '<div class="form-group"><input type="text" class="form-input line-item-input" placeholder="Item description" autocomplete="off" maxlength="' + MAX_ITEM_DESCRIPTION_LENGTH + '" data-item-index="' + modalLineItemCount + '"></div><div class="form-group"><div class="input-with-prefix"><span class="input-prefix">' + currencySymbol + '</span><input type="number" class="form-input line-item-input line-item-amount" placeholder="0.00" step="0.01" min="0" data-amount-index="' + modalLineItemCount + '"></div></div>';
         container.appendChild(div);
         div.querySelectorAll('.line-item-amount').forEach(function(input) { input.addEventListener('input', updateLineItemsTotal); });
     }
@@ -541,7 +543,7 @@ function openModal(preset) {
     }
     if (Object.prototype.hasOwnProperty.call(options, 'description')) {
         const descEl = getEl('modalDescription');
-        if (descEl) descEl.value = options.description || '';
+        if (descEl) descEl.value = String(options.description || '').slice(0, MAX_ITEM_DESCRIPTION_LENGTH);
     }
     if (Object.prototype.hasOwnProperty.call(options, 'contactName')) {
         const contactEl = getEl('modalContactName');
@@ -588,7 +590,7 @@ function openModal(preset) {
                 const currencySymbol = resolveModalCurrencySymbol(getCurrentModalCurrencyCode());
                 const row = document.createElement('div');
                 row.className = 'form-row-line-item';
-                row.innerHTML = '<div class="form-group"><input type="text" class="line-item-input" data-item-index="' + (idx + 1) + '" placeholder="Item description" value="' + (item.description || '').replace(/"/g, '&quot;') + '"></div><div class="form-group"><div class="amount-input-wrapper"><span class="currency-symbol">' + currencySymbol + '</span><input type="text" class="line-item-input line-item-amount" data-amount-index="' + (idx + 1) + '" placeholder="0.00" value="' + (item.amount || '') + '"></div></div>';
+                row.innerHTML = '<div class="form-group"><input type="text" class="line-item-input" data-item-index="' + (idx + 1) + '" placeholder="Item description" maxlength="' + MAX_ITEM_DESCRIPTION_LENGTH + '" value="' + String(item.description || '').slice(0, MAX_ITEM_DESCRIPTION_LENGTH).replace(/"/g, '&quot;') + '"></div><div class="form-group"><div class="amount-input-wrapper"><span class="currency-symbol">' + currencySymbol + '</span><input type="text" class="line-item-input line-item-amount" data-amount-index="' + (idx + 1) + '" placeholder="0.00" value="' + (item.amount || '') + '"></div></div>';
                 itemsContainer.appendChild(row);
             });
             setDetailedItemsExpanded(true);
@@ -658,6 +660,7 @@ window.updateModalModeUI = updateModalModeUI;
 window.modalCashBoxes = modalCashBoxes;
 window.modalCashBoxIndex = modalCashBoxIndex;
 window.maxModalLineItems = maxModalLineItems;
+window.MAX_ITEM_DESCRIPTION_LENGTH = MAX_ITEM_DESCRIPTION_LENGTH;
 
 // ========================================
 // LINE ITEMS TOTAL

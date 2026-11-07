@@ -320,6 +320,7 @@
                                         id="modalDescription"
                                         placeholder="Item description"
                                         autocomplete="off"
+                                        maxlength="60"
                                         required
                                     >
                                     <div class="autocomplete-dropdown" id="descriptionAutocomplete"></div>
@@ -849,6 +850,7 @@
                             class="form-input line-item-input" 
                             placeholder="Item description"
                             autocomplete="off"
+                            maxlength="${window.MAX_ITEM_DESCRIPTION_LENGTH || 60}"
                             data-item-index="${modalLineItemCount}"
                         >
                     </div>
@@ -1704,7 +1706,7 @@
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=20261016-logo2"></script>
     <script src="assets/js/dashboard-ui.js?v=20260406-downgrade-locks"></script>
-    <script src="assets/js/dashboard-modal.js?v=20260406-user-role-gates"></script>
+    <script src="assets/js/dashboard-modal.js?v=20261107-desclimit"></script>
     <script src="assets/js/dashboard-form.js?v=20261107-signatures"></script>
     <script src="assets/js/dashboard-data.js?v=20260406-T4"></script>
 

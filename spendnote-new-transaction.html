@@ -666,7 +666,7 @@
                         <div class="form-group">
                             <div class="autocomplete-wrapper">
                                 <input type="text" class="form-input" id="modalDescription"
-                                    placeholder="Item description" autocomplete="off" required>
+                                    placeholder="Item description" autocomplete="off" maxlength="60" required>
                                 <div class="autocomplete-dropdown" id="descriptionAutocomplete"></div>
                             </div>
                         </div>
@@ -734,7 +734,7 @@
 <script src="assets/js/nav-loader.js?v=20261016-favicon-logo"></script>
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=20261016-logo2"></script>
-<script src="assets/js/dashboard-modal.js?v=20260226-2210"></script>
+<script src="assets/js/dashboard-modal.js?v=20261107-desclimit"></script>
 <script src="assets/js/dashboard-form.js?v=20261107-signatures"></script>
 
 <script>
@@ -830,7 +830,7 @@
         }
         if (Object.prototype.hasOwnProperty.call(options, 'description')) {
             const descEl = document.getElementById('modalDescription');
-            if (descEl) descEl.value = options.description || '';
+            if (descEl) descEl.value = String(options.description || '').slice(0, window.MAX_ITEM_DESCRIPTION_LENGTH || 60);
         }
         if (Object.prototype.hasOwnProperty.call(options, 'contactName')) {
             const contactNameEl = document.getElementById('modalContactName');
@@ -875,7 +875,7 @@
                 options.lineItems.forEach(function(item, idx) {
                     const row = document.createElement('div');
                     row.className = 'form-row-line-item';
-                    row.innerHTML = '<div class="form-group"><input type="text" class="line-item-input" data-item-index="' + (idx + 1) + '" placeholder="Item description" value="' + String(item && item.description ? item.description : '').replace(/"/g, '&quot;') + '"></div><div class="form-group"><div class="amount-input-wrapper"><span class="currency-symbol">$</span><input type="text" class="line-item-input line-item-amount" data-amount-index="' + (idx + 1) + '" placeholder="0.00" value="' + String(item && item.amount ? item.amount : '') + '"></div></div>';
+                    row.innerHTML = '<div class="form-group"><input type="text" class="line-item-input" data-item-index="' + (idx + 1) + '" placeholder="Item description" maxlength="' + (window.MAX_ITEM_DESCRIPTION_LENGTH || 60) + '" value="' + String(item && item.description ? item.description : '').slice(0, window.MAX_ITEM_DESCRIPTION_LENGTH || 60).replace(/"/g, '&quot;') + '"></div><div class="form-group"><div class="amount-input-wrapper"><span class="currency-symbol">$</span><input type="text" class="line-item-input line-item-amount" data-amount-index="' + (idx + 1) + '" placeholder="0.00" value="' + String(item && item.amount ? item.amount : '') + '"></div></div>';
                     itemsContainer.appendChild(row);
                 });
                 if (typeof window.applyModalCurrencyUi === 'function') {

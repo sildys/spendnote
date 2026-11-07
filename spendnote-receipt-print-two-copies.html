@@ -176,6 +176,11 @@ body {
 .items tbody tr {
   height: 4.5mm;
 }
+.items td:not(.amount) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .items th.amount,
 .items th.amount-header,
 .items td.amount {
