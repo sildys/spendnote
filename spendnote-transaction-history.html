@@ -34,7 +34,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=20261016-logo">
-    <link rel="stylesheet" href="assets/css/app-layout.css?v=20261016-logo2">
+    <link rel="stylesheet" href="assets/css/app-layout.css?v=20261107-sigbadge">
     <style>
         /* ===== TRANSACTION HISTORY PAGE SPECIFIC STYLES ===== */
         
@@ -223,7 +223,7 @@
         }
 
         #filterGroupAmountRange {
-            grid-column: span 3;
+            grid-column: span 2;
         }
 
         #filterGroupCreatedBy {
@@ -1049,6 +1049,14 @@
                             <option value="">All team members</option>
                         </select>
                     </div>
+                    <div class="filter-group" id="filterGroupSigned">
+                        <label class="filter-label"><i class="fas fa-signature"></i> Signatures</label>
+                        <select class="filter-select" id="filterSigned">
+                            <option value="">All receipts</option>
+                            <option value="signed">Signed</option>
+                            <option value="unsigned">Not signed</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="filter-actions">
@@ -1184,13 +1192,13 @@
     
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20261023-trial-team"></script>
+    <script src="assets/js/supabase-config.js?v=20261107-sigfilter"></script>
     <script src="assets/js/auth-guard.js"></script>
     <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=20261016-favicon-logo"></script>
     <script>loadNav();</script>
     <script src="assets/js/main.js?v=20261016-logo2"></script>
     <script>if (typeof showPageTip === 'function') showPageTip('tx-history', 'View and filter all your transactions. <strong>Export as CSV</strong> for your records.');</script>
-    <script src="assets/js/transaction-history-data.js?v=20261023-stamp1"></script>
+    <script src="assets/js/transaction-history-data.js?v=20261107-sigfilter"></script>
 </body>
 </html>

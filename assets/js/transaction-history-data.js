@@ -602,8 +602,10 @@
 
         const amountMin = safeText(qs('#filterAmountMin')?.value, '');
         const amountMax = safeText(qs('#filterAmountMax')?.value, '');
+        const signedRaw = safeText(qs('#filterSigned')?.value, '');
 
         return {
+            signed: signedRaw === 'signed' || signedRaw === 'unsigned' ? signedRaw : null,
             cashBoxQuery: safeText(cashBoxQuery, '').toLowerCase(),
             cashBoxId: cashBoxId || null,
             currency: currency || null,
@@ -671,6 +673,11 @@
                 if (filters.dateTo && d > filters.dateTo) return false;
             }
 
+            if (filters.signed) {
+                const signed = Number(tx.signature_count) > 0;
+                if (filters.signed === 'signed' ? !signed : signed) return false;
+            }
+
             const amt = Number(tx.amount);
             if (filters.amountMin !== null && Number.isFinite(filters.amountMin) && (!Number.isFinite(amt) || amt < filters.amountMin)) {
                 return false;
@@ -714,6 +721,11 @@
         const tr = document.createElement('tr');
         tr.innerHTML = '<td colspan="10" style="padding: 24px 10px; text-align: center; color: var(--text-muted); font-weight: 700;">Loading…</td>';
         tbody.appendChild(tr);
+    }
+
+    function formatSignaturesForCsv(count) {
+        const n = Number(count) || 0;
+        return n > 0 ? `${Math.min(n, 2)}/2` : '';
     }
 
     function renderTableRows(tbody, txs, avatarCtx) {
@@ -761,6 +773,17 @@
             const pillIcon = isVoided ? 'fa-ban' : (isIncome ? 'fa-arrow-down' : 'fa-arrow-up');
             const pillLabel = isVoided ? 'VOID' : (isIncome ? 'IN' : 'OUT');
 
+            const sigCount = Number(tx.signature_count) || 0;
+            tr.dataset.signatures = String(sigCount);
+            const sigClass = sigCount >= 2 ? 'full' : 'partial';
+            const sigTitle = sigCount >= 2 ? 'Signed by both parties' : '1 of 2 signatures';
+            const sigBadge = sigCount > 0
+                ? `<span class="tx-sig-badge ${sigClass}" title="${sigTitle}"><i class="fas fa-signature"></i>${sigCount >= 2 ? '' : '<span>1/2</span>'}</span>`
+                : '';
+            const sigCardIcon = sigCount > 0
+                ? `<i class="fas fa-signature tx-card-sig ${sigClass}" title="${sigTitle}"></i>`
+                : '';
+
             tr.innerHTML = `
                 <td><input type="checkbox" class="row-checkbox" data-tx-id="${safeText(tx.id, '')}" ${isVoided ? 'disabled' : ''}></td>
                 <td>
@@ -769,7 +792,7 @@
                         <span class="quick-label">${pillLabel}</span>
                     </div>
                 </td>
-                <td><span class="tx-id">${displayId}</span></td>
+                <td><span class="tx-id">${displayId}</span>${sigBadge}</td>
                 <td><span class="tx-date">${formatDateShort(tx.transaction_date || tx.created_at)}</span></td>
                 <td><span class="cashbox-badge" style="--cb-color: ${cashBoxColor};">${safeText(tx.cash_box?.name, 'Unknown')}</span></td>
                 <td><span class="tx-contact">${contactName}</span></td>
@@ -817,7 +840,7 @@
                         </div>
                         <div class="tx-card-bottom">
                             <span class="tx-card-sub">${subline}</span>
-                            <span class="tx-card-date">${formatDateShort(tx.transaction_date || tx.created_at)}</span>
+                            <span class="tx-card-date">${sigCardIcon}${formatDateShort(tx.transaction_date || tx.created_at)}</span>
                         </div>
                     </div>
                     <div class="tx-card-right">
@@ -1121,7 +1144,7 @@
             cashBoxByQuery: new Map()
         };
 
-        const txSelect = 'id, user_id, cash_box_id, type, amount, description, receipt_number, transaction_date, created_at, contact_id, contact_name, created_by_user_id, created_by_user_name, cash_box_sequence, tx_sequence_in_box, status, voided_at, voided_by_user_name, cash_box_name_snapshot, cash_box_currency_snapshot, cash_box_color_snapshot, cash_box_icon_snapshot, cash_box_id_prefix_snapshot, contact:contacts(id, name, sequence_number)';
+        const txSelect = 'id, user_id, cash_box_id, type, amount, description, receipt_number, transaction_date, created_at, contact_id, contact_name, created_by_user_id, created_by_user_name, cash_box_sequence, tx_sequence_in_box, status, voided_at, voided_by_user_name, cash_box_name_snapshot, cash_box_currency_snapshot, cash_box_color_snapshot, cash_box_icon_snapshot, cash_box_id_prefix_snapshot, signature_count, contact:contacts(id, name, sequence_number)';
 
         const filterHeader = qs('#filterHeader');
         const filterPanel = qs('#filterPanel');
@@ -1368,7 +1391,8 @@
                 'Cash Box',
                 'Contact',
                 'Contact ID',
-                'Amount'
+                'Amount',
+                'Signatures'
             ].join(',');
 
             const lines = [header];
@@ -1387,7 +1411,8 @@
                     escapeCsv(cashBox),
                     escapeCsv(contact),
                     escapeCsv(contactId),
-                    escapeCsv(amount)
+                    escapeCsv(amount),
+                    escapeCsv(formatSignaturesForCsv(tr.dataset.signatures))
                 ].join(','));
             });
 
@@ -1732,7 +1757,7 @@
                     amountMin: serverCtx.filters.amountMin,
                     amountMax: serverCtx.filters.amountMax,
                     txIdQuery: serverCtx.filters.txIdQuery || null,
-                    contactQuery: serverCtx.filters.contactQuery || null,
+                    contactQuery: serverCtx.filters.contactQuery || null, signed: serverCtx.filters.signed || null,
                     sortKey: mapSortKey(state.sort.key),
                     sortDir: state.sort.direction
                 });
@@ -1766,7 +1791,7 @@
                         amountMin: serverCtx.filters.amountMin,
                         amountMax: serverCtx.filters.amountMax,
                         txIdQuery: serverCtx.filters.txIdQuery || null,
-                        contactQuery: serverCtx.filters.contactQuery || null,
+                        contactQuery: serverCtx.filters.contactQuery || null, signed: serverCtx.filters.signed || null,
                         sortKey: mapSortKey(state.sort.key),
                         sortDir: state.sort.direction
                     });
@@ -1892,6 +1917,7 @@
                     `Created by: ${uiCreatedByText || 'All team members'}`,
                     `Amount range: ${amountText}`
                 ];
+                if (filters?.signed) metaLines.push(`Signatures: ${filters.signed === 'signed' ? 'Signed' : 'Not signed'}`);
 
                 showPdfOverlay(
                     rowsForPdf,
@@ -2419,7 +2445,7 @@
             const hasCreated = Boolean(f.createdById) && creatorCount > 1;
             const hasDates = Boolean(f.dateFrom || f.dateTo);
             const hasAmount = (f.amountMin !== null && f.amountMin !== undefined) || (f.amountMax !== null && f.amountMax !== undefined);
-            return hasCashBox || hasCurrency || hasDir || hasText || hasCreated || hasDates || hasAmount;
+            return hasCashBox || hasCurrency || hasDir || hasText || hasCreated || hasDates || hasAmount || Boolean(f.signed);
         };
 
         const scanFilteredCashBoxIds = async (ctx) => {
@@ -2452,6 +2478,7 @@
                     amountMax: ctx?.filters?.amountMax,
                     txIdQuery: ctx?.filters?.txIdQuery || null,
                     contactQuery: ctx?.filters?.contactQuery || null,
+                    signed: ctx?.filters?.signed || null,
                     sortKey: 'date',
                     sortDir: 'desc'
                 });
@@ -2566,7 +2593,7 @@
                 amountMin: serverCtx.filters.amountMin,
                 amountMax: serverCtx.filters.amountMax,
                 txIdQuery: serverCtx.filters.txIdQuery || null,
-                contactQuery: serverCtx.filters.contactQuery || null,
+                contactQuery: serverCtx.filters.contactQuery || null, signed: serverCtx.filters.signed || null,
                 status: 'active'
             });
 
@@ -2590,7 +2617,7 @@
                     amountMin: serverCtx.filters.amountMin,
                     amountMax: serverCtx.filters.amountMax,
                     txIdQuery: serverCtx.filters.txIdQuery || null,
-                    contactQuery: serverCtx.filters.contactQuery || null,
+                    contactQuery: serverCtx.filters.contactQuery || null, signed: serverCtx.filters.signed || null,
                     status: 'active'
                 });
 
@@ -2641,7 +2668,7 @@
                 amountMin: serverCtx.filters.amountMin,
                 amountMax: serverCtx.filters.amountMax,
                 txIdQuery: serverCtx.filters.txIdQuery || null,
-                contactQuery: serverCtx.filters.contactQuery || null,
+                contactQuery: serverCtx.filters.contactQuery || null, signed: serverCtx.filters.signed || null,
                 sortKey: mapSortKey(state.sort.key),
                 sortDir: state.sort.direction
             });
@@ -2699,7 +2726,7 @@
             if (!window.db || !window.db.transactions) return;
             const serverCtx = buildServerQuery();
             if (Array.isArray(serverCtx.cashBoxIds) && serverCtx.cashBoxIds.length === 0) {
-                downloadTextFile('Transaction ID,Type,Date,Cash Box,Cash Box ID,Currency,Contact,Contact ID,Amount,Created by,Description\n', 'transactions.csv', 'text/csv;charset=utf-8');
+                downloadTextFile('Transaction ID,Type,Date,Cash Box,Cash Box ID,Currency,Contact,Contact ID,Amount,Created by,Description,Signatures\n', 'transactions.csv', 'text/csv;charset=utf-8');
                 return;
             }
 
@@ -2722,7 +2749,7 @@
                     amountMin: serverCtx.filters.amountMin,
                     amountMax: serverCtx.filters.amountMax,
                     txIdQuery: serverCtx.filters.txIdQuery || null,
-                    contactQuery: serverCtx.filters.contactQuery || null,
+                    contactQuery: serverCtx.filters.contactQuery || null, signed: serverCtx.filters.signed || null,
                     sortKey: mapSortKey(state.sort.key),
                     sortDir: state.sort.direction
                 });
@@ -2755,7 +2782,7 @@
                         amountMin: serverCtx.filters.amountMin,
                         amountMax: serverCtx.filters.amountMax,
                         txIdQuery: serverCtx.filters.txIdQuery || null,
-                        contactQuery: serverCtx.filters.contactQuery || null,
+                        contactQuery: serverCtx.filters.contactQuery || null, signed: serverCtx.filters.signed || null,
                         sortKey: mapSortKey(state.sort.key),
                         sortDir: state.sort.direction
                     });
@@ -2780,7 +2807,8 @@
                     'Contact ID',
                     'Amount',
                     'Created by',
-                    'Description'
+                    'Description',
+                    'Signatures'
                 ].join(',');
 
                 const lines = [header];
@@ -2800,7 +2828,8 @@
                         escapeCsv(getContactDisplayId(tx)),
                         escapeCsv(String(tx?.amount ?? '')),
                         escapeCsv(safeText(tx?.created_by_user_name, '')),
-                        escapeCsv(safeText(tx?.description, ''))
+                        escapeCsv(safeText(tx?.description, '')),
+                        escapeCsv(formatSignaturesForCsv(tx?.signature_count))
                     ].join(','));
                 });
 

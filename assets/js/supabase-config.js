@@ -1400,6 +1400,13 @@ function applyTxIdQueryToTransactionsQuery(query, txIdQuery) {
     return query.ilike('receipt_number', `%${q}%`);
 }
 
+// signature_count is the PostgREST computed field from migration 070.
+function applySignedFilterToTransactionsQuery(query, signed) {
+    if (signed === 'signed') return query.gt('signature_count', 0);
+    if (signed === 'unsigned') return query.eq('signature_count', 0);
+    return query;
+}
+
 function applyContactQueryToTransactionsQuery(query, contactQuery) {
     const q = String(contactQuery || '').trim();
     if (!q) return query;
@@ -3575,6 +3582,7 @@ var db = {
 
                 query = applyTxIdQueryToTransactionsQuery(query, options.txIdQuery);
                 query = applyContactQueryToTransactionsQuery(query, options.contactQuery);
+                query = applySignedFilterToTransactionsQuery(query, options.signed);
 
                 const sortKey = String(options.sortKey || 'date');
                 const sortDir = String(options.sortDir || 'desc').toLowerCase() === 'asc' ? 'asc' : 'desc';
@@ -3699,6 +3707,7 @@ var db = {
 
             query = applyTxIdQueryToTransactionsQuery(query, options.txIdQuery);
             query = applyContactQueryToTransactionsQuery(query, options.contactQuery);
+            query = applySignedFilterToTransactionsQuery(query, options.signed);
 
             const { data, error, count } = await query.limit(5000);
             if (error) {
