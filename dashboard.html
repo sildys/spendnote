@@ -2359,8 +2359,7 @@
                 'CAD','AUD','NZD','JPY','CNY','KRW','INR','BRL','MXN','ZAR','TRY',
                 'UAH','AED','SAR','THB','PHP','MYR','SGD','HKD','TWD','IDR','VND'
             ];
-            const lockNote = '<strong>Choose carefully:</strong> you can’t change it later. Need another currency? Add a second cash box anytime.';
-            const hint = `Every amount and receipt in your cash box will use this currency. We pre-selected <strong>${suggested}</strong> based on your time zone and language.<br><br>${lockNote}`;
+            const hint = `Every amount and receipt in your cash box will use this currency. We pre-selected <strong>${suggested}</strong> based on your time zone and language.<br><br>Need another currency later? Just add another cash box.`;
             return new Promise(resolve => {
                 const overlay = document.createElement('div');
                 overlay.className = 'sn-dialog-overlay';
