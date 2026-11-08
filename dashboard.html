@@ -48,7 +48,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=20261107-footer">
     <link rel="stylesheet" href="assets/css/app-layout.css?v=20261016-logo2">
-    <link rel="stylesheet" href="assets/css/dashboard.css?v=20261023-review-ask">
+    <link rel="stylesheet" href="assets/css/dashboard.css?v=20261108-onboarding">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <!-- Microsoft Advertising UET tag -->
     <script>
@@ -2247,7 +2247,10 @@
                 }
 
                 // --- AGGRESSIVE ONBOARDING: first-transaction state ---
-                if (txCount === 0) {
+                const onboardingSkippedKey = `sn.onboardingSkipped.${uid}`;
+                if (txCount === 0 && localStorage.getItem(onboardingSkippedKey)) {
+                    // Skipped earlier: keep the normal dashboard, the checklist banner stays as a reminder.
+                } else if (txCount === 0) {
                     window.__spendnoteAggressiveOnboardingActive = true;
                     // 0. Hide checklist — the empty-state CTA is the single focus
                     if (checklist) checklist.style.display = 'none';
@@ -2274,12 +2277,12 @@
                                         <path d="M54 56h12M60 50v12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
                                     </svg>
                                 </div>
-                                <h3>If cash moves and you don't record it,<br>you lose track.</h3>
-                                <p>Right now, you have no record of it.</p>
+                                <h3>Record your first transaction</h3>
+                                <p>Start with the cash in your box right now: record it as money <strong>IN</strong>. That becomes your opening balance.</p>
                                 <button class="sn-empty-cta sn-pulse" id="snMainCta" onclick="window.snStartFirstTx&&window.snStartFirstTx()">
-                                    Start tracking your cash <span class="sn-cta-time">— 30 sec</span>
+                                    Record first transaction <span class="sn-cta-time">— 30 sec</span>
                                 </button>
-                                <button class="sn-empty-skip" id="snSkipOnboarding">I'll do it later</button>
+                                <button class="sn-empty-skip" id="snSkipOnboarding">Skip for now, show my dashboard</button>
                             </div>`;
                     }
 
@@ -2287,9 +2290,11 @@
                     const skipBtn = document.getElementById('snSkipOnboarding');
                     if (skipBtn) {
                         skipBtn.addEventListener('click', () => {
+                            try { localStorage.setItem(onboardingSkippedKey, '1'); } catch (_) {}
                             if (typeof window.__spendnoteExitAggressiveOnboarding === 'function') {
                                 window.__spendnoteExitAggressiveOnboarding();
                             }
+                            if (checklist && !localStorage.getItem(checklistDoneKey)) checklist.style.display = 'flex';
                             if (typeof loadDashboardData === 'function') loadDashboardData();
                         });
                     }
@@ -2354,10 +2359,8 @@
                 'CAD','AUD','NZD','JPY','CNY','KRW','INR','BRL','MXN','ZAR','TRY',
                 'UAH','AED','SAR','THB','PHP','MYR','SGD','HKD','TWD','IDR','VND'
             ];
-            const lockNote = '<strong>Important:</strong> You can’t change this Cash Box’s currency later in settings — only when you create a new Cash Box.';
-            const hint = suggested !== baseline
-                ? `This Cash Box is currently <strong>${baseline}</strong>. We pre-selected <strong>${suggested}</strong> from your time zone and language — change the list if needed.<br><br>${lockNote}`
-                : `Confirm the currency for this Cash Box.<br><br>${lockNote}`;
+            const lockNote = '<strong>Choose carefully:</strong> you can’t change it later. Need another currency? Add a second cash box anytime.';
+            const hint = `Every amount and receipt in your cash box will use this currency. We pre-selected <strong>${suggested}</strong> based on your time zone and language.<br><br>${lockNote}`;
             return new Promise(resolve => {
                 const overlay = document.createElement('div');
                 overlay.className = 'sn-dialog-overlay';
@@ -2370,13 +2373,13 @@
                 overlay.innerHTML = `
                     <div class="sn-dialog-card" style="max-width:420px;text-align:center;">
                         <div class="sn-dialog-icon" style="color:#4f46e5"><i class="fas fa-coins"></i></div>
-                        <div class="sn-dialog-title">Confirm your Cash Box currency</div>
+                        <div class="sn-dialog-title">Choose your currency</div>
                         <div class="sn-dialog-message" style="margin-bottom:16px;line-height:1.45;">${hint}</div>
                         <select id="snCurrencySelect" class="sn-dialog-input" style="width:100%;padding:10px 12px;font-size:15px;border-radius:8px;border:1px solid #d1d5db;margin-bottom:20px;text-align:center;font-weight:600;">
                             ${optionsHtml}
                         </select>
                         <div class="sn-dialog-actions">
-                            <button class="sn-dialog-btn sn-dialog-btn-primary" id="snCurrencyConfirmBtn" style="width:100%;">Continue</button>
+                            <button class="sn-dialog-btn sn-dialog-btn-primary" id="snCurrencyConfirmBtn" style="width:100%;">Save currency</button>
                         </div>
                     </div>`;
 

@@ -142,12 +142,12 @@
             margin-bottom: 7px; color: #374151;
         }
         .form-group label .opt { font-weight: 400; color: var(--text-muted); }
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
             padding: 11px 14px; font-size: 14px; font-family: inherit;
             color: var(--text); background: #f8fafc; outline: none; transition: all 0.15s;
         }
-        .form-group input:focus {
+        .form-group input:focus, .form-group select:focus {
             border-color: var(--primary); background: #fff;
             box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
         }
@@ -291,8 +291,8 @@
 <div class="page-wrap">
 
     <div class="welcome-tag" id="welcomeTag"><i class="fas fa-hand-wave"></i> Welcome aboard</div>
-    <h1 class="welcome-title" id="welcomeTitle">Set up your receipt identity <span>in 60 seconds</span></h1>
-    <p class="welcome-sub" id="welcomeSub">Two quick things - then your dashboard is ready to go.</p>
+    <h1 class="welcome-title" id="welcomeTitle">Set up SpendNote <span>in 60 seconds</span></h1>
+    <p class="welcome-sub" id="welcomeSub">Three quick steps: your name, how you appear on receipts, and your currency.</p>
     <div class="variant-callout" id="variantCallout"></div>
 
     <!-- BLOCK 1: Profile -->
@@ -384,6 +384,24 @@
         </div>
     </div>
 
+    <!-- BLOCK 3: Currency -->
+    <div class="section-card" id="currencyCard">
+        <div class="section-card-header">
+            <div class="section-num">3</div>
+            <div>
+                <div class="section-title">Currency</div>
+                <div class="section-desc">Used for every amount and receipt in your first cash box.</div>
+            </div>
+        </div>
+        <div class="section-body">
+            <div class="form-group">
+                <label for="currencySelect">Cash box currency</label>
+                <select id="currencySelect"></select>
+                <div class="field-hint" id="currencyHint"><strong>Choose carefully:</strong> you can't change it later. Need another currency? Add a second cash box anytime.</div>
+            </div>
+        </div>
+    </div>
+
     <div class="error-msg" id="errMsg"></div>
 
     <!-- Submit -->
@@ -416,10 +434,10 @@ function applyWelcomeVariant(variant) {
 
     const variants = {
         free: {
-            tag: '<i class="fas fa-flag"></i> Free trial setup',
-            title: 'Set up your receipt identity <span>and start on Free</span>',
-            sub: 'Quick profile + receipt identity setup, then you can start creating receipts right away.',
-            callout: '<strong>Free:</strong> full access for 14 days &mdash; every feature and unlimited cash boxes. You can upgrade later without losing data.',
+            tag: '<i class="fas fa-flag"></i> 14-day trial',
+            title: 'Set up SpendNote <span>in 60 seconds</span>',
+            sub: 'Three quick steps: your name, how you appear on receipts, and your currency. Then you can record your first transaction.',
+            callout: '<strong>Your 14-day trial:</strong> every feature and unlimited cash boxes, no credit card. Choose a plan anytime without losing data.',
             receiptDesc: 'How your sender identity appears on every receipt.',
             save: 'Start Creating Receipts',
             skip: 'Skip for now'
@@ -474,6 +492,39 @@ function applyWelcomeVariant(variant) {
     if (saveLabelEl) saveLabelEl.textContent = ui.save;
     if (skipBtnEl) skipBtnEl.textContent = ui.skip;
     if (receiptCardEl) receiptCardEl.style.display = isInvitedFlow ? 'none' : '';
+    const currencyCardEl = document.getElementById('currencyCard');
+    if (currencyCardEl) currencyCardEl.style.display = isInvitedFlow ? 'none' : '';
+}
+
+const WELCOME_CURRENCIES = [
+    'USD','EUR','GBP','HUF','PLN','CZK','RON','SEK','DKK','NOK','CHF',
+    'CAD','AUD','NZD','JPY','CNY','KRW','INR','BRL','MXN','ZAR','TRY',
+    'UAH','AED','SAR','THB','PHP','MYR','SGD','HKD','TWD','IDR','VND'
+];
+let welcomeCashBox = null;
+
+function fillCurrencySelect(selected) {
+    const sel = document.getElementById('currencySelect');
+    if (!sel) return;
+    const code = String(selected || 'USD').trim().toUpperCase() || 'USD';
+    const list = WELCOME_CURRENCIES.includes(code) ? WELCOME_CURRENCIES : [code, ...WELCOME_CURRENCIES];
+    sel.innerHTML = list.map(c => `<option value="${c}"${c === code ? ' selected' : ''}>${c}</option>`).join('');
+}
+
+async function findFirstCashBox(uid, attempts) {
+    for (let i = 0; i < attempts; i++) {
+        try {
+            const { data } = await window.supabaseClient
+                .from('cash_boxes')
+                .select('id, currency')
+                .eq('user_id', uid)
+                .order('created_at', { ascending: true })
+                .limit(1);
+            if (data && data[0]) return data[0];
+        } catch (_) {}
+        await new Promise(r => setTimeout(r, 300));
+    }
+    return null;
 }
 
 function getInitials(name) {
@@ -506,6 +557,8 @@ function updatePreview() {
     document.getElementById('mockOtherId').textContent = otherId.trim();
     document.getElementById('mockAddress').textContent = addr.trim();
 }
+
+fillCurrencySelect(typeof window.__spendnoteDetectCurrency === 'function' ? window.__spendnoteDetectCurrency() : 'USD');
 
 document.getElementById('profileName').addEventListener('input', updatePreview);
 document.getElementById('receiptName').addEventListener('input', updatePreview);
@@ -592,6 +645,30 @@ async function saveSetup() {
         const result = await window.db.profiles.update(payload);
         if (!result?.success) throw new Error(result?.error || 'Failed to save.');
         try { await window.supabaseClient.auth.updateUser({ data: { full_name: name, avatar_color: selectedColor } }); } catch (_) {}
+
+        if (!isInvitedFlow) {
+            const user = await window.auth?.getCurrentUser?.();
+            const uid = String(user?.id || '').trim();
+            const chosen = String(document.getElementById('currencySelect')?.value || '').trim().toUpperCase();
+            if (uid && chosen) {
+                const box = welcomeCashBox || await findFirstCashBox(uid, 10);
+                if (box) {
+                    if (String(box.currency || '').toUpperCase() !== chosen) {
+                        const { error } = await window.supabaseClient
+                            .from('cash_boxes')
+                            .update({ currency: chosen })
+                            .eq('id', box.id);
+                        if (error) throw new Error('Could not save the currency: ' + (error.message || error));
+                        box.currency = chosen;
+                    }
+                    try {
+                        localStorage.setItem('sn.currencyAck.' + uid, '1');
+                        localStorage.removeItem('spendnote.currencyConfirm.' + uid);
+                    } catch (_) {}
+                    if (typeof gtag === 'function') gtag('event', 'currency_selected', { currency: chosen });
+                }
+            }
+        }
         await sendWelcomeEmail();
         window.location.href = 'dashboard.html';
     } catch (e) {
@@ -687,6 +764,15 @@ async function saveSetup() {
             ? 'invited'
             : (tier === 'pro' ? 'pro' : (tier === 'standard' ? 'standard' : 'free'));
         applyWelcomeVariant(variant);
+
+        if (variant !== 'invited') {
+            const detected = (typeof window.__spendnoteDetectCurrency === 'function' ? window.__spendnoteDetectCurrency() : 'USD') || 'USD';
+            fillCurrencySelect(detected);
+            let touched = false;
+            document.getElementById('currencySelect')?.addEventListener('change', () => { touched = true; }, { once: true });
+            welcomeCashBox = await findFirstCashBox(uid, 10);
+            if (welcomeCashBox?.currency && !touched) fillCurrencySelect(welcomeCashBox.currency);
+        }
 
         const name = String(user.user_metadata?.full_name || '').trim();
         if (name) {

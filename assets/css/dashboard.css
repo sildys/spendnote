@@ -4684,6 +4684,7 @@ table.transactions-table td,
     font-weight: 700;
     padding: 14px 32px;
     border-radius: 12px;
+    white-space: nowrap;
     cursor: pointer;
     transition: background .15s ease, box-shadow .15s ease, transform .1s ease;
     box-shadow: 0 4px 16px rgba(79,70,229,.3);
@@ -4698,18 +4699,20 @@ table.transactions-table td,
 }
 .sn-empty-skip {
     appearance: none;
-    border: none;
-    background: none;
-    color: #94a3b8;
-    font-size: 13px;
-    font-weight: 500;
-    margin-top: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #fff;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 18px;
+    margin-top: 14px;
     cursor: pointer;
-    padding: 6px 12px;
-    transition: color .15s ease;
+    transition: border-color .15s ease, background .15s ease;
 }
 .sn-empty-skip:hover {
-    color: #64748b;
+    border-color: #94a3b8;
+    background: #f8fafc;
 }
 
 /* ========================================
@@ -4833,7 +4836,8 @@ table.transactions-table td,
         padding: 48px 20px;
         min-height: 260px;
     }
-    .sn-empty-cta {
+    .sn-empty-cta,
+    .sn-empty-skip {
         width: 100%;
         justify-content: center;
     }
