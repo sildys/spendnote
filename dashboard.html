@@ -1932,23 +1932,7 @@
                 if (textEl) textEl.textContent = d <= 1 ? 'Your trial ends tomorrow' : `Your free trial ends in ${d} days`;
                 banner.style.display = 'flex';
                 if (typeof gtag === 'function') gtag('event', 'trial_warning_shown', { days_left: d });
-                const twKey = `sn.trialWarnEmail.${d}`;
-                if (!localStorage.getItem(twKey)) {
-                    localStorage.setItem(twKey, '1');
-                    try {
-                        let twTxCount = 0;
-                        try {
-                            const { count } = await supabaseClient.from('transactions')
-                                .select('id', { count: 'exact', head: true })
-                                .or('is_system.is.null,is_system.eq.false')
-                                .eq('status', 'active');
-                            twTxCount = count || 0;
-                        } catch (_) {}
-                        supabaseClient?.functions?.invoke('send-user-event-email', {
-                            body: { eventType: 'trial_expiry_warning', daysLeft: d, txCount: twTxCount },
-                        });
-                    } catch (_e) {}
-                }
+                // The trial-ending email is sent once by the daily send-onboarding-emails job.
             } catch (_) {}
         })();
 

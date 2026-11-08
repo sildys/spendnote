@@ -669,6 +669,73 @@ export const renderProductUpdateMobileTemplate = (args: {
   return { subject, html, text };
 };
 
+// ─── Onboarding nudges (scheduled, trial users with no transaction yet) ──────────
+
+const NUDGE_FOOTER_HTML = `<p style="margin:0;font-size:12px;line-height:1.5;color:#6b7280;">You're getting this because you started a SpendNote trial. Don't want these tips? Reply "unsubscribe" and I won't send them again.<br>Sildsys LLC &middot; 1111B S Governors Ave #45989, Dover, DE 19904</p>`;
+const NUDGE_FOOTER_TEXT = `--\nYou're getting this because you started a SpendNote trial. Don't want these tips? Reply "unsubscribe" and I won't send them again.\nSildsys LLC, 1111B S Governors Ave #45989, Dover, DE 19904`;
+
+export const renderOnboardingNudgeDay1Template = (args: {
+  fullName?: string;
+}): BaseEmailTemplate => {
+  const name = esc(String(args.fullName || "there").trim() || "there");
+  const dashboardUrl = "https://spendnote.app/dashboard";
+  const subject = "Your first SpendNote record takes 30 seconds";
+
+  const html = appCard(
+    "One small step to get started",
+    "Record the cash you have right now.",
+    `
+      <p style="margin:0 0 10px;">Hi ${name},</p>
+      <p style="margin:0 0 10px;">You created your SpendNote account, but your cash box is still empty. The easiest first step: count the cash you have right now and record it as money <strong>IN</strong>. That's your opening balance.</p>
+      <p style="margin:0 0 14px;">From then on, whenever cash changes hands, record it: who, how much and what for. You get a receipt both sides can sign on screen, or print and sign on paper.</p>
+      <div style="margin:18px 0 16px;">
+        <a href="${dashboardUrl}" style="${CTA_STYLE}">Record my opening balance &rarr;</a>
+      </div>
+      <p style="margin:0 0 10px;">Stuck, or not sure SpendNote fits what you do? Just reply to this email. I read every message.</p>
+      <p style="margin:0 0 16px;">Sild<br>Founder, SpendNote</p>
+      ${NUDGE_FOOTER_HTML}
+    `,
+  );
+
+  const text = `${subject}\n\nHi ${args.fullName || "there"},\n\nYou created your SpendNote account, but your cash box is still empty. The easiest first step: count the cash you have right now and record it as money IN. That's your opening balance.\n\nFrom then on, whenever cash changes hands, record it: who, how much and what for. You get a receipt both sides can sign on screen, or print and sign on paper.\n\nRecord my opening balance: ${dashboardUrl}\n\nStuck, or not sure SpendNote fits what you do? Just reply to this email. I read every message.\n\nSild\nFounder, SpendNote\n\n${NUDGE_FOOTER_TEXT}`;
+  return { subject, html, text };
+};
+
+export const renderOnboardingNudgeDay3Template = (args: {
+  fullName?: string;
+  daysLeft: number;
+}): BaseEmailTemplate => {
+  const name = esc(String(args.fullName || "there").trim() || "there");
+  const days = Math.max(1, Math.floor(args.daysLeft || 0));
+  const daysText = `${days} day${days === 1 ? "" : "s"}`;
+  const dashboardUrl = "https://spendnote.app/dashboard";
+  const subject = "Three ways small teams use SpendNote";
+
+  const html = appCard(
+    "Three ways people use SpendNote",
+    "Pick the one closest to yours and record it once.",
+    `
+      <p style="margin:0 0 10px;">Hi ${name},</p>
+      <p style="margin:0 0 10px;">Your trial has ${daysText} left and your cash box is still empty, so here are three common ways people start:</p>
+      <ul style="margin:0 0 14px;padding-left:18px;">
+        <li style="margin:0 0 8px;"><strong>Petty cash box.</strong> Someone takes $40 for supplies. Record it as OUT, with who took it and why. The running balance shows what should be in the box.</li>
+        <li style="margin:0 0 8px;"><strong>Cash handoff.</strong> A shift ends and the cash goes to the next person or the owner. Record it, and both of you sign on screen.</li>
+        <li style="margin:0;"><strong>Cash payment received.</strong> A client pays you in cash. Record it as IN, then print or share the receipt.</li>
+      </ul>
+      <p style="margin:0 0 14px;">Pick the one that matches what you do and record it once. It takes about 30 seconds.</p>
+      <div style="margin:18px 0 16px;">
+        <a href="${dashboardUrl}" style="${CTA_STYLE}">Open SpendNote &rarr;</a>
+      </div>
+      <p style="margin:0 0 10px;">If none of these fit, reply and tell me how you handle cash today. I'd like to know.</p>
+      <p style="margin:0 0 16px;">Sild<br>Founder, SpendNote</p>
+      ${NUDGE_FOOTER_HTML}
+    `,
+  );
+
+  const text = `${subject}\n\nHi ${args.fullName || "there"},\n\nYour trial has ${daysText} left and your cash box is still empty, so here are three common ways people start:\n\n- Petty cash box. Someone takes $40 for supplies. Record it as OUT, with who took it and why. The running balance shows what should be in the box.\n- Cash handoff. A shift ends and the cash goes to the next person or the owner. Record it, and both of you sign on screen.\n- Cash payment received. A client pays you in cash. Record it as IN, then print or share the receipt.\n\nPick the one that matches what you do and record it once. It takes about 30 seconds.\n\nOpen SpendNote: ${dashboardUrl}\n\nIf none of these fit, reply and tell me how you handle cash today. I'd like to know.\n\nSild\nFounder, SpendNote\n\n${NUDGE_FOOTER_TEXT}`;
+  return { subject, html, text };
+};
+
 export const renderProductUpdateSigningTemplate = (args: {
   fullName?: string;
 }): BaseEmailTemplate => {

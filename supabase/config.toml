@@ -30,3 +30,6 @@ verify_jwt = false
 
 [functions.remove-org-member]
 verify_jwt = false
+
+[functions.send-onboarding-emails]
+verify_jwt = false
