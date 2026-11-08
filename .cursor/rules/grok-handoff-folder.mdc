@@ -1,0 +1,17 @@
+---
+description: Where to save every file meant for Grok
+alwaysApply: true
+---
+
+# Grok handoff folder
+
+Grok can only read the Windows user folders. Save everything meant for Grok (instructions, plans, copies of repo docs, lead CSVs, screenshots, videos) under:
+
+`C:\Users\sild\Documents\Grok-SpendNote\`
+
+- `README.md` at the top is Grok's entry point. When you add a new file or folder, add a row for it there.
+- The cold email campaign lives in `email-kampany\` (`round1\`, `grok-olvasnivalo\`, `terv.md`).
+- Images go in `kepek\<topic>\`, with a `CAPTIONS.md` that follows the SpendNote wording rules. Videos go in `videok\`, listed in `videok\README.md`.
+- Only put the current version there. When a newer screenshot or video replaces an old one, remove the old copy from this folder (the original stays in the project).
+- Never put secrets here (passwords, API keys, the Porkbun key, signing passwords, service-role keys).
+- This folder is outside the repo. Never commit it.
