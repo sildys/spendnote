@@ -118,6 +118,30 @@ Deno.serve(async (req: Request) => {
     };
 
     if (eventType === "welcome_account_created") {
+      const skippedWelcome = (reason: string) =>
+        new Response(JSON.stringify({ success: true, skipped: true, reason }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      const createdMs = Date.parse(String(user.created_at || ""));
+      if (Number.isFinite(createdMs) && Date.now() - createdMs > 7 * 24 * 60 * 60 * 1000) {
+        return skippedWelcome("account_older_than_7_days");
+      }
+      // The welcome page and the dashboard both ask on every device; the unique
+      // (user_id, email_type) row lets only the first request send.
+      const { error: claimErr } = await supabaseAdmin
+        .from("email_log")
+        .insert({ user_id: user.id, email_type: "welcome" });
+      if (claimErr) return skippedWelcome("already_sent");
+      const sendWelcome = async (subject: string, html: string, text: string, idempotencyKey: string) => {
+        try {
+          return await sendViaResend([userEmail], subject, html, text, idempotencyKey);
+        } catch (e) {
+          await supabaseAdmin.from("email_log").delete().eq("user_id", user.id).eq("email_type", "welcome");
+          throw e;
+        }
+      };
+
       // Solo signups and workspace owners only — not invited team members (user/admin on someone else's org).
       const { data: memberships, error: memErr } = await supabaseAdmin
         .from("org_memberships")
@@ -171,8 +195,7 @@ Deno.serve(async (req: Request) => {
               role: mRoleLabel,
               dashboardUrl: "https://spendnote.app/dashboard",
             });
-            const invitedData = await sendViaResend(
-              [userEmail],
+            const invitedData = await sendWelcome(
               invitedRendered.subject,
               invitedRendered.html,
               invitedRendered.text,
@@ -193,7 +216,7 @@ Deno.serve(async (req: Request) => {
         fullName: userName,
         loginUrl: "https://spendnote.app/spendnote-login",
       });
-      const data = await sendViaResend([userEmail], rendered.subject, rendered.html, rendered.text, `welcome-${user.id}`);
+      const data = await sendWelcome(rendered.subject, rendered.html, rendered.text, `welcome-${user.id}`);
       return new Response(JSON.stringify({ success: true, data }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

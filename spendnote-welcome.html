@@ -423,7 +423,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js?v=20261113-source2"></script>
+<script src="assets/js/supabase-config.js?v=20261113-onboarding"></script>
 <script>
 let selectedColor = '#10b981';
 let currentWelcomeVariant = 'free';
@@ -632,6 +632,7 @@ async function sendWelcomeEmail({ markDone = true } = {}) {
 
 async function skipWelcomeAndGo() {
     await sendWelcomeEmail();
+    await window.SpendNoteOnboarding?.markDone();
     window.location.href = 'dashboard.html';
 }
 
@@ -686,6 +687,7 @@ async function saveSetup() {
             }
         }
         await sendWelcomeEmail();
+        await window.SpendNoteOnboarding?.markDone();
         window.location.href = 'dashboard.html';
     } catch (e) {
         showError(String(e?.message || 'Something went wrong. Please try again.'));

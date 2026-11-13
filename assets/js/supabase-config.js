@@ -772,6 +772,59 @@ window.SpendNoteEmailEvents = {
     shouldSendOwnerWelcome: spendnoteShouldSendOwnerWelcomeEmail
 };
 
+// Onboarding counts as finished once the welcome page was saved or skipped (account flag),
+// or the account already shows real use. localStorage alone is per browser, so a new phone
+// or the Android app would otherwise skip the welcome page for someone who never finished it.
+window.SpendNoteOnboarding = {
+    doneKey(uid) {
+        return 'spendnote.welcome.sent.v2.' + uid;
+    },
+    async markDone() {
+        try {
+            const user = await auth.getCurrentUser();
+            const uid = String(user?.id || '').trim();
+            if (!uid) return;
+            try { localStorage.setItem(this.doneKey(uid), '1'); } catch (_) {}
+            if (user.user_metadata?.onboarding_done !== true) {
+                await supabaseClient.auth.updateUser({ data: { onboarding_done: true } });
+            }
+        } catch (_) {}
+    },
+    async isIncomplete(user) {
+        try {
+            const uid = String(user?.id || '').trim();
+            if (!uid) return false;
+            const doneKey = this.doneKey(uid);
+            if (localStorage.getItem(doneKey) === '1') return false;
+            const remember = () => {
+                try { localStorage.setItem(doneKey, '1'); } catch (_) {}
+                return false;
+            };
+            if (user.user_metadata?.onboarding_done === true) return remember();
+
+            const { data: prof, error: profErr } = await supabaseClient
+                .from('profiles')
+                .select('company_name, avatar_color')
+                .eq('id', uid)
+                .maybeSingle();
+            if (profErr) return false;
+            if (String(prof?.company_name || '').trim() || String(prof?.avatar_color || '').trim()) return remember();
+
+            const { data: tx, error: txErr } = await supabaseClient
+                .from('transactions')
+                .select('id')
+                .eq('user_id', uid)
+                .or('is_system.is.null,is_system.eq.false')
+                .limit(1);
+            if (txErr) return false;
+            if (Array.isArray(tx) && tx.length > 0) return remember();
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+};
+
 // ── Stripe billing gate ──
 const STRIPE_LIVE = true;
 window.STRIPE_LIVE = STRIPE_LIVE;

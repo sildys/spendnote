@@ -661,7 +661,7 @@
     <a href="/" class="fab-home" title="Back to homepage"><i class="fas fa-home"></i></a>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20261113-source2"></script>
+    <script src="assets/js/supabase-config.js?v=20261113-onboarding"></script>
     <script>
         const __SN_INVITE_TOKEN_KEY = 'spendnote.inviteToken.pending';
 
@@ -875,30 +875,14 @@
                         }
                     } catch (_) {}
 
-                    // Detect new user: check isNewUser flag OR check if profile exists in DB
-                    // (covers re-created accounts where auth.created_at is old)
+                    // New accounts and anyone who has not finished the welcome setup go to the welcome page.
                     try {
                         const uid = String(user.id || '').trim();
                         if (uid) {
                             const isNewByFlag = sessionStorage.getItem('spendnote.isNewUser.' + uid) === '1';
-                            const welcomeAlreadySent = localStorage.getItem('spendnote.welcome.sent.v2.' + uid) === '1';
                             let isNew = isNewByFlag;
-                            if (!isNew && !welcomeAlreadySent) {
-                                try {
-                                    const { data: prof, error: profErr } = await window.supabaseClient
-                                        .from('profiles')
-                                        .select('id,created_at')
-                                        .eq('id', uid)
-                                        .maybeSingle();
-                                    if (!profErr && prof?.id) {
-                                        // Profile exists — check if it was just created (< 2 min)
-                                        const profCreatedMs = Date.parse(String(prof.created_at || ''));
-                                        isNew = Number.isFinite(profCreatedMs) && (Date.now() - profCreatedMs) < (2 * 60 * 1000);
-                                    } else {
-                                        // No profile at all → definitely new (ensureProfile may not have run yet)
-                                        isNew = true;
-                                    }
-                                } catch (_) {}
+                            if (!isNew && window.SpendNoteOnboarding) {
+                                isNew = await window.SpendNoteOnboarding.isIncomplete(user);
                             }
                             if (isNew) {
                                 try { sessionStorage.removeItem('spendnote.isNewUser.' + uid); } catch (_) {}
