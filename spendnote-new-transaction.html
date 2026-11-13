@@ -32,7 +32,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=20261016-logo">
-    <link rel="stylesheet" href="assets/css/app-layout.css?v=20261016-logo2">
+    <link rel="stylesheet" href="assets/css/app-layout.css?v=20261113-compact">
     <link rel="stylesheet" href="assets/css/dashboard.css?v=20260220-1548">
     <style>
         /* =============================================
@@ -533,6 +533,87 @@
 
             .nt-footer .btn i {
                 display: none;
+            }
+        }
+
+        /* Phones: the form needs the height. The back button replaces the app nav here,
+           and the save buttons hide while the on-screen keyboard is open (body.nt-typing). */
+        @media (max-width: 768px), (max-width: 1180px) and (pointer: coarse) {
+            .site-nav,
+            .bottom-nav {
+                display: none !important;
+            }
+
+            body {
+                padding-bottom: 0 !important;
+            }
+
+            .nt-topbar {
+                top: 0;
+                padding: 6px 12px;
+            }
+
+            .nt-back-btn {
+                width: 34px;
+                height: 34px;
+            }
+
+            .nt-direction-header {
+                position: static;
+                padding: 8px 12px;
+            }
+
+            .nt-direction-header .direction-primary-btn {
+                height: 38px;
+            }
+
+            .nt-cashbox-row {
+                padding: 6px 12px;
+            }
+
+            .nt-body,
+            .nt-body form,
+            #createTransactionModalContainer[data-mode] .modal-contact-grid {
+                gap: 8px !important;
+            }
+
+            #createTransactionModalContainer .modal-contact-grid .form-group {
+                margin-bottom: 0;
+            }
+
+            .nt-body .modal-section-title {
+                margin-bottom: 8px;
+            }
+
+            .nt-body .nt-mode-row {
+                margin-bottom: 8px !important;
+            }
+
+            .nt-body .form-group label {
+                margin-bottom: 4px;
+            }
+
+            .nt-footer {
+                bottom: 0;
+                gap: 8px;
+                padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+            }
+
+            .nt-footer .btn {
+                min-height: 40px;
+            }
+
+            #createTransactionModalContainer[data-mode="quick"] .nt-body,
+            #createTransactionModalContainer[data-mode="detailed"] .nt-body {
+                padding-bottom: calc(116px + env(safe-area-inset-bottom));
+            }
+
+            body.nt-typing .nt-footer {
+                display: none;
+            }
+
+            body.nt-typing #createTransactionModalContainer .nt-body {
+                padding-bottom: 16px;
             }
         }
     </style>
@@ -1251,6 +1332,30 @@
     } else {
         init();
     }
+})();
+
+// Keyboard open = a text field has focus AND the visual viewport shrank. Checking only focus would
+// keep the save buttons hidden after Android's back key closes the keyboard without blurring.
+(function () {
+    const vv = window.visualViewport;
+    let fullHeight = vv ? vv.height : window.innerHeight;
+    const isTextField = (el) => {
+        if (!el || !el.closest || !el.closest('.nt-body')) return false;
+        if (el.tagName === 'TEXTAREA') return true;
+        return el.tagName === 'INPUT' && !['checkbox', 'radio', 'button', 'submit', 'hidden'].includes(el.type);
+    };
+    const update = () => {
+        const h = vv ? vv.height : window.innerHeight;
+        if (h > fullHeight) fullHeight = h;
+        const keyboard = vv ? (fullHeight - h > 150) : true;
+        document.body.classList.toggle('nt-typing', isTextField(document.activeElement) && keyboard);
+    };
+    document.addEventListener('focusin', () => setTimeout(update, 300));
+    document.addEventListener('focusout', () => setTimeout(update, 50));
+    if (vv) vv.addEventListener('resize', update);
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => { fullHeight = vv ? vv.height : window.innerHeight; update(); }, 400);
+    });
 })();
 </script>
 </body>
