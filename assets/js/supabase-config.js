@@ -30,6 +30,90 @@ window.SpendNoteTWA = (() => {
     }
 })();
 
+// Sign-up source: how this browser tab first reached SpendNote. Kept for the tab session only,
+// saved on the account at sign-up when analytics is allowed (see SpendNoteSignupSource below).
+// The same capture runs in twa-guard.js, because every page loads one of the two files.
+(function () {
+    try {
+        if (sessionStorage.getItem('sn.firstTouch')) return;
+        const params = new URLSearchParams(window.location.search);
+        const rawRef = String(document.referrer || '');
+        let ref = '';
+        if (rawRef.startsWith('android-app://')) {
+            ref = 'android-app';
+        } else if (rawRef) {
+            try {
+                const h = new URL(rawRef).hostname.toLowerCase();
+                if (h && h !== 'spendnote.app' && !h.endsWith('.spendnote.app')) ref = h;
+            } catch (_) {}
+        }
+        const touch = { ref, landing: String(window.location.pathname || '/'), at: new Date().toISOString() };
+        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((k) => {
+            const v = params.get(k);
+            if (v) touch[k] = String(v).slice(0, 100);
+        });
+        if (params.get('gclid')) touch.paid = 'google';
+        else if (params.get('msclkid')) touch.paid = 'microsoft';
+        if (params.get('source') === 'twa' || ref === 'android-app') touch.twa = true;
+        sessionStorage.setItem('sn.firstTouch', JSON.stringify(touch));
+    } catch (_) {}
+})();
+
+window.SpendNoteSignupSource = {
+    read() {
+        try {
+            const t = JSON.parse(sessionStorage.getItem('sn.firstTouch') || 'null');
+            return t && typeof t === 'object' ? t : null;
+        } catch (_) {
+            return null;
+        }
+    },
+
+    // Mirrors SpendNoteConsent in main.js: strict regions need an explicit analytics opt-in.
+    // Sign-up and welcome pages do not load main.js, so an unknown region is looked up the same way.
+    async allowed() {
+        const strict = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR',
+            'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK',
+            'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'CH', 'GB'];
+        try {
+            const c = JSON.parse(localStorage.getItem('spendnote.cookieConsent.v1') || 'null');
+            if (c && typeof c === 'object') return c.regionMode !== 'strict' || c.analytics === true;
+        } catch (_) {}
+        try {
+            const body = await Promise.race([
+                fetch('/cdn-cgi/trace', { credentials: 'same-origin', cache: 'no-store' }).then((r) => (r.ok ? r.text() : '')),
+                new Promise((resolve) => setTimeout(() => resolve(''), 1600))
+            ]);
+            const m = String(body || '').match(/(?:^|\n)loc=([A-Z]{2})(?:\n|$)/);
+            if (!m) return false;
+            return !strict.includes(m[1]);
+        } catch (_) {
+            return false;
+        }
+    },
+
+    async forSignUp() {
+        const t = this.read();
+        if (!t) return null;
+        return (await this.allowed()) ? t : null;
+    },
+
+    // Google sign-ups cannot pass metadata, so new accounts get it after the first sign-in.
+    async backfill(session) {
+        try {
+            const user = session?.user;
+            if (!user || user.user_metadata?.signup_source) return;
+            if (sessionStorage.getItem('sn.firstTouch.saved') === user.id) return;
+            const created = Date.parse(user.created_at || '');
+            if (!created || Date.now() - created > 2 * 24 * 60 * 60 * 1000) return;
+            const t = await this.forSignUp();
+            if (!t) return;
+            const { error } = await supabaseClient.auth.updateUser({ data: { signup_source: t } });
+            if (!error) sessionStorage.setItem('sn.firstTouch.saved', user.id);
+        } catch (_) {}
+    }
+};
+
 // Marketing pages show prices and lead to the web checkout, so the Android app never opens them.
 window.SpendNoteTWAIsMarketingPath = (path) => {
     const p = String(path || '').replace(/\.html$/, '').replace(/\/+$/, '');
@@ -1340,6 +1424,7 @@ try {
                 window.__spendnoteInitSessionHandled = true;
                 __spendnoteTryAcceptPendingInviteToken();
             } catch (_) {}
+            if (session) setTimeout(() => window.SpendNoteSignupSource?.backfill?.(session), 0);
         }
     });
 
@@ -1351,6 +1436,7 @@ try {
             __spendnoteWriteBootstrapSession(session);
             if (session) {
                 await __spendnoteTryAcceptPendingInviteToken();
+                window.SpendNoteSignupSource?.backfill?.(session);
             }
         } catch (_) {}
     })();
@@ -1932,12 +2018,14 @@ var auth = {
     // Sign up new user
     async signUp(email, password, fullName, options = {}) {
         const emailRedirectTo = options?.emailRedirectTo ? String(options.emailRedirectTo) : null;
+        const signupSource = await window.SpendNoteSignupSource?.forSignUp?.();
         const { data, error } = await supabaseClient.auth.signUp({
             email,
             password,
             options: {
                 data: {
-                    full_name: fullName
+                    full_name: fullName,
+                    ...(signupSource ? { signup_source: signupSource } : {})
                 },
                 ...(emailRedirectTo ? { emailRedirectTo } : {})
             }
