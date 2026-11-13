@@ -59,6 +59,34 @@ window.SpendNoteTWA = (() => {
     } catch (_) {}
 })();
 
+// The owner's own devices stay out of Google Analytics, Clarity and the Microsoft Ads tag.
+// Signing in with one of these accounts (SHA-256 of the lowercased email, so the addresses
+// are not published) marks the device; the analytics snippets in each page read sn.internal.
+// ?sn_internal=1 / ?sn_internal=0 toggles it by hand.
+window.SpendNoteInternalDevice = {
+    HASHES: [
+        'cbb4acdf99e7060f5e00aea5d41f718a78edd5060534e650e95ea0b55695e9f6',
+        '147144762876f062486e20645180e6ea3dbbd4a7cf3790457fb6f39e0e07f608',
+        '339d4e665da2302c64eccc1d0a0a59d5a4f0edd8125a28cea409bfcea8810703',
+        '07b2281135b31e53b7cce30e2ef68a1068b093154628776d7c391c929b185879',
+        '346769cfecc76818013232b35d6fe087805c963e03ca4d9c21a132225ba79b95',
+        '639e1c41a5133a8e06c316e485d2302c9bc5c06041761ada33434018204fc2c4'
+    ],
+
+    async markIfOwner(session) {
+        try {
+            const email = String(session?.user?.email || '').trim().toLowerCase();
+            if (!email || !window.crypto?.subtle) return;
+            if (localStorage.getItem('sn.internal') === '1') return;
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(email));
+            const hex = Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
+            if (!this.HASHES.includes(hex)) return;
+            localStorage.setItem('sn.internal', '1');
+            window['ga-disable-G-QPFM30F86Q'] = true;
+        } catch (_) {}
+    }
+};
+
 window.SpendNoteSignupSource = {
     read() {
         try {
@@ -1424,7 +1452,10 @@ try {
                 window.__spendnoteInitSessionHandled = true;
                 __spendnoteTryAcceptPendingInviteToken();
             } catch (_) {}
-            if (session) setTimeout(() => window.SpendNoteSignupSource?.backfill?.(session), 0);
+            if (session) {
+                setTimeout(() => window.SpendNoteSignupSource?.backfill?.(session), 0);
+                window.SpendNoteInternalDevice?.markIfOwner?.(session);
+            }
         }
     });
 
@@ -1437,6 +1468,7 @@ try {
             if (session) {
                 await __spendnoteTryAcceptPendingInviteToken();
                 window.SpendNoteSignupSource?.backfill?.(session);
+                window.SpendNoteInternalDevice?.markIfOwner?.(session);
             }
         } catch (_) {}
     })();

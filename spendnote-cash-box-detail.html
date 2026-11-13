@@ -8,10 +8,10 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-QPFM30F86Q');
+        (function(){try{var m=location.search.match(/[?&]sn_internal=([01])/);if(m){if(m[1]==='1')localStorage.setItem('sn.internal','1');else localStorage.removeItem('sn.internal');}if(localStorage.getItem('sn.internal')==='1')window['ga-disable-G-QPFM30F86Q']=true;}catch(e){}})();gtag('config', 'G-QPFM30F86Q');
     </script>
     <script type="text/javascript">
-    if(!(function(){try{return /[?&]source=twa(&|$)/.test(location.search)||document.referrer.indexOf('android-app://')===0||sessionStorage.getItem('sn.twa')==='1'}catch(e){return false}})())(function(c,l,a,r,i,t,y){
+    if(!(function(){try{return /[?&]source=twa(&|$)/.test(location.search)||document.referrer.indexOf('android-app://')===0||sessionStorage.getItem('sn.twa')==='1'||localStorage.getItem('sn.internal')==='1'}catch(e){return false}})())(function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
@@ -1130,7 +1130,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <!-- Microsoft Advertising UET tag -->
     <script>
-        if(!(function(){try{return /[?&]source=twa(&|$)/.test(location.search)||document.referrer.indexOf('android-app://')===0||sessionStorage.getItem('sn.twa')==='1'}catch(e){return false}})())(function(w,d,t,u,o){w[u]=w[u]||[],o.ts=(new Date).getTime();var n=d.createElement(t);n.src="https://bat.bing.net/bat.js?ti="+o.ti+("uetq"!=u?"&q="+u:""),n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&"loaded"!==s&&"complete"!==s||(o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad"),n.onload=n.onreadystatechange=null)};var i=d.getElementsByTagName(t)[0];i.parentNode.insertBefore(n,i)})(window,document,"script","uetq",{ti:"343258687",enableAutoSpaTracking:true});
+        if(!(function(){try{return /[?&]source=twa(&|$)/.test(location.search)||document.referrer.indexOf('android-app://')===0||sessionStorage.getItem('sn.twa')==='1'||localStorage.getItem('sn.internal')==='1'}catch(e){return false}})())(function(w,d,t,u,o){w[u]=w[u]||[],o.ts=(new Date).getTime();var n=d.createElement(t);n.src="https://bat.bing.net/bat.js?ti="+o.ti+("uetq"!=u?"&q="+u:""),n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&"loaded"!==s&&"complete"!==s||(o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad"),n.onload=n.onreadystatechange=null)};var i=d.getElementsByTagName(t)[0];i.parentNode.insertBefore(n,i)})(window,document,"script","uetq",{ti:"343258687",enableAutoSpaTracking:true});
     </script>
 </head>
 <body>
@@ -1533,7 +1533,7 @@
     
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20261113-source"></script>
+    <script src="assets/js/supabase-config.js?v=20261113-internal"></script>
     <script src="assets/js/auth-guard.js"></script>
     <script src="assets/js/modal-dialogs.js?v=20260208-1900"></script>
     <script src="assets/js/nav-loader.js?v=20261113-play-install"></script>
