@@ -421,15 +421,20 @@ const appInstall = (() => {
     const DISMISS_KEY = 'spendnote.installBanner.dismissed.v1';
     const VISITS_KEY = 'spendnote.dashboardVisits.v1';
     const BANNER_ID = 'snInstallBanner';
+    const PLAY_URL = 'https://play.google.com/store/apps/details?id=app.spendnote';
     let deferredPrompt = null;
+    let hasPlayApp = false;
 
     const ua = navigator.userAgent || '';
     const isIOS = /iphone|ipad|ipod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
     const isIOSSafari = isIOS && !/crios|fxios|edgios/i.test(ua);
+    const isAndroid = /android/i.test(ua);
 
     const isStandalone = () => (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
-        || window.navigator.standalone === true;
-    const canInstall = () => !isStandalone() && (Boolean(deferredPrompt) || isIOSSafari);
+        || window.navigator.standalone === true
+        || Boolean(window.SpendNoteTWA);
+    // Android goes to the Play app: Chrome's own web install does nothing once the Play app owns the origin.
+    const canInstall = () => !isStandalone() && !hasPlayApp && (isAndroid || Boolean(deferredPrompt) || isIOSSafari);
 
     const lsGet = (key) => { try { return localStorage.getItem(key); } catch (_) { return null; } };
     const lsSet = (key, value) => { try { localStorage.setItem(key, value); } catch (_) { /* ignore */ } };
@@ -449,6 +454,10 @@ const appInstall = (() => {
     };
 
     const install = async () => {
+        if (isAndroid) {
+            window.location.href = PLAY_URL;
+            return;
+        }
         if (deferredPrompt) {
             const evt = deferredPrompt;
             deferredPrompt = null;
@@ -538,6 +547,15 @@ const appInstall = (() => {
         deferredPrompt = null;
         refresh();
     });
+
+    if (isAndroid && typeof navigator.getInstalledRelatedApps === 'function') {
+        navigator.getInstalledRelatedApps()
+            .then((apps) => {
+                hasPlayApp = (apps || []).some((app) => app && app.platform === 'play');
+                refresh();
+            })
+            .catch(() => { /* ignore */ });
+    }
 
     document.addEventListener('click', (e) => {
         const link = e.target && e.target.closest ? e.target.closest('[data-action="install-app"]') : null;
