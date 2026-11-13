@@ -190,7 +190,6 @@ Deno.serve(async (req: Request) => {
     const authById: Record<string, {
       lastSignIn: string | null;
       confirmed: boolean;
-      provider: string | null;
       signupSource: Record<string, unknown> | null;
     }> = {};
     const unconfirmedUsers: { email: string; created: string }[] = [];
@@ -200,14 +199,12 @@ Deno.serve(async (req: Request) => {
       const email = String(au.email || "");
       const confirmed = Boolean(au.email_confirmed_at);
       const lastSignIn = au.last_sign_in_at ? String(au.last_sign_in_at) : null;
-      const appMeta = (au.app_metadata || {}) as Record<string, unknown>;
       const userMeta = (au.user_metadata || {}) as Record<string, unknown>;
       const src = userMeta.signup_source;
       if (uid) {
         authById[uid] = {
           lastSignIn,
           confirmed,
-          provider: appMeta.provider ? String(appMeta.provider) : null,
           signupSource: src && typeof src === "object" ? src as Record<string, unknown> : null,
         };
       }
@@ -253,7 +250,6 @@ Deno.serve(async (req: Request) => {
           orgName,
           teamSize,
           confirmed: auth?.confirmed ?? true,
-          provider: auth?.provider || null,
           signupSource: auth?.signupSource || null,
         };
       });

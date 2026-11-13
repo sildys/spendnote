@@ -574,10 +574,9 @@
 
     function sourceCell(s) {
         const src = s.signupSource || {};
-        const via = s.provider === 'google' ? ' <i class="fab fa-google" style="opacity:0.5;font-size:10px;" title="Google-fiókkal regisztrált"></i>' : '';
         const landing = src.landing ? `<div style="font-size:11px;color:#94a3b8;">${esc(src.landing)}</div>` : '';
         const tip = [src.ref && ('honnan: ' + src.ref), src.utm_medium && ('utm_medium: ' + src.utm_medium), src.utm_content && ('utm_content: ' + src.utm_content), src.utm_term && ('utm_term: ' + src.utm_term)].filter(Boolean).join(' | ');
-        return `<div title="${esc(tip)}">${esc(s.source)}${via}${landing}</div>`;
+        return `<div title="${esc(tip)}">${esc(s.source)}${landing}</div>`;
     }
 
     function esc(s) {
