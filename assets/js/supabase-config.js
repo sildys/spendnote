@@ -126,14 +126,15 @@ window.SpendNoteSignupSource = {
         return (await this.allowed()) ? t : null;
     },
 
-    // Google sign-ups cannot pass metadata, so new accounts get it after the first sign-in.
+    // Google sign-ups cannot pass metadata, so they get it at the sign-in that created the account.
+    // Only that sign-in: a later visit would record how they came back, not how they signed up.
     async backfill(session) {
         try {
             const user = session?.user;
             if (!user || user.user_metadata?.signup_source) return;
             if (sessionStorage.getItem('sn.firstTouch.saved') === user.id) return;
             const created = Date.parse(user.created_at || '');
-            if (!created || Date.now() - created > 2 * 24 * 60 * 60 * 1000) return;
+            if (!created || Date.now() - created > 60 * 60 * 1000) return;
             const t = await this.forSignUp();
             if (!t) return;
             const { error } = await supabaseClient.auth.updateUser({ data: { signup_source: t } });

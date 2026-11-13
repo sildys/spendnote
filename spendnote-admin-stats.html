@@ -291,7 +291,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js?v=20261113-internal"></script>
+<script src="assets/js/supabase-config.js?v=20261113-source2"></script>
 <script src="assets/js/auth-guard.js?v=20260223-1949"></script>
 <script src="assets/js/nav-loader.js?v=20261113-play-install"></script>
 <script>loadNav();</script>
@@ -563,9 +563,20 @@
         return h;
     }
 
+    // A source captured after the account existed describes a later visit, not the sign-up
+    // (10 minutes of slack for the visitor's clock).
+    function validSource(s) {
+        const src = s.signupSource;
+        if (!src) return null;
+        const at = Date.parse(src.at || '');
+        const created = Date.parse(s.created || '');
+        if (at && created && at > created + 10 * 60 * 1000) return null;
+        return src;
+    }
+
     function sourceLabel(s) {
         if (s.orgRole && s.orgRole !== 'owner') return 'Meghívott';
-        const src = s.signupSource;
+        const src = validSource(s);
         if (!src) return String(s.created || '') >= SOURCE_TRACKING_START ? 'Nincs adat' : '-';
         if (src.twa) return 'Android app';
         if (src.utm_source) return 'UTM: ' + src.utm_source + (src.utm_campaign ? ' / ' + src.utm_campaign : '');
@@ -576,7 +587,7 @@
     }
 
     function sourceCell(s) {
-        const src = s.signupSource || {};
+        const src = validSource(s) || {};
         const landing = src.landing ? `<div class="landing">${esc(src.landing)}</div>` : '';
         const tip = [src.ref && ('honnan: ' + src.ref), src.utm_medium && ('utm_medium: ' + src.utm_medium), src.utm_content && ('utm_content: ' + src.utm_content), src.utm_term && ('utm_term: ' + src.utm_term)].filter(Boolean).join(' | ');
         return `<div class="source-cell" title="${esc(tip)}">${esc(s.source)}${landing}</div>`;
