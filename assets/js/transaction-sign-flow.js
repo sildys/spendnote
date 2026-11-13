@@ -28,8 +28,7 @@ body.modal-open>.sn-signflow-overlay{pointer-events:auto!important;user-select:a
 .sn-signflow-btn.quiet{border-color:transparent;color:#4b5563;}
 .sn-signflow-btn:disabled{opacity:.6;cursor:progress;}
 .sn-signflow-note{font-size:12px;color:#6b7280;line-height:1.5;margin:12px 0 0;}
-.sn-signflow-pro{font-size:10px;font-weight:800;letter-spacing:.04em;background:#eef2ff;color:#4f46e5;border-radius:999px;padding:2px 7px;}
-.sn-signflow-btn.primary .sn-signflow-pro{background:rgba(255,255,255,.2);color:#fff;}
+.sn-signflow-btn.primary .pro-badge{background:rgba(255,255,255,.2)!important;border-color:rgba(255,255,255,.35)!important;color:#fff!important;}
 `;
 
     const esc = (v) => (typeof window.spendnoteEscapeHtml === 'function')
@@ -279,7 +278,7 @@ body.modal-open>.sn-signflow-overlay{pointer-events:auto!important;user-select:a
             const primary = canEmail ? 'email' : (touchFirst ? 'share' : 'print');
             const emailLabel = signed ? 'Email signed copy' : 'Email receipt';
             const buttons = {
-                email: `<button type="button" class="sn-signflow-btn${primary === 'email' ? ' primary' : ''}" data-act="email"><i class="fas fa-envelope"></i> ${esc(emailLabel)}${canEmail ? '' : ' <span class="sn-signflow-pro">Pro</span>'}</button>`,
+                email: `<button type="button" class="sn-signflow-btn${primary === 'email' ? ' primary' : ''}" data-act="email"><i class="fas fa-envelope"></i> ${esc(emailLabel)}${canEmail ? '' : ' <span class="pro-badge"><i class="fas fa-crown"></i> Pro</span>'}</button>`,
                 share: `<button type="button" class="sn-signflow-btn${primary === 'share' ? ' primary' : ''}" data-act="share" disabled><i class="fas fa-spinner fa-spin"></i> Preparing PDF…</button>`,
                 print: `<button type="button" class="sn-signflow-btn${primary === 'print' ? ' primary' : ''}" data-act="print"><i class="fas fa-print"></i> Print</button>`
             };
