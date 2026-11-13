@@ -268,6 +268,31 @@
         }
         .tip-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; padding-top: 6px; }
         .tip-text strong { color: var(--text); }
+
+        @media (max-width: 600px) {
+            .top-nav-inner { padding: 10px 16px; }
+            .page-wrap { padding: 14px 12px 28px; }
+            .welcome-tag { margin-bottom: 10px; padding: 4px 10px; font-size: 11px; }
+            .welcome-title { font-size: 23px; margin-bottom: 6px; }
+            .welcome-sub { font-size: 14px; line-height: 1.5; margin-bottom: 14px; }
+            .variant-callout { margin: -2px 0 12px; padding: 8px 12px; }
+            .section-card { margin-bottom: 12px; }
+            .section-card-header { padding: 11px 14px; gap: 10px; }
+            .section-body { padding: 14px; }
+            .avatar-inline { margin-bottom: 12px; padding: 10px 12px; }
+            .avatar-circle { width: 44px; height: 44px; font-size: 16px; }
+            .two-col { gap: 12px; }
+            .form-group { margin-bottom: 12px; }
+            .form-group label { margin-bottom: 5px; }
+            .form-group input, .form-group select, .form-group textarea { padding: 10px 12px !important; }
+            .color-row { margin-top: 6px; }
+            .receipt-section-body { gap: 14px; }
+            .receipt-preview-label { margin-bottom: 8px; }
+            .receipt-mock { padding: 14px; max-width: none; }
+            .receipt-mock-highlight { margin-bottom: 0; }
+            .setup-note { margin: -4px 0 12px !important; padding: 8px 12px !important; }
+            .submit-row { padding-top: 2px; }
+        }
     </style>
     <!-- Microsoft Advertising UET tag -->
     <script>
@@ -334,7 +359,7 @@
         </div>
     </div>
 
-    <div style="font-size:13px;color:var(--text-muted);margin:-8px 0 20px;padding:10px 14px;background:#f8fafc;border-radius:8px;border:1px solid var(--border);">
+    <div class="setup-note" style="font-size:13px;color:var(--text-muted);margin:-8px 0 20px;padding:10px 14px;background:#f8fafc;border-radius:8px;border:1px solid var(--border);">
         <i class="fas fa-circle-info" style="color:var(--primary);margin-right:6px;"></i>
         Avatar photo and logo upload are available in <a href="/spendnote-user-settings" style="color:var(--primary-dark);font-weight:700;">Account Settings</a> after setup.
     </div>
