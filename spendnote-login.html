@@ -246,21 +246,26 @@
         }
 
         /* FOOTER LINK */
-        .auth-footer {
+        .new-here {
+            display: block;
+            margin-bottom: 12px;
             text-align: center;
-            margin-top: 12px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .auth-footer a {
-            color: var(--primary);
+            padding: 10px 14px;
+            border: 1px solid rgba(5, 150, 105, 0.35);
+            border-radius: 10px;
+            background: rgba(5, 150, 105, 0.08);
+            color: var(--text);
+            font-size: 13px;
             text-decoration: none;
-            font-weight: 600;
         }
 
-        .auth-footer a:hover {
-            text-decoration: underline;
+        .new-here strong {
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        .new-here:hover {
+            border-color: var(--primary);
         }
 
         /* ERROR MESSAGE */
@@ -567,6 +572,10 @@
                 <p class="auth-subtitle">Log in to your SpendNote account</p>
             </div>
 
+            <a href="/spendnote-signup" class="new-here">
+                New to SpendNote? <strong>Create your account <i class="fas fa-arrow-right"></i></strong>
+            </a>
+
             <!-- Error Message -->
             <div class="error-message" id="errorMessage">
                 <i class="fas fa-exclamation-circle"></i> Error message will appear here
@@ -650,10 +659,6 @@
                 </button>
             </div>
 
-            <!-- Footer -->
-            <div class="auth-footer">
-                Don't have an account? <a href="/spendnote-signup">Sign up</a>
-            </div>
         </div>
     </div>
     </div>
@@ -661,7 +666,7 @@
     <a href="/" class="fab-home" title="Back to homepage"><i class="fas fa-home"></i></a>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="assets/js/supabase-config.js?v=20261113-onboarding"></script>
+    <script src="assets/js/supabase-config.js?v=20261113-signin-help"></script>
     <script>
         const __SN_INVITE_TOKEN_KEY = 'spendnote.inviteToken.pending';
 
@@ -896,6 +901,23 @@
                     } catch (_) {}
 
                     await redirectAfterLogin();
+                } else if (window.SpendNoteTWA && !getInviteTokenFromContext()) {
+                    // The Android app opens on the dashboard, which lands signed-out people here. On a
+                    // phone that has never signed in, that is almost always someone new: show sign-up.
+                    // Once per tab session, so "Log in" on the sign-up page still reaches this page.
+                    let seen = false;
+                    try {
+                        seen = localStorage.getItem('sn.hasSignedIn') === '1'
+                            || sessionStorage.getItem('sn.signupOffered') === '1';
+                        sessionStorage.setItem('sn.signupOffered', '1');
+                    } catch (_) {}
+                    const sp2 = new URLSearchParams(window.location.search);
+                    const hasAuthParams = ['code', 'error', 'confirmed', 'orgPick', 'emailUnconfirmed'].some((k) => sp2.has(k))
+                        || /access_token|error/.test(String(window.location.hash || ''));
+                    if (!seen && !hasAuthParams) {
+                        window.location.replace('/spendnote-signup');
+                        return;
+                    }
                 }
             } catch (_) {
 
@@ -1002,6 +1024,11 @@
                     if (isUnconfirmedEmailError(msg)) {
                         showError('Please confirm your email address, then try again.');
                         if (resendWrap) resendWrap.style.display = 'block';
+                        return;
+                    }
+                    // Supabase does not say whether the account exists; the sign-up link sits just above.
+                    if (/invalid login credentials|invalid email or password/i.test(msg)) {
+                        showError('Wrong email or password. Signed up with Google? Use <strong>Log in with Google</strong> below.');
                         return;
                     }
                     showError(msg);

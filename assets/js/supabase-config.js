@@ -1509,6 +1509,7 @@ try {
             if (session) {
                 setTimeout(() => window.SpendNoteSignupSource?.backfill?.(session), 0);
                 window.SpendNoteInternalDevice?.markIfOwner?.(session);
+                try { localStorage.setItem('sn.hasSignedIn', '1'); } catch (_) {}
             }
         }
     });
@@ -1523,6 +1524,7 @@ try {
                 await __spendnoteTryAcceptPendingInviteToken();
                 window.SpendNoteSignupSource?.backfill?.(session);
                 window.SpendNoteInternalDevice?.markIfOwner?.(session);
+                try { localStorage.setItem('sn.hasSignedIn', '1'); } catch (_) {}
             }
         } catch (_) {}
     })();
