@@ -2400,6 +2400,9 @@
                     try {
                         const welUid = String(userId || '').trim();
                         const welSentKey = welUid ? 'spendnote.welcome.sent.v2.' + welUid : '';
+                        if (welSentKey && localStorage.getItem('spendnote.welcome.email.v1.' + welUid) === '1') {
+                            try { localStorage.setItem(welSentKey, '1'); } catch (_) {}
+                        }
                         if (welSentKey && localStorage.getItem(welSentKey) !== '1') {
                             let shouldSend = true;
                             if (typeof window.spendnoteShouldSendOwnerWelcomeEmail === 'function') {

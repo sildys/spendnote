@@ -592,22 +592,31 @@ function waitForDb() {
     });
 }
 
-async function sendWelcomeEmail() {
+// `spendnote.welcome.sent.v2` also means "onboarding done" (this page redirects to the dashboard
+// when it is set), so the email has its own key and can go out on page load.
+async function sendWelcomeEmail({ markDone = true } = {}) {
     try {
         const user = await window.auth?.getCurrentUser?.();
         const uid = String(user?.id || '').trim();
         if (!uid) return;
-        const sentKey = 'spendnote.welcome.sent.v2.' + uid;
-        if (localStorage.getItem(sentKey) === '1') return;
-        console.log('[SN-WELCOME] Sending welcome email via functions.invoke...');
-        const { data, error } = await window.supabaseClient.functions.invoke(
-            'send-user-event-email',
-            { body: { eventType: 'welcome_account_created' } }
-        );
-        console.log('[SN-WELCOME] Result:', JSON.stringify({ data, error: error?.message || error }));
-        if (!error && data && (data.success || data.skipped)) {
-            try { localStorage.setItem(sentKey, '1'); } catch (_) {}
-            if (data.success && !data.skipped) console.log('[SN-WELCOME] Welcome email sent!');
+        const doneKey = 'spendnote.welcome.sent.v2.' + uid;
+        const emailKey = 'spendnote.welcome.email.v1.' + uid;
+        if (localStorage.getItem(doneKey) === '1') return;
+        let sent = localStorage.getItem(emailKey) === '1';
+        if (!sent) {
+            console.log('[SN-WELCOME] Sending welcome email via functions.invoke...');
+            const { data, error } = await window.supabaseClient.functions.invoke(
+                'send-user-event-email',
+                { body: { eventType: 'welcome_account_created' } }
+            );
+            console.log('[SN-WELCOME] Result:', JSON.stringify({ data, error: error?.message || error }));
+            if (!error && data && (data.success || data.skipped)) {
+                sent = true;
+                try { localStorage.setItem(emailKey, '1'); } catch (_) {}
+            }
+        }
+        if (sent && markDone) {
+            try { localStorage.setItem(doneKey, '1'); } catch (_) {}
         }
     } catch (e) {
         console.error('[SN-WELCOME] Email error:', e);
@@ -718,16 +727,6 @@ async function saveSetup() {
                 try { localStorage.setItem(convKey, '1'); } catch (_) {}
             }
         } catch (_) {}
-        try {
-            const uid = String(user.id || '').trim();
-            if (uid) {
-                const sentKey = 'spendnote.welcome.sent.v2.' + uid;
-                // Welcome email will be sent on user action (Save or Skip) — session is settled by then
-            }
-        } catch (welcomeErr) {
-            console.error('[SN-WELCOME] welcome email error:', welcomeErr);
-        }
-
         try { await (window.__spendnoteAuthCallbackPromise || Promise.resolve()); } catch (_) {}
         try {
             if (typeof window.__spendnoteTryAcceptPendingInviteToken === 'function') {
@@ -735,6 +734,10 @@ async function saveSetup() {
             }
         } catch (_) {}
         try { window.__spendnoteInvalidateOrgContextCache?.(); } catch (_) {}
+
+        // Send now, after the invite is accepted (so team members get the team welcome),
+        // so people who close this page without saving still get the email.
+        sendWelcomeEmail({ markDone: false });
 
         let profile = null;
         let role = '';
