@@ -146,6 +146,9 @@
         }
         .team-info i { font-size: 9px; }
 
+        .source-cell { font-size: 11px; color: #64748b; }
+        .source-cell .landing { font-size: 10px; color: #94a3b8; }
+
         .date-cell {
             font-size: 11px;
             color: #94a3b8;
@@ -574,9 +577,9 @@
 
     function sourceCell(s) {
         const src = s.signupSource || {};
-        const landing = src.landing ? `<div style="font-size:11px;color:#94a3b8;">${esc(src.landing)}</div>` : '';
+        const landing = src.landing ? `<div class="landing">${esc(src.landing)}</div>` : '';
         const tip = [src.ref && ('honnan: ' + src.ref), src.utm_medium && ('utm_medium: ' + src.utm_medium), src.utm_content && ('utm_content: ' + src.utm_content), src.utm_term && ('utm_term: ' + src.utm_term)].filter(Boolean).join(' | ');
-        return `<div title="${esc(tip)}">${esc(s.source)}${landing}</div>`;
+        return `<div class="source-cell" title="${esc(tip)}">${esc(s.source)}${landing}</div>`;
     }
 
     function esc(s) {
