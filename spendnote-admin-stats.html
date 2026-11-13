@@ -348,7 +348,7 @@
         const cb = d.cashBoxes;
         const t = d.teams;
 
-        _allUsers = u.recentSignups || [];
+        _allUsers = (u.recentSignups || []).map(s => ({ ...s, source: sourceLabel(s) }));
 
         let html = '';
 
@@ -364,6 +364,18 @@
         html += `<span class="summary-item"><strong>${tx.thisWeek}</strong> tx (7d)</span>`;
         if (t.pendingInvites > 0) html += `<span class="summary-item" style="background:#fffbeb;border-color:#fbbf24;"><strong>${t.pendingInvites}</strong> pending invite</span>`;
         html += '</div>';
+
+        // --- SIGN-UP SOURCES (recorded from 2026-11-13) ---
+        const tracked = _allUsers.filter(s => String(s.created || '') >= SOURCE_TRACKING_START);
+        if (tracked.length) {
+            const bySource = {};
+            for (const s of tracked) bySource[s.source] = (bySource[s.source] || 0) + 1;
+            html += '<div class="summary-bar"><span class="summary-item" style="background:transparent;border-color:transparent;padding-left:0;">Források (nov. 13. óta):</span>';
+            for (const [label, n] of Object.entries(bySource).sort((a, b) => b[1] - a[1])) {
+                html += `<span class="summary-item"><strong>${n}</strong> ${esc(label)}</span>`;
+            }
+            html += '</div>';
+        }
 
         // --- FILTER + SEARCH ---
         html += '<div class="filter-bar">';
@@ -397,6 +409,7 @@
             { key: 'transactions', label: 'Receiptek' },
             { key: 'lastSignIn', label: 'Utolsó login' },
             { key: 'lastTx', label: 'Utolsó tx' },
+            { key: 'source', label: 'Forrás' },
             { key: 'created', label: 'Regisztráció' },
         ];
         for (const c of cols) {
@@ -521,15 +534,50 @@
                 <td style="text-align:center;font-weight:700;">${s.transactions || 0}</td>
                 <td class="${dateClass(s.lastSignIn)}">${fmtDate(s.lastSignIn)}</td>
                 <td class="${dateClass(s.lastTx)}">${fmtDate(s.lastTx)}</td>
+                <td>${sourceCell(s)}</td>
                 <td class="date-cell">${fmtDate(s.created)}</td>
             </tr>`;
         }
 
         if (rows.length === 0) {
-            html = '<tr><td colspan="9" style="text-align:center;color:#94a3b8;padding:20px;">Nincs találat</td></tr>';
+            html = '<tr><td colspan="10" style="text-align:center;color:#94a3b8;padding:20px;">Nincs találat</td></tr>';
         }
 
         tbody.innerHTML = html;
+    }
+
+    const SOURCE_TRACKING_START = '2026-11-13T16:57:00Z';
+
+    function refLabel(host) {
+        const h = String(host || '').toLowerCase().replace(/^www\./, '');
+        if (/(^|\.)google\.[a-z.]+$/.test(h)) return 'Google keresés';
+        if (h === 'bing.com' || h.endsWith('.bing.com')) return 'Bing keresés';
+        if (h === 'duckduckgo.com') return 'DuckDuckGo';
+        if (h === 'search.yahoo.com' || h.endsWith('.yahoo.com')) return 'Yahoo';
+        if (h === 'chatgpt.com' || h === 'chat.openai.com') return 'ChatGPT';
+        if (h === 'perplexity.ai') return 'Perplexity';
+        if (h === 'play.google.com') return 'Google Play';
+        return h;
+    }
+
+    function sourceLabel(s) {
+        if (s.orgRole && s.orgRole !== 'owner') return 'Meghívott';
+        const src = s.signupSource;
+        if (!src) return String(s.created || '') >= SOURCE_TRACKING_START ? 'Nincs adat' : '-';
+        if (src.twa) return 'Android app';
+        if (src.utm_source) return 'UTM: ' + src.utm_source + (src.utm_campaign ? ' / ' + src.utm_campaign : '');
+        if (src.paid === 'google') return 'Google Ads';
+        if (src.paid === 'microsoft') return 'Microsoft Ads';
+        if (src.ref) return refLabel(src.ref);
+        return 'Közvetlen';
+    }
+
+    function sourceCell(s) {
+        const src = s.signupSource || {};
+        const via = s.provider === 'google' ? ' <i class="fab fa-google" style="opacity:0.5;font-size:10px;" title="Google-fiókkal regisztrált"></i>' : '';
+        const landing = src.landing ? `<div style="font-size:11px;color:#94a3b8;">${esc(src.landing)}</div>` : '';
+        const tip = [src.ref && ('honnan: ' + src.ref), src.utm_medium && ('utm_medium: ' + src.utm_medium), src.utm_content && ('utm_content: ' + src.utm_content), src.utm_term && ('utm_term: ' + src.utm_term)].filter(Boolean).join(' | ');
+        return `<div title="${esc(tip)}">${esc(s.source)}${via}${landing}</div>`;
     }
 
     function esc(s) {
