@@ -771,11 +771,72 @@ body {
    ============================================ */
 @media (max-width: 768px), (max-width: 1180px) and (pointer: coarse) {
     .app-container {
-        padding: 16px 16px;
+        padding: 12px 16px;
     }
 
     .page-title-group h1 {
         font-size: 22px !important;
+    }
+
+    /* #contactMeta carries the contact's details, the other subtitles are static taglines */
+    .page-subtitle:not(#contactMeta) {
+        display: none !important;
+    }
+
+    /* Same target as the bottom-nav "+" and it covers list rows */
+    .sticky-add-btn {
+        display: none !important;
+    }
+
+    .tx-card {
+        gap: 10px;
+        padding: 10px 14px;
+    }
+
+    .tx-card-pill {
+        width: 36px;
+        height: 36px;
+    }
+
+    .app-footer {
+        padding: 14px 0 12px;
+    }
+
+    .app-footer-brand,
+    .app-footer-tools {
+        display: none !important;
+    }
+
+    .app-footer-top {
+        margin-bottom: 0;
+        gap: 10px;
+    }
+
+    .app-footer-right {
+        gap: 10px;
+    }
+
+    .app-footer-links-simple {
+        row-gap: 6px;
+        column-gap: 14px;
+    }
+
+    .app-footer-links-simple a {
+        font-size: 13px;
+    }
+
+    .app-footer-brand-disclaimer {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .app-footer-bottom {
+        padding-top: 10px;
+        margin-top: 10px;
+    }
+
+    .app-footer-copyright {
+        font-size: 12px;
     }
 
     /* Top nav: compact on mobile, bottom nav handles navigation */

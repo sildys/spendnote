@@ -4848,3 +4848,62 @@ table.transactions-table td,
     }
 }
 
+@media (max-width: 768px), (max-width: 1180px) and (pointer: coarse) {
+    .registers-carousel-section {
+        margin-bottom: 4px;
+        padding-top: 0;
+    }
+
+    .registers-swiper {
+        padding-bottom: 0 !important;
+    }
+
+    .register-card,
+    .add-cash-box-card {
+        padding: 12px;
+    }
+
+    .register-top {
+        margin-bottom: 8px;
+    }
+
+    .register-icon {
+        width: 54px !important;
+        height: 54px !important;
+        border-radius: 14px !important;
+        font-size: 24px !important;
+        border-width: 2px;
+    }
+
+    .register-balance {
+        margin-bottom: 8px;
+    }
+
+    .register-quick-btn {
+        padding: 8px 14px;
+    }
+
+    .swiper-pagination {
+        bottom: 0 !important;
+        margin-top: 8px;
+    }
+
+    .invite-banner-compact {
+        margin: 8px 0;
+    }
+
+    .transactions-card {
+        margin-top: 4px;
+        border-radius: 18px;
+    }
+
+    .transactions-header {
+        padding: 10px 14px;
+    }
+
+    .view-all-btn {
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+}
+

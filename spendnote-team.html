@@ -34,7 +34,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=20261107-footer">
-    <link rel="stylesheet" href="assets/css/app-layout.css?v=20261113-compact">
+    <link rel="stylesheet" href="assets/css/app-layout.css?v=20261113-compact2">
     <link rel="stylesheet" href="assets/css/user-settings.css?v=20260415-member-avatars">
     <style>
         /* ===== Team page layout ===== */
@@ -357,6 +357,59 @@
             .modal-content {
                 width: calc(100vw - 20px);
                 max-height: 88vh;
+            }
+        }
+
+        @media (max-width: 768px), (max-width: 1180px) and (pointer: coarse) {
+            .main-content {
+                padding: 4px 0 16px;
+            }
+
+            .team-layout {
+                gap: 10px;
+            }
+
+            .team-sidebar-card {
+                padding: 12px;
+            }
+
+            .team-sidebar-card + .team-sidebar-card {
+                margin-top: 10px;
+            }
+
+            .sidebar-card-title {
+                margin-bottom: 8px;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 6px;
+                margin-bottom: 0 !important;
+            }
+
+            .stats-row .stat-box {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 2px;
+                padding: 8px 10px;
+            }
+
+            .stat-box-icon {
+                display: none;
+            }
+
+            .stats-row .stat-value {
+                font-size: 18px !important;
+            }
+
+            .stats-row .stat-label {
+                font-size: 10px;
+                letter-spacing: 0.02em;
+            }
+
+            .settings-card-header {
+                padding: 12px 14px 10px;
+                margin-bottom: 0;
             }
         }
     </style>

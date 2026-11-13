@@ -34,7 +34,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css?v=20261107-footer">
-    <link rel="stylesheet" href="assets/css/app-layout.css?v=20261113-compact">
+    <link rel="stylesheet" href="assets/css/app-layout.css?v=20261113-compact2">
     <style>
         /* ===== CONTACT LIST PAGE SPECIFIC STYLES ===== */
         
@@ -661,6 +661,52 @@
                 display: flex;
             }
         }
+
+        @media (max-width: 768px), (max-width: 1180px) and (pointer: coarse) {
+            /* "All Contacts" repeats the page title */
+            .Contacts-title {
+                display: none;
+            }
+
+            .Contacts-header {
+                padding: 12px !important;
+            }
+
+            .contacts-header-top {
+                gap: 0;
+                margin-bottom: 0;
+            }
+
+            .contacts-controls {
+                grid-template-columns: 1fr max-content !important;
+                gap: 8px !important;
+            }
+
+            .contacts-controls .search-box {
+                grid-column: 1 / -1;
+                grid-row: 2;
+            }
+
+            .contacts-controls .add-Contact-btn-large {
+                padding: 10px 14px !important;
+                font-size: 14px !important;
+            }
+
+            .contacts-alphabet {
+                margin-top: 10px !important;
+                padding-top: 10px !important;
+            }
+
+            .contact-card {
+                gap: 10px;
+                padding: 10px 14px;
+            }
+
+            .contact-card-avatar {
+                width: 38px;
+                height: 38px;
+            }
+        }
     </style>    <!-- Microsoft Advertising UET tag -->
     <script>
         if(!(function(){try{return /[?&]source=twa(&|$)/.test(location.search)||document.referrer.indexOf('android-app://')===0||sessionStorage.getItem('sn.twa')==='1'}catch(e){return false}})())(function(w,d,t,u,o){w[u]=w[u]||[],o.ts=(new Date).getTime();var n=d.createElement(t);n.src="https://bat.bing.net/bat.js?ti="+o.ti+("uetq"!=u?"&q="+u:""),n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&"loaded"!==s&&"complete"!==s||(o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad"),n.onload=n.onreadystatechange=null)};var i=d.getElementsByTagName(t)[0];i.parentNode.insertBefore(n,i)})(window,document,"script","uetq",{ti:"343258687",enableAutoSpaTracking:true});
@@ -721,7 +767,7 @@
             </div>
             
             <!-- Alphabetical Navigation -->
-            <div style="padding: 16px 0 0; border-top: 1px solid var(--border); margin-top: 20px;">
+            <div class="contacts-alphabet" style="padding: 16px 0 0; border-top: 1px solid var(--border); margin-top: 20px;">
                 <div id="alphabetNav" style="display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px;">
                     <button class="alphabet-btn active" data-letter="all">All</button>
                     <button class="alphabet-btn" data-letter="A">A</button>
