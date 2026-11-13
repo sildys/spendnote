@@ -778,6 +778,14 @@ body {
         font-size: 22px !important;
     }
 
+    .main-content {
+        padding-top: 2px !important;
+    }
+
+    .main-content > .page-header {
+        margin-bottom: 0 !important;
+    }
+
     /* #contactMeta carries the contact's details, the other subtitles are static taglines */
     .page-subtitle:not(#contactMeta) {
         display: none !important;
