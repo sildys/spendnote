@@ -213,6 +213,22 @@ Deno.serve(async (req: Request) => {
       }
     }
 
+    // --- LAST APP ACTIVITY (token refreshes; needs migration 075) ---
+    const lastSeenByUser: Record<string, string> = {};
+    const { data: activityRows } = await db.rpc("admin_last_activity");
+    for (const r of (activityRows || []) as { user_id: string; last_seen: string }[]) {
+      if (r.user_id && r.last_seen) lastSeenByUser[String(r.user_id)] = String(r.last_seen);
+    }
+    const latestOf = (...dates: (string | null | undefined)[]) => {
+      let best: string | null = null;
+      let bestMs = -Infinity;
+      for (const d of dates) {
+        const ms = d ? Date.parse(d) : NaN;
+        if (Number.isFinite(ms) && ms > bestMs) { bestMs = ms; best = d as string; }
+      }
+      return best;
+    };
+
     // --- ALL SIGNUPS (enriched) ---
     const recentSignups = allProfiles
       .sort((a: Record<string, unknown>, b: Record<string, unknown>) => (String(b.created_at || "")).localeCompare(String(a.created_at || "")))
@@ -243,6 +259,7 @@ Deno.serve(async (req: Request) => {
           created: p.created_at,
           lastSignIn: auth?.lastSignIn || null,
           lastTx: lastTxByUser[uid] || null,
+          lastActive: latestOf(lastSeenByUser[uid], auth?.lastSignIn, lastTxByUser[uid]),
           cashBoxes: cbByUser[uid]?.count || 0,
           currencies: cbByUser[uid]?.currencies || [],
           transactions: txByUser[uid] || 0,
