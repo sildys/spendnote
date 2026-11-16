@@ -410,7 +410,6 @@
             { key: 'team', label: 'Team' },
             { key: 'cashBoxes', label: 'Kasszák' },
             { key: 'transactions', label: 'Receiptek' },
-            { key: 'lastSignIn', label: 'Utolsó login' },
             { key: 'lastActive', label: 'Utolsó aktivitás' },
             { key: 'lastTx', label: 'Utolsó tx' },
             { key: 'source', label: 'Forrás' },
@@ -540,7 +539,6 @@
                 <td>${teamHtml}</td>
                 <td style="text-align:center;font-weight:700;">${s.cashBoxes || 0}</td>
                 <td style="text-align:center;font-weight:700;">${s.transactions || 0}</td>
-                <td class="${dateClass(s.lastSignIn)}">${fmtDate(s.lastSignIn)}</td>
                 <td class="${dateClass(s.lastActive)}">${fmtDate(s.lastActive)}</td>
                 <td class="${dateClass(s.lastTx)}">${fmtDate(s.lastTx)}</td>
                 <td>${sourceCell(s)}</td>
@@ -549,7 +547,7 @@
         }
 
         if (rows.length === 0) {
-            html = '<tr><td colspan="11" style="text-align:center;color:#94a3b8;padding:20px;">Nincs találat</td></tr>';
+            html = '<tr><td colspan="10" style="text-align:center;color:#94a3b8;padding:20px;">Nincs találat</td></tr>';
         }
 
         tbody.innerHTML = html;
