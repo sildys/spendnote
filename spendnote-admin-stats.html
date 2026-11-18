@@ -261,6 +261,7 @@
                 <h1 class="page-title"><i class="fas fa-chart-bar" style="color:#059669;margin-right:8px;"></i>Admin Dashboard</h1>
                 <p class="page-subtitle">Real-time usage statistics</p>
             </div>
+            <div id="internalBadge" style="font-size:12px;"></div>
         </div>
 
         <div id="statsContent">
@@ -297,6 +298,24 @@
 <script>loadNav();</script>
 <script src="assets/js/main.js?v=20261016-logo2"></script>
 <script>
+function renderInternalBadge() {
+    const el = document.getElementById('internalBadge');
+    if (!el) return;
+    let on = false;
+    try { on = localStorage.getItem('sn.internal') === '1'; } catch (_) {}
+    el.innerHTML = on
+        ? '<span style="color:#059669;font-weight:600;"><i class="fas fa-user-secret"></i> Ez a böngésző ki van zárva a mérésből (GA, Clarity, Bing)</span>'
+        : '<span style="color:#b45309;font-weight:600;"><i class="fas fa-exclamation-triangle"></i> Ez a böngésző mér a GA-ban</span> '
+          + '<button type="button" id="internalOnBtn" style="margin-left:8px;padding:4px 10px;border:1px solid #059669;border-radius:6px;background:#ecfdf5;color:#047857;font-weight:700;cursor:pointer;">Kizárás bekapcsolása</button>';
+}
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('#internalOnBtn')) return;
+    try { localStorage.setItem('sn.internal', '1'); } catch (_) {}
+    window['ga-disable-G-QPFM30F86Q'] = true;
+    renderInternalBadge();
+});
+renderInternalBadge();
+
 (async function() {
     window.loadStats = async function() {
         const content = document.getElementById('statsContent');
