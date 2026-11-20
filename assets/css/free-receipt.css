@@ -29,8 +29,8 @@ main .fr-actions .fr-clear { background: none; border: none; color: var(--muted,
 .fr-preview-label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted, #5b6474); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem; }
 
 .fr-upsell { margin-top: 1.2rem; background: linear-gradient(135deg, #065f46, #059669); color: #fff; border-radius: var(--radius, 18px); padding: 1.3rem 1.4rem; display: flex; gap: 1rem; align-items: center; justify-content: space-between; flex-wrap: wrap; }
-.fr-upsell h3 { margin: 0 0 0.25rem; font-size: 1.1rem; font-weight: 800; }
-.fr-upsell p { margin: 0; font-size: 0.92rem; opacity: 0.92; }
+.fr-upsell h3 { margin: 0 0 0.25rem; font-size: 1.1rem; font-weight: 800; color: #fff; }
+.fr-upsell p { margin: 0; font-size: 0.92rem; opacity: 0.92; color: #fff; }
 .fr-upsell.fr-pop { animation: frPop 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 @keyframes frPop { from { transform: scale(0.96); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }
 
