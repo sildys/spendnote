@@ -26,7 +26,7 @@ If a chat thread freezes / context is lost: in the new thread say:
 - [x] **DEC-L1** Decide onboarding structure (chosen: 1=A, 2=B)
   - Signup success: in-page vs new `spendnote-welcome.html`
   - Next steps: success only vs success + dismissable dashboard panel
-- [x] **DEC-TRIAL** Trial without card upfront (decision): **14 days OR 20 transactions** (whichever comes first). At limit: **view-only**, **no export**. Invites: **Pro only**.
+- [x] **DEC-TRIAL** Trial without card upfront: **14 days, unlimited transactions, all features** (the earlier 20-transaction cap was removed in migration 068; verified live 2026-11-23). After 14 days no new transactions can be created until a plan is chosen.
 - [x] **P0** Production-ready acceptance criteria (baseline)
   - [x] Client error tracking: Sentry CDN loader + `captureException` backend hibákra
   - [x] Edge Function logging: strukturált error response-ok, Supabase Dashboard Logs
@@ -3567,7 +3567,7 @@ Full "profi app" mobilnézet implementálva. Minden változtatás CSS+JS szinten
     - `/spendnote-user-settings.html`
 
 ### DEC-TRIAL — COMPLETED (decision)
-- Trial ends at **14 days OR 20 transactions** (whichever comes first).
+- Trial ends after **14 days** (no transaction cap since migration 068).
 - After limit: **view-only**, **no export**.
 - Team invites: **Pro only** (no invites on Free/Standard).
 

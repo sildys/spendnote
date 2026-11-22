@@ -561,7 +561,7 @@ This repository is deployable as a static site (Cloudflare Pages, currently live
 - [x] **DEC-L1** Decide onboarding structure (chosen: 1=A, 2=B)
   - Signup success: in-page vs new `spendnote-welcome.html`
   - Next steps: success only vs success + dismissable dashboard panel
-- [x] **DEC-TRIAL** Trial without card upfront (decision): **14 days OR 20 transactions** (whichever comes first). At limit: **view-only**, **no export**. Invites: **Pro only**.
+- [x] **DEC-TRIAL** Trial without card upfront: **14 days, unlimited transactions, all features** (the earlier 20-transaction cap was removed in migration 068; verified live 2026-11-23). After 14 days no new transactions can be created until a plan is chosen.
 - [ ] **P0** Production-ready acceptance criteria (baseline)
   - [ ] Client error tracking (e.g. Sentry)
   - [ ] Edge Function logging + surfacing non-2xx errors clearly
