@@ -10,6 +10,7 @@ function initTransactionForm() {
 
     const addressTextarea = document.getElementById('modalContactAddress');
     const ADDRESS_LINE_MAX = 48;
+    const INSUFFICIENT_BALANCE_MSG = 'Not enough money in this Cash Box.\n\nAdd cash first: record it as money IN, then record this payment.';
 
     const enforceAddressConstraints = () => {
         if (!addressTextarea) return;
@@ -382,7 +383,7 @@ function initTransactionForm() {
                 const balance = Number.isFinite(currentBalance) ? currentBalance : 0;
                 if (finalAmount > balance) {
                     closeReceiptWindow();
-                    showAlert('Not enough funds in this Cash Box.', { iconType: 'error' });
+                    showAlert(INSUFFICIENT_BALANCE_MSG, { iconType: 'error' });
                     return;
                 }
             }
@@ -456,7 +457,7 @@ function initTransactionForm() {
                 const lower = raw.toLowerCase();
                 let msg = raw || 'Failed to create transaction.';
                 if (raw === 'INSUFFICIENT_BALANCE' || lower.includes('insufficient_balance')) {
-                    msg = 'Not enough funds in this Cash Box.';
+                    msg = INSUFFICIENT_BALANCE_MSG;
                 } else
                 if (raw === 'PREVIEW_RECEIPT_LIMIT_REACHED' || lower.includes('preview_receipt_limit_reached')) {
                     msg = 'Preview limit reached (200 transactions). You can view existing data, but cannot create more transactions.';
