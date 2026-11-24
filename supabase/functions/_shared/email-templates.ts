@@ -683,13 +683,13 @@ export const renderOnboardingNudgeDay1Template = (args: {
 
   const html = appCard(
     "One small step to get started",
-    "Record the cash you have right now.",
+    "Record one cash movement and get a receipt.",
     `
       <p style="margin:0 0 10px;">Hi ${name},</p>
-      <p style="margin:0 0 10px;">You created your SpendNote account, but your cash box is still empty. The easiest first step: count the cash you have right now and record it as money <strong>IN</strong>. That's your opening balance.</p>
-      <p style="margin:0 0 14px;">From then on, whenever cash changes hands, record it: who, how much and what for. You get a receipt both sides can sign on screen, or print and sign on paper.</p>
+      <p style="margin:0 0 10px;">You created your SpendNote account, but you haven't recorded anything yet. Start with the next time cash changes hands: cash handed over, a cash payment you receive, or cash paid out.</p>
+      <p style="margin:0 0 14px;">Record who, how much and what for. You get a receipt both sides can sign on screen, or print and sign on paper.</p>
       <div style="margin:18px 0 16px;">
-        <a href="${dashboardUrl}" style="${CTA_STYLE}">Record my opening balance &rarr;</a>
+        <a href="${dashboardUrl}" style="${CTA_STYLE}">Record your first transaction &rarr;</a>
       </div>
       <p style="margin:0 0 10px;">Stuck, or not sure SpendNote fits what you do? Just reply to this email. I read every message.</p>
       <p style="margin:0 0 16px;">Sild<br>Founder, SpendNote</p>
@@ -697,7 +697,7 @@ export const renderOnboardingNudgeDay1Template = (args: {
     `,
   );
 
-  const text = `${subject}\n\nHi ${args.fullName || "there"},\n\nYou created your SpendNote account, but your cash box is still empty. The easiest first step: count the cash you have right now and record it as money IN. That's your opening balance.\n\nFrom then on, whenever cash changes hands, record it: who, how much and what for. You get a receipt both sides can sign on screen, or print and sign on paper.\n\nRecord my opening balance: ${dashboardUrl}\n\nStuck, or not sure SpendNote fits what you do? Just reply to this email. I read every message.\n\nSild\nFounder, SpendNote\n\n${NUDGE_FOOTER_TEXT}`;
+  const text = `${subject}\n\nHi ${args.fullName || "there"},\n\nYou created your SpendNote account, but you haven't recorded anything yet. Start with the next time cash changes hands: cash handed over, a cash payment you receive, or cash paid out.\n\nRecord who, how much and what for. You get a receipt both sides can sign on screen, or print and sign on paper.\n\nRecord your first transaction: ${dashboardUrl}\n\nStuck, or not sure SpendNote fits what you do? Just reply to this email. I read every message.\n\nSild\nFounder, SpendNote\n\n${NUDGE_FOOTER_TEXT}`;
   return { subject, html, text };
 };
 
